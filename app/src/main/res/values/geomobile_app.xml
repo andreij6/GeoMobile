@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="api_base">https://dev.geounderground.com/api/</string>
+    <string name="mobile_version">1.0.0</string>
+    <string name="mobile_version_codename">Alpha</string>
+    <string name="mobile_version_id">5AC2F6BD-AA2D-402F-B4E0-DFC3545602BC</string>
+    <string name="key_1_modulus">leF2gRR62cjRujE0yRzTFThdXMcGmLkS4EBAowTmBqXsXUd01dYFKFnusTNf8Jm2irRzL/6viqKawWnCwbNYlC62Xezba4z9/0bpf+6Rugu19pez+LpwxMV9B6O1orw2LiwkHgamjC/vg9shXCzQ78B07AEpP5bdVqIDTTvPcMHm4xuYffMOgPhyfYKyRsEW</string>
+    <string name="key_1_exponent">gOfjk9sgx+xJ6xd0V5X80A==</string>
+    <string name="key_2">FJvcDaSRQ5sOnd3bbCA9pYhTe4hEj5WuCxYsKgAUDfY=</string>
+</resources>
