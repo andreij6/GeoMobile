@@ -8,19 +8,22 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-/**
- * Created by Jon Shaffer on 2/25/2015.
- */
 public class RecyclerFragment extends Fragment {
     private RecyclerView mRecyclerView;
     private RecyclerView.Adapter mAdapter;
     private RecyclerView.LayoutManager mLayoutManager;
 
+    public void RecyclerFragment() {
+        //
+    }
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        View rootView = inflater.inflate(R.layout.fragment_map, container, false);
-        String[] myDataSet = new String[2];
+        View rootView = inflater.inflate(R.layout.fragment_recycler, container, false);
+        String[] myDataSet = new String[]{
+                "String 1", "String 2"
+        };
 
         mRecyclerView = (RecyclerView) rootView.findViewById(R.id.my_recycler_view);
 
@@ -33,7 +36,7 @@ public class RecyclerFragment extends Fragment {
         mRecyclerView.setLayoutManager(mLayoutManager);
 
         // specify an adapter (see also next example)
-        mAdapter = new MyAdapter(myDataSet);
+        mAdapter = new RecyclerAdapter(myDataSet);
         mRecyclerView.setAdapter(mAdapter);
 
         return rootView;

@@ -1,0 +1,7 @@
+<resources>
+    <color name="black_overlay">#66000000</color>
+    <color name="white">#FFFFFF00</color>
+    <color name="geo_orange">#ED742200</color>
+    <color name="geo_blue">#4080c000</color>
+    <color name="geo_brown">#655b5300</color>
+</resources>

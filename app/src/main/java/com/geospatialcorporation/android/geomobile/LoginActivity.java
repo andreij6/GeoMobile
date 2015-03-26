@@ -26,6 +26,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 
+import com.geospatialcorporation.android.geomobile.util.GeoApi;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GooglePlayServicesUtil;
 import com.google.android.gms.common.SignInButton;
@@ -41,15 +42,28 @@ import java.util.List;
  * https://developers.google.com/+/mobile/android/getting-started#step_1_enable_the_google_api
  * and follow the steps in "Step 1" to create an OAuth 2.0 client for your package.
  */
-public class LoginActivity extends GooglePlusActivity implements LoaderCallbacks<Cursor> {
+public class LoginActivity extends GoogleApiActivity implements LoaderCallbacks<Cursor> {
+
+    /*
+    *Login workflow:
+    * /API/Auth/Mobile/Start
+    * /API/Auth/Mobile/Login
+    *
+    * or
+    *
+    * /API/Auth/Google
+     */
 
     /**
      * A dummy authentication store containing known user names and passwords.
      * TODO: remove after connecting to a real authentication system.
      */
+
     private static final String[] DUMMY_CREDENTIALS = new String[]{
             "foo@example.com:hello", "bar@example.com:world"
     };
+
+    private static final String TEST_CREDENTIALS = new String("jon.shaffer@geospatialcorp.com:secretDev1");
     /**
      * Keep track of the login task to ensure we can cancel it if requested.
      */
@@ -63,6 +77,7 @@ public class LoginActivity extends GooglePlusActivity implements LoaderCallbacks
     private SignInButton mPlusSignInButton;
     private View mSignOutButtons;
     private View mLoginFormView;
+    private GeoApi authentication;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -131,6 +146,8 @@ public class LoginActivity extends GooglePlusActivity implements LoaderCallbacks
             return;
         }
 
+        Intent mainActivityIntent = new Intent(this, MainActivity.class);
+
         // Reset errors.
         mEmailView.setError(null);
         mPasswordView.setError(null);
@@ -143,7 +160,8 @@ public class LoginActivity extends GooglePlusActivity implements LoaderCallbacks
         View focusView = null;
 
         // TODO: Remove this horrible testing code
-        startActivity(new Intent(this, MainActivity.class));
+        mainActivityIntent.putExtra("authToken", authentication.authToken);
+        startActivity(mainActivityIntent);
 
         // Check for a valid password, if the user entered one.
         if (!TextUtils.isEmpty(password) && !isPasswordValid(password)) {
@@ -175,7 +193,8 @@ public class LoginActivity extends GooglePlusActivity implements LoaderCallbacks
             mAuthTask.execute((Void) null);
 
             // TODO: add logic checking login
-            startActivity(new Intent(this, MainActivity.class));
+            mainActivityIntent.putExtra("authToken", authentication.authToken);
+            startActivity(mainActivityIntent);
         }
     }
 

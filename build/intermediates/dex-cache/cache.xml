@@ -2,11 +2,18 @@
 <items version="2" >
 
     <item
-        jar="C:\Users\Administrator\AndroidStudioProjects\GeoMobile\app\build\intermediates\exploded-aar\com.android.support\support-v4\21.0.3\libs\internal_impl-21.0.3.jar"
+        jar="C:\Users\Administrator\AndroidStudioProjects\GeoMobile\app\build\intermediates\exploded-aar\com.android.support\recyclerview-v7\22.0.0\classes.jar"
         jumboMode="false"
         revision="21.1.2"
-        sha1="01ec05bfbafcc07646ba813000bf2ef11742dd03">
-        <dex dex="C:\Users\Administrator\AndroidStudioProjects\GeoMobile\app\build\intermediates\pre-dexed\debug\internal_impl-21.0.3-bc170188985bd37c35435c9fb051cb1df11bf76b.jar" />
+        sha1="c6d79137693d494dee16372d3921f919eb724ced">
+        <dex dex="C:\Users\Administrator\AndroidStudioProjects\GeoMobile\app\build\intermediates\pre-dexed\debug\classes-3ec79f26c2a61c5b773c95c7d8d8aff569880c2e.jar" />
+    </item>
+    <item
+        jar="C:\Users\Administrator\AndroidStudioProjects\GeoMobile\app\build\intermediates\exploded-aar\com.android.support\support-v4\22.0.0\classes.jar"
+        jumboMode="false"
+        revision="21.1.2"
+        sha1="4e86306289ace4aa0cfec44a05ed2b410d36989d">
+        <dex dex="C:\Users\Administrator\AndroidStudioProjects\GeoMobile\app\build\intermediates\pre-dexed\debug\classes-70711c308194a1664a3f51aeda57cd1e87af3094.jar" />
     </item>
     <item
         jar="C:\Users\Administrator\AndroidStudioProjects\GeoMobile\app\build\intermediates\exploded-aar\com.google.android.gms\play-services\6.5.87\classes.jar"
@@ -16,25 +23,25 @@
         <dex dex="C:\Users\Administrator\AndroidStudioProjects\GeoMobile\app\build\intermediates\pre-dexed\debug\classes-4132c10e6bc068283151639cda4bbb6df68b6424.jar" />
     </item>
     <item
-        jar="C:\Users\Administrator\AndroidStudioProjects\GeoMobile\app\build\intermediates\exploded-aar\com.android.support\recyclerview-v7\21.0.3\classes.jar"
+        jar="C:\Users\Administrator\AndroidStudioProjects\GeoMobile\app\build\intermediates\exploded-aar\com.afollestad\material-dialogs\0.6.4.2\classes.jar"
         jumboMode="false"
         revision="21.1.2"
-        sha1="4b8945fc23a7461c6fdde15753456d64b0a9358b">
-        <dex dex="C:\Users\Administrator\AndroidStudioProjects\GeoMobile\app\build\intermediates\pre-dexed\debug\classes-6c20a4b165353d14aaf9300f3777a3912884812e.jar" />
+        sha1="f1c3d2bd4977bbafca0f9396b889ae13605f1ce7">
+        <dex dex="C:\Users\Administrator\AndroidStudioProjects\GeoMobile\app\build\intermediates\pre-dexed\debug\classes-8e82f3f4ddd80d986d74b6209975724088b4e36b.jar" />
     </item>
     <item
-        jar="C:\Users\Administrator\AndroidStudioProjects\GeoMobile\app\build\intermediates\exploded-aar\com.android.support\support-v4\21.0.3\classes.jar"
+        jar="C:\Users\Administrator\AndroidStudioProjects\GeoMobile\app\build\intermediates\exploded-aar\com.android.support\appcompat-v7\22.0.0\classes.jar"
         jumboMode="false"
         revision="21.1.2"
-        sha1="2c91c949a45a21cdecf26e03951e46c7beec9ad8">
-        <dex dex="C:\Users\Administrator\AndroidStudioProjects\GeoMobile\app\build\intermediates\pre-dexed\debug\classes-3da7d5fb6075a74dacab4729fa351b6fe5c41d06.jar" />
+        sha1="d84409890828e07d344a3b9b1da545dba9897b51">
+        <dex dex="C:\Users\Administrator\AndroidStudioProjects\GeoMobile\app\build\intermediates\pre-dexed\debug\classes-fdfaa725e682b70d5709cb858cd5f8e8988db024.jar" />
     </item>
     <item
-        jar="C:\Users\Administrator\AppData\Local\Android\sdk\extras\android\m2repository\com\android\support\support-annotations\21.0.3\support-annotations-21.0.3.jar"
+        jar="C:\Users\Administrator\AppData\Local\Android\sdk\extras\android\m2repository\com\android\support\support-annotations\22.0.0\support-annotations-22.0.0.jar"
         jumboMode="false"
         revision="21.1.2"
-        sha1="4b74cefe1f0c1b819e7260c8627a14674e37fd35">
-        <dex dex="C:\Users\Administrator\AndroidStudioProjects\GeoMobile\app\build\intermediates\pre-dexed\debug\support-annotations-21.0.3-925875d9448dd345587cabdb9a56f4834d2efae9.jar" />
+        sha1="685d0b2c590447e85284ed84712cb363ba04eff8">
+        <dex dex="C:\Users\Administrator\AndroidStudioProjects\GeoMobile\app\build\intermediates\pre-dexed\debug\support-annotations-22.0.0-b02d5f0bbb77641e1684f83d7fa0b9acc540cbd4.jar" />
     </item>
     <item
         jar="C:\Users\Administrator\AndroidStudioProjects\GeoMobile\app\build\intermediates\exploded-aar\com.android.support\cardview-v7\21.0.3\classes.jar"
@@ -44,11 +51,11 @@
         <dex dex="C:\Users\Administrator\AndroidStudioProjects\GeoMobile\app\build\intermediates\pre-dexed\debug\classes-586b18e67e0b79bddd75f4787f1c8c02e7ae5d3d.jar" />
     </item>
     <item
-        jar="C:\Users\Administrator\AndroidStudioProjects\GeoMobile\app\build\intermediates\exploded-aar\com.android.support\appcompat-v7\21.0.3\classes.jar"
+        jar="C:\Users\Administrator\AndroidStudioProjects\GeoMobile\app\build\intermediates\exploded-aar\com.android.support\support-v4\22.0.0\libs\internal_impl-22.0.0.jar"
         jumboMode="false"
         revision="21.1.2"
-        sha1="81d42bf983a8741f4888a6e333e454e4a5e0eeb7">
-        <dex dex="C:\Users\Administrator\AndroidStudioProjects\GeoMobile\app\build\intermediates\pre-dexed\debug\classes-32def1b0224dab34394cb7d4b737571847cc492b.jar" />
+        sha1="b5b92f469d515a13d778900f6d50c03d12f35504">
+        <dex dex="C:\Users\Administrator\AndroidStudioProjects\GeoMobile\app\build\intermediates\pre-dexed\debug\internal_impl-22.0.0-3ad5bf1be38a53aa9c11ffaf0820dd3c79de9b17.jar" />
     </item>
 
 </items>

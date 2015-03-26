@@ -35,6 +35,9 @@ import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.Toast;
 
+import com.geospatialcorporation.android.geomobile.util.Dialogs;
+import com.geospatialcorporation.android.geomobile.util.GeoApi;
+
 /**
  * This example illustrates a common usage of the DrawerLayout widget
  * in the Android support library.
@@ -73,10 +76,16 @@ public class MainActivity extends Activity {
     private CharSequence mTitle;
     private String[] mPlanetTitles;
 
+    private GeoApi authentication;
+
+    private Dialogs dialog;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        dialog = new Dialogs();
 
         mMap = new GoogleMapFragment();
 
@@ -217,5 +226,9 @@ public class MainActivity extends Activity {
         super.onConfigurationChanged(newConfig);
         // Pass any configuration change to the drawer toggls
         mDrawerToggle.onConfigurationChanged(newConfig);
+    }
+
+    public void treeItem(View view) {
+        dialog.message("tree item clicked", this);
     }
 }

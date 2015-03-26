@@ -1,8 +1,5 @@
 package com.geospatialcorporation.android.geomobile;
 
-/**
- * Created by Jon Shaffer on 2/24/2015.
- */
 public enum Views {
     MAP(0),
     LAYERS(1),
