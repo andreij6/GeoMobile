@@ -38,9 +38,8 @@ import android.widget.Toast;
 import com.geospatialcorporation.android.geomobile.library.constants.ViewConstants;
 import com.geospatialcorporation.android.geomobile.ui.fragments.GoogleMapFragment;
 import com.geospatialcorporation.android.geomobile.R;
-import com.geospatialcorporation.android.geomobile.ui.fragments.LayerItemsFragment;
-import com.geospatialcorporation.android.geomobile.ui.fragments.LibraryItemsFragment;
-import com.geospatialcorporation.android.geomobile.ui.fragments.RecyclerFragment;
+import com.geospatialcorporation.android.geomobile.ui.fragments.LayerFragment;
+import com.geospatialcorporation.android.geomobile.ui.fragments.LibraryFragment;
 import com.geospatialcorporation.android.geomobile.library.util.Dialogs;
 import com.geospatialcorporation.android.geomobile.library.util.GeoApi;
 
@@ -212,9 +211,9 @@ public class MainActivity extends Activity {
             case ViewConstants.MAP:
                 return mMap;
             case ViewConstants.LAYER:
-                return new LayerItemsFragment();
+                return new LayerFragment();
             case ViewConstants.LIBRARY:
-                return new LibraryItemsFragment();
+                return new LibraryFragment();
             //case ViewConstants.ACCOUNT:
             //    fragment = new AccountFragment();
             //   break;
