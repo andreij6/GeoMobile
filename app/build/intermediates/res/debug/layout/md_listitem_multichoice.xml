@@ -34,4 +34,4 @@
         android:layout_marginRight="@dimen/md_dialog_frame_margin"
         android:layout_marginEnd="@dimen/md_dialog_frame_margin" />
 
-</LinearLayout><!-- From: file:/Users/aidanfollestad/Android%20Projects/MaterialDialogs/library/src/main/res/layout/md_listitem_multichoice.xml --><!-- From: file:/C:/Users/Administrator/AndroidStudioProjects/GeoMobile/app/build/intermediates/exploded-aar/com.afollestad/material-dialogs/0.6.4.2/res/layout/md_listitem_multichoice.xml -->
+</LinearLayout><!-- From: file:/Users/aidanfollestad/Android%20Projects/MaterialDialogs/library/src/main/res/layout/md_listitem_multichoice.xml --><!-- From: file:/C:/GeoUndergroundMobile/geomobile/app/build/intermediates/exploded-aar/com.afollestad/material-dialogs/0.6.4.2/res/layout/md_listitem_multichoice.xml -->

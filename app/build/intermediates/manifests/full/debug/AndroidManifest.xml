@@ -56,7 +56,7 @@
 
         <!-- On load: Splash -> Login? -> Main -->
         <activity
-            android:name="com.geospatialcorporation.android.geomobile.SplashScreenActivity"
+            android:name="com.geospatialcorporation.android.geomobile.ui.SplashScreenActivity"
             android:label="@string/app_name"
             android:screenOrientation="portrait"
             android:theme="@android:style/Theme.Black.NoTitleBar" >
@@ -67,11 +67,11 @@
             </intent-filter>
         </activity>
         <activity
-            android:name="com.geospatialcorporation.android.geomobile.LoginActivity"
+            android:name="com.geospatialcorporation.android.geomobile.ui.LoginActivity"
             android:label="@string/app_name" >
         </activity>
         <activity
-            android:name="com.geospatialcorporation.android.geomobile.MainActivity"
+            android:name="com.geospatialcorporation.android.geomobile.ui.MainActivity"
             android:label="@string/app_name" >
         </activity>
 
@@ -80,7 +80,7 @@
             android:value="@integer/google_play_services_version" />
 
         <activity
-            android:name="com.geospatialcorporation.android.geomobile.ChooseClientActivity"
+            android:name="com.geospatialcorporation.android.geomobile.ui.ChooseClientActivity"
             android:label="@string/title_activity_choose_client" >
         </activity>
         <activity

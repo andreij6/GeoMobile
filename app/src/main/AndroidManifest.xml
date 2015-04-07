@@ -54,7 +54,7 @@
 
         <!-- On load: Splash -> Login? -> Main -->
         <activity
-            android:name=".SplashScreenActivity"
+            android:name=".ui.SplashScreenActivity"
             android:label="@string/app_name"
             android:screenOrientation="portrait"
             android:theme="@android:style/Theme.Black.NoTitleBar" >
@@ -65,11 +65,11 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".LoginActivity"
+            android:name=".ui.LoginActivity"
             android:label="@string/app_name" >
         </activity>
         <activity
-            android:name=".MainActivity"
+            android:name=".ui.MainActivity"
             android:label="@string/app_name" >
         </activity>
 
@@ -78,7 +78,7 @@
             android:value="@integer/google_play_services_version" />
 
         <activity
-            android:name=".ChooseClientActivity"
+            android:name=".ui.ChooseClientActivity"
             android:label="@string/title_activity_choose_client" >
         </activity>
     </application>

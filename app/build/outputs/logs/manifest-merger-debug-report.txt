@@ -1,6 +1,8 @@
 -- Merging decision tree log ---
 manifest
 ADDED from AndroidManifest.xml:17:1
+	xmlns:android
+		ADDED from AndroidManifest.xml:17:11
 	package
 		ADDED from AndroidManifest.xml:18:5
 		INJECTED from AndroidManifest.xml:0:0
@@ -11,8 +13,6 @@ ADDED from AndroidManifest.xml:17:1
 		ADDED from AndroidManifest.xml:19:5
 		INJECTED from AndroidManifest.xml:0:0
 		INJECTED from AndroidManifest.xml:0:0
-	xmlns:android
-		ADDED from AndroidManifest.xml:17:11
 uses-sdk
 ADDED from AndroidManifest.xml:22:5
 MERGED from com.android.support:support-v4:22.0.0:20:5
@@ -109,11 +109,11 @@ MERGED from com.android.support:support-v4:22.0.0:22:5
 		ADDED from AndroidManifest.xml:46:9
 meta-data#com.google.android.maps.v2.API_KEY
 ADDED from AndroidManifest.xml:51:9
-	android:value
-		ADDED from AndroidManifest.xml:53:13
 	android:name
 		ADDED from AndroidManifest.xml:52:13
-activity#com.geospatialcorporation.android.geomobile.SplashScreenActivity
+	android:value
+		ADDED from AndroidManifest.xml:53:13
+activity#com.geospatialcorporation.android.geomobile.ui.SplashScreenActivity
 ADDED from AndroidManifest.xml:56:9
 	android:screenOrientation
 		ADDED from AndroidManifest.xml:59:13
@@ -133,13 +133,13 @@ category#android.intent.category.LAUNCHER
 ADDED from AndroidManifest.xml:64:17
 	android:name
 		ADDED from AndroidManifest.xml:64:27
-activity#com.geospatialcorporation.android.geomobile.LoginActivity
+activity#com.geospatialcorporation.android.geomobile.ui.LoginActivity
 ADDED from AndroidManifest.xml:67:9
 	android:label
 		ADDED from AndroidManifest.xml:69:13
 	android:name
 		ADDED from AndroidManifest.xml:68:13
-activity#com.geospatialcorporation.android.geomobile.MainActivity
+activity#com.geospatialcorporation.android.geomobile.ui.MainActivity
 ADDED from AndroidManifest.xml:71:9
 	android:label
 		ADDED from AndroidManifest.xml:73:13
@@ -148,11 +148,11 @@ ADDED from AndroidManifest.xml:71:9
 meta-data#com.google.android.gms.version
 ADDED from AndroidManifest.xml:76:9
 MERGED from com.google.android.gms:play-services:6.5.87:21:9
-	android:value
-		ADDED from AndroidManifest.xml:78:13
 	android:name
 		ADDED from AndroidManifest.xml:77:13
-activity#com.geospatialcorporation.android.geomobile.ChooseClientActivity
+	android:value
+		ADDED from AndroidManifest.xml:78:13
+activity#com.geospatialcorporation.android.geomobile.ui.ChooseClientActivity
 ADDED from AndroidManifest.xml:80:9
 	android:label
 		ADDED from AndroidManifest.xml:82:13

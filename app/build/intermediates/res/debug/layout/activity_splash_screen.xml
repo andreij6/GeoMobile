@@ -4,7 +4,7 @@ xmlns:tools="http://schemas.android.com/tools"
 android:layout_width="match_parent"
 android:layout_height="match_parent"
 android:background="@color/black_overlay"
-tools:context="com.geospatialcorporation.android.geomobile.SplashScreenActivity">
+tools:context="com.geospatialcorporation.android.geomobile.ui.SplashScreenActivity">
 
 <ImageView
     android:id="@+id/imgLogo"
@@ -23,4 +23,4 @@ tools:context="com.geospatialcorporation.android.geomobile.SplashScreenActivity"
     android:layout_alignParentBottom="true"
     android:text="GeoUnderground" />
 
-</RelativeLayout><!-- From: file:/C:/Users/Administrator/AndroidStudioProjects/GeoMobile/app/src/main/res/layout/activity_splash_screen.xml -->
+</RelativeLayout><!-- From: file:/C:/GeoUndergroundMobile/geomobile/app/src/main/res/layout/activity_splash_screen.xml -->

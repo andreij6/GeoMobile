@@ -24,4 +24,4 @@
         android:gravity="start"
         android:textAlignment="viewStart" />
 
-</LinearLayout><!-- From: file:/Users/aidanfollestad/Android%20Projects/MaterialDialogs/library/src/main/res/layout/md_progress_dialog_indeterminate.xml --><!-- From: file:/C:/Users/Administrator/AndroidStudioProjects/GeoMobile/app/build/intermediates/exploded-aar/com.afollestad/material-dialogs/0.6.4.2/res/layout/md_progress_dialog_indeterminate.xml -->
+</LinearLayout><!-- From: file:/Users/aidanfollestad/Android%20Projects/MaterialDialogs/library/src/main/res/layout/md_progress_dialog_indeterminate.xml --><!-- From: file:/C:/GeoUndergroundMobile/geomobile/app/build/intermediates/exploded-aar/com.afollestad/material-dialogs/0.6.4.2/res/layout/md_progress_dialog_indeterminate.xml -->
