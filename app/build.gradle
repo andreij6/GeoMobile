@@ -19,6 +19,7 @@ android {
 }
 
 dependencies {
+    compile 'com.squareup.okhttp:okhttp:2.3.0' // at https://github.com/square/okhttp
     compile 'com.android.support:support-v4:21.0.3'
     compile 'com.android.support:appcompat-v7:21.0.3'
     compile 'com.afollestad:material-dialogs:0.6.4.2' // at https://github.com/afollestad/material-dialogs
