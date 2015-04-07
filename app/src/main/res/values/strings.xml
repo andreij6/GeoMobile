@@ -36,4 +36,8 @@
     <string name="dummy_content">DUMMY\nCONTENT</string>
 
     <string name="error">Error</string>
+    <string name="title_activity_choose_client">ChooseClientActivity</string>
+
+    <string name="hello_world">Hello world!</string>
+    <string name="action_settings">Settings</string>
 </resources>

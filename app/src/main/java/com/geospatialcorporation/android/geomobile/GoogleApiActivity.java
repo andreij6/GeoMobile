@@ -4,20 +4,30 @@ import android.accounts.AccountManager;
 import android.app.Activity;
 import android.content.Intent;
 import android.content.IntentSender;
+import android.os.AsyncTask;
 import android.os.Bundle;
+import android.util.Log;
 
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.geospatialcorporation.android.geomobile.util.Dialogs;
+import com.google.android.gms.auth.GoogleAuthException;
+import com.google.android.gms.auth.GoogleAuthUtil;
+import com.google.android.gms.auth.GooglePlayServicesAvailabilityException;
+import com.google.android.gms.auth.UserRecoverableAuthException;
 import com.google.android.gms.common.AccountPicker;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GooglePlayServicesClient.ConnectionCallbacks;
 import com.google.android.gms.common.GooglePlayServicesClient.OnConnectionFailedListener;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.plus.Plus;
+import com.google.android.gms.plus.Account;
+
+import java.io.IOException;
 
 public class GoogleApiActivity extends Activity implements
         ConnectionCallbacks, OnConnectionFailedListener {
-
+    private static final String TAG = "RetrieveAccessToken";
+    private static final int REQ_SIGN_IN_REQUIRED = 55664;
     private Dialogs dialog;
 
     /* Request code used to invoke sign in user interactions. */
@@ -86,16 +96,19 @@ public class GoogleApiActivity extends Activity implements
     public void onDisconnected() {
         // TODO: implement
     }
-/*
-    protected void onActivityResult(final int requestCode, final int resultCode,
-                                    final Intent data) {
-        if (requestCode == 1 && resultCode == RESULT_OK) {
-            String accountName = data.getStringExtra(AccountManager.KEY_ACCOUNT_NAME);
-        }
-    }
-*/
+
     protected void onActivityResult(final int requestCode, final int responseCode, final Intent data) {
-        dialog.message(data.getStringExtra(AccountManager.KEY_ACCOUNT_NAME), this);
+        int MY_ACTIVITYS_AUTH_REQUEST_CODE = 0;
+
+        String accountName = data.getStringExtra(AccountManager.KEY_ACCOUNT_NAME);
+
+        if (requestCode == MY_ACTIVITYS_AUTH_REQUEST_CODE) {
+            if (responseCode == RESULT_OK) {
+                new RetrieveTokenTask().execute(accountName);
+            }
+        }
+
+        dialog.message(accountName, this);
 
         if (requestCode == RC_SIGN_IN) {
             mIntentInProgress = false;
@@ -133,6 +146,8 @@ public class GoogleApiActivity extends Activity implements
         // We've resolved any connection errors.  mGoogleApiClient can be used to
         // access Google APIs on behalf of the user.
         // TODO: store authtoken send to geounderground api
+
+        // code
     }
 
     public void onConnectionSuspended(int cause) {
@@ -141,5 +156,31 @@ public class GoogleApiActivity extends Activity implements
 
     public GoogleApiClient getGoogleApiClient() {
         return mGoogleApiClient;
+    }
+
+    private class RetrieveTokenTask extends AsyncTask<String, Void, String> {
+        @Override
+        protected String doInBackground(String... params) {
+            String accountName = params[0];
+            String scopes = "oauth2:profile email";
+            String token = null;
+            try {
+                token = GoogleAuthUtil.getToken(getApplicationContext(), accountName, scopes);
+            } catch (IOException e) {
+                Log.e(TAG, e.getMessage());
+            } catch (UserRecoverableAuthException e) {
+                startActivityForResult(e.getIntent(), REQ_SIGN_IN_REQUIRED);
+            } catch (GoogleAuthException e) {
+                Log.e(TAG, e.getMessage());
+            }
+            return token;
+        }
+
+        @Override
+        protected void onPostExecute(String s) {
+            super.onPostExecute(s);
+
+            // TODO: Make request to GeoUnderground to authenticate user based on Google AuthToken
+        }
     }
 }
