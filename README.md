@@ -21,6 +21,7 @@
 * [Git Cheatsheet: Visual](http://ndpsoftware.com/git-cheatsheet.html)
 * [Git Cheatsheet: List](https://training.github.com/kit/downloads/github-git-cheat-sheet.pdf)
 * [Learn Markdown](https://bitbucket.org/tutorials/markdowndemo) to edit wiki
+* CTRL+ALT+L auto format file shortcut
 
 ###Development & Android Studio###
 * [Android Programming: Pushing the Limits](https://drive.google.com/a/geospatialcorp.com/folderview?id=0B6sc3xBqdmNHfllWTTM1UE4wUVNpd2FWaGhTd2VPeHJHcEJmNV82VHJWWVc1VTR2RGdNMjA&usp=sharing)
