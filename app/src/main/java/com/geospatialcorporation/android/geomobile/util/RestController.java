@@ -2,6 +2,14 @@ package com.geospatialcorporation.android.geomobile.util;
 
 import android.os.AsyncTask;
 
+import com.google.gson.Gson;
+import com.squareup.okhttp.Callback;
+import com.squareup.okhttp.Headers;
+import com.squareup.okhttp.OkHttpClient;
+import com.squareup.okhttp.Request;
+import com.squareup.okhttp.RequestBody;
+import com.squareup.okhttp.Response;
+
 import org.apache.http.HttpResponse;
 import org.apache.http.client.ClientProtocolException;
 import org.apache.http.client.HttpClient;
@@ -17,123 +25,109 @@ import java.io.IOException;
 
 public class RestController {
     private final OkHttpClient client;
+    private final Gson gson;
     public String authToken = "";
 
     public RestController(String AuthToken) {
+        client = new OkHttpClient();
+        gson = new Gson();
         authToken = AuthToken;
     }
 
-    public class GeoApiRequest extends AsyncTask<String, Integer, JSONObject> {
-        @Override
-        protected JSONObject doInBackground(String... uri) {
-            HttpClient httpclient = new DefaultHttpClient();
-            JSONObject response = new JSONObject();
+    public void AsyncGet(String url) throws Exception {
+        Request request = new Request.Builder()
+                .url(url)
+                .build();
 
-            switch (uri[0]) {
-                case "DELETE":
-                    response = httpDelete(httpclient, uri[1]);
-                    break;
-                case "POST":
-                    response = httpPost(httpclient, uri[1]);
-                    break;
-                case "PUT":
-                    response = httpPut(httpclient, uri[1]);
-                    break;
-                case "GET":
-                    response = httpGet(httpclient, uri[1]);
-                    break;
-                default:
-                    break;
+        client.newCall(request).enqueue(new Callback() {
+            @Override public void onFailure(Request request, IOException throwable) {
+                throwable.printStackTrace();
             }
 
-            return response;
-        }
+            @Override public void onResponse(Response response) throws IOException {
+                if (!response.isSuccessful()) throw new IOException("Unexpected code " + response);
 
-        private JSONObject httpDelete(HttpClient client, String uri) {
-            try {
-                HttpDelete request = new HttpDelete(uri);
-                request.setHeader("Authentication", "WebToken " + authToken);
+                Headers responseHeaders = response.headers();
+                for (int i = 0; i < responseHeaders.size(); i++) {
+                    System.out.println(responseHeaders.name(i) + ": " + responseHeaders.value(i));
+                }
 
-                HttpResponse response = client.execute(request);
+                System.out.println(response.body().string());
+            }
+        });
+    }
 
-                return new JSONObject(response.getEntity().getContent().toString());
-            } catch (JSONException e) {
-                // TODO Handle problems..
-            } catch (ClientProtocolException e) {
-                //TODO Handle problems..
-            } catch (IOException e) {
-                //TODO Handle problems..
+    public void AsyncPost(String url, Object model) throws Exception {
+        Request request = new Request.Builder()
+                .url(url)
+                .post(RequestBody.create(Media.JSON.value, gson.toJson(model)))
+                .build();
+
+        client.newCall(request).enqueue(new Callback() {
+            @Override
+            public void onFailure(Request request, IOException throwable) {
+                throwable.printStackTrace();
             }
 
-            return new JSONObject();
-        }
+            @Override
+            public void onResponse(Response response) throws IOException {
+                if (!response.isSuccessful()) throw new IOException("Unexpected code " + response);
 
-        private JSONObject httpPut(HttpClient client, String uri) {
-            try {
-                HttpPut request = new HttpPut(uri);
-                request.setHeader("Authentication", "WebToken " + authToken);
+                Headers responseHeaders = response.headers();
+                for (int i = 0; i < responseHeaders.size(); i++) {
+                    System.out.println(responseHeaders.name(i) + ": " + responseHeaders.value(i));
+                }
 
-                HttpResponse response = client.execute(request);
+                System.out.println(response.body().string());
+            }
+        });
+    }
 
-                return new JSONObject(response.getEntity().getContent().toString());
-            } catch (JSONException e) {
-                // TODO Handle problems..
-            } catch (ClientProtocolException e) {
-                //TODO Handle problems..
-            } catch (IOException e) {
-                //TODO Handle problems..
+    public void AsyncPut(String url, Object model) throws Exception {
+        Request request = new Request.Builder()
+                .url(url)
+                .put(RequestBody.create(Media.JSON.value, gson.toJson(model)))
+                .build();
+
+        client.newCall(request).enqueue(new Callback() {
+            @Override public void onFailure(Request request, IOException throwable) {
+                throwable.printStackTrace();
             }
 
-            return new JSONObject();
-        }
+            @Override public void onResponse(Response response) throws IOException {
+                if (!response.isSuccessful()) throw new IOException("Unexpected code " + response);
 
-        private JSONObject httpPost(HttpClient client, String uri) {
-            try {
-                HttpPost request = new HttpPost(uri);
-                request.setHeader("Authentication", "WebToken " + authToken);
+                Headers responseHeaders = response.headers();
+                for (int i = 0; i < responseHeaders.size(); i++) {
+                    System.out.println(responseHeaders.name(i) + ": " + responseHeaders.value(i));
+                }
 
-                HttpResponse response = client.execute(request);
+                System.out.println(response.body().string());
+            }
+        });
+    }
 
-                return new JSONObject(response.getEntity().getContent().toString());
-            } catch (JSONException e) {
-                // TODO Handle problems..
-            } catch (ClientProtocolException e) {
-                //TODO Handle problems..
-            } catch (IOException e) {
-                //TODO Handle problems..
+    public void AsyncDelete(String url, Object model) throws Exception {
+        Request request = new Request.Builder()
+                .url(url)
+                .delete(RequestBody.create(Media.JSON.value, gson.toJson(model)))
+                .build();
+
+        client.newCall(request).enqueue(new Callback() {
+            @Override public void onFailure(Request request, IOException throwable) {
+                throwable.printStackTrace();
             }
 
-            return new JSONObject();
-        }
+            @Override public void onResponse(Response response) throws IOException {
+                if (!response.isSuccessful()) throw new IOException("Unexpected code " + response);
 
-        private JSONObject httpGet(HttpClient client, String uri) {
-            try {
-                HttpGet request = new HttpGet(uri);
-                request.setHeader("Authentication", "WebToken " + authToken);
+                Headers responseHeaders = response.headers();
+                for (int i = 0; i < responseHeaders.size(); i++) {
+                    System.out.println(responseHeaders.name(i) + ": " + responseHeaders.value(i));
+                }
 
-                HttpResponse response = client.execute(request);
-
-                return new JSONObject(response.getEntity().getContent().toString());
-            } catch (JSONException e) {
-                // TODO Handle problems..
-            } catch (ClientProtocolException e) {
-                //TODO Handle problems..
-            } catch (IOException e) {
-                //TODO Handle problems..
+                System.out.println(response.body().string());
             }
-
-            return new JSONObject();
-        }
-
-        protected void onProgressUpdate(Integer... progress) {
-            super.onProgressUpdate(progress[0]);
-        }
-
-        @Override
-        protected void onPostExecute(JSONObject result) {
-            super.onPostExecute(result);
-            //Do anything with response..
-        }
-
+        });
     }
 }
