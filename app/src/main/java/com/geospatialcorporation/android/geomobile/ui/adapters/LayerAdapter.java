@@ -2,9 +2,12 @@ package com.geospatialcorporation.android.geomobile.ui.adapters;
 
 import android.content.Context;
 import android.support.v7.widget.RecyclerView;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 
+import com.geospatialcorporation.android.geomobile.R;
 import com.geospatialcorporation.android.geomobile.models.Layers.Layer;
 
 import java.util.ArrayList;
@@ -24,12 +27,14 @@ public class LayerAdapter extends RecyclerView.Adapter<LayerAdapter.LayerViewHol
 
     @Override
     public LayerViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        return null;
+        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.recycler_list_layer, parent, false);
+
+        return new LayerViewHolder(view);
     }
 
     @Override
     public void onBindViewHolder(LayerViewHolder holder, int position) {
-
+        holder.bindLayerItem(mLayers.get(position));
     }
 
     @Override
@@ -38,16 +43,17 @@ public class LayerAdapter extends RecyclerView.Adapter<LayerAdapter.LayerViewHol
     }
 
     protected class LayerViewHolder extends RecyclerView.ViewHolder {
-        //regions Properties
-
+        //region Properties
+        TextView mLayerName;
         //endregion
 
         public LayerViewHolder(View itemView){
             super(itemView);
+            mLayerName = (TextView)itemView.findViewById(R.id.layerNameLabel);
         }
 
-        public void bindLayerItem(Layer item){
-
+        public void bindLayerItem(Layer layer){
+            mLayerName.setText(layer.getName());
         }
 
         protected View.OnClickListener LayerItemClicked = new View.OnClickListener(){

@@ -9,71 +9,79 @@ import java.util.ArrayList;
  * Created by andre on 4/7/2015.
  */
 public class Folder {
+
     //region Properties
-    private Boolean mIsImportFolder;
-    private Boolean mIsFixed;
-    private ArrayList<Layer> mLayers;
-    private ArrayList<Folder> mFolders;
-    private Integer mAccessLevel;
-    private Integer mId;
-    private String mName;
+    private Boolean IsImportFolder;
+    private Boolean IsFixed;
+    private ArrayList<Layer> Layers;
+    private ArrayList<Folder> Folders;
+    private Integer AccessLevel;
+    private Integer MobileId;
+    private Integer Id;
+    private String Name;
     //endregion
 
     //region Getters & Setters
     public Boolean getIsImportFolder() {
-        return mIsImportFolder;
+        return IsImportFolder;
     }
 
     public void setIsImportFolder(Boolean isImportFolder) {
-        mIsImportFolder = isImportFolder;
+        IsImportFolder = isImportFolder;
     }
 
     public Boolean getIsFixed() {
-        return mIsFixed;
+        return IsFixed;
     }
 
     public void setIsFixed(Boolean isFixed) {
-        mIsFixed = isFixed;
+        IsFixed = isFixed;
     }
 
     public ArrayList<Layer> getLayers() {
-        return mLayers;
+        return Layers;
     }
 
     public void setLayers(ArrayList<Layer> layers) {
-        mLayers = layers;
+        Layers = layers;
     }
 
     public ArrayList<Folder> getFolders() {
-        return mFolders;
+        return Folders;
     }
 
     public void setFolders(ArrayList<Folder> folders) {
-        mFolders = folders;
+        Folders = folders;
     }
 
     public Integer getAccessLevel() {
-        return mAccessLevel;
+        return AccessLevel;
     }
 
     public void setAccessLevel(Integer accessLevel) {
-        mAccessLevel = accessLevel;
+        AccessLevel = accessLevel;
     }
 
-    public Integer getId() {
-        return mId;
+    public Integer getMobileId() {
+        return MobileId;
     }
 
-    public void setId(Integer id) {
-        mId = id;
+    public void setMobileId(Integer id) {
+        MobileId = id;
     }
+
+    public Integer getId() {return Id; }
+
+    public void setId(Integer id){ Id = id; }
 
     public String getName() {
-        return mName;
+        return Name;
     }
 
     public void setName(String name) {
-        mName = name;
+        Name = name;
     }
     //endregion
+
+
 }

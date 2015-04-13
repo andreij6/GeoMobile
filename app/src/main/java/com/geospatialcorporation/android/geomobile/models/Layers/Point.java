@@ -5,44 +5,44 @@ package com.geospatialcorporation.android.geomobile.models.Layers;
  */
 public class Point {
     //region Properties
-    private Integer mGeometryType;
-    private double mX;
-    private double mY;
+    private Integer GeometryType;
+    private double X;
+    private double Y;
     //endregion
 
     //region Constructors
     public Point(){}
 
     public Point(Integer geometryType, double x, double y){
-        mGeometryType = geometryType;
-        mX = x;
-        mY = y;
+        GeometryType = geometryType;
+        X = x;
+        Y = y;
     }
     //endregion
 
     //region Getters & Setters
     public Integer getGeometryType() {
-        return mGeometryType;
+        return GeometryType;
     }
 
     public void setGeometryType(Integer geometryType) {
-        mGeometryType = geometryType;
+        GeometryType = geometryType;
     }
 
     public double getX() {
-        return mX;
+        return X;
     }
 
     public void setX(double x) {
-        mX = x;
+        X = x;
     }
 
     public double getY() {
-        return mY;
+        return Y;
     }
 
     public void setY(double y) {
-        mY = y;
+        Y = y;
     }
     //endregion
 

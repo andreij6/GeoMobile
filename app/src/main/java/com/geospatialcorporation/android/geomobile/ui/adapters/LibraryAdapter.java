@@ -2,9 +2,11 @@ package com.geospatialcorporation.android.geomobile.ui.adapters;
 
 import android.content.Context;
 import android.support.v7.widget.RecyclerView;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.geospatialcorporation.android.geomobile.R;
 import com.geospatialcorporation.android.geomobile.models.LibraryItems.LibraryItem;
 
 import java.util.ArrayList;
@@ -24,12 +26,14 @@ public class LibraryAdapter extends RecyclerView.Adapter<LibraryAdapter.LibraryV
 
     @Override
     public LibraryViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-            return null;
+        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.recycler_list_library, parent, false);
+
+        return new LibraryViewHolder(view);
     }
 
     @Override
     public void onBindViewHolder(LibraryViewHolder holder, int position) {
-
+        holder.bindLibraryItem(mLibraryItems.get(position));
     }
 
     @Override
@@ -43,7 +47,9 @@ public class LibraryAdapter extends RecyclerView.Adapter<LibraryAdapter.LibraryV
     //endregion
 
     public LibraryViewHolder(View itemView){
+
         super(itemView);
+
     }
 
     public void bindLibraryItem(LibraryItem item){

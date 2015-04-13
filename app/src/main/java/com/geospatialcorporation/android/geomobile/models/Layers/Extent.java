@@ -6,34 +6,34 @@ package com.geospatialcorporation.android.geomobile.models.Layers;
 public class Extent {
 
     //region Properties
-    private Integer mGeometryType;
-    private Point mMin;
-    private Point mMax;
+    private Integer GeometryType;
+    private Point Min;
+    private Point Max;
     //endregion
 
     //region Getters & Setters
     public Integer getGeometryType() {
-        return mGeometryType;
+        return GeometryType;
     }
 
     public void setGeometryType(Integer geometryType) {
-        mGeometryType = geometryType;
+        GeometryType = geometryType;
     }
 
     public Point getMin() {
-        return mMin;
+        return Min;
     }
 
     public void setMin(Point min) {
-        mMin = min;
+        Min = min;
     }
 
     public Point getMax() {
-        return mMax;
+        return Max;
     }
 
     public void setMax(Point max) {
-        mMax = max;
+        Max = max;
     }
     //endregion
 

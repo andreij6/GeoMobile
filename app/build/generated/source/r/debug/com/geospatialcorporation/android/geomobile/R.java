@@ -2019,8 +2019,8 @@ containing a value of this type.
         public static final int action_mode_bar=0x7f0a0042;
         public static final int action_mode_bar_stub=0x7f0a0041;
         public static final int action_mode_close_button=0x7f0a0034;
-        public static final int action_settings=0x7f0a007f;
-        public static final int action_websearch=0x7f0a007e;
+        public static final int action_settings=0x7f0a0082;
+        public static final int action_websearch=0x7f0a0081;
         public static final int activity_chooser_view_content=0x7f0a0035;
         public static final int adjust_height=0x7f0a0016;
         public static final int adjust_width=0x7f0a0017;
@@ -2039,6 +2039,8 @@ containing a value of this type.
         public static final int buyButton=0x7f0a0028;
         public static final int buy_now=0x7f0a002c;
         public static final int buy_with_google=0x7f0a002d;
+        public static final int card_view=0x7f0a007e;
+        public static final int checkBox=0x7f0a0080;
         public static final int checkbox=0x7f0a003d;
         public static final int choose_client_recycler=0x7f0a0053;
         public static final int classic=0x7f0a002f;
@@ -2079,6 +2081,7 @@ containing a value of this type.
         public static final int imgLogo=0x7f0a0063;
         public static final int info_text=0x7f0a0054;
         public static final int label=0x7f0a007d;
+        public static final int layerNameLabel=0x7f0a007f;
         public static final int layeritem_recyclerView=0x7f0a0067;
         public static final int left_drawer=0x7f0a0062;
         public static final int libraryitem_recyclerView=0x7f0a0068;
@@ -2183,7 +2186,9 @@ containing a value of this type.
         public static final int md_listitem_singlechoice=0x7f030026;
         public static final int md_progress_dialog=0x7f030027;
         public static final int md_progress_dialog_indeterminate=0x7f030028;
-        public static final int support_simple_spinner_dropdown_item=0x7f030029;
+        public static final int recycler_list_layer=0x7f030029;
+        public static final int recycler_list_library=0x7f03002a;
+        public static final int support_simple_spinner_dropdown_item=0x7f03002b;
     }
     public static final class menu {
         public static final int main=0x7f0e0000;
@@ -2279,19 +2284,20 @@ https://console.developers.google.com/flows/enableapi?apiid=maps_android_backend
         public static final int key_1_exponent=0x7f0c0044;
         public static final int key_1_modulus=0x7f0c0045;
         public static final int key_2=0x7f0c0046;
-        public static final int mobile_version=0x7f0c0047;
-        public static final int mobile_version_codename=0x7f0c0048;
-        public static final int mobile_version_id=0x7f0c0049;
-        public static final int plus_disconnect=0x7f0c004a;
-        public static final int plus_sign_out=0x7f0c004b;
-        public static final int prompt_email=0x7f0c004c;
-        public static final int prompt_password=0x7f0c004d;
-        public static final int store_picture_message=0x7f0c004e;
-        public static final int store_picture_title=0x7f0c004f;
-        public static final int title_activity_choose_client=0x7f0c0050;
-        public static final int title_activity_login=0x7f0c0051;
-        public static final int title_activity_splash_screen=0x7f0c0052;
-        public static final int wallet_buy_button_place_holder=0x7f0c0053;
+        public static final int layer_visible_label=0x7f0c0047;
+        public static final int mobile_version=0x7f0c0048;
+        public static final int mobile_version_codename=0x7f0c0049;
+        public static final int mobile_version_id=0x7f0c004a;
+        public static final int plus_disconnect=0x7f0c004b;
+        public static final int plus_sign_out=0x7f0c004c;
+        public static final int prompt_email=0x7f0c004d;
+        public static final int prompt_password=0x7f0c004e;
+        public static final int store_picture_message=0x7f0c004f;
+        public static final int store_picture_title=0x7f0c0050;
+        public static final int title_activity_choose_client=0x7f0c0051;
+        public static final int title_activity_login=0x7f0c0052;
+        public static final int title_activity_splash_screen=0x7f0c0053;
+        public static final int wallet_buy_button_place_holder=0x7f0c0054;
     }
     public static final class style {
         public static final int Animation_AppCompat_DropDownUp=0x7f0d0000;

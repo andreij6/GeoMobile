@@ -5,80 +5,90 @@ package com.geospatialcorporation.android.geomobile.models.Layers;
  */
 public class Layer {
     //region Properties
-    private Extent mExtent;
-    private String mStylePath;
-    private Integer mGeometryTypeCodeId;
-    private Boolean mIsFixed;
-    private Boolean mIsOwner;
-    private Integer mId;
-    private String mName;
-    private Boolean mIsShowing;
+    private Extent Extent;
+    private String StylePath;
+    private Integer GeometryTypeCodeId;
+    private Boolean IsFixed;
+    private Boolean IsOwner;
+    private Integer Id;
+    private Integer MobileId;
+    private String Name;
+    private Boolean IsShowing;
     //endregion
 
     //region Getters & Setters
     public Boolean getIsShowing() {
-        return mIsShowing;
+        return IsShowing;
     }
 
     public void setIsShowing(Boolean isShowing) {
-        mIsShowing = isShowing;
+        IsShowing = isShowing;
     }
 
     public Extent getExtent() {
-        return mExtent;
+        return Extent;
     }
 
     public void setExtent(Extent extent) {
-        mExtent = extent;
+        Extent = extent;
     }
 
     public String getStylePath() {
-        return mStylePath;
+        return StylePath;
     }
 
     public void setStylePath(String stylePath) {
-        mStylePath = stylePath;
+        StylePath = stylePath;
     }
 
     public Integer getGeometryTypeCodeId() {
-        return mGeometryTypeCodeId;
+        return GeometryTypeCodeId;
     }
 
     public void setGeometryTypeCodeId(Integer geometryTypeCodeId) {
-        mGeometryTypeCodeId = geometryTypeCodeId;
+        GeometryTypeCodeId = geometryTypeCodeId;
     }
 
     public Boolean getIsFixed() {
-        return mIsFixed;
+        return IsFixed;
     }
 
     public void setIsFixed(Boolean isFixed) {
-        mIsFixed = isFixed;
+        IsFixed = isFixed;
     }
 
     public Boolean getIsOwner() {
-        return mIsOwner;
+        return IsOwner;
     }
 
     public void setIsOwner(Boolean isOwner) {
-        mIsOwner = isOwner;
+        IsOwner = isOwner;
     }
 
-    public Integer getId() {
-        return mId;
+    public Integer getMobileId() {
+        return MobileId;
     }
 
-    public void setId(Integer id) {
-        mId = id;
+    public void setMobileId(Integer id) {
+        MobileId = id;
     }
+
+    public Integer getId() { return Id; }
+
+    public void setId(Integer id){ Id = id; }
 
     public String getName() {
-        return mName;
+        return Name;
     }
 
     public void setName(String name) {
-        mName = name;
+        Name = name;
     }
+    //endregion
+
+    //region Constructors
+    public Layer(String name) { Name = name; }
+    public Layer(){}
     //endregion
 
 }
