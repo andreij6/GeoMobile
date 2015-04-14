@@ -1,28 +1,14 @@
-package com.geospatialcorporation.android.geomobile.util;
+package com.geospatialcorporation.android.geomobile.library.util;
 
-import android.os.AsyncTask;
-
+import com.facebook.stetho.okhttp.StethoInterceptor;
 import com.geospatialcorporation.android.geomobile.application;
+import com.geospatialcorporation.android.geomobile.library.constants.Media;
 import com.google.gson.Gson;
 import com.squareup.okhttp.Callback;
-import com.squareup.okhttp.Headers;
 import com.squareup.okhttp.OkHttpClient;
 import com.squareup.okhttp.Request;
 import com.squareup.okhttp.RequestBody;
-import com.squareup.okhttp.Response;
 
-import org.apache.http.HttpResponse;
-import org.apache.http.client.ClientProtocolException;
-import org.apache.http.client.HttpClient;
-import org.apache.http.client.methods.HttpDelete;
-import org.apache.http.client.methods.HttpGet;
-import org.apache.http.client.methods.HttpPost;
-import org.apache.http.client.methods.HttpPut;
-import org.apache.http.impl.client.DefaultHttpClient;
-import org.json.JSONException;
-import org.json.JSONObject;
-
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -38,6 +24,8 @@ public class OkAPI {
 
     public OkAPI() {
         client = new OkHttpClient();
+        client.networkInterceptors().add(new StethoInterceptor());
+
         gson = new Gson();
         headers.add("Authorization: WebToken " + application.getAuthToken());
     }

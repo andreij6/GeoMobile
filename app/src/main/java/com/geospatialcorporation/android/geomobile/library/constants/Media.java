@@ -1,4 +1,4 @@
-package com.geospatialcorporation.android.geomobile.util;
+package com.geospatialcorporation.android.geomobile.library.constants;
 
 import com.squareup.okhttp.MediaType;
 

@@ -3,9 +3,6 @@ package com.geospatialcorporation.android.geomobile.database.datasource.base;
 import android.content.Context;
 import android.database.Cursor;
 
-/**
- * Created by andre on 4/10/2015.
- */
 public abstract class DataSourceGenericBase<T> extends DataSourceBase implements IDataRepository<T>{
 
     //region Constructor

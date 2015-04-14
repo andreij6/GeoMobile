@@ -1,8 +1,5 @@
 package com.geospatialcorporation.android.geomobile.database.datasource.base;
 
-/**
- * Created by andre on 4/10/2015.
- */
 public interface IDataRepository<T> {
 
     T GetById(int id);

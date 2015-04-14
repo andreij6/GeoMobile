@@ -3,6 +3,7 @@ package com.geospatialcorporation.android.geomobile;
 import android.app.Application;
 import android.content.Context;
 
+import com.facebook.stetho.Stetho;
 import com.google.android.gms.common.api.GoogleApiClient;
 
 public class application extends Application {
@@ -12,6 +13,14 @@ public class application extends Application {
 
     public void onCreate(){
         super.onCreate();
+
+        Stetho.initialize(
+                Stetho.newInitializerBuilder(this)
+                        .enableDumpapp(
+                                Stetho.defaultDumperPluginsProvider(this))
+                        .enableWebKitInspector(
+                                Stetho.defaultInspectorModulesProvider(this))
+                        .build());
 
         application.context = getApplicationContext();
     }

@@ -11,9 +11,6 @@ import com.google.gson.Gson;
 
 import java.util.Date;
 
-/**
- * Created by andre on 4/10/2015.
- */
 public abstract class DataSourceBase {
 
     protected Context mContext;

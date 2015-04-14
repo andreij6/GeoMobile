@@ -1,8 +1,5 @@
 package com.geospatialcorporation.android.geomobile.models.Layers;
 
-/**
- * Created by andre on 4/7/2015.
- */
 public class Point {
     //region Properties
     private Integer GeometryType;
