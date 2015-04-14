@@ -4,4 +4,4 @@
     android:clickable="true"
     android:onClick="treeItem"
     android:layout_width="match_parent"
-    android:layout_height="match_parent" /><!-- From: file:/C:/Users/Administrator/AndroidStudioProjects/GeoMobile/app/src/main/res/layout/activity_choose_client_item.xml -->
+    android:layout_height="match_parent" /><!-- From: file:/C:/GeoUndergroundMobile/geomobile/app/src/main/res/layout/activity_choose_client_item.xml -->

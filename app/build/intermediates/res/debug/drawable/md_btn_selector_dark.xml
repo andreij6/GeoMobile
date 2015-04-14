@@ -5,4 +5,4 @@
     <item android:drawable="@drawable/md_btn_selected_dark" android:state_pressed="true" />
     <item android:drawable="@drawable/md_transparent" />
 
-</selector><!-- From: file:/Users/aidanfollestad/Android%20Projects/MaterialDialogs/library/src/main/res/drawable/md_btn_selector_dark.xml --><!-- From: file:/C:/Users/Administrator/AndroidStudioProjects/GeoMobile/app/build/intermediates/exploded-aar/com.afollestad/material-dialogs/0.6.4.2/res/drawable/md_btn_selector_dark.xml -->
+</selector><!-- From: file:/Users/aidanfollestad/Android%20Projects/MaterialDialogs/library/src/main/res/drawable/md_btn_selector_dark.xml --><!-- From: file:/C:/GeoUndergroundMobile/geomobile/app/build/intermediates/exploded-aar/com.afollestad/material-dialogs/0.6.4.2/res/drawable/md_btn_selector_dark.xml -->

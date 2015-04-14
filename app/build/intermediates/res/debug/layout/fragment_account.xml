@@ -27,4 +27,4 @@
         android:ems="10"
         android:id="@+id/editText3"
         android:text="Phone" />
-</LinearLayout><!-- From: file:/C:/Users/Administrator/AndroidStudioProjects/GeoMobile/app/src/main/res/layout/fragment_account.xml -->
+</LinearLayout><!-- From: file:/C:/GeoUndergroundMobile/geomobile/app/src/main/res/layout/fragment_account.xml -->
