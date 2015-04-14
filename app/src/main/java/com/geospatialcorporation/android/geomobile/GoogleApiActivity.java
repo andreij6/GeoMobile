@@ -46,10 +46,16 @@ public class GoogleApiActivity extends Activity implements
 
         dialog = new Dialogs();
 
-        mGoogleApiClient = new GoogleApiClient.Builder(this)
-                .addApi(Plus.API)
-                .addScope(Plus.SCOPE_PLUS_LOGIN)
-                .build();
+        if (application.getGoogleClient() == null) {
+            mGoogleApiClient = new GoogleApiClient.Builder(this)
+                    .addApi(Plus.API)
+                    .addScope(Plus.SCOPE_PLUS_LOGIN)
+                    .build();
+
+            application.setGoogleClient(mGoogleApiClient);
+        } else {
+            mGoogleApiClient = application.getGoogleClient();
+        }
     }
 
     /**
@@ -121,8 +127,10 @@ public class GoogleApiActivity extends Activity implements
         Intent mainActivityIntent = new Intent(this, MainActivity.class);
 
         // TODO: Remove this horrible testing code
-        mainActivityIntent.putExtra("authToken", "boop");
-        startActivity(mainActivityIntent);
+        mainActivityIntent.putExtra("authToken", "ya29.TwEnwvsNEaINP6fGQvox11OrWHWJj1IKHxOi-oMi0hp8HpMywTwos9qW");
+
+        // TODO: Client request - select client?
+        //startActivity(mainActivityIntent);
     }
 
     @Override

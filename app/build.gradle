@@ -4,9 +4,15 @@ android {
     compileSdkVersion 21
     buildToolsVersion "21.1.2"
 
+    signingConfigs {
+        debug {
+            storeFile file("debug.keystore")
+        }
+    }
+
     defaultConfig {
         applicationId "com.geospatialcorporation.android.geomobile"
-        minSdkVersion 14
+        minSdkVersion 21
         targetSdkVersion 21
     }
 
