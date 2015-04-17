@@ -7,7 +7,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.geospatialcorporation.android.geomobile.R;
-import com.geospatialcorporation.android.geomobile.models.LibraryItems.LibraryItem;
+import com.geospatialcorporation.android.geomobile.models.Library.Document;
 
 import java.util.ArrayList;
 
@@ -17,11 +17,11 @@ import java.util.ArrayList;
 public class LibraryAdapter extends RecyclerView.Adapter<LibraryAdapter.LibraryViewHolder>{
 
     private Context mContext;
-    private ArrayList<LibraryItem> mLibraryItems;
+    private ArrayList<Document> mDocuments;
 
-    public LibraryAdapter(Context context, ArrayList<LibraryItem> libraryItems){
+    public LibraryAdapter(Context context, ArrayList<Document> documents){
         mContext = context;
-        mLibraryItems = libraryItems;
+        mDocuments = documents;
     }
 
     @Override
@@ -33,12 +33,12 @@ public class LibraryAdapter extends RecyclerView.Adapter<LibraryAdapter.LibraryV
 
     @Override
     public void onBindViewHolder(LibraryViewHolder holder, int position) {
-        holder.bindLibraryItem(mLibraryItems.get(position));
+        holder.bindLibraryItem(mDocuments.get(position));
     }
 
     @Override
     public int getItemCount() {
-        return mLibraryItems.size();
+        return mDocuments.size();
     }
 
     protected class LibraryViewHolder extends RecyclerView.ViewHolder {
@@ -52,7 +52,7 @@ public class LibraryAdapter extends RecyclerView.Adapter<LibraryAdapter.LibraryV
 
     }
 
-    public void bindLibraryItem(LibraryItem item){
+    public void bindLibraryItem(Document item){
 
     }
 

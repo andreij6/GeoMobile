@@ -26,7 +26,9 @@ android {
 
 dependencies {
     compile 'com.google.code.gson:gson:2.3.1' // at https://github.com/google-gson/google-gson
+    compile 'com.squareup.okhttp:okhttp-urlconnection:2.0.0'
     compile 'com.squareup.okhttp:okhttp:2.3.0' // at https://github.com/square/okhttp
+    compile 'com.squareup.retrofit:retrofit:1.9.0' // at http://square.github.io/retrofit/
     compile 'com.facebook.stetho:stetho-okhttp:1.1.0'
     compile 'com.facebook.stetho:stetho:1.1.0' // at http://facebook.github.io/stetho/
     compile 'com.android.support:support-v4:21.0.3'

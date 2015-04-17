@@ -10,6 +10,7 @@ import android.util.Log;
 
 import com.geospatialcorporation.android.geomobile.application;
 import com.geospatialcorporation.android.geomobile.library.util.Dialogs;
+import com.geospatialcorporation.android.geomobile.library.rest.LoginService;
 import com.google.android.gms.auth.GoogleAuthException;
 import com.google.android.gms.auth.GoogleAuthUtil;
 import com.google.android.gms.auth.UserRecoverableAuthException;
@@ -21,6 +22,8 @@ import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.plus.Plus;
 
 import java.io.IOException;
+
+import retrofit.client.Response;
 
 public class GoogleApiActivity extends Activity implements
         ConnectionCallbacks, OnConnectionFailedListener {
@@ -34,6 +37,8 @@ public class GoogleApiActivity extends Activity implements
     /* Client used to interact with Google APIs. */
     private GoogleApiClient mGoogleApiClient;
 
+    private LoginService service;
+
     /* A flag indicating that a PendingIntent is in progress and prevents
      * us from starting further intents.
      */
@@ -43,6 +48,8 @@ public class GoogleApiActivity extends Activity implements
         super.onCreate(savedInstanceState);
 
         dialog = new Dialogs();
+
+        service = application.getRestAdapter().create(LoginService.class);
 
         if (application.getGoogleClient() == null) {
             mGoogleApiClient = new GoogleApiClient.Builder(this)
@@ -62,6 +69,7 @@ public class GoogleApiActivity extends Activity implements
     public void signIn() {
         Intent intent = AccountPicker.newChooseAccountIntent(null, null, new String[]{"com.google"},
                 false, null, null, null, null);
+
         startActivityForResult(intent, 1);
 
         if (!mGoogleApiClient.isConnected()) {
@@ -102,6 +110,7 @@ public class GoogleApiActivity extends Activity implements
     }
 
     protected void onActivityResult(final int requestCode, final int responseCode, final Intent data) {
+
         int MY_ACTIVITYS_AUTH_REQUEST_CODE = 0;
 
         String accountName = data.getStringExtra(AccountManager.KEY_ACCOUNT_NAME);
@@ -172,6 +181,9 @@ public class GoogleApiActivity extends Activity implements
             String token = null;
             try {
                 token = GoogleAuthUtil.getToken(getApplicationContext(), accountName, scopes);
+
+                Response response = service.google(token);
+                application.setAuthToken(response.getBody().toString());
             } catch (IOException e) {
                 Log.e(TAG, e.getMessage());
             } catch (UserRecoverableAuthException e) {

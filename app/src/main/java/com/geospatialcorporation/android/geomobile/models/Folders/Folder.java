@@ -2,8 +2,9 @@ package com.geospatialcorporation.android.geomobile.models.Folders;
 
 
 import com.geospatialcorporation.android.geomobile.models.Layers.Layer;
+import com.geospatialcorporation.android.geomobile.models.Library.Document;
 
-import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Created by andre on 4/7/2015.
@@ -13,8 +14,9 @@ public class Folder {
     //region Properties
     private Boolean IsImportFolder;
     private Boolean IsFixed;
-    private ArrayList<Layer> Layers;
-    private ArrayList<Folder> Folders;
+    private List<Layer> Layers;
+    private List<Folder> Folders;
+    private List<Document> Documents;
     private Integer AccessLevel;
     private Integer MobileId;
     private Integer Id;
@@ -38,19 +40,19 @@ public class Folder {
         IsFixed = isFixed;
     }
 
-    public ArrayList<Layer> getLayers() {
+    public List<Layer> getLayers() {
         return Layers;
     }
 
-    public void setLayers(ArrayList<Layer> layers) {
+    public void setLayers(List<Layer> layers) {
         Layers = layers;
     }
 
-    public ArrayList<Folder> getFolders() {
+    public List<Folder> getFolders() {
         return Folders;
     }
 
-    public void setFolders(ArrayList<Folder> folders) {
+    public void setFolders(List<Folder> folders) {
         Folders = folders;
     }
 

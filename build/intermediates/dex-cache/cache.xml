@@ -30,6 +30,27 @@
         <dex dex="C:\Users\Administrator\AndroidStudioProjects\GeoMobile\app\build\intermediates\pre-dexed\debug\classes-8e82f3f4ddd80d986d74b6209975724088b4e36b.jar" />
     </item>
     <item
+        jar="C:\Users\Administrator\.gradle\caches\modules-2\files-2.1\com.squareup.retrofit\retrofit\1.9.0\a681c044244d9fc375198588297a39ba78028423\retrofit-1.9.0.jar"
+        jumboMode="false"
+        revision="21.1.2"
+        sha1="a681c044244d9fc375198588297a39ba78028423">
+        <dex dex="C:\Users\Administrator\AndroidStudioProjects\GeoMobile\app\build\intermediates\pre-dexed\debug\retrofit-1.9.0-4507dd2f76e2cdf217ef46be346446d0fe069db6.jar" />
+    </item>
+    <item
+        jar="C:\Users\Administrator\.gradle\caches\modules-2\files-2.1\com.facebook.stetho\stetho\1.1.0\d8892e70b02cf2972b2a00aef145809560b0efb4\stetho-1.1.0.jar"
+        jumboMode="false"
+        revision="21.1.2"
+        sha1="d8892e70b02cf2972b2a00aef145809560b0efb4">
+        <dex dex="C:\Users\Administrator\AndroidStudioProjects\GeoMobile\app\build\intermediates\pre-dexed\debug\stetho-1.1.0-25cda7bc362cd4ca8184fb27db27ec3d118aa75d.jar" />
+    </item>
+    <item
+        jar="C:\Users\Administrator\.gradle\caches\modules-2\files-2.1\commons-cli\commons-cli\1.2\2bf96b7aa8b611c177d329452af1dc933e14501c\commons-cli-1.2.jar"
+        jumboMode="false"
+        revision="21.1.2"
+        sha1="2bf96b7aa8b611c177d329452af1dc933e14501c">
+        <dex dex="C:\Users\Administrator\AndroidStudioProjects\GeoMobile\app\build\intermediates\pre-dexed\debug\commons-cli-1.2-7ed28277f6d87070a38e23576b9febb034c7338a.jar" />
+    </item>
+    <item
         jar="C:\Users\Administrator\AndroidStudioProjects\GeoMobile\app\build\intermediates\exploded-aar\com.android.support\appcompat-v7\22.0.0\classes.jar"
         jumboMode="false"
         revision="21.1.2"
@@ -42,6 +63,13 @@
         revision="21.1.2"
         sha1="ecb6e1f8e4b0e84c4b886c2f14a1500caf309757">
         <dex dex="C:\Users\Administrator\AndroidStudioProjects\GeoMobile\app\build\intermediates\pre-dexed\debug\gson-2.3.1-3d67bc6296728dce11d45e3fe02a4d0f0bf336e9.jar" />
+    </item>
+    <item
+        jar="C:\Users\Administrator\.gradle\caches\modules-2\files-2.1\com.google.code.findbugs\jsr305\2.0.1\516c03b21d50a644d538de0f0369c620989cd8f0\jsr305-2.0.1.jar"
+        jumboMode="false"
+        revision="21.1.2"
+        sha1="516c03b21d50a644d538de0f0369c620989cd8f0">
+        <dex dex="C:\Users\Administrator\AndroidStudioProjects\GeoMobile\app\build\intermediates\pre-dexed\debug\jsr305-2.0.1-69d0b6c8ffa05193b3c0ebfa1d1d218ee290f911.jar" />
     </item>
     <item
         jar="C:\Users\Administrator\.gradle\caches\modules-2\files-2.1\com.squareup.okhttp\okhttp\2.3.0\2e7bc7033dc2c8423e661224171b3133fb155b28\okhttp-2.3.0.jar"
@@ -77,6 +105,20 @@
         revision="21.1.2"
         sha1="1b355f73402020c5a0dcca58affc3ec3dfeabac1">
         <dex dex="C:\Users\Administrator\AndroidStudioProjects\GeoMobile\app\build\intermediates\pre-dexed\debug\okio-1.3.0-129db21943a48321f3fc3b05f16e4725120d8cc2.jar" />
+    </item>
+    <item
+        jar="C:\Users\Administrator\.gradle\caches\modules-2\files-2.1\com.squareup.okhttp\okhttp-urlconnection\2.0.0\afe8399d352713b66e597e9670c741d1e60ae923\okhttp-urlconnection-2.0.0.jar"
+        jumboMode="false"
+        revision="21.1.2"
+        sha1="afe8399d352713b66e597e9670c741d1e60ae923">
+        <dex dex="C:\Users\Administrator\AndroidStudioProjects\GeoMobile\app\build\intermediates\pre-dexed\debug\okhttp-urlconnection-2.0.0-4c11df20a70ffd8e90fd939f8578822bbf66313f.jar" />
+    </item>
+    <item
+        jar="C:\Users\Administrator\.gradle\caches\modules-2\files-2.1\com.facebook.stetho\stetho-okhttp\1.1.0\9c71f8505b3e2585b490669dfeaa65ffbfb5fcb3\stetho-okhttp-1.1.0.jar"
+        jumboMode="false"
+        revision="21.1.2"
+        sha1="9c71f8505b3e2585b490669dfeaa65ffbfb5fcb3">
+        <dex dex="C:\Users\Administrator\AndroidStudioProjects\GeoMobile\app\build\intermediates\pre-dexed\debug\stetho-okhttp-1.1.0-5681835b7dfa9fb10cf705b89922c03a2b1a4c81.jar" />
     </item>
 
 </items>

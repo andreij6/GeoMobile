@@ -4,7 +4,6 @@ import android.app.Fragment;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -12,12 +11,11 @@ import android.widget.Toast;
 
 import com.geospatialcorporation.android.geomobile.R;
 import com.geospatialcorporation.android.geomobile.library.constants.EndPoints;
-import com.geospatialcorporation.android.geomobile.library.util.rest.CallbackAction;
-import com.geospatialcorporation.android.geomobile.library.util.rest.CallbackHelper;
-import com.geospatialcorporation.android.geomobile.library.util.rest.RestService;
+import com.geospatialcorporation.android.geomobile.library.rest.CallbackAction;
+import com.geospatialcorporation.android.geomobile.library.rest.CallbackHelper;
+import com.geospatialcorporation.android.geomobile.library.rest.RestService;
 import com.geospatialcorporation.android.geomobile.models.Folders.Folder;
-import com.geospatialcorporation.android.geomobile.models.Layers.Layer;
-import com.geospatialcorporation.android.geomobile.models.LibraryItems.LibraryItem;
+import com.geospatialcorporation.android.geomobile.models.Library.Document;
 import com.geospatialcorporation.android.geomobile.ui.adapters.LibraryAdapter;
 
 import java.io.IOException;
@@ -25,7 +23,6 @@ import java.util.ArrayList;
 
 import com.google.gson.Gson;
 import com.squareup.okhttp.Callback;
-import com.squareup.okhttp.Request;
 import com.squareup.okhttp.Response;
 
 import org.json.JSONArray;
@@ -62,7 +59,7 @@ public class LibraryFragment extends Fragment{
 
         //mDataSet = new ArrayList<>();
 
-        LibraryAdapter adapter = new LibraryAdapter(getActivity(), new ArrayList<LibraryItem>());
+        LibraryAdapter adapter = new LibraryAdapter(getActivity(), new ArrayList<Document>());
 
         mRecyclerView.setAdapter(adapter);
 

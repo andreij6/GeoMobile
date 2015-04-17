@@ -1,5 +1,7 @@
 package com.geospatialcorporation.android.geomobile.models.Layers;
 
+import android.text.TextUtils;
+
 public class Layer {
     //region Properties
     private Extent Extent;
@@ -86,6 +88,38 @@ public class Layer {
     //region Constructors
     public Layer(String name) { Name = name; }
     public Layer(){}
+
+    public Rename Rename(int id, String name) {
+        Rename rename = new Rename();
+
+        rename.Id = id;
+        rename.Name = name;
+
+        return rename;
+    }
     //endregion
 
+    public class Rename {
+        public int Id;
+        public String Name;
+    }
+
+    public class StyleInfo {
+        public int StyleInfoId;
+        public String Name;
+        public int PointStyleCode;
+        public int LineStyleCode;
+        public int Width;
+        public int BorderWidth;
+        public String BorderColor;
+        public String FillColor;
+
+        public boolean IsBorderVisible() {
+            return TextUtils.isEmpty(BorderColor) || BorderColor.substring(6, 2).equals("00");
+        };
+
+        public boolean IsFillVisible() {
+            return TextUtils.isEmpty(FillColor) || FillColor.substring(6, 2).equals("00");
+        };
+    }
 }
