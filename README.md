@@ -3,13 +3,14 @@
 ## Environment Setup ##
 * Download android studio
 * Download the code
-* Setup device testing with adb
+* Setup local device testing with adb -> chrome devtools with stetho
 
 ## Technology, Frameworks, Plugins ##
 * !!Not worried until application working!! [Dagger 2](http://google.github.io/dagger/) dependency injection - [Overview](https://www.youtube.com/watch?v=oK_XtfXPkqw)
 * !!For reference on features only!! [Phonegap Maps Plugin](https://github.com/wf9a5m75/phonegap-googlemaps-plugin) has a lot of layer functionality we want
 * [AppCompat](http://android-developers.blogspot.com/2014/10/appcompat-v21-material-design-for-pre.html) material design views for older devices
 * Main Navigation - [Navigational Drawer](https://developer.android.com/design/patterns/navigation-drawer.html)
+* Rest access: GSON (class to json conversion) -> Retrofit (api access) -> OkHttp (http client) -> OkIO (performant over native io)
 
 ## Reading ##
 
