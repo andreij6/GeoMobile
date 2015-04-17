@@ -27,7 +27,7 @@ import android.widget.EditText;
 import android.widget.TextView;
 
 import com.geospatialcorporation.android.geomobile.R;
-import com.geospatialcorporation.android.geomobile.library.util.GeoApi;
+import com.geospatialcorporation.android.geomobile.application;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GooglePlayServicesUtil;
 import com.google.android.gms.common.SignInButton;
@@ -78,7 +78,6 @@ public class LoginActivity extends GoogleApiActivity implements LoaderCallbacks<
     private SignInButton mPlusSignInButton;
     private View mSignOutButtons;
     private View mLoginFormView;
-    private GeoApi authentication;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -161,7 +160,8 @@ public class LoginActivity extends GoogleApiActivity implements LoaderCallbacks<
         View focusView = null;
 
         // TODO: Remove this horrible testing code
-        mainActivityIntent.putExtra("authToken", authentication.authToken);
+        String authtoken = (application.getAuthToken() == null) ? "fakeAuthToken" : application.getAuthToken();
+        mainActivityIntent.putExtra("authToken", authtoken);
         startActivity(mainActivityIntent);
 
         // Check for a valid password, if the user entered one.
@@ -194,7 +194,7 @@ public class LoginActivity extends GoogleApiActivity implements LoaderCallbacks<
             mAuthTask.execute((Void) null);
 
             // TODO: add logic checking login
-            mainActivityIntent.putExtra("authToken", authentication.authToken);
+            mainActivityIntent.putExtra("authToken", authtoken);
             startActivity(mainActivityIntent);
         }
     }

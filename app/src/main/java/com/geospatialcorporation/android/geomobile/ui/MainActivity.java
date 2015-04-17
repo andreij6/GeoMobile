@@ -41,7 +41,6 @@ import com.geospatialcorporation.android.geomobile.R;
 import com.geospatialcorporation.android.geomobile.ui.fragments.LayerFragment;
 import com.geospatialcorporation.android.geomobile.ui.fragments.LibraryFragment;
 import com.geospatialcorporation.android.geomobile.library.util.Dialogs;
-import com.geospatialcorporation.android.geomobile.library.util.GeoApi;
 
 /**
  * This example illustrates a common usage of the DrawerLayout widget
@@ -81,8 +80,6 @@ public class MainActivity extends Activity {
     private CharSequence mDrawerTitle;
     private CharSequence mTitle;
     private String[] mPlanetTitles;
-
-    private GeoApi authentication;
 
     private Dialogs dialog;
     //endregion

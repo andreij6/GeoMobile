@@ -111,7 +111,7 @@ public class GoogleApiActivity extends Activity implements
 
     protected void onActivityResult(final int requestCode, final int responseCode, final Intent data) {
 
-        int MY_ACTIVITYS_AUTH_REQUEST_CODE = 0;
+        /*int MY_ACTIVITYS_AUTH_REQUEST_CODE = 0;
 
         String accountName = data.getStringExtra(AccountManager.KEY_ACCOUNT_NAME);
 
@@ -129,7 +129,7 @@ public class GoogleApiActivity extends Activity implements
             if (!mGoogleApiClient.isConnecting()) {
                 mGoogleApiClient.connect();
             }
-        }
+        }*/
 
         Intent mainActivityIntent = new Intent(this, MainActivity.class);
 

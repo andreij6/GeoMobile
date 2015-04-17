@@ -4,12 +4,12 @@ import android.text.TextUtils;
 
 public class Layer {
     //region Properties
+    private Integer Id;
     private Extent Extent;
     private String StylePath;
     private Integer GeometryTypeCodeId;
     private Boolean IsFixed;
     private Boolean IsOwner;
-    private Integer Id;
     private Integer MobileId;
     private String Name;
     private Boolean IsShowing;
