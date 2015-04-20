@@ -20,8 +20,7 @@ public class ChooseClientActivity extends Activity {
         super.onCreate(savedInstanceState);
         service = application.getRestAdapter().create(LoginService.class);
 
-        setContentView(R.layout.recycler_list_client);
-
+        setContentView(R.layout.activity_choose_client);
         getFragmentManager().beginTransaction()
                 .replace(R.id.choose_client_content, new ClientFragment())
                 .commit();

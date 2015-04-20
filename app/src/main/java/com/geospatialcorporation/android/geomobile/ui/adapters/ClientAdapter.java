@@ -23,6 +23,7 @@ public class ClientAdapter extends RecyclerView.Adapter<ClientAdapter.ClientView
     private Context mContext;
     private List<Client> mClients;
     private LoginService service;
+    private int newClientId;
 
     public ClientAdapter(Context context, List<Client> clients){
         mContext = context;
@@ -56,6 +57,7 @@ public class ClientAdapter extends RecyclerView.Adapter<ClientAdapter.ClientView
     protected class ClientViewHolder extends RecyclerView.ViewHolder {
         //region Properties
         TextView mClientName;
+        Client mClient;
         //endregion
 
         public ClientViewHolder(View itemView){
@@ -64,6 +66,7 @@ public class ClientAdapter extends RecyclerView.Adapter<ClientAdapter.ClientView
         }
 
         public void bindClientItem(Client client){
+            mClient = client;
             mClientName.setText(client.Name);
         }
 
@@ -71,9 +74,30 @@ public class ClientAdapter extends RecyclerView.Adapter<ClientAdapter.ClientView
 
             @Override
             public void onClick(View v) {
-              //
+              newClientId = mClient.Id;
+
+                switchClient();
             }
         };
+    }
+
+    void switchClient() {
+        AsyncTask task = new AsyncTask() {
+            @Override
+            protected List<Client> doInBackground(Object[] params) {
+                try {
+                    service.setClient(newClientId);
+                } catch (RetrofitError e) {
+                    if (e.getResponse() != null) {
+                        Log.d(TAG, Integer.toString(e.getResponse().getStatus()));
+                    }
+                }
+
+                return mClients;
+            }
+        };
+
+        task.execute();
     }
 
     void getClients() {
