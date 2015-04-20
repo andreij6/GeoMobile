@@ -2,6 +2,7 @@ package com.geospatialcorporation.android.geomobile;
 
 import android.app.Application;
 import android.content.Context;
+import android.util.Log;
 
 import com.facebook.stetho.Stetho;
 import com.facebook.stetho.okhttp.StethoInterceptor;
@@ -18,9 +19,11 @@ import retrofit.RestAdapter;
 import retrofit.client.OkClient;
 
 public class application extends Application {
+    private final static String TAG = "application";
     private static Context context;
     private static GoogleApiClient googleClient;
     private static String geoAuthToken;
+    private static String googleAuthToken;
     private static OkHttpClient client;
     private static RestAdapter restAdapter;
 
@@ -46,11 +49,20 @@ public class application extends Application {
         client.networkInterceptors().add(new StethoInterceptor());
         client.interceptors().add(new TokenInterceptor());
 
-        restAdapter = new RestAdapter.Builder()
-                .setClient(new OkClient(client))
-                .setEndpoint("https://dev.geounderground.com")
-                .setRequestInterceptor(requestInterceptor)
-                .build();
+        if (BuildConfig.DEBUG) {
+            restAdapter = new RestAdapter.Builder()
+                    .setLogLevel(RestAdapter.LogLevel.FULL)
+                    .setClient(new OkClient(client))
+                    .setEndpoint("https://dev.geounderground.com")
+                    .setRequestInterceptor(requestInterceptor)
+                    .build();
+        } else {
+            restAdapter = new RestAdapter.Builder()
+                    .setClient(new OkClient(client))
+                    .setEndpoint("https://dev.geounderground.com")
+                    .setRequestInterceptor(requestInterceptor)
+                    .build();
+        }
 
         application.context = getApplicationContext();
     }
@@ -77,11 +89,22 @@ public class application extends Application {
             }
         };
 
-        restAdapter = new RestAdapter.Builder()
-                .setClient(new OkClient(client))
-                .setEndpoint("https://dev.geounderground.com")
-                .setRequestInterceptor(requestInterceptor)
-                .build();
+        if (BuildConfig.DEBUG) {
+            restAdapter = new RestAdapter.Builder()
+                    .setLogLevel(RestAdapter.LogLevel.FULL)
+                    .setClient(new OkClient(client))
+                    .setEndpoint("https://dev.geounderground.com")
+                    .setRequestInterceptor(requestInterceptor)
+                    .build();
+        } else {
+            restAdapter = new RestAdapter.Builder()
+                    .setClient(new OkClient(client))
+                    .setEndpoint("https://dev.geounderground.com")
+                    .setRequestInterceptor(requestInterceptor)
+                    .build();
+        }
+
+        Log.d(TAG, "Set GeoToken to: " + token);
     }
 
     public static String getAuthToken() {
@@ -98,9 +121,18 @@ public class application extends Application {
             String newToken = response.header("X-WebToken");
             if (newToken != null) {
                 geoAuthToken = newToken;
+                Log.d(TAG, "Set GeoToken to: " + newToken);
             }
 
             return response;
         }
+    }
+
+    public static String getGoogleAuthToken() {
+        return googleAuthToken;
+    }
+
+    public static void setGoogleAuthToken(String token) {
+        googleAuthToken = token;
     }
 }

@@ -1,47 +1,57 @@
-package com.geospatialcorporation.android.geomobile;
+package com.geospatialcorporation.android.geomobile.ui.fragments;
 
 import android.app.Fragment;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.geospatialcorporation.android.geomobile.ui.adapters.RecyclerAdapter;
+import com.geospatialcorporation.android.geomobile.R;
+import com.geospatialcorporation.android.geomobile.application;
+import com.geospatialcorporation.android.geomobile.library.rest.LoginService;
+import com.geospatialcorporation.android.geomobile.ui.adapters.ClientAdapter;
+import com.geospatialcorporation.android.geomobile.models.Client;
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
+
+import java.lang.reflect.Type;
+import java.util.ArrayList;
+
+import retrofit.client.Response;
 
 public class ClientFragment extends Fragment {
+    private static final String TAG = "ClientFragment";
     private RecyclerView mRecyclerView;
-    private RecyclerView.Adapter mAdapter;
-    private RecyclerView.LayoutManager mLayoutManager;
+    private ArrayList<Client> mDataSet;
+    private View mRootView;
+    private LoginService service;
+    private Gson gson = new Gson();
 
-    public void RecyclerFragment() {
-        //
-    }
-
-    @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        View rootView = inflater.inflate(R.layout.fragment_recycler, container, false);
-        String[] myDataSet = new String[]{
-                "String 1", "String 2"
-        };
 
-        mRecyclerView = (RecyclerView) rootView.findViewById(R.id.my_recycler_view);
+        service = application.getRestAdapter().create(LoginService.class);
 
-        // use this setting to improve performance if you know that changes
-        // in content do not change the layout size of the RecyclerView
-        //mRecyclerView.setHasFixedSize(true);
+        mRootView = inflater.inflate(R.layout.fragment_clientitems, container, false);
 
-        // use a linear layout manager
-        mLayoutManager = new LinearLayoutManager(rootView.getContext());
-        mRecyclerView.setLayoutManager(mLayoutManager);
+        mRecyclerView = (RecyclerView)mRootView.findViewById(R.id.clientitem_recyclerview);
 
-        // specify an adapter (see also next example)
-        mAdapter = new RecyclerAdapter(myDataSet);
-        mRecyclerView.setAdapter(mAdapter);
+        Response clients = service.getClients();
 
-        return rootView;
+        Type clientListType = new TypeToken<ArrayList<Client>>(){}.getType();
+        mDataSet = gson.fromJson(clients.getBody().toString(), clientListType);
+
+        ClientAdapter adapter = new ClientAdapter(getActivity(), mDataSet);
+
+        mRecyclerView.setAdapter(adapter);
+
+        RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(container.getContext());
+
+        mRecyclerView.setLayoutManager(layoutManager);
+
+        return mRootView;
     }
-
 }

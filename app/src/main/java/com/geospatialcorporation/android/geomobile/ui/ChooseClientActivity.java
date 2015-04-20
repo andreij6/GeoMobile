@@ -6,16 +6,20 @@ import android.view.Menu;
 import android.view.MenuItem;
 
 import com.geospatialcorporation.android.geomobile.R;
+import com.geospatialcorporation.android.geomobile.application;
+import com.geospatialcorporation.android.geomobile.library.rest.LoginService;
 
 
 public class ChooseClientActivity extends ActionBarActivity {
+    private static LoginService service;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_choose_client);
-    }
+        service = application.getRestAdapter().create(LoginService.class);
 
+        setContentView(R.layout.recycler_list_client);
+    }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {

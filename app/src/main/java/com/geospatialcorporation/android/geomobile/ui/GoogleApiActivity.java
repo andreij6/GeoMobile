@@ -2,22 +2,31 @@ package com.geospatialcorporation.android.geomobile.ui;
 
 import android.accounts.AccountManager;
 import android.app.Activity;
+import android.app.Dialog;
+import android.app.Fragment;
+import android.app.FragmentManager;
+import android.content.Context;
 import android.content.Intent;
 import android.content.IntentSender;
+import android.nfc.Tag;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
 
+import com.geospatialcorporation.android.geomobile.R;
 import com.geospatialcorporation.android.geomobile.application;
 import com.geospatialcorporation.android.geomobile.library.util.Dialogs;
 import com.geospatialcorporation.android.geomobile.library.rest.LoginService;
+import com.geospatialcorporation.android.geomobile.ui.fragments.ClientFragment;
 import com.google.android.gms.auth.GoogleAuthException;
 import com.google.android.gms.auth.GoogleAuthUtil;
+import com.google.android.gms.auth.GooglePlayServicesAvailabilityException;
 import com.google.android.gms.auth.UserRecoverableAuthException;
 import com.google.android.gms.common.AccountPicker;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GooglePlayServicesClient.ConnectionCallbacks;
 import com.google.android.gms.common.GooglePlayServicesClient.OnConnectionFailedListener;
+import com.google.android.gms.common.GooglePlayServicesUtil;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.plus.Plus;
 
@@ -27,17 +36,20 @@ import retrofit.client.Response;
 
 public class GoogleApiActivity extends Activity implements
         ConnectionCallbacks, OnConnectionFailedListener {
-    private static final String TAG = "RetrieveAccessToken";
+    private static final String TAG = "GoogleApiActivity";
     private static final int REQ_SIGN_IN_REQUIRED = 55664;
-    private Dialogs dialog;
-
     /* Request code used to invoke sign in user interactions. */
     private static final int RC_SIGN_IN = 0;
+    private static final int ACTIVITY_AUTH_REQUEST_CODE = 1;
+    private static final String SCOPES = "oauth2:https://www.googleapis.com/auth/userinfo.email https://www.googleapis.com/auth/plus.me https://www.googleapis.com/auth/userinfo.profile https://www.googleapis.com/auth/mapsengine";
+
+    private Dialogs dialog;
 
     /* Client used to interact with Google APIs. */
     private GoogleApiClient mGoogleApiClient;
-
     private LoginService service;
+    private String accountName;
+    private Context context;
 
     /* A flag indicating that a PendingIntent is in progress and prevents
      * us from starting further intents.
@@ -46,6 +58,7 @@ public class GoogleApiActivity extends Activity implements
 
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        context = this;
 
         dialog = new Dialogs();
 
@@ -111,17 +124,30 @@ public class GoogleApiActivity extends Activity implements
 
     protected void onActivityResult(final int requestCode, final int responseCode, final Intent data) {
 
-        /*int MY_ACTIVITYS_AUTH_REQUEST_CODE = 0;
+        int MY_ACTIVITYS_AUTH_REQUEST_CODE = 0;
 
-        String accountName = data.getStringExtra(AccountManager.KEY_ACCOUNT_NAME);
+        accountName = data.getStringExtra(AccountManager.KEY_ACCOUNT_NAME);
 
-        if (requestCode == MY_ACTIVITYS_AUTH_REQUEST_CODE) {
+        /*if (requestCode == MY_ACTIVITYS_AUTH_REQUEST_CODE) {
             if (responseCode == RESULT_OK) {
                 new RetrieveTokenTask().execute(accountName);
             }
+        }*/
+        Log.d(TAG, "Request Code: " + requestCode + " || Response Code: " + responseCode);
+
+        getAndUseAuthTokenInAsyncTask();
+        if (requestCode == MY_ACTIVITYS_AUTH_REQUEST_CODE) {
+            if (responseCode == RESULT_OK) {
+            }
+
+            if (responseCode == RESULT_CANCELED) {
+                //dialog.message("Result cancelled.");
+            }
+        } else {
+            //dialog.message("No auth request code.");
         }
 
-        dialog.message(accountName, this);
+        //dialog.message(accountName, this);
 
         if (requestCode == RC_SIGN_IN) {
             mIntentInProgress = false;
@@ -129,7 +155,9 @@ public class GoogleApiActivity extends Activity implements
             if (!mGoogleApiClient.isConnecting()) {
                 mGoogleApiClient.connect();
             }
-        }*/
+        }
+
+        //dialog.message(application.getAuthToken());
 
         Intent mainActivityIntent = new Intent(this, MainActivity.class);
 
@@ -182,6 +210,8 @@ public class GoogleApiActivity extends Activity implements
             try {
                 token = GoogleAuthUtil.getToken(getApplicationContext(), accountName, scopes);
 
+                dialog.message(token);
+
                 Response response = service.google(token);
                 application.setAuthToken(response.getBody().toString());
             } catch (IOException e) {
@@ -199,6 +229,139 @@ public class GoogleApiActivity extends Activity implements
             super.onPostExecute(s);
 
             // TODO: Make request to GeoUnderground to authenticate user based on Google AuthToken
+        }
+    }
+
+
+    // Example of how to use the GoogleAuthUtil in a blocking, non-main thread context
+    void getAndUseAuthTokenBlocking() {
+        try {
+            // Retrieve a token for the given account and scope. It will always return either
+            // a non-empty String or throw an exception.
+            final String token = GoogleAuthUtil.getToken(this, accountName, SCOPES);
+            // Do work with token.
+
+            application.setGoogleAuthToken(token);
+
+            Log.d(TAG, "Attempting GeoLogin with token: " + token);
+            new RetrieveAuthToken().execute(token);
+
+            if (token != null) {
+                // invalidate the token that we found is bad so that GoogleAuthUtil won't
+                // return it next time (it may have cached it)
+                //GoogleAuthUtil.invalidateToken(Context, String)(context, token);
+                // consider retrying getAndUseTokenBlocking() once more
+                return;
+            }
+            return;
+        } catch (GooglePlayServicesAvailabilityException playEx) {
+            Dialog alert = GooglePlayServicesUtil.getErrorDialog(
+                    playEx.getConnectionStatusCode(),
+                    this,
+                    ACTIVITY_AUTH_REQUEST_CODE);
+        } catch (UserRecoverableAuthException userAuthEx) {
+            // Start the user recoverable action using the intent returned by
+            // getIntent()
+            this.startActivityForResult(
+                    userAuthEx.getIntent(),
+                    ACTIVITY_AUTH_REQUEST_CODE);
+            return;
+        } catch (IOException transientEx) {
+            // network or server error, the call is expected to succeed if you try again later.
+            // Don't attempt to call again immediately - the request is likely to
+            // fail, you'll hit quotas or back-off.
+            return;
+        } catch (GoogleAuthException authEx) {
+            // Failure. The call is not expected to ever succeed so it should not be
+            // retried.
+            return;
+        }
+    }
+
+    // Example of how to use AsyncTask to call blocking code on a background thread.
+    void getAndUseAuthTokenInAsyncTask() {
+        AsyncTask task = new AsyncTask() {
+            @Override
+            protected Object doInBackground(Object[] params) {
+                getAndUseAuthTokenBlocking();
+                return new Object();
+            }
+        };
+
+        task.execute();
+    }
+
+    private void useGoogleAuthToken() {
+        String googleAuthToken = application.getGoogleAuthToken();
+
+        class RetrieveAuthToken extends AsyncTask<String, Void, String> {
+
+            private Exception exception;
+
+            protected String doInBackground(String... urls) {
+                try {
+                    Response response = application.getRestAdapter().create(LoginService.class).google(urls[0]);
+                    String authToken = response.getBody().toString();
+                    return authToken;
+                } catch (Exception e) {
+                    Log.e(TAG, "Login by GoogleAuthToken failed.");
+                    this.exception = e;
+                }
+
+                return null;
+            }
+
+            protected void onPostExecute(String authToken) {
+                if (application.getAuthToken() != null) {
+                    Log.d(TAG, "GeoAuthToken set: " + application.getAuthToken());
+
+                    tryCurrentClient();
+                }
+            }
+        }
+
+        Log.d(TAG, "Attempting GeoLogin with google auth token: " + googleAuthToken);
+        new RetrieveAuthToken().execute(googleAuthToken);
+    }
+
+    class RetrieveAuthToken extends AsyncTask<String, Void, String> {
+
+        private Exception exception;
+
+        protected String doInBackground(String... urls) {
+            try {
+                Response response = application.getRestAdapter().create(LoginService.class).google(urls[0]);
+                String authToken = response.getBody().toString();
+                return authToken;
+            } catch (Exception e) {
+                Log.e(TAG, "Login by GoogleAuthToken failed.");
+                this.exception = e;
+            }
+
+            return null;
+        }
+
+        protected void onPostExecute(String authToken) {
+            if (application.getAuthToken() != null) {
+                Log.i(TAG, "GeoAuthToken set: " + application.getAuthToken());
+
+                tryCurrentClient();
+            }
+        }
+    }
+
+    private void tryCurrentClient() {
+        Response currentClientResponse = service.getCurrentClient();
+        if (currentClientResponse.getStatus() == 200) {
+            startActivity(new Intent(context, MainActivity.class));
+        } else {
+            Fragment fragment = new ClientFragment();
+
+            FragmentManager fragmentManager = getFragmentManager();
+
+            fragmentManager.beginTransaction()
+                    .replace(R.id.login_content_frame, fragment)
+                    .commit();
         }
     }
 }

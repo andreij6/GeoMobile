@@ -4,7 +4,9 @@ import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
 import android.annotation.TargetApi;
 
+import android.app.Dialog;
 import android.app.LoaderManager.LoaderCallbacks;
+import android.content.Context;
 import android.content.CursorLoader;
 import android.content.Intent;
 import android.content.Loader;
@@ -16,6 +18,7 @@ import android.os.Build;
 import android.os.Bundle;
 import android.provider.ContactsContract;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -32,8 +35,11 @@ import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GooglePlayServicesUtil;
 import com.google.android.gms.common.SignInButton;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+
+import retrofit.client.Response;
 
 /**
  * A login screen that offers login via email/password and via Google+ sign in.
@@ -44,6 +50,7 @@ import java.util.List;
  * and follow the steps in "Step 1" to create an OAuth 2.0 client for your package.
  */
 public class LoginActivity extends GoogleApiActivity implements LoaderCallbacks<Cursor> {
+    private final static String TAG = "LoginActivity";
 
     /*
     *Login workflow:
@@ -88,6 +95,7 @@ public class LoginActivity extends GoogleApiActivity implements LoaderCallbacks<
         // Find the Google+ sign in button.
         mPlusSignInButton = (SignInButton) findViewById(R.id.plus_sign_in_button);
         if (supportsGooglePlayServices()) {
+            final Intent googleApiActivity = new Intent(this, GoogleApiActivity.class);
             // Set a listener to connect the user when the G+ button is clicked.
             mPlusSignInButton.setOnClickListener(new OnClickListener() {
                 @Override
@@ -251,14 +259,14 @@ public class LoginActivity extends GoogleApiActivity implements LoaderCallbacks<
         signOutButton.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View view) {
-                signOut();
+                //signOut();
             }
         });
         Button disconnectButton = (Button) findViewById(R.id.plus_disconnect_button);
         disconnectButton.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View view) {
-                revokeAccess();
+                //revokeAccess();
             }
         });
     }
@@ -269,7 +277,7 @@ public class LoginActivity extends GoogleApiActivity implements LoaderCallbacks<
 
     protected void updateConnectButtonState() {
         //TODO: Update this logic to also handle the user logged in by email.
-        boolean connected = getGoogleApiClient().isConnected();
+        boolean connected = false;//getGoogleApiClient().isConnected();
 
         mSignOutButtons.setVisibility(connected ? View.VISIBLE : View.GONE);
         mPlusSignInButton.setVisibility(connected ? View.GONE : View.VISIBLE);
