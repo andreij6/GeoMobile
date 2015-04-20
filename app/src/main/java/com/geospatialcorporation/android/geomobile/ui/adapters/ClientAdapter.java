@@ -1,25 +1,35 @@
 package com.geospatialcorporation.android.geomobile.ui.adapters;
 
 import android.content.Context;
+import android.os.AsyncTask;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.geospatialcorporation.android.geomobile.R;
+import com.geospatialcorporation.android.geomobile.application;
+import com.geospatialcorporation.android.geomobile.library.rest.LoginService;
 import com.geospatialcorporation.android.geomobile.models.Client;
 
 import java.util.List;
+
+import retrofit.RetrofitError;
 
 public class ClientAdapter extends RecyclerView.Adapter<ClientAdapter.ClientViewHolder> {
     private static final String TAG = "ClientAdapter";
     private Context mContext;
     private List<Client> mClients;
+    private LoginService service;
 
     public ClientAdapter(Context context, List<Client> clients){
         mContext = context;
         mClients = clients;
+
+        service = application.getRestAdapter().create(LoginService.class);
+        getClients();
     }
 
     @Override
@@ -64,5 +74,24 @@ public class ClientAdapter extends RecyclerView.Adapter<ClientAdapter.ClientView
               //
             }
         };
+    }
+
+    void getClients() {
+        AsyncTask task = new AsyncTask() {
+            @Override
+            protected List<Client> doInBackground(Object[] params) {
+                try {
+                    mClients = service.getClients();
+                } catch (RetrofitError e) {
+                    if (e.getResponse() != null) {
+                        Log.d(TAG, Integer.toString(e.getResponse().getStatus()));
+                    }
+                }
+
+                return mClients;
+            }
+        };
+
+        task.execute();
     }
 }

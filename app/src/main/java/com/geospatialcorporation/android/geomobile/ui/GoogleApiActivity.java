@@ -366,11 +366,7 @@ public class GoogleApiActivity extends Activity implements
                         if (e.getResponse().getStatus() == 401) {
                             Log.d(TAG, "Unauthorized.");
                         } else {
-                            Fragment fragment = new ClientFragment();
-
-                            getFragmentManager().beginTransaction()
-                                    .replace(R.id.login_content_frame, fragment)
-                                    .commit();
+                            startActivity(new Intent(context, ChooseClientActivity.class));
                         }
                     }
                 }
