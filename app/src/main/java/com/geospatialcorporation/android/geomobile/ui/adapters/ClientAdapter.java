@@ -10,14 +10,14 @@ import android.widget.TextView;
 import com.geospatialcorporation.android.geomobile.R;
 import com.geospatialcorporation.android.geomobile.models.Client;
 
-import java.util.ArrayList;
+import java.util.List;
 
 public class ClientAdapter extends RecyclerView.Adapter<ClientAdapter.ClientViewHolder> {
-
+    private static final String TAG = "ClientAdapter";
     private Context mContext;
-    private ArrayList<Client> mClients;
+    private List<Client> mClients;
 
-    public ClientAdapter(Context context, ArrayList<Client> clients){
+    public ClientAdapter(Context context, List<Client> clients){
         mContext = context;
         mClients = clients;
     }
@@ -36,7 +36,11 @@ public class ClientAdapter extends RecyclerView.Adapter<ClientAdapter.ClientView
 
     @Override
     public int getItemCount() {
-        return mClients.size();
+        if (mClients != null) {
+            return mClients.size();
+        } else {
+            return 0;
+        }
     }
 
     protected class ClientViewHolder extends RecyclerView.ViewHolder {

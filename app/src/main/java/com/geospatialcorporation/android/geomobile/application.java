@@ -6,6 +6,7 @@ import android.util.Log;
 
 import com.facebook.stetho.Stetho;
 import com.facebook.stetho.okhttp.StethoInterceptor;
+import com.geospatialcorporation.android.geomobile.models.Client;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.squareup.okhttp.Interceptor;
 import com.squareup.okhttp.OkHttpClient;
@@ -22,6 +23,7 @@ public class application extends Application {
     private final static String TAG = "application";
     private static Context context;
     private static GoogleApiClient googleClient;
+    private static Client geoClient;
     private static String geoAuthToken;
     private static String googleAuthToken;
     private static OkHttpClient client;
@@ -42,6 +44,9 @@ public class application extends Application {
             @Override
             public void intercept(RequestInterceptor.RequestFacade request) {
                 request.addHeader("User-Agent", "Retrofit-Sample-App");
+                if (geoAuthToken != null) {
+                    request.addHeader("Authorization", "WebToken " + geoAuthToken);
+                }
             }
         };
 
@@ -135,4 +140,7 @@ public class application extends Application {
     public static void setGoogleAuthToken(String token) {
         googleAuthToken = token;
     }
+
+    public static Client getGeoClient() { return geoClient; }
+    public static void setGeoClient(Client client) { geoClient = client; }
 }

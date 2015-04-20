@@ -301,7 +301,7 @@ public class GoogleApiActivity extends Activity implements
 
             protected String doInBackground(String... urls) {
                 try {
-                    Response response = application.getRestAdapter().create(LoginService.class).google(urls[0]);
+                    Response response = service.google(urls[0]);
                     String authToken = response.getBody().toString();
                     return authToken;
                 } catch (Exception e) {
@@ -316,7 +316,7 @@ public class GoogleApiActivity extends Activity implements
                 if (application.getAuthToken() != null) {
                     Log.d(TAG, "GeoAuthToken set: " + application.getAuthToken());
 
-                    tryCurrentClient();
+                    getCurrentClient();
                 }
             }
         }
@@ -346,27 +346,39 @@ public class GoogleApiActivity extends Activity implements
             if (application.getAuthToken() != null) {
                 Log.i(TAG, "GeoAuthToken set: " + application.getAuthToken());
 
-                tryCurrentClient();
+                getCurrentClient();
             }
         }
     }
 
-    private void tryCurrentClient() {
-        try {
-            service.getCurrentClient();
-            startActivity(new Intent(context, MainActivity.class));
-        } catch (RetrofitError e) {
-            if (e.getResponse() != null) {
-                Log.d(TAG, Integer.toString(e.getResponse().getStatus()));
+    void getCurrentClient() {
+        AsyncTask task = new AsyncTask() {
+            @Override
+            protected Object doInBackground(Object[] params) {
+                try {
+                    service.getCurrentClient();
+
+                    startActivity(new Intent(context, MainActivity.class));
+                } catch (RetrofitError e) {
+                    if (e.getResponse() != null) {
+                        Log.d(TAG, Integer.toString(e.getResponse().getStatus()));
+
+                        if (e.getResponse().getStatus() == 401) {
+                            Log.d(TAG, "Unauthorized.");
+                        } else {
+                            Fragment fragment = new ClientFragment();
+
+                            getFragmentManager().beginTransaction()
+                                    .replace(R.id.login_content_frame, fragment)
+                                    .commit();
+                        }
+                    }
+                }
+
+                return new Object();
             }
+        };
 
-            Fragment fragment = new ClientFragment();
-
-            FragmentManager fragmentManager = getFragmentManager();
-
-            fragmentManager.beginTransaction()
-                    .replace(R.id.login_content_frame, fragment)
-                    .commit();
-        }
+        task.execute();
     }
 }

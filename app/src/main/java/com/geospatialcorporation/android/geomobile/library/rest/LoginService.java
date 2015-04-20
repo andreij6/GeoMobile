@@ -1,5 +1,9 @@
 package com.geospatialcorporation.android.geomobile.library.rest;
 
+import com.geospatialcorporation.android.geomobile.models.Client;
+
+import java.util.List;
+
 import retrofit.client.Response;
 import retrofit.http.Body;
 import retrofit.http.GET;
@@ -16,10 +20,10 @@ public interface LoginService {
     Response google(@Body String authToken);
 
     @GET("/API/Clients")
-    Response getClients();
+    List<Client> getClients();
 
     @GET("/API/Clients/Current")
-    Response getCurrentClient();
+    Client getCurrentClient();
 
     @POST("/API/Clients/Switch")
     Response setClient(@Body int clientId);

@@ -1,6 +1,8 @@
 package com.geospatialcorporation.android.geomobile.ui.fragments;
 
 import android.app.Fragment;
+import android.app.FragmentManager;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -19,13 +21,15 @@ import com.google.gson.reflect.TypeToken;
 
 import java.lang.reflect.Type;
 import java.util.ArrayList;
+import java.util.List;
 
+import retrofit.RetrofitError;
 import retrofit.client.Response;
 
 public class ClientFragment extends Fragment {
     private static final String TAG = "ClientFragment";
     private RecyclerView mRecyclerView;
-    private ArrayList<Client> mDataSet;
+    private List<Client> mDataSet;
     private View mRootView;
     private LoginService service;
     private Gson gson = new Gson();
@@ -39,11 +43,7 @@ public class ClientFragment extends Fragment {
 
         mRecyclerView = (RecyclerView)mRootView.findViewById(R.id.clientitem_recyclerview);
 
-        Response clients = service.getClients();
-
-        Type clientListType = new TypeToken<ArrayList<Client>>(){}.getType();
-        mDataSet = gson.fromJson(clients.getBody().toString(), clientListType);
-
+        getClients();
         ClientAdapter adapter = new ClientAdapter(getActivity(), mDataSet);
 
         mRecyclerView.setAdapter(adapter);
@@ -53,5 +53,24 @@ public class ClientFragment extends Fragment {
         mRecyclerView.setLayoutManager(layoutManager);
 
         return mRootView;
+    }
+
+    void getClients() {
+        AsyncTask task = new AsyncTask() {
+            @Override
+            protected Object doInBackground(Object[] params) {
+                try {
+                    mDataSet = service.getClients();
+                } catch (RetrofitError e) {
+                    if (e.getResponse() != null) {
+                        Log.d(TAG, Integer.toString(e.getResponse().getStatus()));
+                    }
+                }
+
+                return new Object();
+            }
+        };
+
+        task.execute();
     }
 }
