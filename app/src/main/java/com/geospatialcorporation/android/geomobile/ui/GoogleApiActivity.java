@@ -32,6 +32,7 @@ import com.google.android.gms.plus.Plus;
 
 import java.io.IOException;
 
+import retrofit.RetrofitError;
 import retrofit.client.Response;
 
 public class GoogleApiActivity extends Activity implements
@@ -351,10 +352,14 @@ public class GoogleApiActivity extends Activity implements
     }
 
     private void tryCurrentClient() {
-        Response currentClientResponse = service.getCurrentClient();
-        if (currentClientResponse.getStatus() == 200) {
+        try {
+            service.getCurrentClient();
             startActivity(new Intent(context, MainActivity.class));
-        } else {
+        } catch (RetrofitError e) {
+            if (e.getResponse() != null) {
+                Log.d(TAG, Integer.toString(e.getResponse().getStatus()));
+            }
+
             Fragment fragment = new ClientFragment();
 
             FragmentManager fragmentManager = getFragmentManager();

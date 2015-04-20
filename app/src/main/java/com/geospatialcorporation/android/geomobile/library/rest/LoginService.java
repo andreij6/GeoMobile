@@ -15,11 +15,11 @@ public interface LoginService {
     @POST("/API/Auth/Google")
     Response google(@Body String authToken);
 
-    @GET("/API/Clients/Current")
-    Response getCurrentClient();
-
     @GET("/API/Clients")
     Response getClients();
+
+    @GET("/API/Clients/Current")
+    Response getCurrentClient();
 
     @POST("/API/Clients/Switch")
     Response setClient(@Body int clientId);
