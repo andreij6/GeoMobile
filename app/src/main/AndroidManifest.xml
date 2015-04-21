@@ -37,7 +37,7 @@
     <uses-permission android:name="android.permission.READ_PROFILE" />
     <uses-permission android:name="android.permission.READ_CONTACTS" />
     <uses-permission android:name="android.permission.READ_PHONE_STATE" />
-    <uses-permission android:name="com.google.android.providers.gsf.permission.READ_GSERVICES"/>
+    <uses-permission android:name="com.google.android.providers.gsf.permission.READ_GSERVICES" />
     <uses-permission
         android:name="android.permission.READ_EXTERNAL_STORAGE"
         android:maxSdkVersion="18" />
@@ -81,6 +81,14 @@
         <activity
             android:name=".ui.ChooseClientActivity"
             android:label="@string/title_activity_choose_client" >
+        </activity>
+        <activity
+            android:name=".ui.FolderDocumentsActivity"
+            android:label="@string/title_activity_folder_documents"
+            android:parentActivityName=".ui.MainActivity" >
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.geospatialcorporation.android.geomobile.ui.MainActivity" />
         </activity>
     </application>
 

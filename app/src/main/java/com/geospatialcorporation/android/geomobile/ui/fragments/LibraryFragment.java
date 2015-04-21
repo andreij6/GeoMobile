@@ -1,46 +1,38 @@
 package com.geospatialcorporation.android.geomobile.ui.fragments;
 
 import android.app.Fragment;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Toast;
 
 import com.geospatialcorporation.android.geomobile.R;
-import com.geospatialcorporation.android.geomobile.library.constants.EndPoints;
-import com.geospatialcorporation.android.geomobile.library.rest.CallbackAction;
-import com.geospatialcorporation.android.geomobile.library.rest.CallbackHelper;
-import com.geospatialcorporation.android.geomobile.library.rest.RestService;
+import com.geospatialcorporation.android.geomobile.application;
+import com.geospatialcorporation.android.geomobile.library.rest.TreeService;
 import com.geospatialcorporation.android.geomobile.models.Folders.Folder;
-import com.geospatialcorporation.android.geomobile.models.Library.Document;
 import com.geospatialcorporation.android.geomobile.ui.adapters.LibraryAdapter;
 
-import java.io.IOException;
 import java.util.ArrayList;
+import java.util.List;
 
-import com.google.gson.Gson;
-import com.squareup.okhttp.Callback;
-import com.squareup.okhttp.Response;
-
-import org.json.JSONArray;
-import org.json.JSONException;
+import retrofit.RetrofitError;
 
 /**
  * Created by andre on 4/7/2015.
  */
 public class LibraryFragment extends Fragment{
+    protected static final String TAG = LibraryFragment.class.getSimpleName();
 
     //region Properties
     private RecyclerView mRecyclerView;
-    private ArrayList<Folder> mDataSet;
+    private List<Folder> mFolders;
     private View mRootView;
+    private TreeService mService;
     //endregion
-
-    private String mTempAuthValue = "WebToken esSCBBfw1zGRUq3XpEmsqLrlCzLytO6YRnP2v2p8g9u8VBf14vgS1C3gDgdv59RKZJ5wQo5tMoCk6pyYg/EXV5O4nUEUW8/lUR9fxc7R4TQKtWPMs4lh4S6Q5zW6lOWK";
-
 
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -49,19 +41,9 @@ public class LibraryFragment extends Fragment{
 
         mRecyclerView = (RecyclerView)mRootView.findViewById(R.id.libraryitem_recyclerView);
 
-        RestService restService = new RestService.Builder()
-                                    .endPoint(EndPoints.TREE_LIBRARY)
-                                    .setAuthToken(mTempAuthValue)
-                                    .callBack(treeLibraryCallback)
-                                    .build();
+        mService = application.getRestAdapter().create(TreeService.class);
 
-        restService.Send();
-
-        //mDataSet = new ArrayList<>();
-
-        LibraryAdapter adapter = new LibraryAdapter(getActivity(), new ArrayList<Document>());
-
-        mRecyclerView.setAdapter(adapter);
+        new GetDocumentsTask().execute();
 
         RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(container.getContext());
 
@@ -70,43 +52,31 @@ public class LibraryFragment extends Fragment{
         return mRootView;
     }
 
-    //region treeLibraryCallback
-    protected CallbackAction treeLibrarySuccess = new CallbackAction(){
+    private class GetDocumentsTask extends AsyncTask<Void, Void, List<Folder>> {
+
         @Override
-        public void run(Response response){
+        protected List<Folder> doInBackground(Void... params) {
             try {
-                String responseString = response.body().string();
+                List<Folder> folders = mService.getLibrary();
 
-                JSONArray message = new JSONArray(responseString);
-
-                String rootFolderString = message.get(0).toString();
-
-                //mDataSet = LibraryItem.fromJSONArray(message);
-                Gson gson = new Gson();
-
-                Folder folder = gson.fromJson(rootFolderString, Folder.class);
-
-                mDataSet = GetFoldersRecursively(folder);
-
-                getActivity().runOnUiThread(new Runnable() {
-                    @Override
-                    public void run() {
-                        Toast.makeText(getActivity(), "success - library", Toast.LENGTH_LONG).show();
-
-                        //LibraryAdapter adapter = new LibraryAdapter(getActivity(), mDataSet);
-
-                        //mRecyclerView.setAdapter(adapter);
-                    }
-                });
+                mFolders = GetFoldersRecursively(folders.get(0));
+            } catch (RetrofitError e) {
+                if (e.getResponse() != null) {
+                    Log.d(TAG, e.getResponse().getStatus() + " : Line 75");
+                }
             }
-            catch (IOException e){
 
-            }
-            catch (JSONException e){
-                e.printStackTrace();
-            }
+            return mFolders;
         }
-    };
+
+        @Override
+        protected void onPostExecute(List<Folder> folders){
+            LibraryAdapter adapter = new LibraryAdapter(getActivity(), folders);
+
+            mRecyclerView.setAdapter(adapter);
+        }
+
+    }
 
     private ArrayList<Folder> GetFoldersRecursively(Folder folder) {
         ArrayList<Folder> result = new ArrayList<>();
@@ -114,14 +84,15 @@ public class LibraryFragment extends Fragment{
         if(folder.getFolders().size() == 0){
             result.add(folder);
         } else {
-
             for(Folder x : folder.getFolders()){
                 result.addAll(GetFoldersRecursively(x));
+            }
+
+            if(!result.contains(folder)){
+                result.add(folder);
             }
         }
         return result;
     }
 
-    protected Callback treeLibraryCallback = CallbackHelper.runInsideShell(treeLibrarySuccess, CallbackHelper.StandardFailure(getActivity()));
-    //endregion
 }

@@ -36,6 +36,7 @@ import android.widget.ListView;
 import android.widget.Toast;
 
 import com.geospatialcorporation.android.geomobile.library.constants.ViewConstants;
+import com.geospatialcorporation.android.geomobile.ui.fragments.AccountFragment;
 import com.geospatialcorporation.android.geomobile.ui.fragments.GoogleMapFragment;
 import com.geospatialcorporation.android.geomobile.R;
 import com.geospatialcorporation.android.geomobile.ui.fragments.LayerFragment;
@@ -211,9 +212,8 @@ public class MainActivity extends Activity {
                 return new LayerFragment();
             case ViewConstants.LIBRARY:
                 return new LibraryFragment();
-            //case ViewConstants.ACCOUNT:
-            //    fragment = new AccountFragment();
-            //   break;
+            case ViewConstants.ACCOUNT:
+                return new AccountFragment();
             case ViewConstants.LOGOUT:
                 startActivity(new Intent(this, LoginActivity.class));
         }

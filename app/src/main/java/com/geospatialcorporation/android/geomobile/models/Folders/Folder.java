@@ -1,22 +1,25 @@
 package com.geospatialcorporation.android.geomobile.models.Folders;
 
 
+import android.os.Parcel;
+import android.os.Parcelable;
+
 import com.geospatialcorporation.android.geomobile.models.Layers.Layer;
-import com.geospatialcorporation.android.geomobile.models.Library.Document;
 
 import java.util.List;
 
 /**
  * Created by andre on 4/7/2015.
  */
-public class Folder {
+public class Folder implements Parcelable {
+
+    public Folder(){}
 
     //region Properties
     private Boolean IsImportFolder;
     private Boolean IsFixed;
     private List<Layer> Layers;
     private List<Folder> Folders;
-    private List<Document> Documents;
     private Integer AccessLevel;
     private Integer MobileId;
     private Integer Id;
@@ -24,6 +27,7 @@ public class Folder {
     //endregion
 
     //region Getters & Setters
+
     public Boolean getIsImportFolder() {
         return IsImportFolder;
     }
@@ -83,6 +87,52 @@ public class Folder {
     public void setName(String name) {
         Name = name;
     }
+    //endregion
+
+    //region Intent Flags
+    public static final String FOLDER_INTENT = "Folder";
+    //endregion
+
+    //region Parcelable Contract
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeValue(IsImportFolder);
+        dest.writeValue(IsFixed);
+        //dest.writeSerializable((ArrayList<Layer>)Layers);
+        //dest.writeSerializable((ArrayList<Folder>)Folders);
+        dest.writeInt(AccessLevel);
+        dest.writeInt(Id);
+        dest.writeString(Name);
+    }
+
+    private Folder(Parcel in){
+        IsImportFolder = (Boolean)in.readValue(Boolean.class.getClassLoader());
+        IsFixed = (Boolean)in.readValue(Boolean.class.getClassLoader());
+        //Layers = (List<Layer>)in.readSerializable();
+        //Folders = (List<Folder>)in.readSerializable();
+        AccessLevel = in.readInt();
+        Id = in.readInt();
+        Name = in.readString();
+
+    }
+
+    public static final Creator<Folder> CREATOR = new Creator<Folder>(){
+
+        @Override
+        public Folder createFromParcel(Parcel source) {
+            return new Folder(source);
+        }
+
+        @Override
+        public Folder[] newArray(int size) {
+            return new Folder[size];
+        }
+    };
     //endregion
 
 

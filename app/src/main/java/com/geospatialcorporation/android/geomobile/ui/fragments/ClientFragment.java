@@ -22,7 +22,7 @@ import retrofit.RetrofitError;
 
 public class ClientFragment extends Fragment {
 
-    private static final String TAG = "ClientFragment";
+    private static final String TAG = ClientFragment.class.getName();
 
     private RecyclerView mRecyclerView;
     private List<Client> mDataSet;

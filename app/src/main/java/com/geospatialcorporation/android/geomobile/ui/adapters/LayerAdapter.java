@@ -10,7 +10,7 @@ import android.widget.TextView;
 import com.geospatialcorporation.android.geomobile.R;
 import com.geospatialcorporation.android.geomobile.models.Layers.Layer;
 
-import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Created by andre on 4/7/2015.
@@ -18,9 +18,9 @@ import java.util.ArrayList;
 public class LayerAdapter extends RecyclerView.Adapter<LayerAdapter.LayerViewHolder>{
 
     private Context mContext;
-    private ArrayList<Layer> mLayers;
+    private List<Layer> mLayers;
 
-    public LayerAdapter(Context context, ArrayList<Layer> layers){
+    public LayerAdapter(Context context, List<Layer> layers){
         mContext = context;
         mLayers = layers;
     }
@@ -55,13 +55,5 @@ public class LayerAdapter extends RecyclerView.Adapter<LayerAdapter.LayerViewHol
         public void bindLayerItem(Layer layer){
             mLayerName.setText(layer.getName());
         }
-
-        protected View.OnClickListener LayerItemClicked = new View.OnClickListener(){
-
-            @Override
-            public void onClick(View v) {
-
-            }
-        };
     }
 }

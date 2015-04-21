@@ -1,24 +1,19 @@
 package com.geospatialcorporation.android.geomobile.ui;
 
 import android.app.Activity;
-import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 
 import com.geospatialcorporation.android.geomobile.R;
-import com.geospatialcorporation.android.geomobile.application;
-import com.geospatialcorporation.android.geomobile.library.rest.LoginService;
 import com.geospatialcorporation.android.geomobile.ui.fragments.ClientFragment;
 
 
 public class ChooseClientActivity extends Activity {
-    private static LoginService service;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        service = application.getRestAdapter().create(LoginService.class);
 
         setContentView(R.layout.activity_choose_client);
         getFragmentManager().beginTransaction()

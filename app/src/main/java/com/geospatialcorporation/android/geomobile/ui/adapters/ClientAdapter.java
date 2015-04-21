@@ -71,6 +71,8 @@ public class ClientAdapter extends RecyclerView.Adapter<ClientAdapter.ClientView
 
                     new SwitchClientTask().execute();
 
+                    application.setGeoClient(mClient);
+
                     mContext.startActivity(new Intent(mContext, MainActivity.class));
                 }
             });
