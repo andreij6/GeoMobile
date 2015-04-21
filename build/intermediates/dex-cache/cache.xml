@@ -1,0 +1,124 @@
+<?xml version="1.0" encoding="utf-8"?>
+<items version="2" >
+
+    <item
+        jar="C:\Users\andre\.gradle\caches\modules-2\files-2.1\com.google.code.findbugs\jsr305\2.0.1\516c03b21d50a644d538de0f0369c620989cd8f0\jsr305-2.0.1.jar"
+        jumboMode="false"
+        revision="21.1.2"
+        sha1="516c03b21d50a644d538de0f0369c620989cd8f0">
+        <dex dex="C:\GeoUndergroundMobile\geomobile\app\build\intermediates\pre-dexed\debug\jsr305-2.0.1-87bfe7855ad36e587ee76dab3f38d75d157ae5bc.jar" />
+    </item>
+    <item
+        jar="C:\GeoUndergroundMobile\geomobile\app\build\intermediates\exploded-aar\com.google.android.gms\play-services\6.5.87\classes.jar"
+        jumboMode="false"
+        revision="21.1.2"
+        sha1="dd9247ea0fabe8ee479638c4b4a23e93752be256">
+        <dex dex="C:\GeoUndergroundMobile\geomobile\app\build\intermediates\pre-dexed\debug\classes-b9d29d9b420517107cf3fc31035ac59dcf14d600.jar" />
+    </item>
+    <item
+        jar="C:\GeoUndergroundMobile\geomobile\app\build\intermediates\exploded-aar\com.android.support\support-v4\22.0.0\classes.jar"
+        jumboMode="false"
+        revision="21.1.2"
+        sha1="4e86306289ace4aa0cfec44a05ed2b410d36989d">
+        <dex dex="C:\GeoUndergroundMobile\geomobile\app\build\intermediates\pre-dexed\debug\classes-6c4d2ed5b99e081bf513a8695bf8c4fedd01d015.jar" />
+    </item>
+    <item
+        jar="C:\Users\andre\AppData\Local\Android\sdk\extras\android\m2repository\com\android\support\support-annotations\22.0.0\support-annotations-22.0.0.jar"
+        jumboMode="false"
+        revision="21.1.2"
+        sha1="685d0b2c590447e85284ed84712cb363ba04eff8">
+        <dex dex="C:\GeoUndergroundMobile\geomobile\app\build\intermediates\pre-dexed\debug\support-annotations-22.0.0-bf37536added4ef1d95ed19784ea6416cf5c3821.jar" />
+    </item>
+    <item
+        jar="C:\GeoUndergroundMobile\geomobile\app\build\intermediates\exploded-aar\com.android.support\appcompat-v7\22.0.0\classes.jar"
+        jumboMode="false"
+        revision="21.1.2"
+        sha1="d84409890828e07d344a3b9b1da545dba9897b51">
+        <dex dex="C:\GeoUndergroundMobile\geomobile\app\build\intermediates\pre-dexed\debug\classes-e1690b574ffd4bb7a3c866b93d7ea3370844457e.jar" />
+    </item>
+    <item
+        jar="C:\Users\andre\.gradle\caches\modules-2\files-2.1\com.squareup.okhttp\okhttp-urlconnection\2.0.0\afe8399d352713b66e597e9670c741d1e60ae923\okhttp-urlconnection-2.0.0.jar"
+        jumboMode="false"
+        revision="21.1.2"
+        sha1="afe8399d352713b66e597e9670c741d1e60ae923">
+        <dex dex="C:\GeoUndergroundMobile\geomobile\app\build\intermediates\pre-dexed\debug\okhttp-urlconnection-2.0.0-4ccde0d8dd375ab2893d42b0d9a564f789d9f4ed.jar" />
+    </item>
+    <item
+        jar="C:\Users\andre\.gradle\caches\modules-2\files-2.1\com.squareup.okhttp\okhttp\2.3.0\2e7bc7033dc2c8423e661224171b3133fb155b28\okhttp-2.3.0.jar"
+        jumboMode="false"
+        revision="21.1.2"
+        sha1="2e7bc7033dc2c8423e661224171b3133fb155b28">
+        <dex dex="C:\GeoUndergroundMobile\geomobile\app\build\intermediates\pre-dexed\debug\okhttp-2.3.0-7fd9cc9fed6ba74ea4e954d94b523d672e9812d1.jar" />
+    </item>
+    <item
+        jar="C:\Users\andre\.gradle\caches\modules-2\files-2.1\commons-cli\commons-cli\1.2\2bf96b7aa8b611c177d329452af1dc933e14501c\commons-cli-1.2.jar"
+        jumboMode="false"
+        revision="21.1.2"
+        sha1="2bf96b7aa8b611c177d329452af1dc933e14501c">
+        <dex dex="C:\GeoUndergroundMobile\geomobile\app\build\intermediates\pre-dexed\debug\commons-cli-1.2-e3d56c4f5f7d52142b076b4d286c62de84f56516.jar" />
+    </item>
+    <item
+        jar="C:\GeoUndergroundMobile\geomobile\app\build\intermediates\exploded-aar\com.android.support\support-v4\22.0.0\libs\internal_impl-22.0.0.jar"
+        jumboMode="false"
+        revision="21.1.2"
+        sha1="b5b92f469d515a13d778900f6d50c03d12f35504">
+        <dex dex="C:\GeoUndergroundMobile\geomobile\app\build\intermediates\pre-dexed\debug\internal_impl-22.0.0-d3e2e5ebc6aa7c123697155d919368a4df348470.jar" />
+    </item>
+    <item
+        jar="C:\Users\andre\.gradle\caches\modules-2\files-2.1\com.squareup.okio\okio\1.3.0\1b355f73402020c5a0dcca58affc3ec3dfeabac1\okio-1.3.0.jar"
+        jumboMode="false"
+        revision="21.1.2"
+        sha1="1b355f73402020c5a0dcca58affc3ec3dfeabac1">
+        <dex dex="C:\GeoUndergroundMobile\geomobile\app\build\intermediates\pre-dexed\debug\okio-1.3.0-06c9bfb34992d0a0a84db3b4315e075ce7e4b71b.jar" />
+    </item>
+    <item
+        jar="C:\Users\andre\.gradle\caches\modules-2\files-2.1\com.facebook.stetho\stetho-okhttp\1.1.0\9c71f8505b3e2585b490669dfeaa65ffbfb5fcb3\stetho-okhttp-1.1.0.jar"
+        jumboMode="false"
+        revision="21.1.2"
+        sha1="9c71f8505b3e2585b490669dfeaa65ffbfb5fcb3">
+        <dex dex="C:\GeoUndergroundMobile\geomobile\app\build\intermediates\pre-dexed\debug\stetho-okhttp-1.1.0-52f9bdd1ce9c3020260fc675bbc1658226b3ac4d.jar" />
+    </item>
+    <item
+        jar="C:\GeoUndergroundMobile\geomobile\app\build\intermediates\exploded-aar\com.android.support\recyclerview-v7\22.0.0\classes.jar"
+        jumboMode="false"
+        revision="21.1.2"
+        sha1="c6d79137693d494dee16372d3921f919eb724ced">
+        <dex dex="C:\GeoUndergroundMobile\geomobile\app\build\intermediates\pre-dexed\debug\classes-883dfe53e68ee4e00230b9fd9e3f7be481c3b42a.jar" />
+    </item>
+    <item
+        jar="C:\GeoUndergroundMobile\geomobile\app\build\intermediates\exploded-aar\com.android.support\cardview-v7\21.0.3\classes.jar"
+        jumboMode="false"
+        revision="21.1.2"
+        sha1="00b0b7233e1ec64acebfac40d4983d32d4712426">
+        <dex dex="C:\GeoUndergroundMobile\geomobile\app\build\intermediates\pre-dexed\debug\classes-1e0791c2bf7acf1b338efe613e872446a8497b86.jar" />
+    </item>
+    <item
+        jar="C:\Users\andre\.gradle\caches\modules-2\files-2.1\com.squareup.retrofit\retrofit\1.9.0\a681c044244d9fc375198588297a39ba78028423\retrofit-1.9.0.jar"
+        jumboMode="false"
+        revision="21.1.2"
+        sha1="a681c044244d9fc375198588297a39ba78028423">
+        <dex dex="C:\GeoUndergroundMobile\geomobile\app\build\intermediates\pre-dexed\debug\retrofit-1.9.0-affc02a75b1d2ca486f389ca5d28d247bd070ae1.jar" />
+    </item>
+    <item
+        jar="C:\GeoUndergroundMobile\geomobile\app\build\intermediates\exploded-aar\com.afollestad\material-dialogs\0.6.4.2\classes.jar"
+        jumboMode="false"
+        revision="21.1.2"
+        sha1="f1c3d2bd4977bbafca0f9396b889ae13605f1ce7">
+        <dex dex="C:\GeoUndergroundMobile\geomobile\app\build\intermediates\pre-dexed\debug\classes-51a1ea34383193f2850236cc8bff5ff78ce0b883.jar" />
+    </item>
+    <item
+        jar="C:\Users\andre\.gradle\caches\modules-2\files-2.1\com.facebook.stetho\stetho\1.1.0\d8892e70b02cf2972b2a00aef145809560b0efb4\stetho-1.1.0.jar"
+        jumboMode="false"
+        revision="21.1.2"
+        sha1="d8892e70b02cf2972b2a00aef145809560b0efb4">
+        <dex dex="C:\GeoUndergroundMobile\geomobile\app\build\intermediates\pre-dexed\debug\stetho-1.1.0-226d9c8fb40c504d19dba67cea030770595cf4df.jar" />
+    </item>
+    <item
+        jar="C:\Users\andre\.gradle\caches\modules-2\files-2.1\com.google.code.gson\gson\2.3.1\ecb6e1f8e4b0e84c4b886c2f14a1500caf309757\gson-2.3.1.jar"
+        jumboMode="false"
+        revision="21.1.2"
+        sha1="ecb6e1f8e4b0e84c4b886c2f14a1500caf309757">
+        <dex dex="C:\GeoUndergroundMobile\geomobile\app\build\intermediates\pre-dexed\debug\gson-2.3.1-8c38d5522876c3784ec2f6a57bc8f73b7af178d6.jar" />
+    </item>
+
+</items>
