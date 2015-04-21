@@ -1,5 +1,8 @@
 **/.idea/workspace.xml
 **/.idea/tasks.xml
-**/.gradle/
+**/.gradle
 **/Thumbs.db
-**/app/build/
+**/app/build
+**/app/app.iml
+**/build
+local.properties
