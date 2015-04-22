@@ -11,6 +11,7 @@ import retrofit.http.Path;
  * Created by andre on 4/21/2015.
  */
 public interface FolderService {
-    @GET("/API/Folders/{folderId}/Documents")
-    List<Document> getFolderDocuments(@Path("id") int folderId);
+
+    @GET("/API/Folders/{folderId}/Files")
+    List<Document> getFolderDocuments(@Path("folderId") int folderId);
 }

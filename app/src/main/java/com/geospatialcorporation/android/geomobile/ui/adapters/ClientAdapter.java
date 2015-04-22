@@ -18,10 +18,13 @@ import com.geospatialcorporation.android.geomobile.ui.MainActivity;
 
 import java.util.List;
 
+import butterknife.ButterKnife;
+import butterknife.InjectView;
 import retrofit.RetrofitError;
 
 public class ClientAdapter extends RecyclerView.Adapter<ClientAdapter.ClientViewHolder> {
-    private static final String TAG = "ClientAdapter";
+    private static final String TAG = ClientAdapter.class.getSimpleName();
+
     private Context mContext;
     private List<Client> mClients;
     private int newClientId;
@@ -56,13 +59,14 @@ public class ClientAdapter extends RecyclerView.Adapter<ClientAdapter.ClientView
 
     protected class ClientViewHolder extends RecyclerView.ViewHolder {
         //region Properties
-        TextView mClientName;
+        @InjectView(R.id.clientNameLabel) TextView mClientName;
+
         Client mClient;
         //endregion
 
         public ClientViewHolder(View itemView){
             super(itemView);
-            mClientName = (TextView)itemView.findViewById(R.id.clientNameLabel);
+            ButterKnife.inject(this, itemView);
 
             itemView.setOnClickListener(new View.OnClickListener(){
                 @Override

@@ -1,32 +1,43 @@
 package com.geospatialcorporation.android.geomobile.ui;
 
 import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
 import android.os.AsyncTask;
-import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 
 import com.geospatialcorporation.android.geomobile.R;
+import com.geospatialcorporation.android.geomobile.application;
 import com.geospatialcorporation.android.geomobile.library.rest.FolderService;
 import com.geospatialcorporation.android.geomobile.models.Folders.Folder;
 import com.geospatialcorporation.android.geomobile.models.Library.Document;
+import com.geospatialcorporation.android.geomobile.ui.adapters.DocumentAdapter;
 
 import java.util.List;
 
+import retrofit.RetrofitError;
+
 public class FolderDocumentsActivity extends Activity {
 
-    //region Properties & Tag
     protected static final String TAG = FolderDocumentsActivity.class.getSimpleName();
 
+    //region Properties
     protected Folder mFolder;
     private FolderService mService;
     private List<Document> mDocumentList;
+    private RecyclerView mRecyclerView;
+    Context mContext;
     //endregion
 
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        mContext = this;
+        mService = application.getRestAdapter().create(FolderService.class);
 
         Intent intent = getIntent();
 
@@ -37,6 +48,17 @@ public class FolderDocumentsActivity extends Activity {
         new GetDocumentsTask().execute();
 
         setContentView(R.layout.activity_folder_documents);
+
+        mRecyclerView = (RecyclerView)findViewById(R.id.documentlist);
+
+        mRecyclerView.setHasFixedSize(true);
+
+        new GetDocumentsTask().execute();
+
+        LinearLayoutManager layoutManager = new LinearLayoutManager(this);
+
+        mRecyclerView.setLayoutManager(layoutManager);
+
     }
 
 
@@ -49,9 +71,6 @@ public class FolderDocumentsActivity extends Activity {
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
         int id = item.getItemId();
 
         //noinspection SimplifiableIfStatement
@@ -66,12 +85,20 @@ public class FolderDocumentsActivity extends Activity {
 
         @Override
         protected List<Document> doInBackground(Void... params) {
-            return null;
+            try {
+                mDocumentList = mService.getFolderDocuments(mFolder.getId());
+
+            } catch (RetrofitError e){
+                Log.d(TAG, e.getMessage());
+            }
+            return mDocumentList;
         }
 
         @Override
         protected void onPostExecute(List<Document> documents){
+            DocumentAdapter adapter = new DocumentAdapter(mContext, mDocumentList);
 
+            mRecyclerView.setAdapter(adapter);
         }
     }
 }
