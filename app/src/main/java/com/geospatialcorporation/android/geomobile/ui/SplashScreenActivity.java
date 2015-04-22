@@ -8,7 +8,6 @@ import android.os.Handler;
 import com.geospatialcorporation.android.geomobile.R;
 
 public class SplashScreenActivity extends Activity {
-
     // Splash screen timer
     private static int SPLASH_TIME_OUT = 3000;
 
@@ -16,6 +15,8 @@ public class SplashScreenActivity extends Activity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_splash_screen);
+
+        // TODO: Check for authentication
 
         new Handler().postDelayed(new Runnable() {
  
@@ -36,5 +37,4 @@ public class SplashScreenActivity extends Activity {
             }
         }, SPLASH_TIME_OUT);
     }
-
 }
