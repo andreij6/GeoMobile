@@ -14,10 +14,10 @@ import android.view.MenuItem;
 import com.geospatialcorporation.android.geomobile.R;
 import com.geospatialcorporation.android.geomobile.application;
 import com.geospatialcorporation.android.geomobile.library.helpers.DataHelper;
+import com.geospatialcorporation.android.geomobile.library.helpers.SectionTreeBuilder;
 import com.geospatialcorporation.android.geomobile.library.rest.FolderService;
 import com.geospatialcorporation.android.geomobile.models.Folders.Folder;
 import com.geospatialcorporation.android.geomobile.models.Library.Document;
-import com.geospatialcorporation.android.geomobile.ui.adapters.DocumentAdapter;
 import com.geospatialcorporation.android.geomobile.ui.adapters.ListItemAdapter;
 import com.geospatialcorporation.android.geomobile.ui.adapters.SimpleSectionedRecyclerViewAdapter;
 import com.geospatialcorporation.android.geomobile.ui.viewmodels.ListItem;
@@ -64,11 +64,6 @@ public class DocumentsActivity extends Activity {
         mRecyclerView.setHasFixedSize(true);
 
         new GetDocumentsTask().execute();
-
-        LinearLayoutManager layoutManager = new LinearLayoutManager(this);
-
-        mRecyclerView.setLayoutManager(layoutManager);
-
     }
 
 
@@ -107,29 +102,11 @@ public class DocumentsActivity extends Activity {
 
         @Override
         protected void onPostExecute(List<Document> documents){
-            List<Folder> folders = mFolder.getFolders() == null ? new ArrayList<Folder>() : mFolder.getFolders();
 
-            List<ListItem> listItems = mHelper.CombineLibraryItems(mDocumentList, folders);
-
-            ListItemAdapter adapter = new ListItemAdapter(mContext, listItems, ListItemAdapter.LIBRARY);
-
-            List<SimpleSectionedRecyclerViewAdapter.Section> sections = new ArrayList<SimpleSectionedRecyclerViewAdapter.Section>();
-
-            sections.add(new SimpleSectionedRecyclerViewAdapter.Section(0, "Folders"));
-            sections.add(new SimpleSectionedRecyclerViewAdapter.Section(folders.size(), "Documents"));
-
-            SimpleSectionedRecyclerViewAdapter.Section[] dummy = new SimpleSectionedRecyclerViewAdapter.Section[sections.size()];
-
-            SimpleSectionedRecyclerViewAdapter mSectionedAdapter = new
-                    SimpleSectionedRecyclerViewAdapter(mContext,  R.layout.section, R.id.section_text, adapter);
-
-            mSectionedAdapter.setSections(sections.toArray(dummy));
-
-            mRecyclerView.setAdapter(mSectionedAdapter);
-
-            RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(mContext);
-
-            mRecyclerView.setLayoutManager(layoutManager);
+            SectionTreeBuilder builder = new SectionTreeBuilder(mContext)
+                                        .AddLibraryData(mDocumentList, mFolder.getFolders())
+                                        .BuildAdapter(ListItemAdapter.LIBRARY, "Folders", "Documents")
+                                        .setRecycler(mRecyclerView);
         }
     }
 }

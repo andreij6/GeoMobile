@@ -10,6 +10,7 @@ import android.view.MenuItem;
 
 import com.geospatialcorporation.android.geomobile.R;
 import com.geospatialcorporation.android.geomobile.library.helpers.DataHelper;
+import com.geospatialcorporation.android.geomobile.library.helpers.SectionTreeBuilder;
 import com.geospatialcorporation.android.geomobile.models.Folders.Folder;
 import com.geospatialcorporation.android.geomobile.ui.adapters.ListItemAdapter;
 import com.geospatialcorporation.android.geomobile.ui.adapters.SimpleSectionedRecyclerViewAdapter;
@@ -42,29 +43,11 @@ public class LayerActivity extends Activity {
         setTitle(mFolder.getName());
 
         //show subfolders & layers in a recycler view
-        List<Folder> folders = mFolder.getFolders() == null ? new ArrayList<Folder>() : mFolder.getFolders();
+        SectionTreeBuilder builder = new SectionTreeBuilder(this)
+                                            .AddLayerData(mFolder.getLayers(), mFolder.getFolders())
+                                            .BuildAdapter(ListItemAdapter.LAYER, "Folders", "Layers")
+                                            .setRecycler(mRecyclerView);
 
-        List<ListItem> listItems = mHelper.CombineLayerItems(mFolder.getLayers(), folders);
-
-        ListItemAdapter listItemAdapter = new ListItemAdapter(this, listItems, ListItemAdapter.LAYER);
-
-        List<SimpleSectionedRecyclerViewAdapter.Section> sections = new ArrayList<SimpleSectionedRecyclerViewAdapter.Section>();
-
-        sections.add(new SimpleSectionedRecyclerViewAdapter.Section(0, "Folders"));
-        sections.add(new SimpleSectionedRecyclerViewAdapter.Section(folders.size(), "Layers"));
-
-        SimpleSectionedRecyclerViewAdapter.Section[] dummy = new SimpleSectionedRecyclerViewAdapter.Section[sections.size()];
-
-        SimpleSectionedRecyclerViewAdapter mSectionedAdapter = new
-                SimpleSectionedRecyclerViewAdapter(this,  R.layout.section, R.id.section_text, listItemAdapter);
-
-        mSectionedAdapter.setSections(sections.toArray(dummy));
-
-        mRecyclerView.setAdapter(mSectionedAdapter);
-
-        RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(this);
-
-        mRecyclerView.setLayoutManager(layoutManager);
     }
 
 
