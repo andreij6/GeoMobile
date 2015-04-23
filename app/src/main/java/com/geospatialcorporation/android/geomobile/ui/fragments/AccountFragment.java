@@ -61,7 +61,7 @@ public class AccountFragment extends Fragment {
 
     @OnClick(R.id.saveAcctBtn)
     public void save(){
-        Toast.makeText(getActivity(), "Your Account changes have NOT Been saved!!", Toast.LENGTH_LONG).show();
+        new SendChangesTask().execute();
     }
 
     private class GetProfileTask extends AsyncTask<Void, Void, UserAccount>{
@@ -82,6 +82,30 @@ public class AccountFragment extends Fragment {
         @Override
         protected void onPostExecute(UserAccount account){
             SetupUI();
+        }
+    }
+
+    private class SendChangesTask extends AsyncTask<Void, Void, UserAccount>{
+        @Override
+        protected UserAccount doInBackground(Void...params){
+            UserAccount u = new UserAccount();
+
+            try {
+                u.setFirstName(FirstName.getText().toString());
+                u.setLastName(LastName.getText().toString());
+                u.setEmail(Email.getText().toString());
+                u.setCellPhone(CellPhone.getText().toString());
+                u.setOfficePhone(OfficePhone.getText().toString());
+                u.setId(mUserAccount.getId());
+
+                mService.postChanges(u);
+
+
+            } catch (RetrofitError e){
+                Log.d(TAG, e.getMessage());
+            }
+
+            return u;
         }
     }
 
