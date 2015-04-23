@@ -65,4 +65,5 @@
     <string name="documents_section">Documents</string>
     <string name="folders_section">Folders</string>
     <string name="layers_section">Layers</string>
+    <string name="general_save">Save</string>
 </resources>

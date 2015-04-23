@@ -1,27 +1,71 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:orientation="vertical" android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <TextView
-        android:layout_width="match_parent"
+    <EditText
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/account_name"
+        android:inputType="textPersonName"
         android:ems="10"
-        android:id="@+id/nameTV" />
+        android:id="@+id/firstNameET"
+        android:layout_marginTop="65dp"
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true"
+        android:hint="First Name"/>
 
-    <TextView
-        android:layout_width="match_parent"
+    <EditText
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:inputType="textPersonName"
         android:ems="10"
-        android:id="@+id/emailTV"
-        android:layout_gravity="center_horizontal"
-        android:text="@string/account_email" />
+        android:id="@+id/lastNameEt"
+        android:layout_marginTop="34dp"
+        android:layout_below="@+id/firstNameET"
+        android:layout_centerHorizontal="true"
+        android:singleLine="false"
+        android:hint="Last Name"/>
 
-    <TextView
-        android:layout_width="match_parent"
+    <EditText
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:inputType="textEmailAddress"
         android:ems="10"
-        android:id="@+id/phoneTV"
-        android:text="@string/account_phone" />
-</LinearLayout>
+        android:id="@+id/emailET"
+        android:layout_below="@+id/lastNameEt"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="32dp"
+        android:hint="Email"/>
+
+    <EditText
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:inputType="phone"
+        android:ems="10"
+        android:id="@+id/cellPhoneET"
+        android:layout_marginTop="32dp"
+        android:hint="Cell Phone"
+        android:layout_below="@+id/emailET"
+        android:layout_alignStart="@+id/officePhoneET"/>
+
+    <EditText
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:inputType="phone"
+        android:ems="10"
+        android:id="@+id/officePhoneET"
+        android:layout_marginTop="27dp"
+        android:layout_below="@+id/cellPhoneET"
+        android:layout_centerHorizontal="true"
+        android:hint="Office Phone"/>
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/general_save"
+        android:id="@+id/saveAcctBtn"
+        android:layout_marginTop="32dp"
+        android:layout_below="@+id/officePhoneET"
+        android:layout_alignStart="@+id/officePhoneET"
+        android:layout_alignEnd="@+id/officePhoneET"/>
+</RelativeLayout>
