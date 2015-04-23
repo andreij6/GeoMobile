@@ -71,13 +71,13 @@ public class LayerFragment extends Fragment {
             try{
                 List<Folder> folders = mService.getLayers();
 
-                List<Folder> allFolders = mHelper.GetFoldersRecursively(folders.get(0));
-                List<Layer> layers = mHelper.GetLayersRecursively(folders.get(0));
+                mCurrentFolder = folders.get(0);
+
+                List<Folder> allFolders = mHelper.GetFoldersRecursively(mCurrentFolder);
+                List<Layer> layers = mHelper.GetLayersRecursively(mCurrentFolder);
 
                 application.setLayerFolders(allFolders);
                 application.setLayers(layers);
-
-                mCurrentFolder = folders.get(0);
 
                 mDataSet = mCurrentFolder.getFolders(); //Get Subfolders
 
@@ -92,12 +92,9 @@ public class LayerFragment extends Fragment {
 
         @Override
         protected void onPostExecute(List<Folder> folders){
-            List<ListItem> listItems = mHelper.CombineLibraryItems(mLayers, mDataSet);
+            List<ListItem> listItems = mHelper.CombineLayerItems(mLayers, mDataSet);
 
-            application.setLayerFolders(mDataSet);
-            application.setLayers(mLayers);
-
-            ListItemAdapter listItemAdapter = new ListItemAdapter(getActivity(), listItems);
+            ListItemAdapter listItemAdapter = new ListItemAdapter(getActivity(), listItems, ListItemAdapter.LAYER);
 
             List<SimpleSectionedRecyclerViewAdapter.Section> sections = new ArrayList<SimpleSectionedRecyclerViewAdapter.Section>();
 

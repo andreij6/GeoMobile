@@ -12,6 +12,7 @@ import com.geospatialcorporation.android.geomobile.library.constants.Domains;
 import com.geospatialcorporation.android.geomobile.models.Client;
 import com.geospatialcorporation.android.geomobile.models.Folders.Folder;
 import com.geospatialcorporation.android.geomobile.models.Layers.Layer;
+import com.geospatialcorporation.android.geomobile.models.Library.Document;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.squareup.okhttp.Interceptor;
 import com.squareup.okhttp.OkHttpClient;
@@ -41,6 +42,9 @@ public class application extends Application {
     private static List<Folder> layerFolders;
     private static List<Layer> Layers;
     private static HashMap<Integer, Layer> layerHashMap;
+    private static HashMap<Integer, Document> documentsHashMap;
+    private static List<Document> documents;
+    private static List<Folder> documentFolders;
 
 
     public void onCreate(){
@@ -48,6 +52,7 @@ public class application extends Application {
         application.context = getApplicationContext();
         folderHashMap = new HashMap<>();
         layerHashMap = new HashMap<>();
+        documentsHashMap = new HashMap<>();
 
         SharedPreferences settings = PreferenceManager
                 .getDefaultSharedPreferences(context);
@@ -157,9 +162,37 @@ public class application extends Application {
         }
     }
 
+    public static void setDocuments(List<Document> documents) {
+        application.documents = documents;
+
+        for(Document document : application.documents){
+            documentsHashMap.put(document.getDocumentId(), document);
+        }
+    }
+
+    public static Document getDocumentById(int documentId){
+        return documentsHashMap.get(documentId);
+    }
+
+    public static List<Document> getDocuments() {
+        return documents;
+    }
+
+    public static void setDocumentFolders(List<Folder> documentFolders) {
+        application.documentFolders = documentFolders;
+
+        for(Folder folder : documentFolders){
+            folderHashMap.put(folder.getId(), folder);
+        }
+    }
+
+    public static List<Folder> getDocumentFolders() {
+        return documentFolders;
+    }
+
     public static List<Folder> getLayerFolders(){ return layerFolders; }
 
-    public static Folder getLibraryFolder(int folderId){
+    public static Folder getFolderById(int folderId){
         return folderHashMap.get(folderId);
     }
 

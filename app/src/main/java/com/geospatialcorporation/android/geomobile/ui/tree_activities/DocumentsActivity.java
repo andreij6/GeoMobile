@@ -39,6 +39,8 @@ public class DocumentsActivity extends Activity {
 
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_documents);
+
         ButterKnife.inject(this);
         mContext = this;
 
@@ -52,7 +54,7 @@ public class DocumentsActivity extends Activity {
 
         new GetDocumentsTask().execute();
 
-        setContentView(R.layout.activity_documents);
+
 
         mRecyclerView.setHasFixedSize(true);
 

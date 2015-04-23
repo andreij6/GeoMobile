@@ -2,6 +2,7 @@ package com.geospatialcorporation.android.geomobile.library.helpers;
 
 import com.geospatialcorporation.android.geomobile.models.Folders.Folder;
 import com.geospatialcorporation.android.geomobile.models.Layers.Layer;
+import com.geospatialcorporation.android.geomobile.models.Library.Document;
 import com.geospatialcorporation.android.geomobile.ui.viewmodels.ListItem;
 
 import java.util.ArrayList;
@@ -44,7 +45,7 @@ public class DataHelper {
         return result;
     }
 
-    public List<ListItem> CombineLibraryItems(List<Layer> layers, List<Folder> folders){
+    public List<ListItem> CombineLayerItems(List<Layer> layers, List<Folder> folders){
         ArrayList<ListItem> results = new ArrayList<>();
 
         if(folders != null) {
@@ -58,6 +59,30 @@ public class DataHelper {
         if(layers != null) {
             for (Layer layer : layers) {
                 ListItem listItem = new ListItem(layer);
+
+                results.add(listItem);
+            }
+        }
+
+        Collections.sort(results);
+
+        return results;
+    }
+
+    public List<ListItem> CombineLibraryItems(List<Document> documents, List<Folder> folders){
+        ArrayList<ListItem> results = new ArrayList<>();
+
+        if(folders != null) {
+            for (Folder folder : folders) {
+                ListItem listItem = new ListItem(folder);
+
+                results.add(listItem);
+            }
+        }
+
+        if(documents != null) {
+            for (Document document : documents) {
+                ListItem listItem = new ListItem(document);
 
                 results.add(listItem);
             }

@@ -13,7 +13,8 @@ import com.geospatialcorporation.android.geomobile.R;
 import com.geospatialcorporation.android.geomobile.application;
 import com.geospatialcorporation.android.geomobile.library.helpers.DataHelper;
 import com.geospatialcorporation.android.geomobile.models.Folders.Folder;
-import com.geospatialcorporation.android.geomobile.ui.tree_activities.LibraryActivity;
+import com.geospatialcorporation.android.geomobile.ui.tree_activities.DocumentsActivity;
+import com.geospatialcorporation.android.geomobile.ui.tree_activities.LayerActivity;
 import com.geospatialcorporation.android.geomobile.ui.viewmodels.ListItem;
 
 import java.util.List;
@@ -27,16 +28,20 @@ import butterknife.InjectView;
 public class ListItemAdapter extends RecyclerView.Adapter<ListItemAdapter.LibraryViewHolder>{
     protected final static String TAG = ListItemAdapter.class.getSimpleName();
 
+    public static final String LAYER = "Layer";
+    public static final String LIBRARY = "Library";
 
     private Context mContext;
     private List<ListItem> mListItems;
     private ListItem mListItem;
     private DataHelper mHelper;
+    private String mViewType;
 
-    public ListItemAdapter(Context context, List<ListItem> data){
+    public ListItemAdapter(Context context, List<ListItem> data, String ViewType){
         mContext = context;
         mListItems = data;
         mHelper = new DataHelper();
+        mViewType = ViewType;
     }
 
     @Override
@@ -101,13 +106,15 @@ public class ListItemAdapter extends RecyclerView.Adapter<ListItemAdapter.Librar
     };
 
         private void goToDocument(ListItem item) {
-
+            Toast.makeText(mContext, "You Selected Document " + item.getName(), Toast.LENGTH_LONG).show();
         }
 
         private void goToLibraryActivity(ListItem item) {
-            mFolder = application.getLibraryFolder(mItem.getId());
+            mFolder = application.getFolderById(mItem.getId());
 
-            Intent intent = new Intent(mContext, LibraryActivity.class)
+            Class<?> klass = mViewType == ListItemAdapter.LAYER ? LayerActivity.class : DocumentsActivity.class;
+
+            Intent intent = new Intent(mContext, klass)
                     .putExtra(Folder.FOLDER_INTENT, mFolder);
             mContext.startActivity(intent);
 

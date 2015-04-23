@@ -1,7 +1,6 @@
 package com.geospatialcorporation.android.geomobile.ui.tree_activities;
 
 import android.app.Activity;
-import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
@@ -12,28 +11,29 @@ import android.view.MenuItem;
 import com.geospatialcorporation.android.geomobile.R;
 import com.geospatialcorporation.android.geomobile.library.helpers.DataHelper;
 import com.geospatialcorporation.android.geomobile.models.Folders.Folder;
-import com.geospatialcorporation.android.geomobile.models.Layers.Layer;
-import com.geospatialcorporation.android.geomobile.ui.adapters.LayerAdapter;
+import com.geospatialcorporation.android.geomobile.ui.adapters.ListItemAdapter;
+import com.geospatialcorporation.android.geomobile.ui.adapters.SimpleSectionedRecyclerViewAdapter;
+import com.geospatialcorporation.android.geomobile.ui.viewmodels.ListItem;
 
+import java.util.ArrayList;
 import java.util.List;
 
+import butterknife.ButterKnife;
 import butterknife.InjectView;
 
 public class LayerActivity extends Activity {
-    protected static final String TAG = LayerActivity.class.getSimpleName();
 
-    //region Properties
-    Folder mFolder;
-    Context mContext;
-    DataHelper mHelper;
-    List<Layer> mLayers;
-    //endregion
+    private Folder mFolder;
+    private DataHelper mHelper;
+    @InjectView(R.id.libraryitem_recyclerView) RecyclerView mRecyclerView;
 
-    @InjectView(R.id.layerlist) RecyclerView mRecyclerView;
-
+    @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_layer);
+        setContentView(R.layout.activity_library);
+        ButterKnife.inject(this);
+
+        mHelper = new DataHelper();
 
         Intent intent = getIntent();
 
@@ -41,13 +41,28 @@ public class LayerActivity extends Activity {
 
         setTitle(mFolder.getName());
 
-        mLayers = mFolder.getLayers();
+        //show subfolders & layers in a recycler view
+        List<Folder> folders = mFolder.getFolders() == null ? new ArrayList<Folder>() : mFolder.getFolders();
 
-        LayerAdapter adapter = new LayerAdapter(this, mLayers);
+        List<ListItem> listItems = mHelper.CombineLayerItems(mFolder.getLayers(), folders);
 
-        mRecyclerView.setAdapter(adapter);
+        ListItemAdapter listItemAdapter = new ListItemAdapter(this, listItems, ListItemAdapter.LAYER);
 
-        LinearLayoutManager layoutManager = new LinearLayoutManager(this);
+        List<SimpleSectionedRecyclerViewAdapter.Section> sections = new ArrayList<SimpleSectionedRecyclerViewAdapter.Section>();
+
+        sections.add(new SimpleSectionedRecyclerViewAdapter.Section(0, "Folders"));
+        sections.add(new SimpleSectionedRecyclerViewAdapter.Section(folders.size(), "Layers"));
+
+        SimpleSectionedRecyclerViewAdapter.Section[] dummy = new SimpleSectionedRecyclerViewAdapter.Section[sections.size()];
+
+        SimpleSectionedRecyclerViewAdapter mSectionedAdapter = new
+                SimpleSectionedRecyclerViewAdapter(this,  R.layout.section, R.id.section_text, listItemAdapter);
+
+        mSectionedAdapter.setSections(sections.toArray(dummy));
+
+        mRecyclerView.setAdapter(mSectionedAdapter);
+
+        RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(this);
 
         mRecyclerView.setLayoutManager(layoutManager);
     }
@@ -56,7 +71,7 @@ public class LayerActivity extends Activity {
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.menu_layer, menu);
+        getMenuInflater().inflate(R.menu.menu_library, menu);
         return true;
     }
 
@@ -74,5 +89,4 @@ public class LayerActivity extends Activity {
 
         return super.onOptionsItemSelected(item);
     }
-
 }

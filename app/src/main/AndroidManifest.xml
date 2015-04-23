@@ -92,14 +92,6 @@
         </activity>
         <activity
             android:name=".ui.tree_activities.LayerActivity"
-            android:label="@string/title_activity_layer"
-            android:parentActivityName=".ui.MainActivity" >
-            <meta-data
-                android:name="android.support.PARENT_ACTIVITY"
-                android:value="com.geospatialcorporation.android.geomobile.ui.MainActivity" />
-        </activity>
-        <activity
-            android:name=".ui.tree_activities.LibraryActivity"
             android:label="@string/title_activity_library" >
         </activity>
     </application>

@@ -13,10 +13,12 @@ import android.view.ViewGroup;
 import com.geospatialcorporation.android.geomobile.R;
 import com.geospatialcorporation.android.geomobile.application;
 import com.geospatialcorporation.android.geomobile.library.helpers.DataHelper;
+import com.geospatialcorporation.android.geomobile.library.rest.FolderService;
 import com.geospatialcorporation.android.geomobile.library.rest.TreeService;
 import com.geospatialcorporation.android.geomobile.models.Folders.Folder;
-import com.geospatialcorporation.android.geomobile.models.Layers.Layer;
+import com.geospatialcorporation.android.geomobile.models.Library.Document;
 import com.geospatialcorporation.android.geomobile.ui.adapters.ListItemAdapter;
+import com.geospatialcorporation.android.geomobile.ui.adapters.SimpleSectionedRecyclerViewAdapter;
 import com.geospatialcorporation.android.geomobile.ui.viewmodels.ListItem;
 
 import java.util.ArrayList;
@@ -36,7 +38,10 @@ public class LibraryFragment extends Fragment{
     private List<Folder> mFolders;
     private View mRootView;
     private TreeService mService;
+    private FolderService mFolderService;
     private DataHelper mHelper;
+    RecyclerView.LayoutManager mLM;
+    private List<Document> mDocuments;
     //endregion
 
     @InjectView(R.id.libraryitem_recyclerView) RecyclerView mRecyclerView;
@@ -53,12 +58,13 @@ public class LibraryFragment extends Fragment{
         mRecyclerView = (RecyclerView)mRootView.findViewById(R.id.libraryitem_recyclerView);
 
         mService = application.getRestAdapter().create(TreeService.class);
+        mFolderService = application.getRestAdapter().create(FolderService.class);
 
         new GetDocumentsTask().execute();
 
-        RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(container.getContext());
+        mLM = new LinearLayoutManager(container.getContext());
 
-        mRecyclerView.setLayoutManager(layoutManager);
+        mRecyclerView.setLayoutManager(mLM);
 
         return mRootView;
     }
@@ -69,8 +75,17 @@ public class LibraryFragment extends Fragment{
         protected List<Folder> doInBackground(Void... params) {
             try {
                 List<Folder> folders = mService.getLibrary();
+                Folder currentFolder = folders.get(0);
+                mFolders = currentFolder.getFolders();
 
-                mFolders = mHelper.GetFoldersRecursively(folders.get(0));
+                List<Folder> allfolders = mHelper.GetFoldersRecursively(currentFolder);
+                List<Document> documents = mFolderService.getFolderDocuments(currentFolder.getId());
+
+                application.setDocumentFolders(allfolders);
+                application.setDocuments(documents);
+
+                mDocuments = documents;
+
             } catch (RetrofitError e) {
                 if (e.getResponse() != null) {
                     Log.d(TAG, e.getResponse().getStatus() + " : Line 75");
@@ -82,11 +97,25 @@ public class LibraryFragment extends Fragment{
 
         @Override
         protected void onPostExecute(List<Folder> folders){
-            List<ListItem> data = mHelper.CombineLibraryItems(new ArrayList<Layer>(), folders);
+            List<ListItem> data = mHelper.CombineLibraryItems(mDocuments, folders);
 
-            ListItemAdapter adapter = new ListItemAdapter(getActivity(), data);
+            ListItemAdapter adapter = new ListItemAdapter(getActivity(), data, ListItemAdapter.LIBRARY);
 
-            mRecyclerView.setAdapter(adapter);
+            List<SimpleSectionedRecyclerViewAdapter.Section> sections = new ArrayList<SimpleSectionedRecyclerViewAdapter.Section>();
+
+            sections.add(new SimpleSectionedRecyclerViewAdapter.Section(0, "Folders"));
+            sections.add(new SimpleSectionedRecyclerViewAdapter.Section(folders.size(), "Documents"));
+
+            SimpleSectionedRecyclerViewAdapter.Section[] dummy = new SimpleSectionedRecyclerViewAdapter.Section[sections.size()];
+
+            SimpleSectionedRecyclerViewAdapter mSectionedAdapter = new
+                    SimpleSectionedRecyclerViewAdapter(getActivity(),  R.layout.section, R.id.section_text, adapter);
+
+            mSectionedAdapter.setSections(sections.toArray(dummy));
+
+            mRecyclerView.setAdapter(mSectionedAdapter);
+
+            mRecyclerView.setLayoutManager(mLM);
         }
 
     }
