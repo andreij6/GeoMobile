@@ -20,9 +20,6 @@ import butterknife.ButterKnife;
 import butterknife.InjectView;
 import retrofit.RetrofitError;
 
-/**
- * Created by andre on 4/21/2015.
- */
 public class AccountFragment extends Fragment {
 
     protected static final String TAG = AccountFragment.class.getSimpleName();

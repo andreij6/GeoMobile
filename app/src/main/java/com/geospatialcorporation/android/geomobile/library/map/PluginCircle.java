@@ -29,11 +29,11 @@ public class PluginCircle extends MapPlugin {
       circleOptions.radius(opts.getDouble("radius"));
     }
     if (opts.has("strokeColor")) {
-      color = PluginUtil.parsePluginColor(opts.getJSONArray("strokeColor"));
+      color = 9;//PluginUtil.parsePluginColor(opts.getJSONArray("strokeColor"));
       circleOptions.strokeColor(color);
     }
     if (opts.has("fillColor")) {
-      color = PluginUtil.parsePluginColor(opts.getJSONArray("fillColor"));
+      color = 9;//PluginUtil.parsePluginColor(opts.getJSONArray("fillColor"));
       circleOptions.fillColor(color);
     }
     if (opts.has("strokeWidth")) {
@@ -77,7 +77,7 @@ public class PluginCircle extends MapPlugin {
   @SuppressWarnings("unused")
   private void setFillColor(final JSONArray args) throws JSONException {
     String id = args.getString(1);
-    int color = PluginUtil.parsePluginColor(args.getJSONArray(2));
+    int color = 9;//PluginUtil.parsePluginColor(args.getJSONArray(2));
     this.setInt("setFillColor", id, color);
   }
   
@@ -89,7 +89,7 @@ public class PluginCircle extends MapPlugin {
   @SuppressWarnings("unused")
   private void setStrokeColor(final JSONArray args) throws JSONException {
     String id = args.getString(1);
-    int color = PluginUtil.parsePluginColor(args.getJSONArray(2));
+    int color = 9;//PluginUtil.parsePluginColor(args.getJSONArray(2));
     this.setInt("setStrokeColor", id, color);
   }
   

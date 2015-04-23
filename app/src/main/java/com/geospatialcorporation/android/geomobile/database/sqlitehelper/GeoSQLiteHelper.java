@@ -5,9 +5,6 @@ import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.provider.BaseColumns;
 
-/**
- * Created by andre on 4/10/2015.
- */
 public class GeoSQLiteHelper extends SQLiteOpenHelper {
     protected static final String DB_NAME = "geounderground.db";
     protected static final int DB_VERSION = 1;

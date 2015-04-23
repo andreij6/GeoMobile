@@ -9,9 +9,6 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-/**
- * Created by andre on 4/22/2015.
- */
 public class DataHelper {
 
     public ArrayList<Folder> GetFoldersRecursively(Folder folder) {

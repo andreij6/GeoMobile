@@ -11,9 +11,6 @@ import com.geospatialcorporation.android.geomobile.models.Layers.Layer;
 
 import java.util.ArrayList;
 
-/**
- * Created by andre on 4/10/2015.
- */
 public class LayersDataSource extends DataSourceGenericBase<Layer> {
 
     //region Constructor

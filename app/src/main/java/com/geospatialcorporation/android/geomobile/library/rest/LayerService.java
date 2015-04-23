@@ -11,9 +11,6 @@ import retrofit.http.POST;
 import retrofit.http.PUT;
 import retrofit.http.Path;
 
-/**
- * Created by Administrator on 4/15/2015.
- */
 public interface LayerService {
     @POST("/API/Layers")
     Layer createLayer(@Body Layer layer);

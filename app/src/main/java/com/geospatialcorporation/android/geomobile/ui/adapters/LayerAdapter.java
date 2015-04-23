@@ -9,9 +9,6 @@ import com.geospatialcorporation.android.geomobile.models.Layers.Layer;
 
 import java.util.List;
 
-/**
- * Created by andre on 4/22/2015.
- */
 public class LayerAdapter extends RecyclerView.Adapter<LayerAdapter.LayerViewHolder> {
 
     Context mContext;

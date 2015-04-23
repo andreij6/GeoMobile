@@ -22,9 +22,6 @@ import java.util.List;
 import butterknife.ButterKnife;
 import butterknife.InjectView;
 
-/**
- * Created by andre on 4/7/2015.
- */
 public class ListItemAdapter extends RecyclerView.Adapter<ListItemAdapter.LibraryViewHolder>{
     protected final static String TAG = ListItemAdapter.class.getSimpleName();
 

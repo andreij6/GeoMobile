@@ -11,9 +11,6 @@ import com.geospatialcorporation.android.geomobile.models.Folders.Folder;
 
 import java.util.ArrayList;
 
-/**
- * Created by andre on 4/10/2015.
- */
 public class FolderDataSource extends DataSourceGenericBase<Folder> {
 
     //region Constructor

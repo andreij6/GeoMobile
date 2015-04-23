@@ -4,9 +4,6 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
-/**
- * Created by andre on 4/7/2015.
- */
 public class Document {
 
     //region Getters & Setters

@@ -4,9 +4,6 @@ import com.geospatialcorporation.android.geomobile.models.Folders.Folder;
 import com.geospatialcorporation.android.geomobile.models.Layers.Layer;
 import com.geospatialcorporation.android.geomobile.models.Library.Document;
 
-/**
- * Created by andre on 4/22/2015.
- */
 public class ListItem implements Comparable<ListItem>{
     //region Getters & Setters
     public String getName() {

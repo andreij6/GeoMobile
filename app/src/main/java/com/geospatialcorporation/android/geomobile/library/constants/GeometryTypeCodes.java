@@ -1,8 +1,5 @@
 package com.geospatialcorporation.android.geomobile.library.constants;
 
-/**
- * Created by Administrator on 4/15/2015.
- */
 public class GeometryTypeCodes {
     public final int Point = 1;
     public final int Line = 2;

@@ -9,9 +9,6 @@ import com.geospatialcorporation.android.geomobile.models.Layers.Layer;
 import java.util.ArrayList;
 import java.util.List;
 
-/**
- * Created by andre on 4/7/2015.
- */
 public class Folder implements Parcelable{
 
     public Folder(){
