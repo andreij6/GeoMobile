@@ -6,7 +6,7 @@
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Name"
+        android:text="@string/account_name"
         android:ems="10"
         android:id="@+id/nameTV" />
 
@@ -16,12 +16,12 @@
         android:ems="10"
         android:id="@+id/emailTV"
         android:layout_gravity="center_horizontal"
-        android:text="Email" />
+        android:text="@string/account_email" />
 
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:ems="10"
         android:id="@+id/phoneTV"
-        android:text="Phone" />
+        android:text="@string/account_phone" />
 </LinearLayout>

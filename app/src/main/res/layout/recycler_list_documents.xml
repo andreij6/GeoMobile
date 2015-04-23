@@ -16,7 +16,7 @@
             android:id="@+id/documentName"
             android:layout_width="match_parent"
             android:layout_height="20dp"
-            android:text="Name"
+            android:text="@string/documents_name"
             android:gravity="center_vertical"
             android:textSize="14dp"/>
 

@@ -1,4 +1,4 @@
-package com.geospatialcorporation.android.geomobile.library.util;
+package com.geospatialcorporation.android.geomobile.library.map;
 
 import org.json.JSONArray;
 import org.json.JSONException;

@@ -1,4 +1,4 @@
-package com.geospatialcorporation.android.geomobile.library.util;
+package com.geospatialcorporation.android.geomobile.library.map;
 
 import java.lang.reflect.Method;
 import java.util.HashMap;
@@ -9,6 +9,7 @@ import org.json.JSONException;
 import android.annotation.SuppressLint;
 import android.content.res.Resources;
 
+import com.geospatialcorporation.android.geomobile.library.util.Dialogs;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.model.Circle;
 import com.google.android.gms.maps.model.GroundOverlay;

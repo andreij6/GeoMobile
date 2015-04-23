@@ -26,11 +26,11 @@ public class ClientFragment extends Fragment {
 
     private RecyclerView mRecyclerView;
     private List<Client> mDataSet;
-    private View mRootView;
     private LoginService service;
 
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
+        View mRootView;
 
         mRootView = inflater.inflate(R.layout.fragment_clientitems, container, false);
 

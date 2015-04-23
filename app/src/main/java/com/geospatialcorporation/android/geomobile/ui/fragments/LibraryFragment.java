@@ -38,7 +38,6 @@ public class LibraryFragment extends Fragment{
 
     //region Properties
     private List<Folder> mFolders;
-    private View mRootView;
     private TreeService mService;
     private FolderService mFolderService;
     private DataHelper mHelper;
@@ -50,6 +49,7 @@ public class LibraryFragment extends Fragment{
 
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
+        View mRootView;
 
         mHelper = new DataHelper();
 
