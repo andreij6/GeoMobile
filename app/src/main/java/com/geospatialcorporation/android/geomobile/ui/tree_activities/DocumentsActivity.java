@@ -13,11 +13,16 @@ import android.view.MenuItem;
 
 import com.geospatialcorporation.android.geomobile.R;
 import com.geospatialcorporation.android.geomobile.application;
+import com.geospatialcorporation.android.geomobile.library.helpers.DataHelper;
 import com.geospatialcorporation.android.geomobile.library.rest.FolderService;
 import com.geospatialcorporation.android.geomobile.models.Folders.Folder;
 import com.geospatialcorporation.android.geomobile.models.Library.Document;
 import com.geospatialcorporation.android.geomobile.ui.adapters.DocumentAdapter;
+import com.geospatialcorporation.android.geomobile.ui.adapters.ListItemAdapter;
+import com.geospatialcorporation.android.geomobile.ui.adapters.SimpleSectionedRecyclerViewAdapter;
+import com.geospatialcorporation.android.geomobile.ui.viewmodels.ListItem;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import butterknife.ButterKnife;
@@ -33,6 +38,7 @@ public class DocumentsActivity extends Activity {
     private FolderService mService;
     private List<Document> mDocumentList;
     Context mContext;
+    DataHelper mHelper;
     //endregion
 
     @InjectView(R.id.documentlist) RecyclerView mRecyclerView;
@@ -43,6 +49,7 @@ public class DocumentsActivity extends Activity {
 
         ButterKnife.inject(this);
         mContext = this;
+        mHelper = new DataHelper();
 
         mService = application.getRestAdapter().create(FolderService.class);
 
@@ -53,8 +60,6 @@ public class DocumentsActivity extends Activity {
         setTitle(mFolder.getName());
 
         new GetDocumentsTask().execute();
-
-
 
         mRecyclerView.setHasFixedSize(true);
 
@@ -102,9 +107,29 @@ public class DocumentsActivity extends Activity {
 
         @Override
         protected void onPostExecute(List<Document> documents){
-            DocumentAdapter adapter = new DocumentAdapter(mContext, mDocumentList);
+            List<Folder> folders = mFolder.getFolders() == null ? new ArrayList<Folder>() : mFolder.getFolders();
 
-            mRecyclerView.setAdapter(adapter);
+            List<ListItem> listItems = mHelper.CombineLibraryItems(mDocumentList, folders);
+
+            ListItemAdapter adapter = new ListItemAdapter(mContext, listItems, ListItemAdapter.LIBRARY);
+
+            List<SimpleSectionedRecyclerViewAdapter.Section> sections = new ArrayList<SimpleSectionedRecyclerViewAdapter.Section>();
+
+            sections.add(new SimpleSectionedRecyclerViewAdapter.Section(0, "Folders"));
+            sections.add(new SimpleSectionedRecyclerViewAdapter.Section(folders.size(), "Documents"));
+
+            SimpleSectionedRecyclerViewAdapter.Section[] dummy = new SimpleSectionedRecyclerViewAdapter.Section[sections.size()];
+
+            SimpleSectionedRecyclerViewAdapter mSectionedAdapter = new
+                    SimpleSectionedRecyclerViewAdapter(mContext,  R.layout.section, R.id.section_text, adapter);
+
+            mSectionedAdapter.setSections(sections.toArray(dummy));
+
+            mRecyclerView.setAdapter(mSectionedAdapter);
+
+            RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(mContext);
+
+            mRecyclerView.setLayoutManager(layoutManager);
         }
     }
 }
