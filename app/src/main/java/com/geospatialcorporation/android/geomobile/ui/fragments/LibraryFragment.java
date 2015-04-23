@@ -22,6 +22,8 @@ import com.geospatialcorporation.android.geomobile.ui.viewmodels.ListItem;
 import java.util.ArrayList;
 import java.util.List;
 
+import butterknife.ButterKnife;
+import butterknife.InjectView;
 import retrofit.RetrofitError;
 
 /**
@@ -31,18 +33,22 @@ public class LibraryFragment extends Fragment{
     protected static final String TAG = LibraryFragment.class.getSimpleName();
 
     //region Properties
-    private RecyclerView mRecyclerView;
     private List<Folder> mFolders;
     private View mRootView;
     private TreeService mService;
     private DataHelper mHelper;
     //endregion
 
+    @InjectView(R.id.libraryitem_recyclerView) RecyclerView mRecyclerView;
+
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
+
         mHelper = new DataHelper();
 
         mRootView = inflater.inflate(R.layout.fragment_libraryitems, container, false);
+
+        ButterKnife.inject(this, mRootView);
 
         mRecyclerView = (RecyclerView)mRootView.findViewById(R.id.libraryitem_recyclerView);
 

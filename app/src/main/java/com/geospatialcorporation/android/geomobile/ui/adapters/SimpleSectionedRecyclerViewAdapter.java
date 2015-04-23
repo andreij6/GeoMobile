@@ -22,6 +22,7 @@ public class SimpleSectionedRecyclerViewAdapter extends RecyclerView.Adapter<Rec
     private boolean mValid = true;
     private int mSectionResourceId;
     private int mTextResourceId;
+    private LayoutInflater mLayoutInflater;
     private RecyclerView.Adapter mBaseAdapter;
     private SparseArray<Section> mSections = new SparseArray<Section>();
 
