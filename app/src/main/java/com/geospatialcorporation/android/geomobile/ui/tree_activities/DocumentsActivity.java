@@ -19,10 +19,6 @@ import com.geospatialcorporation.android.geomobile.library.rest.FolderService;
 import com.geospatialcorporation.android.geomobile.models.Folders.Folder;
 import com.geospatialcorporation.android.geomobile.models.Library.Document;
 import com.geospatialcorporation.android.geomobile.ui.adapters.ListItemAdapter;
-import com.geospatialcorporation.android.geomobile.ui.adapters.SimpleSectionedRecyclerViewAdapter;
-import com.geospatialcorporation.android.geomobile.ui.viewmodels.ListItem;
-
-import java.util.ArrayList;
 import java.util.List;
 
 import butterknife.ButterKnife;
@@ -93,7 +89,7 @@ public class DocumentsActivity extends Activity {
         protected List<Document> doInBackground(Void... params) {
             try {
                 mDocumentList = mService.getFolderDocuments(mFolder.getId());
-
+                application.setDocuments(mDocumentList);
             } catch (RetrofitError e){
                 Log.d(TAG, e.getMessage());
             }
@@ -109,4 +105,6 @@ public class DocumentsActivity extends Activity {
                                         .setRecycler(mRecyclerView);
         }
     }
+
+
 }
