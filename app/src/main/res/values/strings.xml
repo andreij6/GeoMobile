@@ -46,6 +46,11 @@
     <string name="error_incorrect_password">This password is incorrect</string>
     <string name="error_field_required">This field is required</string>
 
+    <string name="title_activity_layer">Layer Activity</string>
+
 <!-- SharedPreferences -->
     <string name="auth_token">auth-token</string>
+    <string name="files_label">Files</string>
+    <string name="folder_label">Folders</string>
+    <string name="title_activity_library">LibraryActivity</string>
 </resources>

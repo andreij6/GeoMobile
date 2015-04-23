@@ -10,6 +10,8 @@ import com.facebook.stetho.Stetho;
 import com.facebook.stetho.okhttp.StethoInterceptor;
 import com.geospatialcorporation.android.geomobile.library.constants.Domains;
 import com.geospatialcorporation.android.geomobile.models.Client;
+import com.geospatialcorporation.android.geomobile.models.Folders.Folder;
+import com.geospatialcorporation.android.geomobile.models.Layers.Layer;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.squareup.okhttp.Interceptor;
 import com.squareup.okhttp.OkHttpClient;
@@ -17,6 +19,8 @@ import com.squareup.okhttp.Request;
 import com.squareup.okhttp.Response;
 
 import java.io.IOException;
+import java.util.HashMap;
+import java.util.List;
 
 import retrofit.RequestInterceptor;
 import retrofit.RestAdapter;
@@ -32,9 +36,18 @@ public class application extends Application {
     private static String googleAuthToken;
     private static OkHttpClient client;
     private static RestAdapter restAdapter;
+    private static List<Folder> libraryFolders;
+    private static HashMap<Integer, Folder> folderHashMap;
+    private static List<Folder> layerFolders;
+    private static List<Layer> Layers;
+    private static HashMap<Integer, Layer> layerHashMap;
+
 
     public void onCreate(){
         super.onCreate();
+        application.context = getApplicationContext();
+        folderHashMap = new HashMap<>();
+        layerHashMap = new HashMap<>();
 
         SharedPreferences settings = PreferenceManager
                 .getDefaultSharedPreferences(context);
@@ -85,7 +98,7 @@ public class application extends Application {
                     .build();
         }
 
-        application.context = getApplicationContext();
+
     }
 
     public static Context getAppContext() {
@@ -132,7 +145,38 @@ public class application extends Application {
         return geoAuthToken;
     }
 
+    public static void setLibraryFolders(List<Folder> folders){ libraryFolders = folders; }
+
+    public static List<Folder> getLibraryFolders(){ return libraryFolders; }
+
+    public static void setLayerFolders(List<Folder> folders){
+        layerFolders = folders;
+
+        for(Folder folder : layerFolders){
+            folderHashMap.put(folder.getId(), folder);
+        }
+    }
+
+    public static List<Folder> getLayerFolders(){ return layerFolders; }
+
+    public static Folder getLibraryFolder(int folderId){
+        return folderHashMap.get(folderId);
+    }
+
+    public static void setLayers(List<Layer> layers){
+        Layers = layers;
+        for(Layer layer : layers){
+            layerHashMap.put(layer.getId(), layer);
+        }
+    }
+
+    public static List<Layer> getLayers() { return Layers; }
+
     public static RestAdapter getRestAdapter() { return restAdapter; }
+
+    public static Layer getLayer(int id) {
+        return layerHashMap.get(id);
+    }
 
     class TokenInterceptor implements Interceptor {
         @Override public Response intercept(Chain chain) throws IOException {

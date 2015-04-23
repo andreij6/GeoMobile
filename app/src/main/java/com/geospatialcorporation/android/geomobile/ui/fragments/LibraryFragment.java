@@ -12,9 +12,12 @@ import android.view.ViewGroup;
 
 import com.geospatialcorporation.android.geomobile.R;
 import com.geospatialcorporation.android.geomobile.application;
+import com.geospatialcorporation.android.geomobile.library.helpers.DataHelper;
 import com.geospatialcorporation.android.geomobile.library.rest.TreeService;
 import com.geospatialcorporation.android.geomobile.models.Folders.Folder;
-import com.geospatialcorporation.android.geomobile.ui.adapters.LibraryAdapter;
+import com.geospatialcorporation.android.geomobile.models.Layers.Layer;
+import com.geospatialcorporation.android.geomobile.ui.adapters.ListItemAdapter;
+import com.geospatialcorporation.android.geomobile.ui.viewmodels.ListItem;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -32,10 +35,12 @@ public class LibraryFragment extends Fragment{
     private List<Folder> mFolders;
     private View mRootView;
     private TreeService mService;
+    private DataHelper mHelper;
     //endregion
 
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
+        mHelper = new DataHelper();
 
         mRootView = inflater.inflate(R.layout.fragment_libraryitems, container, false);
 
@@ -59,7 +64,7 @@ public class LibraryFragment extends Fragment{
             try {
                 List<Folder> folders = mService.getLibrary();
 
-                mFolders = GetFoldersRecursively(folders.get(0));
+                mFolders = mHelper.GetFoldersRecursively(folders.get(0));
             } catch (RetrofitError e) {
                 if (e.getResponse() != null) {
                     Log.d(TAG, e.getResponse().getStatus() + " : Line 75");
@@ -71,28 +76,13 @@ public class LibraryFragment extends Fragment{
 
         @Override
         protected void onPostExecute(List<Folder> folders){
-            LibraryAdapter adapter = new LibraryAdapter(getActivity(), folders);
+            List<ListItem> data = mHelper.CombineLibraryItems(new ArrayList<Layer>(), folders);
+
+            ListItemAdapter adapter = new ListItemAdapter(getActivity(), data);
 
             mRecyclerView.setAdapter(adapter);
         }
 
-    }
-
-    private ArrayList<Folder> GetFoldersRecursively(Folder folder) {
-        ArrayList<Folder> result = new ArrayList<>();
-
-        if(folder.getFolders().size() == 0){
-            result.add(folder);
-        } else {
-            for(Folder x : folder.getFolders()){
-                result.addAll(GetFoldersRecursively(x));
-            }
-
-            if(!result.contains(folder)){
-                result.add(folder);
-            }
-        }
-        return result;
     }
 
 }

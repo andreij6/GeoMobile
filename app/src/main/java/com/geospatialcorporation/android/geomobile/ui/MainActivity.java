@@ -95,9 +95,9 @@ public class MainActivity extends Activity {
         mMap = new GoogleMapFragment();
 
         mTitle = mDrawerTitle = getTitle();
-        mPlanetTitles = getResources().getStringArray(R.array.planets_array);
         mDrawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
         mDrawerList = (ListView) findViewById(R.id.left_drawer);
+        mPlanetTitles = new String[]{ "Map", "Layers", "Library", "Account", "Logout"};
 
         // set a custom shadow that overlays the main content when the drawer opens
         mDrawerLayout.setDrawerShadow(R.drawable.drawer_shadow, GravityCompat.START);
@@ -200,7 +200,7 @@ public class MainActivity extends Activity {
 
         // update selected item and title, then close the drawer
         mDrawerList.setItemChecked(position, true);
-        setTitle(mPlanetTitles[position]);
+        //setTitle(mPlanetTitles[position]);
         mDrawerLayout.closeDrawer(mDrawerList);
     }
 

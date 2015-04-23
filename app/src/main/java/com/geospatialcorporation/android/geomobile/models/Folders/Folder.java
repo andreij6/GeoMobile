@@ -6,14 +6,18 @@ import android.os.Parcelable;
 
 import com.geospatialcorporation.android.geomobile.models.Layers.Layer;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
  * Created by andre on 4/7/2015.
  */
-public class Folder implements Parcelable {
+public class Folder implements Parcelable{
 
-    public Folder(){}
+    public Folder(){
+        Layers = new ArrayList<>();
+        Folders = new ArrayList<>();
+    }
 
     //region Properties
     private Boolean IsImportFolder;
@@ -27,7 +31,6 @@ public class Folder implements Parcelable {
     //endregion
 
     //region Getters & Setters
-
     public Boolean getIsImportFolder() {
         return IsImportFolder;
     }
@@ -89,8 +92,10 @@ public class Folder implements Parcelable {
     }
     //endregion
 
-    //region Intent Flags
+    //region Constants
     public static final String FOLDER_INTENT = "Folder";
+    public static final String LAYER = "Layer";
+    public static final String LIBRARY = "Library";
     //endregion
 
     //region Parcelable Contract
@@ -103,8 +108,8 @@ public class Folder implements Parcelable {
     public void writeToParcel(Parcel dest, int flags) {
         dest.writeValue(IsImportFolder);
         dest.writeValue(IsFixed);
-        //dest.writeSerializable((ArrayList<Layer>)Layers);
-        //dest.writeSerializable((ArrayList<Folder>)Folders);
+        dest.writeTypedList(Layers);
+        dest.writeTypedList(Folders);
         dest.writeInt(AccessLevel);
         dest.writeInt(Id);
         dest.writeString(Name);
@@ -113,8 +118,10 @@ public class Folder implements Parcelable {
     private Folder(Parcel in){
         IsImportFolder = (Boolean)in.readValue(Boolean.class.getClassLoader());
         IsFixed = (Boolean)in.readValue(Boolean.class.getClassLoader());
-        //Layers = (List<Layer>)in.readSerializable();
-        //Folders = (List<Folder>)in.readSerializable();
+        Layers = new ArrayList<>();
+        in.readTypedList(Layers, Layer.CREATOR);
+        Folders = new ArrayList<>();
+        in.readTypedList(Folders, Folder.CREATOR);
         AccessLevel = in.readInt();
         Id = in.readInt();
         Name = in.readString();
@@ -133,6 +140,7 @@ public class Folder implements Parcelable {
             return new Folder[size];
         }
     };
+
     //endregion
 
 

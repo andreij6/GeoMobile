@@ -1,4 +1,4 @@
-package com.geospatialcorporation.android.geomobile.ui;
+package com.geospatialcorporation.android.geomobile.ui.tree_activities;
 
 import android.app.Activity;
 import android.content.Context;
@@ -20,23 +20,28 @@ import com.geospatialcorporation.android.geomobile.ui.adapters.DocumentAdapter;
 
 import java.util.List;
 
+import butterknife.ButterKnife;
+import butterknife.InjectView;
 import retrofit.RetrofitError;
 
-public class FolderDocumentsActivity extends Activity {
+public class DocumentsActivity extends Activity {
 
-    protected static final String TAG = FolderDocumentsActivity.class.getSimpleName();
+    protected static final String TAG = DocumentsActivity.class.getSimpleName();
 
     //region Properties
     protected Folder mFolder;
     private FolderService mService;
     private List<Document> mDocumentList;
-    private RecyclerView mRecyclerView;
     Context mContext;
     //endregion
 
+    @InjectView(R.id.documentlist) RecyclerView mRecyclerView;
+
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        ButterKnife.inject(this);
         mContext = this;
+
         mService = application.getRestAdapter().create(FolderService.class);
 
         Intent intent = getIntent();
@@ -47,9 +52,7 @@ public class FolderDocumentsActivity extends Activity {
 
         new GetDocumentsTask().execute();
 
-        setContentView(R.layout.activity_folder_documents);
-
-        mRecyclerView = (RecyclerView)findViewById(R.id.documentlist);
+        setContentView(R.layout.activity_documents);
 
         mRecyclerView.setHasFixedSize(true);
 
@@ -80,6 +83,7 @@ public class FolderDocumentsActivity extends Activity {
 
         return super.onOptionsItemSelected(item);
     }
+
 
     private class GetDocumentsTask extends AsyncTask<Void, Void, List<Document>>{
 

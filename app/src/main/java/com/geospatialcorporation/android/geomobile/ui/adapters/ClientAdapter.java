@@ -89,8 +89,6 @@ public class ClientAdapter extends RecyclerView.Adapter<ClientAdapter.ClientView
 
     }
 
-
-
     private class SwitchClientTask extends AsyncTask{
 
         @Override

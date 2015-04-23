@@ -12,14 +12,19 @@ import android.view.ViewGroup;
 
 import com.geospatialcorporation.android.geomobile.R;
 import com.geospatialcorporation.android.geomobile.application;
+import com.geospatialcorporation.android.geomobile.library.helpers.DataHelper;
 import com.geospatialcorporation.android.geomobile.library.rest.TreeService;
 import com.geospatialcorporation.android.geomobile.models.Folders.Folder;
 import com.geospatialcorporation.android.geomobile.models.Layers.Layer;
-import com.geospatialcorporation.android.geomobile.ui.adapters.LayerAdapter;
+import com.geospatialcorporation.android.geomobile.ui.adapters.ListItemAdapter;
+import com.geospatialcorporation.android.geomobile.ui.adapters.SimpleSectionedRecyclerViewAdapter;
+import com.geospatialcorporation.android.geomobile.ui.viewmodels.ListItem;
 
 import java.util.ArrayList;
 import java.util.List;
 
+import butterknife.ButterKnife;
+import butterknife.InjectView;
 import retrofit.RetrofitError;
 
 /**
@@ -28,37 +33,56 @@ import retrofit.RetrofitError;
 public class LayerFragment extends Fragment {
     protected final static String TAG = LayerFragment.class.getSimpleName();
 
-    private RecyclerView mRecyclerView;
-    private List<Layer> mDataSet;
+    private List<Folder> mDataSet;
     private View mRootView;
     private TreeService mService;
+    List<Layer> mLayers;
+    Folder mCurrentFolder;
+    DataHelper mHelper;
+
+    RecyclerView.LayoutManager mLM;
+
+    public LayerFragment(){
+        mHelper = new DataHelper();
+    }
+
+    @InjectView(R.id.layer_recyclerView) RecyclerView mRecycler;
 
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
 
         mRootView = inflater.inflate(R.layout.fragment_layeritems, container, false);
 
-        mRecyclerView = (RecyclerView)mRootView.findViewById(R.id.layeritem_recyclerView);
+        ButterKnife.inject(this, mRootView);
 
         mService = application.getRestAdapter().create(TreeService.class);
 
         new GetLayersTask().execute();
 
-        RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(container.getContext());
-
-        mRecyclerView.setLayoutManager(layoutManager);
+        mLM = new LinearLayoutManager(container.getContext());
 
         return mRootView;
     }
 
-    private class GetLayersTask extends AsyncTask<Void, Void, List<Layer>>{
+    private class GetLayersTask extends AsyncTask<Void, Void, List<Folder>>{
 
         @Override
-        protected List<Layer> doInBackground(Void... params) {
+        protected List<Folder> doInBackground(Void... params) {
             try{
                 List<Folder> folders = mService.getLayers();
-                Folder rootFolder = folders.get(0);
-                mDataSet = GetLayersRecursively(rootFolder);
+
+                List<Folder> allFolders = mHelper.GetFoldersRecursively(folders.get(0));
+                List<Layer> layers = mHelper.GetLayersRecursively(folders.get(0));
+
+                application.setLayerFolders(allFolders);
+                application.setLayers(layers);
+
+                mCurrentFolder = folders.get(0);
+
+                mDataSet = mCurrentFolder.getFolders(); //Get Subfolders
+
+                mLayers = mCurrentFolder.getLayers();
+
             }catch(RetrofitError e){
                 Log.d(TAG, "mESSed up");
             }
@@ -67,26 +91,32 @@ public class LayerFragment extends Fragment {
         }
 
         @Override
-        protected void onPostExecute(List<Layer> layers){
+        protected void onPostExecute(List<Folder> folders){
+            List<ListItem> listItems = mHelper.CombineLibraryItems(mLayers, mDataSet);
 
-            LayerAdapter adapter = new LayerAdapter(getActivity(), mDataSet);
+            application.setLayerFolders(mDataSet);
+            application.setLayers(mLayers);
 
-            mRecyclerView.setAdapter(adapter);
+            ListItemAdapter listItemAdapter = new ListItemAdapter(getActivity(), listItems);
+
+            List<SimpleSectionedRecyclerViewAdapter.Section> sections = new ArrayList<SimpleSectionedRecyclerViewAdapter.Section>();
+
+            sections.add(new SimpleSectionedRecyclerViewAdapter.Section(0, "Folders"));
+            sections.add(new SimpleSectionedRecyclerViewAdapter.Section(mDataSet.size(), "Layers"));
+
+            SimpleSectionedRecyclerViewAdapter.Section[] dummy = new SimpleSectionedRecyclerViewAdapter.Section[sections.size()];
+
+            SimpleSectionedRecyclerViewAdapter mSectionedAdapter = new
+                    SimpleSectionedRecyclerViewAdapter(getActivity(),  R.layout.section, R.id.section_text, listItemAdapter);
+
+            mSectionedAdapter.setSections(sections.toArray(dummy));
+
+            mRecycler.setAdapter(mSectionedAdapter);
+
+            mRecycler.setLayoutManager(mLM);
         }
     }
 
-    private ArrayList<Layer> GetLayersRecursively(Folder folder) {
-        ArrayList<Layer> result = new ArrayList<>();
 
-        if(folder.getFolders().size() == 0){
-            result.addAll(folder.getLayers());
-        } else {
-
-            for(Folder x : folder.getFolders()){
-                result.addAll(GetLayersRecursively(x));
-            }
-        }
-        return result;
-    }
 
 }

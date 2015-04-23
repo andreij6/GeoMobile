@@ -1,8 +1,11 @@
 package com.geospatialcorporation.android.geomobile.models.Layers;
 
+import android.os.Parcel;
+import android.os.Parcelable;
 import android.text.TextUtils;
 
-public class Layer {
+public class Layer implements Parcelable {
+
     //region Properties
     private Integer Id;
     private Extent Extent;
@@ -87,7 +90,11 @@ public class Layer {
 
     //region Constructors
     public Layer(String name) { Name = name; }
+
     public Layer(){}
+    //endregion
+
+    public static String LAYER_INTENT = "Layer Intent";
 
     public Rename Rename(int id, String name) {
         Rename rename = new Rename();
@@ -97,7 +104,48 @@ public class Layer {
 
         return rename;
     }
-    //endregion
+    private Layer(Parcel in){
+        Id = in.readInt();
+        //Extent = in.;
+        StylePath = in.readString();
+        GeometryTypeCodeId = in.readInt();
+        IsFixed = (Boolean)in.readValue(Boolean.class.getClassLoader());
+        IsOwner = (Boolean)in.readValue(Boolean.class.getClassLoader());
+        //MobileId = in.readInt();
+        Name = in.readString();
+        IsShowing = (Boolean)in.readValue(Boolean.class.getClassLoader());
+    }
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeInt(Id);
+
+        dest.writeString(StylePath);
+        dest.writeInt(GeometryTypeCodeId);
+        dest.writeValue(IsFixed);
+        dest.writeValue(IsOwner);
+
+        dest.writeString(Name);
+        dest.writeValue(IsShowing);
+    }
+
+    public static final Creator<Layer> CREATOR = new Creator<Layer>(){
+
+        @Override
+        public Layer createFromParcel(Parcel source) {
+            return new Layer(source);
+        }
+
+        @Override
+        public Layer[] newArray(int size) {
+            return new Layer[size];
+        }
+    };
 
     public class Rename {
         public int Id;
@@ -105,6 +153,7 @@ public class Layer {
     }
 
     public class StyleInfo {
+
         public int StyleInfoId;
         public String Name;
         public int PointStyleCode;
@@ -121,5 +170,8 @@ public class Layer {
         public boolean IsFillVisible() {
             return TextUtils.isEmpty(FillColor) || FillColor.substring(6, 2).equals("00");
         };
+
+
     }
+
 }

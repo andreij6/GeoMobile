@@ -1,5 +1,9 @@
 package com.geospatialcorporation.android.geomobile.models.Library;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+
 /**
  * Created by andre on 4/7/2015.
  */
@@ -45,16 +49,39 @@ public class Document {
     public void setExtension(String extension) {
         Extension = extension;
     }
+
+    public String getUploadTime() {
+        return UploadTime;
+    }
+
+    public void setUploadTime(String uploadTime) {
+        UploadTime = uploadTime;
+    }
     //endregion
 
     //region Properties
     private int DocumentId;
     private long Size;
     private String Name;
-    //private Date UploadTime;
+    private String UploadTime;
     private String MimeType;
     private String Extension;
     //endregion
+
+    public Date getFormattedDate() {
+        SimpleDateFormat formatter = new SimpleDateFormat("dd/mm/yyyy h:mm a");
+
+        Date date = null;
+
+        try {
+            date = formatter.parse(UploadTime);
+
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+
+        return date;
+    }
 
     public Document(){}
 }

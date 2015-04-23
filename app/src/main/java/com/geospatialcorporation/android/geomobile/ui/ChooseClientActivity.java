@@ -10,8 +10,8 @@ import com.geospatialcorporation.android.geomobile.ui.fragments.ClientFragment;
 
 
 public class ChooseClientActivity extends Activity {
+    protected final static String TAG = ChooseClientActivity.class.getSimpleName();
 
-    @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
