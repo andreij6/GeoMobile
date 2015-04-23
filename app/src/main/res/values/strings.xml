@@ -33,6 +33,11 @@
     <string name="layer_visible_label">visible</string>
     <string name="title_activity_folder_documents">FolderDocumentsActivity</string>
 
+<!-- Activity Account -->
+    <string name="account_name">Name</string>
+    <string name="account_email">Email</string>
+    <string name="account_phone">Phone Number</string>
+
 <!-- Activity Login -->
     <string name="title_activity_login">Sign in</string>
     <string name="prompt_email">Email</string>
@@ -45,16 +50,18 @@
     <string name="error_invalid_password">This password is too short</string>
     <string name="error_incorrect_password">This password is incorrect</string>
     <string name="error_field_required">This field is required</string>
-
     <string name="title_activity_layer">Layer Activity</string>
 
-<!-- SharedPreferences -->
-    <string name="auth_token">auth-token</string>
+<!-- Activity Document/Library -->
+    <string name="documents_name">Name</string>
     <string name="files_label">Files</string>
     <string name="folder_label">Folders</string>
     <string name="title_activity_library">LibraryActivity</string>
 
-    <!-- Section Names -->
+<!-- SharedPreferences -->
+    <string name="auth_token">auth-token</string>
+
+<!-- Section Names -->
     <string name="documents_section">Documents</string>
     <string name="folders_section">Folders</string>
     <string name="layers_section">Layers</string>

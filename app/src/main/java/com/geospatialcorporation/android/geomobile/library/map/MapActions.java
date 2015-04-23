@@ -1,4 +1,4 @@
-package com.geospatialcorporation.android.geomobile.library.util;
+package com.geospatialcorporation.android.geomobile.library.map;
 
 import com.google.android.gms.maps.GoogleMap;
 

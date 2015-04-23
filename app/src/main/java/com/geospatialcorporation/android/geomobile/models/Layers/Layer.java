@@ -153,7 +153,6 @@ public class Layer implements Parcelable {
     }
 
     public class StyleInfo {
-
         public int StyleInfoId;
         public String Name;
         public int PointStyleCode;
@@ -173,5 +172,4 @@ public class Layer implements Parcelable {
 
 
     }
-
 }
