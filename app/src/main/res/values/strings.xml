@@ -53,4 +53,9 @@
     <string name="files_label">Files</string>
     <string name="folder_label">Folders</string>
     <string name="title_activity_library">LibraryActivity</string>
+
+    <!-- Section Names -->
+    <string name="documents_section">Documents</string>
+    <string name="folders_section">Folders</string>
+    <string name="layers_section">Layers</string>
 </resources>

@@ -8,7 +8,7 @@
           android:singleLine="true"
           android:textAllCaps="true"
           android:textColor="#FFF"
-          android:background="#000"
+          android:background="@color/geo_blue"
           android:textSize="16sp"
           android:id="@+id/section_text"
           android:textStyle="bold" />

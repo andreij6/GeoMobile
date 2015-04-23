@@ -42,10 +42,9 @@ public class LayerActivity extends Activity {
 
         setTitle(mFolder.getName());
 
-        //show subfolders & layers in a recycler view
         SectionTreeBuilder builder = new SectionTreeBuilder(this)
                                             .AddLayerData(mFolder.getLayers(), mFolder.getFolders())
-                                            .BuildAdapter(ListItemAdapter.LAYER, "Folders", "Layers")
+                                            .BuildAdapter(ListItemAdapter.LAYER)
                                             .setRecycler(mRecyclerView);
 
     }

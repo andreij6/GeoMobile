@@ -100,7 +100,7 @@ public class LibraryFragment extends Fragment{
 
             SectionTreeBuilder builder = new SectionTreeBuilder(mContext)
                     .AddLibraryData(mDocuments, folders)
-                    .BuildAdapter(ListItemAdapter.LIBRARY, "Folders", "Documents")
+                    .BuildAdapter(ListItemAdapter.LIBRARY)
                     .setRecycler(mRecyclerView);
         }
 

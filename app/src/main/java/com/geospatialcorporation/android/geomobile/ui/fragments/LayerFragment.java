@@ -98,7 +98,7 @@ public class LayerFragment extends Fragment {
 
             SectionTreeBuilder builder = new SectionTreeBuilder(mContext)
                     .AddLayerData(mLayers, mDataSet)
-                    .BuildAdapter(ListItemAdapter.LAYER, "Folders", "Layers")
+                    .BuildAdapter(ListItemAdapter.LAYER)
                     .setRecycler(mRecycler);
         }
     }

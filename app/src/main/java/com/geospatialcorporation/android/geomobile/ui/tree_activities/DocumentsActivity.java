@@ -105,7 +105,7 @@ public class DocumentsActivity extends Activity {
 
             SectionTreeBuilder builder = new SectionTreeBuilder(mContext)
                                         .AddLibraryData(mDocumentList, mFolder.getFolders())
-                                        .BuildAdapter(ListItemAdapter.LIBRARY, "Folders", "Documents")
+                                        .BuildAdapter(ListItemAdapter.LIBRARY)
                                         .setRecycler(mRecyclerView);
         }
     }
