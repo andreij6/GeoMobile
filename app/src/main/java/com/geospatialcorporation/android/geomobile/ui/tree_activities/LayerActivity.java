@@ -3,7 +3,6 @@ package com.geospatialcorporation.android.geomobile.ui.tree_activities;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -13,11 +12,6 @@ import com.geospatialcorporation.android.geomobile.library.helpers.DataHelper;
 import com.geospatialcorporation.android.geomobile.library.helpers.SectionTreeBuilder;
 import com.geospatialcorporation.android.geomobile.models.Folders.Folder;
 import com.geospatialcorporation.android.geomobile.ui.adapters.ListItemAdapter;
-import com.geospatialcorporation.android.geomobile.ui.adapters.SimpleSectionedRecyclerViewAdapter;
-import com.geospatialcorporation.android.geomobile.ui.viewmodels.ListItem;
-
-import java.util.ArrayList;
-import java.util.List;
 
 import butterknife.ButterKnife;
 import butterknife.InjectView;
@@ -26,7 +20,9 @@ public class LayerActivity extends Activity {
 
     private Folder mFolder;
     private DataHelper mHelper;
-    @InjectView(R.id.libraryitem_recyclerView) RecyclerView mRecyclerView;
+    Folder mParent;
+    @InjectView(R.id.libraryitem_recyclerView)
+    RecyclerView mRecyclerView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -43,9 +39,9 @@ public class LayerActivity extends Activity {
         setTitle(mFolder.getName());
 
         SectionTreeBuilder builder = new SectionTreeBuilder(this)
-                                            .AddLayerData(mFolder.getLayers(), mFolder.getFolders())
-                                            .BuildAdapter(ListItemAdapter.LAYER)
-                                            .setRecycler(mRecyclerView);
+                .AddLayerData(mFolder.getLayers(), mFolder.getFolders(), mParent)
+                .BuildAdapter(ListItemAdapter.LAYER)
+                .setRecycler(mRecyclerView);
 
     }
 

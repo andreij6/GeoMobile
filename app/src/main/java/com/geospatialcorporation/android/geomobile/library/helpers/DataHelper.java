@@ -11,52 +11,59 @@ import java.util.List;
 
 public class DataHelper {
 
-    public ArrayList<Folder> GetFoldersRecursively(Folder folder) {
+    public ArrayList<Folder> getFoldersRecursively(Folder folder) {
         ArrayList<Folder> result = new ArrayList<>();
 
-        if(folder.getFolders().size() == 0){
+        if (folder == null) return result;
+
+        if (folder.getFolders().size() == 0) {
             result.add(folder);
         } else {
-            for(Folder x : folder.getFolders()){
-                result.addAll(GetFoldersRecursively(x));
+            for (Folder x : folder.getFolders()) {
+                result.addAll(getFoldersRecursively(x));
             }
 
-            if(!result.contains(folder)){
+            if (!result.contains(folder)) {
                 result.add(folder);
             }
         }
         return result;
     }
 
-    public ArrayList<Layer> GetLayersRecursively(Folder folder) {
+    public ArrayList<Layer> getLayersRecursively(Folder folder) {
         ArrayList<Layer> result = new ArrayList<>();
 
-        if(folder.getFolders().size() == 0){
+        if (folder == null) return result;
+
+        if (folder.getFolders().size() == 0) {
             result.addAll(folder.getLayers());
         } else {
 
-            for(Folder x : folder.getFolders()){
-                result.addAll(GetLayersRecursively(x));
+            for (Folder x : folder.getFolders()) {
+                result.addAll(getLayersRecursively(x));
             }
         }
         return result;
     }
 
-    public List<ListItem> CombineLayerItems(List<Layer> layers, List<Folder> folders){
+    public List<ListItem> CombineLayerItems(List<Layer> layers, List<Folder> folders, Folder parent) {
         ArrayList<ListItem> results = new ArrayList<>();
 
-        if(folders != null) {
+        if (parent != null) {
+            ListItem listItem = new ListItem(parent);
+            results.add(listItem);
+        }
+
+        if (folders != null) {
             for (Folder folder : folders) {
                 ListItem listItem = new ListItem(folder);
-
                 results.add(listItem);
             }
         }
 
-        if(layers != null) {
+        if (layers != null) {
             for (Layer layer : layers) {
                 ListItem listItem = new ListItem(layer);
-
                 results.add(listItem);
             }
         }
@@ -66,18 +73,22 @@ public class DataHelper {
         return results;
     }
 
-    public List<ListItem> CombineLibraryItems(List<Document> documents, List<Folder> folders){
+    public List<ListItem> CombineLibraryItems(List<Document> documents, List<Folder> folders, Folder parent) {
         ArrayList<ListItem> results = new ArrayList<>();
 
-        if(folders != null) {
+        if (parent != null) {
+            ListItem listItem = new ListItem(parent);
+            results.add(listItem);
+        }
+
+        if (folders != null) {
             for (Folder folder : folders) {
                 ListItem listItem = new ListItem(folder);
-
                 results.add(listItem);
             }
         }
 
-        if(documents != null) {
+        if (documents != null) {
             for (Document document : documents) {
                 ListItem listItem = new ListItem(document);
 

@@ -3,15 +3,14 @@ package com.geospatialcorporation.android.geomobile.ui;
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
 import android.annotation.TargetApi;
-
 import android.app.LoaderManager.LoaderCallbacks;
 import android.content.CursorLoader;
 import android.content.Intent;
 import android.content.Loader;
+import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.net.Uri;
 import android.os.AsyncTask;
-
 import android.os.Build;
 import android.os.Bundle;
 import android.provider.ContactsContract;
@@ -81,7 +80,17 @@ public class LoginActivity extends GoogleApiActivity implements LoaderCallbacks<
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_login);
+
+        SharedPreferences appState = application.getAppState();
+
+        String geoAuthToken = appState.getString(application.getAppContext().getString(R.string.auth_token), null);
+        if (geoAuthToken == null) {
+            setContentView(R.layout.activity_login);
+        } else {
+
+        }
+
+
 
         View mEmailLoginFormView;
         SignInButton mPlusSignInButton;

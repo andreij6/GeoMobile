@@ -3,6 +3,7 @@ package com.geospatialcorporation.android.geomobile.library.helpers;
 import android.content.Context;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 
 import com.geospatialcorporation.android.geomobile.R;
 import com.geospatialcorporation.android.geomobile.models.Folders.Folder;
@@ -15,14 +16,12 @@ import com.geospatialcorporation.android.geomobile.ui.viewmodels.ListItem;
 import java.util.ArrayList;
 import java.util.List;
 
-/**
- * Created by andre on 4/23/2015.
- */
-
 public class SectionTreeBuilder {
+    String TAG = this.getClass().getSimpleName();
     DataHelper mHelper;
     List<ListItem> mListItems;
     List<Folder> mFolders;
+    Folder mParent;
     Context mContext;
     SimpleSectionedRecyclerViewAdapter mSectionedAdapter;
 
@@ -32,43 +31,46 @@ public class SectionTreeBuilder {
         mContext = context;
     }
 
-    public SectionTreeBuilder AddLayerData(List<Layer> layers, List<Folder> infolders){
-        mFolders = checkInFolders(infolders);
-
-        mListItems = mHelper.CombineLayerItems(layers, mFolders);
-
-        return this;
-    }
-
-    public SectionTreeBuilder AddLibraryData(List<Document> documents, List<Folder> infolders){
-        mFolders = checkInFolders(infolders);
-
-        mListItems = mHelper.CombineLibraryItems(documents, mFolders);
+    public SectionTreeBuilder AddLayerData(List<Layer> layers, List<Folder> infolders, Folder parent){
+        mFolders = infolders != null ? infolders : new ArrayList<Folder>();
+        mParent = parent;
+        mListItems = mHelper.CombineLayerItems(layers, mFolders, mParent);
 
         return this;
     }
 
-    private List<Folder> checkInFolders(List<Folder> infolders){
-        List<Folder> folders = infolders == null ? new ArrayList<Folder>() : infolders;
+    public SectionTreeBuilder AddLibraryData(List<Document> documents, List<Folder> infolders, Folder parent){
+        mFolders = infolders != null ? infolders : new ArrayList<Folder>();
+        mParent = parent;
+        mListItems = mHelper.CombineLibraryItems(documents, mFolders, mParent);
 
-        return folders;
+        return this;
     }
 
     public SectionTreeBuilder BuildAdapter(String adapterType){
         ListItemAdapter listItemAdapter = new ListItemAdapter(mContext, mListItems, adapterType);
-        String section1 = mContext.getResources().getString(R.string.folders_section);
-        String section2;
+        String folderSection = mContext.getResources().getString(R.string.folders_section);
+        String treeSpecificSection;
 
-        if(adapterType == ListItemAdapter.LIBRARY){
-            section2 = mContext.getResources().getString(R.string.documents_section);
+        if(adapterType.equals(ListItemAdapter.LIBRARY)){
+            treeSpecificSection = mContext.getResources().getString(R.string.documents_section);
         } else {
-            section2 = mContext.getResources().getString(R.string.layers_section);
+            treeSpecificSection = mContext.getResources().getString(R.string.layers_section);
         }
 
         List<SimpleSectionedRecyclerViewAdapter.Section> sections = new ArrayList<SimpleSectionedRecyclerViewAdapter.Section>();
 
-        sections.add(new SimpleSectionedRecyclerViewAdapter.Section(0, section1));
-        sections.add(new SimpleSectionedRecyclerViewAdapter.Section(mFolders.size(), section2));
+        Log.d(TAG, "Parent included: ".concat((mParent != null) ? mParent.getName() : "false"));
+
+        if (mParent != null) {
+            String parentSection = mParent.getName();
+            sections.add(new SimpleSectionedRecyclerViewAdapter.Section(0, parentSection));
+            sections.add(new SimpleSectionedRecyclerViewAdapter.Section(1, folderSection));
+            sections.add(new SimpleSectionedRecyclerViewAdapter.Section(mFolders.size()+1, treeSpecificSection));
+        } else {
+            sections.add(new SimpleSectionedRecyclerViewAdapter.Section(0, folderSection));
+            sections.add(new SimpleSectionedRecyclerViewAdapter.Section(mFolders.size(), treeSpecificSection));
+        }
 
         SimpleSectionedRecyclerViewAdapter.Section[] dummy = new SimpleSectionedRecyclerViewAdapter.Section[sections.size()];
 
@@ -76,7 +78,6 @@ public class SectionTreeBuilder {
                 SimpleSectionedRecyclerViewAdapter(mContext,  R.layout.section, R.id.section_text, listItemAdapter);
 
         mSectionedAdapter.setSections(sections.toArray(dummy));
-
         return this;
     }
 
@@ -86,7 +87,6 @@ public class SectionTreeBuilder {
         RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(mContext);
 
         r.setLayoutManager(layoutManager);
-
         return this;
     }
 }

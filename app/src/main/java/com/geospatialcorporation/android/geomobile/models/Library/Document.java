@@ -1,18 +1,22 @@
 package com.geospatialcorporation.android.geomobile.models.Library;
 
+import android.os.Parcel;
+import android.os.Parcelable;
+
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 
-public class Document {
+public class Document implements Parcelable {
 
     //region Getters & Setters
-    public int getDocumentId() {
-        return DocumentId;
+    public int getId() {
+        return Id;
     }
 
-    public void setDocumentId(int documentId) {
-        DocumentId = documentId;
+    public void setId(int id) {
+        Id = id;
     }
 
     public long getSize() {
@@ -31,6 +35,14 @@ public class Document {
         Name = name;
     }
 
+    public String getUploadTime() {
+        return UploadTime;
+    }
+
+    public void setUploadTime(String uploadTime) {
+        UploadTime = uploadTime;
+    }
+
     public String getMimeType() {
         return MimeType;
     }
@@ -46,18 +58,10 @@ public class Document {
     public void setExtension(String extension) {
         Extension = extension;
     }
-
-    public String getUploadTime() {
-        return UploadTime;
-    }
-
-    public void setUploadTime(String uploadTime) {
-        UploadTime = uploadTime;
-    }
     //endregion
 
     //region Properties
-    private int DocumentId;
+    private int Id;
     private long Size;
     private String Name;
     private String UploadTime;
@@ -80,5 +84,40 @@ public class Document {
         return date;
     }
 
-    public Document(){}
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeLong(Size);
+        dest.writeInt(Id);
+        dest.writeString(Name);
+        dest.writeString(UploadTime);
+        dest.writeString(MimeType);
+        dest.writeString(Extension);
+    }
+
+    private Document(Parcel in) {
+        Size = in.readLong();
+        Id = in.readInt();
+        Name = in.readString();
+        UploadTime = in.readString();
+        MimeType = in.readString();
+        Extension = in.readString();
+    }
+
+    public static final Parcelable.Creator<Document> CREATOR = new Parcelable.Creator<Document>() {
+
+        @Override
+        public Document createFromParcel(Parcel source) {
+            return new Document(source);
+        }
+
+        @Override
+        public Document[] newArray(int size) {
+            return new Document[size];
+        }
+    };
 }

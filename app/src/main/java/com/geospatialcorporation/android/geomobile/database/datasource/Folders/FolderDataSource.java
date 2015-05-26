@@ -5,7 +5,7 @@ import android.content.Context;
 import android.database.Cursor;
 import android.provider.BaseColumns;
 
-import com.geospatialcorporation.android.geomobile.database.datasource.base.DataSourceGenericBase;
+import com.geospatialcorporation.android.geomobile.database.datasource.DataSourceGenericBase;
 import com.geospatialcorporation.android.geomobile.database.sqlitehelper.GeoSQLiteHelper;
 import com.geospatialcorporation.android.geomobile.models.Folders.Folder;
 

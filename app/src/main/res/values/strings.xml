@@ -16,6 +16,7 @@
 
 <resources>
     <string name="app_name">GeoUnderground Mobile</string>
+    <string name="choose_client">Choose Client</string>
     <string name="drawer_open">Open navigation drawer</string>
     <string name="drawer_close">Close navigation drawer</string>
     <string name="action_websearch">Web search</string>

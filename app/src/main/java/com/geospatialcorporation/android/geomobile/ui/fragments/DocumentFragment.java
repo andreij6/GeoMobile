@@ -17,7 +17,7 @@ import com.geospatialcorporation.android.geomobile.library.helpers.SectionTreeBu
 import com.geospatialcorporation.android.geomobile.library.rest.FolderService;
 import com.geospatialcorporation.android.geomobile.library.rest.TreeService;
 import com.geospatialcorporation.android.geomobile.models.Folders.Folder;
-import com.geospatialcorporation.android.geomobile.models.Layers.Layer;
+import com.geospatialcorporation.android.geomobile.models.Library.Document;
 import com.geospatialcorporation.android.geomobile.ui.adapters.ListItemAdapter;
 
 import java.util.List;
@@ -26,33 +26,33 @@ import butterknife.ButterKnife;
 import butterknife.InjectView;
 import retrofit.RetrofitError;
 
-public class LayerFragment extends Fragment {
-    protected final static String TAG = LayerFragment.class.getSimpleName();
+public class DocumentFragment extends Fragment {
+    protected static final String TAG = DocumentFragment.class.getSimpleName();
 
+    //region Properties
     private List<Folder> mFolders;
     private TreeService mTreeService;
     private FolderService mFolderService;
-    List<Layer> mLayers;
-    Folder mCurrentFolder;
-    DataHelper mHelper;
-    Context mContext;
+    private DataHelper mHelper;
+    private List<Document> mDocuments;
+    private Folder mCurrentFolder;
+    private Context mContext;
+    //endregion
 
-    RecyclerView.LayoutManager mLM;
-
-    public LayerFragment() {
-        mHelper = new DataHelper();
-    }
-
-    @InjectView(R.id.layer_recyclerView)
-    RecyclerView mRecycler;
+    @InjectView(R.id.libraryitem_recyclerView)
+    RecyclerView mRecyclerView;
 
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
+        View mRootView;
 
-        View mRootView = inflater.inflate(R.layout.fragment_layeritems, container, false);
+        mHelper = new DataHelper();
+
+        mRootView = inflater.inflate(R.layout.fragment_libraryitems, container, false);
 
         ButterKnife.inject(this, mRootView);
+
+        mRecyclerView = (RecyclerView) mRootView.findViewById(R.id.libraryitem_recyclerView);
 
         mTreeService = application.getRestAdapter().create(TreeService.class);
         mFolderService = application.getRestAdapter().create(FolderService.class);
@@ -63,14 +63,15 @@ public class LayerFragment extends Fragment {
         if (args != null) {
             handleArguments(args);
         } else {
-            firstLayerView();
+            firstDocumentView();
         }
+
+        new GetDocumentsTask().execute();
 
         return mRootView;
     }
 
-    private class GetLayersTask extends AsyncTask<Integer, Void, Void> {
-
+    private class GetDocumentsTask extends AsyncTask<Integer, Void, Void> {
         @Override
         protected Void doInBackground(Integer... params) {
             try {
@@ -78,7 +79,7 @@ public class LayerFragment extends Fragment {
 
                 if (params[0] == 0) {
                     getAll = true;
-                    List<Folder> folders = mTreeService.getLayers();
+                    List<Folder> folders = mTreeService.getDocuments();
                     mCurrentFolder = folders.get(0);
                 } else {
                     mCurrentFolder = mFolderService.getFolderById(params[0]);
@@ -89,20 +90,16 @@ public class LayerFragment extends Fragment {
 
                 if (getAll) {
                     List<Folder> allFolders = mHelper.getFoldersRecursively(mCurrentFolder);
-                    List<Layer> allLayers = mHelper.getLayersRecursively(mCurrentFolder);
-
-                    application.setLayerFolders(allFolders);
-                    application.setLayers(allLayers);
+                    application.setDocumentFolders(allFolders);
                 }
 
                 List<Folder> folders = mFolderService.getFoldersByFolder(mCurrentFolder.getId());
-                List<Layer> layers = mFolderService.getLayersByFolder(mCurrentFolder.getId());
-                //mParent =
+                List<Document> documents = mFolderService.getDocumentsByFolder(mCurrentFolder.getId());
 
                 mFolders = folders;
                 mCurrentFolder.setFolders(folders);
-                mLayers = layers;
-                mCurrentFolder.setLayers(layers);
+                mDocuments = documents;
+                mCurrentFolder.setDocuments(documents);
             } catch (RetrofitError e) {
                 Log.d(TAG, "Messed up.");
             } catch (Exception e) {
@@ -115,29 +112,32 @@ public class LayerFragment extends Fragment {
         @Override
         protected void onPostExecute(Void nothing) {
             new SectionTreeBuilder(mContext)
-                    .AddLayerData(mLayers, mFolders, mCurrentFolder.getParent())
-                    .BuildAdapter(ListItemAdapter.LAYER)
-                    .setRecycler(mRecycler);
+                    .AddLibraryData(mDocuments, mFolders, mCurrentFolder.getParent())
+                    .BuildAdapter(ListItemAdapter.LIBRARY)
+                    .setRecycler(mRecyclerView);
         }
+
     }
 
-    private Folder getFolderById(int id, List<Folder> folders) {
-        for (Folder folder : folders) {
-            if (folder.getId() == id) {
-                return folder;
+    private Document getDocumentById(int id, List<Document> documents) {
+        for (Document document : documents) {
+            if (document.getId() == id) {
+                return document;
             }
         }
 
         return null;
     }
 
-    private void firstLayerView() {
-        new GetLayersTask().execute(0);
+    private void firstDocumentView() {
+        new GetDocumentsTask().execute(0);
     }
 
     private void handleArguments(Bundle args) {
         int folderId = args.getInt(Folder.FOLDER_INTENT, 0);
-        new GetLayersTask().execute(folderId);
+        if (folderId != 0) {
+            new GetDocumentsTask().execute(folderId);
+        }
     }
 
 }

@@ -10,6 +10,6 @@ public interface TreeService {
     @GET("/API/Tree/Layer")
     List<Folder> getLayers();
 
-    @GET("/API/Tree/Library")
-    List<Folder> getLibrary();
+    @GET("/API/Tree/Document")
+    List<Folder> getDocuments();
 }

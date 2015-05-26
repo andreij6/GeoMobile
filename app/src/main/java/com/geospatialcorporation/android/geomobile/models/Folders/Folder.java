@@ -5,13 +5,15 @@ import android.os.Parcel;
 import android.os.Parcelable;
 
 import com.geospatialcorporation.android.geomobile.models.Layers.Layer;
+import com.geospatialcorporation.android.geomobile.models.Library.Document;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class Folder implements Parcelable{
+public class Folder implements Parcelable {
 
     public Folder(){
+        Documents = new ArrayList<>();
         Layers = new ArrayList<>();
         Folders = new ArrayList<>();
     }
@@ -19,8 +21,10 @@ public class Folder implements Parcelable{
     //region Properties
     private Boolean IsImportFolder;
     private Boolean IsFixed;
+    private List<Document> Documents;
     private List<Layer> Layers;
     private List<Folder> Folders;
+    private Folder Parent;
     private Integer AccessLevel;
     private Integer MobileId;
     private Integer Id;
@@ -28,42 +32,40 @@ public class Folder implements Parcelable{
     //endregion
 
     //region Getters & Setters
-    public Boolean getIsImportFolder() {
-        return IsImportFolder;
-    }
-
-    public void setIsImportFolder(Boolean isImportFolder) {
-        IsImportFolder = isImportFolder;
-    }
+    public Boolean getIsImportFolder() { return IsImportFolder; }
+    public void setIsImportFolder(Boolean isImportFolder) { IsImportFolder = isImportFolder; }
 
     public Boolean getIsFixed() {
         return IsFixed;
     }
-
     public void setIsFixed(Boolean isFixed) {
         IsFixed = isFixed;
     }
 
+    public List<Document> getDocuments() { return Documents; }
+    public void setDocuments(List<Document> documents) { Documents = documents; }
+
     public List<Layer> getLayers() {
         return Layers;
     }
-
     public void setLayers(List<Layer> layers) {
         Layers = layers;
     }
 
-    public List<Folder> getFolders() {
-        return Folders;
-    }
-
+    public List<Folder> getFolders() { return Folders; }
     public void setFolders(List<Folder> folders) {
         Folders = folders;
+        for (Folder folder : folders) {
+            folder.setParent(this);
+        }
     }
+
+    public Folder getParent() { return Parent; }
+    public void setParent(Folder parent) { Parent = parent; }
 
     public Integer getAccessLevel() {
         return AccessLevel;
     }
-
     public void setAccessLevel(Integer accessLevel) {
         AccessLevel = accessLevel;
     }
@@ -71,19 +73,16 @@ public class Folder implements Parcelable{
     public Integer getMobileId() {
         return MobileId;
     }
-
     public void setMobileId(Integer id) {
         MobileId = id;
     }
 
     public Integer getId() {return Id; }
-
     public void setId(Integer id){ Id = id; }
 
     public String getName() {
         return Name;
     }
-
     public void setName(String name) {
         Name = name;
     }
@@ -115,6 +114,8 @@ public class Folder implements Parcelable{
     private Folder(Parcel in){
         IsImportFolder = (Boolean)in.readValue(Boolean.class.getClassLoader());
         IsFixed = (Boolean)in.readValue(Boolean.class.getClassLoader());
+        Documents = new ArrayList<>();
+        in.readTypedList(Documents, Document.CREATOR);
         Layers = new ArrayList<>();
         in.readTypedList(Layers, Layer.CREATOR);
         Folders = new ArrayList<>();

@@ -1,6 +1,7 @@
 package com.geospatialcorporation.android.geomobile.ui;
 
 import android.app.Activity;
+import android.content.Context;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -15,6 +16,7 @@ public class ChooseClientActivity extends Activity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
+        getActionBar().setTitle(R.string.choose_client);
         setContentView(R.layout.activity_choose_client);
         getFragmentManager().beginTransaction()
                 .replace(R.id.choose_client_content, new ClientFragment())

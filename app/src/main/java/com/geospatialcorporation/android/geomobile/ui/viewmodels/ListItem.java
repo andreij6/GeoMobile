@@ -4,7 +4,11 @@ import com.geospatialcorporation.android.geomobile.models.Folders.Folder;
 import com.geospatialcorporation.android.geomobile.models.Layers.Layer;
 import com.geospatialcorporation.android.geomobile.models.Library.Document;
 
-public class ListItem implements Comparable<ListItem>{
+public class ListItem implements Comparable<ListItem> {
+    public static final int FOLDER = 1;
+    public static final int LAYER = 2;
+    public static final int DOCUMENT = 3;
+
     //region Getters & Setters
     public String getName() {
         return Name;
@@ -37,25 +41,26 @@ public class ListItem implements Comparable<ListItem>{
     private int Order;
 
     //region Constructors
-    public ListItem(Folder folder){
+    public ListItem(Folder folder) {
         Name = folder.getName();
         Id = folder.getId();
         Order = 1;
     }
 
-    public ListItem(Layer layer){
+    public ListItem(Layer layer) {
         Name = layer.getName();
         Id = layer.getId();
         Order = 2;
     }
 
-    public ListItem(Document document){
+    public ListItem(Document document) {
         Name = document.getName();
-        Id = document.getDocumentId();
+        Id = document.getId();
         Order = 3;
     }
 
-    public ListItem(){}
+    public ListItem() {
+    }
     //endregion
 
     @Override
@@ -64,12 +69,4 @@ public class ListItem implements Comparable<ListItem>{
 
         return ordered ? 0 : 1;
     }
-
-    public static final int FOLDER = 1;
-    public static final int LAYER = 2;
-    public static final int DOCUMENT = 3;
-
-
-
-
 }

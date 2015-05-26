@@ -1,11 +1,5 @@
 package com.geospatialcorporation.android.geomobile.library.map;
 
-import java.lang.reflect.Method;
-import java.util.HashMap;
-
-import org.json.JSONArray;
-import org.json.JSONException;
-
 import android.annotation.SuppressLint;
 import android.content.res.Resources;
 
@@ -17,6 +11,12 @@ import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.Polygon;
 import com.google.android.gms.maps.model.Polyline;
 import com.google.android.gms.maps.model.TileOverlay;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+
+import java.lang.reflect.Method;
+import java.util.HashMap;
 
 public class MapPlugin {
     protected HashMap<String, Object> objects;

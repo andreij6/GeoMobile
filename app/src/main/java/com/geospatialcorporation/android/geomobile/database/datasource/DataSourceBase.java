@@ -1,4 +1,4 @@
-package com.geospatialcorporation.android.geomobile.database.datasource.base;
+package com.geospatialcorporation.android.geomobile.database.datasource;
 
 import android.content.Context;
 import android.database.Cursor;

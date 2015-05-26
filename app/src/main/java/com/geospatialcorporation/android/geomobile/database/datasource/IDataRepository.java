@@ -1,4 +1,4 @@
-package com.geospatialcorporation.android.geomobile.database.datasource.base;
+package com.geospatialcorporation.android.geomobile.database.datasource;
 
 public interface IDataRepository<T> {
 

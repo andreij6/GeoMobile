@@ -17,15 +17,15 @@
 package com.geospatialcorporation.android.geomobile.ui;
 
 import android.app.Activity;
+import android.app.Fragment;
 import android.app.FragmentManager;
 import android.app.SearchManager;
 import android.content.Intent;
 import android.content.res.Configuration;
 import android.os.Bundle;
-import android.app.Fragment;
-import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
+import android.support.v7.app.ActionBarDrawerToggle;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -35,13 +35,13 @@ import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.Toast;
 
+import com.geospatialcorporation.android.geomobile.R;
 import com.geospatialcorporation.android.geomobile.library.constants.ViewConstants;
+import com.geospatialcorporation.android.geomobile.library.util.Dialogs;
 import com.geospatialcorporation.android.geomobile.ui.fragments.AccountFragment;
 import com.geospatialcorporation.android.geomobile.ui.fragments.GoogleMapFragment;
-import com.geospatialcorporation.android.geomobile.R;
 import com.geospatialcorporation.android.geomobile.ui.fragments.LayerFragment;
-import com.geospatialcorporation.android.geomobile.ui.fragments.LibraryFragment;
-import com.geospatialcorporation.android.geomobile.library.util.Dialogs;
+import com.geospatialcorporation.android.geomobile.ui.fragments.DocumentFragment;
 
 /**
  * This example illustrates a common usage of the DrawerLayout widget
@@ -210,7 +210,7 @@ public class MainActivity extends Activity {
             case ViewConstants.LAYER:
                 return new LayerFragment();
             case ViewConstants.LIBRARY:
-                return new LibraryFragment();
+                return new DocumentFragment();
             case ViewConstants.ACCOUNT:
                 return new AccountFragment();
             case ViewConstants.LOGOUT:

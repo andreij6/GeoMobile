@@ -1,9 +1,12 @@
 package com.geospatialcorporation.android.geomobile.ui.adapters;
 
+import android.app.Activity;
+import android.app.Fragment;
+import android.app.FragmentManager;
 import android.app.ProgressDialog;
 import android.content.Context;
-import android.content.Intent;
 import android.os.AsyncTask;
+import android.os.Bundle;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -16,10 +19,11 @@ import com.geospatialcorporation.android.geomobile.R;
 import com.geospatialcorporation.android.geomobile.application;
 import com.geospatialcorporation.android.geomobile.library.helpers.DataHelper;
 import com.geospatialcorporation.android.geomobile.library.rest.DocumentService;
+import com.geospatialcorporation.android.geomobile.library.util.Dialogs;
 import com.geospatialcorporation.android.geomobile.models.Folders.Folder;
 import com.geospatialcorporation.android.geomobile.models.Library.Document;
-import com.geospatialcorporation.android.geomobile.ui.tree_activities.DocumentsActivity;
-import com.geospatialcorporation.android.geomobile.ui.tree_activities.LayerActivity;
+import com.geospatialcorporation.android.geomobile.ui.fragments.LayerFragment;
+import com.geospatialcorporation.android.geomobile.ui.fragments.DocumentFragment;
 import com.geospatialcorporation.android.geomobile.ui.viewmodels.ListItem;
 
 import java.io.BufferedInputStream;
@@ -33,7 +37,7 @@ import butterknife.ButterKnife;
 import butterknife.InjectView;
 import retrofit.client.Response;
 
-public class ListItemAdapter extends RecyclerView.Adapter<ListItemAdapter.ListViewHolder>{
+public class ListItemAdapter extends RecyclerView.Adapter<ListItemAdapter.ListViewHolder> {
     protected final static String TAG = ListItemAdapter.class.getSimpleName();
 
     public static final String LAYER = "Layer";
@@ -45,7 +49,7 @@ public class ListItemAdapter extends RecyclerView.Adapter<ListItemAdapter.ListVi
     private DataHelper mHelper;
     private String mViewType;
 
-    public ListItemAdapter(Context context, List<ListItem> data, String ViewType){
+    public ListItemAdapter(Context context, List<ListItem> data, String ViewType) {
         mContext = context;
         mListItems = data;
         mHelper = new DataHelper();
@@ -70,7 +74,6 @@ public class ListItemAdapter extends RecyclerView.Adapter<ListItemAdapter.ListVi
     }
 
 
-
     protected class ListViewHolder extends RecyclerView.ViewHolder {
         //regions Properties
         ListItem mItem;
@@ -91,47 +94,62 @@ public class ListItemAdapter extends RecyclerView.Adapter<ListItemAdapter.ListVi
         public void bindFolder(ListItem item) {
             mItem = item;
             itemName.setText(item.getName());
-
         }
 
         protected View.OnClickListener ItemOnClickListener = new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
                 switch (mItem.getOrder()) {
                     case ListItem.LAYER:
-                        goToLayerActivity(mItem);
+                        LayerAction(mItem);
                         break;
                     case ListItem.FOLDER:
-                        goToLibraryActivity(mItem);
+                        FolderAction(mItem);
                         break;
                     case ListItem.DOCUMENT:
-                        goToDocument(mItem);
+                        DocumentAction(mItem);
                         break;
                     default:
                         break;
                 }
-
-
             }
         };
 
-        private void goToDocument(ListItem item) {
+        private void DocumentAction(ListItem item) {
             new DownloadTask().execute(item.getId());
         }
 
-        private void goToLibraryActivity(ListItem item) {
+        private void FolderAction(ListItem item) {
             mFolder = application.getFolderById(mItem.getId());
+            Fragment fragment;
 
-            Class<?> klass = mViewType == ListItemAdapter.LAYER ? LayerActivity.class : DocumentsActivity.class;
+            if (mFolder.getAccessLevel() < 1) {
+                new Dialogs().error("You don't have access to folder: " + mFolder.getName());
+            }
 
-            Intent intent = new Intent(mContext, klass)
-                    .putExtra(Folder.FOLDER_INTENT, mFolder);
-            mContext.startActivity(intent);
+            Bundle bundle = new Bundle();
+            bundle.putInt(Folder.FOLDER_INTENT, mItem.getId());
 
+            if (mViewType.equals(ListItemAdapter.LAYER)) {
+                // Layer
+                fragment = new LayerFragment();
+                fragment.setArguments(bundle);
+            } else {
+                // Documents
+                fragment = new DocumentFragment();
+                fragment.setArguments(bundle);
+            }
+
+            Activity activity = (Activity) itemView.getContext();
+            FragmentManager fragmentManager = activity.getFragmentManager();
+
+            fragmentManager.beginTransaction()
+                    .replace(R.id.content_frame, fragment)
+                    .setCustomAnimations(R.anim.enter, R.anim.exit, R.anim.pop_enter, R.anim.pop_exit)
+                    .commit();
         }
 
-        private void goToLayerActivity(ListItem item) {
+        private void LayerAction(ListItem item) {
             Toast.makeText(mContext, "You Selected Layer " + item.getName(), Toast.LENGTH_LONG).show();
         }
 
@@ -184,12 +202,12 @@ public class ListItemAdapter extends RecyclerView.Adapter<ListItemAdapter.ListVi
                 return null;
             }
 
-            protected void onProgressUpdate(String...progress){
+            protected void onProgressUpdate(String... progress) {
                 mProgressDialog.setProgress(Integer.parseInt(progress[0]));
             }
 
             @Override
-            protected void onPostExecute(String unused){
+            protected void onPostExecute(String unused) {
                 mProgressDialog.dismiss();
             }
 

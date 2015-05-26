@@ -3,7 +3,6 @@ package com.geospatialcorporation.android.geomobile;
 import android.app.Application;
 import android.content.Context;
 import android.content.SharedPreferences;
-import android.preference.PreferenceManager;
 import android.util.Log;
 
 import com.facebook.stetho.Stetho;
@@ -29,6 +28,8 @@ import retrofit.client.OkClient;
 
 public class application extends Application {
     private final static String TAG = "application";
+    private final static String prefsName = "AppState";
+    private static SharedPreferences appState;
     private static String domain;
     private static Context context;
     private static GoogleApiClient googleClient;
@@ -46,17 +47,14 @@ public class application extends Application {
     private static List<Document> documents;
     private static List<Folder> documentFolders;
 
-
-    public void onCreate(){
+    public void onCreate() {
         super.onCreate();
         application.context = getApplicationContext();
         folderHashMap = new HashMap<>();
         layerHashMap = new HashMap<>();
         documentsHashMap = new HashMap<>();
 
-        SharedPreferences settings = PreferenceManager
-                .getDefaultSharedPreferences(context);
-        geoAuthToken = settings.getString(context.getString(R.string.auth_token), null);
+        appState = getSharedPreferences(prefsName, 0);
 
         if (BuildConfig.DEBUG) {
             domain = Domains.DEVELOPMENT;
@@ -150,14 +148,18 @@ public class application extends Application {
         return geoAuthToken;
     }
 
-    public static void setLibraryFolders(List<Folder> folders){ libraryFolders = folders; }
+    public static void setLibraryFolders(List<Folder> folders) {
+        libraryFolders = folders;
+    }
 
-    public static List<Folder> getLibraryFolders(){ return libraryFolders; }
+    public static List<Folder> getLibraryFolders() {
+        return libraryFolders;
+    }
 
-    public static void setLayerFolders(List<Folder> folders){
+    public static void setLayerFolders(List<Folder> folders) {
         layerFolders = folders;
 
-        for(Folder folder : layerFolders){
+        for (Folder folder : layerFolders) {
             folderHashMap.put(folder.getId(), folder);
         }
     }
@@ -165,12 +167,12 @@ public class application extends Application {
     public static void setDocuments(List<Document> documents) {
         application.documents = documents;
 
-        for(Document document : application.documents){
-            documentsHashMap.put(document.getDocumentId(), document);
+        for (Document document : application.documents) {
+            documentsHashMap.put(document.getId(), document);
         }
     }
 
-    public static Document getDocumentById(int documentId){
+    public static Document getDocumentById(int documentId) {
         return documentsHashMap.get(documentId);
     }
 
@@ -181,7 +183,7 @@ public class application extends Application {
     public static void setDocumentFolders(List<Folder> documentFolders) {
         application.documentFolders = documentFolders;
 
-        for(Folder folder : documentFolders){
+        for (Folder folder : documentFolders) {
             folderHashMap.put(folder.getId(), folder);
         }
     }
@@ -190,29 +192,36 @@ public class application extends Application {
         return documentFolders;
     }
 
-    public static List<Folder> getLayerFolders(){ return layerFolders; }
+    public static List<Folder> getLayerFolders() {
+        return layerFolders;
+    }
 
-    public static Folder getFolderById(int folderId){
+    public static Folder getFolderById(int folderId) {
         return folderHashMap.get(folderId);
     }
 
-    public static void setLayers(List<Layer> layers){
+    public static void setLayers(List<Layer> layers) {
         Layers = layers;
-        for(Layer layer : layers){
+        for (Layer layer : layers) {
             layerHashMap.put(layer.getId(), layer);
         }
     }
 
-    public static List<Layer> getLayers() { return Layers; }
+    public static List<Layer> getLayers() {
+        return Layers;
+    }
 
-    public static RestAdapter getRestAdapter() { return restAdapter; }
+    public static RestAdapter getRestAdapter() {
+        return restAdapter;
+    }
 
     public static Layer getLayer(int id) {
         return layerHashMap.get(id);
     }
 
     class TokenInterceptor implements Interceptor {
-        @Override public Response intercept(Chain chain) throws IOException {
+        @Override
+        public Response intercept(Chain chain) throws IOException {
             Request request = chain.request();
             Response response = chain.proceed(request);
 
@@ -234,6 +243,15 @@ public class application extends Application {
         googleAuthToken = token;
     }
 
-    public static Client getGeoClient() { return geoClient; }
-    public static void setGeoClient(Client client) { geoClient = client; }
+    public static Client getGeoClient() {
+        return geoClient;
+    }
+
+    public static void setGeoClient(Client client) {
+        geoClient = client;
+    }
+
+    public static SharedPreferences getAppState() {
+        return appState;
+    }
 }

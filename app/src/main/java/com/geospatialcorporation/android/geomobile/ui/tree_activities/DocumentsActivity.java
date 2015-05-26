@@ -5,7 +5,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.Menu;
@@ -19,6 +18,7 @@ import com.geospatialcorporation.android.geomobile.library.rest.FolderService;
 import com.geospatialcorporation.android.geomobile.models.Folders.Folder;
 import com.geospatialcorporation.android.geomobile.models.Library.Document;
 import com.geospatialcorporation.android.geomobile.ui.adapters.ListItemAdapter;
+
 import java.util.List;
 
 import butterknife.ButterKnife;
@@ -33,11 +33,13 @@ public class DocumentsActivity extends Activity {
     protected Folder mFolder;
     private FolderService mService;
     private List<Document> mDocumentList;
+    Folder mCurrentFolder;
     Context mContext;
     DataHelper mHelper;
     //endregion
 
-    @InjectView(R.id.documentlist) RecyclerView mRecyclerView;
+    @InjectView(R.id.documentlist)
+    RecyclerView mRecyclerView;
 
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -83,26 +85,26 @@ public class DocumentsActivity extends Activity {
     }
 
 
-    private class GetDocumentsTask extends AsyncTask<Void, Void, List<Document>>{
+    private class GetDocumentsTask extends AsyncTask<Void, Void, List<Document>> {
 
         @Override
         protected List<Document> doInBackground(Void... params) {
             try {
-                mDocumentList = mService.getFolderDocuments(mFolder.getId());
+                mDocumentList = mService.getDocumentsByFolder(mFolder.getId());
                 application.setDocuments(mDocumentList);
-            } catch (RetrofitError e){
+            } catch (RetrofitError e) {
                 Log.d(TAG, e.getMessage());
             }
             return mDocumentList;
         }
 
         @Override
-        protected void onPostExecute(List<Document> documents){
+        protected void onPostExecute(List<Document> documents) {
 
             SectionTreeBuilder builder = new SectionTreeBuilder(mContext)
-                                        .AddLibraryData(mDocumentList, mFolder.getFolders())
-                                        .BuildAdapter(ListItemAdapter.LIBRARY)
-                                        .setRecycler(mRecyclerView);
+                    .AddLibraryData(mDocumentList, mFolder.getFolders(), mCurrentFolder)
+                    .BuildAdapter(ListItemAdapter.LIBRARY)
+                    .setRecycler(mRecyclerView);
         }
     }
 
