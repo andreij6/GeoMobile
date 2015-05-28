@@ -1,8 +1,14 @@
 package com.geospatialcorporation.android.geomobile.models.Layers;
 
+import android.app.Notification;
 import android.os.Parcel;
 import android.os.Parcelable;
 import android.text.TextUtils;
+
+import com.geospatialcorporation.android.geomobile.library.map.MapActions;
+
+import java.util.List;
+import java.util.Map;
 
 public class Layer implements Parcelable {
 
@@ -16,6 +22,9 @@ public class Layer implements Parcelable {
     private Integer MobileId;
     private String Name;
     private Boolean IsShowing;
+    private List<Layer> Sublayers;
+    private StyleInfo StyleInfo;
+    private Object MapObject;
     //endregion
 
     //region Getters & Setters
@@ -86,6 +95,26 @@ public class Layer implements Parcelable {
     public void setName(String name) {
         Name = name;
     }
+
+    public void setSublayers(List<Layer> sublayers) {
+        Sublayers = sublayers;
+        new MapActions().showLayer(this);
+    }
+    
+    public List<Layer> getSublayers() {
+        return Sublayers;
+    }
+
+    public void setStyleInfo(StyleInfo styleInfo) {
+        StyleInfo = styleInfo;
+    }
+
+    public StyleInfo getStyleInfo() {
+        return StyleInfo;
+    }
+
+    public void setMapObject(Object mapObject) { MapObject = mapObject; }
+    public Object getMapObject() { return MapObject; }
     //endregion
 
     //region Constructors
@@ -164,12 +193,12 @@ public class Layer implements Parcelable {
 
         public boolean IsBorderVisible() {
             return TextUtils.isEmpty(BorderColor) || BorderColor.substring(6, 2).equals("00");
-        };
+        }
 
         public boolean IsFillVisible() {
             return TextUtils.isEmpty(FillColor) || FillColor.substring(6, 2).equals("00");
-        };
+        }
 
-
+        public StyleInfo() {}
     }
 }

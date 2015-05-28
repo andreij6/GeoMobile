@@ -1,5 +1,7 @@
 package com.geospatialcorporation.android.geomobile.models.Layers;
 
+import com.google.android.gms.maps.model.LatLng;
+
 public class Extent {
 
     //region Properties
@@ -33,5 +35,13 @@ public class Extent {
         Max = max;
     }
     //endregion
+
+    public LatLng getMinLatLng() {
+        return new LatLng(Min.getX(), Min.getY());
+    }
+
+    public LatLng getMaxLatLng() {
+        return new LatLng(Max.getX(), Max.getY());
+    }
 
 }

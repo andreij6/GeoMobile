@@ -79,8 +79,8 @@ public class DocumentFragment extends Fragment {
 
                 if (params[0] == 0) {
                     getAll = true;
-                    List<Folder> folders = mTreeService.getDocuments();
-                    mCurrentFolder = folders.get(0);
+                    List<Folder> documentsTree = mTreeService.getDocuments();
+                    mCurrentFolder = documentsTree.get(0);
                 } else {
                     mCurrentFolder = mFolderService.getFolderById(params[0]);
                 }
@@ -89,6 +89,7 @@ public class DocumentFragment extends Fragment {
                     throw new Exception("mCurrentFolder is null exception.");
 
                 if (getAll) {
+                    List<Document> allDocuments = mHelper.getDocumentsRecursively(mCurrentFolder);
                     List<Folder> allFolders = mHelper.getFoldersRecursively(mCurrentFolder);
                     application.setDocumentFolders(allFolders);
                 }

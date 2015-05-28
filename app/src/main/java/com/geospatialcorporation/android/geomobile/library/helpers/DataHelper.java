@@ -46,6 +46,22 @@ public class DataHelper {
         return result;
     }
 
+    public ArrayList<Document> getDocumentsRecursively(Folder folder) {
+        ArrayList<Document> result = new ArrayList<>();
+
+        if (folder == null) return result;
+
+        if (folder.getFolders().size() == 0) {
+            result.addAll(folder.getDocuments());
+        } else {
+            for (Folder x : folder.getFolders()) {
+                result.addAll(getDocumentsRecursively(x));
+            }
+        }
+
+        return result;
+    }
+
     public List<ListItem> CombineLayerItems(List<Layer> layers, List<Folder> folders, Folder parent) {
         ArrayList<ListItem> results = new ArrayList<>();
 

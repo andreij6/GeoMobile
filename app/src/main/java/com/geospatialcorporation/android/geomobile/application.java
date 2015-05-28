@@ -1,8 +1,12 @@
 package com.geospatialcorporation.android.geomobile;
 
 import android.app.Application;
+import android.app.DownloadManager;
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.net.Uri;
+import android.os.Build;
+import android.os.Environment;
 import android.util.Log;
 
 import com.facebook.stetho.Stetho;
@@ -12,12 +16,14 @@ import com.geospatialcorporation.android.geomobile.models.Client;
 import com.geospatialcorporation.android.geomobile.models.Folders.Folder;
 import com.geospatialcorporation.android.geomobile.models.Layers.Layer;
 import com.geospatialcorporation.android.geomobile.models.Library.Document;
+import com.geospatialcorporation.android.geomobile.ui.fragments.GoogleMapFragment;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.squareup.okhttp.Interceptor;
 import com.squareup.okhttp.OkHttpClient;
 import com.squareup.okhttp.Request;
 import com.squareup.okhttp.Response;
 
+import java.io.File;
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.List;
@@ -29,6 +35,8 @@ import retrofit.client.OkClient;
 public class application extends Application {
     private final static String TAG = "application";
     private final static String prefsName = "AppState";
+    private static final String geoAuthTokenName = "geoAuthToken";
+    private static GoogleMapFragment googleMap;
     private static SharedPreferences appState;
     private static String domain;
     private static Context context;
@@ -41,19 +49,16 @@ public class application extends Application {
     private static List<Folder> libraryFolders;
     private static HashMap<Integer, Folder> folderHashMap;
     private static List<Folder> layerFolders;
-    private static List<Layer> Layers;
+    private static List<Layer> layers;
     private static HashMap<Integer, Layer> layerHashMap;
-    private static HashMap<Integer, Document> documentsHashMap;
+    private static HashMap<Integer, Document> documentHashMap;
     private static List<Document> documents;
     private static List<Folder> documentFolders;
 
     public void onCreate() {
         super.onCreate();
-        application.context = getApplicationContext();
-        folderHashMap = new HashMap<>();
-        layerHashMap = new HashMap<>();
-        documentsHashMap = new HashMap<>();
 
+        context = getApplicationContext();
         appState = getSharedPreferences(prefsName, 0);
 
         if (BuildConfig.DEBUG) {
@@ -74,7 +79,7 @@ public class application extends Application {
         RequestInterceptor requestInterceptor = new RequestInterceptor() {
             @Override
             public void intercept(RequestInterceptor.RequestFacade request) {
-                request.addHeader("User-Agent", "Retrofit-Sample-App");
+                request.addHeader("User-Agent", "GeoUnderground-Mobile");
 
                 if (geoAuthToken != null) {
                     request.addHeader("Authorization", "WebToken " + geoAuthToken);
@@ -101,11 +106,15 @@ public class application extends Application {
                     .build();
         }
 
+        initializeApplication();
+    }
 
+    public static GoogleMapFragment getMapFragment() {
+        return googleMap;
     }
 
     public static Context getAppContext() {
-        return application.context;
+        return context;
     }
 
     public static void setGoogleClient(GoogleApiClient client) {
@@ -142,6 +151,7 @@ public class application extends Application {
         }
 
         Log.d(TAG, "Set GeoToken to: " + token);
+        appState.getString(geoAuthTokenName, token);
     }
 
     public static String getAuthToken() {
@@ -157,6 +167,7 @@ public class application extends Application {
     }
 
     public static void setLayerFolders(List<Folder> folders) {
+        Log.d(TAG, "setLayerFolders total: " + folders.size());
         layerFolders = folders;
 
         for (Folder folder : layerFolders) {
@@ -164,26 +175,26 @@ public class application extends Application {
         }
     }
 
-    public static void setDocuments(List<Document> documents) {
-        application.documents = documents;
+    public static void setDocuments(List<Document> newDocuments) {
+        documents = newDocuments;
 
-        for (Document document : application.documents) {
-            documentsHashMap.put(document.getId(), document);
+        for (Document document : documents) {
+            documentHashMap.put(document.getId(), document);
         }
     }
 
     public static Document getDocumentById(int documentId) {
-        return documentsHashMap.get(documentId);
+        return documentHashMap.get(documentId);
     }
 
     public static List<Document> getDocuments() {
         return documents;
     }
 
-    public static void setDocumentFolders(List<Folder> documentFolders) {
-        application.documentFolders = documentFolders;
+    public static void setDocumentFolders(List<Folder> newDocumentFolders) {
+        documentFolders = newDocumentFolders;
 
-        for (Folder folder : documentFolders) {
+        for (Folder folder : newDocumentFolders) {
             folderHashMap.put(folder.getId(), folder);
         }
     }
@@ -200,15 +211,16 @@ public class application extends Application {
         return folderHashMap.get(folderId);
     }
 
-    public static void setLayers(List<Layer> layers) {
-        Layers = layers;
-        for (Layer layer : layers) {
+    public static void setLayers(List<Layer> newLayers) {
+        Log.d(TAG, "setLayers total: " + newLayers.size());
+        layers = newLayers;
+        for (Layer layer : newLayers) {
             layerHashMap.put(layer.getId(), layer);
         }
     }
 
     public static List<Layer> getLayers() {
-        return Layers;
+        return layers;
     }
 
     public static RestAdapter getRestAdapter() {
@@ -253,5 +265,30 @@ public class application extends Application {
 
     public static SharedPreferences getAppState() {
         return appState;
+    }
+
+    public static void Logout() {
+        geoAuthToken = null;
+        googleAuthToken = null;
+        libraryFolders = null;
+        layerFolders = null;
+        layers = null;
+        layerHashMap = null;
+        documents = null;
+        documentHashMap = null;
+        documentFolders = null;
+
+        appState.getStringSet(geoAuthTokenName, null);
+
+        initializeApplication();
+    }
+
+    private static void initializeApplication() {
+        folderHashMap = new HashMap<>();
+        layerHashMap = new HashMap<>();
+        documentHashMap = new HashMap<>();
+        googleMap = new GoogleMapFragment();
+
+        geoAuthToken = appState.getString(geoAuthTokenName, null);
     }
 }

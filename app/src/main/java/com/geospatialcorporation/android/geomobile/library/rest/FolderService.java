@@ -10,6 +10,8 @@ import retrofit.http.GET;
 import retrofit.http.Path;
 
 public interface FolderService {
+    @GET("/API/Folders?folderType={type}")
+    List<Folder> getFolders(@Path("type") String type);
 
     @GET("/API/Folders/{folderId}")
     Folder getFolderById(@Path("folderId") int folderId);

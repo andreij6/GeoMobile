@@ -27,10 +27,10 @@ public class ClientAdapter extends RecyclerView.Adapter<ClientAdapter.ClientView
 
     private Context mContext;
     private List<Client> mClients;
-    private int newClientId;
+    private Client mSelectedClient;
     private LoginService mService;
 
-    public ClientAdapter(Context context, List<Client> clients){
+    public ClientAdapter(Context context, List<Client> clients) {
         mContext = context;
         mClients = clients;
         mService = application.getRestAdapter().create(LoginService.class);
@@ -59,43 +59,38 @@ public class ClientAdapter extends RecyclerView.Adapter<ClientAdapter.ClientView
 
     protected class ClientViewHolder extends RecyclerView.ViewHolder {
         //region Properties
-        @InjectView(R.id.clientNameLabel) TextView mClientName;
+        @InjectView(R.id.clientNameLabel)
+        TextView mClientName;
 
         Client mClient;
         //endregion
 
-        public ClientViewHolder(View itemView){
+        public ClientViewHolder(View itemView) {
             super(itemView);
             ButterKnife.inject(this, itemView);
 
-            itemView.setOnClickListener(new View.OnClickListener(){
+            itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    newClientId = mClient.Id;
+                    mSelectedClient = mClient;
 
                     new SwitchClientTask().execute();
-
-                    application.setGeoClient(mClient);
-
-                    mContext.startActivity(new Intent(mContext, MainActivity.class));
                 }
             });
         }
 
-        public void bindClientItem(Client client){
+        public void bindClientItem(Client client) {
             mClient = client;
             mClientName.setText(client.Name);
         }
 
     }
 
-    private class SwitchClientTask extends AsyncTask{
-
+    private class SwitchClientTask extends AsyncTask<Object,Object,Object> {
         @Override
         protected Object doInBackground(Object[] params) {
             try {
-                mService.setClient(newClientId);
-
+                mService.setClient(mSelectedClient.Id);
             } catch (RetrofitError e) {
                 if (e.getResponse() != null) {
                     Log.d(TAG, Integer.toString(e.getResponse().getStatus()));
@@ -104,8 +99,11 @@ public class ClientAdapter extends RecyclerView.Adapter<ClientAdapter.ClientView
 
             return null;
         }
+
+        @Override
+        protected void onPostExecute(Object nothing) {
+            application.setGeoClient(mSelectedClient);
+            mContext.startActivity(new Intent(mContext, MainActivity.class));
+        }
     }
-
-
-
 }

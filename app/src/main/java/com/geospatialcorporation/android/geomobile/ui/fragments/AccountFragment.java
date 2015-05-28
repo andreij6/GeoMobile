@@ -25,16 +25,15 @@ public class AccountFragment extends Fragment {
 
     //region Properties
     View mRootView;
-    UserAccount mUserAccount;
     AccountService mService;
     //endregion
 
     //region View Setup
-    @InjectView(R.id.firstNameET) EditText FirstName;
-    @InjectView(R.id.lastNameEt) EditText LastName;
-    @InjectView(R.id.emailET) EditText Email;
-    @InjectView(R.id.cellPhoneET) EditText CellPhone;
-    @InjectView(R.id.officePhoneET) EditText OfficePhone;
+    @InjectView(R.id.firstName) EditText FirstName;
+    @InjectView(R.id.lastName) EditText LastName;
+    @InjectView(R.id.email) EditText Email;
+    @InjectView(R.id.cellPhone) EditText CellPhone;
+    @InjectView(R.id.officePhone) EditText OfficePhone;
     //endregion
 
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState){
@@ -48,7 +47,7 @@ public class AccountFragment extends Fragment {
         return mRootView;
     }
 
-    private void SetupUI() {
+    private void SetupUI(UserAccount mUserAccount) {
         FirstName.setText(mUserAccount.getFirstName());
         LastName.setText(mUserAccount.getLastName());
         Email.setText(mUserAccount.getEmail());
@@ -56,15 +55,11 @@ public class AccountFragment extends Fragment {
         OfficePhone.setText(mUserAccount.getOfficePhone());
     }
 
-    @OnClick(R.id.saveAcctBtn)
-    public void save(){
-        new SendChangesTask().execute();
-    }
-
     private class GetProfileTask extends AsyncTask<Void, Void, UserAccount>{
 
         @Override
         protected UserAccount doInBackground(Void... params) {
+            UserAccount mUserAccount = new UserAccount();
             try {
                 mUserAccount = mService.getProfile();
             } catch (RetrofitError e) {
@@ -78,31 +73,7 @@ public class AccountFragment extends Fragment {
 
         @Override
         protected void onPostExecute(UserAccount account){
-            SetupUI();
-        }
-    }
-
-    private class SendChangesTask extends AsyncTask<Void, Void, UserAccount>{
-        @Override
-        protected UserAccount doInBackground(Void...params){
-            UserAccount u = new UserAccount();
-
-            try {
-                u.setFirstName(FirstName.getText().toString());
-                u.setLastName(LastName.getText().toString());
-                u.setEmail(Email.getText().toString());
-                u.setCellPhone(CellPhone.getText().toString());
-                u.setOfficePhone(OfficePhone.getText().toString());
-                u.setId(mUserAccount.getId());
-
-                mService.postChanges(u);
-
-
-            } catch (RetrofitError e){
-                Log.d(TAG, e.getMessage());
-            }
-
-            return u;
+            SetupUI(account);
         }
     }
 

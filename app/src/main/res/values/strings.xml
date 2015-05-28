@@ -35,9 +35,11 @@
     <string name="title_activity_folder_documents">FolderDocumentsActivity</string>
 
 <!-- Activity Account -->
-    <string name="account_name">Name</string>
+    <string name="account_first_name">First Name</string>
+    <string name="account_last_name">Last Name</string>
     <string name="account_email">Email</string>
-    <string name="account_phone">Phone Number</string>
+    <string name="account_cell_phone">Cell Phone</string>
+    <string name="account_office_phone">Office Phone</string>
 
 <!-- Activity Login -->
     <string name="title_activity_login">Sign in</string>

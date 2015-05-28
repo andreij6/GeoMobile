@@ -1,71 +1,97 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical" android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="fill_parent">
 
-    <EditText
+    <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:inputType="textPersonName"
-        android:ems="10"
-        android:id="@+id/firstNameET"
-        android:layout_marginTop="65dp"
-        android:layout_alignParentTop="true"
+        android:textAppearance="?android:attr/textAppearanceSmall"
+        android:text="@string/account_first_name"
+        android:id="@+id/firstNameLabel"
         android:layout_centerHorizontal="true"
-        android:hint="First Name"/>
-
-    <EditText
+        android:layout_marginTop="18dp" />
+    <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:inputType="textPersonName"
-        android:ems="10"
-        android:id="@+id/lastNameEt"
-        android:layout_marginTop="34dp"
-        android:layout_below="@+id/firstNameET"
+        android:textAppearance="?android:attr/textAppearanceMedium"
+        android:text="@string/account_first_name"
+        android:id="@+id/firstName"
         android:layout_centerHorizontal="true"
-        android:singleLine="false"
-        android:hint="Last Name"/>
+        android:layout_marginBottom="18dp"
+        android:layout_below="@+id/firstNameLabel" />
 
-    <EditText
+    <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:inputType="textEmailAddress"
-        android:ems="10"
-        android:id="@+id/emailET"
-        android:layout_below="@+id/lastNameEt"
+        android:textAppearance="?android:attr/textAppearanceSmall"
+        android:text="@string/account_last_name"
+        android:id="@+id/lastNameLabel"
         android:layout_centerHorizontal="true"
-        android:layout_marginTop="32dp"
-        android:hint="Email"/>
-
-    <EditText
+        android:layout_below="@+id/firstName"/>
+    <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:inputType="phone"
-        android:ems="10"
-        android:id="@+id/cellPhoneET"
-        android:layout_marginTop="32dp"
-        android:hint="Cell Phone"
-        android:layout_below="@+id/emailET"
-        android:layout_alignStart="@+id/officePhoneET"/>
-
-    <EditText
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:inputType="phone"
-        android:ems="10"
-        android:id="@+id/officePhoneET"
-        android:layout_marginTop="27dp"
-        android:layout_below="@+id/cellPhoneET"
+        android:textAppearance="?android:attr/textAppearanceMedium"
+        android:text="@string/account_last_name"
+        android:id="@+id/lastName"
         android:layout_centerHorizontal="true"
-        android:hint="Office Phone"/>
+        android:layout_marginBottom="18dp"
+        android:layout_below="@+id/lastNameLabel" />
 
-    <Button
+    <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/general_save"
-        android:id="@+id/saveAcctBtn"
-        android:layout_marginTop="32dp"
-        android:layout_below="@+id/officePhoneET"
-        android:layout_alignStart="@+id/officePhoneET"
-        android:layout_alignEnd="@+id/officePhoneET"/>
+        android:textAppearance="?android:attr/textAppearanceSmall"
+        android:text="@string/account_email"
+        android:id="@+id/emailLabel"
+        android:layout_centerHorizontal="true"
+        android:layout_below="@+id/lastName" />
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceMedium"
+        android:text="@string/account_email"
+        android:id="@+id/email"
+        android:layout_centerHorizontal="true"
+        android:layout_below="@+id/emailLabel"
+        android:layout_marginBottom="18dp" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceSmall"
+        android:text="@string/account_cell_phone"
+        android:id="@+id/cellPhoneLabel"
+        android:layout_centerHorizontal="true"
+        android:layout_below="@+id/email" />
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceMedium"
+        android:text="@string/account_cell_phone"
+        android:id="@+id/cellPhone"
+        android:layout_centerHorizontal="true"
+        android:layout_below="@+id/cellPhoneLabel"
+        android:layout_marginBottom="18dp" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceSmall"
+        android:text="@string/account_office_phone"
+        android:id="@+id/officePhoneLabel"
+        android:layout_centerHorizontal="true"
+        android:layout_below="@+id/cellPhone" />
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceMedium"
+        android:text="@string/account_office_phone"
+        android:id="@+id/officePhone"
+        android:layout_below="@+id/officePhoneLabel"
+        android:layout_centerHorizontal="true"
+        android:layout_marginBottom="18dp" />
+
 </RelativeLayout>

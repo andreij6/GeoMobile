@@ -15,6 +15,12 @@ public interface LayerService {
     @POST("/API/Layers")
     Layer createLayer(@Body Layer layer);
 
+    @GET("/API/Layers")
+    List<Layer> getLayers();
+
+    @GET("/API/Layers/{id}")
+    Layer getLayer(@Path("id") int id);
+
     @GET("/API/Layers/{id}/Sublayers")
     List<Layer> getSublayers(@Path("id") int id);
 

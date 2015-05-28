@@ -15,6 +15,7 @@ import com.geospatialcorporation.android.geomobile.application;
 import com.geospatialcorporation.android.geomobile.library.helpers.DataHelper;
 import com.geospatialcorporation.android.geomobile.library.helpers.SectionTreeBuilder;
 import com.geospatialcorporation.android.geomobile.library.rest.FolderService;
+import com.geospatialcorporation.android.geomobile.library.rest.LayerService;
 import com.geospatialcorporation.android.geomobile.library.rest.TreeService;
 import com.geospatialcorporation.android.geomobile.models.Folders.Folder;
 import com.geospatialcorporation.android.geomobile.models.Layers.Layer;
@@ -29,13 +30,12 @@ import retrofit.RetrofitError;
 public class LayerFragment extends Fragment {
     protected final static String TAG = LayerFragment.class.getSimpleName();
 
-    private List<Folder> mFolders;
+    private Folder mCurrentFolder;
     private TreeService mTreeService;
     private FolderService mFolderService;
-    List<Layer> mLayers;
-    Folder mCurrentFolder;
-    DataHelper mHelper;
-    Context mContext;
+    private LayerService mLayerService;
+    private DataHelper mHelper;
+    private Context mContext;
 
     RecyclerView.LayoutManager mLM;
 
@@ -56,6 +56,7 @@ public class LayerFragment extends Fragment {
 
         mTreeService = application.getRestAdapter().create(TreeService.class);
         mFolderService = application.getRestAdapter().create(FolderService.class);
+        mLayerService = application.getRestAdapter().create(LayerService.class);
 
         mContext = getActivity();
 
@@ -69,66 +70,44 @@ public class LayerFragment extends Fragment {
         return mRootView;
     }
 
-    private class GetLayersTask extends AsyncTask<Integer, Void, Void> {
-
+    private class GetLayersTask extends AsyncTask<Integer, Void, Folder> {
         @Override
-        protected Void doInBackground(Integer... params) {
+        protected Folder doInBackground(Integer... params) {
             try {
-                Boolean getAll = false;
-
                 if (params[0] == 0) {
-                    getAll = true;
                     List<Folder> folders = mTreeService.getLayers();
+
                     mCurrentFolder = folders.get(0);
+
+                    List<Folder> allFolders = mHelper.getFoldersRecursively(mCurrentFolder);
+                    List<Layer> allLayers = mLayerService.getLayers();
+
+                    if (allFolders.size() > 0) { application.setLayerFolders(allFolders); }
+                    else { Log.d(TAG, "allFolders empty."); }
+                    if (allLayers.size() > 0) { application.setLayers(allLayers); }
+                    else { Log.d(TAG, "allLayers empty."); }
                 } else {
                     mCurrentFolder = mFolderService.getFolderById(params[0]);
                 }
 
-                if (mCurrentFolder == null)
-                    throw new Exception("mCurrentFolder is null exception.");
-
-                if (getAll) {
-                    List<Folder> allFolders = mHelper.getFoldersRecursively(mCurrentFolder);
-                    List<Layer> allLayers = mHelper.getLayersRecursively(mCurrentFolder);
-
-                    application.setLayerFolders(allFolders);
-                    application.setLayers(allLayers);
-                }
-
-                List<Folder> folders = mFolderService.getFoldersByFolder(mCurrentFolder.getId());
-                List<Layer> layers = mFolderService.getLayersByFolder(mCurrentFolder.getId());
-                //mParent =
-
-                mFolders = folders;
-                mCurrentFolder.setFolders(folders);
-                mLayers = layers;
-                mCurrentFolder.setLayers(layers);
+                mCurrentFolder.setFolders(mFolderService.getFoldersByFolder(mCurrentFolder.getId()));
+                mCurrentFolder.setLayers(mFolderService.getLayersByFolder(mCurrentFolder.getId()));
             } catch (RetrofitError e) {
                 Log.d(TAG, "Messed up.");
             } catch (Exception e) {
                 Log.d(TAG, e.getMessage());
             }
 
-            return null;
+            return mCurrentFolder;
         }
 
         @Override
-        protected void onPostExecute(Void nothing) {
+        protected void onPostExecute(Folder rootFolder) {
             new SectionTreeBuilder(mContext)
-                    .AddLayerData(mLayers, mFolders, mCurrentFolder.getParent())
+                    .AddLayerData(mCurrentFolder.getLayers(), mCurrentFolder.getFolders(), mCurrentFolder.getParent())
                     .BuildAdapter(ListItemAdapter.LAYER)
                     .setRecycler(mRecycler);
         }
-    }
-
-    private Folder getFolderById(int id, List<Folder> folders) {
-        for (Folder folder : folders) {
-            if (folder.getId() == id) {
-                return folder;
-            }
-        }
-
-        return null;
     }
 
     private void firstLayerView() {
