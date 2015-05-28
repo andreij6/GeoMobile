@@ -83,7 +83,6 @@ public class MainActivity extends Activity {
 
     private CharSequence mDrawerTitle;
     private CharSequence mTitle;
-    private String[] mViewTitles;
 
     private Dialogs dialog;
     //endregion
@@ -102,13 +101,13 @@ public class MainActivity extends Activity {
         mTitle = mDrawerTitle = getTitle();
         mDrawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
         mDrawerList = (ListView) findViewById(R.id.left_drawer);
-        mViewTitles = new String[]{"Map", "Layers", "Library", "Account", "Logout"};
 
         // set a custom shadow that overlays the main content when the drawer opens
         mDrawerLayout.setDrawerShadow(R.drawable.drawer_shadow, GravityCompat.START);
         // set up the drawer's list view with items and click listener
         mDrawerList.setAdapter(new ArrayAdapter<>(this,
-                R.layout.drawer_list_item, mViewTitles));
+                R.layout.drawer_list_item,
+                new String[]{"Map", "Layers", "Library", "Account", "Logout"}));
         mDrawerList.setOnItemClickListener(new DrawerItemClickListener());
 
         // enable ActionBar app icon to behave as action to toggle nav drawer

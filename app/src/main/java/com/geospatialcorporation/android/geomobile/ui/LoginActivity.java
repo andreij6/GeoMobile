@@ -65,7 +65,7 @@ public class LoginActivity extends GoogleApiActivity implements LoaderCallbacks<
             "foo@example.com:hello", "bar@example.com:world"
     };
 
-    private static final String TEST_CREDENTIALS = new String("jon.shaffer@geospatialcorp.com:secretDev1");
+    private static final String TEST_CREDENTIALS = "jon.shaffer@geospatialcorp.com:secretDev1";
     /**
      * Keep track of the login task to ensure we can cancel it if requested.
      */
@@ -82,15 +82,7 @@ public class LoginActivity extends GoogleApiActivity implements LoaderCallbacks<
         super.onCreate(savedInstanceState);
 
         SharedPreferences appState = application.getAppState();
-
-        String geoAuthToken = appState.getString(application.getAppContext().getString(R.string.auth_token), null);
-        if (geoAuthToken == null) {
-            setContentView(R.layout.activity_login);
-        } else {
-
-        }
-
-
+        setContentView(R.layout.activity_login);
 
         View mEmailLoginFormView;
         SignInButton mPlusSignInButton;
@@ -140,8 +132,8 @@ public class LoginActivity extends GoogleApiActivity implements LoaderCallbacks<
 
         mLoginFormView = findViewById(R.id.login_form);
         mProgressView = findViewById(R.id.login_progress);
-        mEmailLoginFormView = findViewById(R.id.email_login_form);
-        mSignOutButtons = findViewById(R.id.plus_sign_out_buttons);
+//        mEmailLoginFormView = findViewById(R.id.email_login_form);
+//        mSignOutButtons = findViewById(R.id.plus_sign_out_buttons);
     }
 
     private void populateAutoComplete() {
@@ -287,7 +279,7 @@ public class LoginActivity extends GoogleApiActivity implements LoaderCallbacks<
 
     @Override
     public void onLoadFinished(Loader<Cursor> cursorLoader, Cursor cursor) {
-        List<String> emails = new ArrayList<String>();
+        List<String> emails = new ArrayList<>();
         cursor.moveToFirst();
         while (!cursor.isAfterLast()) {
             emails.add(cursor.getString(ProfileQuery.ADDRESS));
@@ -316,7 +308,7 @@ public class LoginActivity extends GoogleApiActivity implements LoaderCallbacks<
     private void addEmailsToAutoComplete(List<String> emailAddressCollection) {
         //Create adapter to tell the AutoCompleteTextView what to show in its dropdown list.
         ArrayAdapter<String> adapter =
-                new ArrayAdapter<String>(LoginActivity.this,
+                new ArrayAdapter<>(LoginActivity.this,
                         android.R.layout.simple_dropdown_item_1line, emailAddressCollection);
 
         mEmailView.setAdapter(adapter);

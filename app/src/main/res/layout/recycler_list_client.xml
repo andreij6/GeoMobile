@@ -19,7 +19,7 @@
             android:text="contact det"
             android:gravity="center_vertical"
             android:textColor="@android:color/white"
-            android:textSize="14dp"/>
+            android:textSize="14sp"/>
 
         <TextView
             android:layout_width="wrap_content"

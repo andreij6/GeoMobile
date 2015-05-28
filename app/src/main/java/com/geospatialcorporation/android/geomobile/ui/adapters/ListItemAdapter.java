@@ -41,16 +41,12 @@ public class ListItemAdapter extends RecyclerView.Adapter<ListItemAdapter.ListVi
     public static final String LAYER = "Layer";
     public static final String LIBRARY = "Library";
 
-    private Context mContext;
     private List<ListItem> mListItems;
     private ListItem mListItem;
-    private DataHelper mHelper;
     private String mViewType;
 
     public ListItemAdapter(Context context, List<ListItem> data, String ViewType) {
-        mContext = context;
         mListItems = data;
-        mHelper = new DataHelper();
         mViewType = ViewType;
     }
 

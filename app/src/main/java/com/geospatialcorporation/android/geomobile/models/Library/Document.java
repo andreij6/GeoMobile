@@ -7,6 +7,7 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.Locale;
 
 public class Document implements Parcelable {
 
@@ -70,7 +71,7 @@ public class Document implements Parcelable {
     //endregion
 
     public Date getFormattedDate() {
-        SimpleDateFormat formatter = new SimpleDateFormat("dd/mm/yyyy h:mm a");
+        SimpleDateFormat formatter = new SimpleDateFormat("dd/mm/yyyy h:mm a", Locale.ENGLISH);
 
         Date date = null;
 

@@ -13,7 +13,7 @@ android {
     defaultConfig {
         applicationId "com.geospatialcorporation.android.geomobile"
         minSdkVersion 21
-        targetSdkVersion 21
+        targetSdkVersion 22
     }
 
     buildTypes {
@@ -31,8 +31,8 @@ dependencies {
     compile 'com.squareup.retrofit:retrofit:1.9.0' // at http://square.github.io/retrofit/
     compile 'com.facebook.stetho:stetho-okhttp:1.1.0'
     compile 'com.facebook.stetho:stetho:1.1.0' // at http://facebook.github.io/stetho/
-    compile 'com.android.support:support-v4:21.0.3'
-    compile 'com.android.support:appcompat-v7:21.0.3'
+    compile 'com.android.support:support-v4:22.0.0'
+    compile 'com.android.support:appcompat-v7:22.0.0'
     compile 'com.afollestad:material-dialogs:0.6.4.2' // at https://github.com/afollestad/material-dialogs
     compile 'com.android.support:cardview-v7:21.0.3'
     compile 'com.android.support:recyclerview-v7:21.0.3'

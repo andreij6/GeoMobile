@@ -132,16 +132,12 @@ public class GoogleApiActivity extends Activity implements
         Log.d(TAG, "Request Code: " + requestCode + " || Response Code: " + responseCode);
 
         getAndUseAuthTokenInAsyncTask();
-        if (requestCode == MY_ACTIVITYS_AUTH_REQUEST_CODE) {
-            if (responseCode == RESULT_OK) {
-            }
-
-            if (responseCode == RESULT_CANCELED) {
-                //dialog.message("Result cancelled.");
-            }
-        } else {
-            //dialog.message("No auth request code.");
-        }
+//        if (requestCode == MY_ACTIVITYS_AUTH_REQUEST_CODE) {
+//            if (responseCode == RESULT_OK) {}
+//
+//            if (responseCode == RESULT_CANCELED) {}
+//        } else {
+//        }
 
         //dialog.message(accountName, this);
 
@@ -242,14 +238,8 @@ public class GoogleApiActivity extends Activity implements
             Log.d(TAG, "Attempting GeoLogin with token: " + token);
             new RetrieveAuthToken().execute(token);
 
-            if (token != null) {
-                // invalidate the token that we found is bad so that GoogleAuthUtil won't
-                // return it next time (it may have cached it)
-                //GoogleAuthUtil.invalidateToken(Context, String)(context, token);
-                // consider retrying getAndUseTokenBlocking() once more
-                return;
-            }
-            return;
+//            if (token != null) {
+//            }
         } catch (GooglePlayServicesAvailabilityException playEx) {
             Dialog alert = GooglePlayServicesUtil.getErrorDialog(
                     playEx.getConnectionStatusCode(),
@@ -261,22 +251,16 @@ public class GoogleApiActivity extends Activity implements
             this.startActivityForResult(
                     userAuthEx.getIntent(),
                     ACTIVITY_AUTH_REQUEST_CODE);
-            return;
         } catch (IOException transientEx) {
             // network or server error, the call is expected to succeed if you try again later.
             // Don't attempt to call again immediately - the request is likely to
             // fail, you'll hit quotas or back-off.
-            return;
-        } catch (GoogleAuthException authEx) {
-            // Failure. The call is not expected to ever succeed so it should not be
-            // retried.
-            return;
         }
     }
 
     // Example of how to use AsyncTask to call blocking code on a background thread.
     void getAndUseAuthTokenInAsyncTask() {
-        AsyncTask task = new AsyncTask() {
+        AsyncTask task = new AsyncTask<Object,Object,Object>() {
             @Override
             protected Object doInBackground(Object[] params) {
                 getAndUseAuthTokenBlocking();
@@ -297,8 +281,7 @@ public class GoogleApiActivity extends Activity implements
             protected String doInBackground(String... urls) {
                 try {
                     Response response = service.google(urls[0]);
-                    String authToken = response.getBody().toString();
-                    return authToken;
+                    return response.getBody().toString();
                 } catch (Exception e) {
                     Log.e(TAG, "Login by GoogleAuthToken failed.");
                     this.exception = e;
@@ -327,8 +310,7 @@ public class GoogleApiActivity extends Activity implements
         protected String doInBackground(String... urls) {
             try {
                 Response response = application.getRestAdapter().create(LoginService.class).google(urls[0]);
-                String authToken = response.getBody().toString();
-                return authToken;
+                return response.getBody().toString();
             } catch (Exception e) {
                 Log.e(TAG, "Login by GoogleAuthToken failed.");
                 this.exception = e;
@@ -347,7 +329,7 @@ public class GoogleApiActivity extends Activity implements
     }
 
     void getCurrentClient() {
-        AsyncTask task = new AsyncTask() {
+        AsyncTask task = new AsyncTask<Object,Object,Object>() {
             @Override
             protected Object doInBackground(Object[] params) {
                 try {
