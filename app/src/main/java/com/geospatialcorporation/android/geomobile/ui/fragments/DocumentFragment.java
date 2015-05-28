@@ -52,8 +52,6 @@ public class DocumentFragment extends Fragment {
 
         ButterKnife.inject(this, mRootView);
 
-        mRecyclerView = (RecyclerView) mRootView.findViewById(R.id.libraryitem_recyclerView);
-
         mTreeService = application.getRestAdapter().create(TreeService.class);
         mFolderService = application.getRestAdapter().create(FolderService.class);
 
