@@ -9,6 +9,8 @@ import android.content.IntentSender;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.View;
+import android.widget.Toast;
 
 import com.geospatialcorporation.android.geomobile.application;
 import com.geospatialcorporation.android.geomobile.library.rest.LoginService;
@@ -32,21 +34,20 @@ import retrofit.client.Response;
 
 public class GoogleApiActivity extends Activity implements
         ConnectionCallbacks, OnConnectionFailedListener {
-    private static final String TAG = "GoogleApiActivity";
+
+    private static final String TAG = GoogleApiActivity.class.getSimpleName();
     private static final int REQ_SIGN_IN_REQUIRED = 55664;
     /* Request code used to invoke sign in user interactions. */
     private static final int RC_SIGN_IN = 0;
     private static final int ACTIVITY_AUTH_REQUEST_CODE = 1;
     private static final String SCOPES = "oauth2:https://www.googleapis.com/auth/userinfo.email https://www.googleapis.com/auth/plus.me https://www.googleapis.com/auth/userinfo.profile https://www.googleapis.com/auth/mapsengine";
-
     private Dialogs dialog;
-
     /* Client used to interact with Google APIs. */
     private GoogleApiClient mGoogleApiClient;
     private LoginService service;
     private String accountName;
     private Context context;
-
+    private View BaseProgressView;
     /* A flag indicating that a PendingIntent is in progress and prevents
      * us from starting further intents.
      */
@@ -75,11 +76,14 @@ public class GoogleApiActivity extends Activity implements
     /**
      * Try to sign in the user.
      */
-    public void signIn() {
+    public void signIn(View progressView) {
+        BaseProgressView = progressView;
+
         Intent intent = AccountPicker.newChooseAccountIntent(null, null, new String[]{"com.google"},
                 false, null, null, null, null);
 
-        startActivityForResult(intent, 1);
+
+        startActivityForResult(intent, ACTIVITY_AUTH_REQUEST_CODE);
 
         if (!mGoogleApiClient.isConnected()) {
             mGoogleApiClient.connect();
@@ -120,30 +124,36 @@ public class GoogleApiActivity extends Activity implements
 
     protected void onActivityResult(final int requestCode, final int responseCode, final Intent data) {
 
-        int MY_ACTIVITYS_AUTH_REQUEST_CODE = 0;
-
-        accountName = data.getStringExtra(AccountManager.KEY_ACCOUNT_NAME);
-
+        //region Commented code
         /*if (requestCode == MY_ACTIVITYS_AUTH_REQUEST_CODE) {
             if (responseCode == RESULT_OK) {
                 new RetrieveTokenTask().execute(accountName);
             }
         }*/
-        Log.d(TAG, "Request Code: " + requestCode + " || Response Code: " + responseCode);
+        //endregion
 
-        getAndUseAuthTokenInAsyncTask();
-        if (requestCode == MY_ACTIVITYS_AUTH_REQUEST_CODE) {
+        if (requestCode == ACTIVITY_AUTH_REQUEST_CODE) {
             if (responseCode == RESULT_OK) {
+                BaseProgressView.setVisibility(View.VISIBLE);
+                accountName = data.getStringExtra(AccountManager.KEY_ACCOUNT_NAME);
+                getAndUseAuthTokenInAsyncTask();
+
             }
 
             if (responseCode == RESULT_CANCELED) {
                 //dialog.message("Result cancelled.");
+                BaseProgressView.setVisibility(View.GONE);
             }
-        } else {
-            //dialog.message("No auth request code.");
         }
 
+        //region Commented Code
+        //else {
+            //dialog.message("No auth request code.");
+        //}
+
+
         //dialog.message(accountName, this);
+        //endregion
 
         if (requestCode == RC_SIGN_IN) {
             mIntentInProgress = false;
@@ -162,6 +172,7 @@ public class GoogleApiActivity extends Activity implements
 
         // TODO: Client request - select client?
         //startActivity(mainActivityIntent);
+
     }
 
     @Override
@@ -185,49 +196,44 @@ public class GoogleApiActivity extends Activity implements
         // We've resolved any connection errors.  mGoogleApiClient can be used to
         // access Google APIs on behalf of the user.
         // TODO: store authtoken send to geounderground api
-
+        Log.d(TAG, "connected");
         // code
     }
 
-    public void onConnectionSuspended(int cause) {
-        mGoogleApiClient.connect();
-    }
+    //public void onConnectionSuspended(int cause) {
+    //    mGoogleApiClient.connect();
+    //}
 
     public GoogleApiClient getGoogleApiClient() {
         return mGoogleApiClient;
     }
 
-    private class RetrieveTokenTask extends AsyncTask<String, Void, String> {
-        @Override
-        protected String doInBackground(String... params) {
-            String accountName = params[0];
-            String scopes = "oauth2:profile email";
-            String token = null;
-            try {
-                token = GoogleAuthUtil.getToken(getApplicationContext(), accountName, scopes);
+    void getCurrentClient() {
+        AsyncTask task = new AsyncTask() {
+            @Override
+            protected Object doInBackground(Object[] params) {
+                try {
+                    service.getCurrentClient();
 
-                dialog.message(token);
+                    startActivity(new Intent(context, MainActivity.class));
+                } catch (RetrofitError e) {
+                    if (e.getResponse() != null) {
+                        Log.d(TAG, Integer.toString(e.getResponse().getStatus()));
 
-                Response response = service.google(token);
-                application.setAuthToken(response.getBody().toString());
-            } catch (IOException e) {
-                Log.e(TAG, e.getMessage());
-            } catch (UserRecoverableAuthException e) {
-                startActivityForResult(e.getIntent(), REQ_SIGN_IN_REQUIRED);
-            } catch (GoogleAuthException e) {
-                Log.e(TAG, e.getMessage());
+                        if (e.getResponse().getStatus() == 401) {
+                            Log.d(TAG, "Unauthorized.");
+                        } else {
+                            startActivity(new Intent(context, ChooseClientActivity.class));
+                        }
+                    }
+                }
+
+                return new Object();
             }
-            return token;
-        }
+        };
 
-        @Override
-        protected void onPostExecute(String s) {
-            super.onPostExecute(s);
-
-            // TODO: Make request to GeoUnderground to authenticate user based on Google AuthToken
-        }
+        task.execute();
     }
-
 
     // Example of how to use the GoogleAuthUtil in a blocking, non-main thread context
     void getAndUseAuthTokenBlocking() {
@@ -287,40 +293,75 @@ public class GoogleApiActivity extends Activity implements
         task.execute();
     }
 
-    private void useGoogleAuthToken() {
-        String googleAuthToken = application.getGoogleAuthToken();
+    //region Commented Code
+    //private void useGoogleAuthToken() {
+    //    String googleAuthToken = application.getGoogleAuthToken();
 
-        class RetrieveAuthToken extends AsyncTask<String, Void, String> {
+    //    class RetrieveAuthToken extends AsyncTask<String, Void, String> {
 
-            private Exception exception;
+    //        private Exception exception;
 
-            protected String doInBackground(String... urls) {
-                try {
-                    Response response = service.google(urls[0]);
-                    String authToken = response.getBody().toString();
-                    return authToken;
-                } catch (Exception e) {
-                    Log.e(TAG, "Login by GoogleAuthToken failed.");
-                    this.exception = e;
-                }
+    //        protected String doInBackground(String... urls) {
+    //            try {
+    //                Response response = service.google(urls[0]);
+    //                String authToken = response.getBody().toString();
+    //                return authToken;
+    //            } catch (Exception e) {
+    //                Log.e(TAG, "Login by GoogleAuthToken failed.");
+    //                this.exception = e;
+    //            }
 
-                return null;
-            }
+    //            return null;
+    //        }
 
-            protected void onPostExecute(String authToken) {
-                if (application.getAuthToken() != null) {
-                    Log.d(TAG, "GeoAuthToken set: " + application.getAuthToken());
+    //        protected void onPostExecute(String authToken) {
+    //            if (application.getAuthToken() != null) {
+    //                Log.d(TAG, "GeoAuthToken set: " + application.getAuthToken());
 
-                    getCurrentClient();
-                }
-            }
-        }
+    //                getCurrentClient();
+    //            }
+    //        }
+    //    }
 
-        Log.d(TAG, "Attempting GeoLogin with google auth token: " + googleAuthToken);
-        new RetrieveAuthToken().execute(googleAuthToken);
-    }
+    //    Log.d(TAG, "Attempting GeoLogin with google auth token: " + googleAuthToken);
+    //    new RetrieveAuthToken().execute(googleAuthToken);
+    //}
 
-    class RetrieveAuthToken extends AsyncTask<String, Void, String> {
+    //private class RetrieveTokenTask extends AsyncTask<String, Void, String> {
+    //    @Override
+    //    protected String doInBackground(String... params) {
+    //        String accountName = params[0];
+    //        String scopes = "oauth2:profile email";
+    //        String token = null;
+    //        try {
+    //            token = GoogleAuthUtil.getToken(getApplicationContext(), accountName, scopes);
+
+    //            dialog.message(token);
+
+    //            Response response = service.google(token);
+    //            application.setAuthToken(response.getBody().toString());
+    //        } catch (IOException e) {
+    //            Log.e(TAG, e.getMessage());
+    //        } catch (UserRecoverableAuthException e) {
+    //            startActivityForResult(e.getIntent(), REQ_SIGN_IN_REQUIRED);
+    //        } catch (GoogleAuthException e) {
+    //            Log.e(TAG, e.getMessage());
+    //        }
+    //        return token;
+    //    }
+
+    //    @Override
+    //    protected void onPostExecute(String s) {
+    //        super.onPostExecute(s);
+
+    //        // TODO: Make request to GeoUnderground to authenticate user based on Google AuthToken
+    //    }
+    //}
+    //endregion
+
+    private class RetrieveAuthToken extends AsyncTask<String, Void, String> {
+
+        private View mProgressView;
 
         private Exception exception;
 
@@ -342,34 +383,11 @@ public class GoogleApiActivity extends Activity implements
                 Log.i(TAG, "GeoAuthToken set: " + application.getAuthToken());
 
                 getCurrentClient();
+
+                BaseProgressView.setVisibility(View.GONE);
             }
         }
     }
 
-    void getCurrentClient() {
-        AsyncTask task = new AsyncTask() {
-            @Override
-            protected Object doInBackground(Object[] params) {
-                try {
-                    service.getCurrentClient();
 
-                    startActivity(new Intent(context, MainActivity.class));
-                } catch (RetrofitError e) {
-                    if (e.getResponse() != null) {
-                        Log.d(TAG, Integer.toString(e.getResponse().getStatus()));
-
-                        if (e.getResponse().getStatus() == 401) {
-                            Log.d(TAG, "Unauthorized.");
-                        } else {
-                            startActivity(new Intent(context, ChooseClientActivity.class));
-                        }
-                    }
-                }
-
-                return new Object();
-            }
-        };
-
-        task.execute();
-    }
 }

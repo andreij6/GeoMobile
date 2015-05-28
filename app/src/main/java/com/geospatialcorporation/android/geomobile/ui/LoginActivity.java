@@ -24,6 +24,7 @@ import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.geospatialcorporation.android.geomobile.R;
 import com.geospatialcorporation.android.geomobile.application;
@@ -33,6 +34,10 @@ import com.google.android.gms.common.SignInButton;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import butterknife.ButterKnife;
+import butterknife.InjectView;
+import butterknife.OnClick;
 
 
 /**
@@ -44,8 +49,7 @@ import java.util.List;
  * and follow the steps in "Step 1" to create an OAuth 2.0 client for your package.
  */
 public class LoginActivity extends GoogleApiActivity implements LoaderCallbacks<Cursor> {
-    private final static String TAG = "LoginActivity";
-
+    private final static String TAG = LoginActivity.class.getSimpleName();
     /*
     *Login workflow:
     * /API/Auth/Mobile/Start
@@ -55,7 +59,6 @@ public class LoginActivity extends GoogleApiActivity implements LoaderCallbacks<
     *
     * /API/Auth/Google
      */
-
     /**
      * A dummy authentication store containing known user names and passwords.
      * TODO: remove after connecting to a real authentication system.
@@ -71,54 +74,55 @@ public class LoginActivity extends GoogleApiActivity implements LoaderCallbacks<
      */
     private UserLoginTask mAuthTask = null;
 
-    // UI references.
-    private AutoCompleteTextView mEmailView;
-    private EditText mPasswordView;
-    private View mProgressView;
-    private View mLoginFormView;
+    //region  UI references.
+    @InjectView(R.id.email)
+    AutoCompleteTextView mEmailView;
+    @InjectView(R.id.password)
+    EditText mPasswordView;
+    @InjectView(R.id.plus_sign_in_button)
+    SignInButton mPlusSignInButton;
+    @InjectView(R.id.login_form)
+    View mLoginFormView;
+    @InjectView(R.id.login_progress)
+    View mProgressView;
+    @InjectView(R.id.email_login_form)
+    View mEmailLoginFormView;
+    @InjectView(R.id.plus_sign_out_buttons)
+    View mSignOutButtons;
+    @InjectView(R.id.email_sign_in_button)
+    Button mEmailSignInButton;
+    //endregion
+
+    //region OnclickListeners
+    @OnClick(R.id.plus_sign_in_button)
+    public void GooglePlusSignInClick(){
+        signIn(mProgressView);
+    }
+
+    @OnClick(R.id.email_sign_in_button)
+    public void EmailSignInClick(){
+        attemptLogin();
+    }
+    //endregion
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        SharedPreferences appState = application.getAppState();
-
-        String geoAuthToken = appState.getString(application.getAppContext().getString(R.string.auth_token), null);
-        if (geoAuthToken == null) {
+        if (hasAuthToken()) {
             setContentView(R.layout.activity_login);
-        } else {
-
+            ButterKnife.inject(this);
         }
 
-
-
-        View mEmailLoginFormView;
-        SignInButton mPlusSignInButton;
-        View mSignOutButtons;
-
-        // Find the Google+ sign in button.
-        mPlusSignInButton = (SignInButton) findViewById(R.id.plus_sign_in_button);
-        if (supportsGooglePlayServices()) {
-            final Intent googleApiActivity = new Intent(this, GoogleApiActivity.class);
-            // Set a listener to connect the user when the G+ button is clicked.
-            mPlusSignInButton.setOnClickListener(new OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    signIn();
-                }
-            });
-        } else {
+        if (!supportsGooglePlayServices()) {
             // Don't offer G+ sign in if the app's version is too low to support Google Play
             // Services.
             mPlusSignInButton.setVisibility(View.GONE);
             return;
         }
 
-        // Set up the login form.
-        mEmailView = (AutoCompleteTextView) findViewById(R.id.email);
         populateAutoComplete();
 
-        mPasswordView = (EditText) findViewById(R.id.password);
         mPasswordView.setOnEditorActionListener(new TextView.OnEditorActionListener() {
             @Override
             public boolean onEditorAction(TextView textView, int id, KeyEvent keyEvent) {
@@ -130,18 +134,6 @@ public class LoginActivity extends GoogleApiActivity implements LoaderCallbacks<
             }
         });
 
-        Button mEmailSignInButton = (Button) findViewById(R.id.email_sign_in_button);
-        mEmailSignInButton.setOnClickListener(new OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                attemptLogin();
-            }
-        });
-
-        mLoginFormView = findViewById(R.id.login_form);
-        mProgressView = findViewById(R.id.login_progress);
-        mEmailLoginFormView = findViewById(R.id.email_login_form);
-        mSignOutButtons = findViewById(R.id.plus_sign_out_buttons);
     }
 
     private void populateAutoComplete() {
@@ -321,6 +313,17 @@ public class LoginActivity extends GoogleApiActivity implements LoaderCallbacks<
 
         mEmailView.setAdapter(adapter);
     }
+
+    //region Helpers
+    protected Boolean hasAuthToken(){
+
+        SharedPreferences appState = application.getAppState();
+
+        String geoAuthToken = appState.getString(application.getAppContext().getString(R.string.auth_token), null);
+
+        return geoAuthToken == null;
+    }
+    //endregion
 
     /**
      * Represents an asynchronous login/registration task used to authenticate

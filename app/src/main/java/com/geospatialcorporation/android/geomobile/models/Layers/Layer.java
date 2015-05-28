@@ -12,6 +12,24 @@ import java.util.Map;
 
 public class Layer implements Parcelable {
 
+    //region Constructors
+    public Layer(String name) { Name = name; }
+
+    public Layer(){}
+
+    private Layer(Parcel in){
+        Id = in.readInt();
+        //Extent = in.;
+        StylePath = in.readString();
+        GeometryTypeCodeId = in.readInt();
+        IsFixed = (Boolean)in.readValue(Boolean.class.getClassLoader());
+        IsOwner = (Boolean)in.readValue(Boolean.class.getClassLoader());
+        //MobileId = in.readInt();
+        Name = in.readString();
+        IsShowing = (Boolean)in.readValue(Boolean.class.getClassLoader());
+    }
+    //endregion
+
     //region Properties
     private Integer Id;
     private Extent Extent;
@@ -117,12 +135,6 @@ public class Layer implements Parcelable {
     public Object getMapObject() { return MapObject; }
     //endregion
 
-    //region Constructors
-    public Layer(String name) { Name = name; }
-
-    public Layer(){}
-    //endregion
-
     public static String LAYER_INTENT = "Layer Intent";
 
     public Rename Rename(int id, String name) {
@@ -132,17 +144,6 @@ public class Layer implements Parcelable {
         rename.Name = name;
 
         return rename;
-    }
-    private Layer(Parcel in){
-        Id = in.readInt();
-        //Extent = in.;
-        StylePath = in.readString();
-        GeometryTypeCodeId = in.readInt();
-        IsFixed = (Boolean)in.readValue(Boolean.class.getClassLoader());
-        IsOwner = (Boolean)in.readValue(Boolean.class.getClassLoader());
-        //MobileId = in.readInt();
-        Name = in.readString();
-        IsShowing = (Boolean)in.readValue(Boolean.class.getClassLoader());
     }
 
     @Override
