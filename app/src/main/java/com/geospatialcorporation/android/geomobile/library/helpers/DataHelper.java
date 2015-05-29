@@ -11,23 +11,31 @@ import java.util.List;
 
 public class DataHelper {
 
-    public ArrayList<Folder> getFoldersRecursively(Folder folder) {
+    public ArrayList<Folder> getFoldersRecursively(Folder folder, Folder parentFolder) {
         ArrayList<Folder> result = new ArrayList<>();
 
         if (folder == null) return result;
 
         if (folder.getFolders().size() == 0) {
+            setParentFolder(folder, parentFolder);
+
             result.add(folder);
         } else {
             for (Folder x : folder.getFolders()) {
-                result.addAll(getFoldersRecursively(x));
+                result.addAll(getFoldersRecursively(x, folder));
             }
 
             if (!result.contains(folder)) {
+                setParentFolder(folder, parentFolder);
+
                 result.add(folder);
             }
         }
         return result;
+    }
+
+    private void setParentFolder(Folder folder, Folder parentFolder){
+        if(parentFolder != null) folder.setParent(parentFolder);
     }
 
     public ArrayList<Layer> getLayersRecursively(Folder folder) {

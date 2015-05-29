@@ -13,6 +13,7 @@ import android.view.ViewGroup;
 import com.geospatialcorporation.android.geomobile.R;
 import com.geospatialcorporation.android.geomobile.application;
 import com.geospatialcorporation.android.geomobile.library.helpers.DataHelper;
+import com.geospatialcorporation.android.geomobile.library.helpers.FolderTreeService;
 import com.geospatialcorporation.android.geomobile.library.helpers.SectionTreeBuilder;
 import com.geospatialcorporation.android.geomobile.library.rest.FolderService;
 import com.geospatialcorporation.android.geomobile.library.rest.TreeService;
@@ -32,7 +33,7 @@ public class DocumentFragment extends Fragment {
     //region Properties
     private List<Folder> mFolders;
     private TreeService mTreeService;
-    private FolderService mFolderService;
+    private FolderTreeService mFolderTreeService;
     private DataHelper mHelper;
     private List<Document> mDocuments;
     private Folder mCurrentFolder;
@@ -53,7 +54,7 @@ public class DocumentFragment extends Fragment {
         ButterKnife.inject(this, mRootView);
 
         mTreeService = application.getRestAdapter().create(TreeService.class);
-        mFolderService = application.getRestAdapter().create(FolderService.class);
+        mFolderTreeService = new FolderTreeService();
 
         mContext = getActivity();
 
@@ -64,7 +65,7 @@ public class DocumentFragment extends Fragment {
             firstDocumentView();
         }
 
-        new GetDocumentsTask().execute();
+        //new GetDocumentsTask().execute();
 
         return mRootView;
     }
@@ -80,7 +81,7 @@ public class DocumentFragment extends Fragment {
                     List<Folder> documentsTree = mTreeService.getDocuments();
                     mCurrentFolder = documentsTree.get(0);
                 } else {
-                    mCurrentFolder = mFolderService.getFolderById(params[0]);
+                    mCurrentFolder = mFolderTreeService.getFolderById(params[0]);
                 }
 
                 if (mCurrentFolder == null)
@@ -88,12 +89,12 @@ public class DocumentFragment extends Fragment {
 
                 if (getAll) {
                     List<Document> allDocuments = mHelper.getDocumentsRecursively(mCurrentFolder);
-                    List<Folder> allFolders = mHelper.getFoldersRecursively(mCurrentFolder);
+                    List<Folder> allFolders = mHelper.getFoldersRecursively(mCurrentFolder, mCurrentFolder.getParent());
                     application.setDocumentFolders(allFolders);
                 }
 
-                List<Folder> folders = mFolderService.getFoldersByFolder(mCurrentFolder.getId());
-                List<Document> documents = mFolderService.getDocumentsByFolder(mCurrentFolder.getId());
+                List<Folder> folders = mFolderTreeService.getFoldersByFolder(mCurrentFolder.getId());
+                List<Document> documents = mFolderTreeService.getDocumentsByFolder(mCurrentFolder.getId());
 
                 mFolders = folders;
                 mCurrentFolder.setFolders(folders);
@@ -134,9 +135,9 @@ public class DocumentFragment extends Fragment {
 
     private void handleArguments(Bundle args) {
         int folderId = args.getInt(Folder.FOLDER_INTENT, 0);
-        if (folderId != 0) {
-            new GetDocumentsTask().execute(folderId);
-        }
+
+        new GetDocumentsTask().execute(folderId);
+
     }
 
 }

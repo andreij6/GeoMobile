@@ -21,13 +21,19 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
 import com.geospatialcorporation.android.geomobile.R;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.MapView;
 import com.google.android.gms.maps.MapsInitializer;
+import com.google.android.gms.maps.model.BitmapDescriptor;
+import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.CircleOptions;
+import com.google.android.gms.maps.model.GroundOverlay;
+import com.google.android.gms.maps.model.GroundOverlayOptions;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.LatLngBounds;
 import com.google.android.gms.maps.model.MarkerOptions;
 
 /**
@@ -91,6 +97,7 @@ public class GoogleMapFragment extends Fragment {
         if (mMap != null) {
             testMapMarker();
             testMapCircle();
+            testMapRaster();
         }
     }
 
@@ -106,8 +113,25 @@ public class GoogleMapFragment extends Fragment {
 
     private void testMapCircle() {
         mMap.addCircle(new CircleOptions()
-                .center(new LatLng(0,0))
+                .center(new LatLng(0, 0))
                 .radius(30432.02)); // radius in meters || 1m == 0.000621371mi
     }
+
+    private void testMapRaster(){
+        BitmapDescriptor image = BitmapDescriptorFactory.fromResource(R.drawable.ic_launcher);
+        LatLng northeast = new LatLng(40.5118451,-79.6953338);
+        LatLng southwest = new LatLng(40.3947741,-79.9599499);
+
+        LatLngBounds bounds = new LatLngBounds(southwest, northeast);
+
+        GroundOverlay overlay = mMap.addGroundOverlay(new GroundOverlayOptions()
+                                    .image(image)
+                                    .positionFromBounds(bounds)
+                                    .transparency(0.5f));
+
+        Toast.makeText(getActivity(), overlay.isVisible() + "", Toast.LENGTH_LONG).show();
+    }
+
+    //private testPolygon
 
 }

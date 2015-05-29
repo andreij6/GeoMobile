@@ -1,17 +1,12 @@
 package com.geospatialcorporation.android.geomobile.ui.adapters;
 
 import android.app.Activity;
-import android.app.DownloadManager;
 import android.app.Fragment;
 import android.app.FragmentManager;
 import android.app.ProgressDialog;
 import android.content.Context;
-import android.net.Uri;
-import android.os.Build;
 import android.os.Bundle;
-import android.os.Environment;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -24,12 +19,10 @@ import com.geospatialcorporation.android.geomobile.library.map.MapActions;
 import com.geospatialcorporation.android.geomobile.library.rest.DownloadService;
 import com.geospatialcorporation.android.geomobile.library.util.Dialogs;
 import com.geospatialcorporation.android.geomobile.models.Folders.Folder;
-import com.geospatialcorporation.android.geomobile.models.Library.Document;
 import com.geospatialcorporation.android.geomobile.ui.fragments.LayerFragment;
 import com.geospatialcorporation.android.geomobile.ui.fragments.DocumentFragment;
 import com.geospatialcorporation.android.geomobile.ui.viewmodels.ListItem;
 
-import java.io.File;
 import java.util.List;
 
 import butterknife.ButterKnife;
@@ -119,6 +112,7 @@ public class ListItemAdapter extends RecyclerView.Adapter<ListItemAdapter.ListVi
 
         private void FolderAction(ListItem item) {
             mFolder = application.getFolderById(mItem.getId());
+
             Fragment fragment;
 
             if (mFolder.getAccessLevel() != null && mFolder.getAccessLevel() < 1) {
