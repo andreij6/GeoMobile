@@ -1,5 +1,6 @@
 package com.geospatialcorporation.android.geomobile.library.helpers;
 
+import android.app.FragmentManager;
 import android.content.Context;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -24,11 +25,13 @@ public class SectionTreeBuilder {
     Folder mParent;
     Context mContext;
     SimpleSectionedRecyclerViewAdapter mSectionedAdapter;
+    FragmentManager mFragmentManager;
 
-    public SectionTreeBuilder(Context context){
+    public SectionTreeBuilder(Context context, FragmentManager fm){
         mHelper = new DataHelper();
         mListItems = new ArrayList<>();
         mContext = context;
+        mFragmentManager = fm;
     }
 
     public SectionTreeBuilder AddLayerData(List<Layer> layers, List<Folder> infolders, Folder parent){
@@ -48,7 +51,7 @@ public class SectionTreeBuilder {
     }
 
     public SectionTreeBuilder BuildAdapter(String adapterType){
-        ListItemAdapter listItemAdapter = new ListItemAdapter(mContext, mListItems, adapterType);
+        ListItemAdapter listItemAdapter = new ListItemAdapter(mContext, mListItems, adapterType, mFragmentManager);
         String folderSection = mContext.getResources().getString(R.string.folders_section);
         String treeSpecificSection;
 

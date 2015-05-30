@@ -69,4 +69,10 @@
     <string name="folders_section">Folders</string>
     <string name="layers_section">Layers</string>
     <string name="general_save">Save</string>
+    <string name="change_map_style">Change Map Style</string>
+    <string name="download">Download</string>
+    <string name="cancel">Cancel</string>
+    <string name="OK">OK</string>
+    <string name="done">Done</string>
+    <string name="select_map_style">Select a Style</string>
 </resources>

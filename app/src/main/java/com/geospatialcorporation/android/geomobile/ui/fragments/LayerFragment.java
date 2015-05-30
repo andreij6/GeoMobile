@@ -104,7 +104,7 @@ public class LayerFragment extends Fragment {
 
         @Override
         protected void onPostExecute(Folder rootFolder) {
-            new SectionTreeBuilder(mContext)
+            new SectionTreeBuilder(mContext, getFragmentManager())
                     .AddLayerData(mCurrentFolder.getLayers(), mCurrentFolder.getFolders(), mCurrentFolder.getParent())
                     .BuildAdapter(ListItemAdapter.LAYER)
                     .setRecycler(mRecycler);

@@ -120,4 +120,8 @@ public class Document implements Parcelable {
             return new Document[size];
         }
     };
+
+    public String getNameWithExt() {
+        return Name + Extension;
+    }
 }

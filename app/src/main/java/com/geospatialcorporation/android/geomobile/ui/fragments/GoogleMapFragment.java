@@ -21,9 +21,11 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.geospatialcorporation.android.geomobile.R;
+import com.geospatialcorporation.android.geomobile.ui.fragments.dialogs.MapTypeSelectDialogFragment;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.MapView;
 import com.google.android.gms.maps.MapsInitializer;
@@ -36,12 +38,25 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.LatLngBounds;
 import com.google.android.gms.maps.model.MarkerOptions;
 
+import butterknife.ButterKnife;
+import butterknife.InjectView;
+import butterknife.OnClick;
+
 /**
  * Fragment that appears in the "content_frame", shows a google-play map
  */
 public class GoogleMapFragment extends Fragment {
-    public MapView mView;
     public GoogleMap mMap;
+    @InjectView(R.id.map) MapView mView;
+    @InjectView(R.id.styleselector) TextView mStyleSelector;
+
+    @OnClick(R.id.styleselector)
+    public void selected(){
+        MapTypeSelectDialogFragment m = new MapTypeSelectDialogFragment();
+        m.setContext(getActivity());
+        m.setMap(mView);
+        m.show(getFragmentManager(), "styles");
+    }
 
     public GoogleMapFragment() {
         // Empty constructor required for fragment subclasses
@@ -52,8 +67,8 @@ public class GoogleMapFragment extends Fragment {
                              Bundle savedInstanceState) {
 
         View rootView = inflater.inflate(R.layout.fragment_map, container, false);
+        ButterKnife.inject(this, rootView);
 
-        mView = (MapView) rootView.findViewById(R.id.map);
         mView.onCreate(savedInstanceState);
 
         mMap = mView.getMap();

@@ -1,7 +1,12 @@
 package com.geospatialcorporation.android.geomobile.ui.fragments;
 
+import android.app.AlertDialog;
+import android.app.Dialog;
+import android.app.DialogFragment;
 import android.app.Fragment;
+import android.app.FragmentManager;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v7.widget.RecyclerView;
@@ -91,10 +96,12 @@ public class DocumentFragment extends Fragment {
                     List<Document> allDocuments = mHelper.getDocumentsRecursively(mCurrentFolder);
                     List<Folder> allFolders = mHelper.getFoldersRecursively(mCurrentFolder, mCurrentFolder.getParent());
                     application.setDocumentFolders(allFolders);
+                    application.setDocuments(allDocuments);
                 }
 
                 List<Folder> folders = mFolderTreeService.getFoldersByFolder(mCurrentFolder.getId());
                 List<Document> documents = mFolderTreeService.getDocumentsByFolder(mCurrentFolder.getId());
+                application.setDocuments(documents);
 
                 mFolders = folders;
                 mCurrentFolder.setFolders(folders);
@@ -111,7 +118,8 @@ public class DocumentFragment extends Fragment {
 
         @Override
         protected void onPostExecute(Void nothing) {
-            new SectionTreeBuilder(mContext)
+            FragmentManager fm = getFragmentManager();
+            new SectionTreeBuilder(mContext, fm)
                     .AddLibraryData(mDocuments, mFolders, mCurrentFolder.getParent())
                     .BuildAdapter(ListItemAdapter.LIBRARY)
                     .setRecycler(mRecyclerView);
@@ -139,5 +147,7 @@ public class DocumentFragment extends Fragment {
         new GetDocumentsTask().execute(folderId);
 
     }
+
+
 
 }

@@ -5,7 +5,6 @@ import android.app.Fragment;
 import android.app.FragmentManager;
 import android.app.ProgressDialog;
 import android.content.Context;
-import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -17,9 +16,10 @@ import com.geospatialcorporation.android.geomobile.R;
 import com.geospatialcorporation.android.geomobile.application;
 import com.geospatialcorporation.android.geomobile.library.helpers.DataHelper;
 import com.geospatialcorporation.android.geomobile.library.map.MapActions;
-import com.geospatialcorporation.android.geomobile.library.rest.DownloadService;
 import com.geospatialcorporation.android.geomobile.library.util.Dialogs;
 import com.geospatialcorporation.android.geomobile.models.Folders.Folder;
+import com.geospatialcorporation.android.geomobile.models.Library.Document;
+import com.geospatialcorporation.android.geomobile.ui.fragments.dialogs.DownloadDialogFragment;
 import com.geospatialcorporation.android.geomobile.ui.fragments.LayerFragment;
 import com.geospatialcorporation.android.geomobile.ui.fragments.DocumentFragment;
 import com.geospatialcorporation.android.geomobile.ui.viewmodels.ListItem;
@@ -40,12 +40,14 @@ public class ListItemAdapter extends RecyclerView.Adapter<ListItemAdapter.ListVi
     private ListItem mListItem;
     private DataHelper mHelper;
     private String mViewType;
+    private FragmentManager mFragmentManager;
 
-    public ListItemAdapter(Context context, List<ListItem> data, String ViewType) {
+    public ListItemAdapter(Context context, List<ListItem> data, String ViewType, FragmentManager fm) {
         mContext = context;
         mListItems = data;
         mHelper = new DataHelper();
         mViewType = ViewType;
+        mFragmentManager = fm;
     }
 
     @Override
@@ -94,6 +96,7 @@ public class ListItemAdapter extends RecyclerView.Adapter<ListItemAdapter.ListVi
             int folder = R.drawable.ic_folder_black_24dp;
             int download = R.drawable.ic_file_download_black_24dp;
             int file = R.drawable.ic_insert_drive_file_black_24dp;
+            int layer = R.drawable.ic_layers_black_24dp;
 
             switch (item.getOrder()){
                 case ListItem.DOCUMENT:
@@ -103,6 +106,7 @@ public class ListItemAdapter extends RecyclerView.Adapter<ListItemAdapter.ListVi
                     itemName.setCompoundDrawablesWithIntrinsicBounds(folder, 0, 0, 0);
                     break;
                 case ListItem.LAYER:
+                    itemName.setCompoundDrawablesWithIntrinsicBounds(layer, 0, 0, 0);
                     break;
             }
         }
@@ -127,7 +131,12 @@ public class ListItemAdapter extends RecyclerView.Adapter<ListItemAdapter.ListVi
         };
 
         private void DocumentAction(ListItem item) {
-            new DownloadService(item.getId(), item.getName());
+            Document document = application.getDocumentById(item.getId());
+
+            DownloadDialogFragment d = new DownloadDialogFragment();
+            d.setContext(mContext);
+            d.setDocument(document);
+            d.show(mFragmentManager, "download");
         }
 
         private void FolderAction(ListItem item) {
@@ -165,4 +174,6 @@ public class ListItemAdapter extends RecyclerView.Adapter<ListItemAdapter.ListVi
             new MapActions().showLayer(item.getId());
         }
     }
+
+
 }
