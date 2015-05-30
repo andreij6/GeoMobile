@@ -7,16 +7,16 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.EditText;
+import android.widget.TextView;
 
 import com.geospatialcorporation.android.geomobile.R;
 import com.geospatialcorporation.android.geomobile.application;
+import com.geospatialcorporation.android.geomobile.library.helpers.ProgressDialogHelper;
 import com.geospatialcorporation.android.geomobile.library.rest.AccountService;
 import com.geospatialcorporation.android.geomobile.models.UserAccount;
 
 import butterknife.ButterKnife;
 import butterknife.InjectView;
-import butterknife.OnClick;
 import retrofit.RetrofitError;
 
 public class AccountFragment extends Fragment {
@@ -26,14 +26,15 @@ public class AccountFragment extends Fragment {
     //region Properties
     View mRootView;
     AccountService mService;
+
     //endregion
 
     //region View Setup
-    @InjectView(R.id.firstName) EditText FirstName;
-    @InjectView(R.id.lastName) EditText LastName;
-    @InjectView(R.id.email) EditText Email;
-    @InjectView(R.id.cellPhone) EditText CellPhone;
-    @InjectView(R.id.officePhone) EditText OfficePhone;
+    @InjectView(R.id.firstName) TextView FirstName;
+    @InjectView(R.id.lastName) TextView LastName;
+    @InjectView(R.id.email) TextView Email;
+    @InjectView(R.id.cellPhone) TextView CellPhone;
+    @InjectView(R.id.officePhone) TextView OfficePhone;
     //endregion
 
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState){
@@ -41,7 +42,6 @@ public class AccountFragment extends Fragment {
         ButterKnife.inject(this, mRootView);
 
         mService = application.getRestAdapter().create(AccountService.class);
-
         new GetProfileTask().execute();
 
         return mRootView;
@@ -56,6 +56,16 @@ public class AccountFragment extends Fragment {
     }
 
     private class GetProfileTask extends AsyncTask<Void, Void, UserAccount>{
+        ProgressDialogHelper mProgressHelper;
+
+        public GetProfileTask(){
+            mProgressHelper = new ProgressDialogHelper(getActivity());
+        }
+
+        @Override
+        protected void onPreExecute(){
+            mProgressHelper.toggleProgressDialog();
+        }
 
         @Override
         protected UserAccount doInBackground(Void... params) {
@@ -74,6 +84,7 @@ public class AccountFragment extends Fragment {
         @Override
         protected void onPostExecute(UserAccount account){
             SetupUI(account);
+            mProgressHelper.toggleProgressDialog();
         }
     }
 

@@ -129,7 +129,6 @@ public class GoogleMapFragment extends Fragment {
                                     .positionFromBounds(bounds)
                                     .transparency(0.5f));
 
-        Toast.makeText(getActivity(), overlay.isVisible() + "", Toast.LENGTH_LONG).show();
     }
 
     //private testPolygon

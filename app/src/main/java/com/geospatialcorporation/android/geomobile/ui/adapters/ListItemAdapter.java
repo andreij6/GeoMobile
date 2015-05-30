@@ -5,6 +5,7 @@ import android.app.Fragment;
 import android.app.FragmentManager;
 import android.app.ProgressDialog;
 import android.content.Context;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -85,6 +86,25 @@ public class ListItemAdapter extends RecyclerView.Adapter<ListItemAdapter.ListVi
         public void bindFolder(ListItem item) {
             mItem = item;
             itemName.setText(item.getName());
+            setDrawable(item);
+
+        }
+
+        private void setDrawable(ListItem item) {
+            int folder = R.drawable.ic_folder_black_24dp;
+            int download = R.drawable.ic_file_download_black_24dp;
+            int file = R.drawable.ic_insert_drive_file_black_24dp;
+
+            switch (item.getOrder()){
+                case ListItem.DOCUMENT:
+                    itemName.setCompoundDrawablesWithIntrinsicBounds(file, 0, download, 0);
+                    break;
+                case ListItem.FOLDER:
+                    itemName.setCompoundDrawablesWithIntrinsicBounds(folder, 0, 0, 0);
+                    break;
+                case ListItem.LAYER:
+                    break;
+            }
         }
 
         protected View.OnClickListener ItemOnClickListener = new View.OnClickListener() {

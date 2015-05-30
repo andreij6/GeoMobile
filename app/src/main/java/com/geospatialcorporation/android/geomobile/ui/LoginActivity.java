@@ -4,6 +4,7 @@ import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
 import android.annotation.TargetApi;
 import android.app.LoaderManager.LoaderCallbacks;
+import android.app.ProgressDialog;
 import android.content.CursorLoader;
 import android.content.Intent;
 import android.content.Loader;
@@ -96,7 +97,7 @@ public class LoginActivity extends GoogleApiActivity implements LoaderCallbacks<
     //region OnclickListeners
     @OnClick(R.id.plus_sign_in_button)
     public void GooglePlusSignInClick(){
-        signIn(mProgressView);
+        signIn();
     }
 
     @OnClick(R.id.email_sign_in_button)

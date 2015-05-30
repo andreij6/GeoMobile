@@ -3,16 +3,16 @@ package com.geospatialcorporation.android.geomobile.ui;
 import android.accounts.AccountManager;
 import android.app.Activity;
 import android.app.Dialog;
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentSender;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
-import android.view.View;
-import android.widget.Toast;
 
 import com.geospatialcorporation.android.geomobile.application;
+import com.geospatialcorporation.android.geomobile.library.helpers.ProgressDialogHelper;
 import com.geospatialcorporation.android.geomobile.library.rest.LoginService;
 import com.geospatialcorporation.android.geomobile.library.util.Dialogs;
 import com.google.android.gms.auth.GoogleAuthException;
@@ -47,7 +47,7 @@ public class GoogleApiActivity extends Activity implements
     private LoginService service;
     private String accountName;
     private Context context;
-    private View BaseProgressView;
+    private ProgressDialogHelper ProgressHelper;
     /* A flag indicating that a PendingIntent is in progress and prevents
      * us from starting further intents.
      */
@@ -58,6 +58,7 @@ public class GoogleApiActivity extends Activity implements
         context = this;
 
         dialog = new Dialogs();
+        ProgressHelper = new ProgressDialogHelper(context);
 
         service = application.getRestAdapter().create(LoginService.class);
 
@@ -76,8 +77,7 @@ public class GoogleApiActivity extends Activity implements
     /**
      * Try to sign in the user.
      */
-    public void signIn(View progressView) {
-        BaseProgressView = progressView;
+    public void signIn() {
 
         Intent intent = AccountPicker.newChooseAccountIntent(null, null, new String[]{"com.google"},
                 false, null, null, null, null);
@@ -134,15 +134,13 @@ public class GoogleApiActivity extends Activity implements
 
         if (requestCode == ACTIVITY_AUTH_REQUEST_CODE) {
             if (responseCode == RESULT_OK) {
-                BaseProgressView.setVisibility(View.VISIBLE);
                 accountName = data.getStringExtra(AccountManager.KEY_ACCOUNT_NAME);
-                getAndUseAuthTokenInAsyncTask();
+                new GetAndUseAuthTokenInAsyncTask(this).execute();
 
             }
 
             if (responseCode == RESULT_CANCELED) {
                 //dialog.message("Result cancelled.");
-                BaseProgressView.setVisibility(View.GONE);
             }
         }
 
@@ -208,89 +206,74 @@ public class GoogleApiActivity extends Activity implements
         return mGoogleApiClient;
     }
 
-    void getCurrentClient() {
-        AsyncTask task = new AsyncTask() {
-            @Override
-            protected Object doInBackground(Object[] params) {
-                try {
-                    service.getCurrentClient();
 
-                    startActivity(new Intent(context, MainActivity.class));
-                } catch (RetrofitError e) {
-                    if (e.getResponse() != null) {
-                        Log.d(TAG, Integer.toString(e.getResponse().getStatus()));
-
-                        if (e.getResponse().getStatus() == 401) {
-                            Log.d(TAG, "Unauthorized.");
-                        } else {
-                            startActivity(new Intent(context, ChooseClientActivity.class));
-                        }
-                    }
-                }
-
-                return new Object();
-            }
-        };
-
-        task.execute();
-    }
-
-    // Example of how to use the GoogleAuthUtil in a blocking, non-main thread context
-    void getAndUseAuthTokenBlocking() {
-        try {
-            // Retrieve a token for the given account and scope. It will always return either
-            // a non-empty String or throw an exception.
-            final String token = GoogleAuthUtil.getToken(this, accountName, SCOPES);
-            // Do work with token.
-
-            application.setGoogleAuthToken(token);
-
-            Log.d(TAG, "Attempting GeoLogin with token: " + token);
-            new RetrieveAuthToken().execute(token);
-
-            if (token != null) {
-                // invalidate the token that we found is bad so that GoogleAuthUtil won't
-                // return it next time (it may have cached it)
-                //GoogleAuthUtil.invalidateToken(Context, String)(context, token);
-                // consider retrying getAndUseTokenBlocking() once more
-                return;
-            }
-            return;
-        } catch (GooglePlayServicesAvailabilityException playEx) {
-            Dialog alert = GooglePlayServicesUtil.getErrorDialog(
-                    playEx.getConnectionStatusCode(),
-                    this,
-                    ACTIVITY_AUTH_REQUEST_CODE);
-        } catch (UserRecoverableAuthException userAuthEx) {
-            // Start the user recoverable action using the intent returned by
-            // getIntent()
-            this.startActivityForResult(
-                    userAuthEx.getIntent(),
-                    ACTIVITY_AUTH_REQUEST_CODE);
-            return;
-        } catch (IOException transientEx) {
-            // network or server error, the call is expected to succeed if you try again later.
-            // Don't attempt to call again immediately - the request is likely to
-            // fail, you'll hit quotas or back-off.
-            return;
-        } catch (GoogleAuthException authEx) {
-            // Failure. The call is not expected to ever succeed so it should not be
-            // retried.
-            return;
-        }
-    }
 
     // Example of how to use AsyncTask to call blocking code on a background thread.
-    void getAndUseAuthTokenInAsyncTask() {
-        AsyncTask task = new AsyncTask() {
-            @Override
-            protected Object doInBackground(Object[] params) {
-                getAndUseAuthTokenBlocking();
-                return new Object();
-            }
-        };
+    private class GetAndUseAuthTokenInAsyncTask extends AsyncTask<Object, Void, Boolean>{
 
-        task.execute();
+        GoogleApiActivity mContext;
+
+        public GetAndUseAuthTokenInAsyncTask(GoogleApiActivity self)
+        {
+            mContext = self;
+        }
+
+        @Override
+        protected void onPreExecute(){
+            ProgressHelper.toggleProgressDialog();
+        }
+
+        @Override
+        protected Boolean doInBackground(Object[] params) {
+            getAndUseAuthTokenBlocking();
+            return true;
+        }
+
+        // Example of how to use the GoogleAuthUtil in a blocking, non-main thread context
+        void getAndUseAuthTokenBlocking() {
+            try {
+                // Retrieve a token for the given account and scope. It will always return either
+                // a non-empty String or throw an exception.
+                final String token = GoogleAuthUtil.getToken(mContext, accountName, SCOPES);
+                // Do work with token.
+
+                application.setGoogleAuthToken(token);
+
+                Log.d(TAG, "Attempting GeoLogin with token: " + token);
+                new RetrieveAuthToken().execute(token);
+
+                if (token != null) {
+                    // invalidate the token that we found is bad so that GoogleAuthUtil won't
+                    // return it next time (it may have cached it)
+                    //GoogleAuthUtil.invalidateToken(Context, String)(context, token);
+                    // consider retrying getAndUseTokenBlocking() once more
+                    return;
+                }
+                return;
+            } catch (GooglePlayServicesAvailabilityException playEx) {
+                Dialog alert = GooglePlayServicesUtil.getErrorDialog(
+                        playEx.getConnectionStatusCode(),
+                        mContext,
+                        ACTIVITY_AUTH_REQUEST_CODE);
+            } catch (UserRecoverableAuthException userAuthEx) {
+                // Start the user recoverable action using the intent returned by
+                // getIntent()
+                mContext.startActivityForResult(
+                        userAuthEx.getIntent(),
+                        ACTIVITY_AUTH_REQUEST_CODE);
+                return;
+            } catch (IOException transientEx) {
+                // network or server error, the call is expected to succeed if you try again later.
+                // Don't attempt to call again immediately - the request is likely to
+                // fail, you'll hit quotas or back-off.
+                return;
+            } catch (GoogleAuthException authEx) {
+                // Failure. The call is not expected to ever succeed so it should not be
+                // retried.
+                return;
+            }
+        }
+
     }
 
     //region Commented Code
@@ -361,10 +344,9 @@ public class GoogleApiActivity extends Activity implements
 
     private class RetrieveAuthToken extends AsyncTask<String, Void, String> {
 
-        private View mProgressView;
-
         private Exception exception;
 
+        @Override
         protected String doInBackground(String... urls) {
             try {
                 Response response = application.getRestAdapter().create(LoginService.class).google(urls[0]);
@@ -378,14 +360,42 @@ public class GoogleApiActivity extends Activity implements
             return null;
         }
 
+        @Override
         protected void onPostExecute(String authToken) {
             if (application.getAuthToken() != null) {
                 Log.i(TAG, "GeoAuthToken set: " + application.getAuthToken());
+                ProgressHelper.toggleProgressDialog();
 
                 getCurrentClient();
 
-                BaseProgressView.setVisibility(View.GONE);
             }
+        }
+
+        void getCurrentClient() {
+            AsyncTask task = new AsyncTask() {
+                @Override
+                protected Object doInBackground(Object[] params) {
+                    try {
+                        service.getCurrentClient();
+
+                        startActivity(new Intent(context, MainActivity.class));
+                    } catch (RetrofitError e) {
+                        if (e.getResponse() != null) {
+                            Log.d(TAG, Integer.toString(e.getResponse().getStatus()));
+
+                            if (e.getResponse().getStatus() == 401) {
+                                Log.d(TAG, "Unauthorized.");
+                            } else {
+                                startActivity(new Intent(context, ChooseClientActivity.class));
+                            }
+                        }
+                    }
+
+                    return new Object();
+                }
+            };
+
+            task.execute();
         }
     }
 
