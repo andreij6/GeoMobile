@@ -15,9 +15,6 @@ import com.geospatialcorporation.android.geomobile.library.rest.DownloadService;
 import com.geospatialcorporation.android.geomobile.models.Library.Document;
 import com.geospatialcorporation.android.geomobile.ui.viewmodels.ListItem;
 
-/**
- * Created by andre on 5/30/2015.
- */
 public class DownloadDialogFragment extends DialogFragment {
     //region Getters & Setters
     public Document getDocument() {

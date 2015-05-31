@@ -4,9 +4,13 @@
 
     <com.google.android.gms.maps.MapView
         xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:map="http://schemas.android.com/apk/res-auto"
         android:id="@+id/map"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        map:cameraTargetLat="38.3448001"
+        map:cameraTargetLng="-96.5878515"
+        map:cameraZoom="3"
         />
 
     <LinearLayout
@@ -25,5 +29,15 @@
             android:text="@string/change_map_style"
             android:id="@+id/styleselector"/>
     </LinearLayout>
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="@drawable/ic_my_location_black_24dp"
+        android:id="@+id/myLocation"
+        android:layout_marginEnd="29dp"
+        android:layout_marginTop="27dp"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentEnd="true"/>
 
 </RelativeLayout>

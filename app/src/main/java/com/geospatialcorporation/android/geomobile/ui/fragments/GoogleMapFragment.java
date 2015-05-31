@@ -17,15 +17,23 @@
 package com.geospatialcorporation.android.geomobile.ui.fragments;
 
 import android.app.Fragment;
+import android.location.Location;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.geospatialcorporation.android.geomobile.R;
 import com.geospatialcorporation.android.geomobile.ui.fragments.dialogs.MapTypeSelectDialogFragment;
+import com.google.android.gms.common.ConnectionResult;
+import com.google.android.gms.common.GooglePlayServicesClient;
+import com.google.android.gms.common.api.GoogleApiClient;
+import com.google.android.gms.location.LocationServices;
+import com.google.android.gms.maps.CameraUpdate;
+import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.MapView;
 import com.google.android.gms.maps.MapsInitializer;
@@ -37,7 +45,6 @@ import com.google.android.gms.maps.model.GroundOverlayOptions;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.LatLngBounds;
 import com.google.android.gms.maps.model.MarkerOptions;
-
 import butterknife.ButterKnife;
 import butterknife.InjectView;
 import butterknife.OnClick;
@@ -45,17 +52,37 @@ import butterknife.OnClick;
 /**
  * Fragment that appears in the "content_frame", shows a google-play map
  */
-public class GoogleMapFragment extends Fragment {
+public class GoogleMapFragment extends Fragment implements
+        GoogleApiClient.ConnectionCallbacks,
+        GoogleApiClient.OnConnectionFailedListener
+{
     public GoogleMap mMap;
+    GoogleApiClient mLocationClient;
     @InjectView(R.id.map) MapView mView;
     @InjectView(R.id.styleselector) TextView mStyleSelector;
+    @InjectView(R.id.myLocation) Button mMyCurrentButton;
 
     @OnClick(R.id.styleselector)
-    public void selected(){
+    public void StyleSelector(){
         MapTypeSelectDialogFragment m = new MapTypeSelectDialogFragment();
         m.setContext(getActivity());
         m.setMap(mView);
         m.show(getFragmentManager(), "styles");
+    }
+
+    @OnClick(R.id.myLocation)
+    public void getLocation(){
+        Location currentLocation = LocationServices.FusedLocationApi.getLastLocation(mLocationClient);
+
+        if(currentLocation == null){
+            Toast.makeText(getActivity(), "Current location isnt available", Toast.LENGTH_LONG).show();
+        } else {
+            LatLng ll = new LatLng(currentLocation.getLatitude(), currentLocation.getLongitude());
+
+            CameraUpdate update = CameraUpdateFactory.newLatLngZoom(ll, 13);
+
+            mMap.animateCamera(update);
+        }
     }
 
     public GoogleMapFragment() {
@@ -72,11 +99,20 @@ public class GoogleMapFragment extends Fragment {
         mView.onCreate(savedInstanceState);
 
         mMap = mView.getMap();
-        mMap.getUiSettings().setMyLocationButtonEnabled(true);
-        mMap.setMyLocationEnabled(true);
+        //mMap.getUiSettings().setMyLocationButtonEnabled(true);
+        //mMap.setMyLocationEnabled(true);
+
+        mLocationClient = new GoogleApiClient.Builder(getActivity())
+                .addApi(LocationServices.API)
+                .addConnectionCallbacks(this)
+                .addOnConnectionFailedListener(this)
+                .build();
 
         try {
             MapsInitializer.initialize(this.getActivity());
+
+            mLocationClient.connect();
+
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -88,8 +124,8 @@ public class GoogleMapFragment extends Fragment {
 
     @Override
     public void onResume() {
-        mView.onResume();
         super.onResume();
+        mView.onResume();
     }
 
     @Override
@@ -123,13 +159,13 @@ public class GoogleMapFragment extends Fragment {
      * This should only be called once and when we are sure that {@link #mMap} is not null.
      */
     private void testMapMarker() {
-        mMap.addMarker(new MarkerOptions().position(new LatLng(0, 0)).title("Marker"));
+        mMap.addMarker(new MarkerOptions().position(new LatLng(38.3448001, -96.5878515)).title("Marker"));
     }
 
     private void testMapCircle() {
         mMap.addCircle(new CircleOptions()
-                .center(new LatLng(0, 0))
-                .radius(30432.02)); // radius in meters || 1m == 0.000621371mi
+                .center(new LatLng(38.3448001, -96.5878515))
+                .radius(30432.02 * 10)); // radius in meters || 1m == 0.000621371mi
     }
 
     private void testMapRaster(){
@@ -145,6 +181,25 @@ public class GoogleMapFragment extends Fragment {
                                     .transparency(0.5f));
 
     }
+
+    @Override
+    public void onConnected(Bundle bundle) {
+        Toast.makeText(getActivity(), "Connected to location service", Toast.LENGTH_LONG).show();
+    }
+
+    @Override
+    public void onConnectionSuspended(int i) {
+
+    }
+
+    @Override
+    public void onConnectionFailed(ConnectionResult connectionResult) {
+        //
+    }
+
+    //region Interface Methods
+
+    //endregion
 
     //private testPolygon
 
