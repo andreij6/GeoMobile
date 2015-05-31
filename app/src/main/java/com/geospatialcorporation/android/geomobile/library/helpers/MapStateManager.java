@@ -2,6 +2,9 @@ package com.geospatialcorporation.android.geomobile.library.helpers;
 
 import android.content.Context;
 import android.content.SharedPreferences;
+
+import com.geospatialcorporation.android.geomobile.application;
+import com.geospatialcorporation.android.geomobile.models.Client;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.model.CameraPosition;
 import com.google.android.gms.maps.model.LatLng;
@@ -19,9 +22,11 @@ public class MapStateManager {
     //endregion
 
     private SharedPreferences mapStatePrefs;
+    private Client mClient;
 
     public MapStateManager(Context context){
         mapStatePrefs = context.getSharedPreferences(PREFS_NAME, context.MODE_PRIVATE);
+        mClient = application.getGeoClient();
     }
 
     public void saveMapState(GoogleMap map){
@@ -29,36 +34,40 @@ public class MapStateManager {
 
         CameraPosition position = map.getCameraPosition();
 
-        editor.putFloat(LATITUDE, (float) position.target.latitude);
-        editor.putFloat(LONGITUDE, (float)position.target.longitude);
-        editor.putFloat(ZOOM, position.zoom);
-        editor.putFloat(TILT, position.tilt);
-        editor.putFloat(BEARING, position.bearing);
-        editor.putInt(MAPTYPE, map.getMapType());
+        editor.putFloat(makeKey(LATITUDE), (float) position.target.latitude);
+        editor.putFloat(makeKey(LONGITUDE), (float)position.target.longitude);
+        editor.putFloat(makeKey(ZOOM), position.zoom);
+        editor.putFloat(makeKey(TILT), position.tilt);
+        editor.putFloat(makeKey(BEARING), position.bearing);
+        editor.putInt(makeKey(MAPTYPE), map.getMapType());
 
         editor.commit();
     }
 
+    private String makeKey(String key){
+        return key + mClient.getName();
+    }
+
     public CameraPosition getSavedCameraPosition(){
-        double latitude = mapStatePrefs.getFloat(LATITUDE, 0);
+        double latitude = mapStatePrefs.getFloat(makeKey(LATITUDE), 0);
 
         if(latitude == 0){
             return null;
         }
 
-        double longitude = mapStatePrefs.getFloat(LONGITUDE, 0);
+        double longitude = mapStatePrefs.getFloat(makeKey(LONGITUDE), 0);
         LatLng target = new LatLng(latitude, longitude);
 
-        float zoom = mapStatePrefs.getFloat(ZOOM, 0);
-        float bearing = mapStatePrefs.getFloat(BEARING, 0);
-        float tilt = mapStatePrefs.getFloat(TILT, 0);
+        float zoom = mapStatePrefs.getFloat(makeKey(ZOOM), 0);
+        float bearing = mapStatePrefs.getFloat(makeKey(BEARING), 0);
+        float tilt = mapStatePrefs.getFloat(makeKey(TILT), 0);
 
         return new CameraPosition(target, zoom, tilt, bearing);
 
     }
 
     public Integer getSavedMapType(){
-        Integer maptype = mapStatePrefs.getInt(MAPTYPE, 25); //0 is GoogleMap.MAP_TYPE_NONE
+        Integer maptype = mapStatePrefs.getInt(makeKey(MAPTYPE), 25); //0 is GoogleMap.MAP_TYPE_NONE
 
         if(maptype == 25){
             return GoogleMap.MAP_TYPE_NORMAL;

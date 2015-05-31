@@ -8,6 +8,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+import com.geospatialcorporation.android.geomobile.R;
+
 import java.util.Arrays;
 import java.util.Comparator;
 
@@ -61,13 +63,17 @@ public class SimpleSectionedRecyclerViewAdapter extends RecyclerView.Adapter<Rec
     }
 
 
+
+
     public static class SectionViewHolder extends RecyclerView.ViewHolder {
         public TextView title;
+
 
         public SectionViewHolder(View view, int mTextResourceId) {
             super(view);
             title = (TextView) view.findViewById(mTextResourceId);
         }
+
     }
 
     @Override
@@ -83,11 +89,35 @@ public class SimpleSectionedRecyclerViewAdapter extends RecyclerView.Adapter<Rec
     @Override
     public void onBindViewHolder(RecyclerView.ViewHolder sectionViewHolder, int position) {
         if (isSectionHeaderPosition(position)) {
-            ((SectionViewHolder) sectionViewHolder).title.setText(mSections.get(position).title);
+            TextView title = ((SectionViewHolder) sectionViewHolder).title;
+            title.setText(mSections.get(position).title);
+            setDrawable(mSections.get(position).title, title);
         } else {
             mBaseAdapter.onBindViewHolder(sectionViewHolder, sectionedPositionToPosition(position));
         }
 
+    }
+
+    public void setDrawable(CharSequence titleString, TextView title) {
+        int layer = R.drawable.ic_layers_black_24dp;
+        int folder = R.drawable.ic_folder_black_24dp;
+        int file = R.drawable.ic_insert_drive_file_black_24dp;
+        int folder_open = R.drawable.ic_folder_open_black_24dp;
+
+        switch (titleString.toString()){
+            case "Layers":
+                title.setCompoundDrawablesWithIntrinsicBounds(layer, 0, 0, 0);
+                break;
+            case "Folders":
+                title.setCompoundDrawablesWithIntrinsicBounds(folder, 0, 0, 0);
+                break;
+            case "Documents":
+                title.setCompoundDrawablesWithIntrinsicBounds(file, 0, 0, 0);
+                break;
+            default:
+                title.setCompoundDrawablesWithIntrinsicBounds(folder_open, 0, 0, 0);
+                break;
+        }
     }
 
     @Override

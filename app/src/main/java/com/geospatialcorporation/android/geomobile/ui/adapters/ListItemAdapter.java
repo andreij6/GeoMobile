@@ -94,19 +94,21 @@ public class ListItemAdapter extends RecyclerView.Adapter<ListItemAdapter.ListVi
             int folder = R.drawable.ic_folder_black_24dp;
             int download = R.drawable.ic_file_download_black_24dp;
             int file = R.drawable.ic_insert_drive_file_black_24dp;
-            int layer = R.drawable.ic_layers_black_24dp;
+            //int layer = R.drawable.ic_layers_black_24dp;  Change to Get a layer type drawable
+
 
             switch (item.getOrder()){
                 case ListItem.DOCUMENT:
-                    itemName.setCompoundDrawablesWithIntrinsicBounds(file, 0, download, 0);
+                    itemName.setCompoundDrawablesWithIntrinsicBounds(0, 0, download, 0);
                     break;
                 case ListItem.FOLDER:
-                    itemName.setCompoundDrawablesWithIntrinsicBounds(folder, 0, 0, 0);
+                    //itemName.setCompoundDrawablesWithIntrinsicBounds(folder, 0, 0, 0);
                     break;
                 case ListItem.LAYER:
-                    itemName.setCompoundDrawablesWithIntrinsicBounds(layer, 0, 0, 0);
+                    //itemName.setCompoundDrawablesWithIntrinsicBounds(layer, 0, 0, 0);
                     break;
             }
+
         }
 
         protected View.OnClickListener ItemOnClickListener = new View.OnClickListener() {

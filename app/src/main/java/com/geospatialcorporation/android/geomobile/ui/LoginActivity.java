@@ -84,8 +84,6 @@ public class LoginActivity extends GoogleApiActivity implements LoaderCallbacks<
     SignInButton mPlusSignInButton;
     @InjectView(R.id.login_form)
     View mLoginFormView;
-    @InjectView(R.id.login_progress)
-    View mProgressView;
     @InjectView(R.id.email_login_form)
     View mEmailLoginFormView;
     @InjectView(R.id.plus_sign_out_buttons)
@@ -233,19 +231,9 @@ public class LoginActivity extends GoogleApiActivity implements LoaderCallbacks<
                     mLoginFormView.setVisibility(show ? View.GONE : View.VISIBLE);
                 }
             });
-
-            mProgressView.setVisibility(show ? View.VISIBLE : View.GONE);
-            mProgressView.animate().setDuration(shortAnimTime).alpha(
-                    show ? 1 : 0).setListener(new AnimatorListenerAdapter() {
-                @Override
-                public void onAnimationEnd(Animator animation) {
-                    mProgressView.setVisibility(show ? View.VISIBLE : View.GONE);
-                }
-            });
         } else {
             // The ViewPropertyAnimator APIs are not available, so simply show
             // and hide the relevant UI components.
-            mProgressView.setVisibility(show ? View.VISIBLE : View.GONE);
             mLoginFormView.setVisibility(show ? View.GONE : View.VISIBLE);
         }
     }
