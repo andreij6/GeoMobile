@@ -2,14 +2,10 @@ package com.geospatialcorporation.android.geomobile.library.helpers;
 
 import android.content.Context;
 import android.content.SharedPreferences;
-
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.model.CameraPosition;
 import com.google.android.gms.maps.model.LatLng;
 
-/**
- * Created by andre on 5/31/2015.
- */
 public class MapStateManager {
 
     //region Constants
@@ -62,7 +58,7 @@ public class MapStateManager {
     }
 
     public Integer getSavedMapType(){
-        Integer maptype = mapStatePrefs.getInt(MAPTYPE, 25);
+        Integer maptype = mapStatePrefs.getInt(MAPTYPE, 25); //0 is GoogleMap.MAP_TYPE_NONE
 
         if(maptype == 25){
             return GoogleMap.MAP_TYPE_NORMAL;

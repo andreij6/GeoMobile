@@ -69,14 +69,12 @@ public class ListItemAdapter extends RecyclerView.Adapter<ListItemAdapter.ListVi
 
 
     protected class ListViewHolder extends RecyclerView.ViewHolder {
-        //regions Properties
+        //region Properties
         ListItem mItem;
         Folder mFolder;
         //endregion
 
-        @InjectView(R.id.folderNameTV)
-        TextView itemName;
-        ProgressDialog mProgressDialog;
+        @InjectView(R.id.itemNameTV) TextView itemName;
 
         public ListViewHolder(View itemView) {
             super(itemView);

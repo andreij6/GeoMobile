@@ -12,8 +12,11 @@ import android.os.Bundle;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
 import com.geospatialcorporation.android.geomobile.R;
 import com.geospatialcorporation.android.geomobile.application;
@@ -48,6 +51,12 @@ public class DocumentFragment extends Fragment {
     @InjectView(R.id.libraryitem_recyclerView)
     RecyclerView mRecyclerView;
 
+    @Override
+    public void onCreate(Bundle savedInstance){
+        setHasOptionsMenu(true);
+        super.onCreate(savedInstance);
+    }
+
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View mRootView;
@@ -70,9 +79,14 @@ public class DocumentFragment extends Fragment {
             firstDocumentView();
         }
 
-        //new GetDocumentsTask().execute();
-
         return mRootView;
+    }
+
+    @Override
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+        inflater.inflate(R.menu.document_menu, menu);
+
+        super.onCreateOptionsMenu(menu, inflater);
     }
 
     private class GetDocumentsTask extends AsyncTask<Integer, Void, Void> {

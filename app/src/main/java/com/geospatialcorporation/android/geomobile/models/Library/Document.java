@@ -52,11 +52,11 @@ public class Document implements Parcelable {
     }
 
     public String getExtension() {
-        return Extension;
+        return Ext;
     }
 
     public void setExtension(String extension) {
-        Extension = extension;
+        Ext = extension;
     }
     //endregion
 
@@ -66,7 +66,7 @@ public class Document implements Parcelable {
     private String Name;
     private String UploadTime;
     private String MimeType;
-    private String Extension;
+    private String Ext;
     //endregion
 
     public Date getFormattedDate() {
@@ -96,7 +96,7 @@ public class Document implements Parcelable {
         dest.writeString(Name);
         dest.writeString(UploadTime);
         dest.writeString(MimeType);
-        dest.writeString(Extension);
+        dest.writeString(Ext);
     }
 
     private Document(Parcel in) {
@@ -105,7 +105,7 @@ public class Document implements Parcelable {
         Name = in.readString();
         UploadTime = in.readString();
         MimeType = in.readString();
-        Extension = in.readString();
+        Ext = in.readString();
     }
 
     public static final Parcelable.Creator<Document> CREATOR = new Parcelable.Creator<Document>() {
@@ -122,6 +122,6 @@ public class Document implements Parcelable {
     };
 
     public String getNameWithExt() {
-        return Name + Extension;
+        return Name + Ext;
     }
 }

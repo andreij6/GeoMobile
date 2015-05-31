@@ -18,7 +18,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class SectionTreeBuilder {
-    String TAG = this.getClass().getSimpleName();
+    private static final String TAG = SectionTreeBuilder.class.getSimpleName();
+
     DataHelper mHelper;
     List<ListItem> mListItems;
     List<Folder> mFolders;

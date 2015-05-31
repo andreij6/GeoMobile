@@ -33,8 +33,6 @@ public class DownloadDialogFragment extends DialogFragment {
         mContext = context;
     }
 
-
-
     public ListItem getListItem() {
         return mListItem;
     }
@@ -56,13 +54,13 @@ public class DownloadDialogFragment extends DialogFragment {
         LayoutInflater inflater = LayoutInflater.from(mContext);
         View v = inflater.inflate(R.layout.dialog_download, null);
         TextView documentName = (TextView)v.findViewById(R.id.documentName);
-        documentName.setText(mDocument.getName());
-
+        documentName.setText(mDocument.getNameWithExt());
+        builder.setTitle(R.string.download_file);
         builder.setView(v);
 
         builder.setPositiveButton(R.string.download, new DialogInterface.OnClickListener() {
                 public void onClick(DialogInterface dialog, int id) {
-                    new DownloadService(mDocument.getId(), mDocument.getName());
+                    new DownloadService(mDocument.getId(), mDocument.getNameWithExt());
                 }
             })
                 .setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {

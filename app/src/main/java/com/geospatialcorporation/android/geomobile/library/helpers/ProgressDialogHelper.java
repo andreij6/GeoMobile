@@ -3,6 +3,8 @@ package com.geospatialcorporation.android.geomobile.library.helpers;
 import android.app.ProgressDialog;
 import android.content.Context;
 
+import com.geospatialcorporation.android.geomobile.R;
+
 /**
  * Created by andre on 5/29/2015.
  */
@@ -13,7 +15,7 @@ public class ProgressDialogHelper {
     public ProgressDialogHelper(Context context)
     {
         mProgressDialog = new ProgressDialog(context);
-        mProgressDialog.setMessage("Loading...");
+        mProgressDialog.setMessage(context.getString(R.string.loading_dots));
         mProgressDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
     }
 

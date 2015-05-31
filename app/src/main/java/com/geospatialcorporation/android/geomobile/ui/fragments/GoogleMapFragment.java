@@ -214,7 +214,7 @@ public class GoogleMapFragment extends Fragment implements
     //region Interface Methods
     @Override
     public void onConnected(Bundle bundle) {
-        Toast.makeText(getActivity(), "Connected to location service", Toast.LENGTH_LONG).show();
+        //Toast.makeText(getActivity(), "Connected to location service", Toast.LENGTH_LONG).show();
     }
 
     @Override
