@@ -17,6 +17,7 @@
 package com.geospatialcorporation.android.geomobile.ui.fragments;
 
 import android.app.Fragment;
+import android.graphics.Color;
 import android.location.Location;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -27,6 +28,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.geospatialcorporation.android.geomobile.R;
+import com.geospatialcorporation.android.geomobile.library.helpers.MapStateManager;
 import com.geospatialcorporation.android.geomobile.ui.fragments.dialogs.MapTypeSelectDialogFragment;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GooglePlayServicesClient;
@@ -39,12 +41,18 @@ import com.google.android.gms.maps.MapView;
 import com.google.android.gms.maps.MapsInitializer;
 import com.google.android.gms.maps.model.BitmapDescriptor;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
+import com.google.android.gms.maps.model.CameraPosition;
+import com.google.android.gms.maps.model.Circle;
 import com.google.android.gms.maps.model.CircleOptions;
 import com.google.android.gms.maps.model.GroundOverlay;
 import com.google.android.gms.maps.model.GroundOverlayOptions;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.LatLngBounds;
+import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
+
+import java.util.Map;
+
 import butterknife.ButterKnife;
 import butterknife.InjectView;
 import butterknife.OnClick;
@@ -62,6 +70,7 @@ public class GoogleMapFragment extends Fragment implements
     @InjectView(R.id.styleselector) TextView mStyleSelector;
     @InjectView(R.id.myLocation) Button mMyCurrentButton;
 
+    @SuppressWarnings("unused")
     @OnClick(R.id.styleselector)
     public void StyleSelector(){
         MapTypeSelectDialogFragment m = new MapTypeSelectDialogFragment();
@@ -70,6 +79,7 @@ public class GoogleMapFragment extends Fragment implements
         m.show(getFragmentManager(), "styles");
     }
 
+    @SuppressWarnings("unused")
     @OnClick(R.id.myLocation)
     public void getLocation(){
         Location currentLocation = LocationServices.FusedLocationApi.getLastLocation(mLocationClient);
@@ -99,8 +109,6 @@ public class GoogleMapFragment extends Fragment implements
         mView.onCreate(savedInstanceState);
 
         mMap = mView.getMap();
-        //mMap.getUiSettings().setMyLocationButtonEnabled(true);
-        //mMap.setMyLocationEnabled(true);
 
         mLocationClient = new GoogleApiClient.Builder(getActivity())
                 .addApi(LocationServices.API)
@@ -126,6 +134,17 @@ public class GoogleMapFragment extends Fragment implements
     public void onResume() {
         super.onResume();
         mView.onResume();
+        MapStateManager msm = new MapStateManager(getActivity());
+
+        CameraPosition position = msm.getSavedCameraPosition();
+        Integer mapType = msm.getSavedMapType();
+
+        mMap.setMapType(mapType);
+
+        if(position != null){
+            CameraUpdate update = CameraUpdateFactory.newCameraPosition(position);
+            mMap.moveCamera(update);
+        }
     }
 
     @Override
@@ -140,6 +159,12 @@ public class GoogleMapFragment extends Fragment implements
         mView.onLowMemory();
     }
 
+    @Override
+    public void onStop(){
+        super.onStop();
+        MapStateManager msm = new MapStateManager(getActivity());
+        msm.saveMapState(mMap);
+    }
     /**
      * Sets up the map if it is possible to do so
      */
@@ -165,7 +190,11 @@ public class GoogleMapFragment extends Fragment implements
     private void testMapCircle() {
         mMap.addCircle(new CircleOptions()
                 .center(new LatLng(38.3448001, -96.5878515))
+                .strokeColor(Color.BLUE)
+                .fillColor(0x330000FF)
                 .radius(30432.02 * 10)); // radius in meters || 1m == 0.000621371mi
+
+
     }
 
     private void testMapRaster(){
@@ -182,6 +211,7 @@ public class GoogleMapFragment extends Fragment implements
 
     }
 
+    //region Interface Methods
     @Override
     public void onConnected(Bundle bundle) {
         Toast.makeText(getActivity(), "Connected to location service", Toast.LENGTH_LONG).show();
@@ -196,11 +226,7 @@ public class GoogleMapFragment extends Fragment implements
     public void onConnectionFailed(ConnectionResult connectionResult) {
         //
     }
-
-    //region Interface Methods
-
     //endregion
 
-    //private testPolygon
 
 }
