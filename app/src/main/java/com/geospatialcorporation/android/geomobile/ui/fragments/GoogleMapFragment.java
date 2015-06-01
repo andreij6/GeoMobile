@@ -53,6 +53,7 @@ import com.google.android.gms.maps.model.MarkerOptions;
 
 import java.util.Map;
 
+import at.markushi.ui.CircleButton;
 import butterknife.ButterKnife;
 import butterknife.InjectView;
 import butterknife.OnClick;
@@ -68,7 +69,7 @@ public class GoogleMapFragment extends Fragment implements
     GoogleApiClient mLocationClient;
     @InjectView(R.id.map) MapView mView;
     @InjectView(R.id.styleselector) TextView mStyleSelector;
-    @InjectView(R.id.myLocation) Button mMyCurrentButton;
+    @InjectView(R.id.myLocation) CircleButton mMyCurrentButton;
 
     @SuppressWarnings("unused")
     @OnClick(R.id.styleselector)
