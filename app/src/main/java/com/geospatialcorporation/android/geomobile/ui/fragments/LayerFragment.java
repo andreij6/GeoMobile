@@ -13,6 +13,7 @@ import android.view.ViewGroup;
 import com.geospatialcorporation.android.geomobile.R;
 import com.geospatialcorporation.android.geomobile.application;
 import com.geospatialcorporation.android.geomobile.library.helpers.DataHelper;
+import com.geospatialcorporation.android.geomobile.library.helpers.FolderTreeService;
 import com.geospatialcorporation.android.geomobile.library.helpers.SectionTreeBuilder;
 import com.geospatialcorporation.android.geomobile.library.rest.FolderService;
 import com.geospatialcorporation.android.geomobile.library.rest.LayerService;
@@ -32,7 +33,7 @@ public class LayerFragment extends Fragment {
 
     private Folder mCurrentFolder;
     private TreeService mTreeService;
-    private FolderService mFolderService;
+    private FolderTreeService mFolderTreeService;
     private LayerService mLayerService;
     private DataHelper mHelper;
     private Context mContext;
@@ -55,8 +56,8 @@ public class LayerFragment extends Fragment {
         ButterKnife.inject(this, mRootView);
 
         mTreeService = application.getRestAdapter().create(TreeService.class);
-        mFolderService = application.getRestAdapter().create(FolderService.class);
         mLayerService = application.getRestAdapter().create(LayerService.class);
+        mFolderTreeService = new FolderTreeService();
 
         mContext = getActivity();
 
@@ -79,7 +80,7 @@ public class LayerFragment extends Fragment {
 
                     mCurrentFolder = folders.get(0);
 
-                    List<Folder> allFolders = mHelper.getFoldersRecursively(mCurrentFolder);
+                    List<Folder> allFolders = mHelper.getFoldersRecursively(mCurrentFolder, mCurrentFolder.getParent());
                     List<Layer> allLayers = mLayerService.getLayers();
 
                     if (allFolders.size() > 0) { application.setLayerFolders(allFolders); }
@@ -87,11 +88,11 @@ public class LayerFragment extends Fragment {
                     if (allLayers.size() > 0) { application.setLayers(allLayers); }
                     else { Log.d(TAG, "allLayers empty."); }
                 } else {
-                    mCurrentFolder = mFolderService.getFolderById(params[0]);
+                    mCurrentFolder = mFolderTreeService.getFolderById(params[0]);
                 }
 
-                mCurrentFolder.setFolders(mFolderService.getFoldersByFolder(mCurrentFolder.getId()));
-                mCurrentFolder.setLayers(mFolderService.getLayersByFolder(mCurrentFolder.getId()));
+                mCurrentFolder.setFolders(mFolderTreeService.getFoldersByFolder(mCurrentFolder.getId()));
+                mCurrentFolder.setLayers(mFolderTreeService.getLayersByFolder(mCurrentFolder.getId()));
             } catch (RetrofitError e) {
                 Log.d(TAG, "Messed up.");
             } catch (Exception e) {
@@ -103,7 +104,7 @@ public class LayerFragment extends Fragment {
 
         @Override
         protected void onPostExecute(Folder rootFolder) {
-            new SectionTreeBuilder(mContext)
+            new SectionTreeBuilder(mContext, getFragmentManager())
                     .AddLayerData(mCurrentFolder.getLayers(), mCurrentFolder.getFolders(), mCurrentFolder.getParent())
                     .BuildAdapter(ListItemAdapter.LAYER)
                     .setRecycler(mRecycler);

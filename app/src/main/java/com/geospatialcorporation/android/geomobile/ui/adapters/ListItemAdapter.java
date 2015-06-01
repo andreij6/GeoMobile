@@ -1,17 +1,12 @@
 package com.geospatialcorporation.android.geomobile.ui.adapters;
 
 import android.app.Activity;
-import android.app.DownloadManager;
 import android.app.Fragment;
 import android.app.FragmentManager;
 import android.app.ProgressDialog;
 import android.content.Context;
-import android.net.Uri;
-import android.os.Build;
 import android.os.Bundle;
-import android.os.Environment;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -21,15 +16,14 @@ import com.geospatialcorporation.android.geomobile.R;
 import com.geospatialcorporation.android.geomobile.application;
 import com.geospatialcorporation.android.geomobile.library.helpers.DataHelper;
 import com.geospatialcorporation.android.geomobile.library.map.MapActions;
-import com.geospatialcorporation.android.geomobile.library.rest.DownloadService;
 import com.geospatialcorporation.android.geomobile.library.util.Dialogs;
 import com.geospatialcorporation.android.geomobile.models.Folders.Folder;
 import com.geospatialcorporation.android.geomobile.models.Library.Document;
+import com.geospatialcorporation.android.geomobile.ui.fragments.dialogs.DownloadDialogFragment;
 import com.geospatialcorporation.android.geomobile.ui.fragments.LayerFragment;
 import com.geospatialcorporation.android.geomobile.ui.fragments.DocumentFragment;
 import com.geospatialcorporation.android.geomobile.ui.viewmodels.ListItem;
 
-import java.io.File;
 import java.util.List;
 
 import butterknife.ButterKnife;
@@ -41,13 +35,19 @@ public class ListItemAdapter extends RecyclerView.Adapter<ListItemAdapter.ListVi
     public static final String LAYER = "Layer";
     public static final String LIBRARY = "Library";
 
+    private Context mContext;
     private List<ListItem> mListItems;
     private ListItem mListItem;
+    private DataHelper mHelper;
     private String mViewType;
+    private FragmentManager mFragmentManager;
 
-    public ListItemAdapter(Context context, List<ListItem> data, String ViewType) {
+    public ListItemAdapter(Context context, List<ListItem> data, String ViewType, FragmentManager fm) {
+        mContext = context;
         mListItems = data;
+        mHelper = new DataHelper();
         mViewType = ViewType;
+        mFragmentManager = fm;
     }
 
     @Override
@@ -69,14 +69,12 @@ public class ListItemAdapter extends RecyclerView.Adapter<ListItemAdapter.ListVi
 
 
     protected class ListViewHolder extends RecyclerView.ViewHolder {
-        //regions Properties
+        //region Properties
         ListItem mItem;
         Folder mFolder;
         //endregion
 
-        @InjectView(R.id.folderNameTV)
-        TextView itemName;
-        ProgressDialog mProgressDialog;
+        @InjectView(R.id.itemNameTV) TextView itemName;
 
         public ListViewHolder(View itemView) {
             super(itemView);
@@ -88,6 +86,29 @@ public class ListItemAdapter extends RecyclerView.Adapter<ListItemAdapter.ListVi
         public void bindFolder(ListItem item) {
             mItem = item;
             itemName.setText(item.getName());
+            setDrawable(item);
+
+        }
+
+        private void setDrawable(ListItem item) {
+            int folder = R.drawable.ic_folder_black_24dp;
+            int download = R.drawable.ic_file_download_black_24dp;
+            int file = R.drawable.ic_insert_drive_file_black_24dp;
+            //int layer = R.drawable.ic_layers_black_24dp;  Change to Get a layer type drawable
+
+
+            switch (item.getOrder()){
+                case ListItem.DOCUMENT:
+                    itemName.setCompoundDrawablesWithIntrinsicBounds(0, 0, download, 0);
+                    break;
+                case ListItem.FOLDER:
+                    //itemName.setCompoundDrawablesWithIntrinsicBounds(folder, 0, 0, 0);
+                    break;
+                case ListItem.LAYER:
+                    //itemName.setCompoundDrawablesWithIntrinsicBounds(layer, 0, 0, 0);
+                    break;
+            }
+
         }
 
         protected View.OnClickListener ItemOnClickListener = new View.OnClickListener() {
@@ -110,11 +131,17 @@ public class ListItemAdapter extends RecyclerView.Adapter<ListItemAdapter.ListVi
         };
 
         private void DocumentAction(ListItem item) {
-            new DownloadService(item.getId(), item.getName());
+            Document document = application.getDocumentById(item.getId());
+
+            DownloadDialogFragment d = new DownloadDialogFragment();
+            d.setContext(mContext);
+            d.setDocument(document);
+            d.show(mFragmentManager, "download");
         }
 
         private void FolderAction(ListItem item) {
             mFolder = application.getFolderById(mItem.getId());
+
             Fragment fragment;
 
             if (mFolder.getAccessLevel() != null && mFolder.getAccessLevel() < 1) {
@@ -147,4 +174,6 @@ public class ListItemAdapter extends RecyclerView.Adapter<ListItemAdapter.ListVi
             new MapActions().showLayer(item.getId());
         }
     }
+
+
 }

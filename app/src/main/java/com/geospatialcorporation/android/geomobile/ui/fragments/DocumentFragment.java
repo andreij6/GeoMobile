@@ -1,18 +1,27 @@
 package com.geospatialcorporation.android.geomobile.ui.fragments;
 
+import android.app.AlertDialog;
+import android.app.Dialog;
+import android.app.DialogFragment;
 import android.app.Fragment;
+import android.app.FragmentManager;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
 import com.geospatialcorporation.android.geomobile.R;
 import com.geospatialcorporation.android.geomobile.application;
 import com.geospatialcorporation.android.geomobile.library.helpers.DataHelper;
+import com.geospatialcorporation.android.geomobile.library.helpers.FolderTreeService;
 import com.geospatialcorporation.android.geomobile.library.helpers.SectionTreeBuilder;
 import com.geospatialcorporation.android.geomobile.library.rest.FolderService;
 import com.geospatialcorporation.android.geomobile.library.rest.TreeService;
@@ -32,7 +41,7 @@ public class DocumentFragment extends Fragment {
     //region Properties
     private List<Folder> mFolders;
     private TreeService mTreeService;
-    private FolderService mFolderService;
+    private FolderTreeService mFolderTreeService;
     private DataHelper mHelper;
     private List<Document> mDocuments;
     private Folder mCurrentFolder;
@@ -41,6 +50,12 @@ public class DocumentFragment extends Fragment {
 
     @InjectView(R.id.libraryitem_recyclerView)
     RecyclerView mRecyclerView;
+
+    @Override
+    public void onCreate(Bundle savedInstance){
+        setHasOptionsMenu(true);
+        super.onCreate(savedInstance);
+    }
 
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -53,7 +68,7 @@ public class DocumentFragment extends Fragment {
         ButterKnife.inject(this, mRootView);
 
         mTreeService = application.getRestAdapter().create(TreeService.class);
-        mFolderService = application.getRestAdapter().create(FolderService.class);
+        mFolderTreeService = new FolderTreeService();
 
         mContext = getActivity();
 
@@ -64,9 +79,14 @@ public class DocumentFragment extends Fragment {
             firstDocumentView();
         }
 
-        new GetDocumentsTask().execute();
-
         return mRootView;
+    }
+
+    @Override
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+        //inflater.inflate(R.menu.document_menu, menu);
+
+        super.onCreateOptionsMenu(menu, inflater);
     }
 
     private class GetDocumentsTask extends AsyncTask<Integer, Void, Void> {
@@ -80,7 +100,7 @@ public class DocumentFragment extends Fragment {
                     List<Folder> documentsTree = mTreeService.getDocuments();
                     mCurrentFolder = documentsTree.get(0);
                 } else {
-                    mCurrentFolder = mFolderService.getFolderById(params[0]);
+                    mCurrentFolder = mFolderTreeService.getFolderById(params[0]);
                 }
 
                 if (mCurrentFolder == null)
@@ -88,12 +108,14 @@ public class DocumentFragment extends Fragment {
 
                 if (getAll) {
                     List<Document> allDocuments = mHelper.getDocumentsRecursively(mCurrentFolder);
-                    List<Folder> allFolders = mHelper.getFoldersRecursively(mCurrentFolder);
+                    List<Folder> allFolders = mHelper.getFoldersRecursively(mCurrentFolder, mCurrentFolder.getParent());
                     application.setDocumentFolders(allFolders);
+                    application.setDocuments(allDocuments);
                 }
 
-                List<Folder> folders = mFolderService.getFoldersByFolder(mCurrentFolder.getId());
-                List<Document> documents = mFolderService.getDocumentsByFolder(mCurrentFolder.getId());
+                List<Folder> folders = mFolderTreeService.getFoldersByFolder(mCurrentFolder.getId());
+                List<Document> documents = mFolderTreeService.getDocumentsByFolder(mCurrentFolder.getId());
+                application.setDocuments(documents);
 
                 mFolders = folders;
                 mCurrentFolder.setFolders(folders);
@@ -110,7 +132,8 @@ public class DocumentFragment extends Fragment {
 
         @Override
         protected void onPostExecute(Void nothing) {
-            new SectionTreeBuilder(mContext)
+            FragmentManager fm = getFragmentManager();
+            new SectionTreeBuilder(mContext, fm)
                     .AddLibraryData(mDocuments, mFolders, mCurrentFolder.getParent())
                     .BuildAdapter(ListItemAdapter.LIBRARY)
                     .setRecycler(mRecyclerView);
@@ -134,9 +157,11 @@ public class DocumentFragment extends Fragment {
 
     private void handleArguments(Bundle args) {
         int folderId = args.getInt(Folder.FOLDER_INTENT, 0);
-        if (folderId != 0) {
-            new GetDocumentsTask().execute(folderId);
-        }
+
+        new GetDocumentsTask().execute(folderId);
+
     }
+
+
 
 }

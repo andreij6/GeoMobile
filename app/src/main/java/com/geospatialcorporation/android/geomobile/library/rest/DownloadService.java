@@ -29,7 +29,7 @@ public class DownloadService {
 
         // Download File
         DownloadManager.Request request =
-                new DownloadManager.Request(Uri.parse("https://dev.geounderground.com/API/Documents/" + docId));
+                new DownloadManager.Request(Uri.parse("https://dev.geounderground.com/API/Documents/" + docId + "/File"));
 
         request.addRequestHeader("Authorization", "WebToken " + application.getAuthToken());
         request.setDescription(docName);

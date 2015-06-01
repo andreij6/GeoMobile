@@ -8,13 +8,17 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.TextView;
 
 import com.geospatialcorporation.android.geomobile.R;
 import com.geospatialcorporation.android.geomobile.application;
+import com.geospatialcorporation.android.geomobile.library.constants.ClientTypeCodes;
 import com.geospatialcorporation.android.geomobile.library.rest.LoginService;
 import com.geospatialcorporation.android.geomobile.models.Client;
 import com.geospatialcorporation.android.geomobile.ui.MainActivity;
+
+import org.w3c.dom.Text;
 
 import java.util.List;
 
@@ -59,17 +63,19 @@ public class ClientAdapter extends RecyclerView.Adapter<ClientAdapter.ClientView
 
     protected class ClientViewHolder extends RecyclerView.ViewHolder {
         //region Properties
-        @InjectView(R.id.clientNameLabel)
-        TextView mClientName;
-
+        @InjectView(R.id.clientNameLabel) TextView mClientName;
+        @InjectView(R.id.impersonate) Button mImpersonateBtn;
+        @InjectView(R.id.clientTypeLabel) TextView mClientType;
+        ClientTypeCodes mClientTypeCodes;
         Client mClient;
         //endregion
 
         public ClientViewHolder(View itemView) {
             super(itemView);
             ButterKnife.inject(this, itemView);
+            mClientTypeCodes = new ClientTypeCodes();
 
-            itemView.setOnClickListener(new View.OnClickListener() {
+            mImpersonateBtn.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     mSelectedClient = mClient;
@@ -81,7 +87,8 @@ public class ClientAdapter extends RecyclerView.Adapter<ClientAdapter.ClientView
 
         public void bindClientItem(Client client) {
             mClient = client;
-            mClientName.setText(client.Name);
+            mClientName.setText(client.getName());
+            mClientType.setText(mClientTypeCodes.getClientTypeName(client.getType()));
         }
 
     }
@@ -90,7 +97,7 @@ public class ClientAdapter extends RecyclerView.Adapter<ClientAdapter.ClientView
         @Override
         protected Object doInBackground(Object[] params) {
             try {
-                mService.setClient(mSelectedClient.Id);
+                mService.setClient(mSelectedClient.getId());
             } catch (RetrofitError e) {
                 if (e.getResponse() != null) {
                     Log.d(TAG, Integer.toString(e.getResponse().getStatus()));

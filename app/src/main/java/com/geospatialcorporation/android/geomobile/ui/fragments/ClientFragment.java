@@ -18,6 +18,7 @@ import com.geospatialcorporation.android.geomobile.ui.adapters.ClientAdapter;
 
 import java.util.List;
 
+import butterknife.InjectView;
 import retrofit.RetrofitError;
 
 public class ClientFragment extends Fragment {

@@ -13,9 +13,14 @@ import java.util.Map;
 public class Layer implements Parcelable {
 
     //region Constructors
-    public Layer(String name) { Name = name; }
+    public Layer(String name) {
+        Name = name;
+        IsShowing = false;
+    }
 
-    public Layer(){}
+    public Layer(){
+        IsShowing = false;
+    }
 
     private Layer(Parcel in){
         Id = in.readInt();

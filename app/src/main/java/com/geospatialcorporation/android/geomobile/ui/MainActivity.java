@@ -21,29 +21,43 @@ import android.app.Fragment;
 import android.app.FragmentManager;
 import android.app.SearchManager;
 import android.app.ActionBar;
+import android.content.Context;
 import android.content.Intent;
 import android.content.res.Configuration;
 import android.os.Bundle;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
+import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.CheckBox;
 import android.widget.ListView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.geospatialcorporation.android.geomobile.application;
 import com.geospatialcorporation.android.geomobile.R;
 import com.geospatialcorporation.android.geomobile.library.constants.ViewConstants;
 import com.geospatialcorporation.android.geomobile.library.util.Dialogs;
+import com.geospatialcorporation.android.geomobile.models.Layers.Layer;
 import com.geospatialcorporation.android.geomobile.ui.fragments.AccountFragment;
 import com.geospatialcorporation.android.geomobile.ui.fragments.GoogleMapFragment;
 import com.geospatialcorporation.android.geomobile.ui.fragments.LayerFragment;
 import com.geospatialcorporation.android.geomobile.ui.fragments.DocumentFragment;
+
+import java.lang.reflect.Array;
+import java.util.AbstractMap;
+import java.util.ArrayList;
+import java.util.List;
+
+import butterknife.ButterKnife;
+import butterknife.InjectView;
 
 /**
  * This example illustrates a common usage of the DrawerLayout widget
@@ -73,17 +87,23 @@ import com.geospatialcorporation.android.geomobile.ui.fragments.DocumentFragment
  * for example enabling or disabling a data overlay on top of the current content.</p>
  */
 public class MainActivity extends Activity {
+    private static final String TAG = MainActivity.class.getSimpleName();
+
     //region Properties
-    private DrawerLayout mDrawerLayout;
-    private ListView mDrawerList;
+    @InjectView(R.id.drawer_layout)
+    DrawerLayout mDrawerLayout;
+    @InjectView(R.id.left_drawer)
+    ListView mLeftDrawerList;
+    @InjectView(R.id.right_drawer)
+    ListView mRightDrawerList;
+    View mHeaderView;
+    View mFooterView;
     private ActionBarDrawerToggle mDrawerToggle;
     private ActionBar mActionBar;
-
     private GoogleMapFragment mMap;
-
     private CharSequence mDrawerTitle;
     private CharSequence mTitle;
-
+    private String[] mViewTitles;
     private Dialogs dialog;
     //endregion
 
@@ -91,6 +111,7 @@ public class MainActivity extends Activity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        ButterKnife.inject(this);
 
         mActionBar = getActionBar();
 
@@ -99,16 +120,32 @@ public class MainActivity extends Activity {
         mMap = application.getMapFragment();
 
         mTitle = mDrawerTitle = getTitle();
-        mDrawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
-        mDrawerList = (ListView) findViewById(R.id.left_drawer);
+
+        mHeaderView = View.inflate(this, R.layout.drawer_listview_header, null);
+        mFooterView = View.inflate(this, R.layout.drawer_listview_footer, null);
+
+        TextView mClientName = (TextView) mHeaderView.findViewById(R.id.headerClientName);
+        mClientName.setText(application.getGeoClient().getName());
+
+        mLeftDrawerList.addHeaderView(mHeaderView);
+        mLeftDrawerList.addFooterView(mFooterView);
+
+        mViewTitles = new String[]{"Map", "Layers", "Library"};
 
         // set a custom shadow that overlays the main content when the drawer opens
         mDrawerLayout.setDrawerShadow(R.drawable.drawer_shadow, GravityCompat.START);
         // set up the drawer's list view with items and click listener
-        mDrawerList.setAdapter(new ArrayAdapter<>(this,
-                R.layout.drawer_list_item,
-                new String[]{"Map", "Layers", "Library", "Account", "Logout"}));
-        mDrawerList.setOnItemClickListener(new DrawerItemClickListener());
+        mLeftDrawerList.setAdapter(new ArrayAdapter<>(this,
+                R.layout.drawer_left_list_item, mViewTitles));
+
+        List<Layer> fakeLayers = new ArrayList<>();
+        fakeLayers.add(new Layer("First Layer"));
+        //TODO: Get a List of Layers
+        mRightDrawerList.setAdapter(new LayerAdapter(this,
+                R.layout.drawer_right_list_item, fakeLayers));
+
+        mLeftDrawerList.setOnItemClickListener(new LeftDrawerItemClickListener());
+        mRightDrawerList.setOnItemClickListener(new RightDrawerItemClickListener());
 
         // enable ActionBar app icon to behave as action to toggle nav drawer
         mActionBar.setDisplayHomeAsUpEnabled(true);
@@ -125,21 +162,39 @@ public class MainActivity extends Activity {
             public void onDrawerClosed(View view) {
                 mActionBar.setTitle(mTitle);
                 invalidateOptionsMenu(); // creates call to onPrepareOptionsMenu()
+                mDrawerToggle.syncState();
             }
 
             public void onDrawerOpened(View drawerView) {
                 mActionBar.setTitle(mDrawerTitle);
                 invalidateOptionsMenu(); // creates call to onPrepareOptionsMenu()
+                toggleDrawers((ListView) drawerView);
+                mDrawerToggle.syncState();
             }
         };
         mDrawerLayout.setDrawerListener(mDrawerToggle);
 
         if (savedInstanceState == null) {
-            selectItem(0);
+            selectItem(1);
         }
     }
 
-    @Override
+    private void toggleDrawers(ListView drawer) {
+        if (drawer == mLeftDrawerList) {
+            if (mDrawerLayout.isDrawerOpen(mRightDrawerList)) {
+                mDrawerLayout.closeDrawer(mRightDrawerList);
+            }
+        } else {
+            if (mDrawerLayout.isDrawerOpen(mLeftDrawerList)) {
+                mDrawerLayout.closeDrawer(mLeftDrawerList);
+            }
+        }
+    }
+
+    public AbstractMap.SimpleEntry<DrawerLayout, ListView> getRightDrawer() {
+        return new AbstractMap.SimpleEntry<>(mDrawerLayout, mRightDrawerList);
+    }
+
     protected void onResume() {
         super.onResume();
     }
@@ -155,7 +210,7 @@ public class MainActivity extends Activity {
     @Override
     public boolean onPrepareOptionsMenu(Menu menu) {
         // If the nav drawer is open, hide action items related to the content view
-        boolean drawerOpen = mDrawerLayout.isDrawerOpen(mDrawerList);
+        boolean drawerOpen = mDrawerLayout.isDrawerOpen(mLeftDrawerList);
         menu.findItem(R.id.action_websearch).setVisible(!drawerOpen);
         return super.onPrepareOptionsMenu(menu);
     }
@@ -186,12 +241,79 @@ public class MainActivity extends Activity {
     }
 
     /* The click listener for ListView in the navigation drawer */
-    private class DrawerItemClickListener implements ListView.OnItemClickListener {
+    private class LeftDrawerItemClickListener implements ListView.OnItemClickListener {
         @Override
         public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
             selectItem(position);
         }
     }
+
+    private class RightDrawerItemClickListener implements ListView.OnItemClickListener {
+
+        @Override
+        public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+            selectLayerItem(position);
+        }
+
+        private void selectLayerItem(int position) {
+        }
+    }
+
+    private class LayerAdapter extends ArrayAdapter<Layer> {
+
+        private List<Layer> mLayers;
+
+        public LayerAdapter(Context context, int resource, List<Layer> layers) {
+            super(context, resource, layers);
+            mLayers = layers;
+        }
+
+        private class ViewHolder {
+            TextView layerName;
+            CheckBox isVisible;
+        }
+
+        @Override
+        public View getView(int position, View convertView, ViewGroup parent) {
+
+            ViewHolder holder = null;
+            Toast.makeText(getContext(), "Convert View: " + position, Toast.LENGTH_LONG).show();
+            if (convertView == null) {
+                LayoutInflater vi = (LayoutInflater) getSystemService(
+                        Context.LAYOUT_INFLATER_SERVICE);
+                convertView = vi.inflate(R.layout.drawer_right_list_item, null);
+
+                holder = new ViewHolder();
+                holder.layerName = (TextView) convertView.findViewById(R.id.layerNameTV);
+                holder.isVisible = (CheckBox) convertView.findViewById(R.id.isVisible);
+                convertView.setTag(holder);
+
+                convertView.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        CheckBox cb = (CheckBox) v.findViewById(R.id.isVisible);
+                        if(cb.isChecked()){
+                            cb.setChecked(false);
+                        } else {
+                            cb.setChecked(true);
+                        }
+                    }
+                });
+            } else {
+                holder = (ViewHolder) convertView.getTag();
+            }
+
+            Layer layer = mLayers.get(position);
+            holder.layerName.setText(layer.getName());
+            holder.isVisible.setChecked(layer.getIsShowing());
+
+            return convertView;
+
+        }
+
+    }
+
+
 
     private void selectItem(int position) {
         Fragment fragment = setPageFragment(position);
@@ -203,8 +325,8 @@ public class MainActivity extends Activity {
                 .commit();
 
         // update selected item and title, then close the drawer
-        mDrawerList.setItemChecked(position, true);
-        mDrawerLayout.closeDrawer(mDrawerList);
+        mLeftDrawerList.setItemChecked(position, true);
+        mDrawerLayout.closeDrawer(mLeftDrawerList);
     }
 
     protected Fragment setPageFragment(int position) {
