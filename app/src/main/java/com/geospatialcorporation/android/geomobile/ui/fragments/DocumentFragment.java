@@ -28,11 +28,14 @@ import com.geospatialcorporation.android.geomobile.library.rest.TreeService;
 import com.geospatialcorporation.android.geomobile.models.Folders.Folder;
 import com.geospatialcorporation.android.geomobile.models.Library.Document;
 import com.geospatialcorporation.android.geomobile.ui.adapters.ListItemAdapter;
+import com.geospatialcorporation.android.geomobile.ui.fragments.dialogs.LibraryActionDialogFragment;
 
 import java.util.List;
 
+import at.markushi.ui.CircleButton;
 import butterknife.ButterKnife;
 import butterknife.InjectView;
+import butterknife.OnClick;
 import retrofit.RetrofitError;
 
 public class DocumentFragment extends Fragment {
@@ -48,8 +51,16 @@ public class DocumentFragment extends Fragment {
     private Context mContext;
     //endregion
 
-    @InjectView(R.id.libraryitem_recyclerView)
-    RecyclerView mRecyclerView;
+    @InjectView(R.id.libraryitem_recyclerView) RecyclerView mRecyclerView;
+    @InjectView(R.id.library_action_btn) CircleButton mCircleButton;
+
+    @OnClick(R.id.library_action_btn)
+    public void libraryActionOnClick(){
+        LibraryActionDialogFragment l = new LibraryActionDialogFragment();
+
+        l.setContext(getActivity());
+        l.show(getFragmentManager(), "library actions");
+    }
 
     @Override
     public void onCreate(Bundle savedInstance){

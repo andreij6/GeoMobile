@@ -9,6 +9,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
 import com.geospatialcorporation.android.geomobile.R;
 import com.geospatialcorporation.android.geomobile.application;
@@ -21,11 +22,15 @@ import com.geospatialcorporation.android.geomobile.library.rest.TreeService;
 import com.geospatialcorporation.android.geomobile.models.Folders.Folder;
 import com.geospatialcorporation.android.geomobile.models.Layers.Layer;
 import com.geospatialcorporation.android.geomobile.ui.adapters.ListItemAdapter;
+import com.geospatialcorporation.android.geomobile.ui.fragments.dialogs.LayerActionDialogFragment;
+import com.google.android.gms.maps.model.Circle;
 
 import java.util.List;
 
+import at.markushi.ui.CircleButton;
 import butterknife.ButterKnife;
 import butterknife.InjectView;
+import butterknife.OnClick;
 import retrofit.RetrofitError;
 
 public class LayerFragment extends Fragment {
@@ -44,8 +49,16 @@ public class LayerFragment extends Fragment {
         mHelper = new DataHelper();
     }
 
-    @InjectView(R.id.layer_recyclerView)
-    RecyclerView mRecycler;
+    @InjectView(R.id.layer_recyclerView) RecyclerView mRecycler;
+    @InjectView(R.id.layer_action_btn) CircleButton mCircleButton;
+
+    @OnClick(R.id.layer_action_btn)
+    public void layerActionClick(){
+        LayerActionDialogFragment l = new LayerActionDialogFragment();
+
+        l.setContext(getActivity());
+        l.show(getFragmentManager(), "layer actions");
+    }
 
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {

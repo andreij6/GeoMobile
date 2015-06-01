@@ -5,11 +5,14 @@ import android.app.Fragment;
 import android.app.FragmentManager;
 import android.app.ProgressDialog;
 import android.content.Context;
+import android.content.Intent;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.geospatialcorporation.android.geomobile.R;
@@ -19,6 +22,9 @@ import com.geospatialcorporation.android.geomobile.library.map.MapActions;
 import com.geospatialcorporation.android.geomobile.library.util.Dialogs;
 import com.geospatialcorporation.android.geomobile.models.Folders.Folder;
 import com.geospatialcorporation.android.geomobile.models.Library.Document;
+import com.geospatialcorporation.android.geomobile.ui.detail.DocumentDetailActivity;
+import com.geospatialcorporation.android.geomobile.ui.detail.FolderDetailActivity;
+import com.geospatialcorporation.android.geomobile.ui.detail.LayerDetailActivity;
 import com.geospatialcorporation.android.geomobile.ui.fragments.dialogs.DownloadDialogFragment;
 import com.geospatialcorporation.android.geomobile.ui.fragments.LayerFragment;
 import com.geospatialcorporation.android.geomobile.ui.fragments.DocumentFragment;
@@ -75,39 +81,22 @@ public class ListItemAdapter extends RecyclerView.Adapter<ListItemAdapter.ListVi
         //endregion
 
         @InjectView(R.id.itemNameTV) TextView itemName;
+        @InjectView(R.id.itemImageView) ImageView itemIcon;
+        @InjectView(R.id.infoImageView) ImageView itemInfo;
 
         public ListViewHolder(View itemView) {
             super(itemView);
             ButterKnife.inject(this, itemView);
-            itemView.setOnClickListener(ItemOnClickListener);
+            itemName.setOnClickListener(ItemOnClickListener);
+            itemIcon.setOnClickListener(ItemOnClickListener);
+            itemInfo.setOnClickListener(ItemDetailOnClickListener);
 
         }
 
         public void bindFolder(ListItem item) {
             mItem = item;
             itemName.setText(item.getName());
-            setDrawable(item);
-
-        }
-
-        private void setDrawable(ListItem item) {
-            int folder = R.drawable.ic_folder_black_24dp;
-            int download = R.drawable.ic_file_download_black_24dp;
-            int file = R.drawable.ic_insert_drive_file_black_24dp;
-            //int layer = R.drawable.ic_layers_black_24dp;  Change to Get a layer type drawable
-
-
-            switch (item.getOrder()){
-                case ListItem.DOCUMENT:
-                    itemName.setCompoundDrawablesWithIntrinsicBounds(0, 0, download, 0);
-                    break;
-                case ListItem.FOLDER:
-                    //itemName.setCompoundDrawablesWithIntrinsicBounds(folder, 0, 0, 0);
-                    break;
-                case ListItem.LAYER:
-                    //itemName.setCompoundDrawablesWithIntrinsicBounds(layer, 0, 0, 0);
-                    break;
-            }
+            itemIcon.setImageDrawable(mContext.getDrawable(item.getIconId()));
 
         }
 
@@ -130,6 +119,26 @@ public class ListItemAdapter extends RecyclerView.Adapter<ListItemAdapter.ListVi
             }
         };
 
+        protected View.OnClickListener ItemDetailOnClickListener = new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                switch (mItem.getOrder()) {
+                    case ListItem.LAYER:
+                        LayerDetailAction(mItem);
+                        break;
+                    case ListItem.FOLDER:
+                        FolderDetailAction(mItem);
+                        break;
+                    case ListItem.DOCUMENT:
+                        DocumentDetailAction(mItem);
+                        break;
+                    default:
+                        break;
+                }
+            }
+        };
+
+        //region ListItem Actions by Type
         private void DocumentAction(ListItem item) {
             Document document = application.getDocumentById(item.getId());
 
@@ -137,6 +146,11 @@ public class ListItemAdapter extends RecyclerView.Adapter<ListItemAdapter.ListVi
             d.setContext(mContext);
             d.setDocument(document);
             d.show(mFragmentManager, "download");
+        }
+
+        private void DocumentDetailAction(ListItem item) {
+
+            mContext.startActivity(new Intent(mContext, DocumentDetailActivity.class));
         }
 
         private void FolderAction(ListItem item) {
@@ -170,9 +184,18 @@ public class ListItemAdapter extends RecyclerView.Adapter<ListItemAdapter.ListVi
                     .commit();
         }
 
+        private void FolderDetailAction(ListItem item) {
+            mContext.startActivity(new Intent(mContext, FolderDetailActivity.class));
+        }
+
         private void LayerAction(ListItem item) {
             new MapActions().showLayer(item.getId());
         }
+
+        private void LayerDetailAction(ListItem item) {
+            mContext.startActivity(new Intent(mContext, LayerDetailActivity.class));
+        }
+        //endregion
     }
 
 

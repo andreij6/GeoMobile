@@ -68,6 +68,7 @@
     <string name="documents_section">Documents</string>
     <string name="folders_section">Folders</string>
     <string name="layers_section">Layers</string>
+
     <string name="general_save">Save</string>
     <string name="change_map_style">Change Map Style</string>
     <string name="download">Download</string>
@@ -79,4 +80,13 @@
     <string name="download_file">Download File</string>
     <string name="loading_dots">Loading...</string>
     <string name="logout">Logout</string>
+    <string name="title_activity_folder_detail">FolderDetailActivity</string>
+    <string name="title_activity_document_detail">DocumentDetailActivity</string>
+    <string name="title_activity_layer_detail">LayerDetailActivity</string>
+    <string name="library_dialog_title">Library Actions</string>
+    <string name="layer_dialog_title">Layer Actions</string>
+    <string name="add_folder">Folder</string>
+    <string name="add_layer">Layer</string>
+    <string name="add_document">Document</string>
+    <string name="add_image">Image</string>
 </resources>

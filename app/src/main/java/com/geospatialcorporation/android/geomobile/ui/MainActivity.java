@@ -90,12 +90,9 @@ public class MainActivity extends Activity {
     private static final String TAG = MainActivity.class.getSimpleName();
 
     //region Properties
-    @InjectView(R.id.drawer_layout)
-    DrawerLayout mDrawerLayout;
-    @InjectView(R.id.left_drawer)
-    ListView mLeftDrawerList;
-    @InjectView(R.id.right_drawer)
-    ListView mRightDrawerList;
+    @InjectView(R.id.drawer_layout)DrawerLayout mDrawerLayout;
+    @InjectView(R.id.left_drawer)ListView mLeftDrawerList;
+    @InjectView(R.id.right_drawer)ListView mRightDrawerList;
     View mHeaderView;
     View mFooterView;
     private ActionBarDrawerToggle mDrawerToggle;
