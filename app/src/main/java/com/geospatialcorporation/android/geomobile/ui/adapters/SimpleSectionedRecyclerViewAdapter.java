@@ -91,7 +91,7 @@ public class SimpleSectionedRecyclerViewAdapter extends RecyclerView.Adapter<Rec
         if (isSectionHeaderPosition(position)) {
             TextView title = ((SectionViewHolder) sectionViewHolder).title;
             title.setText(mSections.get(position).title);
-            setDrawable(mSections.get(position).title, title);
+            //setDrawable(mSections.get(position).title, title);
         } else {
             mBaseAdapter.onBindViewHolder(sectionViewHolder, sectionedPositionToPosition(position));
         }

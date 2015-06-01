@@ -18,6 +18,7 @@
         android:layout_alignParentBottom="true"
         android:layout_alignParentEnd="true"
         android:layout_alignParentRight="true"
-        android:src="@drawable/ic_action_add"/>
+        android:src="@drawable/ic_action_add"
+        android:id="@+id/library_action_btn"/>
 
 </RelativeLayout>
