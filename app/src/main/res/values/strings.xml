@@ -78,4 +78,5 @@
     <string name="impersonate">Impersonate</string>
     <string name="download_file">Download File</string>
     <string name="loading_dots">Loading...</string>
+    <string name="logout">Logout</string>
 </resources>

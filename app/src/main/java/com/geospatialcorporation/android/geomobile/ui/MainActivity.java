@@ -34,6 +34,7 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.geospatialcorporation.android.geomobile.application;
@@ -44,6 +45,9 @@ import com.geospatialcorporation.android.geomobile.ui.fragments.AccountFragment;
 import com.geospatialcorporation.android.geomobile.ui.fragments.GoogleMapFragment;
 import com.geospatialcorporation.android.geomobile.ui.fragments.LayerFragment;
 import com.geospatialcorporation.android.geomobile.ui.fragments.DocumentFragment;
+
+import butterknife.ButterKnife;
+import butterknife.InjectView;
 
 /**
  * This example illustrates a common usage of the DrawerLayout widget
@@ -73,18 +77,19 @@ import com.geospatialcorporation.android.geomobile.ui.fragments.DocumentFragment
  * for example enabling or disabling a data overlay on top of the current content.</p>
  */
 public class MainActivity extends Activity {
+    private static final String TAG = MainActivity.class.getSimpleName();
+
     //region Properties
-    private DrawerLayout mDrawerLayout;
-    private ListView mDrawerList;
+    @InjectView(R.id.drawer_layout) DrawerLayout mDrawerLayout;
+    @InjectView(R.id.left_drawer) ListView mDrawerList;
+    View mHeaderView;
+    View mFooterView;
     private ActionBarDrawerToggle mDrawerToggle;
     private ActionBar mActionBar;
-
     private GoogleMapFragment mMap;
-
     private CharSequence mDrawerTitle;
     private CharSequence mTitle;
     private String[] mViewTitles;
-
     private Dialogs dialog;
     //endregion
 
@@ -92,6 +97,7 @@ public class MainActivity extends Activity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        ButterKnife.inject(this);
 
         mActionBar = getActionBar();
 
@@ -100,9 +106,17 @@ public class MainActivity extends Activity {
         mMap = application.getMapFragment();
 
         mTitle = mDrawerTitle = getTitle();
-        mDrawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
-        mDrawerList = (ListView) findViewById(R.id.left_drawer);
-        mViewTitles = new String[]{"Map", "Layers", "Library", "Account", "Logout"};
+
+        mHeaderView = View.inflate(this, R.layout.drawer_listview_header, null);
+        mFooterView = View.inflate(this, R.layout.drawer_listview_footer, null);
+
+        TextView mClientName = (TextView)mHeaderView.findViewById(R.id.headerClientName);
+        mClientName.setText(application.getGeoClient().getName());
+
+        mDrawerList.addHeaderView(mHeaderView);
+        mDrawerList.addFooterView(mFooterView);
+
+        mViewTitles = new String[]{"Map", "Layers", "Library"};
 
         // set a custom shadow that overlays the main content when the drawer opens
         mDrawerLayout.setDrawerShadow(R.drawable.drawer_shadow, GravityCompat.START);
@@ -136,7 +150,7 @@ public class MainActivity extends Activity {
         mDrawerLayout.setDrawerListener(mDrawerToggle);
 
         if (savedInstanceState == null) {
-            selectItem(0);
+            selectItem(1);
         }
     }
 
