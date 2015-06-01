@@ -20,15 +20,18 @@ import android.app.Fragment;
 import android.graphics.Color;
 import android.location.Location;
 import android.os.Bundle;
+import android.support.v4.widget.DrawerLayout;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.geospatialcorporation.android.geomobile.R;
 import com.geospatialcorporation.android.geomobile.library.helpers.MapStateManager;
+import com.geospatialcorporation.android.geomobile.ui.MainActivity;
 import com.geospatialcorporation.android.geomobile.ui.fragments.dialogs.MapTypeSelectDialogFragment;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GooglePlayServicesClient;
@@ -69,7 +72,8 @@ public class GoogleMapFragment extends Fragment implements
     GoogleApiClient mLocationClient;
     @InjectView(R.id.map) MapView mView;
     @InjectView(R.id.styleselector) TextView mStyleSelector;
-    @InjectView(R.id.myLocation) CircleButton mMyCurrentButton;
+    @InjectView(R.id.action_btn_location) CircleButton mMyCurrentButton;
+    @InjectView(R.id.action_btn_layers) CircleButton mLayersButton;
 
     @SuppressWarnings("unused")
     @OnClick(R.id.styleselector)
@@ -81,7 +85,7 @@ public class GoogleMapFragment extends Fragment implements
     }
 
     @SuppressWarnings("unused")
-    @OnClick(R.id.myLocation)
+    @OnClick(R.id.action_btn_location)
     public void getLocation(){
         Location currentLocation = LocationServices.FusedLocationApi.getLastLocation(mLocationClient);
 
@@ -94,6 +98,15 @@ public class GoogleMapFragment extends Fragment implements
 
             mMap.animateCamera(update);
         }
+    }
+
+    @SuppressWarnings("unused")
+    @OnClick(R.id.action_btn_layers)
+    public void showLayersDrawer(){
+        DrawerLayout mDrawerLayout = ((MainActivity)getActivity()).getRightDrawer().getKey();
+        ListView mRightListView = ((MainActivity)getActivity()).getRightDrawer().getValue();
+
+        mDrawerLayout.openDrawer(mRightListView);
     }
 
     public GoogleMapFragment() {
