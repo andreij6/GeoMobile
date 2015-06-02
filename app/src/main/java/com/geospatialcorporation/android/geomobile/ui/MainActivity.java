@@ -37,6 +37,7 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.CheckBox;
+import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -53,6 +54,7 @@ import com.geospatialcorporation.android.geomobile.ui.fragments.LayerFragment;
 
 import java.util.AbstractMap;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import butterknife.ButterKnife;
@@ -99,7 +101,7 @@ public class MainActivity extends Activity {
     private GoogleMapFragment mMap;
     private CharSequence mDrawerTitle;
     private CharSequence mTitle;
-    private String[] mViewTitles;
+    private List<String> mViewTitles;
     private Dialogs dialog;
     //endregion
 
@@ -126,13 +128,12 @@ public class MainActivity extends Activity {
         mLeftDrawerList.addHeaderView(mHeaderView);
         mLeftDrawerList.addFooterView(mFooterView);
 
-        mViewTitles = new String[]{"Map", "Layers", "Library"};
+        mViewTitles = Arrays.asList(new String[]{"Map", "Layers", "Library"});
 
         // set a custom shadow that overlays the main content when the drawer opens
         mDrawerLayout.setDrawerShadow(R.drawable.drawer_shadow, GravityCompat.START);
         // set up the drawer's list view with items and click listener
-        mLeftDrawerList.setAdapter(new ArrayAdapter<>(this,
-                R.layout.drawer_left_list_item, mViewTitles));
+        mLeftDrawerList.setAdapter(new MainNavigationAdapter(this, mViewTitles));
 
         List<Layer> fakeLayers = new ArrayList<>();
         fakeLayers.add(new Layer("First Layer"));
@@ -273,7 +274,7 @@ public class MainActivity extends Activity {
         public View getView(int position, View convertView, ViewGroup parent) {
 
             ViewHolder holder = null;
-            Toast.makeText(getContext(), "Convert View: " + position, Toast.LENGTH_LONG).show();
+
             if (convertView == null) {
                 LayoutInflater vi = (LayoutInflater) getSystemService(
                         Context.LAYOUT_INFLATER_SERVICE);
@@ -309,7 +310,44 @@ public class MainActivity extends Activity {
 
     }
 
+    private class MainNavigationAdapter extends ArrayAdapter<String>{
+        List<String> mMenuItems;
 
+        public MainNavigationAdapter(Context context, List<String> menuItems) {
+            super(context, R.layout.drawer_left_list_item, menuItems);
+            mMenuItems = menuItems;
+        }
+
+        @Override
+        public View getView(int position, View coverView, ViewGroup parent) {
+            // TODO Auto-generated method stub
+
+            LayoutInflater inflater = (LayoutInflater) getContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+
+            View v = inflater.inflate(R.layout.drawer_left_list_item, null);
+
+            TextView name = (TextView)v.findViewById(R.id.menuItemTV);
+            ImageView icon = (ImageView)v.findViewById(R.id.menuItemIcon);
+
+            name.setText(mMenuItems.get(position));
+
+            switch (mMenuItems.get(position)){
+                case "Map":
+                    icon.setImageDrawable(getDrawable(R.drawable.ic_map_marker_white_18dp));
+                    break;
+                case "Layers":
+                    icon.setImageDrawable(getDrawable(R.drawable.ic_layers_white_18dp));
+                    break;
+                case "Library":
+                    icon.setImageDrawable(getDrawable(R.drawable.ic_book_white_18dp));
+                    break;
+            }
+
+            return v;
+
+        }
+
+    }
 
     private void selectItem(int position) {
         Fragment fragment = setPageFragment(position);
@@ -352,11 +390,6 @@ public class MainActivity extends Activity {
         mTitle = title;
         mActionBar.setTitle(mTitle);
     }
-
-    /**
-     * When using the ActionBarDrawerToggle, you must call it during
-     * onPostCreate() and onConfigurationChanged()...
-     */
 
     @Override
     protected void onPostCreate(Bundle savedInstanceState) {

@@ -1,19 +1,21 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="horizontal"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:layout_alignParentBottom="true"
-    android:background="#00000000">]
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              android:orientation="horizontal"
+              android:layout_width="match_parent"
+              android:layout_height="match_parent"
+              android:weightSum="1"
+              android:background="?android:attr/activatedBackgroundIndicator"
+              android:minHeight="?android:attr/listPreferredItemHeightSmall"
+              android:paddingLeft="20dp"
+              android:paddingTop="8dp"
+              android:paddingBottom="8dp"
+                android:layout_alignParentBottom="true">
 
     <ImageView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:id="@+id/imageView2"
-        android:src="@drawable/ic_logout_white_24dp"
-        android:paddingLeft="10sp"
-        android:paddingRight="10sp"/>
+        android:id="@+id/menuItemIcon"
+        android:src="@drawable/ic_logout_white_18dp"/>
 
     <TextView
         android:layout_width="match_parent"
@@ -22,6 +24,8 @@
         android:text="@string/logout"
         android:id="@+id/textView2"
         android:textColor="#fffffbff"
-        android:background="#00ffc5a9"/>
+        android:gravity="center_vertical"
+        android:background="#00ffc5a9"
+        android:paddingLeft="15dp"/>
 
 </LinearLayout>

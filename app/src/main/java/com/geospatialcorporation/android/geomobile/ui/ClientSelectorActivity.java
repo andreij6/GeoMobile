@@ -20,6 +20,7 @@ public class ClientSelectorActivity extends ActionBarActivity implements ActionB
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        setTitle(R.string.title_activity_select_client);
         setContentView(R.layout.activity_client_selector);
         final ActionBar actionBar = getSupportActionBar();
         actionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_TABS);

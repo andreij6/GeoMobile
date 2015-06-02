@@ -16,12 +16,15 @@
 
 package com.geospatialcorporation.android.geomobile.ui.fragments;
 
+import android.app.AlertDialog;
 import android.app.Fragment;
 import android.app.SearchManager;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Color;
 import android.location.Location;
 import android.os.Bundle;
+import android.provider.Settings;
 import android.support.v4.widget.DrawerLayout;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -88,7 +91,25 @@ public class GoogleMapFragment extends Fragment implements
         Location currentLocation = LocationServices.FusedLocationApi.getLastLocation(mLocationClient);
 
         if(currentLocation == null){
-            Toast.makeText(getActivity(), "Current location isnt available", Toast.LENGTH_LONG).show();
+            AlertDialog.Builder builder1 = new AlertDialog.Builder(getActivity());
+            builder1.setMessage(getString(R.string.location_not_found))
+                    .setPositiveButton(getString(R.string.enable_gps),
+                    new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface dialog, int id) {
+                            Intent gpsOptions = new Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS);
+
+                            startActivity(gpsOptions);
+                        }
+                    })
+                    .setNegativeButton(getString(R.string.cancel),
+                    new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface dialog, int id) {
+                            dialog.cancel();
+                        }
+                    });
+
+            AlertDialog alert11 = builder1.create();
+            alert11.show();
         } else {
             LatLng ll = new LatLng(currentLocation.getLatitude(), currentLocation.getLongitude());
 

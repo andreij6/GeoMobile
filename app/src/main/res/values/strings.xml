@@ -110,4 +110,7 @@
     <string name="layer_name_hint">Layer Name</string>
     <string name="delete_layer">Delete Layer</string>
     <string name="delete">Delete</string>
+    <string name="title_activity_select_client">Select a Client</string>
+    <string name="location_not_found">Location Not Found</string>
+    <string name="enable_gps">Enable GPS</string>
 </resources>
