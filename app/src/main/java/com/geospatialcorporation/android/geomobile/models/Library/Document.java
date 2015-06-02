@@ -124,4 +124,6 @@ public class Document implements Parcelable {
     public String getNameWithExt() {
         return Name + Ext;
     }
+
+    public static String INTENT = "Document Intent";
 }

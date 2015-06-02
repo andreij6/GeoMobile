@@ -21,10 +21,11 @@ import com.geospatialcorporation.android.geomobile.library.helpers.DataHelper;
 import com.geospatialcorporation.android.geomobile.library.map.MapActions;
 import com.geospatialcorporation.android.geomobile.library.util.Dialogs;
 import com.geospatialcorporation.android.geomobile.models.Folders.Folder;
+import com.geospatialcorporation.android.geomobile.models.Layers.Layer;
 import com.geospatialcorporation.android.geomobile.models.Library.Document;
-import com.geospatialcorporation.android.geomobile.ui.detail.DocumentDetailActivity;
-import com.geospatialcorporation.android.geomobile.ui.detail.FolderDetailActivity;
-import com.geospatialcorporation.android.geomobile.ui.detail.LayerDetailActivity;
+import com.geospatialcorporation.android.geomobile.ui.fragments.DocumentDetailFragment;
+import com.geospatialcorporation.android.geomobile.ui.fragments.FolderDetailFragment;
+import com.geospatialcorporation.android.geomobile.ui.fragments.LayerDetailFragment;
 import com.geospatialcorporation.android.geomobile.ui.fragments.dialogs.DownloadDialogFragment;
 import com.geospatialcorporation.android.geomobile.ui.fragments.LayerFragment;
 import com.geospatialcorporation.android.geomobile.ui.fragments.DocumentFragment;
@@ -149,8 +150,17 @@ public class ListItemAdapter extends RecyclerView.Adapter<ListItemAdapter.ListVi
         }
 
         private void DocumentDetailAction(ListItem item) {
+            Fragment f = new DocumentDetailFragment();
+            Document d = application.getDocumentById(item.getId());
 
-            mContext.startActivity(new Intent(mContext, DocumentDetailActivity.class));
+            Bundle b = new Bundle();
+            b.putParcelable(Document.INTENT, d);
+            f.setArguments(b);
+
+            mFragmentManager.beginTransaction()
+                    .addToBackStack(null)
+                    .replace(R.id.content_frame, f)
+                    .commit();
         }
 
         private void FolderAction(ListItem item) {
@@ -185,7 +195,17 @@ public class ListItemAdapter extends RecyclerView.Adapter<ListItemAdapter.ListVi
         }
 
         private void FolderDetailAction(ListItem item) {
-            mContext.startActivity(new Intent(mContext, FolderDetailActivity.class));
+            Fragment f = new FolderDetailFragment();
+            Folder folder = application.getFolderById(item.getId());
+
+            Bundle b = new Bundle();
+            b.putParcelable(Folder.FOLDER_INTENT, folder);
+            f.setArguments(b);
+
+            mFragmentManager.beginTransaction()
+                    .addToBackStack(null)
+                    .replace(R.id.content_frame, f)
+                    .commit();
         }
 
         private void LayerAction(ListItem item) {
@@ -193,7 +213,17 @@ public class ListItemAdapter extends RecyclerView.Adapter<ListItemAdapter.ListVi
         }
 
         private void LayerDetailAction(ListItem item) {
-            mContext.startActivity(new Intent(mContext, LayerDetailActivity.class));
+            Fragment f = new LayerDetailFragment();
+            Layer layer = application.getLayer(item.getId());
+
+            Bundle b = new Bundle();
+            b.putParcelable(Layer.LAYER_INTENT, layer);
+            f.setArguments(b);
+
+            mFragmentManager.beginTransaction()
+                    .addToBackStack(null)
+                    .replace(R.id.content_frame, f)
+                    .commit();
         }
         //endregion
     }

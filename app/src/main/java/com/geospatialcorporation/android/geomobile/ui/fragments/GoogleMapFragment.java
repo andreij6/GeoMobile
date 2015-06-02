@@ -17,11 +17,16 @@
 package com.geospatialcorporation.android.geomobile.ui.fragments;
 
 import android.app.Fragment;
+import android.app.SearchManager;
+import android.content.Intent;
 import android.graphics.Color;
 import android.location.Location;
 import android.os.Bundle;
 import android.support.v4.widget.DrawerLayout;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
@@ -71,18 +76,10 @@ public class GoogleMapFragment extends Fragment implements
     public GoogleMap mMap;
     GoogleApiClient mLocationClient;
     @InjectView(R.id.map) MapView mView;
-    @InjectView(R.id.styleselector) TextView mStyleSelector;
     @InjectView(R.id.action_btn_location) CircleButton mMyCurrentButton;
     @InjectView(R.id.action_btn_layers) CircleButton mLayersButton;
 
-    @SuppressWarnings("unused")
-    @OnClick(R.id.styleselector)
-    public void StyleSelector(){
-        MapTypeSelectDialogFragment m = new MapTypeSelectDialogFragment();
-        m.setContext(getActivity());
-        m.setMap(mView);
-        m.show(getFragmentManager(), "styles");
-    }
+
 
     @SuppressWarnings("unused")
     @OnClick(R.id.action_btn_location)
@@ -116,7 +113,7 @@ public class GoogleMapFragment extends Fragment implements
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-
+        setHasOptionsMenu(true);
         View rootView = inflater.inflate(R.layout.fragment_map, container, false);
         ButterKnife.inject(this, rootView);
 
@@ -145,6 +142,12 @@ public class GoogleMapFragment extends Fragment implements
     }
 
     @Override
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+        inflater.inflate(R.menu.map_menu, menu);
+
+        super.onCreateOptionsMenu(menu, inflater);
+    }
+    @Override
     public void onResume() {
         super.onResume();
         mView.onResume();
@@ -158,6 +161,21 @@ public class GoogleMapFragment extends Fragment implements
         if(position != null){
             CameraUpdate update = CameraUpdateFactory.newCameraPosition(position);
             mMap.moveCamera(update);
+        }
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        // Handle action buttons
+        switch (item.getItemId()) {
+            case R.id.action_map_settings:
+                MapTypeSelectDialogFragment m = new MapTypeSelectDialogFragment();
+                m.setContext(getActivity());
+                m.setMap(mView);
+                m.show(getFragmentManager(), "styles");
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
         }
     }
 

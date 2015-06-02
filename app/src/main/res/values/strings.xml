@@ -108,4 +108,6 @@
     <string name="layer_point">Point</string>
     <string name="folder_name_hint">Folder Name</string>
     <string name="layer_name_hint">Layer Name</string>
+    <string name="delete_layer">Delete Layer</string>
+    <string name="delete">Delete</string>
 </resources>
