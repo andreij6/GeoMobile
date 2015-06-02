@@ -54,6 +54,15 @@ public class application extends Application {
     private static HashMap<Integer, Document> documentHashMap;
     private static List<Document> documents;
     private static List<Folder> documentFolders;
+    private static boolean isAdminUser;
+
+    public static void setIsAdminUser(boolean isAdminUser) {
+        application.isAdminUser = isAdminUser;
+    }
+
+    public static Boolean getIsAdminUser(){
+        return isAdminUser;
+    }
 
     public void onCreate() {
         super.onCreate();
@@ -105,6 +114,8 @@ public class application extends Application {
                     .setRequestInterceptor(requestInterceptor)
                     .build();
         }
+
+        isAdminUser = false;
 
         initializeApplication();
     }

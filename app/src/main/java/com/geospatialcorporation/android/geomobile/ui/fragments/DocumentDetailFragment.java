@@ -11,6 +11,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.geospatialcorporation.android.geomobile.R;
+import com.geospatialcorporation.android.geomobile.library.helpers.GeoDialogHelper;
 import com.geospatialcorporation.android.geomobile.models.Library.Document;
 import com.geospatialcorporation.android.geomobile.ui.fragments.dialogs.ItemDetailFragment;
 
@@ -66,7 +67,7 @@ public class DocumentDetailFragment extends ItemDetailFragment<Document> {
     public View.OnClickListener DeleteonClickListner = new View.OnClickListener(){
         @Override
         public void onClick(View v){
-            Toast.makeText(getActivity(), "Delete Not Implemented", Toast.LENGTH_LONG).show();
+            GeoDialogHelper.deleteDocument(getActivity(), mDocument, getFragmentManager());
         }
     };
 }

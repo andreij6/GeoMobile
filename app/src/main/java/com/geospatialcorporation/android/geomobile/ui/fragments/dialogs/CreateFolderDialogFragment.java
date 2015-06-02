@@ -23,22 +23,20 @@ public class CreateFolderDialogFragment extends CreateDialogFragmentBase {
 
         final EditText name = (EditText)v.findViewById(R.id.folderNameInput);
 
-        builder.setTitle(R.string.create_folder);
-
-        builder.setView(v);
-
-        builder.setPositiveButton(R.string.create, new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                //TODO: Validation
-                service.createFolder(name.getText().toString(), mFolder.getId());
-            }
-        }).setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                CreateFolderDialogFragment.this.getDialog().cancel();
-            }
-        });
+        builder.setTitle(R.string.create_folder)
+                .setView(v)
+                .setPositiveButton(R.string.create, new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            //TODO: Validation
+                            service.createFolder(name.getText().toString(), mFolder.getId());
+                        }
+                    }).setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            CreateFolderDialogFragment.this.getDialog().cancel();
+                        }
+                    });
 
         return builder.create();
     }

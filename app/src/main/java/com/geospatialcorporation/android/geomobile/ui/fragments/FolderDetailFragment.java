@@ -11,7 +11,9 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.geospatialcorporation.android.geomobile.R;
+import com.geospatialcorporation.android.geomobile.library.helpers.GeoDialogHelper;
 import com.geospatialcorporation.android.geomobile.models.Folders.Folder;
+import com.geospatialcorporation.android.geomobile.ui.fragments.dialogs.DeleteFolderDialogFragment;
 import com.geospatialcorporation.android.geomobile.ui.fragments.dialogs.ItemDetailFragment;
 
 import butterknife.ButterKnife;
@@ -65,7 +67,7 @@ public class FolderDetailFragment extends ItemDetailFragment<Folder> {
     public View.OnClickListener DeleteonClickListner = new View.OnClickListener(){
         @Override
         public void onClick(View v){
-            Toast.makeText(getActivity(), "Delete Not Implemented", Toast.LENGTH_LONG).show();
+            GeoDialogHelper.deleteFolder(getActivity(), mFolder, getFragmentManager());
         }
     };
 

@@ -1,5 +1,6 @@
 package com.geospatialcorporation.android.geomobile.ui;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.ViewPager;
@@ -7,8 +8,10 @@ import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBarActivity;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.Toast;
 
 import com.geospatialcorporation.android.geomobile.R;
+import com.geospatialcorporation.android.geomobile.application;
 import com.geospatialcorporation.android.geomobile.ui.adapters.ClientSelectorSectionsPagerAdapter;
 
 public class ClientSelectorActivity extends ActionBarActivity implements ActionBar.TabListener {
@@ -17,10 +20,23 @@ public class ClientSelectorActivity extends ActionBarActivity implements ActionB
 
     ViewPager mViewPager;
 
+    //region Getters & Setters
+    public boolean isBackButtonClickOnce() {
+        return mBackButtonClickOnce;
+    }
+
+    public void setBackButtonClickOnce(boolean backButtonClickOnce) {
+        mBackButtonClickOnce = backButtonClickOnce;
+    }
+    //endregion
+
+    private boolean mBackButtonClickOnce;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setTitle(R.string.title_activity_select_client);
+        setBackButtonClickOnce(false);
         setContentView(R.layout.activity_client_selector);
         final ActionBar actionBar = getSupportActionBar();
         actionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_TABS);
@@ -67,6 +83,18 @@ public class ClientSelectorActivity extends ActionBarActivity implements ActionB
         }
 
         return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    public void onBackPressed() {
+        if(mBackButtonClickOnce){
+            application.Logout();
+            startActivity(new Intent(this, LoginActivity.class));
+            finish();
+        } else {
+            Toast.makeText(this, "You will be signed out if you click the back button again", Toast.LENGTH_LONG).show();
+            setBackButtonClickOnce(true);
+        }
     }
 
     //region Action.TabListner Interface

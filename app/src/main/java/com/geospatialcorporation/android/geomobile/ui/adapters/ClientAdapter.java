@@ -10,6 +10,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.geospatialcorporation.android.geomobile.R;
 import com.geospatialcorporation.android.geomobile.application;
@@ -77,7 +78,6 @@ public class ClientAdapter extends RecyclerView.Adapter<ClientAdapter.ClientView
                 @Override
                 public void onClick(View v) {
                     mSelectedClient = mClient;
-
                     new SwitchClientTask().execute();
                 }
             });
@@ -95,6 +95,7 @@ public class ClientAdapter extends RecyclerView.Adapter<ClientAdapter.ClientView
         @Override
         protected Object doInBackground(Object[] params) {
             try {
+
                 mService.setClient(mSelectedClient.getId());
             } catch (RetrofitError e) {
                 if (e.getResponse() != null) {

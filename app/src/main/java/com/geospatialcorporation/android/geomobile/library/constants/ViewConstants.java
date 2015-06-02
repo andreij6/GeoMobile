@@ -5,5 +5,7 @@ public class ViewConstants {
     public static final int MAP = 1;
     public static final int LAYER = 2;
     public static final int LIBRARY = 3;
-    public static final int LOGOUT = 4;
+    public static final int LOGOUT_REGULAR = 4;
+    public static final int ADMINCLIENTS = 4;
+    public static final int LOGOUT_ADMIN = 5;
 }

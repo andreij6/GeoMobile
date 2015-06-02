@@ -113,4 +113,6 @@
     <string name="title_activity_select_client">Select a Client</string>
     <string name="location_not_found">Location Not Found</string>
     <string name="enable_gps">Enable GPS</string>
+    <string name="are_you_sure">Are you sure that you want to delete</string>
+    <string name="are_you_sure_title">Are You Sure?</string>
 </resources>

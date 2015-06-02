@@ -16,7 +16,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.geospatialcorporation.android.geomobile.R;
-import com.geospatialcorporation.android.geomobile.library.helpers.CreateItemDialogHelper;
+import com.geospatialcorporation.android.geomobile.library.helpers.GeoDialogHelper;
 import com.geospatialcorporation.android.geomobile.models.Folders.Folder;
 
 import butterknife.ButterKnife;
@@ -117,7 +117,7 @@ public class LibraryActionDialogFragment extends DialogFragment {
                 }
 
                 if(isHighlighted(f)){
-                    CreateItemDialogHelper.createFolder(mContext, mFolder, getFragmentManager());
+                    GeoDialogHelper.createFolder(mContext, mFolder, getFragmentManager());
                 }
 
             }

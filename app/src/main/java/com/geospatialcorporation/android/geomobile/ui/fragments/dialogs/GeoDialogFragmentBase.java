@@ -1,6 +1,7 @@
 package com.geospatialcorporation.android.geomobile.ui.fragments.dialogs;
 
 import android.app.AlertDialog;
+import android.app.DialogFragment;
 import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -8,26 +9,22 @@ import android.view.View;
 import com.geospatialcorporation.android.geomobile.models.Folders.Folder;
 
 /**
- * Created by andre on 6/1/2015.
+ * Created by andre on 6/2/2015.
  */
-public class CreateDialogFragmentBase extends GeoDialogFragmentBase {
+public class GeoDialogFragmentBase extends DialogFragment {
     //region Getters & Setters
-    public Folder getFolder() {
-        return mFolder;
+    public Context getContext() {
+        return mContext;
     }
 
-    public void setFolder(Folder folder) {
-        mFolder = folder;
+    public void setContext(Context context) {
+        mContext = context;
     }
+
     //endregion
 
 
-    public void init(Context context, Folder folder){
-        setContext(context);
-        setFolder(folder);
-    }
-
-    protected Folder mFolder;
+    protected Context mContext;
 
     protected AlertDialog.Builder getDialogBuilder(){
         return new AlertDialog.Builder(mContext);

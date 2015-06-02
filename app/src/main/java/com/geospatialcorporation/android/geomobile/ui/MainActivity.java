@@ -103,6 +103,7 @@ public class MainActivity extends Activity {
     private CharSequence mTitle;
     private List<String> mViewTitles;
     private Dialogs dialog;
+    private boolean mIsAdmin;
     //endregion
 
     @Override
@@ -116,6 +117,7 @@ public class MainActivity extends Activity {
         dialog = new Dialogs();
 
         mMap = application.getMapFragment();
+        mIsAdmin = application.getIsAdminUser();
 
         mTitle = mDrawerTitle = getTitle();
 
@@ -128,7 +130,11 @@ public class MainActivity extends Activity {
         mLeftDrawerList.addHeaderView(mHeaderView);
         mLeftDrawerList.addFooterView(mFooterView);
 
-        mViewTitles = Arrays.asList(new String[]{"Map", "Layers", "Library"});
+        if(mIsAdmin){
+            mViewTitles = Arrays.asList(new String[]{MenuConstants.MAP, MenuConstants.LAYERS, MenuConstants.LIBRARY, MenuConstants.ADMINCLITENTS});
+        } else {
+            mViewTitles = Arrays.asList(new String[]{MenuConstants.MAP, MenuConstants.LAYERS, MenuConstants.LIBRARY});
+        }
 
         // set a custom shadow that overlays the main content when the drawer opens
         mDrawerLayout.setDrawerShadow(R.drawable.drawer_shadow, GravityCompat.START);
@@ -332,14 +338,19 @@ public class MainActivity extends Activity {
             name.setText(mMenuItems.get(position));
 
             switch (mMenuItems.get(position)){
-                case "Map":
+                case MenuConstants.MAP:
                     icon.setImageDrawable(getDrawable(R.drawable.ic_map_marker_white_18dp));
                     break;
-                case "Layers":
+                case MenuConstants.LAYERS:
                     icon.setImageDrawable(getDrawable(R.drawable.ic_layers_white_18dp));
                     break;
-                case "Library":
+                case MenuConstants.LIBRARY:
                     icon.setImageDrawable(getDrawable(R.drawable.ic_book_white_18dp));
+                    break;
+                case MenuConstants.ADMINCLITENTS:
+                    icon.setImageDrawable(getDrawable(R.drawable.ic_account_search_white_18dp));
+                    break;
+                default:
                     break;
             }
 
@@ -364,22 +375,46 @@ public class MainActivity extends Activity {
     }
 
     protected Fragment setPageFragment(int position) {
-        switch (position) {
-            case ViewConstants.MAP:
-                return mMap;
-            case ViewConstants.LAYER:
-                return new LayerFragment();
-            case ViewConstants.LIBRARY:
-                return new DocumentFragment();
-            case ViewConstants.ACCOUNT:
-                return new AccountFragment();
-            case ViewConstants.LOGOUT:
-                application.Logout();
-                startActivity(new Intent(this, LoginActivity.class));
-                break;
-            default:
-                Toast.makeText(application.getAppContext(), "Drawer view not yet implemented.", Toast.LENGTH_LONG).show();
-                break;
+        if(mIsAdmin) {
+            switch (position) {
+                case ViewConstants.MAP:
+                    return mMap;
+                case ViewConstants.LAYER:
+                    return new LayerFragment();
+                case ViewConstants.LIBRARY:
+                    return new DocumentFragment();
+                case ViewConstants.ACCOUNT:
+                    return new AccountFragment();
+                case ViewConstants.LOGOUT_ADMIN:
+                    application.Logout();
+                    startActivity(new Intent(this, LoginActivity.class));
+                    break;
+                case ViewConstants.ADMINCLIENTS:
+                    startActivity(new Intent(this, ClientSelectorActivity.class));
+                    finish();
+                    break;
+                default:
+                    Toast.makeText(application.getAppContext(), "Drawer view not yet implemented.", Toast.LENGTH_LONG).show();
+                    break;
+            }
+        } else {
+            switch (position) {
+                case ViewConstants.MAP:
+                    return mMap;
+                case ViewConstants.LAYER:
+                    return new LayerFragment();
+                case ViewConstants.LIBRARY:
+                    return new DocumentFragment();
+                case ViewConstants.ACCOUNT:
+                    return new AccountFragment();
+                case ViewConstants.LOGOUT_REGULAR:
+                    application.Logout();
+                    startActivity(new Intent(this, LoginActivity.class));
+                    break;
+                default:
+                    Toast.makeText(application.getAppContext(), "Drawer view not yet implemented.", Toast.LENGTH_LONG).show();
+                    break;
+            }
         }
 
         return mMap;
@@ -407,5 +442,13 @@ public class MainActivity extends Activity {
 
     public void treeItem(View view) {
         dialog.message("tree item clicked", this);
+    }
+
+    private class MenuConstants {
+        public static final String MAP = "Map";
+        public static final String LAYERS = "Layers";
+        public static final String LIBRARY = "Library";
+        public static final String ADMINCLITENTS = "Admin Clients";
+
     }
 }

@@ -13,7 +13,7 @@ import android.view.View;
 import android.widget.LinearLayout;
 
 import com.geospatialcorporation.android.geomobile.R;
-import com.geospatialcorporation.android.geomobile.library.helpers.CreateItemDialogHelper;
+import com.geospatialcorporation.android.geomobile.library.helpers.GeoDialogHelper;
 import com.geospatialcorporation.android.geomobile.models.Folders.Folder;
 
 import butterknife.ButterKnife;
@@ -88,11 +88,11 @@ public class LayerActionDialogFragment extends DialogFragment {
                 LinearLayout l = (LinearLayout)v.findViewById(R.id.addLayerSection);
 
                 if (isHighlighted(f)) {
-                    CreateItemDialogHelper.createFolder(mContext, mFolder, getFragmentManager());
+                    GeoDialogHelper.createFolder(mContext, mFolder, getFragmentManager());
                 }
 
                 if(isHighlighted(l)){
-                    CreateItemDialogHelper.createLayer(mContext, mFolder, getFragmentManager());
+                    GeoDialogHelper.createLayer(mContext, mFolder, getFragmentManager());
                 }
 
             }
