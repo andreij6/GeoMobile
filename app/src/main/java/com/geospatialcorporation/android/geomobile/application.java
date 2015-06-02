@@ -231,6 +231,10 @@ public class application extends Application {
         return layerHashMap.get(id);
     }
 
+    public static void addFolder(Folder folder) {
+        folderHashMap.put(folder.getId(), folder);
+    }
+
     class TokenInterceptor implements Interceptor {
         @Override
         public Response intercept(Chain chain) throws IOException {

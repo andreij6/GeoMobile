@@ -16,6 +16,8 @@ public class Folder implements Parcelable {
         Documents = new ArrayList<>();
         Layers = new ArrayList<>();
         Folders = new ArrayList<>();
+        IsImportFolder = false;
+        IsFixed = false;
     }
 
     //region Properties

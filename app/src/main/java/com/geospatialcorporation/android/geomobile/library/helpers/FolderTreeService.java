@@ -1,16 +1,21 @@
 package com.geospatialcorporation.android.geomobile.library.helpers;
 
+import android.widget.Toast;
+
 import com.geospatialcorporation.android.geomobile.application;
 import com.geospatialcorporation.android.geomobile.library.rest.FolderService;
 import com.geospatialcorporation.android.geomobile.models.Folders.Folder;
+import com.geospatialcorporation.android.geomobile.models.Folders.FolderCreateRequest;
+import com.geospatialcorporation.android.geomobile.models.Folders.FolderCreateResponse;
 import com.geospatialcorporation.android.geomobile.models.Layers.Layer;
 import com.geospatialcorporation.android.geomobile.models.Library.Document;
 
 import java.util.List;
 
-/**
- * Created by andre on 5/29/2015.
- */
+import retrofit.Callback;
+import retrofit.RetrofitError;
+import retrofit.client.Response;
+
 public class FolderTreeService {
 
     private FolderService mFolderService;
@@ -27,6 +32,24 @@ public class FolderTreeService {
         }
 
         return folder;
+    }
+
+    public void createFolder(String name, int parentFolder){
+        FolderCreateRequest createRequest = new FolderCreateRequest(name, parentFolder);
+
+
+            mFolderService.createFolder(createRequest, new Callback<FolderCreateResponse>() {
+            @Override
+            public void success(FolderCreateResponse cr, Response response) {
+                Toast.makeText(application.getAppContext(), "Success!", Toast.LENGTH_LONG).show();
+            }
+
+            @Override
+            public void failure(RetrofitError error) {
+                Toast.makeText(application.getAppContext(), "Failure", Toast.LENGTH_LONG).show();
+            }
+        });
+
     }
 
     public List<Folder> getFoldersByFolder(Integer folderId) {

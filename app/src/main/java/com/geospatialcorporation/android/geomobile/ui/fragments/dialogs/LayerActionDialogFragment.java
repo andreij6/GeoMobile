@@ -8,6 +8,7 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.graphics.Color;
 import android.graphics.Point;
+import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.view.Display;
 import android.view.Gravity;
@@ -19,6 +20,9 @@ import android.widget.LinearLayout;
 import android.widget.Toast;
 
 import com.geospatialcorporation.android.geomobile.R;
+import com.geospatialcorporation.android.geomobile.library.helpers.CreateItemDialogHelper;
+import com.geospatialcorporation.android.geomobile.models.Folders.Folder;
+import com.google.android.gms.drive.internal.CreateFolderRequest;
 
 import butterknife.ButterKnife;
 import butterknife.InjectView;
@@ -33,10 +37,19 @@ public class LayerActionDialogFragment extends DialogFragment {
     public void setContext(Context context) {
         mContext = context;
     }
+
+    public Folder getFolder() {
+        return mFolder;
+    }
+
+    public void setFolder(Folder folder) {
+        mFolder = folder;
+    }
     //endregion
 
     //region Properties
     Context mContext;
+    Folder mFolder;
     @InjectView(R.id.addLayerFolderSection) LinearLayout mFolderSection;
     @InjectView(R.id.addLayerSection) LinearLayout mLayerSection;
     //endregion
@@ -69,7 +82,7 @@ public class LayerActionDialogFragment extends DialogFragment {
 
         LayoutInflater inflater = LayoutInflater.from(mContext);
 
-        View v = inflater.inflate(R.layout.dialog_layer, null);
+        final View v = inflater.inflate(R.layout.dialog_layer, null);
         ButterKnife.inject(this, v);
 
         builder.setTitle(R.string.layer_dialog_title);
@@ -78,6 +91,17 @@ public class LayerActionDialogFragment extends DialogFragment {
         builder.setPositiveButton(R.string.OK, new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
+
+                LinearLayout f = (LinearLayout)v.findViewById(R.id.addLayerFolderSection);
+                LinearLayout l = (LinearLayout)v.findViewById(R.id.addLayerSection);
+
+                if (isHighlighted(f)) {
+                    CreateItemDialogHelper.createFolder(mContext, mFolder, getFragmentManager());
+                }
+
+                if(isHighlighted(l)){
+                    CreateItemDialogHelper.createLayer(mContext, mFolder, getFragmentManager());
+                }
 
             }
         }).setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
@@ -90,22 +114,10 @@ public class LayerActionDialogFragment extends DialogFragment {
         return builder.create();
     }
 
-    /*
-    @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState){
-        getDialog().getWindow().setGravity(Gravity.BOTTOM);
+    private boolean isHighlighted(LinearLayout d) {
+        Integer b = ((ColorDrawable)d.getBackground()).getColor();
 
-        WindowManager.LayoutParams p = getDialog().getWindow().getAttributes();
-
-        Display display = getActivity().getWindowManager().getDefaultDisplay();
-        Point size = new Point();
-        display.getSize(size);
-        p.width = size.x;
-        p.y = 200;
-
-        getDialog().getWindow().setAttributes(p);
-
-        return super.onCreateView(inflater, container, savedInstanceState);
+        return !(b == Color.WHITE);
     }
-    **/
+
 }

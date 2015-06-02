@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              android:orientation="vertical"
+              android:layout_width="match_parent"
+              android:layout_height="match_parent"
+              android:paddingLeft="10dp"
+              android:paddingRight="10dp"
+              android:paddingTop="20dp"
+              android:paddingBottom="20dp">
+
+    <EditText
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/layerNameInput"
+        android:layout_gravity="center_horizontal"
+        android:hint="@string/layer_name_hint"/>
+
+    <LinearLayout
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingTop="8dp">
+
+        <RadioButton
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/layer_point"
+            android:id="@+id/pointRadio"
+            android:layout_weight="1"
+            android:checked="false"/>
+
+        <RadioButton
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/layer_line"
+            android:id="@+id/lineRadio"
+            android:layout_weight="1"
+            android:checked="false"/>
+
+        <RadioButton
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/layer_polygon"
+            android:id="@+id/polygonRadio"
+            android:layout_weight="1"
+            android:checked="false"/>
+    </LinearLayout>
+</LinearLayout>

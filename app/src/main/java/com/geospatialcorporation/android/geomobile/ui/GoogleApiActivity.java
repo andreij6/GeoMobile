@@ -386,7 +386,7 @@ public class GoogleApiActivity extends Activity implements
                             if (e.getResponse().getStatus() == 401) {
                                 Log.d(TAG, "Unauthorized.");
                             } else {
-                                startActivity(new Intent(context, ChooseClientActivity.class));
+                                startActivity(new Intent(context, ClientSelectorActivity.class));
                             }
                         }
                     }

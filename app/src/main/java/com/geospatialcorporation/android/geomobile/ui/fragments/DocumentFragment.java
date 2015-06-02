@@ -55,10 +55,12 @@ public class DocumentFragment extends Fragment {
     @InjectView(R.id.library_action_btn) CircleButton mCircleButton;
 
     @OnClick(R.id.library_action_btn)
+    @SuppressWarnings("unused")
     public void libraryActionOnClick(){
         LibraryActionDialogFragment l = new LibraryActionDialogFragment();
 
         l.setContext(getActivity());
+        l.setFolder(mCurrentFolder);
         l.show(getFragmentManager(), "library actions");
     }
 

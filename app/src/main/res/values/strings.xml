@@ -89,4 +89,23 @@
     <string name="add_layer">Layer</string>
     <string name="add_document">Document</string>
     <string name="add_image">Image</string>
+    <string name="title_activity_client_selector">ClientSelectorActivity</string>
+
+    <string name="title_section1">Section 1</string>
+    <string name="title_section2">Section 2</string>
+    <string name="title_section3">Section 3</string>
+    <string name="standard_client_section">Standard</string>
+    <string name="tutorial_clone_client_section">Tutorial Clone</string>
+    <string name="demo_clone_client_section">Demo Clone</string>
+    <string name="default_client_section">Default</string>
+    <string name="ssp_client_section">SSP</string>
+    <string name="plugin_owners_section">Plugin Owners</string>
+    <string name="create_folder">Create Folder</string>
+    <string name="create">Create</string>
+    <string name="create_layer">Create Layer</string>
+    <string name="layer_polygon">Polygon</string>
+    <string name="layer_line">Line</string>
+    <string name="layer_point">Point</string>
+    <string name="folder_name_hint">Folder Name</string>
+    <string name="layer_name_hint">Layer Name</string>
 </resources>

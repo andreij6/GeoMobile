@@ -28,6 +28,7 @@
             android:textAppearance="?android:attr/textAppearanceLarge"
             android:id="@+id/clientNameLabel"
             android:text="Client Name"
+            android:textColor="@android:color/black"
             android:layout_below="@+id/clientTypeLabel"
             android:layout_centerHorizontal="true"/>
 
@@ -37,6 +38,7 @@
             android:text="@string/impersonate"
             android:id="@+id/impersonate"
             android:background="#ffe9e9e9"
+            android:textColor="@android:color/black"
             android:layout_below="@+id/clientNameLabel"
             android:layout_alignParentStart="true"
             android:layout_marginTop="30dp"/>

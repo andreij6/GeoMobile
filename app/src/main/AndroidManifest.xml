@@ -80,10 +80,6 @@
             android:value="@integer/google_play_services_version" />
 
         <activity
-            android:name=".ui.ChooseClientActivity"
-            android:label="@string/title_activity_choose_client" >
-        </activity>
-        <activity
             android:name=".ui.detail.FolderDetailActivity"
             android:label="@string/title_activity_folder_detail" >
         </activity>
@@ -94,6 +90,12 @@
         <activity
             android:name=".ui.detail.LayerDetailActivity"
             android:label="@string/title_activity_layer_detail" >
+        </activity>
+        <activity
+            android:name=".ui.ClientSelectorActivity"
+            android:label="@string/title_activity_client_selector"
+            android:theme="@style/Theme.AppCompat"
+            android:screenOrientation="portrait">
         </activity>
     </application>
 

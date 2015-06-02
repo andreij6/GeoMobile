@@ -1,9 +1,12 @@
 package com.geospatialcorporation.android.geomobile.library.rest;
 
 import com.geospatialcorporation.android.geomobile.models.Layers.Layer;
+import com.geospatialcorporation.android.geomobile.models.Layers.LayerCreateRequest;
+import com.geospatialcorporation.android.geomobile.models.Layers.LayerCreateResponse;
 
 import java.util.List;
 
+import retrofit.Callback;
 import retrofit.http.Body;
 import retrofit.http.DELETE;
 import retrofit.http.GET;
@@ -14,7 +17,7 @@ import retrofit.http.Path;
 public interface LayerService {
 
     @POST("/API/Layers")
-    Layer createLayer(@Body Layer layer);
+    void createLayer(@Body LayerCreateRequest layer, Callback<LayerCreateResponse> cb);
 
     @GET("/API/Layers")
     List<Layer> getLayers();

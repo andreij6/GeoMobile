@@ -1,8 +1,9 @@
 package com.geospatialcorporation.android.geomobile.ui.fragments;
 
-import android.app.Fragment;
+import android.content.Context;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -16,14 +17,25 @@ import com.geospatialcorporation.android.geomobile.library.rest.LoginService;
 import com.geospatialcorporation.android.geomobile.models.Client;
 import com.geospatialcorporation.android.geomobile.ui.adapters.ClientAdapter;
 
+import java.util.ArrayList;
 import java.util.List;
 
-import butterknife.InjectView;
 import retrofit.RetrofitError;
 
-public class ClientFragment extends Fragment {
+/**
+ * Created by andre on 6/1/2015.
+ */
+public class ClientSelectorFragment extends Fragment {
+    int mClientTypeCode;
+    Context mContext;
 
-    private static final String TAG = ClientFragment.class.getName();
+    public ClientSelectorFragment initialize(int clientTypeCode, Context context){
+        this.mClientTypeCode = clientTypeCode;
+        this.mContext = context;
+        return this;
+    }
+
+    private static final String TAG = ClientSelectorFragment.class.getName();
 
     private RecyclerView mRecyclerView;
     private List<Client> mDataSet;
@@ -52,7 +64,7 @@ public class ClientFragment extends Fragment {
         @Override
         protected List<Client> doInBackground(Void... params) {
             try {
-                mDataSet = service.getClients();
+                mDataSet = filter(service.getClients(), mClientTypeCode);
             } catch (RetrofitError e) {
                 if (e.getResponse() != null) {
                     Log.d(TAG, e.getResponse().getStatus() + " : Line 112");
@@ -60,6 +72,18 @@ public class ClientFragment extends Fragment {
             }
 
             return mDataSet;
+        }
+
+        private List<Client> filter(List<Client> clients, int clientTypeCode) {
+            List<Client> filtered  = new ArrayList<>();
+
+            for(Client client : clients){
+                if(client.getType() == mClientTypeCode){
+                    filtered.add(client);
+                }
+            }
+
+            return filtered;
         }
 
         @Override

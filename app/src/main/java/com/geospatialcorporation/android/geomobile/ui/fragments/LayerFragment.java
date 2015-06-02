@@ -57,6 +57,7 @@ public class LayerFragment extends Fragment {
         LayerActionDialogFragment l = new LayerActionDialogFragment();
 
         l.setContext(getActivity());
+        l.setFolder(mCurrentFolder);
         l.show(getFragmentManager(), "layer actions");
     }
 
