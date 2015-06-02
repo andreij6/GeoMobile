@@ -12,4 +12,9 @@
         <item name="android:background">@color/black_overlay</item>
     </style>
 
+    <style name="GeoActionBarStyle" parent="Base.Theme.AppCompat">
+        <item name="android:background">@color/material_orange_800</item>
+        <item name="android:textColor">@color/white</item>
+    </style>
+
 </resources>

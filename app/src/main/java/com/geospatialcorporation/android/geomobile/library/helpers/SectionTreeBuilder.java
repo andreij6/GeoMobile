@@ -1,6 +1,7 @@
 package com.geospatialcorporation.android.geomobile.library.helpers;
 
-import android.app.FragmentManager;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
 import android.content.Context;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;

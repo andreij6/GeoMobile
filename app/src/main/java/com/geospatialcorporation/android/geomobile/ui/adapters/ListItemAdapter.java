@@ -1,10 +1,11 @@
 package com.geospatialcorporation.android.geomobile.ui.adapters;
 
 import android.app.Activity;
-import android.app.Fragment;
-import android.app.FragmentManager;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
 import android.content.Context;
 import android.os.Bundle;
+import android.support.v7.app.ActionBarActivity;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -183,7 +184,7 @@ public class ListItemAdapter extends RecyclerView.Adapter<ListItemAdapter.ListVi
             }
 
             Activity activity = (Activity) itemView.getContext();
-            FragmentManager fragmentManager = activity.getFragmentManager();
+            FragmentManager fragmentManager = ((ActionBarActivity)activity).getSupportFragmentManager();
 
             fragmentManager.beginTransaction()
                     .replace(R.id.content_frame, fragment)

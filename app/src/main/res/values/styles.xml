@@ -1,10 +1,11 @@
 <resources>
 
-    <style name="FullscreenTheme" parent="android:Theme.NoTitleBar">
+    <style name="GeoUndergroundTheme" parent="Theme.AppCompat.Light">
         <item name="android:windowContentOverlay">@null</item>
         <item name="android:windowBackground">@null</item>
         <item name="metaButtonBarStyle">@style/ButtonBar</item>
         <item name="metaButtonBarButtonStyle">@style/ButtonBarButton</item>
+        <item name="android:actionBarStyle">@style/GeoActionBarStyle</item>
     </style>
 
     <!-- Backward-compatible version of ?android:attr/buttonBarStyle -->

@@ -2,8 +2,6 @@ package com.geospatialcorporation.android.geomobile.ui.fragments.dialogs;
 
 import android.app.AlertDialog;
 import android.app.Dialog;
-import android.app.DialogFragment;
-import android.content.Context;
 import android.content.DialogInterface;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -15,7 +13,7 @@ import com.geospatialcorporation.android.geomobile.library.rest.DownloadService;
 import com.geospatialcorporation.android.geomobile.models.Library.Document;
 import com.geospatialcorporation.android.geomobile.ui.viewmodels.ListItem;
 
-public class DownloadDialogFragment extends DialogFragment {
+public class DownloadDialogFragment extends GeoDialogFragmentBase {
     //region Getters & Setters
     public Document getDocument() {
         return mDocument;
@@ -23,14 +21,6 @@ public class DownloadDialogFragment extends DialogFragment {
 
     public void setDocument(Document document) {
         mDocument = document;
-    }
-
-    public Context getContext() {
-        return mContext;
-    }
-
-    public void setContext(Context context) {
-        mContext = context;
     }
 
     public ListItem getListItem() {
@@ -43,7 +33,6 @@ public class DownloadDialogFragment extends DialogFragment {
     //endregion
 
     Document mDocument;
-    Context mContext;
     ListItem mListItem;
 
     @Override

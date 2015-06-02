@@ -16,46 +16,29 @@
 
 package com.geospatialcorporation.android.geomobile.ui;
 
-import android.app.ActionBar;
-import android.app.Activity;
-import android.app.Fragment;
-import android.app.FragmentManager;
-import android.app.SearchManager;
-import android.content.Context;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
 import android.content.Intent;
-import android.content.res.Configuration;
 import android.os.Bundle;
-import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
+import android.support.v7.app.ActionBarActivity;
 import android.support.v7.app.ActionBarDrawerToggle;
-import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
-import android.view.MenuItem;
 import android.view.View;
-import android.view.ViewGroup;
-import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
-import android.widget.CheckBox;
-import android.widget.ImageView;
 import android.widget.ListView;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import com.geospatialcorporation.android.geomobile.R;
 import com.geospatialcorporation.android.geomobile.application;
 import com.geospatialcorporation.android.geomobile.library.constants.ViewConstants;
 import com.geospatialcorporation.android.geomobile.library.util.Dialogs;
-import com.geospatialcorporation.android.geomobile.models.Layers.Layer;
 import com.geospatialcorporation.android.geomobile.ui.fragments.AccountFragment;
 import com.geospatialcorporation.android.geomobile.ui.fragments.DocumentFragment;
 import com.geospatialcorporation.android.geomobile.ui.fragments.GoogleMapFragment;
 import com.geospatialcorporation.android.geomobile.ui.fragments.LayerFragment;
-
-import java.util.AbstractMap;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
+import com.geospatialcorporation.android.geomobile.ui.fragments.LayerSelectorDrawerFragment;
+import com.geospatialcorporation.android.geomobile.ui.fragments.MainNavigationDrawerFragment;
 
 import butterknife.ButterKnife;
 import butterknife.InjectView;
@@ -87,23 +70,23 @@ import butterknife.InjectView;
  * An action should be an operation performed on the current contents of the window,
  * for example enabling or disabling a data overlay on top of the current content.</p>
  */
-public class MainActivity extends Activity {
+public class MainActivity extends ActionBarActivity
+        implements MainNavigationDrawerFragment.NavigationDrawerCallbacks{
     private static final String TAG = MainActivity.class.getSimpleName();
 
     //region Properties
     @InjectView(R.id.drawer_layout)DrawerLayout mDrawerLayout;
-    @InjectView(R.id.left_drawer)ListView mLeftDrawerList;
-    @InjectView(R.id.right_drawer)ListView mRightDrawerList;
     View mHeaderView;
     View mFooterView;
     private ActionBarDrawerToggle mDrawerToggle;
-    private ActionBar mActionBar;
     private GoogleMapFragment mMap;
     private CharSequence mDrawerTitle;
     private CharSequence mTitle;
-    private List<String> mViewTitles;
     private Dialogs dialog;
     private boolean mIsAdmin;
+    MainNavigationDrawerFragment mMainMainNavigationDrawerFragment;
+    LayerSelectorDrawerFragment mLayerDrawerFragement;
+    private ListView mLayerListView;
     //endregion
 
     @Override
@@ -112,76 +95,22 @@ public class MainActivity extends Activity {
         setContentView(R.layout.activity_main);
         ButterKnife.inject(this);
 
-        mActionBar = getActionBar();
-
         dialog = new Dialogs();
 
         mMap = application.getMapFragment();
-        mIsAdmin = application.getIsAdminUser();
-
         mTitle = mDrawerTitle = getTitle();
 
-        mHeaderView = View.inflate(this, R.layout.drawer_listview_header, null);
-        mFooterView = View.inflate(this, R.layout.drawer_listview_footer, null);
+        mIsAdmin = application.getIsAdminUser();
 
-        TextView mClientName = (TextView) mHeaderView.findViewById(R.id.headerClientName);
-        mClientName.setText(application.getGeoClient().getName());
+        mMainMainNavigationDrawerFragment = (MainNavigationDrawerFragment)getSupportFragmentManager().findFragmentById(R.id.navigation_left_drawer);
+        mMainMainNavigationDrawerFragment.setUp(R.id.navigation_left_drawer,(DrawerLayout)findViewById(R.id.drawer_layout));
 
-        mLeftDrawerList.addHeaderView(mHeaderView);
-        mLeftDrawerList.addFooterView(mFooterView);
+        mLayerDrawerFragement = (LayerSelectorDrawerFragment)getSupportFragmentManager().findFragmentById(R.id.layer_drawer);
+        mLayerDrawerFragement.setUp(R.id.layer_drawer, (DrawerLayout)findViewById(R.id.drawer_layout));
 
-        if(mIsAdmin){
-            mViewTitles = Arrays.asList(new String[]{MenuConstants.MAP, MenuConstants.LAYERS, MenuConstants.LIBRARY, MenuConstants.ADMINCLITENTS});
-        } else {
-            mViewTitles = Arrays.asList(new String[]{MenuConstants.MAP, MenuConstants.LAYERS, MenuConstants.LIBRARY});
-        }
-
-        // set a custom shadow that overlays the main content when the drawer opens
-        mDrawerLayout.setDrawerShadow(R.drawable.drawer_shadow, GravityCompat.START);
-        // set up the drawer's list view with items and click listener
-        mLeftDrawerList.setAdapter(new MainNavigationAdapter(this, mViewTitles));
-
-        List<Layer> fakeLayers = new ArrayList<>();
-        fakeLayers.add(new Layer("First Layer"));
-        //TODO: Get a List of Layers
-        mRightDrawerList.setAdapter(new LayerAdapter(this,
-                R.layout.drawer_right_list_item, fakeLayers));
-
-        mLeftDrawerList.setOnItemClickListener(new LeftDrawerItemClickListener());
-        mRightDrawerList.setOnItemClickListener(new RightDrawerItemClickListener());
-
-        // enable ActionBar app icon to behave as action to toggle nav drawer
-        mActionBar.setDisplayHomeAsUpEnabled(true);
-        mActionBar.setHomeButtonEnabled(true);
-
-        // ActionBarDrawerToggle ties together the the proper interactions
-        // between the sliding drawer and the action bar app icon
-        mDrawerToggle = new ActionBarDrawerToggle(
-                this,                  /* host Activity */
-                mDrawerLayout,         /* DrawerLayout object */
-                R.string.drawer_open,  /* "open drawer" description for accessibility */
-                R.string.drawer_close  /* "close drawer" description for accessibility */
-        ) {
-            public void onDrawerClosed(View view) {
-                mActionBar.setTitle(mTitle);
-                invalidateOptionsMenu(); // creates call to onPrepareOptionsMenu()
-                mDrawerToggle.syncState();
-            }
-
-            public void onDrawerOpened(View drawerView) {
-                mActionBar.setTitle(mDrawerTitle);
-                invalidateOptionsMenu(); // creates call to onPrepareOptionsMenu()
-                toggleDrawers((ListView) drawerView);
-                mDrawerToggle.syncState();
-            }
-        };
-        mDrawerLayout.setDrawerListener(mDrawerToggle);
-
-        if (savedInstanceState == null) {
-            selectItem(1);
-        }
     }
-
+    //region old
+/*
     private void toggleDrawers(ListView drawer) {
         if (drawer == mLeftDrawerList) {
             if (mDrawerLayout.isDrawerOpen(mRightDrawerList)) {
@@ -197,6 +126,8 @@ public class MainActivity extends Activity {
     public AbstractMap.SimpleEntry<DrawerLayout, ListView> getRightDrawer() {
         return new AbstractMap.SimpleEntry<>(mDrawerLayout, mRightDrawerList);
     }
+    */
+    //endregion
 
     protected void onResume() {
         super.onResume();
@@ -213,165 +144,20 @@ public class MainActivity extends Activity {
     @Override
     public boolean onPrepareOptionsMenu(Menu menu) {
         // If the nav drawer is open, hide action items related to the content view
-        boolean drawerOpen = mDrawerLayout.isDrawerOpen(mLeftDrawerList);
-        menu.findItem(R.id.action_websearch).setVisible(!drawerOpen);
+        //boolean drawerOpen = mDrawerLayout.isDrawerOpen(mLeftDrawerList);
+        //menu.findItem(R.id.action_websearch).setVisible(!drawerOpen);
         return super.onPrepareOptionsMenu(menu);
     }
 
+
     @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        // The action bar home/up action should open or close the drawer.
-        // ActionBarDrawerToggle will take care of this.
-        if (mDrawerToggle.onOptionsItemSelected(item)) {
-            return true;
-        }
-        // Handle action buttons
-        switch (item.getItemId()) {
-            case R.id.action_websearch:
-                // create intent to perform web search for this planet
-                Intent intent = new Intent(Intent.ACTION_WEB_SEARCH);
-                intent.putExtra(SearchManager.QUERY, mActionBar.getTitle());
-                // catch event that there's no activity to handle intent
-                if (intent.resolveActivity(getPackageManager()) != null) {
-                    startActivity(intent);
-                } else {
-                    Toast.makeText(this, R.string.app_not_available, Toast.LENGTH_LONG).show();
-                }
-                return true;
-            default:
-                return super.onOptionsItemSelected(item);
-        }
-    }
+    public void onNavigationDrawerItemSelected(int position) {
+        Fragment pageFragment = setPageFragment(position);
 
-    /* The click listener for ListView in the navigation drawer */
-    private class LeftDrawerItemClickListener implements ListView.OnItemClickListener {
-        @Override
-        public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-            selectItem(position);
-        }
-    }
-
-    private class RightDrawerItemClickListener implements ListView.OnItemClickListener {
-
-        @Override
-        public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-            selectLayerItem(position);
-        }
-
-        private void selectLayerItem(int position) {
-        }
-    }
-
-    private class LayerAdapter extends ArrayAdapter<Layer> {
-
-        private List<Layer> mLayers;
-
-        public LayerAdapter(Context context, int resource, List<Layer> layers) {
-            super(context, resource, layers);
-            mLayers = layers;
-        }
-
-        private class ViewHolder {
-            TextView layerName;
-            CheckBox isVisible;
-        }
-
-        @Override
-        public View getView(int position, View convertView, ViewGroup parent) {
-
-            ViewHolder holder = null;
-
-            if (convertView == null) {
-                LayoutInflater vi = (LayoutInflater) getSystemService(
-                        Context.LAYOUT_INFLATER_SERVICE);
-                convertView = vi.inflate(R.layout.drawer_right_list_item, null);
-
-                holder = new ViewHolder();
-                holder.layerName = (TextView) convertView.findViewById(R.id.layerNameTV);
-                holder.isVisible = (CheckBox) convertView.findViewById(R.id.isVisible);
-                convertView.setTag(holder);
-
-                convertView.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        CheckBox cb = (CheckBox) v.findViewById(R.id.isVisible);
-                        if(cb.isChecked()){
-                            cb.setChecked(false);
-                        } else {
-                            cb.setChecked(true);
-                        }
-                    }
-                });
-            } else {
-                holder = (ViewHolder) convertView.getTag();
-            }
-
-            Layer layer = mLayers.get(position);
-            holder.layerName.setText(layer.getName());
-            holder.isVisible.setChecked(layer.getIsShowing());
-
-            return convertView;
-
-        }
-
-    }
-
-    private class MainNavigationAdapter extends ArrayAdapter<String>{
-        List<String> mMenuItems;
-
-        public MainNavigationAdapter(Context context, List<String> menuItems) {
-            super(context, R.layout.drawer_left_list_item, menuItems);
-            mMenuItems = menuItems;
-        }
-
-        @Override
-        public View getView(int position, View coverView, ViewGroup parent) {
-            // TODO Auto-generated method stub
-
-            LayoutInflater inflater = (LayoutInflater) getContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-
-            View v = inflater.inflate(R.layout.drawer_left_list_item, null);
-
-            TextView name = (TextView)v.findViewById(R.id.menuItemTV);
-            ImageView icon = (ImageView)v.findViewById(R.id.menuItemIcon);
-
-            name.setText(mMenuItems.get(position));
-
-            switch (mMenuItems.get(position)){
-                case MenuConstants.MAP:
-                    icon.setImageDrawable(getDrawable(R.drawable.ic_map_marker_white_18dp));
-                    break;
-                case MenuConstants.LAYERS:
-                    icon.setImageDrawable(getDrawable(R.drawable.ic_layers_white_18dp));
-                    break;
-                case MenuConstants.LIBRARY:
-                    icon.setImageDrawable(getDrawable(R.drawable.ic_book_white_18dp));
-                    break;
-                case MenuConstants.ADMINCLITENTS:
-                    icon.setImageDrawable(getDrawable(R.drawable.ic_account_search_white_18dp));
-                    break;
-                default:
-                    break;
-            }
-
-            return v;
-
-        }
-
-    }
-
-    private void selectItem(int position) {
-        Fragment fragment = setPageFragment(position);
-
-        FragmentManager fragmentManager = getFragmentManager();
-
+        FragmentManager fragmentManager = getSupportFragmentManager();
         fragmentManager.beginTransaction()
-                .replace(R.id.content_frame, fragment)
+                .replace(R.id.content_frame, pageFragment)
                 .commit();
-
-        // update selected item and title, then close the drawer
-        mLeftDrawerList.setItemChecked(position, true);
-        mDrawerLayout.closeDrawer(mLeftDrawerList);
     }
 
     protected Fragment setPageFragment(int position) {
@@ -400,6 +186,8 @@ public class MainActivity extends Activity {
         } else {
             switch (position) {
                 case ViewConstants.MAP:
+                    if(mMap == null)
+                        mMap = application.getMapFragment();
                     return mMap;
                 case ViewConstants.LAYER:
                     return new LayerFragment();
@@ -423,32 +211,17 @@ public class MainActivity extends Activity {
     @Override
     public void setTitle(CharSequence title) {
         mTitle = title;
-        mActionBar.setTitle(mTitle);
-    }
-
-    @Override
-    protected void onPostCreate(Bundle savedInstanceState) {
-        super.onPostCreate(savedInstanceState);
-        // Sync the toggle state after onRestoreInstanceState has occurred.
-        mDrawerToggle.syncState();
-    }
-
-    @Override
-    public void onConfigurationChanged(Configuration newConfig) {
-        super.onConfigurationChanged(newConfig);
-        // Pass any configuration change to the drawer toggls
-        mDrawerToggle.onConfigurationChanged(newConfig);
     }
 
     public void treeItem(View view) {
         dialog.message("tree item clicked", this);
     }
 
-    private class MenuConstants {
-        public static final String MAP = "Map";
-        public static final String LAYERS = "Layers";
-        public static final String LIBRARY = "Library";
-        public static final String ADMINCLITENTS = "Admin Clients";
+    public DrawerLayout getRightDrawer() {
+        return (DrawerLayout)findViewById(R.id.drawer_layout);
+    }
 
+    public View getLayerListView() {
+        return (View)findViewById(R.id.layer_drawer);
     }
 }

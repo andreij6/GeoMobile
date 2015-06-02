@@ -1,6 +1,7 @@
 package com.geospatialcorporation.android.geomobile.ui.fragments.dialogs;
 
-import android.app.Fragment;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
 import android.view.View;
 import android.widget.Toast;
 

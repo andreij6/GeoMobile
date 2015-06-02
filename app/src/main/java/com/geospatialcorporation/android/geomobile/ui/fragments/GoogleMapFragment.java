@@ -17,7 +17,8 @@
 package com.geospatialcorporation.android.geomobile.ui.fragments;
 
 import android.app.AlertDialog;
-import android.app.Fragment;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
 import android.app.SearchManager;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -102,9 +103,9 @@ public class GoogleMapFragment extends Fragment implements
                         }
                     })
                     .setNegativeButton(getString(R.string.cancel),
-                    new DialogInterface.OnClickListener() {
-                        public void onClick(DialogInterface dialog, int id) {
-                            dialog.cancel();
+                            new DialogInterface.OnClickListener() {
+                                public void onClick(DialogInterface dialog, int id) {
+                                    dialog.cancel();
                         }
                     });
 
@@ -122,10 +123,10 @@ public class GoogleMapFragment extends Fragment implements
     @SuppressWarnings("unused")
     @OnClick(R.id.action_btn_layers)
     public void showLayersDrawer(){
-        DrawerLayout mDrawerLayout = ((MainActivity)getActivity()).getRightDrawer().getKey();
-        ListView mRightListView = ((MainActivity)getActivity()).getRightDrawer().getValue();
+        DrawerLayout mDrawerLayout = ((MainActivity)getActivity()).getRightDrawer();
+        View layerView = ((MainActivity)getActivity()).getLayerListView();
 
-        mDrawerLayout.openDrawer(mRightListView);
+        mDrawerLayout.openDrawer(layerView);
     }
     //endregion
 

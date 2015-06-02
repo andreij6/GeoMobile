@@ -15,16 +15,12 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 
-public class MapTypeSelectDialogFragment extends DialogFragment {
+public class MapTypeSelectDialogFragment extends GeoDialogFragmentBase {
 
     public MapTypeSelectDialogFragment(){
         mSelected = -1;
     }
-    public void setContext(Context context) {
-        mContext = context;
-    }
 
-    Context mContext;
     Integer mSelected;
 
     public void setMap(MapView map) {

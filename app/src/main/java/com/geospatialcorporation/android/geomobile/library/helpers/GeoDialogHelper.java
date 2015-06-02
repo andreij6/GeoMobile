@@ -1,6 +1,6 @@
 package com.geospatialcorporation.android.geomobile.library.helpers;
 
-import android.app.FragmentManager;
+import android.support.v4.app.FragmentManager;
 import android.content.Context;
 
 import com.geospatialcorporation.android.geomobile.models.Folders.Folder;

@@ -27,7 +27,8 @@
             android:textAppearance="?android:attr/textAppearanceSmall"
             android:text="@string/add_folder"
             android:id="@+id/addLayerFolderTV"
-            android:layout_gravity="center_horizontal"/>
+            android:layout_gravity="center_horizontal"
+            />
 
     </LinearLayout>
 
@@ -53,7 +54,8 @@
             android:textAppearance="?android:attr/textAppearanceSmall"
             android:text="@string/add_layer"
             android:id="@+id/addLayerTV"
-            android:layout_gravity="center_horizontal"/>
+            android:layout_gravity="center_horizontal"
+            android:typeface="normal"/>
 
     </LinearLayout>
 </LinearLayout>

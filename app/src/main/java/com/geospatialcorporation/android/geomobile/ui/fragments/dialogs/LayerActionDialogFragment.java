@@ -20,15 +20,8 @@ import butterknife.ButterKnife;
 import butterknife.InjectView;
 import butterknife.OnClick;
 
-public class LayerActionDialogFragment extends DialogFragment {
+public class LayerActionDialogFragment extends GeoDialogFragmentBase {
     //region Getters & Setters
-    public Context getContext() {
-        return mContext;
-    }
-
-    public void setContext(Context context) {
-        mContext = context;
-    }
 
     public Folder getFolder() {
         return mFolder;
@@ -40,7 +33,6 @@ public class LayerActionDialogFragment extends DialogFragment {
     //endregion
 
     //region Properties
-    Context mContext;
     Folder mFolder;
     @InjectView(R.id.addLayerFolderSection) LinearLayout mFolderSection;
     @InjectView(R.id.addLayerSection) LinearLayout mLayerSection;

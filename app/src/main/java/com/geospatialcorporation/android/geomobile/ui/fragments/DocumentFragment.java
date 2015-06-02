@@ -1,7 +1,7 @@
 package com.geospatialcorporation.android.geomobile.ui.fragments;
 
-import android.app.Fragment;
-import android.app.FragmentManager;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
 import android.content.Context;
 import android.os.AsyncTask;
 import android.os.Bundle;
