@@ -30,7 +30,6 @@ public class FolderDetailFragment extends ItemDetailFragment<Folder> {
     @InjectView(R.id.deleteFolderTV) TextView mDeleteText;
     @InjectView(R.id.backImageView) ImageView mBack;
 
-
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState){
         super.onCreate(savedInstanceState);
@@ -58,7 +57,7 @@ public class FolderDetailFragment extends ItemDetailFragment<Folder> {
         mFolderName.setText(mFolder.getName());
 
         mDeleteIcon.setOnClickListener(DeleteonClickListner);
-        mDeleteIcon.setOnClickListener(DeleteonClickListner);
+        mDeleteText.setOnClickListener(DeleteonClickListner);
 
         mBack.setOnClickListener(BackButtonClicked);
     }

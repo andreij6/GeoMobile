@@ -3,7 +3,6 @@ package com.geospatialcorporation.android.geomobile.ui;
 import android.accounts.AccountManager;
 import android.app.Activity;
 import android.app.Dialog;
-import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentSender;

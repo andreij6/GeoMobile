@@ -2,13 +2,10 @@ package com.geospatialcorporation.android.geomobile.ui.fragments.dialogs;
 
 import android.app.AlertDialog;
 import android.app.Dialog;
-import android.app.DialogFragment;
 import android.content.DialogInterface;
 import android.os.Bundle;
-import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.EditText;
-import android.widget.Toast;
 
 import com.geospatialcorporation.android.geomobile.R;
 import com.geospatialcorporation.android.geomobile.library.helpers.FolderTreeService;

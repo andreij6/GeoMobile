@@ -53,6 +53,7 @@ public class LayerFragment extends Fragment {
     @InjectView(R.id.layer_action_btn) CircleButton mCircleButton;
 
     @OnClick(R.id.layer_action_btn)
+    @SuppressWarnings("unused")
     public void layerActionClick(){
         LayerActionDialogFragment l = new LayerActionDialogFragment();
 
@@ -75,12 +76,7 @@ public class LayerFragment extends Fragment {
 
         mContext = getActivity();
 
-        Bundle args = getArguments();
-        if (args != null) {
-            handleArguments(args);
-        } else {
-            firstLayerView();
-        }
+        handleArguments();
 
         return mRootView;
     }
@@ -129,9 +125,15 @@ public class LayerFragment extends Fragment {
         new GetLayersTask().execute(0);
     }
 
-    private void handleArguments(Bundle args) {
-        int folderId = args.getInt(Folder.FOLDER_INTENT, 0);
-        new GetLayersTask().execute(folderId);
+    private void handleArguments() {
+        Bundle args = getArguments();
+
+        if(args != null) {
+            int folderId = args.getInt(Folder.FOLDER_INTENT, 0);
+            new GetLayersTask().execute(folderId);
+        } else {
+            firstLayerView();
+        }
     }
 
 }

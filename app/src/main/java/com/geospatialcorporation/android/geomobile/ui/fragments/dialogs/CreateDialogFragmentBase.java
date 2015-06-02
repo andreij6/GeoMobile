@@ -3,13 +3,10 @@ package com.geospatialcorporation.android.geomobile.ui.fragments.dialogs;
 import android.app.AlertDialog;
 import android.app.DialogFragment;
 import android.content.Context;
-import android.text.Layout;
 import android.view.LayoutInflater;
 import android.view.View;
 
 import com.geospatialcorporation.android.geomobile.models.Folders.Folder;
-
-import java.util.zip.Inflater;
 
 /**
  * Created by andre on 6/1/2015.

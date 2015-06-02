@@ -143,5 +143,4 @@ public class Folder implements Parcelable {
 
     //endregion
 
-
 }

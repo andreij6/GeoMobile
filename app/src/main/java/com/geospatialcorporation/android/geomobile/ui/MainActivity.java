@@ -16,11 +16,11 @@
 
 package com.geospatialcorporation.android.geomobile.ui;
 
+import android.app.ActionBar;
 import android.app.Activity;
 import android.app.Fragment;
 import android.app.FragmentManager;
 import android.app.SearchManager;
-import android.app.ActionBar;
 import android.content.Context;
 import android.content.Intent;
 import android.content.res.Configuration;
@@ -41,17 +41,16 @@ import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.geospatialcorporation.android.geomobile.application;
 import com.geospatialcorporation.android.geomobile.R;
+import com.geospatialcorporation.android.geomobile.application;
 import com.geospatialcorporation.android.geomobile.library.constants.ViewConstants;
 import com.geospatialcorporation.android.geomobile.library.util.Dialogs;
 import com.geospatialcorporation.android.geomobile.models.Layers.Layer;
 import com.geospatialcorporation.android.geomobile.ui.fragments.AccountFragment;
+import com.geospatialcorporation.android.geomobile.ui.fragments.DocumentFragment;
 import com.geospatialcorporation.android.geomobile.ui.fragments.GoogleMapFragment;
 import com.geospatialcorporation.android.geomobile.ui.fragments.LayerFragment;
-import com.geospatialcorporation.android.geomobile.ui.fragments.DocumentFragment;
 
-import java.lang.reflect.Array;
 import java.util.AbstractMap;
 import java.util.ArrayList;
 import java.util.List;

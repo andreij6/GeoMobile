@@ -31,7 +31,6 @@ public class LayerDetailFragment extends ItemDetailFragment<Layer> {
     @InjectView(R.id.deleteLayerTV) TextView mDeleteText;
     @InjectView(R.id.backImageView) ImageView mBack;
 
-
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState){
         super.onCreate(savedInstanceState);
@@ -52,7 +51,6 @@ public class LayerDetailFragment extends ItemDetailFragment<Layer> {
         Bundle args = getArguments();
 
         mLayer = args.getParcelable(Layer.LAYER_INTENT);
-
     }
 
     @Override
@@ -60,7 +58,7 @@ public class LayerDetailFragment extends ItemDetailFragment<Layer> {
         mLayerName.setText(mLayer.getName());
 
         mDeleteIcon.setOnClickListener(DeleteonClickListner);
-        mDeleteIcon.setOnClickListener(DeleteonClickListner);
+        mDeleteText.setOnClickListener(DeleteonClickListner);
 
         mBack.setOnClickListener(BackButtonClicked);
     }

@@ -26,7 +26,6 @@ public class AccountFragment extends Fragment {
     //region Properties
     View mRootView;
     AccountService mService;
-
     //endregion
 
     //region View Setup
@@ -37,6 +36,7 @@ public class AccountFragment extends Fragment {
     @InjectView(R.id.officePhone) TextView OfficePhone;
     //endregion
 
+    @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState){
         mRootView = inflater.inflate(R.layout.fragment_account, container, false);
         ButterKnife.inject(this, mRootView);

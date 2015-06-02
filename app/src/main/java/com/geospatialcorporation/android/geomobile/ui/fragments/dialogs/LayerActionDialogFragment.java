@@ -1,28 +1,20 @@
 package com.geospatialcorporation.android.geomobile.ui.fragments.dialogs;
 
-import android.app.ActionBar;
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.app.DialogFragment;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.graphics.Color;
-import android.graphics.Point;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
-import android.view.Display;
-import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
-import android.view.WindowManager;
 import android.widget.LinearLayout;
-import android.widget.Toast;
 
 import com.geospatialcorporation.android.geomobile.R;
 import com.geospatialcorporation.android.geomobile.library.helpers.CreateItemDialogHelper;
 import com.geospatialcorporation.android.geomobile.models.Folders.Folder;
-import com.google.android.gms.drive.internal.CreateFolderRequest;
 
 import butterknife.ButterKnife;
 import butterknife.InjectView;

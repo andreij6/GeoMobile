@@ -26,6 +26,8 @@ import retrofit.RetrofitError;
  * Created by andre on 6/1/2015.
  */
 public class ClientSelectorFragment extends Fragment {
+    private static final String TAG = ClientSelectorFragment.class.getName();
+
     int mClientTypeCode;
     Context mContext;
 
@@ -35,12 +37,11 @@ public class ClientSelectorFragment extends Fragment {
         return this;
     }
 
-    private static final String TAG = ClientSelectorFragment.class.getName();
-
     private RecyclerView mRecyclerView;
     private List<Client> mDataSet;
     private LoginService service;
 
+    @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View mRootView;

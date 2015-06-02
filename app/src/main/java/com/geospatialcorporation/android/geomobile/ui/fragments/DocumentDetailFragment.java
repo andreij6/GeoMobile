@@ -25,11 +25,11 @@ public class DocumentDetailFragment extends ItemDetailFragment<Document> {
 
     Document mDocument;
 
+    //view
     @InjectView(R.id.documentNameTV) TextView mDocumentName;
     @InjectView(R.id.deleteDocumentIcon) ImageView mDeleteIcon;
     @InjectView(R.id.deleteDocumentTV) TextView mDeleteText;
     @InjectView(R.id.backImageView) ImageView mBack;
-
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState){
@@ -55,10 +55,10 @@ public class DocumentDetailFragment extends ItemDetailFragment<Document> {
 
     @Override
     protected void SetupUI(){
-        mDocumentName.setText(mDocument.getName());
+        mDocumentName.setText(mDocument.getNameWithExt());
 
         mDeleteIcon.setOnClickListener(DeleteonClickListner);
-        mDeleteIcon.setOnClickListener(DeleteonClickListner);
+        mDeleteText.setOnClickListener(DeleteonClickListner);
 
         mBack.setOnClickListener(BackButtonClicked);
     }

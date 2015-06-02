@@ -18,8 +18,6 @@ import com.geospatialcorporation.android.geomobile.library.rest.LoginService;
 import com.geospatialcorporation.android.geomobile.models.Client;
 import com.geospatialcorporation.android.geomobile.ui.MainActivity;
 
-import org.w3c.dom.Text;
-
 import java.util.List;
 
 import butterknife.ButterKnife;

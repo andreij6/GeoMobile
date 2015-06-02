@@ -7,7 +7,6 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
-import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -19,7 +18,6 @@ import android.widget.Toast;
 import com.geospatialcorporation.android.geomobile.R;
 import com.geospatialcorporation.android.geomobile.library.helpers.CreateItemDialogHelper;
 import com.geospatialcorporation.android.geomobile.models.Folders.Folder;
-import com.geospatialcorporation.android.geomobile.ui.viewmodels.ListItem;
 
 import butterknife.ButterKnife;
 import butterknife.InjectView;

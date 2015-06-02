@@ -73,14 +73,15 @@ public class GoogleMapFragment extends Fragment implements
         GoogleApiClient.ConnectionCallbacks,
         GoogleApiClient.OnConnectionFailedListener
 {
+    //region Properties
     public GoogleMap mMap;
     GoogleApiClient mLocationClient;
     @InjectView(R.id.map) MapView mView;
     @InjectView(R.id.action_btn_location) CircleButton mMyCurrentButton;
     @InjectView(R.id.action_btn_layers) CircleButton mLayersButton;
+    //endregion
 
-
-
+    //region OnClicks
     @SuppressWarnings("unused")
     @OnClick(R.id.action_btn_location)
     public void getLocation(){
@@ -105,10 +106,13 @@ public class GoogleMapFragment extends Fragment implements
 
         mDrawerLayout.openDrawer(mRightListView);
     }
+    //endregion
 
+    //region Constructors
     public GoogleMapFragment() {
         // Empty constructor required for fragment subclasses
     }
+    //endregion
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -197,6 +201,8 @@ public class GoogleMapFragment extends Fragment implements
         MapStateManager msm = new MapStateManager(getActivity());
         msm.saveMapState(mMap);
     }
+
+    //region Test Layers
     /**
      * Sets up the map if it is possible to do so
      */
@@ -242,8 +248,9 @@ public class GoogleMapFragment extends Fragment implements
                                     .transparency(0.5f));
 
     }
+    //endregion
 
-    //region Interface Methods
+    //region GoogleAPIClient Interface Methods
     @Override
     public void onConnected(Bundle bundle) {
         //Toast.makeText(getActivity(), "Connected to location service", Toast.LENGTH_LONG).show();
