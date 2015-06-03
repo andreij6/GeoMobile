@@ -19,6 +19,7 @@ import com.geospatialcorporation.android.geomobile.R;
 import com.geospatialcorporation.android.geomobile.application;
 import com.geospatialcorporation.android.geomobile.library.helpers.GeoDialogHelper;
 import com.geospatialcorporation.android.geomobile.library.helpers.LayerTreeService;
+import com.geospatialcorporation.android.geomobile.library.helpers.MediaHelper;
 import com.geospatialcorporation.android.geomobile.library.rest.DocumentService;
 import com.geospatialcorporation.android.geomobile.models.Folders.Folder;
 import com.geospatialcorporation.android.geomobile.ui.MainActivity;
@@ -83,13 +84,33 @@ public class UploadImageDialogFragment extends GeoUploadDialogFragmentBase {
                     LinearLayout s = (LinearLayout)v.findViewById(R.id.selectSection);
 
                     if (isHighlighted(t)) {
-                        Intent chooseImage = new Intent(Intent.ACTION_PICK, android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
-                        getActivity().startActivityForResult(chooseImage, MainActivity.MediaConstants.PICK_IMAGE_REQUEST);
+                        Intent getIntent = new Intent(Intent.ACTION_GET_CONTENT);
+                        getIntent.setType("image/*");
+
+                        Intent pickIntent = new Intent(Intent.ACTION_PICK, android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+                        pickIntent.setType("image/*");
+
+                        Intent chooserIntent = Intent.createChooser(getIntent, "Select Image");
+                        chooserIntent.putExtra(Intent.EXTRA_INITIAL_INTENTS, new Intent[]{pickIntent});
+
+                        getActivity().startActivityForResult(chooserIntent, MainActivity.MediaConstants.PICK_IMAGE_REQUEST);
                     }
 
                     if(isHighlighted(s)){
-                        Intent takeImage = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-                        getActivity().startActivityForResult(takeImage, MainActivity.MediaConstants.TAKE_IMAGE_REQUEST);
+                        Intent takePhotoIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+                        MediaHelper mediaHelper = new MediaHelper(mContext);
+
+                        application.mMediaUri = mediaHelper.getOutputMediaFileUri(MainActivity.MediaConstants.MEDIA_TYPE_IMAGE);
+
+                        if (application.mMediaUri == null) {
+                            // display an error
+                            Toast.makeText(mContext, R.string.error_external_storage,
+                                    Toast.LENGTH_LONG).show();
+                        }
+                        else {
+                            takePhotoIntent.putExtra(MediaStore.EXTRA_OUTPUT, application.mMediaUri);
+                            getActivity().startActivityForResult(takePhotoIntent, MainActivity.MediaConstants.TAKE_IMAGE_REQUEST);
+                        }
                     }
 
                     dialog.cancel();

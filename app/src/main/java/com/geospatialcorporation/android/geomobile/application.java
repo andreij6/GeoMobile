@@ -55,6 +55,7 @@ public class application extends Application {
     private static List<Document> documents;
     private static List<Folder> documentFolders;
     private static boolean isAdminUser;
+    public static Uri mMediaUri;
 
     public static void setIsAdminUser(boolean isAdminUser) {
         application.isAdminUser = isAdminUser;

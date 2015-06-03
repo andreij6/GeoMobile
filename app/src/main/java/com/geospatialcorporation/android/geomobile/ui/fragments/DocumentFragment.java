@@ -2,6 +2,8 @@ package com.geospatialcorporation.android.geomobile.ui.fragments;
 
 import android.content.Intent;
 import android.graphics.Bitmap;
+import android.net.Uri;
+import android.os.Environment;
 import android.os.Handler;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
@@ -31,7 +33,11 @@ import com.geospatialcorporation.android.geomobile.ui.MainActivity;
 import com.geospatialcorporation.android.geomobile.ui.adapters.ListItemAdapter;
 import com.geospatialcorporation.android.geomobile.ui.fragments.dialogs.LibraryActionDialogFragment;
 
+import java.io.File;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
+import java.util.Locale;
 
 import at.markushi.ui.CircleButton;
 import butterknife.ButterKnife;
@@ -106,33 +112,34 @@ public class DocumentFragment extends Fragment {
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         // Check which request we're responding to
-        Toast.makeText(getActivity(), "Request: " + requestCode + " Result: " + resultCode, Toast.LENGTH_LONG).show();
-        if (requestCode == MainActivity.MediaConstants.PICK_FILE_REQUEST) {
-            // Make sure the request was successful
-            if (resultCode == getActivity().RESULT_OK) {
+        if (resultCode == getActivity().RESULT_OK) {
+            if (requestCode == MainActivity.MediaConstants.PICK_FILE_REQUEST) {
+                // Make sure the request was successful
+
                 DocumentTreeService uploader = new DocumentTreeService();
                 uploader.SendDocument(mCurrentFolder, data.getData());
-            }
-        }
 
-        if(requestCode == MainActivity.MediaConstants.PICK_IMAGE_REQUEST){
-            if (resultCode == getActivity().RESULT_OK) {
-                //DocumentTreeService uploader = new DocumentTreeService();
-                Toast.makeText(getActivity(), "Data received but code not implemented", Toast.LENGTH_LONG).show();
-                //uploader.SendImage(mCurrentFolder, data.getData());
             }
-        }
 
-        if(requestCode == MainActivity.MediaConstants.TAKE_IMAGE_REQUEST){
-            if (resultCode == getActivity().RESULT_OK) {
-                Toast.makeText(getActivity(), "Data received but code not implemented", Toast.LENGTH_LONG).show();
-               //DocumentTreeService uploader = new DocumentTreeService();
-                //uploader.SendDocument(mCurrentFolder, data.getData());
+            if(requestCode == MainActivity.MediaConstants.PICK_IMAGE_REQUEST){
+
+                DocumentTreeService uploader = new DocumentTreeService();
+                uploader.SendPickedImage(mCurrentFolder, data.getData());
+
+            }
+
+            if(requestCode == MainActivity.MediaConstants.TAKE_IMAGE_REQUEST) {
+
+                DocumentTreeService uploader = new DocumentTreeService();
+                uploader.SendTakenImage(mCurrentFolder, application.mMediaUri);
+
             }
         }
 
 
     }
+
+
 
     private class GetDocumentsTask extends AsyncTask<Integer, Void, Void> {
         @Override
