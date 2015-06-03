@@ -88,7 +88,7 @@ public class DocumentTreeService {
         return opt.outMimeType;
     }
 
-    public static String getRealPathFromUri(Uri contentUri) {
+    public String getRealPathFromUri(Uri contentUri) {
         Cursor cursor = null;
         try {
             String[] proj = { MediaStore.Images.Media.DATA };

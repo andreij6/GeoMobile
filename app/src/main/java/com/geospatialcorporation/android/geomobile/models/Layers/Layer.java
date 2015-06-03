@@ -6,11 +6,12 @@ import android.os.Parcelable;
 import android.text.TextUtils;
 
 import com.geospatialcorporation.android.geomobile.library.map.MapActions;
+import com.geospatialcorporation.android.geomobile.models.IdModel;
 
 import java.util.List;
 import java.util.Map;
 
-public class Layer implements Parcelable {
+public class Layer implements Parcelable, IdModel {
 
     //region Constructors
     public Layer(String name) {
@@ -107,7 +108,7 @@ public class Layer implements Parcelable {
         MobileId = id;
     }
 
-    public Integer getId() { return Id; }
+    public int getId() { return Id; }
 
     public void setId(Integer id){ Id = id; }
 

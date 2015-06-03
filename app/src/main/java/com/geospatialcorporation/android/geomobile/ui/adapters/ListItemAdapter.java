@@ -15,6 +15,9 @@ import android.widget.TextView;
 
 import com.geospatialcorporation.android.geomobile.R;
 import com.geospatialcorporation.android.geomobile.application;
+import com.geospatialcorporation.android.geomobile.database.DataRepository.Implementations.Documents.DocumentsAppSource;
+import com.geospatialcorporation.android.geomobile.database.DataRepository.Implementations.Folders.FolderAppSource;
+import com.geospatialcorporation.android.geomobile.database.DataRepository.Implementations.IAppDataRepository;
 import com.geospatialcorporation.android.geomobile.library.helpers.DataHelper;
 import com.geospatialcorporation.android.geomobile.library.helpers.LayerTreeService;
 import com.geospatialcorporation.android.geomobile.library.map.MapActions;
@@ -84,12 +87,17 @@ public class ListItemAdapter extends RecyclerView.Adapter<ListItemAdapter.ListVi
         @InjectView(R.id.itemImageView) ImageView itemIcon;
         @InjectView(R.id.infoImageView) ImageView itemInfo;
 
+        IAppDataRepository<Document> DocumentRepo;
+        IAppDataRepository<Folder> FolderRepo;
+
         public ListViewHolder(View itemView) {
             super(itemView);
             ButterKnife.inject(this, itemView);
             itemName.setOnClickListener(ItemOnClickListener);
             itemIcon.setOnClickListener(ItemOnClickListener);
             itemInfo.setOnClickListener(ItemDetailOnClickListener);
+            DocumentRepo = new DocumentsAppSource();
+            FolderRepo = new FolderAppSource();
 
         }
 
@@ -140,7 +148,7 @@ public class ListItemAdapter extends RecyclerView.Adapter<ListItemAdapter.ListVi
 
         //region ListItem Actions by Type
         private void DocumentAction(ListItem item) {
-            Document document = application.getDocumentById(item.getId());
+            Document document = DocumentRepo.getById(item.getId());
 
             DownloadDialogFragment d = new DownloadDialogFragment();
             d.setContext(mContext);
@@ -150,7 +158,7 @@ public class ListItemAdapter extends RecyclerView.Adapter<ListItemAdapter.ListVi
 
         private void DocumentDetailAction(ListItem item) {
             Fragment f = new DocumentDetailFragment();
-            Document d = application.getDocumentById(item.getId());
+            Document d = DocumentRepo.getById(item.getId());
 
             Bundle b = new Bundle();
             b.putParcelable(Document.INTENT, d);
@@ -163,7 +171,7 @@ public class ListItemAdapter extends RecyclerView.Adapter<ListItemAdapter.ListVi
         }
 
         private void FolderAction(ListItem item) {
-            mFolder = application.getFolderById(mItem.getId());
+            mFolder = FolderRepo.getById(mItem.getId());
 
             Fragment fragment;
 
@@ -195,7 +203,7 @@ public class ListItemAdapter extends RecyclerView.Adapter<ListItemAdapter.ListVi
 
         private void FolderDetailAction(ListItem item) {
             Fragment f = new FolderDetailFragment();
-            Folder folder = application.getFolderById(item.getId());
+            Folder folder = FolderRepo.getById(item.getId());
 
             Bundle b = new Bundle();
             b.putParcelable(Folder.FOLDER_INTENT, folder);

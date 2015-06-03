@@ -15,6 +15,10 @@ import android.widget.Toast;
 
 import com.geospatialcorporation.android.geomobile.R;
 import com.geospatialcorporation.android.geomobile.application;
+import com.geospatialcorporation.android.geomobile.database.DataRepository.IAddDataRepository;
+import com.geospatialcorporation.android.geomobile.database.DataRepository.Implementations.Folders.FolderAppSource;
+import com.geospatialcorporation.android.geomobile.database.DataRepository.Implementations.IAppDataRepository;
+import com.geospatialcorporation.android.geomobile.database.DataRepository.Implementations.Layers.LayersAppSource;
 import com.geospatialcorporation.android.geomobile.library.helpers.DataHelper;
 import com.geospatialcorporation.android.geomobile.library.helpers.FolderTreeService;
 import com.geospatialcorporation.android.geomobile.library.helpers.SectionTreeBuilder;
@@ -116,9 +120,15 @@ public class LayerFragment extends Fragment {
             List<Folder> allFolders = mHelper.getFoldersRecursively(mCurrentFolder, mCurrentFolder.getParent());
             List<Layer> allLayers = mLayerService.getLayers();
 
-            if (allFolders.size() > 0) { application.setLayerFolders(allFolders); }
+            if (allFolders.size() > 0) {
+                IAddDataRepository<Folder> repo = new FolderAppSource();
+                repo.Add(allFolders);
+            }
             else { Log.d(TAG, "allFolders empty."); }
-            if (allLayers.size() > 0) { application.setLayers(allLayers); }
+            if (allLayers.size() > 0) {
+                IAppDataRepository<Layer> LayerRepo = new LayersAppSource();
+                LayerRepo.Add(allLayers);
+            }
             else { Log.d(TAG, "allLayers empty."); }
         }
 

@@ -4,13 +4,14 @@ package com.geospatialcorporation.android.geomobile.models.Folders;
 import android.os.Parcel;
 import android.os.Parcelable;
 
+import com.geospatialcorporation.android.geomobile.models.IdModel;
 import com.geospatialcorporation.android.geomobile.models.Layers.Layer;
 import com.geospatialcorporation.android.geomobile.models.Library.Document;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class Folder implements Parcelable {
+public class Folder implements Parcelable, IdModel {
 
     public Folder(){
         Documents = new ArrayList<>();
@@ -79,7 +80,7 @@ public class Folder implements Parcelable {
         MobileId = id;
     }
 
-    public Integer getId() {return Id; }
+    public int getId() {return Id; }
     public void setId(Integer id){ Id = id; }
 
     public String getName() {

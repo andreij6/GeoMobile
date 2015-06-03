@@ -1,11 +1,11 @@
-package com.geospatialcorporation.android.geomobile.database.datasource.Folders;
+package com.geospatialcorporation.android.geomobile.database.DataRepository.Implementations.Folders;
 
 import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
 import android.provider.BaseColumns;
 
-import com.geospatialcorporation.android.geomobile.database.datasource.DataSourceGenericBase;
+import com.geospatialcorporation.android.geomobile.database.DataRepository.Implementations.DataSourceGenericBase;
 import com.geospatialcorporation.android.geomobile.database.sqlitehelper.GeoSQLiteHelper;
 import com.geospatialcorporation.android.geomobile.models.Folders.Folder;
 

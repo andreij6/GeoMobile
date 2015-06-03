@@ -47,15 +47,44 @@ public class application extends Application {
     private static OkHttpClient client;
     private static RestAdapter restAdapter;
     private static List<Folder> libraryFolders;
-    private static HashMap<Integer, Folder> folderHashMap;
     private static List<Folder> layerFolders;
     private static List<Layer> layers;
-    private static HashMap<Integer, Layer> layerHashMap;
-    private static HashMap<Integer, Document> documentHashMap;
     private static List<Document> documents;
     private static List<Folder> documentFolders;
     private static boolean isAdminUser;
     public static Uri mMediaUri;
+
+
+
+    private static HashMap<Integer, Folder> folderHashMap;
+    private static HashMap<Integer, Document> documentHashMap;
+    private static HashMap<Integer, Layer> layerHashMap;
+
+    //region Tree Entity Getters & Setters
+    public static HashMap<Integer, Folder> getFolderHashMap() {
+        return folderHashMap;
+    }
+
+    public static void setFolderHashMap(HashMap<Integer, Folder> folderHashMap) {
+        application.folderHashMap = folderHashMap;
+    }
+
+    public static HashMap<Integer, Document> getDocumentHashMap() {
+        return documentHashMap;
+    }
+
+    public static void setDocumentHashMap(HashMap<Integer, Document> documentHashMap) {
+        application.documentHashMap = documentHashMap;
+    }
+
+    public static HashMap<Integer, Layer> getLayerHashMap() {
+        return layerHashMap;
+    }
+
+    public static void setLayerHashMap(HashMap<Integer, Layer> layerHashMap) {
+        application.layerHashMap = layerHashMap;
+    }
+    //endregion
 
     public static void setIsAdminUser(boolean isAdminUser) {
         application.isAdminUser = isAdminUser;
@@ -63,14 +92,6 @@ public class application extends Application {
 
     public static Boolean getIsAdminUser(){
         return isAdminUser;
-    }
-
-    public static void setFolders(List<Folder> folders) {
-        for(Folder f : folders){
-            if(!folderHashMap.containsKey(f.getId())) {
-                folderHashMap.put(f.getId(), f);
-            }
-        }
     }
 
     public void onCreate() {
@@ -178,87 +199,8 @@ public class application extends Application {
         return geoAuthToken;
     }
 
-    public static void setLibraryFolders(List<Folder> folders) {
-        libraryFolders = folders;
-    }
-
-    public static List<Folder> getLibraryFolders() {
-        return libraryFolders;
-    }
-
-    public static void setLayerFolders(List<Folder> folders) {
-        Log.d(TAG, "setLayerFolders total: " + folders.size());
-        layerFolders = folders;
-
-        for (Folder folder : layerFolders) {
-            folderHashMap.put(folder.getId(), folder);
-        }
-    }
-
-    public static void setDocuments(List<Document> newDocuments) {
-        documents = newDocuments;
-
-        for (Document document : documents) {
-            documentHashMap.put(document.getId(), document);
-        }
-    }
-
-    public static Document getDocumentById(int documentId) {
-        return documentHashMap.get(documentId);
-    }
-
-    public static List<Document> getDocuments() {
-        return documents;
-    }
-
-    public static void setDocumentFolders(List<Folder> newDocumentFolders) {
-        documentFolders = newDocumentFolders;
-
-        for (Folder folder : newDocumentFolders) {
-            folderHashMap.put(folder.getId(), folder);
-        }
-    }
-
-    public static List<Folder> getDocumentFolders() {
-        return documentFolders;
-    }
-
-    public static List<Folder> getLayerFolders() {
-        return layerFolders;
-    }
-
-    public static Folder getFolderById(int folderId) {
-        return folderHashMap.get(folderId);
-    }
-
-    public static void setLayers(List<Layer> newLayers) {
-
-        for (Layer layer : newLayers) {
-            if(!layerHashMap.containsKey(layer.getId())) {
-                layerHashMap.put(layer.getId(), layer);
-            }
-        }
-    }
-
-
     public static RestAdapter getRestAdapter() {
         return restAdapter;
-    }
-
-    public static Layer getLayer(int id) {
-        return layerHashMap.get(id);
-    }
-
-    public static void addFolder(Folder folder) {
-        folderHashMap.put(folder.getId(), folder);
-    }
-
-    public static void removeFolder(Integer id) {
-        folderHashMap.remove(id); //TODO: May need to remove subfolders
-    }
-
-    public static void removeLayer(Integer id) {
-        layerHashMap.remove(id);
     }
 
     class TokenInterceptor implements Interceptor {

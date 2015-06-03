@@ -6,6 +6,9 @@ import android.util.Log;
 import android.widget.Toast;
 
 import com.geospatialcorporation.android.geomobile.application;
+import com.geospatialcorporation.android.geomobile.database.DataRepository.IAddDataRepository;
+import com.geospatialcorporation.android.geomobile.database.DataRepository.Implementations.IAppDataRepository;
+import com.geospatialcorporation.android.geomobile.database.DataRepository.Implementations.Layers.LayersAppSource;
 import com.geospatialcorporation.android.geomobile.library.constants.GeometryTypeCodes;
 import com.geospatialcorporation.android.geomobile.library.rest.LayerService;
 import com.geospatialcorporation.android.geomobile.models.Layers.Layer;
@@ -23,11 +26,13 @@ public class MapActions {
     protected final static String TAG = MapActions.class.getSimpleName();
     private GoogleMap mMap;
     private LayerService layerService;
+    private IAppDataRepository<Layer> LayerRepo;
 
     public MapActions() {
         GoogleMapFragment mMapFragment = application.getMapFragment();
         layerService = application.getRestAdapter().create(LayerService.class);
         mMap = mMapFragment.mMap;
+        LayerRepo = new LayersAppSource();
     }
 
     public void showLayer(Layer layer) {
@@ -39,7 +44,7 @@ public class MapActions {
     }
 
     public void showLayer(int layerId) {
-        Layer layer = application.getLayer(layerId);
+        Layer layer = LayerRepo.getById(layerId);
 
         if (layer == null) {
             showNullLayer(layerId);
@@ -245,7 +250,8 @@ public class MapActions {
         @Override
         protected void onPostExecute(List<Layer> layers) {
             if (layers != null) {
-                application.setLayers(layers);
+                IAddDataRepository<Layer> LayerRepo = new LayersAppSource();
+                LayerRepo.Add(layers);
                 showLayer(selectedLayerId);
             } else {
                 Log.e(TAG, "Failed to update application layers.");

@@ -3,12 +3,14 @@ package com.geospatialcorporation.android.geomobile.models.Library;
 import android.os.Parcel;
 import android.os.Parcelable;
 
+import com.geospatialcorporation.android.geomobile.models.IdModel;
+
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 
-public class Document implements Parcelable {
+public class Document implements Parcelable, IdModel {
 
     //region Getters & Setters
     public int getId() {

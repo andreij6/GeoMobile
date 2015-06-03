@@ -1,9 +1,12 @@
-package com.geospatialcorporation.android.geomobile.database.datasource;
+package com.geospatialcorporation.android.geomobile.database.DataRepository.Implementations;
 
 import android.content.Context;
 import android.database.Cursor;
 
-public abstract class DataSourceGenericBase<T> extends DataSourceBase implements IDataRepository<T>{
+import com.geospatialcorporation.android.geomobile.database.DataRepository.IDataRepository;
+import com.geospatialcorporation.android.geomobile.database.datasource.DataSourceBase;
+
+public abstract class DataSourceGenericBase<T> extends DataSourceBase implements IDataRepository<T> {
 
     //region Constructor
     public DataSourceGenericBase(Context context)
@@ -28,7 +31,7 @@ public abstract class DataSourceGenericBase<T> extends DataSourceBase implements
     //endregion
 
     //region Public Interface Methods
-    public T GetById(int id){
+    public T getById(int id){
         mEntityId = id;
 
         InReadTransaction(GetEntityById);
@@ -36,21 +39,22 @@ public abstract class DataSourceGenericBase<T> extends DataSourceBase implements
         return mEntity;
     }
 
-    public void Update(T entity, int id){
+    public void update(T entity, int id){
         mEntity = entity;
         mEntityId = id;
 
         InTransaction(UpdateEntity);
     }
 
-    public Iterable<T> GetAll(){
+    public Iterable<T> getAll(){
         InTransaction(GetAllEntities);
 
         return mEntities;
     }
 
-    public void Remove(T entity){
-        mEntity = entity;
+    public void Remove(int id){
+        mEntity = getById(id);
+        mEntityId = id;
 
         InTransaction(RemoveEntity);
     }

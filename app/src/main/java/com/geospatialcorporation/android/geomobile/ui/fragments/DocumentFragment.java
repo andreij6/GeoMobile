@@ -22,6 +22,9 @@ import android.widget.Toast;
 
 import com.geospatialcorporation.android.geomobile.R;
 import com.geospatialcorporation.android.geomobile.application;
+import com.geospatialcorporation.android.geomobile.database.DataRepository.IAddDataRepository;
+import com.geospatialcorporation.android.geomobile.database.DataRepository.Implementations.Documents.DocumentsAppSource;
+import com.geospatialcorporation.android.geomobile.database.DataRepository.Implementations.Folders.FolderAppSource;
 import com.geospatialcorporation.android.geomobile.library.helpers.DataHelper;
 import com.geospatialcorporation.android.geomobile.library.helpers.DocumentTreeService;
 import com.geospatialcorporation.android.geomobile.library.helpers.FolderTreeService;
@@ -146,7 +149,8 @@ public class DocumentFragment extends Fragment {
         protected Void doInBackground(Integer... params) {
             try {
                 Boolean getAll = false;
-
+                IAddDataRepository<Document> documentRepo = new DocumentsAppSource();
+                IAddDataRepository<Folder> folderRepo = new FolderAppSource();
                 if (params[0] == 0) {
                     getAll = true;
                     List<Folder> documentsTree = mTreeService.getDocuments();
@@ -161,13 +165,13 @@ public class DocumentFragment extends Fragment {
                 if (getAll) {
                     List<Document> allDocuments = mHelper.getDocumentsRecursively(mCurrentFolder);
                     List<Folder> allFolders = mHelper.getFoldersRecursively(mCurrentFolder, mCurrentFolder.getParent());
-                    application.setDocumentFolders(allFolders);
-                    application.setDocuments(allDocuments);
+                    folderRepo.Add(allFolders);
+                    documentRepo.Add(allDocuments);
                 }
 
                 List<Folder> folders = mFolderTreeService.getFoldersByFolder(mCurrentFolder.getId(), false);
                 List<Document> documents = mFolderTreeService.getDocumentsByFolder(mCurrentFolder.getId());
-                application.setDocuments(documents);
+                documentRepo.Add(documents);
 
                 mFolders = folders;
                 mCurrentFolder.setFolders(folders);
