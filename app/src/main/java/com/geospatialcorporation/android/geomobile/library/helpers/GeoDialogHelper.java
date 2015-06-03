@@ -11,6 +11,7 @@ import com.geospatialcorporation.android.geomobile.ui.fragments.dialogs.CreateLa
 import com.geospatialcorporation.android.geomobile.ui.fragments.dialogs.DeleteDocumentDialogFragment;
 import com.geospatialcorporation.android.geomobile.ui.fragments.dialogs.DeleteFolderDialogFragment;
 import com.geospatialcorporation.android.geomobile.ui.fragments.dialogs.DeleteLayerDialogFragment;
+import com.geospatialcorporation.android.geomobile.ui.fragments.dialogs.UploadImageDialogFragment;
 
 public class GeoDialogHelper {
 
@@ -44,5 +45,11 @@ public class GeoDialogHelper {
         d.show(fm, "Delete Layer");
     }
 
+
+    public static void uploadImage(Context context, Folder folder, FragmentManager fm) {
+        UploadImageDialogFragment u = new UploadImageDialogFragment();
+        u.init(context, folder);
+        u.show(fm, "Upload Image");
+    }
 
 }

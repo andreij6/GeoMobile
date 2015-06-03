@@ -1,9 +1,11 @@
 package com.geospatialcorporation.android.geomobile.ui.fragments;
 
+import android.os.Handler;
 import android.support.v4.app.Fragment;
 import android.content.Context;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -51,6 +53,7 @@ public class LayerFragment extends Fragment {
 
     @InjectView(R.id.layer_recyclerView) RecyclerView mRecycler;
     @InjectView(R.id.layer_action_btn) CircleButton mCircleButton;
+    @InjectView(R.id.swipe_refresh_layout) SwipeRefreshLayout mSwipeRefreshLayout;
 
     @OnClick(R.id.layer_action_btn)
     @SuppressWarnings("unused")
@@ -69,6 +72,8 @@ public class LayerFragment extends Fragment {
         View mRootView = inflater.inflate(R.layout.fragment_layeritems, container, false);
 
         ButterKnife.inject(this, mRootView);
+        mSwipeRefreshLayout.setOnRefreshListener(new LayerRefreshLayout());
+        mSwipeRefreshLayout.setColorSchemeColors(R.color.material_orange_800);
 
         mTreeService = application.getRestAdapter().create(TreeService.class);
         mLayerService = application.getRestAdapter().create(LayerService.class);
@@ -89,20 +94,15 @@ public class LayerFragment extends Fragment {
                     List<Folder> folders = mTreeService.getLayers();
 
                     mCurrentFolder = folders.get(0);
-
-                    List<Folder> allFolders = mHelper.getFoldersRecursively(mCurrentFolder, mCurrentFolder.getParent());
-                    List<Layer> allLayers = mLayerService.getLayers();
-
-                    if (allFolders.size() > 0) { application.setLayerFolders(allFolders); }
-                    else { Log.d(TAG, "allFolders empty."); }
-                    if (allLayers.size() > 0) { application.setLayers(allLayers); }
-                    else { Log.d(TAG, "allLayers empty."); }
+                    getCurrentFolderLayers();
                 } else {
                     mCurrentFolder = mFolderTreeService.getFolderById(params[0]);
                 }
 
-                mCurrentFolder.setFolders(mFolderTreeService.getFoldersByFolder(mCurrentFolder.getId()));
-                mCurrentFolder.setLayers(mFolderTreeService.getLayersByFolder(mCurrentFolder.getId()));
+
+
+                mCurrentFolder.setFolders(mFolderTreeService.getFoldersByFolder(mCurrentFolder.getId(), false));
+                mCurrentFolder.setLayers(mFolderTreeService.getLayersByFolder(mCurrentFolder.getId(), false));
             } catch (RetrofitError e) {
                 Log.d(TAG, "Messed up.");
             } catch (Exception e) {
@@ -110,6 +110,16 @@ public class LayerFragment extends Fragment {
             }
 
             return mCurrentFolder;
+        }
+
+        private void getCurrentFolderLayers() {
+            List<Folder> allFolders = mHelper.getFoldersRecursively(mCurrentFolder, mCurrentFolder.getParent());
+            List<Layer> allLayers = mLayerService.getLayers();
+
+            if (allFolders.size() > 0) { application.setLayerFolders(allFolders); }
+            else { Log.d(TAG, "allFolders empty."); }
+            if (allLayers.size() > 0) { application.setLayers(allLayers); }
+            else { Log.d(TAG, "allLayers empty."); }
         }
 
         @Override
@@ -134,6 +144,20 @@ public class LayerFragment extends Fragment {
         } else {
             firstLayerView();
         }
+    }
+
+    private class LayerRefreshLayout implements SwipeRefreshLayout.OnRefreshListener {
+        @Override
+        public void onRefresh() {
+            new Handler().postDelayed(new Runnable() {
+                @Override
+                public void run() {
+                    handleArguments();
+                    mSwipeRefreshLayout.setRefreshing(false);
+                }
+            }, 2000);
+        }
+
     }
 
 }

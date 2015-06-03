@@ -49,13 +49,8 @@ public class CreateLayerDialogFragment extends CreateDialogFragmentBase {
                 if(line.isChecked())
                     shape = GeometryTypeCodes.Line;
 
-                Boolean success = layerService.createLayer(name.getText().toString(), shape, mFolder.getId());
+                layerService.createLayer(name.getText().toString(), shape, mFolder.getId());
 
-                if(success){
-                    Toast.makeText(mContext, "Layer Created", Toast.LENGTH_LONG).show();
-                } else {
-                    Toast.makeText(mContext, "Layer was not Created", Toast.LENGTH_LONG).show();
-                }
             }
         }).setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
             @Override

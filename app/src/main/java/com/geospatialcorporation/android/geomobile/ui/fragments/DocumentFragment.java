@@ -1,10 +1,14 @@
 package com.geospatialcorporation.android.geomobile.ui.fragments;
 
+import android.content.Intent;
+import android.graphics.Bitmap;
+import android.os.Handler;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.content.Context;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -12,15 +16,18 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
 import com.geospatialcorporation.android.geomobile.R;
 import com.geospatialcorporation.android.geomobile.application;
 import com.geospatialcorporation.android.geomobile.library.helpers.DataHelper;
+import com.geospatialcorporation.android.geomobile.library.helpers.DocumentTreeService;
 import com.geospatialcorporation.android.geomobile.library.helpers.FolderTreeService;
 import com.geospatialcorporation.android.geomobile.library.helpers.SectionTreeBuilder;
 import com.geospatialcorporation.android.geomobile.library.rest.TreeService;
 import com.geospatialcorporation.android.geomobile.models.Folders.Folder;
 import com.geospatialcorporation.android.geomobile.models.Library.Document;
+import com.geospatialcorporation.android.geomobile.ui.MainActivity;
 import com.geospatialcorporation.android.geomobile.ui.adapters.ListItemAdapter;
 import com.geospatialcorporation.android.geomobile.ui.fragments.dialogs.LibraryActionDialogFragment;
 
@@ -47,6 +54,8 @@ public class DocumentFragment extends Fragment {
 
     @InjectView(R.id.libraryitem_recyclerView) RecyclerView mRecyclerView;
     @InjectView(R.id.library_action_btn) CircleButton mCircleButton;
+    @InjectView(R.id.swipe_refresh_layout) SwipeRefreshLayout mSwipeRefreshLayout;
+
 
     @OnClick(R.id.library_action_btn)
     @SuppressWarnings("unused")
@@ -62,6 +71,7 @@ public class DocumentFragment extends Fragment {
     public void onCreate(Bundle savedInstance){
         setHasOptionsMenu(true);
         super.onCreate(savedInstance);
+
     }
 
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -73,18 +83,15 @@ public class DocumentFragment extends Fragment {
         mRootView = inflater.inflate(R.layout.fragment_libraryitems, container, false);
 
         ButterKnife.inject(this, mRootView);
+        mSwipeRefreshLayout.setOnRefreshListener(new DocumentRefreshLayout());
+        mSwipeRefreshLayout.setColorSchemeColors(R.color.material_orange_800);
 
         mTreeService = application.getRestAdapter().create(TreeService.class);
         mFolderTreeService = new FolderTreeService();
 
         mContext = getActivity();
 
-        Bundle args = getArguments();
-        if (args != null) {
-            handleArguments(args);
-        } else {
-            firstDocumentView();
-        }
+        handleArguments();
 
         return mRootView;
     }
@@ -94,6 +101,37 @@ public class DocumentFragment extends Fragment {
         //inflater.inflate(R.menu.document_menu, menu);
 
         super.onCreateOptionsMenu(menu, inflater);
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        // Check which request we're responding to
+        Toast.makeText(getActivity(), "Request: " + requestCode + " Result: " + resultCode, Toast.LENGTH_LONG).show();
+        if (requestCode == MainActivity.MediaConstants.PICK_FILE_REQUEST) {
+            // Make sure the request was successful
+            if (resultCode == getActivity().RESULT_OK) {
+                DocumentTreeService uploader = new DocumentTreeService();
+                uploader.SendDocument(mCurrentFolder, data.getData());
+            }
+        }
+
+        if(requestCode == MainActivity.MediaConstants.PICK_IMAGE_REQUEST){
+            if (resultCode == getActivity().RESULT_OK) {
+                //DocumentTreeService uploader = new DocumentTreeService();
+                Toast.makeText(getActivity(), "Data received but code not implemented", Toast.LENGTH_LONG).show();
+                //uploader.SendImage(mCurrentFolder, data.getData());
+            }
+        }
+
+        if(requestCode == MainActivity.MediaConstants.TAKE_IMAGE_REQUEST){
+            if (resultCode == getActivity().RESULT_OK) {
+                Toast.makeText(getActivity(), "Data received but code not implemented", Toast.LENGTH_LONG).show();
+               //DocumentTreeService uploader = new DocumentTreeService();
+                //uploader.SendDocument(mCurrentFolder, data.getData());
+            }
+        }
+
+
     }
 
     private class GetDocumentsTask extends AsyncTask<Integer, Void, Void> {
@@ -120,7 +158,7 @@ public class DocumentFragment extends Fragment {
                     application.setDocuments(allDocuments);
                 }
 
-                List<Folder> folders = mFolderTreeService.getFoldersByFolder(mCurrentFolder.getId());
+                List<Folder> folders = mFolderTreeService.getFoldersByFolder(mCurrentFolder.getId(), false);
                 List<Document> documents = mFolderTreeService.getDocumentsByFolder(mCurrentFolder.getId());
                 application.setDocuments(documents);
 
@@ -162,13 +200,32 @@ public class DocumentFragment extends Fragment {
         new GetDocumentsTask().execute(0);
     }
 
-    private void handleArguments(Bundle args) {
-        int folderId = args.getInt(Folder.FOLDER_INTENT, 0);
+    private void handleArguments() {
+        Bundle args = getArguments();
 
-        new GetDocumentsTask().execute(folderId);
+        if(args != null) {
+
+            int folderId = args.getInt(Folder.FOLDER_INTENT, 0);
+
+            new GetDocumentsTask().execute(folderId);
+        } else {
+            firstDocumentView();
+        }
 
     }
 
+    private class DocumentRefreshLayout implements SwipeRefreshLayout.OnRefreshListener {
 
+        @Override
+        public void onRefresh() {
+            new Handler().postDelayed(new Runnable() {
+                @Override
+                public void run() {
+                    handleArguments();
+                    mSwipeRefreshLayout.setRefreshing(false);
+                }
+            }, 2000);
+        }
+    }
 
 }

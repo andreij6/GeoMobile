@@ -16,6 +16,7 @@ import android.widget.TextView;
 import com.geospatialcorporation.android.geomobile.R;
 import com.geospatialcorporation.android.geomobile.application;
 import com.geospatialcorporation.android.geomobile.library.helpers.DataHelper;
+import com.geospatialcorporation.android.geomobile.library.helpers.LayerTreeService;
 import com.geospatialcorporation.android.geomobile.library.map.MapActions;
 import com.geospatialcorporation.android.geomobile.library.util.Dialogs;
 import com.geospatialcorporation.android.geomobile.models.Folders.Folder;
@@ -212,7 +213,8 @@ public class ListItemAdapter extends RecyclerView.Adapter<ListItemAdapter.ListVi
 
         private void LayerDetailAction(ListItem item) {
             Fragment f = new LayerDetailFragment();
-            Layer layer = application.getLayer(item.getId());
+            LayerTreeService service = new LayerTreeService();
+            Layer layer = service.getLayer(item.getId());
 
             Bundle b = new Bundle();
             b.putParcelable(Layer.LAYER_INTENT, layer);

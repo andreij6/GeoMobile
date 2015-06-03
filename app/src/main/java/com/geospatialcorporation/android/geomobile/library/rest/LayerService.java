@@ -35,7 +35,7 @@ public interface LayerService {
     void rename(@Path("id") int id, @Body Layer.Rename rename);
 
     @DELETE("/API/Layers/{id}")
-    void delete(@Path("id") int id);
+    void delete(@Path("id") int id, Callback<Layer> cb);
 
     @GET("/API/Layers/{id}/Style")
     Layer.StyleInfo getStyle(@Path("id") int id);

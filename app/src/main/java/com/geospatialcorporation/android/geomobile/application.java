@@ -64,6 +64,14 @@ public class application extends Application {
         return isAdminUser;
     }
 
+    public static void setFolders(List<Folder> folders) {
+        for(Folder f : folders){
+            if(!folderHashMap.containsKey(f.getId())) {
+                folderHashMap.put(f.getId(), f);
+            }
+        }
+    }
+
     public void onCreate() {
         super.onCreate();
 
@@ -223,16 +231,14 @@ public class application extends Application {
     }
 
     public static void setLayers(List<Layer> newLayers) {
-        Log.d(TAG, "setLayers total: " + newLayers.size());
-        layers = newLayers;
+
         for (Layer layer : newLayers) {
-            layerHashMap.put(layer.getId(), layer);
+            if(!layerHashMap.containsKey(layer.getId())) {
+                layerHashMap.put(layer.getId(), layer);
+            }
         }
     }
 
-    public static List<Layer> getLayers() {
-        return layers;
-    }
 
     public static RestAdapter getRestAdapter() {
         return restAdapter;
@@ -244,6 +250,14 @@ public class application extends Application {
 
     public static void addFolder(Folder folder) {
         folderHashMap.put(folder.getId(), folder);
+    }
+
+    public static void removeFolder(Integer id) {
+        folderHashMap.remove(id); //TODO: May need to remove subfolders
+    }
+
+    public static void removeLayer(Integer id) {
+        layerHashMap.remove(id);
     }
 
     class TokenInterceptor implements Interceptor {

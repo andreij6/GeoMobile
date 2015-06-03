@@ -10,6 +10,7 @@ import java.util.List;
 
 import retrofit.Callback;
 import retrofit.http.Body;
+import retrofit.http.DELETE;
 import retrofit.http.GET;
 import retrofit.http.POST;
 import retrofit.http.Path;
@@ -32,4 +33,7 @@ public interface FolderService {
 
     @POST("/API/Folders")
     void createFolder(@Body FolderCreateRequest createRequest, Callback<FolderCreateResponse> cb);
+
+    @DELETE("/API/Folders/{folderId}")
+    void delete(@Path("folderId") int folderId, Callback<Folder> cb);
 }

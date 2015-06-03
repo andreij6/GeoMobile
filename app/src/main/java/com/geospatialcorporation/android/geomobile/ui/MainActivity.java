@@ -74,6 +74,7 @@ public class MainActivity extends ActionBarActivity
         implements MainNavigationDrawerFragment.NavigationDrawerCallbacks{
     private static final String TAG = MainActivity.class.getSimpleName();
 
+
     //region Properties
     @InjectView(R.id.drawer_layout)DrawerLayout mDrawerLayout;
     View mHeaderView;
@@ -109,28 +110,15 @@ public class MainActivity extends ActionBarActivity
         mLayerDrawerFragement.setUp(R.id.layer_drawer, (DrawerLayout)findViewById(R.id.drawer_layout));
 
     }
-    //region old
-/*
-    private void toggleDrawers(ListView drawer) {
-        if (drawer == mLeftDrawerList) {
-            if (mDrawerLayout.isDrawerOpen(mRightDrawerList)) {
-                mDrawerLayout.closeDrawer(mRightDrawerList);
-            }
-        } else {
-            if (mDrawerLayout.isDrawerOpen(mLeftDrawerList)) {
-                mDrawerLayout.closeDrawer(mLeftDrawerList);
-            }
-        }
-    }
-
-    public AbstractMap.SimpleEntry<DrawerLayout, ListView> getRightDrawer() {
-        return new AbstractMap.SimpleEntry<>(mDrawerLayout, mRightDrawerList);
-    }
-    */
-    //endregion
 
     protected void onResume() {
         super.onResume();
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        Fragment fragment = getSupportFragmentManager().findFragmentById(R.id.content_frame);
+        fragment.onActivityResult(requestCode, resultCode, data);
     }
 
     @Override
@@ -223,5 +211,11 @@ public class MainActivity extends ActionBarActivity
 
     public View getLayerListView() {
         return (View)findViewById(R.id.layer_drawer);
+    }
+
+    public static class MediaConstants {
+        public static final int PICK_FILE_REQUEST = 0;
+        public static final int PICK_IMAGE_REQUEST = 1;
+        public static final int TAKE_IMAGE_REQUEST = 2;
     }
 }

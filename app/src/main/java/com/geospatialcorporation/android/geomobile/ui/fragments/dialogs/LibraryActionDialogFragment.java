@@ -2,6 +2,7 @@ package com.geospatialcorporation.android.geomobile.ui.fragments.dialogs;
 
 import android.app.AlertDialog;
 import android.app.Dialog;
+import android.content.Intent;
 import android.support.v4.app.DialogFragment;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -18,6 +19,7 @@ import android.widget.Toast;
 import com.geospatialcorporation.android.geomobile.R;
 import com.geospatialcorporation.android.geomobile.library.helpers.GeoDialogHelper;
 import com.geospatialcorporation.android.geomobile.models.Folders.Folder;
+import com.geospatialcorporation.android.geomobile.ui.MainActivity;
 
 import butterknife.ButterKnife;
 import butterknife.InjectView;
@@ -103,27 +105,30 @@ public class LibraryActionDialogFragment extends DialogFragment {
         builder.setPositiveButton(R.string.OK, new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
-                LinearLayout d = (LinearLayout)v.findViewById(R.id.addDocumentSection);
-                LinearLayout i = (LinearLayout)v.findViewById(R.id.addImageSection);
-                LinearLayout f = (LinearLayout)v.findViewById(R.id.addFolderSection);
+                LinearLayout d = (LinearLayout) v.findViewById(R.id.addDocumentSection);
+                LinearLayout i = (LinearLayout) v.findViewById(R.id.addImageSection);
+                LinearLayout f = (LinearLayout) v.findViewById(R.id.addFolderSection);
 
 
-                if(isHighlighted(d)){
-                    Toast.makeText(getActivity(), "Not Implemented: Add Document . Parent Folder: " + mFolder.getName(), Toast.LENGTH_LONG).show();
+                if (isHighlighted(d)) {
+                    Intent chooseFileIntent = new Intent(Intent.ACTION_GET_CONTENT);
+                    chooseFileIntent.setType("file/*");
+                    getActivity().startActivityForResult(chooseFileIntent, MainActivity.MediaConstants.PICK_FILE_REQUEST);
                 }
 
-                if(isHighlighted(i)){
-                    Toast.makeText(getActivity(), "Not Implemented: Add Image. Parent Folder: " + mFolder.getName(), Toast.LENGTH_LONG).show();
+                if (isHighlighted(i)) {
+                    GeoDialogHelper.uploadImage(mContext, mFolder, getFragmentManager());
                 }
 
-                if(isHighlighted(f)){
+                if (isHighlighted(f)) {
                     GeoDialogHelper.createFolder(mContext, mFolder, getFragmentManager());
                 }
 
             }
 
 
-        }).setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
+        });
+        builder.setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
                 LibraryActionDialogFragment.this.getDialog().cancel();

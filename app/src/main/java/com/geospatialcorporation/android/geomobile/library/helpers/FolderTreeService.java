@@ -41,7 +41,8 @@ public class FolderTreeService {
             mFolderService.createFolder(createRequest, new Callback<FolderCreateResponse>() {
             @Override
             public void success(FolderCreateResponse cr, Response response) {
-                Toast.makeText(application.getAppContext(), "Success!", Toast.LENGTH_LONG).show();
+                Toast.makeText(application.getAppContext(), "Success!", Toast.LENGTH_SHORT).show();
+                Toast.makeText(application.getAppContext(), "Pull to Refresh", Toast.LENGTH_LONG).show();
             }
 
             @Override
@@ -52,28 +53,33 @@ public class FolderTreeService {
 
     }
 
-    public List<Folder> getFoldersByFolder(Integer folderId) {
+    public List<Folder> getFoldersByFolder(Integer folderId, boolean checkCache) {
         Folder folder = application.getFolderById(folderId);
         List<Folder> result;
 
-        if(folder != null && folder.getFolders().size() > 0){
+        if(folder != null && folder.getFolders().size() > 0 && checkCache){
             result = folder.getFolders();
         } else {
             result = mFolderService.getFoldersByFolder(folderId);
+
+            application.setFolders(result);
         }
 
         return result;
     }
 
-    public List<Layer> getLayersByFolder(Integer folderId) {
+    public List<Layer> getLayersByFolder(Integer folderId, Boolean checkCache) {
         Folder folder = application.getFolderById(folderId);
         List<Layer> result;
 
-        if(folder != null && folder.getLayers().size() > 0){
+        if(folder != null && folder.getLayers().size() > 0 && checkCache){
             result = folder.getLayers();
 
         } else {
             result = mFolderService.getLayersByFolder(folderId);
+
+            application.setLayers(result);
+
         }
 
         return result;
@@ -90,5 +96,22 @@ public class FolderTreeService {
         }
 
         return result;
+    }
+
+    public void deleteFolder(Folder folder) {
+        mFolderService.delete(folder.getId(), new Callback<Folder>() {
+            @Override
+            public void success(Folder folder, Response response) {
+                Toast.makeText(application.getAppContext(), "Success", Toast.LENGTH_SHORT).show();
+                Toast.makeText(application.getAppContext(), "Pull to Refresh", Toast.LENGTH_LONG).show();
+            }
+
+            @Override
+            public void failure(RetrofitError error) {
+                Toast.makeText(application.getAppContext(), "Failure", Toast.LENGTH_LONG).show();
+            }
+        });
+
+        application.removeFolder(folder.getId());
     }
 }
