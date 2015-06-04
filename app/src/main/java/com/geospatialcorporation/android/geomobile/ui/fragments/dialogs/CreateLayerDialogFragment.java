@@ -7,11 +7,10 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.RadioButton;
-import android.widget.Toast;
 
 import com.geospatialcorporation.android.geomobile.R;
 import com.geospatialcorporation.android.geomobile.library.constants.GeometryTypeCodes;
-import com.geospatialcorporation.android.geomobile.library.helpers.LayerTreeService;
+import com.geospatialcorporation.android.geomobile.library.services.LayerTreeService;
 
 /**
  * Created by andre on 6/1/2015.

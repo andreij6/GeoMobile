@@ -1,16 +1,15 @@
 package com.geospatialcorporation.android.geomobile.ui.fragments.dialogs;
 
 import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentManager;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
-import com.geospatialcorporation.android.geomobile.library.helpers.DocumentTreeService;
-import com.geospatialcorporation.android.geomobile.library.helpers.FolderTreeService;
+import com.geospatialcorporation.android.geomobile.library.services.DocumentTreeService;
+import com.geospatialcorporation.android.geomobile.library.services.FolderTreeService;
 import com.geospatialcorporation.android.geomobile.library.helpers.Interfaces.ITreeService;
-import com.geospatialcorporation.android.geomobile.library.helpers.LayerTreeService;
+import com.geospatialcorporation.android.geomobile.library.services.LayerTreeService;
 import com.geospatialcorporation.android.geomobile.models.Folders.Folder;
 import com.geospatialcorporation.android.geomobile.models.Interfaces.INamedEntity;
 import com.geospatialcorporation.android.geomobile.models.Interfaces.IdModel;
@@ -90,7 +89,13 @@ public class ItemDetailFragment<ITreeEntity> extends Fragment {
 
                 if(service != null) {
 
-                    service.rename(((IdModel)mEntity).getId(), mEditText.getText().toString());
+                    Boolean success = service.rename(((IdModel)mEntity).getId(), mEditText.getText().toString());
+
+                    if(!success){
+                        Toast.makeText(getActivity(), "Not Authorized to Rename Doc", Toast.LENGTH_LONG).show();
+                    } else {
+                        Toast.makeText(getActivity(), "Success!", Toast.LENGTH_LONG).show();
+                    }
                 }
             }
         });

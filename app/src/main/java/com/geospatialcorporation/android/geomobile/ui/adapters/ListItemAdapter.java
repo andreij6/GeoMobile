@@ -12,17 +12,15 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageButton;
-import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.geospatialcorporation.android.geomobile.R;
-import com.geospatialcorporation.android.geomobile.application;
 import com.geospatialcorporation.android.geomobile.database.DataRepository.Implementations.Documents.DocumentsAppSource;
 import com.geospatialcorporation.android.geomobile.database.DataRepository.Implementations.Folders.FolderAppSource;
 import com.geospatialcorporation.android.geomobile.database.DataRepository.Implementations.IAppDataRepository;
 import com.geospatialcorporation.android.geomobile.library.helpers.DataHelper;
-import com.geospatialcorporation.android.geomobile.library.helpers.LayerTreeService;
+import com.geospatialcorporation.android.geomobile.library.services.LayerTreeService;
 import com.geospatialcorporation.android.geomobile.library.map.MapActions;
 import com.geospatialcorporation.android.geomobile.library.util.Dialogs;
 import com.geospatialcorporation.android.geomobile.models.Folders.Folder;
@@ -36,7 +34,6 @@ import com.geospatialcorporation.android.geomobile.ui.fragments.LayerFragment;
 import com.geospatialcorporation.android.geomobile.ui.fragments.dialogs.DownloadDialogFragment;
 import com.geospatialcorporation.android.geomobile.ui.viewmodels.ListItem;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import butterknife.ButterKnife;
@@ -57,15 +54,21 @@ public class ListItemAdapter extends RecyclerView.Adapter<ListItemAdapter.ListVi
 
     public ListItemAdapter(Context context, List<ListItem> data, String ViewType, FragmentManager fm) {
         if(ViewType == ListItemAdapter.LAYER) {
-            data.add(new ListItem(ListItem.LAYER));
+            AddEmptyListItems(data, ListItem.LAYER);
         } else {
-            data.add(new ListItem(ListItem.DOCUMENT));
+            AddEmptyListItems(data, ListItem.DOCUMENT);
         }
         mContext = context;
         mListItems = data;
         mHelper = new DataHelper();
         mViewType = ViewType;
         mFragmentManager = fm;
+    }
+
+    protected void AddEmptyListItems(List<ListItem> data, int type) {
+        for(int x = 0; x < 2; x++) {
+            data.add(new ListItem(type));
+        }
     }
 
     @Override
@@ -116,12 +119,21 @@ public class ListItemAdapter extends RecyclerView.Adapter<ListItemAdapter.ListVi
             mItem = item;
             itemName.setText(item.getName());
 
-            if(item.getIconId() != 0) {
-                itemIcon.setImageDrawable(mContext.getDrawable(item.getIconId()));
-            } else {
+            if(item.getIsCompletelyEmpty()) {
                 itemIcon.setVisibility(View.GONE);
                 itemInfo.setVisibility(View.GONE);
                 Container.setBackgroundColor(Color.TRANSPARENT);
+
+            } else if(!item.getShowInfoIcon() && item.getIconId() == 0) {
+                itemName.setOnClickListener(null);
+                itemIcon.setVisibility(View.GONE);
+                itemInfo.setVisibility(View.GONE);
+            } else {
+                itemIcon.setImageDrawable(mContext.getDrawable(item.getIconId()));
+
+                if(!item.getShowInfoIcon()){
+                    itemInfo.setVisibility(View.GONE);  //for parent folder
+                }
             }
 
         }

@@ -1,4 +1,4 @@
-package com.geospatialcorporation.android.geomobile.library.helpers;
+package com.geospatialcorporation.android.geomobile.library.services;
 
 import android.widget.Toast;
 
@@ -75,6 +75,9 @@ public class LayerTreeService implements ITreeService {
     }
 
     public Boolean rename(final int id, final String name){
+
+        if(!AuthorizedToRename(id)) return false;
+
         mLayerService.rename(id, new RenameRequest(name), new Callback<Response>() {
             @Override
             public void success(Response response, Response response2) {
@@ -88,8 +91,17 @@ public class LayerTreeService implements ITreeService {
             }
         });
 
-
-
         return true;
+
+    }
+
+    protected boolean AuthorizedToRename(int id) {
+        Layer l = LayerRepo.getById(id);
+
+        if(l.getIsOwner()){
+            return true;
+        }
+
+        return false;
     }
 }

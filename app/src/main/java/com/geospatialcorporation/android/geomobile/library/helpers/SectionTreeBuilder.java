@@ -71,7 +71,11 @@ public class SectionTreeBuilder {
             String parentSection = setParentName();
             sections.add(new SimpleSectionedRecyclerViewAdapter.Section(0, parentSection));
             sections.add(new SimpleSectionedRecyclerViewAdapter.Section(1, folderSection));
-            sections.add(new SimpleSectionedRecyclerViewAdapter.Section(mFolders.size()+1, treeSpecificSection));
+            if(mFolders.isEmpty()) {
+                sections.add(new SimpleSectionedRecyclerViewAdapter.Section(mFolders.size() + 2, treeSpecificSection));
+            } else {
+                sections.add(new SimpleSectionedRecyclerViewAdapter.Section(mFolders.size() + 1, treeSpecificSection));
+            }
         } else {
             sections.add(new SimpleSectionedRecyclerViewAdapter.Section(0, folderSection));
             sections.add(new SimpleSectionedRecyclerViewAdapter.Section(mFolders.size(), treeSpecificSection));

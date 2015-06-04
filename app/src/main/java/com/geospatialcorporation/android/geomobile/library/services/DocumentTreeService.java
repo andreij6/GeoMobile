@@ -1,4 +1,4 @@
-package com.geospatialcorporation.android.geomobile.library.helpers;
+package com.geospatialcorporation.android.geomobile.library.services;
 
 import android.app.DownloadManager;
 import android.content.Context;
@@ -141,12 +141,13 @@ public class DocumentTreeService implements ITreeService {
     }
 
     public Boolean rename(final int documentId, final String docName){
+        if(!AuthorizedToRenameDocument(documentId)) return false;
+
         Service.rename(documentId, new RenameRequest(docName), new Callback<Response>() {
             @Override
             public void success(Response response, Response response2) {
                 Document l = DocumentRepo.getById(documentId);
                 l.setName(docName);
-
             }
 
             @Override
@@ -160,11 +161,17 @@ public class DocumentTreeService implements ITreeService {
 
         return true;
 
+
     }
     //endregion
 
     //region Helpers
-    private void SendImage(Folder currentFolder, final TypedFile t, final String path) {
+    protected Boolean AuthorizedToRenameDocument(int id){
+        //Not sure if there are restrictions on this but if so we check here
+        return true;
+    }
+
+    protected void SendImage(Folder currentFolder, final TypedFile t, final String path) {
         Service.create(currentFolder.getId(), t, new Callback<DocumentCreateResponse>() {
             @Override
             public void success(DocumentCreateResponse documentCreateResponse, Response response) {

@@ -70,6 +70,10 @@ public class Document implements Parcelable, ITreeEntity {
     private String Ext;
     //endregion
 
+    public Document(){
+
+    }
+
     public Date getFormattedDate() {
         SimpleDateFormat formatter = new SimpleDateFormat("dd/mm/yyyy h:mm a");
 

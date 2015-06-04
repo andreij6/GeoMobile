@@ -1,4 +1,4 @@
-package com.geospatialcorporation.android.geomobile.library.helpers;
+package com.geospatialcorporation.android.geomobile.library.services;
 
 import android.widget.Toast;
 
@@ -24,9 +24,11 @@ import retrofit.client.Response;
 
 public class FolderTreeService implements ITreeService {
 
+    //region Properties
     private FolderService mFolderService;
     IAppDataRepository<Folder> FolderRepo;
     IAddDataRepository<Layer> LayerRepo;
+    //endregion
 
     public FolderTreeService(){
         mFolderService = application.getRestAdapter().create(FolderService.class);
@@ -34,6 +36,7 @@ public class FolderTreeService implements ITreeService {
         LayerRepo = new LayersAppSource();
     }
 
+    //region Public Methods
     public Folder getFolderById(Integer folderId) {
         Folder folder = FolderRepo.getById(folderId);
 
@@ -125,6 +128,9 @@ public class FolderTreeService implements ITreeService {
     }
 
     public Boolean rename(final int folderId,final String folderName){
+
+        if(!AuthorizedToRename(folderId)) return false;
+
         mFolderService.rename(folderId, new RenameRequest(folderName), new Callback<Response>() {
             @Override
             public void success(Response response, Response response2) {
@@ -140,5 +146,19 @@ public class FolderTreeService implements ITreeService {
         });
 
         return true;
+
     }
+    //endregion
+
+    //region Helpers
+    protected boolean AuthorizedToRename(int id) {
+        Folder f = FolderRepo.getById(id);
+
+        if(f.getIsFixed() || f.getIsImportFolder()){
+            return false;
+        }
+
+        return true;
+    }
+    //endregion
 }

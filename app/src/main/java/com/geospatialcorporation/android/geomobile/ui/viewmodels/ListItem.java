@@ -48,11 +48,30 @@ public class ListItem implements Comparable<ListItem> {
     public void setIconId(int iconId) {
         IconId = iconId;
     }
+
+    public Boolean getShowInfoIcon() {
+        return showInfoIcon;
+    }
+
+    public void setShowInfoIcon(Boolean showInfoIcon) {
+        this.showInfoIcon = showInfoIcon;
+    }
+
+    public Boolean getIsCompletelyEmpty() {
+        return IsCompletelyEmpty;
+    }
+
+    public void setIsCompletelyEmpty(Boolean isCompletelyEmpty) {
+        IsCompletelyEmpty = isCompletelyEmpty;
+    }
+
     //endregion
 
     private String Name;
     private int Id;
     private int Order;
+    private Boolean showInfoIcon;
+    private Boolean IsCompletelyEmpty;
 
 
 
@@ -64,6 +83,19 @@ public class ListItem implements Comparable<ListItem> {
         Id = folder.getId();
         Order = 1;
         IconId = R.drawable.ic_folder_black_24dp;
+        showInfoIcon = true;
+        IsCompletelyEmpty = false;
+
+    }
+
+    public ListItem(Folder folder, Boolean isEmpty) {
+        Name = "No Folders";
+        Id = 0;
+        Order = 0;
+        IconId = 0;
+        showInfoIcon = false;
+        IsCompletelyEmpty = false; //only ListItem(int empty) is true
+
     }
 
     public ListItem(Layer layer) {
@@ -71,6 +103,19 @@ public class ListItem implements Comparable<ListItem> {
         Id = layer.getId();
         Order = 2;
         IconId = R.drawable.ic_layers_black_24dp;
+        showInfoIcon = true;
+        IsCompletelyEmpty = false;
+
+    }
+
+    public ListItem(Layer layer, Boolean isEmpty) {
+        Name = "No Layers";
+        Id = 0;
+        Order = EMPTYLayer;
+        IconId = 0;
+        showInfoIcon = false;
+        IsCompletelyEmpty = false; //only ListItem(int empty) is true
+
     }
 
     public ListItem(Document document) {
@@ -78,6 +123,19 @@ public class ListItem implements Comparable<ListItem> {
         Id = document.getId();
         Order = 3;
         IconId = setIconIdFromExt(document.getExtension());
+        showInfoIcon = true;
+        IsCompletelyEmpty = false;
+
+    }
+
+    public ListItem(Document document, Boolean isEmpty) {
+        Name = "No Documents";
+        Id = 0;
+        Order = EMPTYDocument;
+        IconId = 0;
+        showInfoIcon = false;
+        IsCompletelyEmpty = false;  //only ListItem(int empty) is true
+
     }
 
     public ListItem(int empty) {
@@ -85,6 +143,8 @@ public class ListItem implements Comparable<ListItem> {
         Id = 0;
         Order = empty == EMPTYDocument ? EMPTYDocument : EMPTYLayer;
         IconId = 0;
+        showInfoIcon = false;
+        IsCompletelyEmpty = true;
     }
     //endregion
 
@@ -121,4 +181,6 @@ public class ListItem implements Comparable<ListItem> {
 
         return R.drawable.ic_file_document_box_black_24dp;
     }
+
+
 }

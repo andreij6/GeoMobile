@@ -8,7 +8,7 @@ import android.view.View;
 import android.widget.EditText;
 
 import com.geospatialcorporation.android.geomobile.R;
-import com.geospatialcorporation.android.geomobile.library.helpers.FolderTreeService;
+import com.geospatialcorporation.android.geomobile.library.services.FolderTreeService;
 
 /**
  * Created by andre on 6/1/2015.

@@ -35,7 +35,7 @@ public class DataHelper {
         return result;
     }
 
-    private void setParentFolder(Folder folder, Folder parentFolder){
+    protected void setParentFolder(Folder folder, Folder parentFolder){
         if(parentFolder != null) folder.setParent(parentFolder);
     }
 
@@ -78,6 +78,7 @@ public class DataHelper {
             ListItem listItem = new ListItem(parent);
             listItem.setIconId(R.drawable.ic_arrow_left_bold_black_24dp);
             listItem.setName("");
+            listItem.setShowInfoIcon(false);
             results.add(listItem);
         }
 
@@ -86,12 +87,19 @@ public class DataHelper {
                 ListItem listItem = new ListItem(folder);
                 results.add(listItem);
             }
+
+            SetupEmptyFolder(folders, results);
         }
 
         if (layers != null) {
             for (Layer layer : layers) {
                 ListItem listItem = new ListItem(layer);
                 results.add(listItem);
+            }
+
+            if(layers.isEmpty()){
+                ListItem l = new ListItem(new Layer(), true);
+                results.add(l);
             }
         }
 
@@ -107,6 +115,7 @@ public class DataHelper {
             ListItem listItem = new ListItem(parent);
             listItem.setIconId(R.drawable.ic_arrow_left_bold_black_24dp);
             listItem.setName("");
+            listItem.setShowInfoIcon(false);
             results.add(listItem);
         }
 
@@ -115,6 +124,8 @@ public class DataHelper {
                 ListItem listItem = new ListItem(folder);
                 results.add(listItem);
             }
+
+            SetupEmptyFolder(folders, results);
         }
 
         if (documents != null) {
@@ -123,10 +134,22 @@ public class DataHelper {
 
                 results.add(listItem);
             }
+
+            if(documents.isEmpty()){
+                ListItem listItem = new ListItem(new Document(), true);
+                results.add(listItem);
+            }
         }
 
         Collections.sort(results);
 
         return results;
+    }
+
+    protected void SetupEmptyFolder(List<Folder> folders, ArrayList<ListItem> results) {
+        if(folders.isEmpty()){
+            ListItem listItem = new ListItem(new Folder(), true);
+            results.add(listItem);
+        }
     }
 }

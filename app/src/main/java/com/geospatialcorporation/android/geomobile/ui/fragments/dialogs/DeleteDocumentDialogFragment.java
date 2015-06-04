@@ -6,7 +6,7 @@ import android.content.DialogInterface;
 import android.os.Bundle;
 
 import com.geospatialcorporation.android.geomobile.R;
-import com.geospatialcorporation.android.geomobile.library.helpers.DocumentTreeService;
+import com.geospatialcorporation.android.geomobile.library.services.DocumentTreeService;
 import com.geospatialcorporation.android.geomobile.models.Library.Document;
 
 /**
