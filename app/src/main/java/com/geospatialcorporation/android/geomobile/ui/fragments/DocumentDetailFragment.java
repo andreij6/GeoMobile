@@ -38,7 +38,7 @@ public class DocumentDetailFragment extends ItemDetailFragment<Document> {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState){
         super.onCreate(savedInstanceState);
 
-        View view = inflater.inflate(R.layout.document_detail_fragment, null);
+        View view = inflater.inflate(R.layout.fragment_detail_document, null);
 
         ButterKnife.inject(this, view);
 

@@ -22,18 +22,16 @@ import com.geospatialcorporation.android.geomobile.database.DataRepository.Imple
 import com.geospatialcorporation.android.geomobile.library.helpers.DataHelper;
 import com.geospatialcorporation.android.geomobile.library.helpers.FolderTreeService;
 import com.geospatialcorporation.android.geomobile.library.helpers.SectionTreeBuilder;
-import com.geospatialcorporation.android.geomobile.library.rest.FolderService;
 import com.geospatialcorporation.android.geomobile.library.rest.LayerService;
 import com.geospatialcorporation.android.geomobile.library.rest.TreeService;
 import com.geospatialcorporation.android.geomobile.models.Folders.Folder;
 import com.geospatialcorporation.android.geomobile.models.Layers.Layer;
 import com.geospatialcorporation.android.geomobile.ui.adapters.ListItemAdapter;
 import com.geospatialcorporation.android.geomobile.ui.fragments.dialogs.LayerActionDialogFragment;
-import com.google.android.gms.maps.model.Circle;
+import com.melnykov.fab.FloatingActionButton;
 
 import java.util.List;
 
-import at.markushi.ui.CircleButton;
 import butterknife.ButterKnife;
 import butterknife.InjectView;
 import butterknife.OnClick;
@@ -56,10 +54,10 @@ public class LayerFragment extends Fragment {
     }
 
     @InjectView(R.id.layer_recyclerView) RecyclerView mRecycler;
-    @InjectView(R.id.layer_action_btn) CircleButton mCircleButton;
+    @InjectView(R.id.fab) FloatingActionButton mCircleButton;
     @InjectView(R.id.swipe_refresh_layout) SwipeRefreshLayout mSwipeRefreshLayout;
 
-    @OnClick(R.id.layer_action_btn)
+    @OnClick(R.id.fab)
     @SuppressWarnings("unused")
     public void layerActionClick(){
         LayerActionDialogFragment l = new LayerActionDialogFragment();
@@ -76,14 +74,14 @@ public class LayerFragment extends Fragment {
         View mRootView = inflater.inflate(R.layout.fragment_layeritems, container, false);
 
         ButterKnife.inject(this, mRootView);
+        mContext = getActivity();
         mSwipeRefreshLayout.setOnRefreshListener(new LayerRefreshLayout());
-        mSwipeRefreshLayout.setColorSchemeColors(R.color.material_orange_800);
+        mSwipeRefreshLayout.setProgressBackgroundColorSchemeColor(mContext.getResources().getColor(R.color.accent));
 
         mTreeService = application.getRestAdapter().create(TreeService.class);
         mLayerService = application.getRestAdapter().create(LayerService.class);
         mFolderTreeService = new FolderTreeService();
 
-        mContext = getActivity();
 
         handleArguments();
 

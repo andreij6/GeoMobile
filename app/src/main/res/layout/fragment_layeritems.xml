@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-                xmlns:app="http://schemas.android.com/apk/res-auto"
+                xmlns:fab="http://schemas.android.com/apk/res-auto"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:background="@color/geo_blue">
+                android:background="@color/primary_dark">
 
     <android.support.v4.widget.SwipeRefreshLayout
         android:id="@+id/swipe_refresh_layout"
@@ -19,17 +19,18 @@
 
     </android.support.v4.widget.SwipeRefreshLayout>
 
-    <at.markushi.ui.CircleButton
-        android:layout_width="64dp"
-        android:layout_height="64dp"
-        app:cb_color="@color/material_orange_800"
-        app:cb_pressedRingWidth="8dp"
+
+    <com.melnykov.fab.FloatingActionButton
+        android:id="@+id/fab"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
         android:layout_alignParentEnd="true"
         android:layout_alignParentRight="true"
+        android:layout_margin="16dp"
         android:src="@drawable/ic_action_add"
-        android:id="@+id/layer_action_btn"/>
-
-
+        fab:fab_colorNormal="@color/accent"
+        fab:fab_colorPressed="@color/primary_dark"
+        fab:fab_colorRipple="@color/primary_light" />
 
 </RelativeLayout>

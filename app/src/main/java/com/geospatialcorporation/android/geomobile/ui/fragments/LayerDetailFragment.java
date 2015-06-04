@@ -36,7 +36,7 @@ public class LayerDetailFragment extends ItemDetailFragment<Layer> {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState){
         super.onCreate(savedInstanceState);
 
-        View view = inflater.inflate(R.layout.layer_detail_fragment, null);
+        View view = inflater.inflate(R.layout.fragment_detail_layer, null);
 
         ButterKnife.inject(this, view);
 

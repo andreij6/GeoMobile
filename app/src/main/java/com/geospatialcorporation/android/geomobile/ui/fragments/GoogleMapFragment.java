@@ -60,12 +60,10 @@ import com.google.android.gms.maps.model.GroundOverlay;
 import com.google.android.gms.maps.model.GroundOverlayOptions;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.LatLngBounds;
-import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
+import com.melnykov.fab.FloatingActionButton;
+import com.sothree.slidinguppanel.SlidingUpPanelLayout;
 
-import java.util.Map;
-
-import at.markushi.ui.CircleButton;
 import butterknife.ButterKnife;
 import butterknife.InjectView;
 import butterknife.OnClick;
@@ -81,13 +79,14 @@ public class GoogleMapFragment extends Fragment implements
     public GoogleMap mMap;
     GoogleApiClient mLocationClient;
     @InjectView(R.id.map) MapView mView;
-    @InjectView(R.id.action_btn_location) CircleButton mMyCurrentButton;
-    @InjectView(R.id.action_btn_layers) CircleButton mLayersButton;
+    @InjectView(R.id.fab_location) FloatingActionButton mMyCurrentButton;
+    @InjectView(R.id.fab_layers) FloatingActionButton mLayersButton;
+    @InjectView(R.id.sliding_layout) SlidingUpPanelLayout mPanel;
     //endregion
 
     //region OnClicks
     @SuppressWarnings("unused")
-    @OnClick(R.id.action_btn_location)
+    @OnClick(R.id.fab_location)
     public void getLocation(){
         Location currentLocation = LocationServices.FusedLocationApi.getLastLocation(mLocationClient);
 
@@ -121,7 +120,7 @@ public class GoogleMapFragment extends Fragment implements
     }
 
     @SuppressWarnings("unused")
-    @OnClick(R.id.action_btn_layers)
+    @OnClick(R.id.fab_layers)
     public void showLayersDrawer(){
         DrawerLayout mDrawerLayout = ((MainActivity)getActivity()).getRightDrawer();
         View layerView = ((MainActivity)getActivity()).getLayerListView();
@@ -135,6 +134,7 @@ public class GoogleMapFragment extends Fragment implements
         // Empty constructor required for fragment subclasses
     }
     //endregion
+
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -162,9 +162,45 @@ public class GoogleMapFragment extends Fragment implements
             e.printStackTrace();
         }
 
+        setupPanel();
+
         setUpMapIfNeeded();
 
         return rootView;
+    }
+
+    private void setupPanel() {
+
+        mPanel.setPanelSlideListener(new SlidingUpPanelLayout.PanelSlideListener() {
+            @Override
+            public void onPanelSlide(View view, float v) {
+
+            }
+
+            @Override
+            public void onPanelCollapsed(View view) {
+                Toast.makeText(getActivity(), "Collapsed", Toast.LENGTH_LONG).show();
+
+            }
+
+            @Override
+            public void onPanelExpanded(View view) {
+                Toast.makeText(getActivity(), "Expanded", Toast.LENGTH_LONG).show();
+
+            }
+
+            @Override
+            public void onPanelAnchored(View view) {
+                Toast.makeText(getActivity(), "Anchored", Toast.LENGTH_LONG).show();
+
+            }
+
+            @Override
+            public void onPanelHidden(View view) {
+                Toast.makeText(getActivity(), "Hidden", Toast.LENGTH_LONG).show();
+
+            }
+        });
     }
 
     @Override
@@ -200,8 +236,50 @@ public class GoogleMapFragment extends Fragment implements
                 m.setMap(mView);
                 m.show(getFragmentManager(), "styles");
                 return true;
+            case R.id.action_quick_search:
+                quickSearchSetup();
+                return true;
+            case R.id.action_advanced_search:
+                advancedSearchSetup();
+                return true;
+            case R.id.action_draw:
+                drawSetup();
             default:
                 return super.onOptionsItemSelected(item);
+        }
+    }
+
+    private void drawSetup() {
+        hideSlider();
+    }
+
+    protected void advancedSearchSetup() {
+        anchorSlider();
+    }
+
+    protected void quickSearchSetup() {
+        anchorSlider();
+    }
+
+    private void anchorSlider() {
+        if (mPanel != null) {
+            if (mPanel.getAnchorPoint() == 1.0f) {
+                mPanel.setAnchorPoint(0.7f);
+                mPanel.setPanelState(SlidingUpPanelLayout.PanelState.ANCHORED);
+            } else {
+                mPanel.setAnchorPoint(1.0f);
+                mPanel.setPanelState(SlidingUpPanelLayout.PanelState.COLLAPSED);
+            }
+        }
+    }
+
+    protected void hideSlider(){
+        if (mPanel != null) {
+            if (mPanel.getPanelState() != SlidingUpPanelLayout.PanelState.HIDDEN) {
+                mPanel.setPanelState(SlidingUpPanelLayout.PanelState.HIDDEN);
+            } else {
+                mPanel.setPanelState(SlidingUpPanelLayout.PanelState.COLLAPSED);
+            }
         }
     }
 

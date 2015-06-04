@@ -216,6 +216,7 @@ public class ListItemAdapter extends RecyclerView.Adapter<ListItemAdapter.ListVi
             fragmentManager.beginTransaction()
                     .replace(R.id.content_frame, fragment)
                     .setCustomAnimations(R.anim.enter, R.anim.exit, R.anim.pop_enter, R.anim.pop_exit)
+                    .addToBackStack(null)
                     .commit();
         }
 

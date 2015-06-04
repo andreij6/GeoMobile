@@ -76,10 +76,6 @@ public class MainActivity extends ActionBarActivity
 
 
     //region Properties
-    @InjectView(R.id.drawer_layout)DrawerLayout mDrawerLayout;
-    View mHeaderView;
-    View mFooterView;
-    private ActionBarDrawerToggle mDrawerToggle;
     private GoogleMapFragment mMap;
     private CharSequence mDrawerTitle;
     private CharSequence mTitle;
@@ -87,7 +83,6 @@ public class MainActivity extends ActionBarActivity
     private boolean mIsAdmin;
     MainNavigationDrawerFragment mMainMainNavigationDrawerFragment;
     LayerSelectorDrawerFragment mLayerDrawerFragement;
-    private ListView mLayerListView;
     //endregion
 
     @Override
@@ -145,6 +140,7 @@ public class MainActivity extends ActionBarActivity
         FragmentManager fragmentManager = getSupportFragmentManager();
         fragmentManager.beginTransaction()
                 .replace(R.id.content_frame, pageFragment)
+                .addToBackStack(null)
                 .commit();
     }
 

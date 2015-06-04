@@ -10,9 +10,9 @@
         android:id="@+id/backgroundImageView"
         android:layout_centerHorizontal="true"
         android:layout_alignParentTop="true"
-        android:background="@color/material_orange_800"
+        android:background="@color/primary"
         android:minHeight="100dp"
-        android:src="@drawable/ic_layers_black_24dp"/>
+        android:src="@drawable/ic_layers_white_24dp"/>
 
     <TextView
         android:layout_width="match_parent"
@@ -20,10 +20,11 @@
         android:textAppearance="?android:attr/textAppearanceLarge"
         android:text="United States"
         android:id="@+id/layerNameTV"
+        android:textColor="@color/white"
         android:layout_below="@+id/backgroundImageView"
         android:layout_alignParentStart="true"
         android:paddingLeft="40dp"
-        android:background="@color/material_orange_800"
+        android:background="@color/primary"
         android:paddingBottom="10dp"/>
 
     <LinearLayout
@@ -32,7 +33,7 @@
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
         android:layout_centerHorizontal="true"
-        android:background="#ff0c0c0c">
+        android:background="@color/primary_dark">
 
         <ImageView
             android:layout_width="wrap_content"
@@ -84,7 +85,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:id="@+id/editBtn"
-        android:src="@drawable/ic_pencil_black_18dp"
+        android:src="@drawable/ic_pencil_white_18dp"
         android:background="#00f3baa0"
         android:layout_alignTop="@+id/layerNameTV"
         android:layout_alignStart="@+id/backImageView"/>

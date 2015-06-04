@@ -35,14 +35,10 @@ import com.geospatialcorporation.android.geomobile.models.Library.Document;
 import com.geospatialcorporation.android.geomobile.ui.MainActivity;
 import com.geospatialcorporation.android.geomobile.ui.adapters.ListItemAdapter;
 import com.geospatialcorporation.android.geomobile.ui.fragments.dialogs.LibraryActionDialogFragment;
+import com.melnykov.fab.FloatingActionButton;
 
-import java.io.File;
-import java.text.SimpleDateFormat;
-import java.util.Date;
+
 import java.util.List;
-import java.util.Locale;
-
-import at.markushi.ui.CircleButton;
 import butterknife.ButterKnife;
 import butterknife.InjectView;
 import butterknife.OnClick;
@@ -62,11 +58,11 @@ public class DocumentFragment extends Fragment {
     //endregion
 
     @InjectView(R.id.libraryitem_recyclerView) RecyclerView mRecyclerView;
-    @InjectView(R.id.library_action_btn) CircleButton mCircleButton;
+    @InjectView(R.id.fab) FloatingActionButton mCircleButton;
     @InjectView(R.id.swipe_refresh_layout) SwipeRefreshLayout mSwipeRefreshLayout;
 
 
-    @OnClick(R.id.library_action_btn)
+    @OnClick(R.id.fab)
     @SuppressWarnings("unused")
     public void libraryActionOnClick(){
         LibraryActionDialogFragment l = new LibraryActionDialogFragment();
@@ -92,13 +88,12 @@ public class DocumentFragment extends Fragment {
         mRootView = inflater.inflate(R.layout.fragment_libraryitems, container, false);
 
         ButterKnife.inject(this, mRootView);
-        mSwipeRefreshLayout.setOnRefreshListener(new DocumentRefreshLayout());
-        mSwipeRefreshLayout.setColorSchemeColors(R.color.material_orange_800);
+        mContext = getActivity();
+        mSwipeRefreshLayout.setProgressBackgroundColorSchemeColor(mContext.getResources().getColor(R.color.accent));
 
         mTreeService = application.getRestAdapter().create(TreeService.class);
         mFolderTreeService = new FolderTreeService();
 
-        mContext = getActivity();
 
         handleArguments();
 

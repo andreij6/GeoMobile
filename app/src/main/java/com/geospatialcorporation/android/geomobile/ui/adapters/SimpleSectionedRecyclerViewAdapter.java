@@ -1,6 +1,7 @@
 package com.geospatialcorporation.android.geomobile.ui.adapters;
 
 import android.content.Context;
+import android.graphics.Color;
 import android.support.v7.widget.RecyclerView;
 import android.util.SparseArray;
 import android.view.LayoutInflater;
@@ -91,32 +92,19 @@ public class SimpleSectionedRecyclerViewAdapter extends RecyclerView.Adapter<Rec
         if (isSectionHeaderPosition(position)) {
             TextView title = ((SectionViewHolder) sectionViewHolder).title;
             title.setText(mSections.get(position).title);
-            //setDrawable(mSections.get(position).title, title);
+            modifyParentStyle(mSections.get(position).title.toString(), title);
         } else {
             mBaseAdapter.onBindViewHolder(sectionViewHolder, sectionedPositionToPosition(position));
         }
 
     }
 
-    public void setDrawable(CharSequence titleString, TextView title) {
-        int layer = R.drawable.ic_layers_black_24dp;
-        int folder = R.drawable.ic_folder_black_24dp;
-        int file = R.drawable.ic_insert_drive_file_black_24dp;
-        int folder_open = R.drawable.ic_folder_open_black_24dp;
+    public void modifyParentStyle(String titleString, TextView title) {
+        int arrow = R.drawable.ic_arrow_left_bold_black_24dp;
 
-        switch (titleString.toString()){
-            case "Layers":
-                title.setCompoundDrawablesWithIntrinsicBounds(layer, 0, 0, 0);
-                break;
-            case "Folders":
-                title.setCompoundDrawablesWithIntrinsicBounds(folder, 0, 0, 0);
-                break;
-            case "Documents":
-                title.setCompoundDrawablesWithIntrinsicBounds(file, 0, 0, 0);
-                break;
-            default:
-                title.setCompoundDrawablesWithIntrinsicBounds(folder_open, 0, 0, 0);
-                break;
+        if (titleString.startsWith("Back to ")){
+            title.setBackgroundColor(mContext.getResources().getColor(R.color.primary_light));
+            title.setCompoundDrawablesWithIntrinsicBounds(arrow, 0, 0, 0);
         }
     }
 

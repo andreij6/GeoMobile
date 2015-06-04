@@ -6,6 +6,17 @@
     <color name="geo_brown">#655b5300</color>
 
     <!-- http://www.google.com/design/spec/style/color.html#color-color-palette -->
-    <color name="material_orange_800">#EF6C00</color>
     <color name="material_blue_grey_50">#ECEFF1</color>
+
+    <!-- Pallet -->
+    <!-- Indigo -->
+    <color name="primary">#37474F</color>
+    <color name="primary_light">#90A4AE</color>
+    <color name="primary_dark">#263238</color>
+
+    <!-- Orange -->
+    <color name="accent">#FF5722</color>
+    <color name="accent_dark">#BF360C</color>
+    <!--End Pallet -->
+
 </resources>

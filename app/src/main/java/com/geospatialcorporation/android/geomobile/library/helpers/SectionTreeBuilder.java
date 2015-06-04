@@ -68,7 +68,7 @@ public class SectionTreeBuilder {
         Log.d(TAG, "Parent included: ".concat((mParent != null) ? mParent.getName() : "false"));
 
         if (mParent != null) {
-            String parentSection = mParent.getName();
+            String parentSection = setParentName();
             sections.add(new SimpleSectionedRecyclerViewAdapter.Section(0, parentSection));
             sections.add(new SimpleSectionedRecyclerViewAdapter.Section(1, folderSection));
             sections.add(new SimpleSectionedRecyclerViewAdapter.Section(mFolders.size()+1, treeSpecificSection));
@@ -84,6 +84,11 @@ public class SectionTreeBuilder {
 
         mSectionedAdapter.setSections(sections.toArray(dummy));
         return this;
+    }
+
+    protected String setParentName() {
+        return mParent.getIsFixed() && !mParent.getIsImportFolder() && mParent.getName().trim().length() == 1
+                    ? "Back to ROOT" : "Back to " + mParent.getName();
     }
 
     public SectionTreeBuilder setRecycler(RecyclerView r){

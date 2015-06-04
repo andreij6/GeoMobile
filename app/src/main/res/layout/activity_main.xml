@@ -44,7 +44,8 @@
               android:layout_height="match_parent"
               android:layout_gravity="start"
               android:name="com.geospatialcorporation.android.geomobile.ui.fragments.MainNavigationDrawerFragment"
-              tools:layout="@layout/fragment_left_navigation_drawer"/>
+              tools:layout="@layout/fragment_left_navigation_drawer"
+        />
 
     <fragment android:id="@+id/layer_drawer"
               android:layout_width="240dp"

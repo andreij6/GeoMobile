@@ -122,4 +122,5 @@
     <string name="upload_existing">Upload Existing</string>
     <string name="error_external_storage">Error External Storage</string>
     <string name="save">Save</string>
+    <string name="sublayers">Sublayers</string>
 </resources>

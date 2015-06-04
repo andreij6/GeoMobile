@@ -9,7 +9,8 @@
           android:textAllCaps="true"
           android:paddingTop="5dp"
           android:paddingBottom="5dp"
-          android:textColor="#FFF"
-          android:background="@color/geo_blue"
+          android:textColor="@color/primary_dark"
+          android:background="@color/primary_light"
           android:textSize="11sp"
-          android:id="@+id/section_text" />
+          android:id="@+id/section_text"
+          android:textStyle="bold"/>
