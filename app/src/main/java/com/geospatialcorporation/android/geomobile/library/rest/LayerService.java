@@ -3,10 +3,12 @@ package com.geospatialcorporation.android.geomobile.library.rest;
 import com.geospatialcorporation.android.geomobile.models.Layers.Layer;
 import com.geospatialcorporation.android.geomobile.models.Layers.LayerCreateRequest;
 import com.geospatialcorporation.android.geomobile.models.Layers.LayerCreateResponse;
+import com.geospatialcorporation.android.geomobile.models.RenameRequest;
 
 import java.util.List;
 
 import retrofit.Callback;
+import retrofit.client.Response;
 import retrofit.http.Body;
 import retrofit.http.DELETE;
 import retrofit.http.GET;
@@ -32,7 +34,7 @@ public interface LayerService {
     List<Layer> getDetails(@Path("id") int id);
 
     @PUT("/API/Layers/{id}/Rename")
-    void rename(@Path("id") int id, @Body Layer.Rename rename);
+    void rename(@Path("id") int id, @Body RenameRequest rename, Callback<Response> cb);
 
     @DELETE("/API/Layers/{id}")
     void delete(@Path("id") int id, Callback<Layer> cb);

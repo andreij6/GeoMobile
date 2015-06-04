@@ -1,17 +1,15 @@
 package com.geospatialcorporation.android.geomobile.models.Layers;
 
-import android.app.Notification;
 import android.os.Parcel;
 import android.os.Parcelable;
 import android.text.TextUtils;
 
 import com.geospatialcorporation.android.geomobile.library.map.MapActions;
-import com.geospatialcorporation.android.geomobile.models.IdModel;
+import com.geospatialcorporation.android.geomobile.models.Interfaces.ITreeEntity;
 
 import java.util.List;
-import java.util.Map;
 
-public class Layer implements Parcelable, IdModel {
+public class Layer implements Parcelable, ITreeEntity {
 
     //region Constructors
     public Layer(String name) {
@@ -143,15 +141,6 @@ public class Layer implements Parcelable, IdModel {
 
     public static String LAYER_INTENT = "Layer Intent";
 
-    public Rename Rename(int id, String name) {
-        Rename rename = new Rename();
-
-        rename.Id = id;
-        rename.Name = name;
-
-        return rename;
-    }
-
     @Override
     public int describeContents() {
         return 0;
@@ -182,11 +171,6 @@ public class Layer implements Parcelable, IdModel {
             return new Layer[size];
         }
     };
-
-    public class Rename {
-        public int Id;
-        public String Name;
-    }
 
     public class StyleInfo {
         public int StyleInfoId;

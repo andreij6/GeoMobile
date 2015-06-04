@@ -22,9 +22,10 @@
         android:id="@+id/documentNameTV"
         android:layout_below="@+id/backgroundImageView"
         android:layout_alignParentStart="true"
-        android:paddingLeft="20dp"
+        android:paddingLeft="40dp"
         android:background="@color/material_orange_800"
-        android:paddingBottom="10dp"/>
+        android:paddingBottom="10dp"
+        android:editable="true"/>
 
     <LinearLayout
         android:orientation="horizontal"
@@ -59,5 +60,34 @@
         android:layout_alignParentStart="true"
         android:layout_marginStart="24dp"
         android:layout_marginTop="23dp"/>
+
+    <EditText
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:inputType="textPersonName"
+        android:text="Name"
+        android:ems="10"
+        android:id="@+id/documentNameET"
+        android:layout_below="@+id/documentNameTV"
+        android:layout_centerHorizontal="true"
+        android:paddingLeft="25dp"
+        android:paddingRight="25dp"/>
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/save"
+        android:id="@+id/saveBtn"
+        android:layout_below="@+id/documentNameET"
+        android:layout_centerHorizontal="true"/>
+
+    <ImageButton
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/editBtn"
+        android:src="@drawable/ic_pencil_black_18dp"
+        android:background="#00f3baa0"
+        android:layout_alignTop="@+id/documentNameTV"
+        android:layout_alignStart="@+id/backImageView"/>
 
 </RelativeLayout>

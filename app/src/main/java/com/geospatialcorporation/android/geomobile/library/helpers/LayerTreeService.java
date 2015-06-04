@@ -5,10 +5,12 @@ import android.widget.Toast;
 import com.geospatialcorporation.android.geomobile.application;
 import com.geospatialcorporation.android.geomobile.database.DataRepository.Implementations.IAppDataRepository;
 import com.geospatialcorporation.android.geomobile.database.DataRepository.Implementations.Layers.LayersAppSource;
+import com.geospatialcorporation.android.geomobile.library.helpers.Interfaces.ITreeService;
 import com.geospatialcorporation.android.geomobile.library.rest.LayerService;
 import com.geospatialcorporation.android.geomobile.models.Layers.Layer;
 import com.geospatialcorporation.android.geomobile.models.Layers.LayerCreateRequest;
 import com.geospatialcorporation.android.geomobile.models.Layers.LayerCreateResponse;
+import com.geospatialcorporation.android.geomobile.models.RenameRequest;
 
 import retrofit.Callback;
 import retrofit.RetrofitError;
@@ -17,7 +19,7 @@ import retrofit.client.Response;
 /**
  * Created by andre on 6/1/2015.
  */
-public class LayerTreeService {
+public class LayerTreeService implements ITreeService {
 
     LayerService mLayerService;
     IAppDataRepository<Layer> LayerRepo;
@@ -44,12 +46,13 @@ public class LayerTreeService {
         });
     }
 
-    public void deleteLayer(Integer id) {
+    public void deleteLayer(final int id) {
         mLayerService.delete(id, new Callback<Layer>() {
             @Override
             public void success(Layer layer, Response response) {
                 Toast.makeText(application.getAppContext(), "Success!", Toast.LENGTH_SHORT).show();
                 Toast.makeText(application.getAppContext(), "Pull to Refresh", Toast.LENGTH_LONG).show();
+                LayerRepo.Remove(id);
             }
 
             @Override
@@ -69,5 +72,24 @@ public class LayerTreeService {
         }
 
         return layer;
+    }
+
+    public Boolean rename(final int id, final String name){
+        mLayerService.rename(id, new RenameRequest(name), new Callback<Response>() {
+            @Override
+            public void success(Response response, Response response2) {
+                Layer l = LayerRepo.getById(id);
+                l.setName(name);
+            }
+
+            @Override
+            public void failure(RetrofitError error) {
+
+            }
+        });
+
+
+
+        return true;
     }
 }

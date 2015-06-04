@@ -46,15 +46,8 @@ public class application extends Application {
     private static String googleAuthToken;
     private static OkHttpClient client;
     private static RestAdapter restAdapter;
-    private static List<Folder> libraryFolders;
-    private static List<Folder> layerFolders;
-    private static List<Layer> layers;
-    private static List<Document> documents;
-    private static List<Folder> documentFolders;
     private static boolean isAdminUser;
     public static Uri mMediaUri;
-
-
 
     private static HashMap<Integer, Folder> folderHashMap;
     private static HashMap<Integer, Document> documentHashMap;
@@ -242,13 +235,9 @@ public class application extends Application {
     public static void Logout() {
         geoAuthToken = null;
         googleAuthToken = null;
-        libraryFolders = null;
-        layerFolders = null;
-        layers = null;
         layerHashMap = null;
-        documents = null;
         documentHashMap = null;
-        documentFolders = null;
+        folderHashMap = null;
 
         appState.getStringSet(geoAuthTokenName, null);
 

@@ -1,11 +1,12 @@
 package com.geospatialcorporation.android.geomobile.ui.fragments;
 
-import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentManager;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
+import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -23,13 +24,15 @@ import butterknife.InjectView;
 public class DocumentDetailFragment extends ItemDetailFragment<Document> {
     private static final String TAG = DocumentDetailFragment.class.getSimpleName();
 
-    Document mDocument;
-
     //view
     @InjectView(R.id.documentNameTV) TextView mDocumentName;
     @InjectView(R.id.deleteDocumentIcon) ImageView mDeleteIcon;
     @InjectView(R.id.deleteDocumentTV) TextView mDeleteText;
     @InjectView(R.id.backImageView) ImageView mBack;
+    @InjectView(R.id.documentNameET)EditText mNameET;
+    @InjectView(R.id.saveBtn) Button mSave;
+    @InjectView(R.id.editBtn)
+    ImageButton mEdit;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState){
@@ -50,23 +53,32 @@ public class DocumentDetailFragment extends ItemDetailFragment<Document> {
     protected void HandleArguments() {
         Bundle args = getArguments();
 
-        mDocument = args.getParcelable(Document.INTENT);
+        mEntity = args.getParcelable(Document.INTENT);
     }
 
     @Override
     protected void SetupUI(){
-        mDocumentName.setText(mDocument.getNameWithExt());
+        mDocumentName.setText(mEntity.getNameWithExt());
 
         mDeleteIcon.setOnClickListener(DeleteonClickListner);
         mDeleteText.setOnClickListener(DeleteonClickListner);
 
         mBack.setOnClickListener(BackButtonClicked);
+
+        mEdit.setOnClickListener(EditNameClicked);
+        mNameET.setOnClickListener(EditNameClicked);
+
+
+        setButton(mSave);
+        setEditText(mNameET);
+
+        SetupRename();
     }
 
     public View.OnClickListener DeleteonClickListner = new View.OnClickListener(){
         @Override
         public void onClick(View v){
-            GeoDialogHelper.deleteDocument(getActivity(), mDocument, getFragmentManager());
+            GeoDialogHelper.deleteDocument(getActivity(), mEntity, getFragmentManager());
         }
     };
 }

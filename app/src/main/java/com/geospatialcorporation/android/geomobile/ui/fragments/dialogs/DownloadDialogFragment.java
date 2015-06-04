@@ -9,6 +9,7 @@ import android.view.View;
 import android.widget.TextView;
 
 import com.geospatialcorporation.android.geomobile.R;
+import com.geospatialcorporation.android.geomobile.library.helpers.DocumentTreeService;
 import com.geospatialcorporation.android.geomobile.library.rest.DownloadService;
 import com.geospatialcorporation.android.geomobile.models.Library.Document;
 import com.geospatialcorporation.android.geomobile.ui.viewmodels.ListItem;
@@ -49,7 +50,9 @@ public class DownloadDialogFragment extends GeoDialogFragmentBase {
 
         builder.setPositiveButton(R.string.download, new DialogInterface.OnClickListener() {
                 public void onClick(DialogInterface dialog, int id) {
-                    new DownloadService(mDocument.getId(), mDocument.getNameWithExt());
+                    DocumentTreeService Service = new DocumentTreeService();
+                    Service.download(mDocument.getId(), mDocument.getNameWithExt());
+
                 }
             })
                 .setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {

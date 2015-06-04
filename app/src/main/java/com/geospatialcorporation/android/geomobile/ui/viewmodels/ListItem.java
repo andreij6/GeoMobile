@@ -13,6 +13,8 @@ public class ListItem implements Comparable<ListItem> {
     public static final int FOLDER = 1;
     public static final int LAYER = 2;
     public static final int DOCUMENT = 3;
+    public static final int EMPTYLayer = 4;
+    public static final int EMPTYDocument = 5;
 
     //region Getters & Setters
     public String getName() {
@@ -78,7 +80,11 @@ public class ListItem implements Comparable<ListItem> {
         IconId = setIconIdFromExt(document.getExtension());
     }
 
-    public ListItem() {
+    public ListItem(int empty) {
+        Name = "";
+        Id = 0;
+        Order = empty == EMPTYDocument ? EMPTYDocument : EMPTYLayer;
+        IconId = 0;
     }
     //endregion
 

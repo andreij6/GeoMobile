@@ -1,6 +1,7 @@
 package com.geospatialcorporation.android.geomobile.ui.adapters;
 
 import android.app.Activity;
+import android.graphics.Color;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.content.Context;
@@ -10,7 +11,9 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageButton;
 import android.widget.ImageView;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.geospatialcorporation.android.geomobile.R;
@@ -33,6 +36,7 @@ import com.geospatialcorporation.android.geomobile.ui.fragments.LayerFragment;
 import com.geospatialcorporation.android.geomobile.ui.fragments.dialogs.DownloadDialogFragment;
 import com.geospatialcorporation.android.geomobile.ui.viewmodels.ListItem;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import butterknife.ButterKnife;
@@ -52,6 +56,11 @@ public class ListItemAdapter extends RecyclerView.Adapter<ListItemAdapter.ListVi
     private FragmentManager mFragmentManager;
 
     public ListItemAdapter(Context context, List<ListItem> data, String ViewType, FragmentManager fm) {
+        if(ViewType == ListItemAdapter.LAYER) {
+            data.add(new ListItem(ListItem.LAYER));
+        } else {
+            data.add(new ListItem(ListItem.DOCUMENT));
+        }
         mContext = context;
         mListItems = data;
         mHelper = new DataHelper();
@@ -73,7 +82,8 @@ public class ListItemAdapter extends RecyclerView.Adapter<ListItemAdapter.ListVi
 
     @Override
     public int getItemCount() {
-        return mListItems.size();
+        int count = mListItems.size();
+        return count;
     }
 
 
@@ -84,8 +94,9 @@ public class ListItemAdapter extends RecyclerView.Adapter<ListItemAdapter.ListVi
         //endregion
 
         @InjectView(R.id.itemNameTV) TextView itemName;
-        @InjectView(R.id.itemImageView) ImageView itemIcon;
-        @InjectView(R.id.infoImageView) ImageView itemInfo;
+        @InjectView(R.id.itemImageView) ImageButton itemIcon;
+        @InjectView(R.id.infoImageView) ImageButton itemInfo;
+        @InjectView(R.id.listitem_container) RelativeLayout Container;
 
         IAppDataRepository<Document> DocumentRepo;
         IAppDataRepository<Folder> FolderRepo;
@@ -104,7 +115,14 @@ public class ListItemAdapter extends RecyclerView.Adapter<ListItemAdapter.ListVi
         public void bindFolder(ListItem item) {
             mItem = item;
             itemName.setText(item.getName());
-            itemIcon.setImageDrawable(mContext.getDrawable(item.getIconId()));
+
+            if(item.getIconId() != 0) {
+                itemIcon.setImageDrawable(mContext.getDrawable(item.getIconId()));
+            } else {
+                itemIcon.setVisibility(View.GONE);
+                itemInfo.setVisibility(View.GONE);
+                Container.setBackgroundColor(Color.TRANSPARENT);
+            }
 
         }
 

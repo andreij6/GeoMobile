@@ -4,16 +4,17 @@ import android.widget.Toast;
 
 import com.geospatialcorporation.android.geomobile.application;
 import com.geospatialcorporation.android.geomobile.database.DataRepository.IAddDataRepository;
-import com.geospatialcorporation.android.geomobile.database.DataRepository.IDataRepository;
 import com.geospatialcorporation.android.geomobile.database.DataRepository.Implementations.Folders.FolderAppSource;
 import com.geospatialcorporation.android.geomobile.database.DataRepository.Implementations.IAppDataRepository;
 import com.geospatialcorporation.android.geomobile.database.DataRepository.Implementations.Layers.LayersAppSource;
+import com.geospatialcorporation.android.geomobile.library.helpers.Interfaces.ITreeService;
 import com.geospatialcorporation.android.geomobile.library.rest.FolderService;
 import com.geospatialcorporation.android.geomobile.models.Folders.Folder;
 import com.geospatialcorporation.android.geomobile.models.Folders.FolderCreateRequest;
 import com.geospatialcorporation.android.geomobile.models.Folders.FolderCreateResponse;
 import com.geospatialcorporation.android.geomobile.models.Layers.Layer;
 import com.geospatialcorporation.android.geomobile.models.Library.Document;
+import com.geospatialcorporation.android.geomobile.models.RenameRequest;
 
 import java.util.List;
 
@@ -21,7 +22,7 @@ import retrofit.Callback;
 import retrofit.RetrofitError;
 import retrofit.client.Response;
 
-public class FolderTreeService {
+public class FolderTreeService implements ITreeService {
 
     private FolderService mFolderService;
     IAppDataRepository<Folder> FolderRepo;
@@ -121,5 +122,23 @@ public class FolderTreeService {
             }
         });
         FolderRepo.Remove(folder.getId());
+    }
+
+    public Boolean rename(final int folderId,final String folderName){
+        mFolderService.rename(folderId, new RenameRequest(folderName), new Callback<Response>() {
+            @Override
+            public void success(Response response, Response response2) {
+                Folder f = FolderRepo.getById(folderId);
+
+                f.setName(folderName);
+            }
+
+            @Override
+            public void failure(RetrofitError error) {
+
+            }
+        });
+
+        return true;
     }
 }

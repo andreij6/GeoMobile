@@ -6,6 +6,9 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
+import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -24,13 +27,15 @@ import butterknife.InjectView;
  */
 public class FolderDetailFragment extends ItemDetailFragment<Folder> {
     private static final String TAG = FolderDetailFragment.class.getSimpleName();
-
-    Folder mFolder;
     
     @InjectView(R.id.folderNameTV) TextView mFolderName;
     @InjectView(R.id.deleteFolderIcon) ImageView mDeleteIcon;
     @InjectView(R.id.deleteFolderTV) TextView mDeleteText;
     @InjectView(R.id.backImageView) ImageView mBack;
+    @InjectView(R.id.folderNameET) EditText mNameET;
+    @InjectView(R.id.saveBtn) Button mSave;
+    @InjectView(R.id.editBtn)
+    ImageButton mEdit;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState){
@@ -51,23 +56,29 @@ public class FolderDetailFragment extends ItemDetailFragment<Folder> {
     protected void HandleArguments() {
         Bundle args = getArguments();
 
-        mFolder = args.getParcelable(Folder.FOLDER_INTENT);
+        mEntity = args.getParcelable(Folder.FOLDER_INTENT);
     }
 
     @Override
     protected void SetupUI(){
-        mFolderName.setText(mFolder.getName());
-
+        mFolderName.setText(mEntity.getName());
         mDeleteIcon.setOnClickListener(DeleteonClickListner);
         mDeleteText.setOnClickListener(DeleteonClickListner);
 
         mBack.setOnClickListener(BackButtonClicked);
+
+        mNameET.setOnClickListener(EditNameClicked);
+        mEdit.setOnClickListener(EditNameClicked);
+
+        setButton(mSave);
+        setEditText(mNameET);
+        SetupRename();
     }
 
     public View.OnClickListener DeleteonClickListner = new View.OnClickListener(){
         @Override
         public void onClick(View v){
-            GeoDialogHelper.deleteFolder(getActivity(), mFolder, getFragmentManager());
+            GeoDialogHelper.deleteFolder(getActivity(), mEntity, getFragmentManager());
         }
     };
 

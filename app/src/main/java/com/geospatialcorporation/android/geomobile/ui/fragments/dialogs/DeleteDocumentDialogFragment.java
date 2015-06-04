@@ -6,6 +6,7 @@ import android.content.DialogInterface;
 import android.os.Bundle;
 
 import com.geospatialcorporation.android.geomobile.R;
+import com.geospatialcorporation.android.geomobile.library.helpers.DocumentTreeService;
 import com.geospatialcorporation.android.geomobile.models.Library.Document;
 
 /**
@@ -14,6 +15,7 @@ import com.geospatialcorporation.android.geomobile.models.Library.Document;
 public class DeleteDocumentDialogFragment extends GeoDialogFragmentBase {
     private static final String TAG = DeleteDocumentDialogFragment.class.getSimpleName();
 
+    //region Getters & Setters
     public Document getDocument() {
         return mDocument;
     }
@@ -21,12 +23,15 @@ public class DeleteDocumentDialogFragment extends GeoDialogFragmentBase {
     public void setDocument(Document document) {
         mDocument = document;
     }
+    //endregion
 
     Document mDocument;
+    DocumentTreeService Service;
 
     public void init(Context context, Document document){
         setContext(context);
         setDocument(document);
+        Service = new DocumentTreeService();
     }
 
     @Override
@@ -37,12 +42,12 @@ public class DeleteDocumentDialogFragment extends GeoDialogFragmentBase {
                 .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
-
+                        Service.delete(mDocument);
                     }
                 }).setNegativeButton(android.R.string.cancel, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
-
+                        dialog.cancel();
                     }
                 }).create();
     }

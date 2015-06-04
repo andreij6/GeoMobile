@@ -5,14 +5,17 @@ import com.geospatialcorporation.android.geomobile.models.Folders.FolderCreateRe
 import com.geospatialcorporation.android.geomobile.models.Folders.FolderCreateResponse;
 import com.geospatialcorporation.android.geomobile.models.Layers.Layer;
 import com.geospatialcorporation.android.geomobile.models.Library.Document;
+import com.geospatialcorporation.android.geomobile.models.RenameRequest;
 
 import java.util.List;
 
 import retrofit.Callback;
+import retrofit.client.Response;
 import retrofit.http.Body;
 import retrofit.http.DELETE;
 import retrofit.http.GET;
 import retrofit.http.POST;
+import retrofit.http.PUT;
 import retrofit.http.Path;
 
 public interface FolderService {
@@ -36,4 +39,7 @@ public interface FolderService {
 
     @DELETE("/API/Folders/{folderId}")
     void delete(@Path("folderId") int folderId, Callback<Folder> cb);
+
+    @PUT("/API/Folders/{folderId}/Rename")
+    void rename(@Path("folderId") int folderId, @Body RenameRequest name, Callback<Response> cb);
 }

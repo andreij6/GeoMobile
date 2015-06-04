@@ -3,14 +3,13 @@ package com.geospatialcorporation.android.geomobile.models.Library;
 import android.os.Parcel;
 import android.os.Parcelable;
 
-import com.geospatialcorporation.android.geomobile.models.IdModel;
+import com.geospatialcorporation.android.geomobile.models.Interfaces.ITreeEntity;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
 import java.util.Date;
 
-public class Document implements Parcelable, IdModel {
+public class Document implements Parcelable, ITreeEntity {
 
     //region Getters & Setters
     public int getId() {
@@ -86,6 +85,7 @@ public class Document implements Parcelable, IdModel {
         return date;
     }
 
+    //region Parcelable Contract
     @Override
     public int describeContents() {
         return 0;
@@ -123,9 +123,14 @@ public class Document implements Parcelable, IdModel {
         }
     };
 
+    //endregion
+
+    //region Methods & Intent String
     public String getNameWithExt() {
         return Name + Ext;
     }
 
     public static String INTENT = "Document Intent";
+    //endregion
+
 }

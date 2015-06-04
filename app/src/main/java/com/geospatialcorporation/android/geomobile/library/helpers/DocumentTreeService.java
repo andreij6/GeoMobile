@@ -1,32 +1,68 @@
 package com.geospatialcorporation.android.geomobile.library.helpers;
 
+import android.app.DownloadManager;
+import android.content.Context;
 import android.database.Cursor;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
+import android.os.Environment;
 import android.provider.MediaStore;
 import android.widget.Toast;
 
 import com.geospatialcorporation.android.geomobile.application;
+import com.geospatialcorporation.android.geomobile.database.DataRepository.Implementations.Documents.DocumentsAppSource;
+import com.geospatialcorporation.android.geomobile.database.DataRepository.Implementations.IAppDataRepository;
+import com.geospatialcorporation.android.geomobile.library.helpers.Interfaces.ITreeService;
 import com.geospatialcorporation.android.geomobile.library.rest.DocumentService;
+import com.geospatialcorporation.android.geomobile.library.rest.DownloadService;
 import com.geospatialcorporation.android.geomobile.models.Folders.Folder;
+import com.geospatialcorporation.android.geomobile.models.Library.Document;
 import com.geospatialcorporation.android.geomobile.models.Library.DocumentCreateResponse;
+import com.geospatialcorporation.android.geomobile.models.RenameRequest;
 
 import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
 
 import retrofit.Callback;
 import retrofit.RetrofitError;
 import retrofit.client.Response;
+import retrofit.mime.TypedByteArray;
 import retrofit.mime.TypedFile;
 
 /**
  * Created by andre on 6/2/2015.
  */
-public class DocumentTreeService {
+public class DocumentTreeService implements ITreeService {
 
+    //region Properties
     DocumentService Service;
+    IAppDataRepository<Document> DocumentRepo;
+    //endregion
 
     public DocumentTreeService(){
         Service = application.getRestAdapter().create(DocumentService.class);
+        DocumentRepo = new DocumentsAppSource();
+    }
+
+    //region Public Methods
+    public void delete(Document document) {
+        Service.delete(document.getId(), new Callback<Document>() {
+            @Override
+            public void success(Document document, Response response) {
+                DocumentRepo.Remove(document.getId());
+
+                Toast.makeText(application.getAppContext(), "Document Deleted", Toast.LENGTH_LONG).show();
+            }
+
+            @Override
+            public void failure(RetrofitError error) {
+
+            }
+        });
+
+
     }
 
     public void SendDocument(Folder currentFolder, Uri data) {
@@ -62,6 +98,72 @@ public class DocumentTreeService {
         SendImage(currentFolder, t, actualPath);
     }
 
+    public void download(int documentId, String docName){
+        //region Attempt to download file using Retrofit
+        /*
+        String dir = Environment.DIRECTORY_DOWNLOADS;
+        dir += "/geomobile";
+        final File fileDir = new File(dir);
+        if (!fileDir.isDirectory()) {
+            fileDir.mkdir();
+        }
+
+        Service.download(documentId, new Callback<Response>() {
+            @Override
+            public void success(Response response, Response response2) {
+                byte[] fileBytes = ((TypedByteArray)response.getBody()).getBytes();
+
+                try (FileOutputStream output = new FileOutputStream(fileDir)) {
+                    output.write(fileBytes);
+
+                    Toast.makeText(application.getAppContext(), "Sucess", Toast.LENGTH_LONG).show();
+                } catch (FileNotFoundException e) {
+                    Toast.makeText(application.getAppContext(), e.getMessage(), Toast.LENGTH_LONG).show();
+                    e.printStackTrace();
+                } catch (IOException e) {
+                    Toast.makeText(application.getAppContext(), e.getMessage(), Toast.LENGTH_LONG).show();
+                    e.printStackTrace();
+                }
+
+            }
+
+            @Override
+            public void failure(RetrofitError error) {
+                Toast.makeText(application.getAppContext(), error.getMessage(), Toast.LENGTH_LONG).show();
+
+
+            }
+        });
+        **/
+        //endregion
+
+        new DownloadService(documentId, docName);
+    }
+
+    public Boolean rename(final int documentId, final String docName){
+        Service.rename(documentId, new RenameRequest(docName), new Callback<Response>() {
+            @Override
+            public void success(Response response, Response response2) {
+                Document l = DocumentRepo.getById(documentId);
+                l.setName(docName);
+
+            }
+
+            @Override
+            public void failure(RetrofitError error) {
+
+            }
+        });
+
+        Document doc = DocumentRepo.getById(documentId);
+        doc.setName(docName);
+
+        return true;
+
+    }
+    //endregion
+
+    //region Helpers
     private void SendImage(Folder currentFolder, final TypedFile t, final String path) {
         Service.create(currentFolder.getId(), t, new Callback<DocumentCreateResponse>() {
             @Override
@@ -81,14 +183,14 @@ public class DocumentTreeService {
         });
     }
 
-    public String getMimeTypeOfFile(String pathName) {
+    protected String getMimeTypeOfFile(String pathName) {
         BitmapFactory.Options opt = new BitmapFactory.Options();
         opt.inJustDecodeBounds = true;
         BitmapFactory.decodeFile(pathName, opt);
         return opt.outMimeType;
     }
 
-    public String getRealPathFromUri(Uri contentUri) {
+    protected String getRealPathFromUri(Uri contentUri) {
         Cursor cursor = null;
         try {
             String[] proj = { MediaStore.Images.Media.DATA };
@@ -102,4 +204,6 @@ public class DocumentTreeService {
             }
         }
     }
+
+    //endregion
 }
