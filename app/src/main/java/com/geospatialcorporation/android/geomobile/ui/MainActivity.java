@@ -22,26 +22,24 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarActivity;
-import android.support.v7.app.ActionBarDrawerToggle;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.View;
-import android.widget.ListView;
 import android.widget.Toast;
 
 import com.geospatialcorporation.android.geomobile.R;
 import com.geospatialcorporation.android.geomobile.application;
 import com.geospatialcorporation.android.geomobile.library.constants.ViewConstants;
 import com.geospatialcorporation.android.geomobile.library.util.Dialogs;
-import com.geospatialcorporation.android.geomobile.ui.fragments.AccountFragment;
-import com.geospatialcorporation.android.geomobile.ui.fragments.DocumentFragment;
+import com.geospatialcorporation.android.geomobile.ui.Interfaces.OnFragmentInteractionListener;
+import com.geospatialcorporation.android.geomobile.ui.fragments.tree_fragments.AccountFragment;
+import com.geospatialcorporation.android.geomobile.ui.fragments.tree_fragments.DocumentFragment;
 import com.geospatialcorporation.android.geomobile.ui.fragments.GoogleMapFragment;
-import com.geospatialcorporation.android.geomobile.ui.fragments.LayerFragment;
-import com.geospatialcorporation.android.geomobile.ui.fragments.LayerSelectorDrawerFragment;
-import com.geospatialcorporation.android.geomobile.ui.fragments.MainNavigationDrawerFragment;
+import com.geospatialcorporation.android.geomobile.ui.fragments.tree_fragments.LayerFragment;
+import com.geospatialcorporation.android.geomobile.ui.fragments.drawer.LayerSelectorDrawerFragment;
+import com.geospatialcorporation.android.geomobile.ui.fragments.drawer.MainNavigationDrawerFragment;
 
 import butterknife.ButterKnife;
-import butterknife.InjectView;
 
 /**
  * This example illustrates a common usage of the DrawerLayout widget
@@ -72,7 +70,7 @@ import butterknife.InjectView;
  */
 public class MainActivity extends ActionBarActivity
         implements MainNavigationDrawerFragment.NavigationDrawerCallbacks,
-        OnFragmentInteractionListener{
+        OnFragmentInteractionListener {
     private static final String TAG = MainActivity.class.getSimpleName();
 
 
@@ -100,7 +98,7 @@ public class MainActivity extends ActionBarActivity
         mMainMainNavigationDrawerFragment.setUp(R.id.navigation_left_drawer,(DrawerLayout)findViewById(R.id.drawer_layout));
 
         mLayerDrawerFragement = (LayerSelectorDrawerFragment)getSupportFragmentManager().findFragmentById(R.id.layer_drawer);
-        mLayerDrawerFragement.setUp(R.id.layer_drawer, (DrawerLayout)findViewById(R.id.drawer_layout));
+        mLayerDrawerFragement.setUp(R.id.layer_drawer, (DrawerLayout) findViewById(R.id.drawer_layout));
 
     }
 

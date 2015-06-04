@@ -10,11 +10,12 @@ import com.geospatialcorporation.android.geomobile.R;
 import com.geospatialcorporation.android.geomobile.application;
 import com.geospatialcorporation.android.geomobile.library.services.LayerTreeService;
 import com.geospatialcorporation.android.geomobile.models.Layers.Layer;
+import com.geospatialcorporation.android.geomobile.ui.fragments.dialogs.base.GeoDialogFragmentBase;
 
 /**
  * Created by andre on 6/2/2015.
  */
-public class DeleteLayerDialogFragment extends GeoDialogFragmentBase{
+public class DeleteLayerDialogFragment extends GeoDialogFragmentBase {
 
     public Layer getLayer() {
         return mLayer;

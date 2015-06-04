@@ -4,7 +4,7 @@ import android.app.Activity;
 import android.support.v4.app.Fragment;
 import android.widget.Toast;
 
-import com.geospatialcorporation.android.geomobile.ui.OnFragmentInteractionListener;
+import com.geospatialcorporation.android.geomobile.ui.Interfaces.OnFragmentInteractionListener;
 
 /**
  * Created by andre on 6/4/2015.

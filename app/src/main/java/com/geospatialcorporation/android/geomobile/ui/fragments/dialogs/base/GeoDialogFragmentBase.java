@@ -1,4 +1,4 @@
-package com.geospatialcorporation.android.geomobile.ui.fragments.dialogs;
+package com.geospatialcorporation.android.geomobile.ui.fragments.dialogs.base;
 
 import android.app.AlertDialog;
 import android.support.v4.app.DialogFragment;

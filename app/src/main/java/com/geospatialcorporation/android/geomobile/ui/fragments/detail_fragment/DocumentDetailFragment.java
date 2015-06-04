@@ -1,4 +1,4 @@
-package com.geospatialcorporation.android.geomobile.ui.fragments;
+package com.geospatialcorporation.android.geomobile.ui.fragments.detail_fragment;
 
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -14,8 +14,6 @@ import com.geospatialcorporation.android.geomobile.R;
 import com.geospatialcorporation.android.geomobile.library.helpers.GeoDialogHelper;
 import com.geospatialcorporation.android.geomobile.models.Library.Document;
 import com.geospatialcorporation.android.geomobile.ui.fragments.dialogs.ItemDetailFragment;
-
-import java.util.Set;
 
 import butterknife.ButterKnife;
 import butterknife.InjectView;

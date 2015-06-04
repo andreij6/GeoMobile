@@ -26,11 +26,11 @@ import com.geospatialcorporation.android.geomobile.library.util.Dialogs;
 import com.geospatialcorporation.android.geomobile.models.Folders.Folder;
 import com.geospatialcorporation.android.geomobile.models.Layers.Layer;
 import com.geospatialcorporation.android.geomobile.models.Library.Document;
-import com.geospatialcorporation.android.geomobile.ui.fragments.DocumentDetailFragment;
-import com.geospatialcorporation.android.geomobile.ui.fragments.DocumentFragment;
-import com.geospatialcorporation.android.geomobile.ui.fragments.FolderDetailFragment;
-import com.geospatialcorporation.android.geomobile.ui.fragments.LayerDetailFragment;
-import com.geospatialcorporation.android.geomobile.ui.fragments.LayerFragment;
+import com.geospatialcorporation.android.geomobile.ui.fragments.detail_fragment.DocumentDetailFragment;
+import com.geospatialcorporation.android.geomobile.ui.fragments.tree_fragments.DocumentFragment;
+import com.geospatialcorporation.android.geomobile.ui.fragments.detail_fragment.FolderDetailFragment;
+import com.geospatialcorporation.android.geomobile.ui.fragments.detail_fragment.LayerDetailFragment;
+import com.geospatialcorporation.android.geomobile.ui.fragments.tree_fragments.LayerFragment;
 import com.geospatialcorporation.android.geomobile.ui.fragments.dialogs.DownloadDialogFragment;
 import com.geospatialcorporation.android.geomobile.ui.viewmodels.ListItem;
 

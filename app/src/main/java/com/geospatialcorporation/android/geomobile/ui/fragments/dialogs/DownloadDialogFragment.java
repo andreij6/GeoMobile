@@ -11,6 +11,7 @@ import android.widget.TextView;
 import com.geospatialcorporation.android.geomobile.R;
 import com.geospatialcorporation.android.geomobile.library.services.DocumentTreeService;
 import com.geospatialcorporation.android.geomobile.models.Library.Document;
+import com.geospatialcorporation.android.geomobile.ui.fragments.dialogs.base.GeoDialogFragmentBase;
 import com.geospatialcorporation.android.geomobile.ui.viewmodels.ListItem;
 
 public class DownloadDialogFragment extends GeoDialogFragmentBase {
