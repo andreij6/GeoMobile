@@ -78,6 +78,7 @@ public class LayerFragment extends Fragment {
         mSwipeRefreshLayout.setOnRefreshListener(new LayerRefreshLayout());
         mSwipeRefreshLayout.setProgressBackgroundColorSchemeColor(mContext.getResources().getColor(R.color.accent));
 
+
         mTreeService = application.getRestAdapter().create(TreeService.class);
         mLayerService = application.getRestAdapter().create(LayerService.class);
         mFolderTreeService = new FolderTreeService();
@@ -96,11 +97,11 @@ public class LayerFragment extends Fragment {
                     List<Folder> folders = mTreeService.getLayers();
 
                     mCurrentFolder = folders.get(0);
+
                     getCurrentFolderLayers();
                 } else {
                     mCurrentFolder = mFolderTreeService.getFolderById(params[0]);
                 }
-
 
 
                 mCurrentFolder.setFolders(mFolderTreeService.getFoldersByFolder(mCurrentFolder.getId(), false));

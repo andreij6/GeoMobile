@@ -39,6 +39,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.geospatialcorporation.android.geomobile.R;
+import com.geospatialcorporation.android.geomobile.application;
 import com.geospatialcorporation.android.geomobile.library.helpers.MapStateManager;
 import com.geospatialcorporation.android.geomobile.ui.MainActivity;
 import com.geospatialcorporation.android.geomobile.ui.fragments.dialogs.MapTypeSelectDialogFragment;
@@ -144,6 +145,7 @@ public class GoogleMapFragment extends Fragment implements
         ButterKnife.inject(this, rootView);
 
         mView.onCreate(savedInstanceState);
+        getActivity().setTitle(R.string.app_name);
 
         mMap = mView.getMap();
 

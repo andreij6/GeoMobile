@@ -123,4 +123,5 @@
     <string name="error_external_storage">Error External Storage</string>
     <string name="save">Save</string>
     <string name="sublayers">Sublayers</string>
+    <string name="account_title">Account</string>
 </resources>

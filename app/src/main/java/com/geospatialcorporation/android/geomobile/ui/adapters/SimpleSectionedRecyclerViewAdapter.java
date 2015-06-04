@@ -100,11 +100,11 @@ public class SimpleSectionedRecyclerViewAdapter extends RecyclerView.Adapter<Rec
     }
 
     public void modifyParentStyle(String titleString, TextView title) {
-        int arrow = R.drawable.ic_arrow_left_bold_black_24dp;
+        //int arrow = R.drawable.ic_arrow_left_bold_black_24dp;
 
         if (titleString.startsWith("Back to ")){
             title.setBackgroundColor(mContext.getResources().getColor(R.color.primary_light));
-            title.setCompoundDrawablesWithIntrinsicBounds(arrow, 0, 0, 0);
+            //title.setCompoundDrawablesWithIntrinsicBounds(arrow, 0, 0, 0);
         }
     }
 

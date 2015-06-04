@@ -1,5 +1,6 @@
 package com.geospatialcorporation.android.geomobile.library.helpers;
 
+import com.geospatialcorporation.android.geomobile.R;
 import com.geospatialcorporation.android.geomobile.models.Folders.Folder;
 import com.geospatialcorporation.android.geomobile.models.Layers.Layer;
 import com.geospatialcorporation.android.geomobile.models.Library.Document;
@@ -75,6 +76,8 @@ public class DataHelper {
 
         if (parent != null) {
             ListItem listItem = new ListItem(parent);
+            listItem.setIconId(R.drawable.ic_arrow_left_bold_black_24dp);
+            listItem.setName("");
             results.add(listItem);
         }
 
@@ -102,6 +105,8 @@ public class DataHelper {
 
         if (parent != null) {
             ListItem listItem = new ListItem(parent);
+            listItem.setIconId(R.drawable.ic_arrow_left_bold_black_24dp);
+            listItem.setName("");
             results.add(listItem);
         }
 
