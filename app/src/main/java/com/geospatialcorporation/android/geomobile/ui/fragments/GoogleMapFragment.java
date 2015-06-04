@@ -238,28 +238,23 @@ public class GoogleMapFragment extends Fragment implements
                 m.setMap(mView);
                 m.show(getFragmentManager(), "styles");
                 return true;
-            case R.id.action_quick_search:
-                quickSearchSetup();
+            case R.id.action_search:
+                searchSetup();
                 return true;
-            case R.id.action_advanced_search:
-                advancedSearchSetup();
+            case R.id.action_query:
+                querySetup();
                 return true;
-            case R.id.action_draw:
-                drawSetup();
             default:
                 return super.onOptionsItemSelected(item);
         }
     }
 
-    private void drawSetup() {
+    private void querySetup() {
+        //showQuerySelector();
         hideSlider();
     }
 
-    protected void advancedSearchSetup() {
-        anchorSlider();
-    }
-
-    protected void quickSearchSetup() {
+    protected void searchSetup() {
         anchorSlider();
     }
 

@@ -4,14 +4,11 @@
           android:title="Map Settings"
           android:icon="@drawable/ic_map_marker_circle_white_24dp"
           android:showAsAction="always"/>
-    <item android:id="@+id/action_draw"
-          android:title="Draw"
+    <item android:id="@+id/action_query"
+          android:title="Query"
           android:showAsAction="always"/>
-    <item android:id="@+id/action_quick_search"
-          android:title="Quick Search"
-          android:showAsAction="always"/>
-    <item android:id="@+id/action_advanced_search"
-          android:title="Advanced Search"
+    <item android:id="@+id/action_search"
+          android:title="Search"
           android:showAsAction="always"/>
 
 </menu>
