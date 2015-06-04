@@ -30,13 +30,14 @@ import com.geospatialcorporation.android.geomobile.ui.fragments.dialogs.LayerAct
 import com.melnykov.fab.FloatingActionButton;
 
 import java.util.List;
+import java.util.Set;
 
 import butterknife.ButterKnife;
 import butterknife.InjectView;
 import butterknife.OnClick;
 import retrofit.RetrofitError;
 
-public class LayerFragment extends Fragment {
+public class LayerFragment extends GeoViewFragmentBase {
     protected final static String TAG = LayerFragment.class.getSimpleName();
 
     private Folder mCurrentFolder;
@@ -45,8 +46,6 @@ public class LayerFragment extends Fragment {
     private LayerService mLayerService;
     private DataHelper mHelper;
     private Context mContext;
-
-    RecyclerView.LayoutManager mLM;
 
     public LayerFragment() {
         mHelper = new DataHelper();
@@ -69,7 +68,6 @@ public class LayerFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
         View mRootView = inflater.inflate(R.layout.fragment_layeritems, container, false);
 
         ButterKnife.inject(this, mRootView);
@@ -77,11 +75,9 @@ public class LayerFragment extends Fragment {
         mSwipeRefreshLayout.setOnRefreshListener(new LayerRefreshLayout());
         mSwipeRefreshLayout.setProgressBackgroundColorSchemeColor(mContext.getResources().getColor(R.color.accent));
 
-
         mTreeService = application.getRestAdapter().create(TreeService.class);
         mLayerService = application.getRestAdapter().create(LayerService.class);
         mFolderTreeService = new FolderTreeService();
-
 
         handleArguments();
 
@@ -101,7 +97,6 @@ public class LayerFragment extends Fragment {
                 } else {
                     mCurrentFolder = mFolderTreeService.getFolderById(params[0]);
                 }
-
 
                 mCurrentFolder.setFolders(mFolderTreeService.getFoldersByFolder(mCurrentFolder.getId(), false));
                 mCurrentFolder.setLayers(mFolderTreeService.getLayersByFolder(mCurrentFolder.getId(), false));
@@ -132,6 +127,12 @@ public class LayerFragment extends Fragment {
 
         @Override
         protected void onPostExecute(Folder rootFolder) {
+            if(mCurrentFolder.getParent() != null){
+                SetTitle(mCurrentFolder.getName());
+            } else {
+                SetTitle(R.string.layer_tree);
+            }
+
             new SectionTreeBuilder(mContext, getFragmentManager())
                     .AddLayerData(mCurrentFolder.getLayers(), mCurrentFolder.getFolders(), mCurrentFolder.getParent())
                     .BuildAdapter(ListItemAdapter.LAYER)
@@ -149,8 +150,10 @@ public class LayerFragment extends Fragment {
         if(args != null) {
             int folderId = args.getInt(Folder.FOLDER_INTENT, 0);
             new GetLayersTask().execute(folderId);
+
         } else {
             firstLayerView();
+
         }
     }
 

@@ -72,7 +72,7 @@ import butterknife.OnClick;
 /**
  * Fragment that appears in the "content_frame", shows a google-play map
  */
-public class GoogleMapFragment extends Fragment implements
+public class GoogleMapFragment extends GeoViewFragmentBase implements
         GoogleApiClient.ConnectionCallbacks,
         GoogleApiClient.OnConnectionFailedListener
 {
@@ -145,7 +145,6 @@ public class GoogleMapFragment extends Fragment implements
         ButterKnife.inject(this, rootView);
 
         mView.onCreate(savedInstanceState);
-        getActivity().setTitle(R.string.app_name);
 
         mMap = mView.getMap();
 
@@ -163,6 +162,8 @@ public class GoogleMapFragment extends Fragment implements
         } catch (Exception e) {
             e.printStackTrace();
         }
+
+        SetTitle(R.string.app_name);
 
         setupPanel();
 

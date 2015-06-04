@@ -40,7 +40,7 @@ import butterknife.InjectView;
 import butterknife.OnClick;
 import retrofit.RetrofitError;
 
-public class DocumentFragment extends Fragment {
+public class DocumentFragment extends GeoViewFragmentBase {
     protected static final String TAG = DocumentFragment.class.getSimpleName();
 
     //region Properties
@@ -78,7 +78,6 @@ public class DocumentFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View mRootView;
-
         mHelper = new DataHelper();
 
         mRootView = inflater.inflate(R.layout.fragment_libraryitems, container, false);
@@ -179,6 +178,11 @@ public class DocumentFragment extends Fragment {
 
         @Override
         protected void onPostExecute(Void nothing) {
+            if(mCurrentFolder.getParent() != null){
+                SetTitle(mCurrentFolder.getName());
+            } else {
+                SetTitle(R.string.library_fragment_title);
+            }
             FragmentManager fm = getFragmentManager();
             new SectionTreeBuilder(mContext, fm)
                     .AddLibraryData(mDocuments, mFolders, mCurrentFolder.getParent())
@@ -206,12 +210,13 @@ public class DocumentFragment extends Fragment {
         Bundle args = getArguments();
 
         if(args != null) {
-
             int folderId = args.getInt(Folder.FOLDER_INTENT, 0);
 
             new GetDocumentsTask().execute(folderId);
+
         } else {
             firstDocumentView();
+
         }
 
     }

@@ -53,11 +53,13 @@ public class FolderDetailFragment extends ItemDetailFragment<Folder> {
         Bundle args = getArguments();
 
         mEntity = args.getParcelable(Folder.FOLDER_INTENT);
+
     }
 
     @Override
     protected void SetupUI(){
         mFolderName.setText(mEntity.getName());
+        SetTitle(mEntity.getName());
         mDeleteIcon.setOnClickListener(DeleteonClickListner);
         mDeleteText.setOnClickListener(DeleteonClickListner);
 

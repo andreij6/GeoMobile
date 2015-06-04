@@ -124,4 +124,8 @@
     <string name="save">Save</string>
     <string name="sublayers">Sublayers</string>
     <string name="account_title">Account</string>
+    <string name="layertree_title">Layer Tree</string>
+    <string name="show_layers">Show Layers</string>
+    <string name="library_fragment_title">Library Tree</string>
+    <string name="layer_tree">Layer Tree</string>
 </resources>

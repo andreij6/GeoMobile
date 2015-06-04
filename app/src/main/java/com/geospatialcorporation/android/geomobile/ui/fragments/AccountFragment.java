@@ -1,5 +1,6 @@
 package com.geospatialcorporation.android.geomobile.ui.fragments;
 
+import android.app.Activity;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.os.AsyncTask;
@@ -9,18 +10,21 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.geospatialcorporation.android.geomobile.R;
 import com.geospatialcorporation.android.geomobile.application;
 import com.geospatialcorporation.android.geomobile.library.helpers.ProgressDialogHelper;
 import com.geospatialcorporation.android.geomobile.library.rest.AccountService;
 import com.geospatialcorporation.android.geomobile.models.UserAccount;
+import com.geospatialcorporation.android.geomobile.ui.MainActivity;
+import com.geospatialcorporation.android.geomobile.ui.OnFragmentInteractionListener;
 
 import butterknife.ButterKnife;
 import butterknife.InjectView;
 import retrofit.RetrofitError;
 
-public class AccountFragment extends Fragment {
+public class AccountFragment extends GeoViewFragmentBase {
 
     protected static final String TAG = AccountFragment.class.getSimpleName();
 
@@ -41,6 +45,8 @@ public class AccountFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState){
         mRootView = inflater.inflate(R.layout.fragment_account, container, false);
         ButterKnife.inject(this, mRootView);
+
+        SetTitle(R.string.account_title);
 
         mService = application.getRestAdapter().create(AccountService.class);
         new GetProfileTask().execute();

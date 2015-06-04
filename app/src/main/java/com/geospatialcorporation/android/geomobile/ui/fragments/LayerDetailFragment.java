@@ -52,6 +52,8 @@ public class LayerDetailFragment extends ItemDetailFragment<Layer> {
         Bundle args = getArguments();
 
         mEntity = args.getParcelable(Layer.LAYER_INTENT);
+
+        SetTitle(mEntity.getName());
     }
 
     @Override

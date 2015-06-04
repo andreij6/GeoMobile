@@ -71,14 +71,13 @@ import butterknife.InjectView;
  * for example enabling or disabling a data overlay on top of the current content.</p>
  */
 public class MainActivity extends ActionBarActivity
-        implements MainNavigationDrawerFragment.NavigationDrawerCallbacks{
+        implements MainNavigationDrawerFragment.NavigationDrawerCallbacks,
+        OnFragmentInteractionListener{
     private static final String TAG = MainActivity.class.getSimpleName();
 
 
     //region Properties
     private GoogleMapFragment mMap;
-    private CharSequence mDrawerTitle;
-    private CharSequence mTitle;
     private Dialogs dialog;
     private boolean mIsAdmin;
     MainNavigationDrawerFragment mMainMainNavigationDrawerFragment;
@@ -94,7 +93,6 @@ public class MainActivity extends ActionBarActivity
         dialog = new Dialogs();
 
         mMap = application.getMapFragment();
-        mTitle = mDrawerTitle = getTitle();
 
         mIsAdmin = application.getIsAdminUser();
 
@@ -193,8 +191,8 @@ public class MainActivity extends ActionBarActivity
     }
 
     @Override
-    public void setTitle(CharSequence title) {
-        mTitle = title;
+    public void onFragmentInteraction(String title) {
+        getSupportActionBar().setTitle(title);
     }
 
     public void treeItem(View view) {

@@ -15,6 +15,8 @@ import com.geospatialcorporation.android.geomobile.library.helpers.GeoDialogHelp
 import com.geospatialcorporation.android.geomobile.models.Library.Document;
 import com.geospatialcorporation.android.geomobile.ui.fragments.dialogs.ItemDetailFragment;
 
+import java.util.Set;
+
 import butterknife.ButterKnife;
 import butterknife.InjectView;
 
@@ -54,6 +56,8 @@ public class DocumentDetailFragment extends ItemDetailFragment<Document> {
         Bundle args = getArguments();
 
         mEntity = args.getParcelable(Document.INTENT);
+
+        SetTitle(mEntity.getName());
     }
 
     @Override

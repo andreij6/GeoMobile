@@ -15,11 +15,12 @@ import com.geospatialcorporation.android.geomobile.models.Interfaces.INamedEntit
 import com.geospatialcorporation.android.geomobile.models.Interfaces.IdModel;
 import com.geospatialcorporation.android.geomobile.models.Layers.Layer;
 import com.geospatialcorporation.android.geomobile.models.Library.Document;
+import com.geospatialcorporation.android.geomobile.ui.fragments.GeoViewFragmentBase;
 
 /**
  * Created by andre on 6/2/2015.
  */
-public class ItemDetailFragment<ITreeEntity> extends Fragment {
+public class ItemDetailFragment<ITreeEntity> extends GeoViewFragmentBase {
 
     protected ITreeEntity mEntity;
 
