@@ -34,21 +34,14 @@
         android:orientation="horizontal"
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
-        <!-- need something for sublayers/filter layers -->
-       <!-- <ImageView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:src="@drawable/ic_action_add"
-            android:id="@+id/sublayerExpander"
-            android:paddingLeft="40dp"/>
 
-        <TextView
+       <ImageView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textAppearance="?android:attr/textAppearanceMedium"
-            android:text="@string/sublayers"
-            android:id="@+id/textView"
-            android:textColor="#fffffbff"/> -->
+            android:src="@drawable/ic_arrow_right_bold_hexagon_outline_white_24dp"
+            android:id="@+id/sublayerExpander"
+           android:layout_marginStart="150dp"/>
+
     </LinearLayout>
 
 </LinearLayout>

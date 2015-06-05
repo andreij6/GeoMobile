@@ -20,7 +20,7 @@ public class MainNavigationAdapter extends ArrayAdapter<String> {
     Context mContext;
 
     public MainNavigationAdapter(Context context, List<String> menuItems) {
-        super(context, R.layout.drawer_left_list_item, menuItems);
+        super(context, R.layout.drawer_main_nav_list_item, menuItems);
         mMenuItems = menuItems;
         mContext = context;
     }
@@ -31,7 +31,7 @@ public class MainNavigationAdapter extends ArrayAdapter<String> {
 
         LayoutInflater inflater = (LayoutInflater) getContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 
-        View v = inflater.inflate(R.layout.drawer_left_list_item, null);
+        View v = inflater.inflate(R.layout.drawer_main_nav_list_item, null);
 
         TextView name = (TextView)v.findViewById(R.id.menuItemTV);
         ImageView icon = (ImageView)v.findViewById(R.id.menuItemIcon);

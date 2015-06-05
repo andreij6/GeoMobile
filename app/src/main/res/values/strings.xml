@@ -133,4 +133,6 @@
     <string name="quicksearch">Quick Search</string>
     <string name="search">Search</string>
     <string name="no_results_found">No Results Found</string>
+    <string name="legend">Legend</string>
+    <string name="sublayers_legend">Sublayers</string>
 </resources>

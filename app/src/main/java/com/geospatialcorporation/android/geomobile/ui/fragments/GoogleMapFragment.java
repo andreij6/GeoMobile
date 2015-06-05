@@ -440,6 +440,9 @@ public class GoogleMapFragment extends GeoViewFragmentBase implements
             case R.id.action_query:
                 querySetup();
                 return true;
+            case R.id.action_bookmark:
+                Toaster("Allow the user to bookmark a position - or go to bookmarked positions");
+                return true;
             default:
                 return super.onOptionsItemSelected(item);
         }

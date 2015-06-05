@@ -7,6 +7,9 @@
     <item android:id="@+id/action_query"
           android:title="Query"
           android:showAsAction="always"/>
+    <item android:id="@+id/action_bookmark"
+          android:title="Bookmarks"
+          android:showAsAction="always"/>
     <item android:id="@+id/action_search"
           android:title="Search"
           android:showAsAction="always"/>
