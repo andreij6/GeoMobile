@@ -37,6 +37,7 @@ import com.geospatialcorporation.android.geomobile.R;
 import com.geospatialcorporation.android.geomobile.application;
 import com.geospatialcorporation.android.geomobile.library.helpers.MapStateManager;
 import com.geospatialcorporation.android.geomobile.library.helpers.MarkerComparer;
+import com.geospatialcorporation.android.geomobile.library.helpers.QueryMachine;
 import com.geospatialcorporation.android.geomobile.library.helpers.QuerySenderHelper;
 import com.geospatialcorporation.android.geomobile.library.rest.QueryService;
 import com.geospatialcorporation.android.geomobile.models.Query.quickSearch.QuickSearchRequest;
@@ -94,7 +95,7 @@ public class GoogleMapFragment extends GeoViewFragmentBase implements
     Polygon mShape;
     List<Marker> markers = new ArrayList<>();
     private static final int BOX = 2;
-    Boolean mWantsToClose;
+    QueryMachine mQueryMachine;
 
     GoogleApiClient mLocationClient;
     @InjectView(R.id.map) MapView mView;
@@ -153,15 +154,19 @@ public class GoogleMapFragment extends GeoViewFragmentBase implements
 
     @SuppressWarnings("unused")
     @OnClick(R.id.fab_box)
-    public void setupBoxQuery(){
-        clearMapDrawings();
+    public void boxQuery_StepOne(){
+
+        mQueryMachine.setState(QueryMachine.State.BOXQUERY_INPROGRESS);
+
+        clearMapQueryPoints();
         SetTitle(R.string.box_query);
 
-        Toaster("Long Press on the map in 2 diagnol positions");
+        Toaster("Click on the map in 2 diagonal positions");
+
         mMap.setOnMapClickListener(new GoogleMap.OnMapClickListener() {
             @Override
             public void onMapClick(LatLng ll) {
-                setBoxMarker(ll.latitude, ll.longitude);
+                boxQueryStep2AddPoint(ll.latitude, ll.longitude);
             }
         });
         
@@ -170,7 +175,9 @@ public class GoogleMapFragment extends GeoViewFragmentBase implements
     @SuppressWarnings("unused")
     @OnClick(R.id.fab_point)
     public void setupPointQuery(){
-        clearMapDrawings();
+        mQueryMachine.setState(QueryMachine.State.POINTQUERY_INPROGRESS);
+
+        clearMapQueryPoints();
         SetTitle(R.string.point_query);
 
         mMap.setOnMapClickListener(new GoogleMap.OnMapClickListener() {
@@ -185,17 +192,38 @@ public class GoogleMapFragment extends GeoViewFragmentBase implements
     @SuppressWarnings("unused")
     @OnClick(R.id.fab_close)
     public void reset(){
+        if(mQueryMachine.isState(QueryMachine.State.POINTQUERY_DRAWN)
+                || mQueryMachine.isState(QueryMachine.State.BOXQUERY_DRAWN)
+                || mQueryMachine.isState(QueryMachine.State.BOXQUERY_INPROGRESS)){
 
-        if(mWantsToClose) {
-            toggleCollapsedHidden();
-            clearMapDrawings();
-            mMap.setOnMapClickListener(null);
-            SetTitle(R.string.app_name);
+            clearMapQueryPoints();
+
+            switch (mQueryMachine.getState()){
+                case QueryMachine.State.POINTQUERY_DRAWN:
+                    mQueryMachine.setState(QueryMachine.State.POINTQUERY_INPROGRESS);
+                    break;
+                case QueryMachine.State.BOXQUERY_DRAWN:
+                case QueryMachine.State.BOXQUERY_INPROGRESS:
+                    mQueryMachine.setState(QueryMachine.State.BOXQUERY_STARTED);
+                    break;
+            }
         } else {
-            clearMapDrawings();
-            mWantsToClose = true;
-            Toaster("Click again to exit Query Mode");
+
+            if (mQueryMachine.isState(QueryMachine.State.PICKQUERY)
+                    || mQueryMachine.isState(QueryMachine.State.POINTQUERY_INPROGRESS)
+                    || mQueryMachine.isState(QueryMachine.State.BOXQUERY_STARTED)) {
+
+                resetHelper();
+            }
         }
+
+    }
+
+    private void resetHelper() {
+        toggleCollapsedHidden();
+        clearMapQueryPoints();
+        mMap.setOnMapClickListener(null);
+        SetTitle(R.string.app_name);
     }
 
     //endregion
@@ -208,16 +236,19 @@ public class GoogleMapFragment extends GeoViewFragmentBase implements
 
     //region Drawing Query Helpers
     private void setPointMarker(double latitude, double longitude) {
-        mWantsToClose = false;
+        mQueryMachine.setState(QueryMachine.State.POINTQUERY_DRAWN);
 
         MarkerOptions options = getMarkerOptions(latitude, longitude);
 
-        clearMapDrawings();
+        clearMapQueryPoints();
         markers.add(mMap.addMarker(options));
 
-        Toaster("Point Query Sent to GeoUnderground - Show results in panel");
+        pointQueryStep2SendToGeoU();
+    }
 
-
+    private void pointQueryStep2SendToGeoU() {
+        Toaster("Send to geounderground");
+        Toaster("Show results in panel");
     }
 
     private MarkerOptions getMarkerOptions(double latitude, double longitude) {
@@ -227,7 +258,7 @@ public class GoogleMapFragment extends GeoViewFragmentBase implements
                 .anchor(.5f, .5f);
     }
 
-    protected void clearMapDrawings(){
+    protected void clearMapQueryPoints(){
         for(Marker marker : markers){
             marker.remove();
         }
@@ -240,18 +271,24 @@ public class GoogleMapFragment extends GeoViewFragmentBase implements
         }
     }
 
-    protected void setBoxMarker(double lat, double lng){
+    protected void boxQueryStep2AddPoint(double lat, double lng){
+        if(mQueryMachine.isState(QueryMachine.State.BOXQUERY_DRAWN)){
+            clearMapQueryPoints();
+        }
         MarkerOptions options = getMarkerOptions(lat, lng);
 
         markers.add(mMap.addMarker(options));
 
         if(markers.size() == BOX){
-            completeBox();
-            boxQuery();
+            boxQueryStep3CompleteBox();
+            mQueryMachine.setState(QueryMachine.State.BOXQUERY_DRAWN);
+            boxQueryStep4SendToGeoU();
+        } else {
+            mQueryMachine.setState(QueryMachine.State.BOXQUERY_INPROGRESS);
         }
     }
 
-    private void completeBox() {
+    private void boxQueryStep3CompleteBox() {
         LatLng first = markers.get(0).getPosition();
         LatLng second = markers.get(1).getPosition();
 
@@ -271,7 +308,7 @@ public class GoogleMapFragment extends GeoViewFragmentBase implements
         markers.add(reOrder.get(3));
     }
 
-    protected void boxQuery(){
+    protected void boxQueryStep4SendToGeoU(){
         PolygonOptions options = new PolygonOptions().fillColor(0x33000000).strokeWidth(2).strokeColor(Color.BLACK);
 
         for(int i = 0; i < BOX + 2; i++){
@@ -290,9 +327,8 @@ public class GoogleMapFragment extends GeoViewFragmentBase implements
         QuerySenderHelper q = new QuerySenderHelper();
         q.sendBoxQuery(max, min);
 
-        Toaster("Box Query Sent to GeoUnderground - Show results in panel");
-
-        //clearMapDrawings();
+        Toaster("send data to Geounderground for Analysis");
+        //clearMapQueryPoints();
 
         //anchorSlider();
 
@@ -307,7 +343,7 @@ public class GoogleMapFragment extends GeoViewFragmentBase implements
         setHasOptionsMenu(true);
         View rootView = inflater.inflate(R.layout.fragment_map, container, false);
         ButterKnife.inject(this, rootView);
-        mWantsToClose = false;
+
         mView.onCreate(savedInstanceState);
 
         mMap = mView.getMap();
@@ -445,6 +481,7 @@ public class GoogleMapFragment extends GeoViewFragmentBase implements
     }
 
     private void querySetup() {
+        mQueryMachine = new QueryMachine();
         toggleQueryBtns();
         toggleCollapsedHidden();
     }
