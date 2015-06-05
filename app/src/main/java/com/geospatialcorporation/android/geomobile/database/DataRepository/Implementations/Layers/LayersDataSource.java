@@ -45,7 +45,7 @@ public class LayersDataSource extends DataSourceGenericBase<Layer> {
 
             Cursor cursor = GetAllCursor();
 
-            //region Query Example
+            //region QueryService Example
                     /*
                     mDatabase.query(
                     GeoSQLiteHelper.LAYER_TABLE,

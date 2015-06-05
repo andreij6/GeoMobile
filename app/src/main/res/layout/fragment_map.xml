@@ -52,6 +52,45 @@
                 android:layout_alignEnd="@+id/fab_location"
                 />
 
+            <com.melnykov.fab.FloatingActionButton
+                android:id="@+id/fab_point"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentTop="true"
+                android:layout_alignParentEnd="true"
+                android:layout_alignParentRight="true"
+                android:layout_margin="16dp"
+                android:src="@drawable/ic_crosshairs_gps_white_24dp"
+                fab:fab_colorNormal="@color/accent_dark"
+                fab:fab_colorPressed="@color/primary_dark"
+                fab:fab_colorRipple="@color/primary_light"
+                android:visibility="gone"/>
+
+            <com.melnykov.fab.FloatingActionButton
+                android:id="@+id/fab_box"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/ic_crop_free_white_24dp"
+                fab:fab_colorNormal="@color/accent_dark"
+                fab:fab_colorPressed="@color/primary_dark"
+                fab:fab_colorRipple="@color/primary_light"
+                android:layout_below="@+id/fab_location"
+                android:layout_alignEnd="@+id/fab_location"
+                android:visibility="gone"/>
+
+            <com.melnykov.fab.FloatingActionButton
+                android:id="@+id/fab_close"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/ic_close_circle_white_24dp"
+                fab:fab_colorNormal="@color/accent_dark"
+                fab:fab_colorPressed="@color/primary_dark"
+                fab:fab_colorRipple="@color/primary_light"
+                android:layout_marginTop="18dp"
+                android:layout_below="@+id/fab_layers"
+                android:layout_alignStart="@+id/fab_layers"
+                android:visibility="gone"/>
+
         </RelativeLayout>
 
 

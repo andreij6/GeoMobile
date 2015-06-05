@@ -128,4 +128,6 @@
     <string name="show_layers">Show Layers</string>
     <string name="library_fragment_title">Library Tree</string>
     <string name="layer_tree">Layer Tree</string>
+    <string name="point_query">Point Query</string>
+    <string name="box_query">Box Query</string>
 </resources>

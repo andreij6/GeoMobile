@@ -43,7 +43,7 @@
               android:layout_width="240dp"
               android:layout_height="match_parent"
               android:layout_gravity="start"
-              android:name="com.geospatialcorporation.android.geomobile.ui.fragments.MainNavigationDrawerFragment"
+              android:name="com.geospatialcorporation.android.geomobile.ui.fragments.drawer.MainNavigationDrawerFragment"
               tools:layout="@layout/fragment_left_navigation_drawer"
         />
 
@@ -51,7 +51,7 @@
               android:layout_width="240dp"
               android:layout_height="match_parent"
               android:layout_gravity="end"
-              android:name="com.geospatialcorporation.android.geomobile.ui.fragments.LayerSelectorDrawerFragment"
+              android:name="com.geospatialcorporation.android.geomobile.ui.fragments.drawer.LayerSelectorDrawerFragment"
               tools:layout="@layout/fragment_right_navigation_drawer"/>
 
 </android.support.v4.widget.DrawerLayout>
