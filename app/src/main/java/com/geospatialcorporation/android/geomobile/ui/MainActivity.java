@@ -188,6 +188,10 @@ public class MainActivity extends ActionBarActivity
         return mMap;
     }
 
+    public Fragment getContentFragment(){
+        return getSupportFragmentManager().findFragmentById(R.id.content_frame);
+    }
+
     @Override
     public void onFragmentInteraction(String title) {
         getSupportActionBar().setTitle(title);

@@ -23,6 +23,8 @@ import android.graphics.Color;
 import android.location.Location;
 import android.os.Bundle;
 import android.provider.Settings;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
 import android.support.v4.widget.DrawerLayout;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -31,6 +33,7 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.RelativeLayout;
 import android.widget.Toast;
 
 import com.geospatialcorporation.android.geomobile.R;
@@ -44,8 +47,11 @@ import com.geospatialcorporation.android.geomobile.models.Query.quickSearch.Quic
 import com.geospatialcorporation.android.geomobile.models.Query.quickSearch.QuickSearchResponse;
 import com.geospatialcorporation.android.geomobile.models.Query.point.Max;
 import com.geospatialcorporation.android.geomobile.models.Query.point.Min;
+import com.geospatialcorporation.android.geomobile.ui.Interfaces.SlidingPanelController;
 import com.geospatialcorporation.android.geomobile.ui.MainActivity;
 import com.geospatialcorporation.android.geomobile.ui.fragments.dialogs.MapTypeSelectDialogFragment;
+import com.geospatialcorporation.android.geomobile.ui.fragments.panel_fragments.CollapsedPanelFragment;
+import com.geospatialcorporation.android.geomobile.ui.fragments.panel_fragments.QuickSearchFragment;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.location.LocationServices;
@@ -72,6 +78,7 @@ import com.sothree.slidinguppanel.SlidingUpPanelLayout;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.Set;
 
 import butterknife.ButterKnife;
 import butterknife.InjectView;
@@ -85,7 +92,8 @@ import retrofit.client.Response;
  */
 public class GoogleMapFragment extends GeoViewFragmentBase implements
         GoogleApiClient.ConnectionCallbacks,
-        GoogleApiClient.OnConnectionFailedListener
+        GoogleApiClient.OnConnectionFailedListener,
+        SlidingPanelController
 {
     private static final String TAG = GoogleMapFragment.class.getSimpleName();
 
@@ -105,6 +113,7 @@ public class GoogleMapFragment extends GeoViewFragmentBase implements
     @InjectView(R.id.fab_box) FloatingActionButton mBoxQueryBtn;
     @InjectView(R.id.fab_point) FloatingActionButton mPointQueryBtn;
     @InjectView(R.id.fab_close) FloatingActionButton mCloseBtn;
+    @InjectView(R.id.slider_content) RelativeLayout mSliderContent;
     private boolean mIsQuerying;
     //endregion
 
@@ -243,6 +252,9 @@ public class GoogleMapFragment extends GeoViewFragmentBase implements
         clearMapQueryPoints();
         markers.add(mMap.addMarker(options));
 
+        CameraUpdate u = CameraUpdateFactory.newLatLng(options.getPosition());
+        mMap.animateCamera(u);
+
         pointQueryStep2SendToGeoU();
     }
 
@@ -306,6 +318,21 @@ public class GoogleMapFragment extends GeoViewFragmentBase implements
         markers.add(reOrder.get(2));
         markers.add(reOrder.get(1));
         markers.add(reOrder.get(3));
+
+        setCameraToBoxExtent();
+    }
+
+    private void setCameraToBoxExtent() {
+        LatLngBounds.Builder builder = new LatLngBounds.Builder();
+        for(Marker m : markers) {
+            builder.include(m.getPosition());
+        }
+
+        LatLngBounds bounds = builder.build();
+
+        int padding = 80;
+        CameraUpdate u = CameraUpdateFactory.newLatLngBounds(bounds, padding);
+        mMap.animateCamera(u);
     }
 
     protected void boxQueryStep4SendToGeoU(){
@@ -348,6 +375,8 @@ public class GoogleMapFragment extends GeoViewFragmentBase implements
 
         mMap = mView.getMap();
 
+        setCollapsedUI();
+
         mLocationClient = new GoogleApiClient.Builder(getActivity())
                 .addApi(LocationServices.API)
                 .addConnectionCallbacks(this)
@@ -371,7 +400,6 @@ public class GoogleMapFragment extends GeoViewFragmentBase implements
 
         return rootView;
     }
-
 
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
@@ -434,6 +462,13 @@ public class GoogleMapFragment extends GeoViewFragmentBase implements
         super.onStop();
         MapStateManager msm = new MapStateManager(getActivity());
         msm.saveMapState(mMap);
+        disableQueryMode();
+    }
+
+    @Override
+    public void onDetach(){
+        super.onDetach();
+        disableQueryMode();
     }
     //endregion
 
@@ -442,42 +477,58 @@ public class GoogleMapFragment extends GeoViewFragmentBase implements
         mPanel.setPanelSlideListener(new SlidingUpPanelLayout.PanelSlideListener() {
             @Override
             public void onPanelSlide(View view, float v) {
-                mIsQuerying = false;
-                toggleQueryBtns();
+                disableQueryMode();
             }
 
             @Override
             public void onPanelCollapsed(View view) {
-                mIsQuerying = false;
-                toggleQueryBtns();
-                Toast.makeText(getActivity(), "Collapsed", Toast.LENGTH_LONG).show();
+                setCollapsedUI();
+                disableQueryMode();
 
             }
 
             @Override
             public void onPanelExpanded(View view) {
-                mIsQuerying = false;
-                toggleQueryBtns();
-                Toast.makeText(getActivity(), "Expanded", Toast.LENGTH_LONG).show();
+
+                disableQueryMode();
 
             }
 
             @Override
             public void onPanelAnchored(View view) {
-                mIsQuerying = false;
-                toggleQueryBtns();
-                Toast.makeText(getActivity(), "Anchored", Toast.LENGTH_LONG).show();
+                disableQueryMode();
 
             }
 
             @Override
             public void onPanelHidden(View view) {
-                mIsQuerying = true;
-                toggleQueryBtns();
-                Toast.makeText(getActivity(), "Hidden", Toast.LENGTH_LONG).show();
+                enableQueryMode();
 
             }
         });
+    }
+
+    private void setCollapsedUI() {
+        Fragment collapsedFragment = new CollapsedPanelFragment();
+
+        FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
+
+        fragmentManager.beginTransaction()
+                .replace(R.id.slider_content, collapsedFragment)
+                .commit();
+    }
+
+    private void enableQueryMode() {
+        mIsQuerying = true;
+        toggleQueryBtns();
+    }
+
+    private void disableQueryMode() {
+        mIsQuerying = false;
+        mMap.setOnMapClickListener(null);
+        clearMapQueryPoints();
+        toggleQueryBtns();
+        SetTitle(R.string.app_name);
     }
 
     private void querySetup() {
@@ -487,21 +538,22 @@ public class GoogleMapFragment extends GeoViewFragmentBase implements
     }
 
     protected void searchSetup() {
-        QueryService service = application.getRestAdapter().create(QueryService.class);
 
-        service.quickSearch(new QuickSearchRequest("service"), new Callback<List<QuickSearchResponse>>() {
-            @Override
-            public void success(List<QuickSearchResponse> response, Response response2) {
-
-            }
-
-            @Override
-            public void failure(RetrofitError error) {
-
-            }
-        });
+        setupSlideUIQuickSearch();
 
         anchorSlider();
+    }
+
+    private void setupSlideUIQuickSearch() {
+        mPanel.setTouchEnabled(false);
+
+        Fragment quickSearchFragment = new QuickSearchFragment();
+
+        FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
+
+        fragmentManager.beginTransaction()
+                .replace(R.id.slider_content, quickSearchFragment)
+                .commit();
     }
 
     private void toggleQueryBtns() {
@@ -601,8 +653,14 @@ public class GoogleMapFragment extends GeoViewFragmentBase implements
     public void onConnectionFailed(ConnectionResult connectionResult) {
         //
     }
+    //endregion
 
-
+    //region SlidingPanelController Interface
+    @Override
+    public void CollapsePanel() {
+        mPanel.setPanelState(SlidingUpPanelLayout.PanelState.COLLAPSED);
+        mPanel.setTouchEnabled(true);
+    }
     //endregion
 
 

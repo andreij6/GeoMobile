@@ -130,4 +130,7 @@
     <string name="layer_tree">Layer Tree</string>
     <string name="point_query">Point Query</string>
     <string name="box_query">Box Query</string>
+    <string name="quicksearch">Quick Search</string>
+    <string name="search">Search</string>
+    <string name="no_results_found">No Results Found</string>
 </resources>
