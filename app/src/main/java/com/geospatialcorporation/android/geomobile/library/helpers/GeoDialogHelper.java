@@ -1,11 +1,13 @@
 package com.geospatialcorporation.android.geomobile.library.helpers;
 
+import android.provider.Browser;
 import android.support.v4.app.FragmentManager;
 import android.content.Context;
 
 import com.geospatialcorporation.android.geomobile.models.Folders.Folder;
 import com.geospatialcorporation.android.geomobile.models.Layers.Layer;
 import com.geospatialcorporation.android.geomobile.models.Library.Document;
+import com.geospatialcorporation.android.geomobile.ui.fragments.dialogs.BookmarksDialogFragment;
 import com.geospatialcorporation.android.geomobile.ui.fragments.dialogs.CreateFolderDialogFragment;
 import com.geospatialcorporation.android.geomobile.ui.fragments.dialogs.CreateLayerDialogFragment;
 import com.geospatialcorporation.android.geomobile.ui.fragments.dialogs.DeleteDocumentDialogFragment;
@@ -52,4 +54,9 @@ public class GeoDialogHelper {
         u.show(fm, "Upload Image");
     }
 
+    public static void showBookmarks(Context context, FragmentManager fm) {
+        BookmarksDialogFragment b = new BookmarksDialogFragment();
+        b.init(context);
+        b.show(fm, "Bookmarks");
+    }
 }

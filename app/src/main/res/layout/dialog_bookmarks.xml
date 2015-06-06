@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              android:orientation="vertical"
+              android:layout_width="match_parent"
+              android:layout_height="wrap_content"
+              android:paddingLeft="10dp"
+              android:paddingRight="10dp"
+    >
+
+    <LinearLayout
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/addBookmarkContainer"
+        android:paddingBottom="10dp"
+        android:paddingTop="10dp">
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/addBookmarkImage"
+            android:src="@drawable/ic_bookmark_plus_black_24dp"
+            android:paddingLeft="40dp"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textAppearance="?android:attr/textAppearanceLarge"
+            android:text="@string/add_bookmark"
+            android:id="@+id/textView"
+            android:layout_weight="1"
+            android:paddingLeft="8dp"/>
+
+    </LinearLayout>
+
+    <android.support.v7.widget.RecyclerView
+        android:layout_width="match_parent"
+        android:layout_height="300dp"
+        android:id="@+id/bookmarkRecycler"
+        android:layout_alignParentTop="true"
+        android:background="@color/primary_light"/>
+
+</LinearLayout>

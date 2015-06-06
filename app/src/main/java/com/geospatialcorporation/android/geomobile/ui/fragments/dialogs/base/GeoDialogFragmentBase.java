@@ -5,6 +5,7 @@ import android.support.v4.app.DialogFragment;
 import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.widget.Toast;
 
 import com.geospatialcorporation.android.geomobile.models.Folders.Folder;
 
@@ -34,5 +35,9 @@ public class GeoDialogFragmentBase extends DialogFragment {
         LayoutInflater inflater = LayoutInflater.from(mContext);
 
         return inflater.inflate(layoutId, null);
+    }
+
+    protected void Toaster(String message){
+        Toast.makeText(mContext, message, Toast.LENGTH_LONG).show();
     }
 }

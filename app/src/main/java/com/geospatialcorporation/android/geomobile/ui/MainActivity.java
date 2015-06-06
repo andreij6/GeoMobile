@@ -95,13 +95,14 @@ public class MainActivity extends ActionBarActivity
         mIsAdmin = application.getIsAdminUser();
 
         mMainMainNavigationDrawerFragment = (MainNavigationDrawerFragment)getSupportFragmentManager().findFragmentById(R.id.navigation_left_drawer);
-        mMainMainNavigationDrawerFragment.setUp(R.id.navigation_left_drawer,(DrawerLayout)findViewById(R.id.drawer_layout));
+        mMainMainNavigationDrawerFragment.setUp(R.id.navigation_left_drawer, (DrawerLayout) findViewById(R.id.drawer_layout));
 
         mLayerDrawerFragement = (LayerSelectorDrawerFragment)getSupportFragmentManager().findFragmentById(R.id.layer_drawer);
         mLayerDrawerFragement.setUp(R.id.layer_drawer, (DrawerLayout) findViewById(R.id.drawer_layout));
 
     }
 
+    @Override
     protected void onResume() {
         super.onResume();
     }
@@ -197,16 +198,12 @@ public class MainActivity extends ActionBarActivity
         getSupportActionBar().setTitle(title);
     }
 
-    public void treeItem(View view) {
-        dialog.message("tree item clicked", this);
-    }
-
     public DrawerLayout getRightDrawer() {
         return (DrawerLayout)findViewById(R.id.drawer_layout);
     }
 
     public View getLayerListView() {
-        return (View)findViewById(R.id.layer_drawer);
+        return findViewById(R.id.layer_drawer);
     }
 
     public static class MediaConstants {

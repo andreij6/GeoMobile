@@ -21,16 +21,16 @@ import com.geospatialcorporation.android.geomobile.database.DataRepository.IAddD
 import com.geospatialcorporation.android.geomobile.database.DataRepository.Implementations.Documents.DocumentsAppSource;
 import com.geospatialcorporation.android.geomobile.database.DataRepository.Implementations.Folders.FolderAppSource;
 import com.geospatialcorporation.android.geomobile.library.helpers.DataHelper;
+import com.geospatialcorporation.android.geomobile.library.sectionbuilders.implementations.LibraryTreeSectionBuilder;
 import com.geospatialcorporation.android.geomobile.library.services.DocumentTreeService;
 import com.geospatialcorporation.android.geomobile.library.services.FolderTreeService;
-import com.geospatialcorporation.android.geomobile.library.helpers.SectionTreeBuilder;
 import com.geospatialcorporation.android.geomobile.library.rest.TreeService;
 import com.geospatialcorporation.android.geomobile.models.Folders.Folder;
 import com.geospatialcorporation.android.geomobile.models.Library.Document;
 import com.geospatialcorporation.android.geomobile.ui.MainActivity;
-import com.geospatialcorporation.android.geomobile.ui.adapters.ListItemAdapter;
 import com.geospatialcorporation.android.geomobile.ui.fragments.GeoViewFragmentBase;
 import com.geospatialcorporation.android.geomobile.ui.fragments.dialogs.LibraryActionDialogFragment;
+import com.geospatialcorporation.android.geomobile.ui.viewmodels.ListItem;
 import com.melnykov.fab.FloatingActionButton;
 
 
@@ -184,22 +184,16 @@ public class DocumentFragment extends GeoViewFragmentBase {
                 SetTitle(R.string.library_fragment_title);
             }
             FragmentManager fm = getFragmentManager();
-            new SectionTreeBuilder(mContext, fm)
-                    .AddLibraryData(mDocuments, mFolders, mCurrentFolder.getParent())
-                    .BuildAdapter(ListItemAdapter.LIBRARY)
+
+            DataHelper helper = new DataHelper();
+
+            List<ListItem> data = helper.CombineLibraryItems(mCurrentFolder.getDocuments(), mCurrentFolder.getFolders(), mCurrentFolder.getParent());
+
+            new LibraryTreeSectionBuilder(mContext, fm, mCurrentFolder.getParent())
+                    .BuildAdapter(data,  mCurrentFolder.getFolders().size())
                     .setRecycler(mRecyclerView);
         }
 
-    }
-
-    private Document getDocumentById(int id, List<Document> documents) {
-        for (Document document : documents) {
-            if (document.getId() == id) {
-                return document;
-            }
-        }
-
-        return null;
     }
 
     private void firstDocumentView() {

@@ -72,6 +72,8 @@ public class DataHelper {
     }
 
     public List<ListItem> CombineLayerItems(List<Layer> layers, List<Folder> folders, Folder parent) {
+        List<Folder> infolders = folders != null ? folders : new ArrayList<Folder>();
+
         ArrayList<ListItem> results = new ArrayList<>();
 
         if (parent != null) {
@@ -82,13 +84,13 @@ public class DataHelper {
             results.add(listItem);
         }
 
-        if (folders != null) {
-            for (Folder folder : folders) {
+        if (infolders != null) {
+            for (Folder folder : infolders) {
                 ListItem listItem = new ListItem(folder);
                 results.add(listItem);
             }
 
-            SetupEmptyFolder(folders, results);
+            SetupEmptyFolder(infolders, results);
         }
 
         if (layers != null) {
@@ -109,6 +111,8 @@ public class DataHelper {
     }
 
     public List<ListItem> CombineLibraryItems(List<Document> documents, List<Folder> folders, Folder parent) {
+        List<Folder> infolders = folders != null ? folders : new ArrayList<Folder>();
+
         ArrayList<ListItem> results = new ArrayList<>();
 
         if (parent != null) {
@@ -119,13 +123,13 @@ public class DataHelper {
             results.add(listItem);
         }
 
-        if (folders != null) {
-            for (Folder folder : folders) {
+        if (infolders != null) {
+            for (Folder folder : infolders) {
                 ListItem listItem = new ListItem(folder);
                 results.add(listItem);
             }
 
-            SetupEmptyFolder(folders, results);
+            SetupEmptyFolder(infolders, results);
         }
 
         if (documents != null) {

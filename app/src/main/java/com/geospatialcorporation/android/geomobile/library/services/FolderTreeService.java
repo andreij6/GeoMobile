@@ -1,21 +1,29 @@
 package com.geospatialcorporation.android.geomobile.library.services;
 
+import android.os.AsyncTask;
+import android.util.Log;
 import android.widget.Toast;
 
+import com.geospatialcorporation.android.geomobile.R;
 import com.geospatialcorporation.android.geomobile.application;
 import com.geospatialcorporation.android.geomobile.database.DataRepository.IAddDataRepository;
 import com.geospatialcorporation.android.geomobile.database.DataRepository.Implementations.Folders.FolderAppSource;
 import com.geospatialcorporation.android.geomobile.database.DataRepository.Implementations.IAppDataRepository;
 import com.geospatialcorporation.android.geomobile.database.DataRepository.Implementations.Layers.LayersAppSource;
+import com.geospatialcorporation.android.geomobile.library.helpers.DataHelper;
 import com.geospatialcorporation.android.geomobile.library.helpers.Interfaces.ITreeService;
 import com.geospatialcorporation.android.geomobile.library.rest.FolderService;
+import com.geospatialcorporation.android.geomobile.library.rest.TreeService;
+import com.geospatialcorporation.android.geomobile.library.sectionbuilders.implementations.LayerTreeSectionBuilder;
 import com.geospatialcorporation.android.geomobile.models.Folders.Folder;
 import com.geospatialcorporation.android.geomobile.models.Folders.FolderCreateRequest;
 import com.geospatialcorporation.android.geomobile.models.Folders.FolderCreateResponse;
 import com.geospatialcorporation.android.geomobile.models.Layers.Layer;
 import com.geospatialcorporation.android.geomobile.models.Library.Document;
 import com.geospatialcorporation.android.geomobile.models.RenameRequest;
+import com.geospatialcorporation.android.geomobile.ui.viewmodels.ListItem;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import retrofit.Callback;
@@ -28,12 +36,14 @@ public class FolderTreeService implements ITreeService {
     private FolderService mFolderService;
     IAppDataRepository<Folder> FolderRepo;
     IAddDataRepository<Layer> LayerRepo;
+    private TreeService mTreeService;
     //endregion
 
     public FolderTreeService(){
         mFolderService = application.getRestAdapter().create(FolderService.class);
         FolderRepo = new FolderAppSource();
         LayerRepo = new LayersAppSource();
+        mTreeService = application.getRestAdapter().create(TreeService.class);
     }
 
     //region Public Methods
@@ -160,5 +170,8 @@ public class FolderTreeService implements ITreeService {
 
         return true;
     }
+
     //endregion
+
+
 }

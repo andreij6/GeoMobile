@@ -1,8 +1,8 @@
 package com.geospatialcorporation.android.geomobile.ui.fragments.drawer;
 
-import android.app.Activity;
 import android.content.SharedPreferences;
 import android.content.res.Configuration;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.v4.app.ActionBarDrawerToggle;
@@ -11,25 +11,27 @@ import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBarActivity;
+import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
 import android.widget.ListView;
 
 import com.geospatialcorporation.android.geomobile.R;
 import com.geospatialcorporation.android.geomobile.application;
-import com.geospatialcorporation.android.geomobile.models.Layers.Layer;
-import com.geospatialcorporation.android.geomobile.ui.adapters.LayerAdapter;
-import com.geospatialcorporation.android.geomobile.ui.adapters.LayerDrawerAdapter;
-import com.geospatialcorporation.android.geomobile.ui.adapters.MainNavigationAdapter;
+import com.geospatialcorporation.android.geomobile.library.helpers.DataHelper;
+import com.geospatialcorporation.android.geomobile.library.rest.TreeService;
+import com.geospatialcorporation.android.geomobile.library.sectionbuilders.implementations.LegendLayerSectionBuilder;
+import com.geospatialcorporation.android.geomobile.models.Folders.Folder;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
+
+import retrofit.RetrofitError;
 
 /**
  * Fragment used for managing interactions for and presentation of a navigation drawer.
@@ -38,28 +40,17 @@ import java.util.List;
  */
 public class LayerSelectorDrawerFragment extends Fragment {
 
-    /**
-     * Remember the position of the selected item.
-     */
     private static final String STATE_SELECTED_POSITION = "selected_navigation_drawer_position";
+    private static final String TAG = LayerSelectorDrawerFragment.class.getSimpleName();
 
-    /**
-     * Per the design guidelines, you should show the drawer on launch until the user manually
-     * expands it. This shared preference tracks this.
-     */
     private static final String PREF_USER_LEARNED_DRAWER = "navigation_drawer_learned";
 
-    /**
-     * A pointer to the current callbacks instance (the Activity).
-     */
-    /**
-     * Helper component that ties the action bar to the navigation drawer.
-     */
     private ActionBarDrawerToggle mDrawerToggle;
 
     private DrawerLayout mDrawerLayout;
     private ListView mDrawerListView;
     private View mFragmentContainerView;
+    RecyclerView mRecyclerView;
 
     private int mCurrentSelectedPosition = 0;
     private boolean mFromSavedInstanceState;
@@ -96,43 +87,38 @@ public class LayerSelectorDrawerFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        mDrawerListView = (ListView) inflater.inflate(
-                R.layout.fragment_left_navigation_drawer, container, false);
-        mDrawerListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                selectItem(position);
-            }
-        });
 
-        //View header = inflater.inflate(R.layout.drawer_listview_header, container, false);
+        //mDrawerListView = (ListView) inflater.inflate(R.layout.fragment_left_navigation_drawer, container, false);
 
-        List<Layer> fakelist = Arrays.asList(new Layer[]{ new Layer("Fake Layer"), new Layer("United States"), new Layer("Counties")});
+        mRecyclerView = (RecyclerView)inflater.inflate(R.layout.fragment_right_navigation_drawer, container, false);
 
+
+        //mDrawerListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+        //    @Override
+        //    public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+        //        selectItem(position);
+        //    }
+        //});
+        //View header = inflater.inflate(R.layout.header_layers_listview, container, false);
+        //List<Layer> fakelist = Arrays.asList(new Layer[]{new Layer("Fake Layer"), new Layer("United States"), new Layer("Counties")});
         //mDrawerListView.addHeaderView(header);
-        mDrawerListView.setAdapter(new LayerDrawerAdapter(getActivity(), fakelist));
+        //mDrawerListView.setAdapter(new LayerDrawerAdapter(getActivity(), fakelist));
 
-        mDrawerListView.setItemChecked(mCurrentSelectedPosition, true);
-        return mDrawerListView;
+        new GetLayersTask().execute(0);
+
+        return mRecyclerView;
+        //return mDrawerListView;
     }
 
     public boolean isDrawerOpen() {
         return mDrawerLayout != null && mDrawerLayout.isDrawerOpen(mFragmentContainerView);
     }
 
-    /**
-     * Users of this fragment must call this method to set up the navigation drawer interactions.
-     *
-     * @param fragmentId   The android:id of this fragment in its activity's layout.
-     * @param drawerLayout The DrawerLayout containing this fragment's UI.
-     */
     public void setUp(int fragmentId, DrawerLayout drawerLayout) {
         mFragmentContainerView = getActivity().findViewById(fragmentId);
         mDrawerLayout = drawerLayout;
 
-        // set a custom shadow that overlays the main content when the drawer opens
         mDrawerLayout.setDrawerShadow(R.drawable.drawer_shadow, GravityCompat.START);
-        // set up the drawer's list view with items and click listener
 
         ActionBar actionBar = getActionBar();
         actionBar.setDisplayHomeAsUpEnabled(true);
@@ -204,7 +190,6 @@ public class LayerSelectorDrawerFragment extends Fragment {
         }
     }
 
-
     @Override
     public void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
@@ -220,10 +205,7 @@ public class LayerSelectorDrawerFragment extends Fragment {
 
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
-        // If the drawer is open, show the global app actions in the action bar. See also
-        // showGlobalContextActionBar, which controls the top-left area of the action bar.
         if (mDrawerLayout != null && isDrawerOpen()) {
-            //inflater.inflate(R.menu.global, menu);
             showGlobalContextActionBar();
         }
         super.onCreateOptionsMenu(menu, inflater);
@@ -234,32 +216,10 @@ public class LayerSelectorDrawerFragment extends Fragment {
         if (mDrawerToggle.onOptionsItemSelected(item)) {
             return true;
         }
-        // Handle action buttons
-        /*
-        switch (item.getItemId()) {
-            case R.id.action_websearch:
-                // create intent to perform web search for this planet
-                Intent intent = new Intent(Intent.ACTION_WEB_SEARCH);
-                intent.putExtra(SearchManager.QUERY, mActionBar.getTitle());
-                // catch event that there's no activity to handle intent
-                if (intent.resolveActivity(getPackageManager()) != null) {
-                    startActivity(intent);
-                } else {
-                    Toast.makeText(this, R.string.app_not_available, Toast.LENGTH_LONG).show();
-                }
-                return true;
-            default:
-                return super.onOptionsItemSelected(item);
-        }
-        **/
 
         return super.onOptionsItemSelected(item);
     }
 
-    /**
-     * Per the navigation drawer design guidelines, updates the action bar to show the global app
-     * 'context', rather than just what's in the current screen.
-     */
     private void showGlobalContextActionBar() {
         ActionBar actionBar = getActionBar();
         actionBar.setDisplayShowTitleEnabled(true);
@@ -268,6 +228,38 @@ public class LayerSelectorDrawerFragment extends Fragment {
 
     private ActionBar getActionBar() {
         return ((ActionBarActivity) getActivity()).getSupportActionBar();
+    }
+
+    private class GetLayersTask extends AsyncTask<Integer, Void, List<Folder>> {
+        @Override
+        protected List<Folder> doInBackground(Integer... params) {
+            List<Folder> folders = new ArrayList<>();
+
+            try {
+                TreeService treeService = application.getRestAdapter().create(TreeService.class);
+
+                List<Folder> root = treeService.getLayers();
+
+                DataHelper helper = new DataHelper();
+
+                folders = helper.getFoldersRecursively(root.get(0), null);
+
+            } catch (RetrofitError e) {
+                Log.d(TAG, "Messed up.");
+            } catch (Exception e) {
+                Log.d(TAG, e.getMessage());
+            }
+
+            return folders;
+        }
+
+        @Override
+        protected void onPostExecute(List<Folder> folders) {
+
+            new LegendLayerSectionBuilder(getActivity())
+                    .BuildAdapter(folders, 0)
+                    .setRecycler(mRecyclerView);
+        }
     }
 
 }

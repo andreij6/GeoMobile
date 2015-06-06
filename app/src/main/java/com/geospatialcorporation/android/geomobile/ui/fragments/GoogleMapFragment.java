@@ -34,17 +34,13 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.RelativeLayout;
-import android.widget.Toast;
 
 import com.geospatialcorporation.android.geomobile.R;
-import com.geospatialcorporation.android.geomobile.application;
+import com.geospatialcorporation.android.geomobile.library.helpers.GeoDialogHelper;
 import com.geospatialcorporation.android.geomobile.library.helpers.MapStateManager;
 import com.geospatialcorporation.android.geomobile.library.helpers.MarkerComparer;
 import com.geospatialcorporation.android.geomobile.library.helpers.QueryMachine;
 import com.geospatialcorporation.android.geomobile.library.helpers.QuerySenderHelper;
-import com.geospatialcorporation.android.geomobile.library.rest.QueryService;
-import com.geospatialcorporation.android.geomobile.models.Query.quickSearch.QuickSearchRequest;
-import com.geospatialcorporation.android.geomobile.models.Query.quickSearch.QuickSearchResponse;
 import com.geospatialcorporation.android.geomobile.models.Query.point.Max;
 import com.geospatialcorporation.android.geomobile.models.Query.point.Min;
 import com.geospatialcorporation.android.geomobile.ui.Interfaces.SlidingPanelController;
@@ -78,14 +74,10 @@ import com.sothree.slidinguppanel.SlidingUpPanelLayout;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
-import java.util.Set;
 
 import butterknife.ButterKnife;
 import butterknife.InjectView;
 import butterknife.OnClick;
-import retrofit.Callback;
-import retrofit.RetrofitError;
-import retrofit.client.Response;
 
 /**
  * Fragment that appears in the "content_frame", shows a google-play map
@@ -101,7 +93,7 @@ public class GoogleMapFragment extends GeoViewFragmentBase implements
     public GoogleMap mMap;
 
     Polygon mShape;
-    List<Marker> markers = new ArrayList<>();
+    List<Marker> mMarkers = new ArrayList<>();
     private static final int BOX = 2;
     QueryMachine mQueryMachine;
 
@@ -250,7 +242,7 @@ public class GoogleMapFragment extends GeoViewFragmentBase implements
         MarkerOptions options = getMarkerOptions(latitude, longitude);
 
         clearMapQueryPoints();
-        markers.add(mMap.addMarker(options));
+        mMarkers.add(mMap.addMarker(options));
 
         CameraUpdate u = CameraUpdateFactory.newLatLng(options.getPosition());
         mMap.animateCamera(u);
@@ -271,10 +263,10 @@ public class GoogleMapFragment extends GeoViewFragmentBase implements
     }
 
     protected void clearMapQueryPoints(){
-        for(Marker marker : markers){
+        for(Marker marker : mMarkers){
             marker.remove();
         }
-        markers.clear();
+        mMarkers.clear();
 
         if(mShape != null) {
             mShape.remove();
@@ -289,9 +281,9 @@ public class GoogleMapFragment extends GeoViewFragmentBase implements
         }
         MarkerOptions options = getMarkerOptions(lat, lng);
 
-        markers.add(mMap.addMarker(options));
+        mMarkers.add(mMap.addMarker(options));
 
-        if(markers.size() == BOX){
+        if(mMarkers.size() == BOX){
             boxQueryStep3CompleteBox();
             mQueryMachine.setState(QueryMachine.State.BOXQUERY_DRAWN);
             boxQueryStep4SendToGeoU();
@@ -301,30 +293,30 @@ public class GoogleMapFragment extends GeoViewFragmentBase implements
     }
 
     private void boxQueryStep3CompleteBox() {
-        LatLng first = markers.get(0).getPosition();
-        LatLng second = markers.get(1).getPosition();
+        LatLng first = mMarkers.get(0).getPosition();
+        LatLng second = mMarkers.get(1).getPosition();
 
         MarkerOptions options = getMarkerOptions(first.latitude, second.longitude);
         MarkerOptions options2 = getMarkerOptions(second.latitude, first.longitude);
 
-        markers.add(mMap.addMarker(options));
-        markers.add(mMap.addMarker(options2));
+        mMarkers.add(mMap.addMarker(options));
+        mMarkers.add(mMap.addMarker(options2));
 
         List<Marker> reOrder = new ArrayList<>();
-        reOrder.addAll(markers);
+        reOrder.addAll(mMarkers);
 
-        markers.clear();
-        markers.add(reOrder.get(0));
-        markers.add(reOrder.get(2));
-        markers.add(reOrder.get(1));
-        markers.add(reOrder.get(3));
+        mMarkers.clear();
+        mMarkers.add(reOrder.get(0));
+        mMarkers.add(reOrder.get(2));
+        mMarkers.add(reOrder.get(1));
+        mMarkers.add(reOrder.get(3));
 
         setCameraToBoxExtent();
     }
 
     private void setCameraToBoxExtent() {
         LatLngBounds.Builder builder = new LatLngBounds.Builder();
-        for(Marker m : markers) {
+        for(Marker m : mMarkers) {
             builder.include(m.getPosition());
         }
 
@@ -339,14 +331,14 @@ public class GoogleMapFragment extends GeoViewFragmentBase implements
         PolygonOptions options = new PolygonOptions().fillColor(0x33000000).strokeWidth(2).strokeColor(Color.BLACK);
 
         for(int i = 0; i < BOX + 2; i++){
-            options.add(markers.get(i).getPosition());
+            options.add(mMarkers.get(i).getPosition());
         }
 
         mShape = mMap.addPolygon(options);
 
-        Collections.sort(markers, new MarkerComparer());
-        Min min = new Min(markers.get(2));
-        Max max = new Max(markers.get(0));
+        Collections.sort(mMarkers, new MarkerComparer());
+        Min min = new Min(mMarkers.get(2));
+        Max max = new Max(mMarkers.get(0));
 
         Log.d(TAG, max.toString());
         Log.d(TAG, min.toString());
@@ -441,7 +433,7 @@ public class GoogleMapFragment extends GeoViewFragmentBase implements
                 querySetup();
                 return true;
             case R.id.action_bookmark:
-                Toaster("Allow the user to bookmark a position - or go to bookmarked positions");
+                GeoDialogHelper.showBookmarks(getActivity(), getFragmentManager());
                 return true;
             default:
                 return super.onOptionsItemSelected(item);

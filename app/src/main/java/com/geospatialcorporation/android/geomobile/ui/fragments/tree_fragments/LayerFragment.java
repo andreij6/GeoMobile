@@ -18,15 +18,15 @@ import com.geospatialcorporation.android.geomobile.database.DataRepository.Imple
 import com.geospatialcorporation.android.geomobile.database.DataRepository.Implementations.IAppDataRepository;
 import com.geospatialcorporation.android.geomobile.database.DataRepository.Implementations.Layers.LayersAppSource;
 import com.geospatialcorporation.android.geomobile.library.helpers.DataHelper;
+import com.geospatialcorporation.android.geomobile.library.sectionbuilders.implementations.LayerTreeSectionBuilder;
 import com.geospatialcorporation.android.geomobile.library.services.FolderTreeService;
-import com.geospatialcorporation.android.geomobile.library.helpers.SectionTreeBuilder;
 import com.geospatialcorporation.android.geomobile.library.rest.LayerService;
 import com.geospatialcorporation.android.geomobile.library.rest.TreeService;
 import com.geospatialcorporation.android.geomobile.models.Folders.Folder;
 import com.geospatialcorporation.android.geomobile.models.Layers.Layer;
-import com.geospatialcorporation.android.geomobile.ui.adapters.ListItemAdapter;
 import com.geospatialcorporation.android.geomobile.ui.fragments.GeoViewFragmentBase;
 import com.geospatialcorporation.android.geomobile.ui.fragments.dialogs.LayerActionDialogFragment;
+import com.geospatialcorporation.android.geomobile.ui.viewmodels.ListItem;
 import com.melnykov.fab.FloatingActionButton;
 
 import java.util.List;
@@ -132,9 +132,11 @@ public class LayerFragment extends GeoViewFragmentBase {
                 SetTitle(R.string.layer_tree);
             }
 
-            new SectionTreeBuilder(mContext, getFragmentManager())
-                    .AddLayerData(mCurrentFolder.getLayers(), mCurrentFolder.getFolders(), mCurrentFolder.getParent())
-                    .BuildAdapter(ListItemAdapter.LAYER)
+            DataHelper helper = new DataHelper();
+            List<ListItem> data = helper.CombineLayerItems(mCurrentFolder.getLayers(), mCurrentFolder.getFolders(), mCurrentFolder.getParent());
+
+            new LayerTreeSectionBuilder(mContext, getFragmentManager(), mCurrentFolder.getParent())
+                    .BuildAdapter(data, mCurrentFolder.getFolders().size())
                     .setRecycler(mRecycler);
         }
     }

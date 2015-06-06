@@ -1,0 +1,82 @@
+package com.geospatialcorporation.android.geomobile.ui.fragments.dialogs;
+
+import android.app.AlertDialog;
+import android.app.Dialog;
+import android.content.Context;
+import android.content.DialogInterface;
+import android.os.Bundle;
+import android.support.v7.widget.RecyclerView;
+import android.view.View;
+import android.widget.Button;
+import android.widget.LinearLayout;
+
+import com.geospatialcorporation.android.geomobile.R;
+import com.geospatialcorporation.android.geomobile.library.sectionbuilders.implementations.BookmarkSectionBuilder;
+import com.geospatialcorporation.android.geomobile.models.Bookmark;
+import com.geospatialcorporation.android.geomobile.ui.fragments.dialogs.base.GeoDialogFragmentBase;
+
+import java.util.ArrayList;
+import java.util.List;
+
+/**
+ * Created by andre on 6/5/2015.
+ */
+public class BookmarksDialogFragment extends GeoDialogFragmentBase{
+
+    public void init(Context context){
+        setContext(context);
+    }
+
+    @Override
+    public void onStart(){
+        super.onStart();
+
+        AlertDialog d = (AlertDialog)getDialog();
+
+        if(d != null){
+            Button negative = (Button)d.getButton(Dialog.BUTTON_NEGATIVE);
+            negative.setEnabled(false);
+        }
+    }
+
+    @Override
+    public Dialog onCreateDialog(Bundle savedInstanceState){
+        AlertDialog.Builder builder = getDialogBuilder();
+
+        View v = getDialogView(R.layout.dialog_bookmarks);
+
+        LinearLayout l = (LinearLayout)v.findViewById(R.id.addBookmarkContainer);
+        l.setOnClickListener(addBookmarkMode);
+
+        RecyclerView recycler = (RecyclerView)v.findViewById(R.id.bookmarkRecycler);
+
+        new BookmarkSectionBuilder(mContext)
+                .BuildAdapter(getData(), 0)
+                .setRecycler(recycler);
+
+
+        builder.setTitle(R.string.bookmark)
+                .setView(v)
+                .setPositiveButton(R.string.close, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        dialog.cancel();
+                    }
+        });
+
+        return builder.create();
+    }
+
+    private View.OnClickListener addBookmarkMode = new View.OnClickListener(){
+        @Override
+        public void onClick(View v){
+            Toaster("Set Bookmark mode");
+            BookmarksDialogFragment.this.getDialog().cancel();
+        }
+    };
+
+
+    public List<Bookmark> getData() {
+        return new ArrayList<Bookmark>();
+    }
+}
