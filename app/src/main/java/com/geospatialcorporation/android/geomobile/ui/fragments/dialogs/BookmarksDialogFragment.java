@@ -5,6 +5,7 @@ import android.app.Dialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.os.Bundle;
+import android.support.v4.app.Fragment;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.widget.Button;
@@ -12,8 +13,15 @@ import android.widget.LinearLayout;
 
 import com.geospatialcorporation.android.geomobile.R;
 import com.geospatialcorporation.android.geomobile.library.sectionbuilders.implementations.BookmarkSectionBuilder;
+import com.geospatialcorporation.android.geomobile.library.viewmode.implementations.BookmarkMode;
 import com.geospatialcorporation.android.geomobile.models.Bookmark;
+import com.geospatialcorporation.android.geomobile.ui.Interfaces.IViewModeListener;
+import com.geospatialcorporation.android.geomobile.ui.Interfaces.SlidingPanelController;
+import com.geospatialcorporation.android.geomobile.ui.MainActivity;
 import com.geospatialcorporation.android.geomobile.ui.fragments.dialogs.base.GeoDialogFragmentBase;
+import com.google.android.gms.maps.GoogleMap;
+import com.melnykov.fab.FloatingActionButton;
+import com.sothree.slidinguppanel.SlidingUpPanelLayout;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -23,8 +31,17 @@ import java.util.List;
  */
 public class BookmarksDialogFragment extends GeoDialogFragmentBase{
 
-    public void init(Context context){
+    FloatingActionButton mSaveBtn;
+    FloatingActionButton mCloseBtn;
+    SlidingUpPanelLayout mPanel;
+    GoogleMap mMap;
+
+    public void init(Context context, FloatingActionButton s, FloatingActionButton c, SlidingUpPanelLayout p,  GoogleMap m){
         setContext(context);
+        mSaveBtn = s;
+        mCloseBtn = c;
+        mPanel = p;
+        mMap = m;
     }
 
     @Override
@@ -71,6 +88,13 @@ public class BookmarksDialogFragment extends GeoDialogFragmentBase{
         @Override
         public void onClick(View v){
             Toaster("Set Bookmark mode");
+            Fragment contentFragment = ((MainActivity)getActivity()).getContentFragment();
+
+            ((IViewModeListener)contentFragment).setViewMode(
+                    new BookmarkMode.Builder()
+                            .init(mSaveBtn, mCloseBtn, mPanel, mMap)
+                            .create()
+            );
             BookmarksDialogFragment.this.getDialog().cancel();
         }
     };
