@@ -48,10 +48,11 @@ public class QuickSearchFragment extends GeoViewFragmentBase {
     @OnClick(R.id.searchBtn)
     public void doSearch(){
         String query = SearchBox.getText().toString();
-
+        Toaster("Message Sent");
         mService.quickSearch(new QuickSearchRequest(query), new Callback<List<QuickSearchResponse>>() {
             @Override
             public void success(List<QuickSearchResponse> response, Response response2) {
+
                 Toaster("Responses: " + response.size());
                 if(response.size() == 0) {
                     Toaster(getString(R.string.no_results_found));
@@ -88,5 +89,21 @@ public class QuickSearchFragment extends GeoViewFragmentBase {
         return mView;
     }
 
+    @Override
+    public void onDetach(){
+        super.onDetach();
+        SetTitle(R.string.app_name);
+    }
 
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        SetTitle(R.string.app_name);
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        SetTitle(R.string.app_name);
+    }
 }

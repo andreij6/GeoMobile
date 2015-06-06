@@ -52,8 +52,13 @@ public class QueryMode implements IViewMode {
     }
 
     @Override
-    public void Disable() {
-        mBuilder.Reset();
+    public void Disable(Boolean showPanel) {
+        mBuilder.Reset(showPanel);
+    }
+
+    @Override
+    public boolean isSame(IViewMode mode) {
+        return mode instanceof QueryMode;
     }
 
     /*
@@ -153,7 +158,7 @@ public class QueryMode implements IViewMode {
 
                         if (ShouldReset()) {
 
-                            Reset();
+                            Reset(true);
                         }
                     }
                 }
@@ -309,8 +314,10 @@ public class QueryMode implements IViewMode {
         //endregion
 
         //region Reset Helpers
-        protected void Reset() {
-            mPanel.setPanelState(SlidingUpPanelLayout.PanelState.COLLAPSED);
+        protected void Reset(Boolean showPanel) {
+            if(showPanel){
+                mPanel.setPanelState(SlidingUpPanelLayout.PanelState.COLLAPSED);
+            }
             clearMapQueryPoints();
             SetVisibility(mControls.values(), View.GONE);
             mMap.setOnMapClickListener(null);

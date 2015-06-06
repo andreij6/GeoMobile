@@ -1,17 +1,15 @@
 package com.geospatialcorporation.android.geomobile;
 
 import android.app.Application;
-import android.app.DownloadManager;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.net.Uri;
-import android.os.Build;
-import android.os.Environment;
 import android.util.Log;
 
 import com.facebook.stetho.Stetho;
 import com.facebook.stetho.okhttp.StethoInterceptor;
 import com.geospatialcorporation.android.geomobile.library.constants.Domains;
+import com.geospatialcorporation.android.geomobile.models.Bookmarks.Bookmark;
 import com.geospatialcorporation.android.geomobile.models.Client;
 import com.geospatialcorporation.android.geomobile.models.Folders.Folder;
 import com.geospatialcorporation.android.geomobile.models.Layers.Layer;
@@ -23,10 +21,8 @@ import com.squareup.okhttp.OkHttpClient;
 import com.squareup.okhttp.Request;
 import com.squareup.okhttp.Response;
 
-import java.io.File;
 import java.io.IOException;
 import java.util.HashMap;
-import java.util.List;
 
 import retrofit.RequestInterceptor;
 import retrofit.RestAdapter;
@@ -52,6 +48,7 @@ public class application extends Application {
     private static HashMap<Integer, Folder> folderHashMap;
     private static HashMap<Integer, Document> documentHashMap;
     private static HashMap<Integer, Layer> layerHashMap;
+    private static HashMap<Integer, Bookmark> bookmarkHashMap;
 
     //region Tree Entity Getters & Setters
     public static HashMap<Integer, Folder> getFolderHashMap() {
@@ -85,6 +82,13 @@ public class application extends Application {
 
     public static Boolean getIsAdminUser(){
         return isAdminUser;
+    }
+
+    public static HashMap<Integer, Bookmark> getBookmarkHashMap() {
+        if(bookmarkHashMap == null){
+            bookmarkHashMap = new HashMap<>();
+        }
+        return bookmarkHashMap;
     }
 
     public void onCreate() {

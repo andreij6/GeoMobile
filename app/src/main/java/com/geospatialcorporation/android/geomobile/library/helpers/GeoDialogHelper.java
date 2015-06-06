@@ -59,7 +59,7 @@ public class GeoDialogHelper {
 
     public static void showBookmarks(Context context, FragmentManager fm, FloatingActionButton save, FloatingActionButton close, SlidingUpPanelLayout panel, GoogleMap m) {
         BookmarksDialogFragment b = new BookmarksDialogFragment();
-        b.init(context, save, close, panel, m);
+        b.init(context, save, close, panel, m, fm);
         b.show(fm, "Bookmarks");
     }
 }

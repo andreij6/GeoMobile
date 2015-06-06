@@ -22,11 +22,11 @@ public class MapTypeSelectDialogFragment extends GeoDialogFragmentBase {
 
     Integer mSelected;
 
-    public void setMap(MapView map) {
+    public void setMap(GoogleMap map) {
         mMap = map;
     }
 
-    MapView mMap;
+    GoogleMap mMap;
 
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {
@@ -45,7 +45,7 @@ public class MapTypeSelectDialogFragment extends GeoDialogFragmentBase {
                     public void onClick(DialogInterface dialog, int id) {
                         //Change Map
                         if(mSelected != -1){
-                            mMap.getMap().setMapType(getMapType(mSelected));
+                            mMap.setMapType(getMapType(mSelected));
                         }
                     }
                 })

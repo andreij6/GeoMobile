@@ -4,10 +4,17 @@ import android.content.Context;
 import android.content.SharedPreferences;
 
 import com.geospatialcorporation.android.geomobile.application;
+import com.geospatialcorporation.android.geomobile.database.DataRepository.IDataRepository;
+import com.geospatialcorporation.android.geomobile.database.DataRepository.Implementations.Bookmark.BookmarkAppSource;
+import com.geospatialcorporation.android.geomobile.models.Bookmarks.Bookmark;
+import com.geospatialcorporation.android.geomobile.models.Bookmarks.BookmarkPosition;
 import com.geospatialcorporation.android.geomobile.models.Client;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.model.CameraPosition;
 import com.google.android.gms.maps.model.LatLng;
+
+import java.util.Collection;
+import java.util.List;
 
 public class MapStateManager {
 
@@ -77,4 +84,25 @@ public class MapStateManager {
     }
 
 
+    public void saveMapStateForBookMark(GoogleMap map, String name) {
+        IDataRepository<Bookmark> BookmarkRepo = new BookmarkAppSource(); //not cache repo
+
+        CameraPosition position = map.getCameraPosition();
+
+        BookmarkPosition bp = new BookmarkPosition();
+
+        bp.setLat((float) position.target.latitude);
+        bp.setLng((float) position.target.latitude);
+        bp.setZoom(position.zoom);
+        bp.setTilt(position.tilt);
+        bp.setBearing(position.bearing);
+
+        Bookmark bookmark = new Bookmark(name, bp);
+
+        List<Bookmark> existing = BookmarkRepo.getAll();
+
+        bookmark.setId(existing.size());
+
+        BookmarkRepo.Create(bookmark);
+    }
 }

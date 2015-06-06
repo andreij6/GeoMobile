@@ -38,10 +38,24 @@ public class LegendLayerSectionBuilder extends SectionBuilderBase<Folder> implem
 
         if(data != null){
             int skip = 0;
-            for(Folder folder : data){
-                sections.add(new SimpleSectionedRecyclerViewAdapter.Section(skip, folder.getName()));
-                skip = getSkipValue(folder, skip);
+            List<Folder> emptyFolders = new ArrayList<>();
 
+            for(Folder folder : data){
+                if(folder.getLayers() != null && folder.getLayers().size() > 0) {
+                    if(skip == 0) {
+                        sections.add(new SimpleSectionedRecyclerViewAdapter.Section(skip, "ROOT"));
+                    } else {
+                        sections.add(new SimpleSectionedRecyclerViewAdapter.Section(skip, folder.getName()));
+                    }
+                    skip = getSkipValue(folder, skip);
+                } else {
+                    emptyFolders.add(folder);
+                }
+            }
+
+            for(Folder folder : emptyFolders){
+                sections.add(new SimpleSectionedRecyclerViewAdapter.Section(skip, folder.getName() + " - EMPTY"));
+                skip = getSkipValue(folder, skip);
             }
         }
 

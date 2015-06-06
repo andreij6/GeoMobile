@@ -2,6 +2,8 @@ package com.geospatialcorporation.android.geomobile.database.DataRepository.Impl
 
 import com.geospatialcorporation.android.geomobile.models.Interfaces.IdModel;
 
+import java.util.ArrayList;
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 
@@ -28,8 +30,14 @@ public class AppSourceBase<T> implements IAppDataRepository<T> {
     }
 
     @Override
-    public Iterable<T> getAll() {
-        return Data.values();
+    public List<T> getAll() {
+        List<T> result = new ArrayList<>();
+
+        for(T entity : Data.values()){
+            result.add(entity);
+        }
+
+        return result;
     }
 
     @Override
@@ -39,8 +47,12 @@ public class AppSourceBase<T> implements IAppDataRepository<T> {
 
     //use add
     @Override
-    public int Create(T type) {
-        return 0;
+    public int Create(T entity) {
+        IdModel idModel = (IdModel)entity;
+
+        Data.put(idModel.getId(), entity);
+
+        return idModel.getId();
     }
 
     @Override

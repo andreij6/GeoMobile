@@ -7,7 +7,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.geospatialcorporation.android.geomobile.R;
-import com.geospatialcorporation.android.geomobile.models.Bookmark;
+import com.geospatialcorporation.android.geomobile.models.Bookmarks.Bookmark;
 
 import java.util.List;
 

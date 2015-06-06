@@ -38,6 +38,12 @@ import com.geospatialcorporation.android.geomobile.ui.fragments.GoogleMapFragmen
 import com.geospatialcorporation.android.geomobile.ui.fragments.tree_fragments.LayerFragment;
 import com.geospatialcorporation.android.geomobile.ui.fragments.drawer.LayerSelectorDrawerFragment;
 import com.geospatialcorporation.android.geomobile.ui.fragments.drawer.MainNavigationDrawerFragment;
+import com.google.android.gms.common.ConnectionResult;
+import com.google.android.gms.common.api.GoogleApiClient;
+import com.google.android.gms.location.LocationServices;
+import com.google.android.gms.maps.GoogleMap;
+import com.google.android.gms.maps.OnMapReadyCallback;
+import com.google.android.gms.maps.SupportMapFragment;
 
 import butterknife.ButterKnife;
 
@@ -75,12 +81,14 @@ public class MainActivity extends ActionBarActivity
 
 
     //region Properties
-    private GoogleMapFragment mMap;
+    private GoogleMapFragment mMapFragment;
+    GoogleMap mMap;
     private Dialogs dialog;
     private boolean mIsAdmin;
     MainNavigationDrawerFragment mMainMainNavigationDrawerFragment;
     LayerSelectorDrawerFragment mLayerDrawerFragement;
     //endregion
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -90,7 +98,7 @@ public class MainActivity extends ActionBarActivity
 
         dialog = new Dialogs();
 
-        mMap = application.getMapFragment();
+        mMapFragment = application.getMapFragment();
 
         mIsAdmin = application.getIsAdminUser();
 
@@ -145,7 +153,7 @@ public class MainActivity extends ActionBarActivity
         if(mIsAdmin) {
             switch (position) {
                 case ViewConstants.MAP:
-                    return mMap;
+                    return mMapFragment;
                 case ViewConstants.LAYER:
                     return new LayerFragment();
                 case ViewConstants.LIBRARY:
@@ -168,8 +176,8 @@ public class MainActivity extends ActionBarActivity
             switch (position) {
                 case ViewConstants.MAP:
                     if(mMap == null)
-                        mMap = application.getMapFragment();
-                    return mMap;
+                        mMapFragment = application.getMapFragment();
+                    return mMapFragment;
                 case ViewConstants.LAYER:
                     return new LayerFragment();
                 case ViewConstants.LIBRARY:
@@ -186,7 +194,7 @@ public class MainActivity extends ActionBarActivity
             }
         }
 
-        return mMap;
+        return mMapFragment;
     }
 
     public Fragment getContentFragment(){
@@ -205,6 +213,7 @@ public class MainActivity extends ActionBarActivity
     public View getLayerListView() {
         return findViewById(R.id.layer_drawer);
     }
+
 
     public static class MediaConstants {
         public static final int PICK_FILE_REQUEST = 0;

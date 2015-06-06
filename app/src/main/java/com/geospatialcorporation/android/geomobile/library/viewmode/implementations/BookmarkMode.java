@@ -1,11 +1,17 @@
 package com.geospatialcorporation.android.geomobile.library.viewmode.implementations;
 
+import android.os.Bundle;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
 import android.view.View;
 import android.widget.Toast;
 
+import com.geospatialcorporation.android.geomobile.R;
 import com.geospatialcorporation.android.geomobile.application;
 import com.geospatialcorporation.android.geomobile.library.helpers.MapStateManager;
 import com.geospatialcorporation.android.geomobile.library.viewmode.IViewMode;
+import com.geospatialcorporation.android.geomobile.ui.fragments.panel_fragments.BookmarkFragment;
+import com.geospatialcorporation.android.geomobile.ui.fragments.panel_fragments.QuickSearchFragment;
 import com.google.android.gms.maps.GoogleMap;
 import com.melnykov.fab.FloatingActionButton;
 import com.sothree.slidinguppanel.SlidingUpPanelLayout;
@@ -22,8 +28,13 @@ public class BookmarkMode implements IViewMode {
     }
 
     @Override
-    public void Disable() {
-        mBuilder.Reset();
+    public void Disable(Boolean showPanel) {
+        mBuilder.Reset(showPanel);
+    }
+
+    @Override
+    public boolean isSame(IViewMode mode) {
+        return mode instanceof BookmarkMode;
     }
 
     public static class Builder {
@@ -33,47 +44,64 @@ public class BookmarkMode implements IViewMode {
         SlidingUpPanelLayout mPanel;
         GoogleMap mMap;
 
-       public Builder init(FloatingActionButton save, FloatingActionButton close, SlidingUpPanelLayout panel, final GoogleMap map){
-            mSave = save;
+       public Builder init(FloatingActionButton add, FloatingActionButton close, SlidingUpPanelLayout panel, final GoogleMap map, FragmentManager fm){
+            mSave = add;
            mClose = close;
            mPanel = panel;
            mMap = map;
 
-           save.setVisibility(View.VISIBLE);
+           add.setVisibility(View.VISIBLE);
            close.setVisibility(View.VISIBLE);
            mPanel.setPanelState(SlidingUpPanelLayout.PanelState.HIDDEN);
 
-           SetClickEvents(save, close);
+           SetClickEvents(add, close, fm);
 
            return this;
        }
 
-        protected void SetClickEvents(FloatingActionButton save, FloatingActionButton close) {
-            save.setOnClickListener(new View.OnClickListener() {
+        protected void SetClickEvents(FloatingActionButton add, FloatingActionButton close, final FragmentManager fm) {
+            add.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    MapStateManager msm = new MapStateManager(application.getAppContext());
-                    //msm.saveMapStateForBookMark(mMap);
-                    Toast.makeText(application.getAppContext(), "Save: Not Implemented", Toast.LENGTH_LONG).show();
+                    mPanel.setTouchEnabled(false);
+
+                    Fragment f = new BookmarkFragment.Builder(mMap, mPanel).create();
+
+                    fm.beginTransaction()
+                            .replace(R.id.slider_content, f)
+                            .commit();
+
+                    anchorSlider();
+
                 }
             });
 
             close.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    Reset();
+                    Reset(true);
                 }
             });
         }
 
-        protected void Reset(){
+        protected void Reset(Boolean showPanel){
             mSave.setVisibility(View.GONE);
             mClose.setVisibility(View.GONE);
-            mPanel.setPanelState(SlidingUpPanelLayout.PanelState.COLLAPSED);
+            if(showPanel) {
+                mPanel.setPanelState(SlidingUpPanelLayout.PanelState.COLLAPSED);
+            }
         }
 
         public BookmarkMode create(){
             return new BookmarkMode(this);
         }
+
+        //region Slider Helpers
+        protected void anchorSlider(){
+            mPanel.setAnchorPoint(0.7f);
+            mPanel.setPanelState(SlidingUpPanelLayout.PanelState.ANCHORED);
+        }
+
+        //endregion
     }
 }

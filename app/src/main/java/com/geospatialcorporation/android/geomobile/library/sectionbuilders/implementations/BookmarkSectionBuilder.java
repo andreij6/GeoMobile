@@ -7,7 +7,7 @@ import android.support.v7.widget.RecyclerView;
 import com.geospatialcorporation.android.geomobile.R;
 import com.geospatialcorporation.android.geomobile.library.sectionbuilders.ISectionBuilder;
 import com.geospatialcorporation.android.geomobile.library.sectionbuilders.SectionBuilderBase;
-import com.geospatialcorporation.android.geomobile.models.Bookmark;
+import com.geospatialcorporation.android.geomobile.models.Bookmarks.Bookmark;
 import com.geospatialcorporation.android.geomobile.ui.adapters.BookmarkAdapter;
 import com.geospatialcorporation.android.geomobile.ui.adapters.SimpleSectionedRecyclerViewAdapter;
 

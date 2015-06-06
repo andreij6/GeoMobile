@@ -6,6 +6,9 @@ import android.database.Cursor;
 import com.geospatialcorporation.android.geomobile.database.DataRepository.IDataRepository;
 import com.geospatialcorporation.android.geomobile.database.datasource.DataSourceBase;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public abstract class DataSourceGenericBase<T> extends DataSourceBase implements IDataRepository<T> {
 
     //region Constructor
@@ -46,10 +49,16 @@ public abstract class DataSourceGenericBase<T> extends DataSourceBase implements
         InTransaction(UpdateEntity);
     }
 
-    public Iterable<T> getAll(){
+    public List<T> getAll(){
         InTransaction(GetAllEntities);
 
-        return mEntities;
+        List<T> result = new ArrayList<>();
+
+        for(T entity : mEntities){
+            result.add(entity);
+        }
+
+        return result;
     }
 
     public void Remove(int id){

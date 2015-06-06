@@ -43,7 +43,6 @@ import com.geospatialcorporation.android.geomobile.ui.Interfaces.SlidingPanelCon
 import com.geospatialcorporation.android.geomobile.ui.MainActivity;
 import com.geospatialcorporation.android.geomobile.ui.fragments.dialogs.MapTypeSelectDialogFragment;
 import com.geospatialcorporation.android.geomobile.ui.fragments.panel_fragments.CollapsedPanelFragment;
-import com.geospatialcorporation.android.geomobile.ui.fragments.panel_fragments.QuickSearchFragment;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.location.LocationServices;
@@ -65,10 +64,10 @@ import butterknife.OnClick;
  * Fragment that appears in the "content_frame", shows a google-play map
  */
 public class GoogleMapFragment extends GeoViewFragmentBase implements
-        GoogleApiClient.ConnectionCallbacks,
-        GoogleApiClient.OnConnectionFailedListener,
         SlidingPanelController,
-        IViewModeListener
+        IViewModeListener,
+        GoogleApiClient.ConnectionCallbacks,
+        GoogleApiClient.OnConnectionFailedListener
 {
     private static final String TAG = GoogleMapFragment.class.getSimpleName();
 
@@ -83,7 +82,7 @@ public class GoogleMapFragment extends GeoViewFragmentBase implements
     @InjectView(R.id.fab_close) FloatingActionButton mCloseBtn;
     @InjectView(R.id.fab_save) FloatingActionButton mSaveBtn;
     @InjectView(R.id.fab_bm_close) FloatingActionButton mBmClose;
-    private boolean mIsQuerying;
+    Menu mMenu;
     //endregion
 
     //region OnClicks
@@ -144,6 +143,8 @@ public class GoogleMapFragment extends GeoViewFragmentBase implements
                              Bundle savedInstanceState) {
         setHasOptionsMenu(true);
         View rootView = inflater.inflate(R.layout.fragment_map, container, false);
+
+
         ButterKnife.inject(this, rootView);
         SetTitle(R.string.app_name);
 
@@ -154,6 +155,7 @@ public class GoogleMapFragment extends GeoViewFragmentBase implements
 
         return rootView;
     }
+
 
     protected void initializeGoogleMap(Bundle savedInstanceState) {
         mView.onCreate(savedInstanceState);
@@ -176,10 +178,11 @@ public class GoogleMapFragment extends GeoViewFragmentBase implements
         }
     }
 
+
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
         inflater.inflate(R.menu.map_menu, menu);
-
+        mMenu = menu;
         super.onCreateOptionsMenu(menu, inflater);
     }
 
@@ -187,17 +190,7 @@ public class GoogleMapFragment extends GeoViewFragmentBase implements
     public void onResume() {
         super.onResume();
         mView.onResume();
-        MapStateManager msm = new MapStateManager(getActivity());
-
-        CameraPosition position = msm.getSavedCameraPosition();
-        Integer mapType = msm.getSavedMapType();
-
-        mMap.setMapType(mapType);
-
-        if(position != null){
-            CameraUpdate update = CameraUpdateFactory.newCameraPosition(position);
-            mMap.moveCamera(update);
-        }
+        setMapState();
     }
 
     @Override
@@ -207,10 +200,11 @@ public class GoogleMapFragment extends GeoViewFragmentBase implements
             case R.id.action_map_settings:
                 MapTypeSelectDialogFragment m = new MapTypeSelectDialogFragment();
                 m.setContext(getActivity());
-                m.setMap(mView);
+                m.setMap(mMap);
                 m.show(getFragmentManager(), "styles");
                 return true;
             case R.id.action_search:
+                mPanel.setPanelState(SlidingUpPanelLayout.PanelState.COLLAPSED);
                 setViewMode(searchSetup());
                 return true;
             case R.id.action_query:
@@ -239,15 +233,31 @@ public class GoogleMapFragment extends GeoViewFragmentBase implements
     @Override
     public void onStop(){
         super.onStop();
+        saveMapState();
+    }
+
+    private void saveMapState() {
         MapStateManager msm = new MapStateManager(getActivity());
         msm.saveMapState(mMap);
-        mViewMode.Disable();
+        disableViewMode();
+    }
+
+    @Override
+    public void onDestroyView(){
+        super.onDestroyView();
+        mView.onDestroy();
+    }
+
+    private void disableViewMode() {
+        if(mViewMode != null){
+            mViewMode.Disable(true);
+        }
     }
 
     @Override
     public void onDetach(){
         super.onDetach();
-        mViewMode.Disable();
+        disableViewMode();
     }
     //endregion
 
@@ -262,7 +272,8 @@ public class GoogleMapFragment extends GeoViewFragmentBase implements
             @Override
             public void onPanelCollapsed(View view) {
                 setCollapsedUI();
-
+                MenuItem item = mMenu.findItem(R.id.action_search);
+                item.setVisible(true);
             }
 
             @Override
@@ -283,6 +294,7 @@ public class GoogleMapFragment extends GeoViewFragmentBase implements
     }
 
     private void setCollapsedUI() {
+
         Fragment collapsedFragment = new CollapsedPanelFragment();
 
         FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
@@ -358,7 +370,7 @@ public class GoogleMapFragment extends GeoViewFragmentBase implements
     //endregion
 
     //region GoogleAPIClient Interface Methods
-    @Override
+    /*@Override
     public void onConnected(Bundle bundle) {
         //Toast.makeText(getActivity(), "Connected to location service", Toast.LENGTH_LONG).show();
     }
@@ -372,6 +384,7 @@ public class GoogleMapFragment extends GeoViewFragmentBase implements
     public void onConnectionFailed(ConnectionResult connectionResult) {
         //
     }
+    **/
     //endregion
 
     //region SlidingPanelController Interface
@@ -386,9 +399,62 @@ public class GoogleMapFragment extends GeoViewFragmentBase implements
     @Override
     public void setViewMode(IViewMode mode) {
         if(mViewMode != null){
-            mViewMode.Disable();
+            if(!mViewMode.isSame(mode)){
+                if(mode instanceof SearchMode){
+                    mViewMode.Disable(true);
+                    mViewMode = null;
+                    mViewMode = mode;
+                } else {
+                    MenuItem item = mMenu.findItem(R.id.action_search);
+                    item.setVisible(false);
+
+                    mViewMode.Disable(false);
+                    mViewMode = null;
+                    mViewMode = mode;
+                }
+
+            }
+        } else {
+            if(mode instanceof SearchMode){
+                mViewMode = mode;
+            } else {
+                MenuItem item = mMenu.findItem(R.id.action_search);
+                item.setVisible(false);
+                mViewMode = mode;
+            }
+
         }
-        mViewMode = mode;
+
+
+    }
+
+    @Override
+    public void onConnected(Bundle bundle) {
+
+    }
+
+    @Override
+    public void onConnectionSuspended(int i) {
+
+    }
+
+    @Override
+    public void onConnectionFailed(ConnectionResult connectionResult) {
+
+    }
+
+    private void setMapState() {
+        MapStateManager msm = new MapStateManager(getActivity());
+
+        CameraPosition position = msm.getSavedCameraPosition();
+        Integer mapType = msm.getSavedMapType();
+
+        mMap.setMapType(mapType);
+
+        if(position != null){
+            CameraUpdate update = CameraUpdateFactory.newCameraPosition(position);
+            mMap.moveCamera(update);
+        }
     }
     //endregion
 

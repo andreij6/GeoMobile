@@ -18,9 +18,14 @@ public class SearchMode implements IViewMode {
     }
 
     @Override
-    public void Disable() {
+    public void Disable(Boolean showPanel) {
         mBuilder.mPanel.setTouchEnabled(true);
         mBuilder.mPanel.setPanelState(SlidingUpPanelLayout.PanelState.COLLAPSED);
+    }
+
+    @Override
+    public boolean isSame(IViewMode mode) {
+        return mode instanceof SearchMode;
     }
 
     public static class Builder {
@@ -48,15 +53,8 @@ public class SearchMode implements IViewMode {
 
         //region Slider Helpers
         protected void anchorSlider(){
-            if (mPanel != null) {
-                if (mPanel.getAnchorPoint() == 1.0f || mPanel.getPanelState() == SlidingUpPanelLayout.PanelState.COLLAPSED) {
-                    mPanel.setAnchorPoint(0.7f);
-                    mPanel.setPanelState(SlidingUpPanelLayout.PanelState.ANCHORED);
-                } else {
-                    mPanel.setAnchorPoint(1.0f);
-                    mPanel.setPanelState(SlidingUpPanelLayout.PanelState.COLLAPSED);
-                }
-            }
+            mPanel.setAnchorPoint(0.7f);
+            mPanel.setPanelState(SlidingUpPanelLayout.PanelState.ANCHORED);
         }
 
         //endregion

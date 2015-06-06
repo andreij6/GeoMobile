@@ -244,6 +244,10 @@ public class LayerSelectorDrawerFragment extends Fragment {
 
                 folders = helper.getFoldersRecursively(root.get(0), null);
 
+                int index = folders.indexOf(root.get(0));  //putting the root folder in front
+                folders.remove(index);
+                folders.add(0, root.get(0));
+
             } catch (RetrofitError e) {
                 Log.d(TAG, "Messed up.");
             } catch (Exception e) {
