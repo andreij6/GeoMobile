@@ -4,6 +4,7 @@ import android.app.Application;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.net.Uri;
+import android.support.v4.widget.DrawerLayout;
 import android.util.Log;
 
 import com.facebook.stetho.Stetho;
@@ -49,6 +50,7 @@ public class application extends Application {
     private static HashMap<Integer, Document> documentHashMap;
     private static HashMap<Integer, Layer> layerHashMap;
     private static HashMap<Integer, Bookmark> bookmarkHashMap;
+    private static DrawerLayout layerDrawer;
 
     //region Tree Entity Getters & Setters
     public static HashMap<Integer, Folder> getFolderHashMap() {
@@ -89,6 +91,14 @@ public class application extends Application {
             bookmarkHashMap = new HashMap<>();
         }
         return bookmarkHashMap;
+    }
+
+    public static void setLayerDrawer(DrawerLayout layerDrawer) {
+        application.layerDrawer = layerDrawer;
+    }
+
+    public static DrawerLayout getLayerDrawer() {
+        return layerDrawer;
     }
 
     public void onCreate() {

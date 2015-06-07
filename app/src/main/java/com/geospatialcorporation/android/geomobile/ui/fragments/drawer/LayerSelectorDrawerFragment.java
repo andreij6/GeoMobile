@@ -87,27 +87,11 @@ public class LayerSelectorDrawerFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-
-        //mDrawerListView = (ListView) inflater.inflate(R.layout.fragment_left_navigation_drawer, container, false);
-
         mRecyclerView = (RecyclerView)inflater.inflate(R.layout.fragment_right_navigation_drawer, container, false);
-
-
-        //mDrawerListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-        //    @Override
-        //    public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-        //        selectItem(position);
-        //    }
-        //});
-        //View header = inflater.inflate(R.layout.header_layers_listview, container, false);
-        //List<Layer> fakelist = Arrays.asList(new Layer[]{new Layer("Fake Layer"), new Layer("United States"), new Layer("Counties")});
-        //mDrawerListView.addHeaderView(header);
-        //mDrawerListView.setAdapter(new LayerDrawerAdapter(getActivity(), fakelist));
 
         new GetLayersTask().execute(0);
 
         return mRecyclerView;
-        //return mDrawerListView;
     }
 
     public boolean isDrawerOpen() {
@@ -247,6 +231,8 @@ public class LayerSelectorDrawerFragment extends Fragment {
                 int index = folders.indexOf(root.get(0));  //putting the root folder in front
                 folders.remove(index);
                 folders.add(0, root.get(0));
+
+                application.setLayerDrawer(mDrawerLayout);
 
             } catch (RetrofitError e) {
                 Log.d(TAG, "Messed up.");

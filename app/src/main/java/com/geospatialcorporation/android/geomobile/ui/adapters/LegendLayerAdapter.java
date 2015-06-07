@@ -1,6 +1,10 @@
 package com.geospatialcorporation.android.geomobile.ui.adapters;
 
 import android.content.Context;
+import android.os.Bundle;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.widget.DrawerLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -12,8 +16,11 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.geospatialcorporation.android.geomobile.R;
+import com.geospatialcorporation.android.geomobile.application;
 import com.geospatialcorporation.android.geomobile.models.Folders.Folder;
 import com.geospatialcorporation.android.geomobile.models.Layers.Layer;
+import com.geospatialcorporation.android.geomobile.ui.MainActivity;
+import com.geospatialcorporation.android.geomobile.ui.fragments.detail_fragment.LayerDetailFragment;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -90,7 +97,22 @@ public class LegendLayerAdapter extends RecyclerView.Adapter<LegendLayerAdapter.
         private View.OnClickListener GoToSublayer = new View.OnClickListener(){
             @Override
             public void onClick(View v){
-                Toast.makeText(mContext, "Go to Sublayers for Layer: " + mLayer.getName(), Toast.LENGTH_LONG).show();
+                Fragment frag = new LayerDetailFragment();
+                FragmentManager fm = ((MainActivity) mContext).getSupportFragmentManager();
+
+                Bundle b = new Bundle();
+                b.putParcelable(Layer.LAYER_INTENT, mLayer);
+                frag.setArguments(b);
+
+                fm.beginTransaction()
+                        .replace(R.id.content_frame, frag)
+                        .addToBackStack(null)
+                        .commit();
+
+                //attempting to close the drawer after selecting a sublayer
+                //DrawerLayout drawer = application.getLayerDrawer();
+                //View container = ((MainActivity) mContext).findViewById(R.id.navigation_left_drawer);
+                //drawer.closeDrawer(container);
             }
         };
     }
