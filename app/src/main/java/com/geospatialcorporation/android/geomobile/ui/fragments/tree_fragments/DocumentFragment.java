@@ -84,6 +84,8 @@ public class DocumentFragment extends GeoViewFragmentBase {
 
         ButterKnife.inject(this, mRootView);
         mContext = getActivity();
+
+        mSwipeRefreshLayout.setOnRefreshListener(new DocumentRefreshLayout());
         mSwipeRefreshLayout.setProgressBackgroundColorSchemeColor(mContext.getResources().getColor(R.color.accent));
 
         mTreeService = application.getRestAdapter().create(TreeService.class);

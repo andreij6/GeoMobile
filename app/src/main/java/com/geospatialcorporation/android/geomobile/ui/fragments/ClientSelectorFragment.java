@@ -3,7 +3,9 @@ package com.geospatialcorporation.android.geomobile.ui.fragments;
 import android.content.Context;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.v4.app.Fragment;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -20,6 +22,8 @@ import com.geospatialcorporation.android.geomobile.ui.adapters.ClientAdapter;
 import java.util.ArrayList;
 import java.util.List;
 
+import butterknife.ButterKnife;
+import butterknife.InjectView;
 import retrofit.RetrofitError;
 
 /**
@@ -37,7 +41,8 @@ public class ClientSelectorFragment extends Fragment {
         return this;
     }
 
-    private RecyclerView mRecyclerView;
+    @InjectView(R.id.clientitem_recyclerView) RecyclerView mRecyclerView;
+    @InjectView(R.id.swipe_refresh_layout) SwipeRefreshLayout mSwipeRefreshLayout;
     private List<Client> mDataSet;
     private LoginService service;
 
@@ -47,8 +52,10 @@ public class ClientSelectorFragment extends Fragment {
         View mRootView;
 
         mRootView = inflater.inflate(R.layout.fragment_clientitems, container, false);
+        ButterKnife.inject(this, mRootView);
 
-        mRecyclerView = (RecyclerView)mRootView.findViewById(R.id.clientitem_recyclerView);
+        mSwipeRefreshLayout.setOnRefreshListener(new ClientRefreshLayout());
+        mSwipeRefreshLayout.setProgressBackgroundColorSchemeColor(mContext.getResources().getColor(R.color.accent));
 
         service = application.getRestAdapter().create(LoginService.class);
 
@@ -93,6 +100,20 @@ public class ClientSelectorFragment extends Fragment {
 
             mRecyclerView.setAdapter(adapter);
 
+        }
+    }
+
+    private class ClientRefreshLayout implements SwipeRefreshLayout.OnRefreshListener {
+
+        @Override
+        public void onRefresh() {
+            new Handler().postDelayed(new Runnable() {
+                @Override
+                public void run() {
+                    new GetClientsTask().execute();
+                    mSwipeRefreshLayout.setRefreshing(false);
+                }
+            }, 2000);
         }
     }
 }

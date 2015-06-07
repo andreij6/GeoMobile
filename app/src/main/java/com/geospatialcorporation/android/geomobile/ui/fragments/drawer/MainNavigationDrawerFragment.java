@@ -22,6 +22,7 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.geospatialcorporation.android.geomobile.R;
@@ -111,15 +112,18 @@ public class MainNavigationDrawerFragment extends Fragment {
             }
         });
 
-        //View header = inflater.inflate(R.layout.drawer_listview_header, container, false);
+
 
         if(mIsAdmin){
-            mViewTitles = Arrays.asList(new String[]{MenuConstants.MAP, MenuConstants.LAYERS, MenuConstants.LIBRARY, MenuConstants.ACCOUNTS, MenuConstants.ADMINCLITENTS});
+            mViewTitles = Arrays.asList(new String[]{MenuConstants.MAP, MenuConstants.LAYERS, MenuConstants.LIBRARY, MenuConstants.ACCOUNTS, MenuConstants.ADMINCLITENTS, MenuConstants.LOGOUT});
         } else {
-            mViewTitles = Arrays.asList(new String[]{MenuConstants.MAP, MenuConstants.LAYERS, MenuConstants.LIBRARY, MenuConstants.ACCOUNTS});
+            mViewTitles = Arrays.asList(new String[]{MenuConstants.MAP, MenuConstants.LAYERS, MenuConstants.LIBRARY, MenuConstants.ACCOUNTS, MenuConstants.LOGOUT});
         }
+        View header = inflater.inflate(R.layout.header_main_navigation, container, false);
+        TextView clientName = (TextView)header.findViewById(R.id.clientName);
+        clientName.setText(application.getGeoClient().getName());
 
-        //mDrawerListView.addHeaderView(header);
+        mDrawerListView.addHeaderView(header);
         mDrawerListView.setAdapter(new MainNavigationAdapter(getActivity(), mViewTitles));
 
         mDrawerListView.setItemChecked(mCurrentSelectedPosition, true);
@@ -314,5 +318,6 @@ public class MainNavigationDrawerFragment extends Fragment {
         public static final String LIBRARY = "Library";
         public static final String ADMINCLITENTS = "Admin Clients";
         public static final String ACCOUNTS = "Account";
+        public static final String LOGOUT = "Logout";
     }
 }

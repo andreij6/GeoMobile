@@ -31,6 +31,7 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
 import com.geospatialcorporation.android.geomobile.R;
 import com.geospatialcorporation.android.geomobile.library.helpers.GeoDialogHelper;
@@ -144,7 +145,6 @@ public class GoogleMapFragment extends GeoViewFragmentBase implements
         setHasOptionsMenu(true);
         View rootView = inflater.inflate(R.layout.fragment_map, container, false);
 
-
         ButterKnife.inject(this, rootView);
         SetTitle(R.string.app_name);
 
@@ -167,7 +167,6 @@ public class GoogleMapFragment extends GeoViewFragmentBase implements
                 .addConnectionCallbacks(this)
                 .addOnConnectionFailedListener(this)
                 .build();
-
         try {
             MapsInitializer.initialize(this.getActivity());
 
@@ -178,7 +177,14 @@ public class GoogleMapFragment extends GeoViewFragmentBase implements
         }
     }
 
+    @Override
+    public void onCreate(Bundle savedInstance){
+        super.onCreate(savedInstance);
 
+        if(mView != null){
+            mView.onCreate(savedInstance);
+        }
+    }
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
         inflater.inflate(R.menu.map_menu, menu);
@@ -220,14 +226,16 @@ public class GoogleMapFragment extends GeoViewFragmentBase implements
 
     @Override
     public void onDestroy() {
-        super.onDestroy();
         mView.onDestroy();
+        super.onDestroy();
     }
 
     @Override
     public void onLowMemory() {
         super.onLowMemory();
-        mView.onLowMemory();
+        //if(mView != null) {
+        //    mView.onLowMemory();
+        //}
     }
 
     @Override
@@ -245,19 +253,24 @@ public class GoogleMapFragment extends GeoViewFragmentBase implements
     @Override
     public void onDestroyView(){
         super.onDestroyView();
-        mView.onDestroy();
+    }
+
+    @Override
+    public void onPause(){
+        mView.onPause();
+        super.onPause();
     }
 
     private void disableViewMode() {
-        if(mViewMode != null){
-            mViewMode.Disable(true);
-        }
+        //if(mViewMode != null){
+        //    mViewMode.Disable(true);
+        //}
     }
 
     @Override
     public void onDetach(){
         super.onDetach();
-        disableViewMode();
+        //disableViewMode();
     }
     //endregion
 

@@ -42,7 +42,7 @@ public class LegendLayerSectionBuilder extends SectionBuilderBase<Folder> implem
 
             for(Folder folder : data){
                 if(folder.getLayers() != null && folder.getLayers().size() > 0) {
-                    if(skip == 0) {
+                    if(skip == 0 && emptyFolders.isEmpty()) {
                         sections.add(new SimpleSectionedRecyclerViewAdapter.Section(skip, "ROOT"));
                     } else {
                         sections.add(new SimpleSectionedRecyclerViewAdapter.Section(skip, folder.getName()));

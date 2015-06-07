@@ -1,6 +1,7 @@
 package com.geospatialcorporation.android.geomobile.ui.fragments.panel_fragments;
 
 import android.os.Bundle;
+import android.support.v4.app.Fragment;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -15,12 +16,15 @@ import com.geospatialcorporation.android.geomobile.database.DataRepository.IData
 import com.geospatialcorporation.android.geomobile.database.DataRepository.Implementations.Bookmark.BookmarkAppSource;
 import com.geospatialcorporation.android.geomobile.library.helpers.MapStateManager;
 import com.geospatialcorporation.android.geomobile.models.Bookmarks.Bookmark;
+import com.geospatialcorporation.android.geomobile.ui.Interfaces.SlidingPanelController;
+import com.geospatialcorporation.android.geomobile.ui.MainActivity;
 import com.geospatialcorporation.android.geomobile.ui.fragments.GeoViewFragmentBase;
 import com.google.android.gms.maps.GoogleMap;
 import com.sothree.slidinguppanel.SlidingUpPanelLayout;
 
 import butterknife.ButterKnife;
 import butterknife.InjectView;
+import butterknife.OnClick;
 
 /**
  * Created by andre on 6/6/2015.
@@ -50,6 +54,12 @@ public class BookmarkFragment extends GeoViewFragmentBase {
     SlidingUpPanelLayout mPanel;
     GoogleMap mMap;
 
+    @OnClick(R.id.fab_close)
+    public void close(){
+        Fragment contentFragment = ((MainActivity)getActivity()).getContentFragment();
+
+        ((SlidingPanelController)contentFragment).CollapsePanel();
+    }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState){
@@ -61,7 +71,7 @@ public class BookmarkFragment extends GeoViewFragmentBase {
         mName.setOnEditorActionListener(new TextView.OnEditorActionListener() {
             @Override
             public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
-                if(actionId == EditorInfo.IME_ACTION_DONE){
+                if (actionId == EditorInfo.IME_ACTION_DONE) {
                     MapStateManager msm = new MapStateManager(getActivity());
                     msm.saveMapStateForBookMark(mMap, mName.getText().toString());
 

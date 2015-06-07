@@ -97,7 +97,7 @@ public class MainActivity extends ActionBarActivity
         ButterKnife.inject(this);
 
         dialog = new Dialogs();
-
+        getSupportActionBar().setElevation(0);
         mMapFragment = application.getMapFragment();
 
         mIsAdmin = application.getIsAdminUser();
@@ -152,6 +152,7 @@ public class MainActivity extends ActionBarActivity
     protected Fragment setPageFragment(int position) {
         if(mIsAdmin) {
             switch (position) {
+                case ViewConstants.HEADER:
                 case ViewConstants.MAP:
                     return mMapFragment;
                 case ViewConstants.LAYER:
@@ -174,6 +175,7 @@ public class MainActivity extends ActionBarActivity
             }
         } else {
             switch (position) {
+                case ViewConstants.HEADER:
                 case ViewConstants.MAP:
                     if(mMap == null)
                         mMapFragment = application.getMapFragment();

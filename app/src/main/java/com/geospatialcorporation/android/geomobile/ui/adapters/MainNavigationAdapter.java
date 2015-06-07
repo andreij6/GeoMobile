@@ -54,6 +54,8 @@ public class MainNavigationAdapter extends ArrayAdapter<String> {
             case MenuConstants.ACCOUNT:
                 icon.setImageDrawable(mContext.getDrawable(R.drawable.ic_account_circle_white_18dp));
                 break;
+            case MenuConstants.LOGOUT:
+                icon.setImageDrawable(mContext.getDrawable(R.drawable.ic_logout_white_18dp));
             default:
                 break;
         }
@@ -68,6 +70,7 @@ public class MainNavigationAdapter extends ArrayAdapter<String> {
         public static final String LIBRARY = "Library";
         public static final String ADMINCLITENTS = "Admin Clients";
         public static final String ACCOUNT = "Account";
+        public static final String LOGOUT = "Logout";
     }
 
 }

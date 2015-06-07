@@ -139,4 +139,5 @@
     <string name="add_bookmark">Add a Bookmark</string>
     <string name="close">Close</string>
     <string name="bookmarkname">Bookmark Name</string>
+    <string name="geoundergroundClient">Client</string>
 </resources>

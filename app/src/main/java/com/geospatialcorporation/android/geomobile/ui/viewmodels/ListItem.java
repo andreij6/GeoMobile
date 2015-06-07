@@ -161,6 +161,7 @@ public class ListItem implements Comparable<ListItem> {
         List<String> powerpoint = Arrays.asList(new String[] { ".ppt", ".pot", ".pps", ".pptx"});
         List<String> images = Arrays.asList(new String[] { ".jpg", ".png", ".jpeg"});
 
+
         String lowerExt = documentExt.toLowerCase();
 
         if(word.contains(lowerExt)){
@@ -177,6 +178,10 @@ public class ListItem implements Comparable<ListItem> {
 
         if(images.contains(lowerExt)){
             return R.drawable.ic_file_image_black_24dp;
+        }
+
+        if (lowerExt == ".pdf") {
+            return R.drawable.ic_file_pdf_box_black_24dp;
         }
 
         return R.drawable.ic_file_document_box_black_24dp;

@@ -2,9 +2,11 @@ package com.geospatialcorporation.android.geomobile.ui.fragments.panel_fragments
 
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.inputmethod.EditorInfo;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
@@ -39,36 +41,7 @@ public class QuickSearchFragment extends GeoViewFragmentBase {
     View mView;
     QueryService mService;
 
-
-    @InjectView(R.id.title) TextView Title;
-    @InjectView(R.id.searchBtn) Button SearchBtn;
     @InjectView(R.id.searchBox) EditText SearchBox;
-    @InjectView(R.id.fab_close) FloatingActionButton mClose;
-
-    @OnClick(R.id.searchBtn)
-    public void doSearch(){
-        String query = SearchBox.getText().toString();
-        Toaster("Message Sent");
-        mService.quickSearch(new QuickSearchRequest(query), new Callback<List<QuickSearchResponse>>() {
-            @Override
-            public void success(List<QuickSearchResponse> response, Response response2) {
-
-                Toaster("Responses: " + response.size());
-                if(response.size() == 0) {
-                    Toaster(getString(R.string.no_results_found));
-                }else {
-                    Toaster("Response 1 Type: " + response.get(0).getType());
-                    Toaster("Response 1 Result Count: " + response.get(0).getResults().size());
-                    Toaster("Response 1 Result Value: " + response.get(0).getResults().get(0).getValue());
-                }
-            }
-
-            @Override
-            public void failure(RetrofitError error) {
-                Toaster("Error: " + error.getMessage());
-            }
-        });
-    }
 
     @OnClick(R.id.fab_close)
     public void close(){
@@ -83,6 +56,38 @@ public class QuickSearchFragment extends GeoViewFragmentBase {
         ButterKnife.inject(this, mView);
 
         SetTitle(R.string.quicksearch);
+
+        SearchBox.setOnEditorActionListener(new TextView.OnEditorActionListener() {
+            @Override
+            public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
+                if (actionId == EditorInfo.IME_ACTION_DONE) {
+                    String query = SearchBox.getText().toString();
+                    Toaster("Message Sent");
+                    mService.quickSearch(new QuickSearchRequest(query), new Callback<List<QuickSearchResponse>>() {
+                        @Override
+                        public void success(List<QuickSearchResponse> response, Response response2) {
+
+                            Toaster("Responses: " + response.size());
+                            if (response.size() == 0) {
+                                Toaster(getString(R.string.no_results_found));
+                            } else {
+                                Toaster("Response 1 Type: " + response.get(0).getType());
+                                Toaster("Response 1 Result Count: " + response.get(0).getResults().size());
+                                Toaster("Response 1 Result Value: " + response.get(0).getResults().get(0).getValue());
+                            }
+
+                        }
+
+                        @Override
+                        public void failure(RetrofitError error) {
+                            Toaster("Error: " + error.getMessage());
+                        }
+                    });
+                }
+
+                return false;
+            }
+        });
 
         mService = application.getRestAdapter().create(QueryService.class);
 
