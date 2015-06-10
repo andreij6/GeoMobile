@@ -9,6 +9,7 @@ import android.widget.Toast;
 import com.geospatialcorporation.android.geomobile.R;
 import com.geospatialcorporation.android.geomobile.application;
 import com.geospatialcorporation.android.geomobile.library.helpers.MapStateManager;
+import com.geospatialcorporation.android.geomobile.library.helpers.panelmanager.SlidingPanelManager;
 import com.geospatialcorporation.android.geomobile.library.viewmode.IViewMode;
 import com.geospatialcorporation.android.geomobile.ui.fragments.panel_fragments.BookmarkFragment;
 import com.geospatialcorporation.android.geomobile.ui.fragments.panel_fragments.QuickSearchFragment;
@@ -41,18 +42,18 @@ public class BookmarkMode implements IViewMode {
 
         FloatingActionButton mSave;
         FloatingActionButton mClose;
-        SlidingUpPanelLayout mPanel;
         GoogleMap mMap;
+        SlidingPanelManager mPanelManager;
 
-       public Builder init(FloatingActionButton add, FloatingActionButton close, SlidingUpPanelLayout panel, final GoogleMap map, FragmentManager fm){
+       public Builder init(FloatingActionButton add, FloatingActionButton close, SlidingPanelManager panelManager, final GoogleMap map, FragmentManager fm){
             mSave = add;
            mClose = close;
-           mPanel = panel;
            mMap = map;
+           mPanelManager = panelManager;
 
            add.setVisibility(View.VISIBLE);
            close.setVisibility(View.VISIBLE);
-           mPanel.setPanelState(SlidingUpPanelLayout.PanelState.HIDDEN);
+           mPanelManager.hide();
 
            SetClickEvents(add, close, fm);
 
@@ -63,15 +64,15 @@ public class BookmarkMode implements IViewMode {
             add.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    mPanel.setTouchEnabled(false);
+                    mPanelManager.touch(false);
 
-                    Fragment f = new BookmarkFragment.Builder(mMap, mPanel).create();
+                    Fragment f = new BookmarkFragment.Builder(mMap).create();
 
                     fm.beginTransaction()
                             .replace(R.id.slider_content, f)
                             .commit();
 
-                    anchorSlider();
+                    mPanelManager.anchor();
 
                 }
             });
@@ -88,7 +89,7 @@ public class BookmarkMode implements IViewMode {
             mSave.setVisibility(View.GONE);
             mClose.setVisibility(View.GONE);
             if(showPanel) {
-                mPanel.setPanelState(SlidingUpPanelLayout.PanelState.COLLAPSED);
+                mPanelManager.collapse();
             }
         }
 
@@ -96,12 +97,5 @@ public class BookmarkMode implements IViewMode {
             return new BookmarkMode(this);
         }
 
-        //region Slider Helpers
-        protected void anchorSlider(){
-            mPanel.setAnchorPoint(0.7f);
-            mPanel.setPanelState(SlidingUpPanelLayout.PanelState.ANCHORED);
-        }
-
-        //endregion
     }
 }

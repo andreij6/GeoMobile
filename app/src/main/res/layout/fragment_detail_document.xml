@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                xmlns:fab="http://schemas.android.com/apk/res-auto"
                 android:orientation="vertical"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent">
@@ -28,29 +29,19 @@
         android:textColor="@color/white"
         android:editable="true"/>
 
-    <LinearLayout
-        android:orientation="horizontal"
-        android:layout_width="match_parent"
+    <com.melnykov.fab.FloatingActionButton
+        android:id="@+id/fab"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
-        android:layout_centerHorizontal="true"
-        android:background="@color/primary_dark">
-
-        <ImageView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:id="@+id/deleteDocumentIcon"
-            android:src="@drawable/ic_action_delete"/>
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:textAppearance="?android:attr/textAppearanceSmall"
-            android:text="@string/delete"
-            android:id="@+id/deleteDocumentTV"
-            android:gravity="center_vertical"
-            android:textColor="#fffffbff"/>
-    </LinearLayout>
+        android:src="@drawable/ic_action_add"
+        fab:fab_colorNormal="@color/accent"
+        fab:fab_colorPressed="@color/primary_dark"
+        fab:fab_colorRipple="@color/primary_light"
+        android:layout_marginLeft="16dp"
+        android:layout_marginRight="16dp"
+        android:layout_alignTop="@+id/documentNameTV"
+        android:layout_alignParentEnd="true"
+        android:layout_marginEnd="32dp"/>
 
     <ImageView
         android:layout_width="wrap_content"
@@ -72,23 +63,53 @@
         android:layout_below="@+id/documentNameTV"
         android:layout_centerHorizontal="true"
         android:paddingLeft="25dp"
-        android:paddingRight="25dp"/>
+        android:paddingRight="25dp"
+        android:visibility="gone"/>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceLarge"
+        android:text="Large Text"
+        android:id="@+id/fileSizeValue"
+        android:layout_below="@+id/fab"
+        android:layout_alignStart="@+id/backImageView"
+        android:layout_marginTop="47dp"/>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceMedium"
+        android:text="@string/file_size"
+        android:id="@+id/fileSizeLabel"
+        android:layout_below="@+id/fileSizeValue"
+        android:layout_toEndOf="@+id/backImageView"/>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceLarge"
+        android:text="Large Text"
+        android:id="@+id/uploadTimeValue"
+        android:layout_marginTop="34dp"
+        android:layout_below="@+id/fileSizeLabel"
+        android:layout_alignStart="@+id/fileSizeValue"/>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceMedium"
+        android:text="@string/upload_time"
+        android:id="@+id/uploadTimeLabel"
+        android:layout_below="@+id/uploadTimeValue"
+        android:layout_alignStart="@+id/fileSizeLabel"/>
 
     <Button
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="@string/save"
-        android:id="@+id/saveBtn"
-        android:layout_below="@+id/documentNameET"
+        android:text="@string/download"
+        android:id="@+id/downloadBtn"
+        android:layout_alignParentBottom="true"
         android:layout_centerHorizontal="true"/>
-
-    <ImageButton
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:id="@+id/editBtn"
-        android:src="@drawable/ic_pencil_white_18dp"
-        android:background="#00f3baa0"
-        android:layout_alignTop="@+id/documentNameTV"
-        android:layout_alignStart="@+id/backImageView"/>
 
 </RelativeLayout>

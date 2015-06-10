@@ -1,11 +1,8 @@
 package com.geospatialcorporation.android.geomobile.database.DataRepository.Implementations.Documents;
 
-import android.app.Application;
-
 import com.geospatialcorporation.android.geomobile.application;
-import com.geospatialcorporation.android.geomobile.database.DataRepository.IDataRepository;
 import com.geospatialcorporation.android.geomobile.database.DataRepository.Implementations.AppSourceBase;
-import com.geospatialcorporation.android.geomobile.models.Library.Document;
+import com.geospatialcorporation.android.geomobile.models.Document.Document;
 
 import java.util.HashMap;
 

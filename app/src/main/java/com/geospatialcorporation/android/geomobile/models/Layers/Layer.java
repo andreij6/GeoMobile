@@ -172,6 +172,7 @@ public class Layer implements Parcelable, ITreeEntity {
         }
     };
 
+
     public class StyleInfo {
         public int StyleInfoId;
         public String Name;

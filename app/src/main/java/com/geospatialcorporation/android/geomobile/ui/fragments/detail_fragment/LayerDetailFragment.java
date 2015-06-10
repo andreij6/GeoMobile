@@ -1,48 +1,50 @@
 package com.geospatialcorporation.android.geomobile.ui.fragments.detail_fragment;
 
 import android.os.Bundle;
+import android.support.v4.app.FragmentTabHost;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
-import android.widget.EditText;
-import android.widget.ImageButton;
-import android.widget.ImageView;
-import android.widget.TextView;
+import android.widget.TabHost;
 
 import com.geospatialcorporation.android.geomobile.R;
-import com.geospatialcorporation.android.geomobile.library.helpers.GeoDialogHelper;
 import com.geospatialcorporation.android.geomobile.models.Layers.Layer;
+import com.geospatialcorporation.android.geomobile.ui.fragments.detail_fragment.layer_tabs.AttributeLayoutTab;
+import com.geospatialcorporation.android.geomobile.ui.fragments.detail_fragment.layer_tabs.DetailsTab;
+import com.geospatialcorporation.android.geomobile.ui.fragments.detail_fragment.layer_tabs.SublayersTab;
 import com.geospatialcorporation.android.geomobile.ui.fragments.dialogs.ItemDetailFragment;
 
 import butterknife.ButterKnife;
-import butterknife.InjectView;
 
 /**
  * Created by andre on 6/2/2015.
  */
-public class LayerDetailFragment extends ItemDetailFragment<Layer> {
+public class LayerDetailFragment extends ItemDetailFragment<Layer> implements TabHost.OnTabChangeListener {
     private static final String TAG = LayerDetailFragment.class.getSimpleName();
 
-    @InjectView(R.id.layerNameTV) TextView mLayerName;
-    @InjectView(R.id.deleteLayerIcon) ImageView mDeleteIcon;
-    @InjectView(R.id.deleteLayerTV) TextView mDeleteText;
-    @InjectView(R.id.backImageView) ImageView mBack;
-    @InjectView(R.id.layerNameET) EditText mNameET;
-    @InjectView(R.id.saveBtn) Button mSave;
-    @InjectView(R.id.editBtn) ImageButton mEdit;
+    private static final String SUBLAYERS = "Sublayers";
+    private static final String ATTRIBUTES = "Attributes";
+    private static final String DETAILS = "Details";
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState){
         super.onCreate(savedInstanceState);
 
-        View view = inflater.inflate(R.layout.fragment_detail_layer, null);
+        View view = inflater.inflate(R.layout.fragment_tree_detail, null);
 
         ButterKnife.inject(this, view);
 
         HandleArguments();
 
-        SetupUI();
+        FragmentTabHost tabHost = (FragmentTabHost)view.findViewById(R.id.tabHost);
+
+        tabHost.setup(getActivity(), getChildFragmentManager(), android.R.id.tabcontent);
+
+        tabHost.addTab(tabHost.newTabSpec(SUBLAYERS).setIndicator(SUBLAYERS), SublayersTab.class, getArguments());
+        tabHost.addTab(tabHost.newTabSpec(ATTRIBUTES).setIndicator(ATTRIBUTES), AttributeLayoutTab.class, getArguments());
+        tabHost.addTab(tabHost.newTabSpec(DETAILS).setIndicator(DETAILS), DetailsTab.class, getArguments());
+
+        tabHost.setCurrentTab(0);
 
         return view;
     }
@@ -57,28 +59,14 @@ public class LayerDetailFragment extends ItemDetailFragment<Layer> {
     }
 
     @Override
-    protected void SetupUI(){
-        mLayerName.setText(mEntity.getName());
+    public void onTabChanged(String tabId) {
 
-        mDeleteIcon.setOnClickListener(DeleteonClickListner);
-        mDeleteText.setOnClickListener(DeleteonClickListner);
-
-        mBack.setOnClickListener(BackButtonClicked);
-
-        mEdit.setOnClickListener(EditNameClicked);
-        mNameET.setOnClickListener(EditNameClicked);
-
-        setButton(mSave);
-        setEditText(mNameET);
-        SetupRename();
     }
-
 
     public View.OnClickListener DeleteonClickListner = new View.OnClickListener(){
         @Override
         public void onClick(View v){
-            GeoDialogHelper.deleteLayer(getActivity(), mEntity, getFragmentManager());
+           //GeoDialogHelper.deleteLayer(getActivity(), mEntity, getFragmentManager());
         }
     };
-
 }

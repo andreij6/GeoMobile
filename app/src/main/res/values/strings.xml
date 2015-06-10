@@ -140,4 +140,17 @@
     <string name="close">Close</string>
     <string name="bookmarkname">Bookmark Name</string>
     <string name="geoundergroundClient">Client</string>
+    <string name="depictionstyle">Style</string>
+    <string name="attribute_layout">Attribute Layout</string>
+    <string name="details">Details</string>
+    <string name="visible">Visible</string>
+    <string name="file_size">File Size</string>
+    <string name="upload_time">Upload Time</string>
+    <string name="file_details">File Details</string>
+    <string name="permissions">Permissions</string>
+    <string name="last_updated_date">Last Updated:</string>
+    <string name="updated_by_user">Last  Updated By:</string>
+    <string name="folder_actions">Folder Actions</string>
+    <string name="rename_folder">Rename Folder</string>
+    <string name="rename">Rename</string>
 </resources>

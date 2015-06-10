@@ -1,18 +1,18 @@
 package com.geospatialcorporation.android.geomobile.library.helpers;
 
-import android.provider.Browser;
 import android.support.v4.app.FragmentManager;
 import android.content.Context;
-
 import com.geospatialcorporation.android.geomobile.models.Folders.Folder;
 import com.geospatialcorporation.android.geomobile.models.Layers.Layer;
-import com.geospatialcorporation.android.geomobile.models.Library.Document;
+import com.geospatialcorporation.android.geomobile.models.Document.Document;
 import com.geospatialcorporation.android.geomobile.ui.fragments.dialogs.BookmarksDialogFragment;
 import com.geospatialcorporation.android.geomobile.ui.fragments.dialogs.CreateFolderDialogFragment;
 import com.geospatialcorporation.android.geomobile.ui.fragments.dialogs.CreateLayerDialogFragment;
 import com.geospatialcorporation.android.geomobile.ui.fragments.dialogs.DeleteDocumentDialogFragment;
 import com.geospatialcorporation.android.geomobile.ui.fragments.dialogs.DeleteFolderDialogFragment;
 import com.geospatialcorporation.android.geomobile.ui.fragments.dialogs.DeleteLayerDialogFragment;
+import com.geospatialcorporation.android.geomobile.ui.fragments.dialogs.FolderActionsDialogFragment;
+import com.geospatialcorporation.android.geomobile.ui.fragments.dialogs.ModifySublayersDialogFragment;
 import com.geospatialcorporation.android.geomobile.ui.fragments.dialogs.UploadImageDialogFragment;
 import com.google.android.gms.maps.GoogleMap;
 import com.melnykov.fab.FloatingActionButton;
@@ -61,5 +61,18 @@ public class GeoDialogHelper {
         BookmarksDialogFragment b = new BookmarksDialogFragment();
         b.init(context, save, close, panel, m, fm);
         b.show(fm, "Bookmarks");
+    }
+
+    public static void modifySublayer(Context context, FragmentManager fm){
+        ModifySublayersDialogFragment msdf = new ModifySublayersDialogFragment();
+        msdf.init(context);
+        msdf.show(fm, "Modify Sublayer");
+    }
+
+
+    public static void folderActions(Context context, FragmentManager fm){
+        FolderActionsDialogFragment fad = new FolderActionsDialogFragment();
+        fad.init(context);
+        fad.show(fm, "Folder Actions");
     }
 }

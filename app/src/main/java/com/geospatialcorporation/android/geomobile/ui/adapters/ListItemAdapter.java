@@ -25,10 +25,11 @@ import com.geospatialcorporation.android.geomobile.library.map.MapActions;
 import com.geospatialcorporation.android.geomobile.library.util.Dialogs;
 import com.geospatialcorporation.android.geomobile.models.Folders.Folder;
 import com.geospatialcorporation.android.geomobile.models.Layers.Layer;
-import com.geospatialcorporation.android.geomobile.models.Library.Document;
+import com.geospatialcorporation.android.geomobile.models.Document.Document;
 import com.geospatialcorporation.android.geomobile.ui.fragments.detail_fragment.DocumentDetailFragment;
+import com.geospatialcorporation.android.geomobile.ui.fragments.detail_fragment.LayerFolderDetailFragment;
 import com.geospatialcorporation.android.geomobile.ui.fragments.tree_fragments.DocumentFragment;
-import com.geospatialcorporation.android.geomobile.ui.fragments.detail_fragment.FolderDetailFragment;
+import com.geospatialcorporation.android.geomobile.ui.fragments.detail_fragment.DocumentFolderDetailFragment;
 import com.geospatialcorporation.android.geomobile.ui.fragments.detail_fragment.LayerDetailFragment;
 import com.geospatialcorporation.android.geomobile.ui.fragments.tree_fragments.LayerFragment;
 import com.geospatialcorporation.android.geomobile.ui.fragments.dialogs.DownloadDialogFragment;
@@ -212,15 +213,9 @@ public class ListItemAdapter extends RecyclerView.Adapter<ListItemAdapter.ListVi
             Bundle bundle = new Bundle();
             bundle.putInt(Folder.FOLDER_INTENT, mItem.getId());
 
-            if (mViewType.equals(ListItemAdapter.LAYER)) {
-                // Layer
-                fragment = new LayerFragment();
-                fragment.setArguments(bundle);
-            } else {
-                // Documents
-                fragment = new DocumentFragment();
-                fragment.setArguments(bundle);
-            }
+            fragment = mViewType.equals(ListItemAdapter.LAYER) ? new LayerFragment() : new DocumentFragment();
+
+            fragment.setArguments(bundle);
 
             Activity activity = (Activity) itemView.getContext();
             FragmentManager fragmentManager = ((ActionBarActivity)activity).getSupportFragmentManager();
@@ -233,7 +228,7 @@ public class ListItemAdapter extends RecyclerView.Adapter<ListItemAdapter.ListVi
         }
 
         private void FolderDetailAction(ListItem item) {
-            Fragment f = new FolderDetailFragment();
+            Fragment f = mViewType.equals(ListItemAdapter.LAYER) ? new LayerFolderDetailFragment() : new DocumentFolderDetailFragment();
             Folder folder = FolderRepo.getById(item.getId());
 
             Bundle b = new Bundle();

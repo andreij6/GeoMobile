@@ -3,6 +3,7 @@ package com.geospatialcorporation.android.geomobile.library.rest;
 import com.geospatialcorporation.android.geomobile.models.Layers.Layer;
 import com.geospatialcorporation.android.geomobile.models.Layers.LayerCreateRequest;
 import com.geospatialcorporation.android.geomobile.models.Layers.LayerCreateResponse;
+import com.geospatialcorporation.android.geomobile.models.Layers.LayerDetailsVm;
 import com.geospatialcorporation.android.geomobile.models.RenameRequest;
 
 import java.util.List;
@@ -27,11 +28,8 @@ public interface LayerService {
     @GET("/API/Layers/{id}")
     Layer getLayer(@Path("id") int id);
 
-    @GET("/API/Layers/{id}/Sublayers")
-    List<Layer> getSublayers(@Path("id") int id);
-
     @GET("/API/Layers/{id}/Details")
-    List<Layer> getDetails(@Path("id") int id);
+    LayerDetailsVm getDetails(@Path("id") int id);
 
     @PUT("/API/Layers/{id}/Rename")
     void rename(@Path("id") int id, @Body RenameRequest rename, Callback<Response> cb);

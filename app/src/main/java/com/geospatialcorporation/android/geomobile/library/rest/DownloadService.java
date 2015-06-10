@@ -3,14 +3,11 @@ package com.geospatialcorporation.android.geomobile.library.rest;
 import android.app.DownloadManager;
 import android.content.Context;
 import android.net.Uri;
-import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Environment;
-import android.util.Log;
 import android.widget.Toast;
 
 import com.geospatialcorporation.android.geomobile.application;
-import com.geospatialcorporation.android.geomobile.models.Library.Document;
 
 import java.io.File;
 

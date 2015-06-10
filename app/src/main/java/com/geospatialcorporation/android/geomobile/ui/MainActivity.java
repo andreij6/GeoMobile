@@ -38,12 +38,7 @@ import com.geospatialcorporation.android.geomobile.ui.fragments.GoogleMapFragmen
 import com.geospatialcorporation.android.geomobile.ui.fragments.tree_fragments.LayerFragment;
 import com.geospatialcorporation.android.geomobile.ui.fragments.drawer.LayerSelectorDrawerFragment;
 import com.geospatialcorporation.android.geomobile.ui.fragments.drawer.MainNavigationDrawerFragment;
-import com.google.android.gms.common.ConnectionResult;
-import com.google.android.gms.common.api.GoogleApiClient;
-import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.maps.GoogleMap;
-import com.google.android.gms.maps.OnMapReadyCallback;
-import com.google.android.gms.maps.SupportMapFragment;
 
 import butterknife.ButterKnife;
 
@@ -136,7 +131,6 @@ public class MainActivity extends ActionBarActivity
         //menu.findItem(R.id.action_websearch).setVisible(!drawerOpen);
         return super.onPrepareOptionsMenu(menu);
     }
-
 
     @Override
     public void onNavigationDrawerItemSelected(int position) {

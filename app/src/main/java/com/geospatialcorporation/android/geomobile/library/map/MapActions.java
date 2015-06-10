@@ -11,6 +11,7 @@ import com.geospatialcorporation.android.geomobile.database.DataRepository.Imple
 import com.geospatialcorporation.android.geomobile.database.DataRepository.Implementations.Layers.LayersAppSource;
 import com.geospatialcorporation.android.geomobile.library.constants.GeometryTypeCodes;
 import com.geospatialcorporation.android.geomobile.library.rest.LayerService;
+import com.geospatialcorporation.android.geomobile.library.rest.SublayerService;
 import com.geospatialcorporation.android.geomobile.models.Layers.Layer;
 import com.geospatialcorporation.android.geomobile.ui.fragments.GoogleMapFragment;
 import com.google.android.gms.maps.GoogleMap;
@@ -26,11 +27,13 @@ public class MapActions {
     protected final static String TAG = MapActions.class.getSimpleName();
     private GoogleMap mMap;
     private LayerService layerService;
+    private SublayerService sublayerService;
     private IAppDataRepository<Layer> LayerRepo;
 
     public MapActions() {
         GoogleMapFragment mMapFragment = application.getMapFragment();
         layerService = application.getRestAdapter().create(LayerService.class);
+        sublayerService = application.getRestAdapter().create(SublayerService.class);
         mMap = mMapFragment.mMap;
         LayerRepo = new LayersAppSource();
     }
@@ -188,7 +191,7 @@ public class MapActions {
             List<Layer> sublayers = null;
             try {
                 layer = params[0];
-                sublayers = layerService.getSublayers(layer.getId());
+                sublayers = sublayerService.getSublayers(layer.getId());
             } catch (RetrofitError e) {
                 if (e.getResponse() != null) {
                     Log.d(TAG, Integer.toString(e.getResponse().getStatus()));

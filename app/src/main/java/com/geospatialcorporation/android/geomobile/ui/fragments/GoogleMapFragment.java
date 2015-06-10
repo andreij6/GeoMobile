@@ -31,16 +31,18 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Toast;
 
 import com.geospatialcorporation.android.geomobile.R;
+import com.geospatialcorporation.android.geomobile.application;
 import com.geospatialcorporation.android.geomobile.library.helpers.GeoDialogHelper;
 import com.geospatialcorporation.android.geomobile.library.helpers.MapStateManager;
+import com.geospatialcorporation.android.geomobile.library.helpers.panelmanager.ISlidingPanelManager;
+import com.geospatialcorporation.android.geomobile.library.helpers.panelmanager.SlidingPanelManager;
 import com.geospatialcorporation.android.geomobile.library.viewmode.IViewMode;
+import com.geospatialcorporation.android.geomobile.library.viewmode.implementations.FullScreenMode;
 import com.geospatialcorporation.android.geomobile.library.viewmode.implementations.QueryMode;
 import com.geospatialcorporation.android.geomobile.library.viewmode.implementations.SearchMode;
 import com.geospatialcorporation.android.geomobile.ui.Interfaces.IViewModeListener;
-import com.geospatialcorporation.android.geomobile.ui.Interfaces.SlidingPanelController;
 import com.geospatialcorporation.android.geomobile.ui.MainActivity;
 import com.geospatialcorporation.android.geomobile.ui.fragments.dialogs.MapTypeSelectDialogFragment;
 import com.geospatialcorporation.android.geomobile.ui.fragments.panel_fragments.CollapsedPanelFragment;
@@ -65,7 +67,6 @@ import butterknife.OnClick;
  * Fragment that appears in the "content_frame", shows a google-play map
  */
 public class GoogleMapFragment extends GeoViewFragmentBase implements
-        SlidingPanelController,
         IViewModeListener,
         GoogleApiClient.ConnectionCallbacks,
         GoogleApiClient.OnConnectionFailedListener
@@ -76,7 +77,8 @@ public class GoogleMapFragment extends GeoViewFragmentBase implements
     public GoogleMap mMap;
     IViewMode mViewMode;
     GoogleApiClient mLocationClient;
-    @InjectView(R.id.map) MapView mView;
+    ISlidingPanelManager mPanelManager;
+    @InjectView(R.id.map) MapView mMapView;
     @InjectView(R.id.sliding_layout) SlidingUpPanelLayout mPanel;
     @InjectView(R.id.fab_box) FloatingActionButton mBoxQueryBtn;
     @InjectView(R.id.fab_point) FloatingActionButton mPointQueryBtn;
@@ -88,7 +90,7 @@ public class GoogleMapFragment extends GeoViewFragmentBase implements
 
     //region OnClicks
     @SuppressWarnings("unused")
-    @OnClick(R.id.fab_location)
+    @OnClick(R.id.fab)
     public void getLocation(){
         Location currentLocation = LocationServices.FusedLocationApi.getLastLocation(mLocationClient);
 
@@ -140,6 +142,17 @@ public class GoogleMapFragment extends GeoViewFragmentBase implements
 
     //region Base Overrides
     @Override
+    public void onCreate(Bundle savedInstance){
+        super.onCreate(savedInstance);
+
+        if(mMapView != null){
+            mMapView.onCreate(savedInstance);
+        }
+
+
+    }
+
+    @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         setHasOptionsMenu(true);
@@ -147,20 +160,19 @@ public class GoogleMapFragment extends GeoViewFragmentBase implements
 
         ButterKnife.inject(this, rootView);
         SetTitle(R.string.app_name);
+        application.setMapFragmentPanel(mPanel);
+        mPanelManager = new SlidingPanelManager(getActivity());
 
         initializeGoogleMap(savedInstanceState);
-
-        setCollapsedUI();
-        setupPanel();
 
         return rootView;
     }
 
 
     protected void initializeGoogleMap(Bundle savedInstanceState) {
-        mView.onCreate(savedInstanceState);
+        mMapView.onCreate(savedInstanceState);
 
-        mMap = mView.getMap();
+        mMap = mMapView.getMap();
 
         mLocationClient = new GoogleApiClient.Builder(getActivity())
                 .addApi(LocationServices.API)
@@ -177,25 +189,19 @@ public class GoogleMapFragment extends GeoViewFragmentBase implements
         }
     }
 
-    @Override
-    public void onCreate(Bundle savedInstance){
-        super.onCreate(savedInstance);
 
-        if(mView != null){
-            mView.onCreate(savedInstance);
-        }
-    }
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
         inflater.inflate(R.menu.map_menu, menu);
         mMenu = menu;
+        mPanelManager.setup(mMenu);
         super.onCreateOptionsMenu(menu, inflater);
     }
 
     @Override
     public void onResume() {
         super.onResume();
-        mView.onResume();
+        mMapView.onResume();
         setMapState();
     }
 
@@ -219,6 +225,9 @@ public class GoogleMapFragment extends GeoViewFragmentBase implements
             case R.id.action_bookmark:
                 GeoDialogHelper.showBookmarks(getActivity(), getFragmentManager(), mSaveBtn, mBmClose, mPanel, mMap);
                 return true;
+            case R.id.action_fullscreen:
+                mPanel.setPanelState(SlidingUpPanelLayout.PanelState.HIDDEN);
+                setViewMode(fullScreenSetup());
             default:
                 return super.onOptionsItemSelected(item);
         }
@@ -226,15 +235,15 @@ public class GoogleMapFragment extends GeoViewFragmentBase implements
 
     @Override
     public void onDestroy() {
-        mView.onDestroy();
+        mMapView.onDestroy();
         super.onDestroy();
     }
 
     @Override
     public void onLowMemory() {
         super.onLowMemory();
-        //if(mView != null) {
-        //    mView.onLowMemory();
+        //if(mMapView != null) {
+        //    mMapView.onLowMemory();
         //}
     }
 
@@ -253,11 +262,14 @@ public class GoogleMapFragment extends GeoViewFragmentBase implements
     @Override
     public void onDestroyView(){
         super.onDestroyView();
+        if(mViewMode != null){
+            mViewMode.Disable(true);
+        }
     }
 
     @Override
     public void onPause(){
-        mView.onPause();
+        mMapView.onPause();
         super.onPause();
     }
 
@@ -274,54 +286,12 @@ public class GoogleMapFragment extends GeoViewFragmentBase implements
     }
     //endregion
 
-    private void setupPanel() {
-
-        mPanel.setPanelSlideListener(new SlidingUpPanelLayout.PanelSlideListener() {
-            @Override
-            public void onPanelSlide(View view, float v) {
-
-            }
-
-            @Override
-            public void onPanelCollapsed(View view) {
-                setCollapsedUI();
-                MenuItem item = mMenu.findItem(R.id.action_search);
-                item.setVisible(true);
-            }
-
-            @Override
-            public void onPanelExpanded(View view) {
-
-            }
-
-            @Override
-            public void onPanelAnchored(View view) {
-
-            }
-
-            @Override
-            public void onPanelHidden(View view) {
-
-            }
-        });
-    }
-
-    private void setCollapsedUI() {
-
-        Fragment collapsedFragment = new CollapsedPanelFragment();
-
-        FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
-
-        fragmentManager.beginTransaction()
-                .replace(R.id.slider_content, collapsedFragment)
-                .commit();
-    }
-
+    //region ViewModeSetups
     private IViewMode querySetup() {
         return new QueryMode.Builder()
                 .setDependents(mMap, mListener, getActivity())
                 .setControls(mBoxQueryBtn, mPointQueryBtn, mCloseBtn)
-                .setupUI(mPanel)
+                .setupUI()
                 .create();
 
     }
@@ -332,6 +302,15 @@ public class GoogleMapFragment extends GeoViewFragmentBase implements
                         .init(mPanel, getActivity().getSupportFragmentManager())
                         .create();
     }
+
+    protected IViewMode fullScreenSetup(){
+        MainActivity activity = (MainActivity)getActivity();
+        return new FullScreenMode.Builder()
+                        .create(activity.getSupportActionBar(),
+                                activity.getRightDrawer(),
+                                mPanel);
+    }
+    //endregion
 
     //region Test Layers
     /*
@@ -380,7 +359,7 @@ public class GoogleMapFragment extends GeoViewFragmentBase implements
                                     .transparency(0.5f));
 
     } **/
-    //endregion
+    //endregionge
 
     //region GoogleAPIClient Interface Methods
     /*@Override
@@ -398,14 +377,6 @@ public class GoogleMapFragment extends GeoViewFragmentBase implements
         //
     }
     **/
-    //endregion
-
-    //region SlidingPanelController Interface
-    @Override
-    public void CollapsePanel() {
-        mPanel.setPanelState(SlidingUpPanelLayout.PanelState.COLLAPSED);
-        mPanel.setTouchEnabled(true);
-    }
     //endregion
 
     //region ViewMode Listener

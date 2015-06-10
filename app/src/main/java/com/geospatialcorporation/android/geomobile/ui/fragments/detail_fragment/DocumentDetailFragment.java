@@ -5,15 +5,14 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
-import android.widget.EditText;
-import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.geospatialcorporation.android.geomobile.R;
 import com.geospatialcorporation.android.geomobile.library.helpers.GeoDialogHelper;
-import com.geospatialcorporation.android.geomobile.models.Library.Document;
+import com.geospatialcorporation.android.geomobile.models.Document.Document;
 import com.geospatialcorporation.android.geomobile.ui.fragments.dialogs.ItemDetailFragment;
+import com.melnykov.fab.FloatingActionButton;
 
 import butterknife.ButterKnife;
 import butterknife.InjectView;
@@ -21,18 +20,20 @@ import butterknife.InjectView;
 /**
  * Created by andre on 6/2/2015.
  */
-public class DocumentDetailFragment extends ItemDetailFragment<Document> {
+public class DocumentDetailFragment extends ItemDetailFragment<Document>  {
     private static final String TAG = DocumentDetailFragment.class.getSimpleName();
 
-    //view
+    //region Views
+    @InjectView(R.id.backgroundImageView) ImageView mFileTypeImage;
     @InjectView(R.id.documentNameTV) TextView mDocumentName;
-    @InjectView(R.id.deleteDocumentIcon) ImageView mDeleteIcon;
-    @InjectView(R.id.deleteDocumentTV) TextView mDeleteText;
+    @InjectView(R.id.uploadTimeLabel) TextView mUploadLabel;
+    @InjectView(R.id.uploadTimeValue) TextView mUploadValue;
+    @InjectView(R.id.fileSizeLabel) TextView mFileSizeLabel;
+    @InjectView(R.id.fileSizeValue) TextView mFileSizeValue;
+    @InjectView(R.id.fab) FloatingActionButton mFab;
     @InjectView(R.id.backImageView) ImageView mBack;
-    @InjectView(R.id.documentNameET)EditText mNameET;
-    @InjectView(R.id.saveBtn) Button mSave;
-    @InjectView(R.id.editBtn)
-    ImageButton mEdit;
+    @InjectView(R.id.downloadBtn) Button mDownload;
+    //endregion
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState){
@@ -44,7 +45,24 @@ public class DocumentDetailFragment extends ItemDetailFragment<Document> {
 
         HandleArguments();
 
-        SetupUI();
+        mDocumentName.setText(mEntity.getNameWithExt());
+        mFileTypeImage.setImageDrawable(getActivity().getResources().getDrawable(mEntity.getFileTypeDrawable(true)));
+        mUploadValue.setText(mEntity.getUploadTime());
+        mFileSizeValue.setText(mEntity.getSize() + "");
+        mBack.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Toaster("Should go back now");
+                getActivity().getSupportFragmentManager().popBackStack();
+            }
+        });
+
+        mDownload.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Toaster("download file");
+            }
+        });
 
         return view;
     }
@@ -55,26 +73,7 @@ public class DocumentDetailFragment extends ItemDetailFragment<Document> {
 
         mEntity = args.getParcelable(Document.INTENT);
 
-        SetTitle(mEntity.getName());
-    }
-
-    @Override
-    protected void SetupUI(){
-        mDocumentName.setText(mEntity.getNameWithExt());
-
-        mDeleteIcon.setOnClickListener(DeleteonClickListner);
-        mDeleteText.setOnClickListener(DeleteonClickListner);
-
-        mBack.setOnClickListener(BackButtonClicked);
-
-        mEdit.setOnClickListener(EditNameClicked);
-        mNameET.setOnClickListener(EditNameClicked);
-
-
-        setButton(mSave);
-        setEditText(mNameET);
-
-        SetupRename();
+        SetTitle(R.string.file_details);
     }
 
     public View.OnClickListener DeleteonClickListner = new View.OnClickListener(){
@@ -83,4 +82,5 @@ public class DocumentDetailFragment extends ItemDetailFragment<Document> {
             GeoDialogHelper.deleteDocument(getActivity(), mEntity, getFragmentManager());
         }
     };
+
 }

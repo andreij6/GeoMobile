@@ -52,5 +52,11 @@ public class Options {
     }
     //endregion
 
-
+    public Options(){
+        Attributes = true;
+        Columns = true;
+        Documents = true;
+        MapInfo = true;
+        Sublayers = true;
+    }
 }

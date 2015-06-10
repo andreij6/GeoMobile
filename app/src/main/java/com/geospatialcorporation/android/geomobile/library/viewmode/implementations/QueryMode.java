@@ -9,6 +9,8 @@ import com.geospatialcorporation.android.geomobile.library.constants.SlidingPane
 import com.geospatialcorporation.android.geomobile.library.helpers.MarkerComparer;
 import com.geospatialcorporation.android.geomobile.library.helpers.QueryMachine;
 import com.geospatialcorporation.android.geomobile.library.helpers.QuerySenderHelper;
+import com.geospatialcorporation.android.geomobile.library.helpers.panelmanager.ISlidingPanelManager;
+import com.geospatialcorporation.android.geomobile.library.helpers.panelmanager.SlidingPanelManager;
 import com.geospatialcorporation.android.geomobile.library.viewmode.IViewMode;
 import com.geospatialcorporation.android.geomobile.models.Query.point.Max;
 import com.geospatialcorporation.android.geomobile.models.Query.point.Min;
@@ -37,14 +39,12 @@ import java.util.List;
  */
 public class QueryMode implements IViewMode {
 
-    SlidingUpPanelLayout mPanel;
     HashMap<Integer, FloatingActionButton> mControls;
     GoogleMap mMap;
     OnFragmentInteractionListener mListener;
     Builder mBuilder;
 
     public QueryMode(Builder builder){
-        mPanel = builder.mPanel;
         mControls = builder.mControls;
         mMap = builder.mMap;
         mListener = builder.mListener;
@@ -61,27 +61,14 @@ public class QueryMode implements IViewMode {
         return mode instanceof QueryMode;
     }
 
-    /*
-    @Override
-    public void ShouldDisable(Integer panelCallback) {
-        if(panelCallback == SlidingPanelAction.PANEL_ONSLIDE
-                || panelCallback == SlidingPanelAction.PANEL_ANCORED
-                || panelCallback == SlidingPanelAction.PANEL_COLLAPSED
-                || panelCallback == SlidingPanelAction.PANEL_EXPANDED)
-        {
-            Disable();
-        }
-    }
-    **/
-
     public static class Builder{
 
-        SlidingUpPanelLayout mPanel;
         HashMap<Integer, FloatingActionButton> mControls;
         GoogleMap mMap;
         FragmentActivity mActivity;
         OnFragmentInteractionListener mListener;
         QueryMachine mQueryMachine;
+        ISlidingPanelManager mPanelManager;
 
         Polygon mShape;
         List<Marker> mMarkers = new ArrayList<>();
@@ -167,12 +154,8 @@ public class QueryMode implements IViewMode {
             return this;
         }
 
-        public Builder setupUI(SlidingUpPanelLayout upUI) {
-            mPanel = upUI;
-
-            if(upUI != null){
-                upUI.setPanelState(SlidingUpPanelLayout.PanelState.HIDDEN);
-            }
+        public Builder setupUI() {
+            mPanelManager.hide();
 
             return this;
         }
@@ -181,6 +164,9 @@ public class QueryMode implements IViewMode {
             mMap = map;
             mListener = listener;
             mActivity = activity;
+
+            mPanelManager = new SlidingPanelManager(mActivity);
+
             return this;
         }
 
@@ -287,8 +273,7 @@ public class QueryMode implements IViewMode {
             q.sendBoxQuery(max, min);
 
             //clearMapQueryPoints();
-
-            //anchorSlider();
+            mPanelManager.anchor();
 
         }
         //endregion
@@ -305,18 +290,22 @@ public class QueryMode implements IViewMode {
             CameraUpdate u = CameraUpdateFactory.newLatLng(options.getPosition());
             mMap.animateCamera(u);
 
-            pointQueryStep2SendToGeoU();
+            pointQueryStep2SendToGeoU(options.getPosition());
+
+            mPanelManager.anchor();
         }
 
-        private void pointQueryStep2SendToGeoU() {
+        private void pointQueryStep2SendToGeoU(LatLng ll) {
+            QuerySenderHelper q = new QuerySenderHelper();
 
+            q.sendPointQuery(ll);
         }
         //endregion
 
         //region Reset Helpers
         protected void Reset(Boolean showPanel) {
             if(showPanel){
-                mPanel.setPanelState(SlidingUpPanelLayout.PanelState.COLLAPSED);
+                mPanelManager.collapse();
             }
             clearMapQueryPoints();
             SetVisibility(mControls.values(), View.GONE);

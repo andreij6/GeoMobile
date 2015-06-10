@@ -1,26 +1,21 @@
 package com.geospatialcorporation.android.geomobile.ui.fragments.panel_fragments;
 
 import android.os.Bundle;
-import android.support.v4.app.Fragment;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.inputmethod.EditorInfo;
-import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.geospatialcorporation.android.geomobile.R;
 import com.geospatialcorporation.android.geomobile.application;
+import com.geospatialcorporation.android.geomobile.library.helpers.panelmanager.SlidingPanelManager;
 import com.geospatialcorporation.android.geomobile.library.rest.QueryService;
 import com.geospatialcorporation.android.geomobile.models.Query.quickSearch.QuickSearchRequest;
 import com.geospatialcorporation.android.geomobile.models.Query.quickSearch.QuickSearchResponse;
-import com.geospatialcorporation.android.geomobile.ui.Interfaces.SlidingPanelController;
-import com.geospatialcorporation.android.geomobile.ui.MainActivity;
 import com.geospatialcorporation.android.geomobile.ui.fragments.GeoViewFragmentBase;
-import com.melnykov.fab.FloatingActionButton;
 
 import java.util.List;
 
@@ -43,16 +38,16 @@ public class QuickSearchFragment extends GeoViewFragmentBase {
 
     @InjectView(R.id.searchBox) EditText SearchBox;
 
-    @OnClick(R.id.fab_close)
+    @OnClick(R.id.close)
     public void close(){
-        Fragment contentFragment = ((MainActivity)getActivity()).getContentFragment();
+        SlidingPanelManager m = new SlidingPanelManager(getActivity());
 
-        ((SlidingPanelController)contentFragment).CollapsePanel();
+        m.collapse();
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState){
-        mView = inflater.inflate(R.layout.fragment_search_quick, container, false);
+        mView = inflater.inflate(R.layout.fragment_panel_search_quick, container, false);
         ButterKnife.inject(this, mView);
 
         SetTitle(R.string.quicksearch);

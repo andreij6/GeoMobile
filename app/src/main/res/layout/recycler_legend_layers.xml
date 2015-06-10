@@ -4,37 +4,38 @@
               android:layout_width="match_parent"
               android:layout_height="match_parent"
               android:weightSum="1"
-              android:paddingTop="8dp"
-              android:paddingBottom="8dp">
+    >
 
     <LinearLayout
         android:orientation="horizontal"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="43dp">
 
         <CheckBox
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_height="match_parent"
             android:id="@+id/isVisible"
             />
 
         <TextView
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_height="match_parent"
             android:textAppearance="?android:attr/textAppearanceMedium"
             android:text="Medium Text"
             android:id="@+id/layerNameTV"
-            android:layout_weight="0.5"
+            android:layout_weight="0.28"
             android:textColor="@color/white"
             android:singleLine="true"
-            android:paddingLeft="8sp"/>
+            android:paddingLeft="8sp"
+            android:gravity="center_vertical"/>
 
         <ImageView
-            android:layout_width="wrap_content"
+            android:layout_width="35dp"
             android:layout_height="match_parent"
             android:id="@+id/sublayerExpander"
             android:src="@drawable/ic_arrow_right_bold_hexagon_outline_white_18dp"
-            />
+            android:background="@color/accent"
+            android:paddingLeft="15dp"/>
 
     </LinearLayout>
 

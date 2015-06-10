@@ -14,9 +14,10 @@ import com.geospatialcorporation.android.geomobile.models.Bookmarks.Bookmark;
 import com.geospatialcorporation.android.geomobile.models.Client;
 import com.geospatialcorporation.android.geomobile.models.Folders.Folder;
 import com.geospatialcorporation.android.geomobile.models.Layers.Layer;
-import com.geospatialcorporation.android.geomobile.models.Library.Document;
+import com.geospatialcorporation.android.geomobile.models.Document.Document;
 import com.geospatialcorporation.android.geomobile.ui.fragments.GoogleMapFragment;
 import com.google.android.gms.common.api.GoogleApiClient;
+import com.sothree.slidinguppanel.SlidingUpPanelLayout;
 import com.squareup.okhttp.Interceptor;
 import com.squareup.okhttp.OkHttpClient;
 import com.squareup.okhttp.Request;
@@ -33,7 +34,7 @@ public class application extends Application {
     private final static String TAG = "application";
     private final static String prefsName = "AppState";
     private static final String geoAuthTokenName = "geoAuthToken";
-    private static GoogleMapFragment googleMap;
+    //private static GoogleMapFragment googleMap;
     private static SharedPreferences appState;
     private static String domain;
     private static Context context;
@@ -51,6 +52,7 @@ public class application extends Application {
     private static HashMap<Integer, Layer> layerHashMap;
     private static HashMap<Integer, Bookmark> bookmarkHashMap;
     private static DrawerLayout layerDrawer;
+    private static SlidingUpPanelLayout mapFragmentPanel;
 
     //region Tree Entity Getters & Setters
     public static HashMap<Integer, Folder> getFolderHashMap() {
@@ -99,6 +101,14 @@ public class application extends Application {
 
     public static DrawerLayout getLayerDrawer() {
         return layerDrawer;
+    }
+
+    public static SlidingUpPanelLayout getMapFragmentPanel() {
+        return mapFragmentPanel;
+    }
+
+    public static void setMapFragmentPanel(SlidingUpPanelLayout mapFragmentPanel) {
+        application.mapFragmentPanel = mapFragmentPanel;
     }
 
     public void onCreate() {
@@ -158,7 +168,8 @@ public class application extends Application {
     }
 
     public static GoogleMapFragment getMapFragment() {
-        return googleMap;
+        return new GoogleMapFragment(); // returning the googlemap fragment from it init didnt work after the views were disposed
+        //return googleMap;
     }
 
     public static Context getAppContext() {
@@ -262,8 +273,7 @@ public class application extends Application {
         folderHashMap = new HashMap<>();
         layerHashMap = new HashMap<>();
         documentHashMap = new HashMap<>();
-        googleMap = new GoogleMapFragment();
-
+        //googleMap = new GoogleMapFragment();
         geoAuthToken = appState.getString(geoAuthTokenName, null);
     }
 }

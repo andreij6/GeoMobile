@@ -20,7 +20,10 @@ import com.geospatialcorporation.android.geomobile.application;
 import com.geospatialcorporation.android.geomobile.models.Folders.Folder;
 import com.geospatialcorporation.android.geomobile.models.Layers.Layer;
 import com.geospatialcorporation.android.geomobile.ui.MainActivity;
+import com.geospatialcorporation.android.geomobile.ui.fragments.GoogleMapFragment;
 import com.geospatialcorporation.android.geomobile.ui.fragments.detail_fragment.LayerDetailFragment;
+
+import org.apache.commons.io.output.TaggedOutputStream;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -62,7 +65,7 @@ public class LegendLayerAdapter extends RecyclerView.Adapter<LegendLayerAdapter.
 
     @Override
     public void onBindViewHolder(Holder holder, int position) {
-        holder.bindLengendLayers(mLayers.get(position));
+        holder.bindLegendLayers(mLayers.get(position));
     }
 
     @Override
@@ -86,19 +89,22 @@ public class LegendLayerAdapter extends RecyclerView.Adapter<LegendLayerAdapter.
             ButterKnife.inject(this, itemView);
         }
 
-        public void bindLengendLayers(Layer layer){
+        public void bindLegendLayers(Layer layer){
             mLayer = layer;
 
             mLayerName.setText(layer.getName());
+            mLayerName.setOnClickListener(ZoomToLayer);
             isVisibleCB.setChecked(layer.getIsShowing());
             gotoSublayer.setOnClickListener(GoToSublayer);
         }
 
+        //region Click Listeners
         private View.OnClickListener GoToSublayer = new View.OnClickListener(){
             @Override
             public void onClick(View v){
+                MainActivity activity = (MainActivity)mContext;
                 Fragment frag = new LayerDetailFragment();
-                FragmentManager fm = ((MainActivity) mContext).getSupportFragmentManager();
+                FragmentManager fm = activity.getSupportFragmentManager();
 
                 Bundle b = new Bundle();
                 b.putParcelable(Layer.LAYER_INTENT, mLayer);
@@ -109,11 +115,48 @@ public class LegendLayerAdapter extends RecyclerView.Adapter<LegendLayerAdapter.
                         .addToBackStack(null)
                         .commit();
 
-                //attempting to close the drawer after selecting a sublayer
-                //DrawerLayout drawer = application.getLayerDrawer();
-                //View container = ((MainActivity) mContext).findViewById(R.id.navigation_left_drawer);
-                //drawer.closeDrawer(container);
+                closeDrawer(activity);
             }
         };
+
+        private View.OnClickListener ZoomToLayer = new View.OnClickListener(){
+            @Override
+            public void onClick(View v){
+                MainActivity activity = (MainActivity)mContext;
+
+                Fragment currentFragment = activity.getContentFragment();
+
+                if(currentFragment instanceof GoogleMapFragment){
+                    zoomToLayer();
+                } else {
+                    goToMap(activity);
+                }
+
+                closeDrawer(activity);
+            }
+        };
+
+        protected void zoomToLayer(){
+            Toast.makeText(mContext, "Zoom to " + mLayer.getName() + " Layer", Toast.LENGTH_LONG).show();
+        }
+
+        protected void closeDrawer(MainActivity activity) {
+            DrawerLayout mDrawerLayout = activity.getRightDrawer();
+            View layerView = activity.getLayerListView();
+
+            mDrawerLayout.closeDrawer(layerView);
+        }
+
+        protected void goToMap(MainActivity activity) {
+            Toast.makeText(mContext, "Zoom to " + mLayer.getName() + " Layer", Toast.LENGTH_LONG).show();
+
+            FragmentManager fm = activity.getSupportFragmentManager();
+
+            fm.beginTransaction()
+                    .replace(R.id.content_frame, new GoogleMapFragment())
+                    .addToBackStack(null)
+                    .commit();
+        }
+        //endregion
     }
 }

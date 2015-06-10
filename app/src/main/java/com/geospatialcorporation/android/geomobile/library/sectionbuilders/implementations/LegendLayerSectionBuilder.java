@@ -42,7 +42,7 @@ public class LegendLayerSectionBuilder extends SectionBuilderBase<Folder> implem
 
             for(Folder folder : data){
                 if(folder.getLayers() != null && folder.getLayers().size() > 0) {
-                    if(skip == 0 && emptyFolders.isEmpty()) {
+                    if(isRoot(folder)) {
                         sections.add(new SimpleSectionedRecyclerViewAdapter.Section(skip, "ROOT"));
                     } else {
                         sections.add(new SimpleSectionedRecyclerViewAdapter.Section(skip, folder.getName()));
@@ -53,8 +53,16 @@ public class LegendLayerSectionBuilder extends SectionBuilderBase<Folder> implem
                 }
             }
 
+            sections.add(new SimpleSectionedRecyclerViewAdapter.Section(skip, "- Empty Folders -"));
+
+            //skip++;
+
             for(Folder folder : emptyFolders){
-                sections.add(new SimpleSectionedRecyclerViewAdapter.Section(skip, folder.getName() + " - EMPTY"));
+                if(isRoot(folder)) {
+                    sections.add(new SimpleSectionedRecyclerViewAdapter.Section(skip, "ROOT"));
+                } else {
+                    sections.add(new SimpleSectionedRecyclerViewAdapter.Section(skip, folder.getName()));
+                }
                 skip = getSkipValue(folder, skip);
             }
         }
@@ -66,6 +74,10 @@ public class LegendLayerSectionBuilder extends SectionBuilderBase<Folder> implem
         mSectionedAdapter.setSections(sections.toArray(sectionArray));
 
         return this;
+    }
+
+    private boolean isRoot(Folder folder) {
+        return folder.getName().equals("/");
     }
 
     protected int getSkipValue(Folder folder, int skip) {

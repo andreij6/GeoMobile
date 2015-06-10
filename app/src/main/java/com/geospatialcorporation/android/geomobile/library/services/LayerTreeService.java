@@ -6,11 +6,16 @@ import com.geospatialcorporation.android.geomobile.application;
 import com.geospatialcorporation.android.geomobile.database.DataRepository.Implementations.IAppDataRepository;
 import com.geospatialcorporation.android.geomobile.database.DataRepository.Implementations.Layers.LayersAppSource;
 import com.geospatialcorporation.android.geomobile.library.helpers.Interfaces.ITreeService;
+import com.geospatialcorporation.android.geomobile.library.rest.AttributeService;
 import com.geospatialcorporation.android.geomobile.library.rest.LayerService;
 import com.geospatialcorporation.android.geomobile.models.Layers.Layer;
+import com.geospatialcorporation.android.geomobile.models.Layers.LayerAttributeColumns;
 import com.geospatialcorporation.android.geomobile.models.Layers.LayerCreateRequest;
 import com.geospatialcorporation.android.geomobile.models.Layers.LayerCreateResponse;
+import com.geospatialcorporation.android.geomobile.models.Layers.LayerDetailsVm;
 import com.geospatialcorporation.android.geomobile.models.RenameRequest;
+
+import java.util.List;
 
 import retrofit.Callback;
 import retrofit.RetrofitError;
@@ -22,10 +27,12 @@ import retrofit.client.Response;
 public class LayerTreeService implements ITreeService {
 
     LayerService mLayerService;
+    AttributeService mAttributeService;
     IAppDataRepository<Layer> LayerRepo;
 
     public LayerTreeService(){
         mLayerService = application.getRestAdapter().create(LayerService.class);
+        mAttributeService = application.getRestAdapter().create(AttributeService.class);
         LayerRepo = new LayersAppSource();
     }
 
@@ -95,10 +102,26 @@ public class LayerTreeService implements ITreeService {
 
     }
 
+    public LayerDetailsVm getDetails(int id){
+        return mLayerService.getDetails(id);
+    }
+
+    public List<LayerAttributeColumns> getLayerAttributeColumns(int id){
+        return mAttributeService.getLayerAttributeColumns(id);
+    }
+
+    public List<LayerAttributeColumns> addLayerAttributeColumn(int id, List<LayerAttributeColumns> data){
+        return mAttributeService.addLayerAttributeColumn(id, data);
+    }
+
+    public void deleteLayerAttributeColumn(int layerId, int columnId){
+        mAttributeService.deleteColumn(layerId, columnId);
+    }
+
     protected boolean AuthorizedToRename(int id) {
         Layer l = LayerRepo.getById(id);
 
-        if(l.getIsOwner()){
+        if(l != null && l.getIsOwner()){
             return true;
         }
 

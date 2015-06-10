@@ -3,8 +3,11 @@ package com.geospatialcorporation.android.geomobile.library.rest;
 import com.geospatialcorporation.android.geomobile.models.Folders.Folder;
 import com.geospatialcorporation.android.geomobile.models.Folders.FolderCreateRequest;
 import com.geospatialcorporation.android.geomobile.models.Folders.FolderCreateResponse;
+import com.geospatialcorporation.android.geomobile.models.Folders.FolderDetailsResponse;
+import com.geospatialcorporation.android.geomobile.models.Folders.FolderPermissionsResponse;
 import com.geospatialcorporation.android.geomobile.models.Layers.Layer;
-import com.geospatialcorporation.android.geomobile.models.Library.Document;
+import com.geospatialcorporation.android.geomobile.models.Document.Document;
+import com.geospatialcorporation.android.geomobile.models.PermissionsSaveRequest;
 import com.geospatialcorporation.android.geomobile.models.RenameRequest;
 
 import java.util.List;
@@ -38,8 +41,17 @@ public interface FolderService {
     void createFolder(@Body FolderCreateRequest createRequest, Callback<FolderCreateResponse> cb);
 
     @DELETE("/API/Folders/{folderId}")
-    void delete(@Path("folderId") int folderId, Callback<Folder> cb);
+    void remove(@Path("folderId") int folderId, Callback<Folder> cb);
 
     @PUT("/API/Folders/{folderId}/Rename")
     void rename(@Path("folderId") int folderId, @Body RenameRequest name, Callback<Response> cb);
+
+    @GET("/API/Folders/{folderId}/Details")
+    FolderDetailsResponse getFolderDetail(@Path("folderId") int folderId);
+
+    @GET("/API/Folders/{folderId}/Permissions")
+    List<FolderPermissionsResponse> getFolderPermission(@Path("folderId") int folderId);
+
+    @PUT("/API/Folders/{folderId}/Permissions")
+    void saveFolderPermissions(int folderId, @Body PermissionsSaveRequest permissions);
 }

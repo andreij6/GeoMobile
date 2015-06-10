@@ -1,7 +1,8 @@
 package com.geospatialcorporation.android.geomobile.library.rest;
 
-import com.geospatialcorporation.android.geomobile.models.Library.Document;
-import com.geospatialcorporation.android.geomobile.models.Library.DocumentCreateResponse;
+import com.geospatialcorporation.android.geomobile.models.Document.Document;
+import com.geospatialcorporation.android.geomobile.models.Document.DocumentCreateResponse;
+import com.geospatialcorporation.android.geomobile.models.Document.MoveRequest;
 import com.geospatialcorporation.android.geomobile.models.RenameRequest;
 
 import retrofit.Callback;
@@ -35,4 +36,6 @@ public interface DocumentService {
     @PUT("/API/Documents/{documentId}/Rename")
     void rename(@Path("documentId") int documentId, @Body RenameRequest rename, Callback<Response> cb);
 
+    @POST("/API/Documents/{id}/Move")
+    void moveDocument(@Path("id") int documentId, @Body MoveRequest request);
 }

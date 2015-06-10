@@ -7,25 +7,29 @@
                 android:paddingLeft="18dp"
                 android:background="@color/white">
 
-    <EditText
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:id="@+id/bookMarkNameInput"
-        android:inputType="textPersonName"
-        android:hint="@string/bookmarkname"
-        android:layout_below="@+id/fab_close"
-        android:layout_alignParentStart="true"
-        android:layout_marginTop="31dp"/>
 
-    <com.melnykov.fab.FloatingActionButton
-        android:id="@+id/fab_close"
+    <EditText
+        style="@style/PanelInputStyle"
+        android:hint="@string/bookmarkname"
+        android:id="@+id/bookMarkNameInput"
+        android:layout_below="@+id/title"/>
+
+    <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:src="@drawable/ic_close_circle_white_24dp"
-        fab:fab_colorNormal="@color/accent_dark"
-        fab:fab_colorPressed="@color/primary_dark"
-        fab:fab_colorRipple="@color/primary_light"
-        android:layout_marginEnd="24dp"
+        android:textAppearance="?android:attr/textAppearanceMedium"
+        android:text="@string/add_bookmark"
+        android:id="@+id/title"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentStart="true"
+        android:layout_marginTop="63dp"/>
+
+    <ImageView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/close"
+        android:src="@drawable/ic_close_circle_black_24dp"
+        android:layout_marginEnd="30dp"
         android:layout_marginTop="30dp"
         android:layout_alignParentTop="true"
         android:layout_alignEnd="@+id/bookMarkNameInput"/>

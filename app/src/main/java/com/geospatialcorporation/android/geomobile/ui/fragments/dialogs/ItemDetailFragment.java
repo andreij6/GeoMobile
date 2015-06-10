@@ -1,9 +1,10 @@
 package com.geospatialcorporation.android.geomobile.ui.fragments.dialogs;
 
-import android.support.v4.app.Fragment;
+import android.view.KeyEvent;
 import android.view.View;
-import android.widget.Button;
+import android.view.inputmethod.EditorInfo;
 import android.widget.EditText;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.geospatialcorporation.android.geomobile.library.services.DocumentTreeService;
@@ -14,7 +15,7 @@ import com.geospatialcorporation.android.geomobile.models.Folders.Folder;
 import com.geospatialcorporation.android.geomobile.models.Interfaces.INamedEntity;
 import com.geospatialcorporation.android.geomobile.models.Interfaces.IdModel;
 import com.geospatialcorporation.android.geomobile.models.Layers.Layer;
-import com.geospatialcorporation.android.geomobile.models.Library.Document;
+import com.geospatialcorporation.android.geomobile.models.Document.Document;
 import com.geospatialcorporation.android.geomobile.ui.fragments.GeoViewFragmentBase;
 
 /**
@@ -25,14 +26,6 @@ public class ItemDetailFragment<ITreeEntity> extends GeoViewFragmentBase {
     protected ITreeEntity mEntity;
 
     //region Getters & Setters
-    public Button getButton() {
-        return mButton;
-    }
-
-    public void setButton(Button button) {
-        mButton = button;
-    }
-
     public EditText getEditText() {
         return mEditText;
     }
@@ -42,7 +35,6 @@ public class ItemDetailFragment<ITreeEntity> extends GeoViewFragmentBase {
     }
     //endregion
 
-    Button mButton;
     EditText mEditText;
 
 
@@ -67,39 +59,44 @@ public class ItemDetailFragment<ITreeEntity> extends GeoViewFragmentBase {
         public void onClick(View v){
             mEditText.setText(((INamedEntity)mEntity).getName());
             mEditText.setVisibility(View.VISIBLE);
-            mButton.setVisibility(View.VISIBLE);
         }
     };
 
     protected void SetupRename(){
-        mButton.setVisibility(View.GONE);
         mEditText.setVisibility(View.GONE);
 
-        mButton.setOnClickListener(new View.OnClickListener() {
+        mEditText.setOnEditorActionListener(new TextView.OnEditorActionListener() {
             @Override
-            public void onClick(View v) {
-                ITreeService service = null;
+            public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
+                if (actionId == EditorInfo.IME_ACTION_DONE) {
+                    ITreeService service = null;
 
-                if(mEntity instanceof Document){
-                    service = new DocumentTreeService();
-                } else if( mEntity instanceof Layer){
-                    service = new LayerTreeService();
-                } else if(mEntity instanceof Folder){
-                    service = new FolderTreeService();
-                } else {}
-
-                if(service != null) {
-
-                    Boolean success = service.rename(((IdModel)mEntity).getId(), mEditText.getText().toString());
-
-                    if(!success){
-                        Toast.makeText(getActivity(), "Not Authorized to Rename Doc", Toast.LENGTH_LONG).show();
+                    if (mEntity instanceof Document) {
+                        service = new DocumentTreeService();
+                    } else if (mEntity instanceof Layer) {
+                        service = new LayerTreeService();
+                    } else if (mEntity instanceof Folder) {
+                        service = new FolderTreeService();
                     } else {
-                        Toast.makeText(getActivity(), "Success!", Toast.LENGTH_LONG).show();
                     }
+
+                    if (service != null) {
+
+                        Boolean success = service.rename(((IdModel) mEntity).getId(), mEditText.getText().toString());
+
+                        if (!success) {
+                            Toast.makeText(getActivity(), "Not Authorized to rename " + mEntity.getClass().getSimpleName(), Toast.LENGTH_LONG).show();
+                        } else {
+                            Toast.makeText(getActivity(), "Success!", Toast.LENGTH_LONG).show();
+                        }
+                    }
+
+                    mEditText.setVisibility(View.GONE);
                 }
+                return false;
             }
         });
+
     }
 
 

@@ -35,4 +35,16 @@
         <item name="android:fontFamily">sans-serif-light</item>
     </style>
 
+    <!-- Panel Layouts -->
+    <style name="PanelInputStyle">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:inputType">textPersonName</item>
+        <item name="android:ems">10</item>
+        <item name="android:layout_marginTop">48dp</item>
+        <item name="android:layout_alignParentStart">true</item>
+    </style>
+
+    <!-- End Panel Layouts -->
+
 </resources>

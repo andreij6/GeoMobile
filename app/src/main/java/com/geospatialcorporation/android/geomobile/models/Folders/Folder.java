@@ -6,7 +6,7 @@ import android.os.Parcelable;
 
 import com.geospatialcorporation.android.geomobile.models.Interfaces.ITreeEntity;
 import com.geospatialcorporation.android.geomobile.models.Layers.Layer;
-import com.geospatialcorporation.android.geomobile.models.Library.Document;
+import com.geospatialcorporation.android.geomobile.models.Document.Document;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -141,6 +141,8 @@ public class Folder implements Parcelable, ITreeEntity {
             return new Folder[size];
         }
     };
+
+
 
     //endregion
 

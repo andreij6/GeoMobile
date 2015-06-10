@@ -13,6 +13,7 @@ import android.widget.Button;
 import android.widget.LinearLayout;
 
 import com.geospatialcorporation.android.geomobile.R;
+import com.geospatialcorporation.android.geomobile.library.helpers.panelmanager.SlidingPanelManager;
 import com.geospatialcorporation.android.geomobile.library.sectionbuilders.implementations.BookmarkSectionBuilder;
 import com.geospatialcorporation.android.geomobile.library.viewmode.implementations.BookmarkMode;
 import com.geospatialcorporation.android.geomobile.models.Bookmarks.Bookmark;
@@ -53,7 +54,7 @@ public class BookmarksDialogFragment extends GeoDialogFragmentBase{
         AlertDialog d = (AlertDialog)getDialog();
 
         if(d != null){
-            Button negative = (Button)d.getButton(Dialog.BUTTON_NEGATIVE);
+            Button negative = d.getButton(Dialog.BUTTON_NEGATIVE);
             negative.setEnabled(false);
         }
     }
@@ -94,7 +95,7 @@ public class BookmarksDialogFragment extends GeoDialogFragmentBase{
 
             ((IViewModeListener)contentFragment).setViewMode(
                     new BookmarkMode.Builder()
-                            .init(mSaveBtn, mCloseBtn, mPanel, mMap, mFragmentManager)
+                            .init(mSaveBtn, mCloseBtn, new SlidingPanelManager(getActivity()), mMap, mFragmentManager)
                             .create()
             );
             BookmarksDialogFragment.this.getDialog().cancel();

@@ -1,11 +1,8 @@
 package com.geospatialcorporation.android.geomobile.library.services;
 
-import android.app.DownloadManager;
-import android.content.Context;
 import android.database.Cursor;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
-import android.os.Environment;
 import android.provider.MediaStore;
 import android.widget.Toast;
 
@@ -16,19 +13,15 @@ import com.geospatialcorporation.android.geomobile.library.helpers.Interfaces.IT
 import com.geospatialcorporation.android.geomobile.library.rest.DocumentService;
 import com.geospatialcorporation.android.geomobile.library.rest.DownloadService;
 import com.geospatialcorporation.android.geomobile.models.Folders.Folder;
-import com.geospatialcorporation.android.geomobile.models.Library.Document;
-import com.geospatialcorporation.android.geomobile.models.Library.DocumentCreateResponse;
+import com.geospatialcorporation.android.geomobile.models.Document.Document;
+import com.geospatialcorporation.android.geomobile.models.Document.DocumentCreateResponse;
 import com.geospatialcorporation.android.geomobile.models.RenameRequest;
 
 import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
-import java.io.IOException;
 
 import retrofit.Callback;
 import retrofit.RetrofitError;
 import retrofit.client.Response;
-import retrofit.mime.TypedByteArray;
 import retrofit.mime.TypedFile;
 
 /**

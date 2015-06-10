@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.v7.widget.CardView
+    xmlns:card_view="http://schemas.android.com/apk/res-auto"
+    xmlns:fab="http://schemas.android.com/apk/res-auto"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/choose_client_card_view"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    card_view:cardCornerRadius="4dp"
+    android:layout_margin="5dp">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        >
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textAppearance="?android:attr/textAppearanceLarge"
+            android:id="@+id/sublayerLabel"
+            android:paddingTop="30dp"
+            android:text="Southern States"
+            android:textColor="@android:color/black"
+            android:layout_alignParentTop="true"
+            android:layout_alignParentStart="true"
+            android:paddingLeft="8dp"
+            android:layout_toStartOf="@+id/fab"
+            android:singleLine="false"/>
+
+        <Button
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/sublayerButton"
+            android:background="#ffe9e9e9"
+            android:textColor="@android:color/black"
+            android:layout_below="@+id/sublayerLabel"
+            android:layout_alignParentStart="true"
+            android:layout_marginTop="30dp"/>
+
+        <com.melnykov.fab.FloatingActionButton
+            android:id="@+id/fab_edit"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/ic_pencil_white_24dp"
+            fab:fab_colorNormal="@color/primary_light"
+            fab:fab_colorPressed="@color/accent"
+            fab:fab_colorRipple="@color/primary_light"
+            android:layout_marginLeft="16dp"
+            android:layout_marginRight="16dp"
+            android:layout_marginEnd="37dp"
+            android:layout_marginTop="24dp"
+            android:layout_alignParentTop="true"
+            android:layout_alignParentEnd="true"/>
+
+        <CheckBox
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/visible"
+            android:id="@+id/showingCB"
+            android:layout_below="@+id/sublayerLabel"
+            android:layout_alignParentStart="true"
+            android:layout_marginStart="24dp"/>
+
+    </RelativeLayout>
+</android.support.v7.widget.CardView>
