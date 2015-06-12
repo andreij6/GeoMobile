@@ -4,6 +4,7 @@ import android.os.Parcel;
 import android.os.Parcelable;
 
 import com.geospatialcorporation.android.geomobile.R;
+import com.geospatialcorporation.android.geomobile.models.Folders.Folder;
 import com.geospatialcorporation.android.geomobile.models.Interfaces.ITreeEntity;
 
 import java.text.ParseException;
@@ -62,6 +63,13 @@ public class Document implements Parcelable, ITreeEntity {
     public void setExtension(String extension) {
         Ext = extension;
     }
+    public Folder getParentFolder() {
+        return ParentFolder;
+    }
+
+    public void setParentFolder(Folder parentFolder) {
+        ParentFolder = parentFolder;
+    }
     //endregion
 
     //region Properties
@@ -71,6 +79,8 @@ public class Document implements Parcelable, ITreeEntity {
     private String UploadTime;
     private String MimeType;
     private String Ext;
+
+    private Folder ParentFolder;
     //endregion
 
     public Document(){

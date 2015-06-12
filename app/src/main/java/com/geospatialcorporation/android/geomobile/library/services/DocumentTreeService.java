@@ -4,6 +4,7 @@ import android.database.Cursor;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.provider.MediaStore;
+import android.util.Log;
 import android.widget.Toast;
 
 import com.geospatialcorporation.android.geomobile.application;
@@ -12,6 +13,7 @@ import com.geospatialcorporation.android.geomobile.database.DataRepository.Imple
 import com.geospatialcorporation.android.geomobile.library.helpers.Interfaces.ITreeService;
 import com.geospatialcorporation.android.geomobile.library.rest.DocumentService;
 import com.geospatialcorporation.android.geomobile.library.rest.DownloadService;
+import com.geospatialcorporation.android.geomobile.models.Document.MoveRequest;
 import com.geospatialcorporation.android.geomobile.models.Folders.Folder;
 import com.geospatialcorporation.android.geomobile.models.Document.Document;
 import com.geospatialcorporation.android.geomobile.models.Document.DocumentCreateResponse;
@@ -41,10 +43,11 @@ public class DocumentTreeService implements ITreeService {
 
     //region Public Methods
     public void delete(Document document) {
+        final int id = document.getId();
         Service.delete(document.getId(), new Callback<Document>() {
             @Override
             public void success(Document document, Response response) {
-                DocumentRepo.Remove(document.getId());
+                DocumentRepo.Remove(id);
 
                 Toast.makeText(application.getAppContext(), "Document Deleted", Toast.LENGTH_LONG).show();
             }
@@ -140,7 +143,9 @@ public class DocumentTreeService implements ITreeService {
             @Override
             public void success(Response response, Response response2) {
                 Document l = DocumentRepo.getById(documentId);
-                l.setName(docName);
+                if(l != null){
+                    l.setName(docName);
+                }
             }
 
             @Override
@@ -155,6 +160,23 @@ public class DocumentTreeService implements ITreeService {
         return true;
 
 
+    }
+
+    public void move(Document document, int toFolderId){
+        MoveRequest moveRequest = new MoveRequest(document, toFolderId);
+
+        Service.moveDocument(document.getId(), moveRequest, new Callback<Response>() {
+            @Override
+            public void success(Response response, Response response2) {
+                Log.d("DocumentTreeService", "Success");
+            }
+
+            @Override
+            public void failure(RetrofitError error) {
+                Log.d("DocumentTreeService", "Failure. " + error.getMessage());
+
+            }
+        });
     }
     //endregion
 

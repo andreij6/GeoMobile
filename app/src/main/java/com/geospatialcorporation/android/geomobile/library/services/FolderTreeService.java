@@ -1,5 +1,6 @@
 package com.geospatialcorporation.android.geomobile.library.services;
 
+import android.util.Log;
 import android.widget.Toast;
 
 import com.geospatialcorporation.android.geomobile.application;
@@ -26,6 +27,7 @@ import retrofit.RetrofitError;
 import retrofit.client.Response;
 
 public class FolderTreeService implements ITreeService {
+    private static final String TAG = FolderTreeService.class.getSimpleName();
 
     //region Properties
     private FolderService mFolderService;
@@ -87,33 +89,15 @@ public class FolderTreeService implements ITreeService {
     }
 
     public List<Layer> getLayersByFolder(Integer folderId, Boolean checkCache) {
-        Folder folder = FolderRepo.getById(folderId);
-        List<Layer> result;
 
-        if(folder != null && folder.getLayers().size() > 0 && checkCache){
-            result = folder.getLayers();
+        return mFolderService.getLayersByFolder(folderId);
 
-        } else {
-            result = mFolderService.getLayersByFolder(folderId);
-
-            LayerRepo.Add(result);
-
-        }
-
-        return result;
     }
 
     public List<Document> getDocumentsByFolder(Integer folderId){
-        Folder folder = FolderRepo.getById(folderId);
-        List<Document> result;
 
-        if(folder != null && folder.getDocuments().size() > 0){
-            result = folder.getDocuments();
-        } else {
-            result = mFolderService.getDocumentsByFolder(folderId);
-        }
+        return mFolderService.getDocumentsByFolder(folderId);
 
-        return result;
     }
 
     public void deleteFolder(Folder folder) {
@@ -172,6 +156,20 @@ public class FolderTreeService implements ITreeService {
         }
 
         return true;
+    }
+
+    public void delete(Folder folder) {
+        mFolderService.remove(folder.getId(), new Callback<Folder>() {
+            @Override
+            public void success(Folder folder, Response response) {
+                Log.d(TAG, "Success!");
+            }
+
+            @Override
+            public void failure(RetrofitError error) {
+                Log.d(TAG, "ERROR! " + error.getMessage());
+            }
+        });
     }
 
     //endregion

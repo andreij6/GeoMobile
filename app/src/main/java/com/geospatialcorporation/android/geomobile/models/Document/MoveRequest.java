@@ -1,5 +1,7 @@
 package com.geospatialcorporation.android.geomobile.models.Document;
 
+import com.geospatialcorporation.android.geomobile.models.Folders.Folder;
+
 /**
  * Created by andre on 6/9/2015.
  */
@@ -42,4 +44,11 @@ public class MoveRequest {
         Name = name;
     }
     //endregion
+
+    public MoveRequest(Document document, int toFolderId){
+        DocumentId = document.getId();
+        Ext = document.getExtension();
+        Name = document.getName();
+        FolderId = toFolderId;
+    }
 }

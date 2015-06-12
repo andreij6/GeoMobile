@@ -20,7 +20,9 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.LinearLayout;
 import android.widget.ListView;
+import android.widget.RelativeLayout;
 import android.widget.Toast;
 
 import com.geospatialcorporation.android.geomobile.R;
@@ -33,6 +35,7 @@ import com.geospatialcorporation.android.geomobile.models.Folders.Folder;
 import java.util.ArrayList;
 import java.util.List;
 
+import butterknife.ButterKnife;
 import butterknife.InjectView;
 import retrofit.RetrofitError;
 
@@ -53,7 +56,8 @@ public class LayerSelectorDrawerFragment extends Fragment {
     private DrawerLayout mDrawerLayout;
     private ListView mDrawerListView;
     private View mFragmentContainerView;
-    RecyclerView mRecyclerView;
+    private View mRootView;
+    @InjectView(R.id.layerRecyclerView) RecyclerView mRecyclerView;
 
     private int mCurrentSelectedPosition = 0;
     private boolean mFromSavedInstanceState;
@@ -79,20 +83,26 @@ public class LayerSelectorDrawerFragment extends Fragment {
         selectItem(mCurrentSelectedPosition);
     }
 
+
+
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
         // Indicate that this fragment would like to influence the set of actions in the action bar.
+        mRecyclerView = (RecyclerView)mRootView.findViewById(R.id.layerRecyclerView);
+
+        new GetLayersTask().execute(0);
+
         setHasOptionsMenu(true);
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        mRecyclerView = (RecyclerView)inflater.inflate(R.layout.fragment_right_navigation_drawer, container, false);
-        new GetLayersTask().execute(0);
+        mRootView = inflater.inflate(R.layout.fragment_right_navigation_drawer, container, false);
 
-        return mRecyclerView;
+
+        return mRootView;
     }
 
     public boolean isDrawerOpen() {

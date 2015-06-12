@@ -1,4 +1,4 @@
-package com.geospatialcorporation.android.geomobile.ui.fragments.dialogs;
+package com.geospatialcorporation.android.geomobile.ui.fragments.dialogs.action_dialogs;
 
 import android.app.AlertDialog;
 import android.app.Dialog;
@@ -19,7 +19,7 @@ import butterknife.ButterKnife;
 import butterknife.InjectView;
 import butterknife.OnClick;
 
-public class LayerActionDialogFragment extends GeoDialogFragmentBase {
+public class LayerTreeActionDialogFragment extends GeoDialogFragmentBase {
     //region Getters & Setters
 
     public Folder getFolder() {
@@ -90,7 +90,7 @@ public class LayerActionDialogFragment extends GeoDialogFragmentBase {
         }).setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
-                LayerActionDialogFragment.this.getDialog().cancel();
+                LayerTreeActionDialogFragment.this.getDialog().cancel();
             }
         });
 

@@ -8,12 +8,17 @@ import com.geospatialcorporation.android.geomobile.models.Document.Document;
 import com.geospatialcorporation.android.geomobile.ui.fragments.dialogs.BookmarksDialogFragment;
 import com.geospatialcorporation.android.geomobile.ui.fragments.dialogs.CreateFolderDialogFragment;
 import com.geospatialcorporation.android.geomobile.ui.fragments.dialogs.CreateLayerDialogFragment;
-import com.geospatialcorporation.android.geomobile.ui.fragments.dialogs.DeleteDocumentDialogFragment;
+import com.geospatialcorporation.android.geomobile.ui.fragments.dialogs.action_dialogs.document.DeleteDocumentDialogFragment;
 import com.geospatialcorporation.android.geomobile.ui.fragments.dialogs.DeleteFolderDialogFragment;
 import com.geospatialcorporation.android.geomobile.ui.fragments.dialogs.DeleteLayerDialogFragment;
-import com.geospatialcorporation.android.geomobile.ui.fragments.dialogs.FolderActionsDialogFragment;
-import com.geospatialcorporation.android.geomobile.ui.fragments.dialogs.ModifySublayersDialogFragment;
+import com.geospatialcorporation.android.geomobile.ui.fragments.dialogs.action_dialogs.DocumentActionsDialogFragment;
+import com.geospatialcorporation.android.geomobile.ui.fragments.dialogs.action_dialogs.FolderActionsDialogFragment;
+import com.geospatialcorporation.android.geomobile.ui.fragments.dialogs.action_dialogs.LayerActionsDialogFragment;
+import com.geospatialcorporation.android.geomobile.ui.fragments.dialogs.action_dialogs.SublayerActionsDialogFragment;
 import com.geospatialcorporation.android.geomobile.ui.fragments.dialogs.UploadImageDialogFragment;
+import com.geospatialcorporation.android.geomobile.ui.fragments.dialogs.action_dialogs.document.MoveDocumentDialogFragment;
+import com.geospatialcorporation.android.geomobile.ui.fragments.dialogs.action_dialogs.document.RenameDocumentDialogFragment;
+import com.geospatialcorporation.android.geomobile.ui.fragments.dialogs.action_dialogs.folder.RenameFolderActionDialogFragment;
 import com.google.android.gms.maps.GoogleMap;
 import com.melnykov.fab.FloatingActionButton;
 import com.sothree.slidinguppanel.SlidingUpPanelLayout;
@@ -64,15 +69,45 @@ public class GeoDialogHelper {
     }
 
     public static void modifySublayer(Context context, FragmentManager fm){
-        ModifySublayersDialogFragment msdf = new ModifySublayersDialogFragment();
+        SublayerActionsDialogFragment msdf = new SublayerActionsDialogFragment();
         msdf.init(context);
         msdf.show(fm, "Modify Sublayer");
     }
 
 
-    public static void folderActions(Context context, FragmentManager fm){
+    public static void folderActions(Context context, Folder folder, FragmentManager fm){
         FolderActionsDialogFragment fad = new FolderActionsDialogFragment();
-        fad.init(context);
+        fad.init(context, folder);
         fad.show(fm, "Folder Actions");
+    }
+
+    public static void showDocumentActions(Context context, Document doc, FragmentManager fm) {
+        DocumentActionsDialogFragment dadf = new DocumentActionsDialogFragment();
+        dadf.init(context, doc);
+        dadf.show(fm, "Document Actions");
+    }
+
+    public static void showLayerActions(Context context, Layer layer, FragmentManager fm) {
+        LayerActionsDialogFragment ladf = new LayerActionsDialogFragment();
+        ladf.init(context, layer);
+        ladf.show(fm, "Layer Actions");
+    }
+
+    public static void renameDocument(Context context, Document document, FragmentManager fm) {
+        RenameDocumentDialogFragment rdd = new RenameDocumentDialogFragment();
+        rdd.init(context, document);
+        rdd.show(fm, "Rename Document");
+    }
+
+    public static void moveDocument(Context context, Document document, FragmentManager fragmentManager) {
+        MoveDocumentDialogFragment move = new MoveDocumentDialogFragment();
+        move.init(context, document);
+        move.show(fragmentManager, "Move Document");
+    }
+
+    public static void renameFolder(Context context, Folder folder, FragmentManager fragmentManager) {
+        RenameFolderActionDialogFragment r = new RenameFolderActionDialogFragment();
+        r.init(context, folder);
+        r.show(fragmentManager, "Rename Folder");
     }
 }

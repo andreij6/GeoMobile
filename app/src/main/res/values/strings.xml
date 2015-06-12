@@ -153,4 +153,16 @@
     <string name="folder_actions">Folder Actions</string>
     <string name="rename_folder">Rename Folder</string>
     <string name="rename">Rename</string>
+    <string name="edit_style">Edit Style</string>
+    <string name="edit_filter">Edit Filters</string>
+    <string name="document_actions">Document Actions</string>
+    <string name="move">Move</string>
+    <string name="edit_sublayer">Edit Sublayer</string>
+    <string name="show_all">Show All</string>
+    <string name="access_level">Access Level</string>
+    <string name="shape_type">Shape Type</string>
+    <string name="feature_count">Feature Count</string>
+    <string name="layer_actions">Layer Actions</string>
+    <string name="finish">Finish</string>
+    <string name="move_document">Move Document</string>
 </resources>

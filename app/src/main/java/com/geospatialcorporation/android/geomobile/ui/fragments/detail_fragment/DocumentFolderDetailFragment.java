@@ -10,7 +10,6 @@ import android.widget.TabHost;
 import com.geospatialcorporation.android.geomobile.R;
 import com.geospatialcorporation.android.geomobile.library.helpers.GeoDialogHelper;
 import com.geospatialcorporation.android.geomobile.models.Folders.Folder;
-import com.geospatialcorporation.android.geomobile.ui.fragments.detail_fragment.folder_tabs.DocumentFolderContentsTab;
 import com.geospatialcorporation.android.geomobile.ui.fragments.detail_fragment.folder_tabs.FolderDetailsTab;
 import com.geospatialcorporation.android.geomobile.ui.fragments.detail_fragment.folder_tabs.PermissionsTab;
 import com.geospatialcorporation.android.geomobile.ui.fragments.dialogs.ItemDetailFragment;
@@ -23,7 +22,6 @@ import butterknife.ButterKnife;
 public class DocumentFolderDetailFragment extends ItemDetailFragment<Folder> implements TabHost.OnTabChangeListener {
     private static final String TAG = DocumentFolderDetailFragment.class.getSimpleName();
 
-    private static final String CONTENTS = "Contents";
     private static final String DETAILS = "Details";
     private static final String PERMISSIONS = "Permissions";
 
@@ -43,7 +41,6 @@ public class DocumentFolderDetailFragment extends ItemDetailFragment<Folder> imp
 
         tabHost.setup(getActivity(), getChildFragmentManager(), android.R.id.tabcontent);
 
-        tabHost.addTab(tabHost.newTabSpec(CONTENTS).setIndicator(CONTENTS), DocumentFolderContentsTab.class, getArguments());
         tabHost.addTab(tabHost.newTabSpec(DETAILS).setIndicator(DETAILS), FolderDetailsTab.class, args);
         tabHost.addTab(tabHost.newTabSpec(PERMISSIONS).setIndicator(PERMISSIONS), PermissionsTab.class, getArguments());
 

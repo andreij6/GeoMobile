@@ -63,7 +63,7 @@ public class FolderDetailsTab extends GeoDetailsTabBase<Folder> {
     private View.OnClickListener showActions = new View.OnClickListener() {
         @Override
         public void onClick(View v) {
-            GeoDialogHelper.folderActions(getActivity(), getActivity().getSupportFragmentManager());
+            GeoDialogHelper.folderActions(getActivity(), mEntity, getActivity().getSupportFragmentManager());
         }
     };
 

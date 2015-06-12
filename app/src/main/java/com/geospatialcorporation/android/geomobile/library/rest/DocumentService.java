@@ -37,5 +37,5 @@ public interface DocumentService {
     void rename(@Path("documentId") int documentId, @Body RenameRequest rename, Callback<Response> cb);
 
     @POST("/API/Documents/{id}/Move")
-    void moveDocument(@Path("id") int documentId, @Body MoveRequest request);
+    void moveDocument(@Path("id") int documentId, @Body MoveRequest request, Callback<Response> cb);
 }

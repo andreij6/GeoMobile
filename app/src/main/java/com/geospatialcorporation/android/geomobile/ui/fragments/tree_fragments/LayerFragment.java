@@ -25,7 +25,7 @@ import com.geospatialcorporation.android.geomobile.library.rest.TreeService;
 import com.geospatialcorporation.android.geomobile.models.Folders.Folder;
 import com.geospatialcorporation.android.geomobile.models.Layers.Layer;
 import com.geospatialcorporation.android.geomobile.ui.fragments.GeoViewFragmentBase;
-import com.geospatialcorporation.android.geomobile.ui.fragments.dialogs.LayerActionDialogFragment;
+import com.geospatialcorporation.android.geomobile.ui.fragments.dialogs.action_dialogs.LayerTreeActionDialogFragment;
 import com.geospatialcorporation.android.geomobile.ui.viewmodels.ListItem;
 import com.melnykov.fab.FloatingActionButton;
 
@@ -57,7 +57,7 @@ public class LayerFragment extends GeoViewFragmentBase {
     @OnClick(R.id.fab)
     @SuppressWarnings("unused")
     public void layerActionClick(){
-        LayerActionDialogFragment l = new LayerActionDialogFragment();
+        LayerTreeActionDialogFragment l = new LayerTreeActionDialogFragment();
 
         l.setContext(getActivity());
         l.setFolder(mCurrentFolder);

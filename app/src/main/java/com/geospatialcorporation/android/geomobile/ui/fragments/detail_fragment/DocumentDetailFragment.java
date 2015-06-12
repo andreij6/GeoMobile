@@ -10,12 +10,15 @@ import android.widget.TextView;
 
 import com.geospatialcorporation.android.geomobile.R;
 import com.geospatialcorporation.android.geomobile.library.helpers.GeoDialogHelper;
+import com.geospatialcorporation.android.geomobile.library.rest.DownloadService;
+import com.geospatialcorporation.android.geomobile.library.services.DocumentTreeService;
 import com.geospatialcorporation.android.geomobile.models.Document.Document;
 import com.geospatialcorporation.android.geomobile.ui.fragments.dialogs.ItemDetailFragment;
 import com.melnykov.fab.FloatingActionButton;
 
 import butterknife.ButterKnife;
 import butterknife.InjectView;
+import butterknife.OnClick;
 
 /**
  * Created by andre on 6/2/2015.
@@ -23,7 +26,10 @@ import butterknife.InjectView;
 public class DocumentDetailFragment extends ItemDetailFragment<Document>  {
     private static final String TAG = DocumentDetailFragment.class.getSimpleName();
 
-    //region Views
+
+    DocumentTreeService mService;
+
+    //region Butterknife
     @InjectView(R.id.backgroundImageView) ImageView mFileTypeImage;
     @InjectView(R.id.documentNameTV) TextView mDocumentName;
     @InjectView(R.id.uploadTimeLabel) TextView mUploadLabel;
@@ -33,6 +39,12 @@ public class DocumentDetailFragment extends ItemDetailFragment<Document>  {
     @InjectView(R.id.fab) FloatingActionButton mFab;
     @InjectView(R.id.backImageView) ImageView mBack;
     @InjectView(R.id.downloadBtn) Button mDownload;
+
+    @OnClick(R.id.fab)
+    public void showDocumentActions(){
+        GeoDialogHelper.showDocumentActions(getActivity(), mEntity, getActivity().getSupportFragmentManager());
+    }
+
     //endregion
 
     @Override
@@ -42,6 +54,7 @@ public class DocumentDetailFragment extends ItemDetailFragment<Document>  {
         View view = inflater.inflate(R.layout.fragment_detail_document, null);
 
         ButterKnife.inject(this, view);
+        mService = new DocumentTreeService();
 
         HandleArguments();
 
@@ -52,7 +65,6 @@ public class DocumentDetailFragment extends ItemDetailFragment<Document>  {
         mBack.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Toaster("Should go back now");
                 getActivity().getSupportFragmentManager().popBackStack();
             }
         });
@@ -60,7 +72,7 @@ public class DocumentDetailFragment extends ItemDetailFragment<Document>  {
         mDownload.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Toaster("download file");
+                mService.download(mEntity.getId(), mEntity.getNameWithExt());
             }
         });
 

@@ -4,6 +4,7 @@ import android.os.Parcel;
 import android.os.Parcelable;
 import android.text.TextUtils;
 
+import com.geospatialcorporation.android.geomobile.library.constants.GeometryTypeCodes;
 import com.geospatialcorporation.android.geomobile.library.map.MapActions;
 import com.geospatialcorporation.android.geomobile.models.Interfaces.ITreeEntity;
 
@@ -171,6 +172,42 @@ public class Layer implements Parcelable, ITreeEntity {
             return new Layer[size];
         }
     };
+
+    public String getReadableGeometryType() {
+        int code = getGeometryTypeCodeId();
+        String result = "";
+        switch(code){
+            case GeometryTypeCodes.Point:
+                result  = "Point";
+                break;
+            case GeometryTypeCodes.Line:
+                result  = "Line";
+                break;
+            case GeometryTypeCodes.Polygon:
+                result  = "Polygon";
+                break;
+            case GeometryTypeCodes.MultiPoint:
+                result  = "MultiPoint";
+                break;
+            case GeometryTypeCodes.MultiLine:
+                result  = "MultiLine";
+                break;
+            case GeometryTypeCodes.MultiPolygon:
+                result  = "MultiPolygon";
+                break;
+            case GeometryTypeCodes.Collection:
+                result  = "Collection";
+                break;
+            case GeometryTypeCodes.Extent:
+                result  = "Extent";
+                break;
+            case GeometryTypeCodes.Raster:
+                result  = "Raster";
+                break;
+        }
+
+        return result;
+    }
 
 
     public class StyleInfo {
