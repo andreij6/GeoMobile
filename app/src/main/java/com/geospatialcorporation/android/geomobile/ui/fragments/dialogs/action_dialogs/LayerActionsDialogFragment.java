@@ -12,6 +12,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.geospatialcorporation.android.geomobile.R;
+import com.geospatialcorporation.android.geomobile.library.helpers.GeoDialogHelper;
 import com.geospatialcorporation.android.geomobile.models.Layers.Layer;
 import com.geospatialcorporation.android.geomobile.ui.fragments.dialogs.base.GeoDialogFragmentBase;
 
@@ -82,7 +83,9 @@ public class LayerActionsDialogFragment extends GeoDialogFragmentBase {
 
         @Override
         public void onClick(View v) {
-            Toaster("Rename Layer");
+
+            GeoDialogHelper.renameLayer(getContext(), mLayer, getFragmentManager());
+            LayerActionsDialogFragment.this.getDialog().cancel();
         }
     };
 
@@ -90,6 +93,7 @@ public class LayerActionsDialogFragment extends GeoDialogFragmentBase {
 
         @Override
         public void onClick(View v) {
+
             Toaster("Style Layer");
         }
     };
@@ -98,7 +102,10 @@ public class LayerActionsDialogFragment extends GeoDialogFragmentBase {
 
         @Override
         public void onClick(View v) {
-            Toaster("Delete Layer - Ask First");
+            GeoDialogHelper.deleteLayer(getContext(), mLayer, getFragmentManager());
+            LayerActionsDialogFragment.this.getDialog().cancel();
+
+
         }
     };
 }

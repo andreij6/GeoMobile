@@ -119,12 +119,12 @@ public class LayerTreeService implements ITreeService {
     }
 
     protected boolean AuthorizedToRename(int id) {
-        Layer l = LayerRepo.getById(id);
+        //Layer l = LayerRepo.getById(id);
 
-        if(l != null && l.getIsOwner()){
-            return true;
-        }
+        //if(l != null && l.getIsOwner()){
+        //    return true;
+        //}
 
-        return false;
+        return true;
     }
 }

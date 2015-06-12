@@ -1,4 +1,4 @@
-package com.geospatialcorporation.android.geomobile.ui.fragments.dialogs;
+package com.geospatialcorporation.android.geomobile.ui.fragments.dialogs.action_dialogs.layer;
 
 import android.app.Dialog;
 import android.content.Context;
@@ -15,24 +15,7 @@ import com.geospatialcorporation.android.geomobile.ui.fragments.dialogs.base.Geo
 /**
  * Created by andre on 6/2/2015.
  */
-public class DeleteLayerDialogFragment extends GeoDialogFragmentBase {
-
-    public Layer getLayer() {
-        return mLayer;
-    }
-
-    public void setLayer(Layer layer) {
-        mLayer = layer;
-    }
-
-    Layer mLayer;
-    LayerTreeService Service;
-
-    public void init(Context context, Layer layer){
-        setContext(context);
-        setLayer(layer);
-        Service = new LayerTreeService();
-    }
+public class DeleteLayerDialogFragment extends LayerActionDialogBase {
 
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState){
@@ -42,7 +25,7 @@ public class DeleteLayerDialogFragment extends GeoDialogFragmentBase {
                 .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
-                        Service.deleteLayer(mLayer.getId());
+                        mService.deleteLayer(mLayer.getId());
 
                         Toast.makeText(application.getAppContext(), "Delete Request Sent!", Toast.LENGTH_LONG).show();
                     }

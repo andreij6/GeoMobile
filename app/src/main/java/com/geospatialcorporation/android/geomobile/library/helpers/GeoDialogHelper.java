@@ -10,7 +10,7 @@ import com.geospatialcorporation.android.geomobile.ui.fragments.dialogs.CreateFo
 import com.geospatialcorporation.android.geomobile.ui.fragments.dialogs.CreateLayerDialogFragment;
 import com.geospatialcorporation.android.geomobile.ui.fragments.dialogs.action_dialogs.document.DeleteDocumentDialogFragment;
 import com.geospatialcorporation.android.geomobile.ui.fragments.dialogs.DeleteFolderDialogFragment;
-import com.geospatialcorporation.android.geomobile.ui.fragments.dialogs.DeleteLayerDialogFragment;
+import com.geospatialcorporation.android.geomobile.ui.fragments.dialogs.action_dialogs.layer.DeleteLayerDialogFragment;
 import com.geospatialcorporation.android.geomobile.ui.fragments.dialogs.action_dialogs.DocumentActionsDialogFragment;
 import com.geospatialcorporation.android.geomobile.ui.fragments.dialogs.action_dialogs.FolderActionsDialogFragment;
 import com.geospatialcorporation.android.geomobile.ui.fragments.dialogs.action_dialogs.LayerActionsDialogFragment;
@@ -19,22 +19,18 @@ import com.geospatialcorporation.android.geomobile.ui.fragments.dialogs.UploadIm
 import com.geospatialcorporation.android.geomobile.ui.fragments.dialogs.action_dialogs.document.MoveDocumentDialogFragment;
 import com.geospatialcorporation.android.geomobile.ui.fragments.dialogs.action_dialogs.document.RenameDocumentDialogFragment;
 import com.geospatialcorporation.android.geomobile.ui.fragments.dialogs.action_dialogs.folder.RenameFolderActionDialogFragment;
+import com.geospatialcorporation.android.geomobile.ui.fragments.dialogs.action_dialogs.layer.RenameLayerActionDialogFragment;
 import com.google.android.gms.maps.GoogleMap;
 import com.melnykov.fab.FloatingActionButton;
 import com.sothree.slidinguppanel.SlidingUpPanelLayout;
 
 public class GeoDialogHelper {
 
+    //region Folder
     public static void createFolder(Context context, Folder folder, FragmentManager fm) {
         CreateFolderDialogFragment c = new CreateFolderDialogFragment();
         c.init(context, folder);
         c.show(fm, "Folder Creator");
-    }
-
-    public static void createLayer(Context context, Folder folder, FragmentManager fm) {
-        CreateLayerDialogFragment l = new CreateLayerDialogFragment();
-        l.init(context, folder);
-        l.show(fm, "Layer Creator");
     }
 
     public static void deleteFolder(Context context, Folder folder, FragmentManager fm){
@@ -43,10 +39,24 @@ public class GeoDialogHelper {
         d.show(fm, "Delete Folder");
     }
 
-    public static void deleteDocument(Context context, Document doc, FragmentManager fm){
-        DeleteDocumentDialogFragment d = new DeleteDocumentDialogFragment();
-        d.init(context, doc);
-        d.show(fm, "Delete Document");
+    public static void renameFolder(Context context, Folder folder, FragmentManager fragmentManager) {
+        RenameFolderActionDialogFragment r = new RenameFolderActionDialogFragment();
+        r.init(context, folder);
+        r.show(fragmentManager, "Rename Folder");
+    }
+
+    public static void folderActions(Context context, Folder folder, FragmentManager fm){
+        FolderActionsDialogFragment fad = new FolderActionsDialogFragment();
+        fad.init(context, folder);
+        fad.show(fm, "Folder Actions");
+    }
+    //endregion
+
+    //region Layer
+    public static void createLayer(Context context, Folder folder, FragmentManager fm) {
+        CreateLayerDialogFragment l = new CreateLayerDialogFragment();
+        l.init(context, folder);
+        l.show(fm, "Layer Creator");
     }
 
     public static void deleteLayer(Context context, Layer layer, FragmentManager fm){
@@ -55,42 +65,24 @@ public class GeoDialogHelper {
         d.show(fm, "Delete Layer");
     }
 
-
-    public static void uploadImage(Context context, Folder folder, FragmentManager fm) {
-        UploadImageDialogFragment u = new UploadImageDialogFragment();
-        u.init(context, folder);
-        u.show(fm, "Upload Image");
-    }
-
-    public static void showBookmarks(Context context, FragmentManager fm, FloatingActionButton save, FloatingActionButton close, SlidingUpPanelLayout panel, GoogleMap m) {
-        BookmarksDialogFragment b = new BookmarksDialogFragment();
-        b.init(context, save, close, panel, m, fm);
-        b.show(fm, "Bookmarks");
-    }
-
-    public static void modifySublayer(Context context, FragmentManager fm){
-        SublayerActionsDialogFragment msdf = new SublayerActionsDialogFragment();
-        msdf.init(context);
-        msdf.show(fm, "Modify Sublayer");
-    }
-
-
-    public static void folderActions(Context context, Folder folder, FragmentManager fm){
-        FolderActionsDialogFragment fad = new FolderActionsDialogFragment();
-        fad.init(context, folder);
-        fad.show(fm, "Folder Actions");
-    }
-
-    public static void showDocumentActions(Context context, Document doc, FragmentManager fm) {
-        DocumentActionsDialogFragment dadf = new DocumentActionsDialogFragment();
-        dadf.init(context, doc);
-        dadf.show(fm, "Document Actions");
-    }
-
     public static void showLayerActions(Context context, Layer layer, FragmentManager fm) {
         LayerActionsDialogFragment ladf = new LayerActionsDialogFragment();
         ladf.init(context, layer);
         ladf.show(fm, "Layer Actions");
+    }
+
+    public static void renameLayer(Context context, Layer layer, FragmentManager fm){
+        RenameLayerActionDialogFragment d = new RenameLayerActionDialogFragment();
+        d.init(context, layer);
+        d.show(fm, "Rename Layer");
+    }
+    //endregion
+
+    //region Document
+    public static void deleteDocument(Context context, Document doc, FragmentManager fm){
+        DeleteDocumentDialogFragment d = new DeleteDocumentDialogFragment();
+        d.init(context, doc);
+        d.show(fm, "Delete Document");
     }
 
     public static void renameDocument(Context context, Document document, FragmentManager fm) {
@@ -105,9 +97,29 @@ public class GeoDialogHelper {
         move.show(fragmentManager, "Move Document");
     }
 
-    public static void renameFolder(Context context, Folder folder, FragmentManager fragmentManager) {
-        RenameFolderActionDialogFragment r = new RenameFolderActionDialogFragment();
-        r.init(context, folder);
-        r.show(fragmentManager, "Rename Folder");
+    public static void uploadImage(Context context, Folder folder, FragmentManager fm) {
+        UploadImageDialogFragment u = new UploadImageDialogFragment();
+        u.init(context, folder);
+        u.show(fm, "Upload Image");
     }
+
+    public static void showDocumentActions(Context context, Document doc, FragmentManager fm) {
+        DocumentActionsDialogFragment dadf = new DocumentActionsDialogFragment();
+        dadf.init(context, doc);
+        dadf.show(fm, "Document Actions");
+    }
+    //endregion
+
+    public static void showBookmarks(Context context, FragmentManager fm, FloatingActionButton save, FloatingActionButton close, SlidingUpPanelLayout panel, GoogleMap m) {
+        BookmarksDialogFragment b = new BookmarksDialogFragment();
+        b.init(context, save, close, panel, m, fm);
+        b.show(fm, "Bookmarks");
+    }
+
+    public static void modifySublayer(Context context, FragmentManager fm){
+        SublayerActionsDialogFragment msdf = new SublayerActionsDialogFragment();
+        msdf.init(context);
+        msdf.show(fm, "Modify Sublayer");
+    }
+
 }
