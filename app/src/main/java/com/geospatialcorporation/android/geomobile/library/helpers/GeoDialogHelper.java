@@ -20,6 +20,8 @@ import com.geospatialcorporation.android.geomobile.ui.fragments.dialogs.action_d
 import com.geospatialcorporation.android.geomobile.ui.fragments.dialogs.action_dialogs.document.RenameDocumentDialogFragment;
 import com.geospatialcorporation.android.geomobile.ui.fragments.dialogs.action_dialogs.folder.RenameFolderActionDialogFragment;
 import com.geospatialcorporation.android.geomobile.ui.fragments.dialogs.action_dialogs.layer.RenameLayerActionDialogFragment;
+import com.geospatialcorporation.android.geomobile.ui.fragments.dialogs.action_dialogs.sublayer.SublayerDeleteActionDialogFragment;
+import com.geospatialcorporation.android.geomobile.ui.fragments.dialogs.action_dialogs.sublayer.SublayerRenameActionDialogFragment;
 import com.google.android.gms.maps.GoogleMap;
 import com.melnykov.fab.FloatingActionButton;
 import com.sothree.slidinguppanel.SlidingUpPanelLayout;
@@ -116,10 +118,21 @@ public class GeoDialogHelper {
         b.show(fm, "Bookmarks");
     }
 
-    public static void modifySublayer(Context context, FragmentManager fm){
+    public static void modifySublayer(Context context, Layer sublayer, FragmentManager fm){
         SublayerActionsDialogFragment msdf = new SublayerActionsDialogFragment();
-        msdf.init(context);
+        msdf.init(context, sublayer);
         msdf.show(fm, "Modify Sublayer");
     }
 
+    public static void renameSublayer(Context context, Layer sublayer, FragmentManager fragmentManager) {
+        SublayerRenameActionDialogFragment srad = new SublayerRenameActionDialogFragment();
+        srad.init(context, sublayer);
+        srad.show(fragmentManager, "Rename Sublayer");
+    }
+
+    public static void deleteSublayer(Context context, Layer sublayer, FragmentManager fragmentManager) {
+        SublayerDeleteActionDialogFragment sdad = new SublayerDeleteActionDialogFragment();
+        sdad.init(context, sublayer);
+        sdad.show(fragmentManager, "Delete Sublayer");
+    }
 }

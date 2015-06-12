@@ -11,6 +11,8 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.geospatialcorporation.android.geomobile.R;
+import com.geospatialcorporation.android.geomobile.library.helpers.GeoDialogHelper;
+import com.geospatialcorporation.android.geomobile.models.Layers.Layer;
 import com.geospatialcorporation.android.geomobile.ui.fragments.dialogs.base.GeoDialogFragmentBase;
 
 import butterknife.ButterKnife;
@@ -21,8 +23,11 @@ import butterknife.InjectView;
  */
 public class SublayerActionsDialogFragment extends GeoDialogFragmentBase {
 
-    public void init(Context context){
+    Layer mSublayer;
+
+    public void init(Context context, Layer layer){
        setContext(context);
+        mSublayer = layer;
     }
 
     //region ButterKnife
@@ -100,7 +105,8 @@ public class SublayerActionsDialogFragment extends GeoDialogFragmentBase {
 
         @Override
         public void onClick(View v) {
-            Toaster("Rename Sublayer");
+            GeoDialogHelper.renameSublayer(getContext(), mSublayer, getFragmentManager());
+            SublayerActionsDialogFragment.this.getDialog().cancel();
         }
     };
 
@@ -108,7 +114,8 @@ public class SublayerActionsDialogFragment extends GeoDialogFragmentBase {
 
         @Override
         public void onClick(View v) {
-            Toaster("Delete Sublayer -- Ask First");
+            GeoDialogHelper.deleteSublayer(getContext(), mSublayer, getFragmentManager());
+            SublayerActionsDialogFragment.this.getDialog().cancel();
         }
     };
 }

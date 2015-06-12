@@ -62,6 +62,7 @@ public class SublayerAdapter extends RecyclerView.Adapter<SublayerAdapter.ViewHo
     }
 
     protected class ViewHolder extends RecyclerView.ViewHolder {
+        Layer mSublayer;
 
         @InjectView(R.id.sublayerLabel) TextView mSublayerName;
         @InjectView(R.id.fab_edit)FloatingActionButton mEdit;
@@ -69,7 +70,7 @@ public class SublayerAdapter extends RecyclerView.Adapter<SublayerAdapter.ViewHo
 
         @OnClick(R.id.fab_edit)
         public void showEditDialog(){
-            GeoDialogHelper.modifySublayer(mContext, ((MainActivity)mContext).getSupportFragmentManager());
+            GeoDialogHelper.modifySublayer(mContext, mSublayer, ((MainActivity)mContext).getSupportFragmentManager());
         }
 
         public ViewHolder(View itemView) {
@@ -80,14 +81,14 @@ public class SublayerAdapter extends RecyclerView.Adapter<SublayerAdapter.ViewHo
         public void bindAllFeatures(Layer layer){
             mSublayerName.setText(layer.getName());
             mVisible.setChecked(layer.getIsShowing());
-
+            mSublayer = layer;
             mEdit.setVisibility(View.GONE);
         }
 
         public void bindSublayer(Layer layer) {
             mSublayerName.setText(layer.getName());
             mVisible.setChecked(layer.getIsShowing());
-
+            mSublayer = layer;
 
             mEdit.setVisibility(View.VISIBLE);
         }
