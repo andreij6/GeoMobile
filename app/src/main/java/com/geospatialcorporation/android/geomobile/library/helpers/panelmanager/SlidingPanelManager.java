@@ -4,13 +4,14 @@ import android.content.Context;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.view.Menu;
-import android.view.MenuItem;
 import android.view.View;
 
 import com.geospatialcorporation.android.geomobile.R;
 import com.geospatialcorporation.android.geomobile.application;
+import com.geospatialcorporation.android.geomobile.library.viewmode.IViewMode;
 import com.geospatialcorporation.android.geomobile.ui.MainActivity;
-import com.geospatialcorporation.android.geomobile.ui.fragments.panel_fragments.CollapsedPanelFragment;
+import com.geospatialcorporation.android.geomobile.ui.fragments.GoogleMapFragment;
+import com.geospatialcorporation.android.geomobile.ui.fragments.panel_fragments.DefaultCollapsedPanelFragment;
 import com.sothree.slidinguppanel.SlidingUpPanelLayout;
 
 /**
@@ -19,33 +20,34 @@ import com.sothree.slidinguppanel.SlidingUpPanelLayout;
 public class SlidingPanelManager implements ISlidingPanelManager{
     SlidingUpPanelLayout mMapPanel;
     Context mContext;
+    GoogleMapFragment mMapFragment;
 
     public SlidingPanelManager(Context context){
         mMapPanel = application.getMapFragmentPanel();
         mContext = context;
+        mMapFragment = (GoogleMapFragment)((MainActivity)context).getContentFragment();
     }
 
     @Override
     public void anchor() {
-        mMapPanel.setAnchorPoint(0.7f);
-        mMapPanel.setPanelState(SlidingUpPanelLayout.PanelState.ANCHORED);
+        if(getPanelState() != SlidingUpPanelLayout.PanelState.ANCHORED) {
+            mMapPanel.setAnchorPoint(0.7f);
+            mMapPanel.setPanelState(SlidingUpPanelLayout.PanelState.ANCHORED);
+        }
     }
 
     @Override
-    public void setup(final Menu menu) {
+    public void setup() {
         setDefaultCollapsedUI();
+
 
         mMapPanel.setPanelSlideListener(new SlidingUpPanelLayout.PanelSlideListener() {
             @Override
-            public void onPanelSlide(View view, float v) {
-
-            }
+            public void onPanelSlide(View view, float v) {}
 
             @Override
             public void onPanelCollapsed(View view) {
                 setDefaultCollapsedUI();
-                MenuItem item = menu.findItem(R.id.action_search);
-                item.setVisible(true);
             }
 
             @Override
@@ -68,8 +70,11 @@ public class SlidingPanelManager implements ISlidingPanelManager{
 
     @Override
     public void collapse() {
-        mMapPanel.setPanelState(SlidingUpPanelLayout.PanelState.COLLAPSED);
-        mMapPanel.setTouchEnabled(true);
+        if(getPanelState() != SlidingUpPanelLayout.PanelState.COLLAPSED) {
+            mMapPanel.setPanelState(SlidingUpPanelLayout.PanelState.COLLAPSED);
+            mMapPanel.setTouchEnabled(true);
+            mMapFragment.resetViewMode();
+        }
     }
 
     @Override
@@ -82,8 +87,13 @@ public class SlidingPanelManager implements ISlidingPanelManager{
         mMapPanel.setTouchEnabled(enabled);
     }
 
+    @Override
+    public SlidingUpPanelLayout.PanelState getPanelState() {
+        return mMapPanel.getPanelState();
+    }
+
     protected void setDefaultCollapsedUI(){
-        Fragment collapsedFragment = new CollapsedPanelFragment();
+        Fragment collapsedFragment = new DefaultCollapsedPanelFragment();
 
         FragmentManager fragmentManager = ((MainActivity)mContext).getSupportFragmentManager();
 

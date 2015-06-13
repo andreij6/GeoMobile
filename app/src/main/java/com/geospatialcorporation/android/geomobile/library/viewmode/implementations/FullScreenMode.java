@@ -1,12 +1,19 @@
 package com.geospatialcorporation.android.geomobile.library.viewmode.implementations;
 
 import android.app.AlertDialog;
+import android.support.v4.app.Fragment;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBar;
+import android.view.View;
 import android.view.ViewGroup;
 import android.widget.FrameLayout;
+import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 
+import com.geospatialcorporation.android.geomobile.R;
 import com.geospatialcorporation.android.geomobile.library.viewmode.IViewMode;
+import com.google.android.gms.maps.MapView;
+import com.melnykov.fab.FloatingActionButton;
 import com.sothree.slidinguppanel.SlidingUpPanelLayout;
 
 /**
@@ -19,14 +26,23 @@ public class FullScreenMode implements IViewMode {
         mBuilder = builder;
     }
 
-
-
     @Override
     public void Disable(Boolean showPanel) {
         mBuilder.mActionBar.show();
-        FrameLayout.LayoutParams params = (FrameLayout.LayoutParams)mBuilder.mDrawerLayout.getLayoutParams();
 
-        params.setMargins(0, mBuilder.mMarginTop, 0, 0);
+        mBuilder.mFab.setVisibility(View.GONE);
+
+        View mainDrawer = mBuilder.mDrawerLayout.findViewById(R.id.navigation_left_drawer);
+        View layerDrawer = mBuilder.mDrawerLayout.findViewById(R.id.layer_drawer);
+
+        ViewGroup.LayoutParams params1 = mainDrawer.getLayoutParams();
+        ViewGroup.LayoutParams params2 = layerDrawer.getLayoutParams();
+
+        ((ViewGroup.MarginLayoutParams)params1).setMargins(0, mBuilder.mMarginTop, 0, 0);
+        ((ViewGroup.MarginLayoutParams)params2).setMargins(0, mBuilder.mMarginTop,0,0);
+
+        mainDrawer.setLayoutParams(params1);
+        layerDrawer.setLayoutParams(params2);
 
         mBuilder.mSlidingUpPanelLayout.setPanelState(SlidingUpPanelLayout.PanelState.COLLAPSED);
     }
@@ -41,21 +57,33 @@ public class FullScreenMode implements IViewMode {
         ActionBar mActionBar;
         DrawerLayout mDrawerLayout;
         SlidingUpPanelLayout mSlidingUpPanelLayout;
+        FloatingActionButton mFab;
         int mMarginTop;
 
-        public FullScreenMode create(ActionBar actionBar, DrawerLayout drawerLayout, SlidingUpPanelLayout panel){
+        public FullScreenMode create(ActionBar actionBar, DrawerLayout drawerLayout, SlidingUpPanelLayout panel, FloatingActionButton fab){
             mActionBar = actionBar;
             mDrawerLayout = drawerLayout;
             mSlidingUpPanelLayout = panel;
+            mFab = fab;
 
-            FrameLayout.LayoutParams params = (FrameLayout.LayoutParams)drawerLayout.getLayoutParams();
-            mMarginTop = params.topMargin;
-
-            params.setMargins(0,0,0,0);
-
-            mDrawerLayout.setLayoutParams(params);
+            mFab.setVisibility(View.VISIBLE);
 
             mActionBar.hide();
+
+            View mainDrawer = mDrawerLayout.findViewById(R.id.navigation_left_drawer);
+            View layerDrawer = mDrawerLayout.findViewById(R.id.layer_drawer);
+
+            ViewGroup.LayoutParams params1 = mainDrawer.getLayoutParams();
+            ViewGroup.LayoutParams params2 = layerDrawer.getLayoutParams();
+
+            mMarginTop = ((ViewGroup.MarginLayoutParams)params1).topMargin;
+
+            ((ViewGroup.MarginLayoutParams)params1).setMargins(0, 0, 0, 0);
+            ((ViewGroup.MarginLayoutParams)params2).setMargins(0,0,0,0);
+
+            mainDrawer.setLayoutParams(params1);
+            layerDrawer.setLayoutParams(params2);
+
             return new FullScreenMode(this);
         }
 

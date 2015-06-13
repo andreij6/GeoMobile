@@ -4,6 +4,8 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 
 import com.geospatialcorporation.android.geomobile.R;
+import com.geospatialcorporation.android.geomobile.library.helpers.panelmanager.ISlidingPanelManager;
+import com.geospatialcorporation.android.geomobile.library.helpers.panelmanager.SlidingPanelManager;
 import com.geospatialcorporation.android.geomobile.library.viewmode.IViewMode;
 import com.geospatialcorporation.android.geomobile.ui.fragments.panel_fragments.QuickSearchFragment;
 import com.sothree.slidinguppanel.SlidingUpPanelLayout;
@@ -19,8 +21,7 @@ public class SearchMode implements IViewMode {
 
     @Override
     public void Disable(Boolean showPanel) {
-        mBuilder.mPanel.setTouchEnabled(true);
-        mBuilder.mPanel.setPanelState(SlidingUpPanelLayout.PanelState.COLLAPSED);
+        mBuilder.mPanelManager.collapse();
     }
 
     @Override
@@ -29,12 +30,12 @@ public class SearchMode implements IViewMode {
     }
 
     public static class Builder {
-        SlidingUpPanelLayout mPanel;
+        ISlidingPanelManager mPanelManager;
 
-        public Builder init(SlidingUpPanelLayout panel, FragmentManager supportFragmentManager) {
-            mPanel = panel;
+        public Builder init(FragmentManager supportFragmentManager, ISlidingPanelManager panelManager) {
+            mPanelManager = panelManager;
 
-            panel.setTouchEnabled(false);
+            mPanelManager.touch(false);
 
             Fragment quickSearchFragment = new QuickSearchFragment();
 
@@ -42,7 +43,7 @@ public class SearchMode implements IViewMode {
                     .replace(R.id.slider_content, quickSearchFragment)
                     .commit();
 
-            anchorSlider();
+            mPanelManager.anchor();
 
             return this;
         }
@@ -51,13 +52,6 @@ public class SearchMode implements IViewMode {
             return new SearchMode(this);
         }
 
-        //region Slider Helpers
-        protected void anchorSlider(){
-            mPanel.setAnchorPoint(0.7f);
-            mPanel.setPanelState(SlidingUpPanelLayout.PanelState.ANCHORED);
-        }
-
-        //endregion
     }
 
 }

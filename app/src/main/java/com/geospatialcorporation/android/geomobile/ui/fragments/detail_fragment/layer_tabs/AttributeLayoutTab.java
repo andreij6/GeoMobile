@@ -35,6 +35,7 @@ import java.util.List;
 
 import butterknife.ButterKnife;
 import butterknife.InjectView;
+import butterknife.OnClick;
 
 /**
  * Created by andre on 6/7/2015.
@@ -48,6 +49,11 @@ public class AttributeLayoutTab extends GeoDetailsTabBase<Layer> {
     @InjectView(R.id.attributeRecycler) RecyclerView mRecyclerView;
     @InjectView(R.id.swipe_refresh_layout) SwipeRefreshLayout mSwipeRefreshLayout;
     @InjectView(R.id.fab) FloatingActionButton mFab;
+
+    @OnClick(R.id.fab)
+    public void addColumn(){
+        Toaster("Add a Attribute Column");
+    }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState){

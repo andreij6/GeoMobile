@@ -168,4 +168,5 @@
     <string name="type">Type</string>
     <string name="name">Name</string>
     <string name="defaultValue">Default Value</string>
+    <string name="query">Box/Point Query</string>
 </resources>

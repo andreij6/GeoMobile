@@ -21,8 +21,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/drawer_layout"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:layout_marginTop="?attr/actionBarSize">
+    android:layout_height="match_parent">
 
     <!-- As the main content view, the view below consumes the entire
          space available using match_parent in both dimensions. -->
@@ -46,6 +45,7 @@
               android:layout_gravity="start"
               android:name="com.geospatialcorporation.android.geomobile.ui.fragments.drawer.MainNavigationDrawerFragment"
               tools:layout="@layout/fragment_left_navigation_drawer"
+              android:layout_marginTop="?attr/actionBarSize"
         />
 
     <fragment android:id="@+id/layer_drawer"
@@ -53,6 +53,7 @@
               android:layout_height="match_parent"
               android:layout_gravity="end"
               android:name="com.geospatialcorporation.android.geomobile.ui.fragments.drawer.LayerSelectorDrawerFragment"
-              tools:layout="@layout/fragment_right_navigation_drawer"/>
+              tools:layout="@layout/fragment_right_navigation_drawer"
+              android:layout_marginTop="?attr/actionBarSize"/>
 
 </android.support.v4.widget.DrawerLayout>
