@@ -75,6 +75,37 @@ public class LayerAttributeColumns {
         return result;
     }
 
+    public String getDataTypeViewName() {
+        String result = "Missing Data Type";
+
+        //switch wouldnt work right here IDK y.
+        if (getDataType() == LayerAttributeColumnDataTypeCodes.IDFIELD) {
+            result = "Id Field";
+        }
+        if (getDataType() == LayerAttributeColumnDataTypeCodes.TEXT) {
+            result = "Text";
+        }
+
+        if (getDataType() == LayerAttributeColumnDataTypeCodes.BOOLEAN){
+            result = "True / False";
+        }
+
+        if (getDataType() == LayerAttributeColumnDataTypeCodes.DATE){
+            result = "Date";
+        }
+        if (getDataType() ==LayerAttributeColumnDataTypeCodes.DATETIME) {
+            result = "DateTime";
+        }
+        if (getDataType() ==LayerAttributeColumnDataTypeCodes.INTEGER) {
+            result = "Integer";
+        }
+        if (getDataType() ==LayerAttributeColumnDataTypeCodes.DECIMAL) {
+            result = "Decimal";
+        }
+
+        return result;
+    }
+
     public void setDataType(Integer dataType) {
         DataType = dataType;
     }

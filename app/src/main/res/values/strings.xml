@@ -165,4 +165,7 @@
     <string name="layer_actions">Layer Actions</string>
     <string name="finish">Finish</string>
     <string name="move_document">Move Document</string>
+    <string name="type">Type</string>
+    <string name="name">Name</string>
+    <string name="defaultValue">Default Value</string>
 </resources>
