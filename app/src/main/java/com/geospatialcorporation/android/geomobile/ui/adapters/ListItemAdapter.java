@@ -26,6 +26,8 @@ import com.geospatialcorporation.android.geomobile.library.util.Dialogs;
 import com.geospatialcorporation.android.geomobile.models.Folders.Folder;
 import com.geospatialcorporation.android.geomobile.models.Layers.Layer;
 import com.geospatialcorporation.android.geomobile.models.Document.Document;
+import com.geospatialcorporation.android.geomobile.ui.adapters.base.GeoHolderBase;
+import com.geospatialcorporation.android.geomobile.ui.adapters.base.GeoRecyclerAdapterBase;
 import com.geospatialcorporation.android.geomobile.ui.fragments.detail_fragment.DocumentDetailFragment;
 import com.geospatialcorporation.android.geomobile.ui.fragments.detail_fragment.LayerFolderDetailFragment;
 import com.geospatialcorporation.android.geomobile.ui.fragments.tree_fragments.DocumentFragment;
@@ -40,58 +42,28 @@ import java.util.List;
 import butterknife.ButterKnife;
 import butterknife.InjectView;
 
-public class ListItemAdapter extends RecyclerView.Adapter<ListItemAdapter.ListViewHolder> {
+public class ListItemAdapter extends GeoRecyclerAdapterBase<ListItemAdapter.Holder, ListItem> {
     protected final static String TAG = ListItemAdapter.class.getSimpleName();
 
     public static final String LAYER = "Layer";
     public static final String LIBRARY = "Library";
 
-    private Context mContext;
-    private List<ListItem> mListItems;
-    private ListItem mListItem;
-    private DataHelper mHelper;
     private String mViewType;
     private FragmentManager mFragmentManager;
 
     public ListItemAdapter(Context context, List<ListItem> data, String ViewType, FragmentManager fm) {
-        if(ViewType == ListItemAdapter.LAYER) {
-            AddEmptyListItems(data, ListItem.LAYER);
-        } else {
-            AddEmptyListItems(data, ListItem.DOCUMENT);
-        }
-        mContext = context;
-        mListItems = data;
-        mHelper = new DataHelper();
+        super(context, data, R.layout.recycler_list_library, Holder.class);
         mViewType = ViewType;
         mFragmentManager = fm;
     }
 
-    protected void AddEmptyListItems(List<ListItem> data, int type) {
-        for(int x = 0; x < 2; x++) {
-            data.add(new ListItem(type));
-        }
-    }
-
     @Override
-    public ListViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.recycler_list_library, parent, false);
-
-        return new ListViewHolder(view);
+    public Holder onCreateViewHolder(ViewGroup parent, int viewType) {
+        setView(parent, viewType);
+        return new Holder(mView);
     }
 
-    @Override
-    public void onBindViewHolder(ListViewHolder holder, int position) {
-        holder.bindFolder(mListItems.get(position));
-    }
-
-    @Override
-    public int getItemCount() {
-        int count = mListItems.size();
-        return count;
-    }
-
-
-    protected class ListViewHolder extends RecyclerView.ViewHolder {
+    protected class Holder extends GeoHolderBase<ListItem> {
         //region Properties
         ListItem mItem;
         Folder mFolder;
@@ -105,9 +77,8 @@ public class ListItemAdapter extends RecyclerView.Adapter<ListItemAdapter.ListVi
         IAppDataRepository<Document> DocumentRepo;
         IAppDataRepository<Folder> FolderRepo;
 
-        public ListViewHolder(View itemView) {
+        public Holder(View itemView) {
             super(itemView);
-            ButterKnife.inject(this, itemView);
             itemName.setOnClickListener(ItemOnClickListener);
             itemIcon.setOnClickListener(ItemOnClickListener);
             itemInfo.setOnClickListener(ItemDetailOnClickListener);
@@ -116,7 +87,7 @@ public class ListItemAdapter extends RecyclerView.Adapter<ListItemAdapter.ListVi
 
         }
 
-        public void bindFolder(ListItem item) {
+        public void bind(ListItem item) {
             mItem = item;
             itemName.setText(item.getName());
 

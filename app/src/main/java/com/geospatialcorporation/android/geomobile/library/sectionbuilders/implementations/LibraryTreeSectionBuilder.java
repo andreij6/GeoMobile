@@ -27,11 +27,19 @@ public class LibraryTreeSectionBuilder extends TreeSectionBuilderBase<ListItem> 
     public ISectionBuilder<ListItem> BuildAdapter(List<ListItem> data, int folderCount) {
         mData = data;
 
+        AddEmptyData(mData);
+
         ListItemAdapter adapter = new ListItemAdapter(mContext, mData, ListItemAdapter.LIBRARY, mFragmentManager);
 
         buildAdapter(adapter, folderCount);
 
         return this;
+    }
+
+    private void AddEmptyData(List<ListItem> data) {
+        for(int x = 0; x < 2; x++) {
+            data.add(new ListItem(ListItem.DOCUMENT));
+        }
     }
 
     @Override

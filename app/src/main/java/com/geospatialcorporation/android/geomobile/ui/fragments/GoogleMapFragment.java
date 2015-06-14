@@ -135,6 +135,7 @@ public class GoogleMapFragment extends GeoViewFragmentBase implements
     @OnClick(R.id.fab_fullscreen_close)
     public void closeFullScreenMode(){
         //probably an expensive way to reset after fullscreen mode but I havent found a good solution yet to disable fullscreen mode
+        onStop();
         getActivity().finish();
         startActivity(getActivity().getIntent());
     }
@@ -270,6 +271,7 @@ public class GoogleMapFragment extends GeoViewFragmentBase implements
         mMapView.onPause();
         super.onPause();
     }
+
     //endregion
 
     //region ViewModeSetups
@@ -371,18 +373,15 @@ public class GoogleMapFragment extends GeoViewFragmentBase implements
 
         if(mViewMode != null){
             if(mViewMode.isSame(mode)){
-                Toaster("Same");
                 mViewMode.Disable(true);
                 mViewMode = null;
             } else {
-                Toaster("not same not null");
                 mViewMode.Disable(false);
                 mViewMode = null;
                 mViewMode = mode;
             }
 
         } else {
-            Toaster("just setting");
             mViewMode = mode;
         }
     }
@@ -432,11 +431,6 @@ public class GoogleMapFragment extends GeoViewFragmentBase implements
             CameraUpdate update = CameraUpdateFactory.newCameraPosition(position);
             mMap.moveCamera(update);
         }
-    }
-
-    public IViewMode getViewMode() {
-        Toaster("getting ViewMode to set to null");
-        return mViewMode;
     }
 
     public void resetViewMode() {

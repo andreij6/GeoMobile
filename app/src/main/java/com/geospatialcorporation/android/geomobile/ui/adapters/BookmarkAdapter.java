@@ -11,9 +11,6 @@ import com.geospatialcorporation.android.geomobile.models.Bookmarks.Bookmark;
 
 import java.util.List;
 
-/**
- * Created by andre on 6/5/2015.
- */
 public class BookmarkAdapter extends RecyclerView.Adapter<BookmarkAdapter.Holder> {
 
     Context mContext;

@@ -75,7 +75,6 @@ public class MainActivity extends ActionBarActivity
         OnFragmentInteractionListener {
     private static final String TAG = MainActivity.class.getSimpleName();
 
-
     //region Properties
     private GoogleMapFragment mMapFragment;
     GoogleMap mMap;
@@ -84,7 +83,6 @@ public class MainActivity extends ActionBarActivity
     MainNavigationDrawerFragment mMainMainNavigationDrawerFragment;
     LayerSelectorDrawerFragment mLayerDrawerFragement;
     //endregion
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -210,8 +208,6 @@ public class MainActivity extends ActionBarActivity
     public View getLayerListView() {
         return findViewById(R.id.layer_drawer);
     }
-
-
 
     public static class MediaConstants {
         public static final int PICK_FILE_REQUEST = 0;

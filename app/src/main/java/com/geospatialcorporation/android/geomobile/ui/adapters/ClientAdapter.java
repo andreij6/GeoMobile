@@ -10,7 +10,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.geospatialcorporation.android.geomobile.R;
 import com.geospatialcorporation.android.geomobile.application;
@@ -18,6 +17,8 @@ import com.geospatialcorporation.android.geomobile.library.constants.ClientTypeC
 import com.geospatialcorporation.android.geomobile.library.rest.LoginService;
 import com.geospatialcorporation.android.geomobile.models.Client;
 import com.geospatialcorporation.android.geomobile.ui.MainActivity;
+import com.geospatialcorporation.android.geomobile.ui.adapters.base.GeoHolderBase;
+import com.geospatialcorporation.android.geomobile.ui.adapters.base.GeoRecyclerAdapterBase;
 
 import java.util.List;
 
@@ -25,42 +26,25 @@ import butterknife.ButterKnife;
 import butterknife.InjectView;
 import retrofit.RetrofitError;
 
-public class ClientAdapter extends RecyclerView.Adapter<ClientAdapter.ClientViewHolder> {
+public class ClientAdapter extends GeoRecyclerAdapterBase<ClientAdapter.Holder, Client> {
     private static final String TAG = ClientAdapter.class.getSimpleName();
 
-    private Context mContext;
-    private List<Client> mClients;
     private Client mSelectedClient;
     private LoginService mService;
 
     public ClientAdapter(Context context, List<Client> clients) {
-        mContext = context;
-        mClients = clients;
+        super(context, clients, R.layout.recycler_list_client, Holder.class);
         mService = application.getRestAdapter().create(LoginService.class);
     }
 
     @Override
-    public ClientViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+    public Holder onCreateViewHolder(ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.recycler_list_client, parent, false);
 
-        return new ClientViewHolder(view);
+        return new Holder(view);
     }
 
-    @Override
-    public void onBindViewHolder(ClientViewHolder holder, int position) {
-        holder.bindClientItem(mClients.get(position));
-    }
-
-    @Override
-    public int getItemCount() {
-        if (mClients != null) {
-            return mClients.size();
-        } else {
-            return 0;
-        }
-    }
-
-    protected class ClientViewHolder extends RecyclerView.ViewHolder {
+    protected class Holder extends GeoHolderBase<Client> {
         //region Properties
         @InjectView(R.id.clientNameLabel) TextView mClientName;
         @InjectView(R.id.impersonate) Button mImpersonateBtn;
@@ -69,9 +53,9 @@ public class ClientAdapter extends RecyclerView.Adapter<ClientAdapter.ClientView
         Client mClient;
         //endregion
 
-        public ClientViewHolder(View itemView) {
+        public Holder(View itemView) {
             super(itemView);
-            ButterKnife.inject(this, itemView);
+
             mClientTypeCodes = new ClientTypeCodes();
 
             mImpersonateBtn.setOnClickListener(new View.OnClickListener() {
@@ -83,7 +67,7 @@ public class ClientAdapter extends RecyclerView.Adapter<ClientAdapter.ClientView
             });
         }
 
-        public void bindClientItem(Client client) {
+        public void bind(Client client) {
             mClient = client;
             mClientName.setText(client.getName());
             mClientType.setText(mClientTypeCodes.getClientTypeName(client.getType()));

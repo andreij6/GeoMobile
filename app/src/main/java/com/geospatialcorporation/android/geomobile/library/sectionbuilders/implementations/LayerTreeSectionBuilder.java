@@ -25,12 +25,18 @@ public class LayerTreeSectionBuilder extends TreeSectionBuilderBase<ListItem> im
     @Override
     public ISectionBuilder<ListItem> BuildAdapter(List<ListItem> data, int folderCount) {
         mData = data;
-
+        AddEmptyData(mData);
         ListItemAdapter adapter = new ListItemAdapter(mContext, mData, ListItemAdapter.LAYER, mFragmentManager);
 
         buildAdapter(adapter, folderCount);
 
         return this;
+    }
+
+    private void AddEmptyData(List<ListItem> data) {
+        for(int x = 0; x < 2; x++) {
+            data.add(new ListItem(ListItem.LAYER));
+        }
     }
 
     @Override
@@ -39,4 +45,6 @@ public class LayerTreeSectionBuilder extends TreeSectionBuilderBase<ListItem> im
 
         return this;
     }
+
+
 }

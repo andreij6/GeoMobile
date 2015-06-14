@@ -1,6 +1,9 @@
 package com.geospatialcorporation.android.geomobile.ui.fragments.panel_fragments;
 
 import android.os.Bundle;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -15,6 +18,7 @@ import com.geospatialcorporation.android.geomobile.library.helpers.panelmanager.
 import com.geospatialcorporation.android.geomobile.library.rest.QueryService;
 import com.geospatialcorporation.android.geomobile.models.Query.quickSearch.QuickSearchRequest;
 import com.geospatialcorporation.android.geomobile.models.Query.quickSearch.QuickSearchResponse;
+import com.geospatialcorporation.android.geomobile.ui.adapters.QuickSearchAdapter;
 import com.geospatialcorporation.android.geomobile.ui.fragments.GeoViewFragmentBase;
 
 import java.util.List;
@@ -37,6 +41,7 @@ public class QuickSearchFragment extends GeoViewFragmentBase {
     QueryService mService;
 
     @InjectView(R.id.searchBox) EditText SearchBox;
+    @InjectView(R.id.searchRecyclerView) RecyclerView mRecyclerView;
 
     @OnClick(R.id.close)
     public void close(){
@@ -52,32 +57,19 @@ public class QuickSearchFragment extends GeoViewFragmentBase {
 
         SetTitle(R.string.quicksearch);
 
+        RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(container.getContext());
+
+        mRecyclerView.setLayoutManager(layoutManager);
+
         SearchBox.setOnEditorActionListener(new TextView.OnEditorActionListener() {
             @Override
             public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
                 if (actionId == EditorInfo.IME_ACTION_DONE) {
-                    String query = SearchBox.getText().toString();
-                    Toaster("Message Sent");
-                    mService.quickSearch(new QuickSearchRequest(query), new Callback<List<QuickSearchResponse>>() {
-                        @Override
-                        public void success(List<QuickSearchResponse> response, Response response2) {
+                    sendSearch();
+                }
 
-                            Toaster("Responses: " + response.size());
-                            if (response.size() == 0) {
-                                Toaster(getString(R.string.no_results_found));
-                            } else {
-                                Toaster("Response 1 Type: " + response.get(0).getType());
-                                Toaster("Response 1 Result Count: " + response.get(0).getResults().size());
-                                Toaster("Response 1 Result Value: " + response.get(0).getResults().get(0).getValue());
-                            }
-
-                        }
-
-                        @Override
-                        public void failure(RetrofitError error) {
-                            Toaster("Error: " + error.getMessage());
-                        }
-                    });
+                if(mRecyclerView.getVisibility() != View.GONE){
+                    mRecyclerView.setVisibility(View.GONE);
                 }
 
                 return false;
@@ -87,6 +79,30 @@ public class QuickSearchFragment extends GeoViewFragmentBase {
         mService = application.getRestAdapter().create(QueryService.class);
 
         return mView;
+    }
+
+    private void sendSearch() {
+        String query = SearchBox.getText().toString();
+
+        mService.quickSearch(new QuickSearchRequest(query), new Callback<List<QuickSearchResponse>>() {
+            @Override
+            public void success(List<QuickSearchResponse> response, Response response2) {
+                mRecyclerView.setVisibility(View.VISIBLE);
+
+                if(response != null || response.size() == 0) {
+                    QuickSearchAdapter adapter = new QuickSearchAdapter(getActivity(), response);
+                    mRecyclerView.setAdapter(adapter);
+                } else {
+                    Toaster("No Results");
+                }
+            }
+
+            @Override
+            public void failure(RetrofitError error) {
+                Toaster("Error");
+                Log.d(TAG, error.getMessage());
+            }
+        });
     }
 
     @Override

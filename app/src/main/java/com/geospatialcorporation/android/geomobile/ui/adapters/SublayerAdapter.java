@@ -10,11 +10,13 @@ import android.widget.TextView;
 
 import com.geospatialcorporation.android.geomobile.R;
 import com.geospatialcorporation.android.geomobile.library.helpers.GeoDialogHelper;
-import com.geospatialcorporation.android.geomobile.library.rest.SublayerService;
 import com.geospatialcorporation.android.geomobile.models.Layers.Layer;
 import com.geospatialcorporation.android.geomobile.ui.MainActivity;
+import com.geospatialcorporation.android.geomobile.ui.adapters.base.GeoHolderBase;
+import com.geospatialcorporation.android.geomobile.ui.adapters.base.GeoRecyclerAdapterBase;
 import com.melnykov.fab.FloatingActionButton;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import butterknife.ButterKnife;
@@ -24,44 +26,31 @@ import butterknife.OnClick;
 /**
  * Created by andre on 6/8/2015.
  */
-public class SublayerAdapter extends RecyclerView.Adapter<SublayerAdapter.ViewHolder> {
-    Context mContext;
-    List<Layer> mData;
+public class SublayerAdapter extends GeoRecyclerAdapterBase<SublayerAdapter.Holder, Layer> {
 
     public SublayerAdapter(Context context, List<Layer> sublayers){
-        mContext = context;
-        mData = sublayers;
+        super(context, sublayers, R.layout.recycler_list_sublayer, Holder.class);
+        mData = sublayers == null ? new ArrayList<Layer>() : sublayers ;
         Layer allFeatures = new Layer("All Features");
         mData.add(0, allFeatures);
     }
 
     @Override
-    public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.recycler_list_sublayer, parent, false);
-
-        return new ViewHolder(v);
+    public Holder onCreateViewHolder(ViewGroup parent, int viewType) {
+        setView(parent, viewType);
+        return new Holder(mView);
     }
 
     @Override
-    public void onBindViewHolder(ViewHolder holder, int position) {
+    public void onBindViewHolder(Holder holder, int position) {
         if(mData.get(position).getName().equals("All Features")){
             holder.bindAllFeatures(mData.get(position));
         } else {
-            holder.bindSublayer(mData.get(position));
+            holder.bind(mData.get(position));
         }
     }
 
-    @Override
-    public int getItemCount() {
-        if(mData != null){
-            return mData.size();
-        } else {
-            return 0;
-        }
-
-    }
-
-    protected class ViewHolder extends RecyclerView.ViewHolder {
+    protected class Holder extends GeoHolderBase<Layer> {
         Layer mSublayer;
 
         @InjectView(R.id.sublayerLabel) TextView mSublayerName;
@@ -73,24 +62,26 @@ public class SublayerAdapter extends RecyclerView.Adapter<SublayerAdapter.ViewHo
             GeoDialogHelper.modifySublayer(mContext, mSublayer, ((MainActivity)mContext).getSupportFragmentManager());
         }
 
-        public ViewHolder(View itemView) {
+        public Holder(View itemView) {
             super(itemView);
-            ButterKnife.inject(this, itemView);
         }
 
         public void bindAllFeatures(Layer layer){
-            mSublayerName.setText(layer.getName());
-            mVisible.setChecked(layer.getIsShowing());
-            mSublayer = layer;
+            bindLayer(layer);
+
             mEdit.setVisibility(View.GONE);
         }
 
-        public void bindSublayer(Layer layer) {
+        public void bind(Layer layer) {
+            bindLayer(layer);
+
+            mEdit.setVisibility(View.VISIBLE);
+        }
+
+        public void bindLayer(Layer layer){
             mSublayerName.setText(layer.getName());
             mVisible.setChecked(layer.getIsShowing());
             mSublayer = layer;
-
-            mEdit.setVisibility(View.VISIBLE);
         }
     }
 }

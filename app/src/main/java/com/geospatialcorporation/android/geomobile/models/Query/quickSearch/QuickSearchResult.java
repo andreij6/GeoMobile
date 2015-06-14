@@ -46,6 +46,22 @@ public class QuickSearchResult {
     public void setValue(String value) {
         Value = value;
     }
+
+    public String getExt() {
+        return Ext;
+    }
+
+    public void setExt(String ext) {
+        Ext = ext;
+    }
+
+    public String getName() {
+        return Name;
+    }
+
+    public void setName(String name) {
+        Name = name;
+    }
     //endregion
 
     CenterPoint mCenterPoint;
@@ -53,4 +69,6 @@ public class QuickSearchResult {
     int LayerId;
     String LayerName;
     String Value;
+    String Ext;
+    String Name;
 }

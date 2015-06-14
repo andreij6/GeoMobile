@@ -30,6 +30,7 @@ import com.geospatialcorporation.android.geomobile.ui.fragments.detail_fragment.
 import com.melnykov.fab.FloatingActionButton;
 import com.sothree.slidinguppanel.SlidingUpPanelLayout;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import butterknife.ButterKnife;
@@ -72,10 +73,16 @@ public class SublayersTab extends GeoDetailsTabBase<Layer> {
 
         @Override
         protected List<Layer> doInBackground(Void... params) {
-            mService = new SublayerTreeService();
+            mData = new ArrayList<>();
 
-            if(mEntity != null){
-                mData = ((SublayerTreeService)mService).getSublayersByLayerId(mEntity.getId());
+            try {
+                mService = new SublayerTreeService();
+
+                if (mEntity != null) {
+                    mData = ((SublayerTreeService) mService).getSublayersByLayerId(mEntity.getId());
+                }
+            } catch (Exception e){
+                Toaster(e.getMessage());
             }
 
             return mData;

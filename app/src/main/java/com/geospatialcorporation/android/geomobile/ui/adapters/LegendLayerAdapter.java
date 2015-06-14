@@ -20,6 +20,8 @@ import com.geospatialcorporation.android.geomobile.application;
 import com.geospatialcorporation.android.geomobile.models.Folders.Folder;
 import com.geospatialcorporation.android.geomobile.models.Layers.Layer;
 import com.geospatialcorporation.android.geomobile.ui.MainActivity;
+import com.geospatialcorporation.android.geomobile.ui.adapters.base.GeoHolderBase;
+import com.geospatialcorporation.android.geomobile.ui.adapters.base.GeoRecyclerAdapterBase;
 import com.geospatialcorporation.android.geomobile.ui.fragments.GoogleMapFragment;
 import com.geospatialcorporation.android.geomobile.ui.fragments.detail_fragment.LayerDetailFragment;
 
@@ -34,50 +36,19 @@ import butterknife.InjectView;
 /**
  * Created by andre on 6/5/2015.
  */
-public class LegendLayerAdapter extends RecyclerView.Adapter<LegendLayerAdapter.Holder> {
+public class LegendLayerAdapter extends GeoRecyclerAdapterBase<LegendLayerAdapter.Holder, Layer> {
 
-    List<Layer> mLayers;
-    Context mContext;
-
-    public LegendLayerAdapter(Context context, List<Folder> layerFolders){
-        mContext = context;
-        mLayers = getLayersFromFolders(layerFolders);
-    }
-
-    private List<Layer> getLayersFromFolders(List<Folder> layerFolders) {
-        List<Layer> result = new ArrayList<>();
-
-        for(Folder folder : layerFolders){
-            if(folder.getLayers() != null || !folder.getLayers().isEmpty()){
-                result.addAll(folder.getLayers());
-            }
-        }
-
-        return result;
+    public LegendLayerAdapter(Context context, List<Layer> layers){
+        super(context, layers, R.layout.recycler_legend_layers, Holder.class);
     }
 
     @Override
     public Holder onCreateViewHolder(ViewGroup parent, int viewType) {
-        View v = LayoutInflater.from(mContext).inflate(R.layout.recycler_legend_layers, parent, false);
-
-        return new Holder(v);
+        setView(parent, viewType);
+        return new Holder(mView);
     }
 
-    @Override
-    public void onBindViewHolder(Holder holder, int position) {
-        holder.bindLegendLayers(mLayers.get(position));
-    }
-
-    @Override
-    public int getItemCount() {
-        if(mLayers != null){
-            return mLayers.size();
-        } else {
-            return 0;
-        }
-    }
-
-    public class Holder extends RecyclerView.ViewHolder {
+    public class Holder extends GeoHolderBase<Layer> {
 
         @InjectView(R.id.layerNameTV) TextView mLayerName;
         @InjectView(R.id.isVisible)CheckBox isVisibleCB;
@@ -86,10 +57,9 @@ public class LegendLayerAdapter extends RecyclerView.Adapter<LegendLayerAdapter.
         private Layer mLayer;
         public Holder(View itemView) {
             super(itemView);
-            ButterKnife.inject(this, itemView);
         }
 
-        public void bindLegendLayers(Layer layer){
+        public void bind(Layer layer){
             mLayer = layer;
 
             mLayerName.setText(layer.getName());

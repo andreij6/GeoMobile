@@ -32,7 +32,9 @@ public class LegendLayerSectionBuilder extends SectionBuilderBase<Folder> implem
     public ISectionBuilder<Folder> BuildAdapter(List<Folder> data, int folderCount) {
         mData = data;
 
-        LegendLayerAdapter adapter = new LegendLayerAdapter(mContext, data);
+        List<Layer> layers = getLayersFromFolders(data);
+
+        LegendLayerAdapter adapter = new LegendLayerAdapter(mContext, layers);
 
         List<SimpleSectionedRecyclerViewAdapter.Section> sections = new ArrayList<>();
 
@@ -74,6 +76,18 @@ public class LegendLayerSectionBuilder extends SectionBuilderBase<Folder> implem
         mSectionedAdapter.setSections(sections.toArray(sectionArray));
 
         return this;
+    }
+
+    private List<Layer> getLayersFromFolders(List<Folder> layerFolders) {
+        List<Layer> result = new ArrayList<>();
+
+        for(Folder folder : layerFolders){
+            if(folder.getLayers() != null || !folder.getLayers().isEmpty()){
+                result.addAll(folder.getLayers());
+            }
+        }
+
+        return result;
     }
 
     private boolean isRoot(Folder folder) {
