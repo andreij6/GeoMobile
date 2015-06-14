@@ -1,9 +1,8 @@
-package com.geospatialcorporation.android.geomobile.ui.adapters;
+package com.geospatialcorporation.android.geomobile.ui.adapters.recycler;
 
 import android.content.Context;
 import android.content.Intent;
 import android.os.AsyncTask;
-import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -17,12 +16,11 @@ import com.geospatialcorporation.android.geomobile.library.constants.ClientTypeC
 import com.geospatialcorporation.android.geomobile.library.rest.LoginService;
 import com.geospatialcorporation.android.geomobile.models.Client;
 import com.geospatialcorporation.android.geomobile.ui.MainActivity;
-import com.geospatialcorporation.android.geomobile.ui.adapters.base.GeoHolderBase;
-import com.geospatialcorporation.android.geomobile.ui.adapters.base.GeoRecyclerAdapterBase;
+import com.geospatialcorporation.android.geomobile.ui.adapters.recycler.base.GeoHolderBase;
+import com.geospatialcorporation.android.geomobile.ui.adapters.recycler.base.GeoRecyclerAdapterBase;
 
 import java.util.List;
 
-import butterknife.ButterKnife;
 import butterknife.InjectView;
 import retrofit.RetrofitError;
 

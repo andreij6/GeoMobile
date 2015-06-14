@@ -17,7 +17,7 @@ import com.geospatialcorporation.android.geomobile.R;
 import com.geospatialcorporation.android.geomobile.application;
 import com.geospatialcorporation.android.geomobile.library.rest.LoginService;
 import com.geospatialcorporation.android.geomobile.models.Client;
-import com.geospatialcorporation.android.geomobile.ui.adapters.ClientAdapter;
+import com.geospatialcorporation.android.geomobile.ui.adapters.recycler.ClientAdapter;
 
 import java.util.ArrayList;
 import java.util.List;

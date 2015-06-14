@@ -1,8 +1,6 @@
-package com.geospatialcorporation.android.geomobile.ui.adapters;
+package com.geospatialcorporation.android.geomobile.ui.adapters.recycler;
 
 import android.content.Context;
-import android.support.v7.widget.RecyclerView;
-import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.CheckBox;
@@ -12,14 +10,13 @@ import com.geospatialcorporation.android.geomobile.R;
 import com.geospatialcorporation.android.geomobile.library.helpers.GeoDialogHelper;
 import com.geospatialcorporation.android.geomobile.models.Layers.Layer;
 import com.geospatialcorporation.android.geomobile.ui.MainActivity;
-import com.geospatialcorporation.android.geomobile.ui.adapters.base.GeoHolderBase;
-import com.geospatialcorporation.android.geomobile.ui.adapters.base.GeoRecyclerAdapterBase;
+import com.geospatialcorporation.android.geomobile.ui.adapters.recycler.base.GeoHolderBase;
+import com.geospatialcorporation.android.geomobile.ui.adapters.recycler.base.GeoRecyclerAdapterBase;
 import com.melnykov.fab.FloatingActionButton;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import butterknife.ButterKnife;
 import butterknife.InjectView;
 import butterknife.OnClick;
 

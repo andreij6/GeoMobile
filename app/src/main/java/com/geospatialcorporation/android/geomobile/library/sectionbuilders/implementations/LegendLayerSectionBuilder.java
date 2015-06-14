@@ -1,23 +1,19 @@
 package com.geospatialcorporation.android.geomobile.library.sectionbuilders.implementations;
 
 import android.content.Context;
-import android.os.AsyncTask;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 
 import com.geospatialcorporation.android.geomobile.R;
 import com.geospatialcorporation.android.geomobile.library.sectionbuilders.ISectionBuilder;
 import com.geospatialcorporation.android.geomobile.library.sectionbuilders.SectionBuilderBase;
 import com.geospatialcorporation.android.geomobile.models.Folders.Folder;
 import com.geospatialcorporation.android.geomobile.models.Layers.Layer;
-import com.geospatialcorporation.android.geomobile.ui.adapters.LegendLayerAdapter;
+import com.geospatialcorporation.android.geomobile.ui.adapters.recycler.LegendLayerAdapter;
 import com.geospatialcorporation.android.geomobile.ui.adapters.SimpleSectionedRecyclerViewAdapter;
 
 import java.util.ArrayList;
 import java.util.List;
-
-import retrofit.RetrofitError;
 
 /**
  * Created by andre on 6/5/2015.

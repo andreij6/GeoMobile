@@ -12,9 +12,6 @@ import com.geospatialcorporation.android.geomobile.R;
 
 import java.util.List;
 
-/**
- * Created by andre on 6/2/2015.
- */
 public class MainNavigationAdapter extends ArrayAdapter<String> {
     List<String> mMenuItems;
     Context mContext;

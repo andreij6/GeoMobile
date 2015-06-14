@@ -1,4 +1,4 @@
-package com.geospatialcorporation.android.geomobile.ui.adapters.base;
+package com.geospatialcorporation.android.geomobile.ui.adapters.recycler.base;
 
 import android.support.v7.widget.RecyclerView;
 import android.view.View;

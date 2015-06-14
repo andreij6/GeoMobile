@@ -50,6 +50,7 @@ public class DefaultCollapsedPanelFragment extends GeoViewFragmentBase {
         return mView;
     }
 
+    //region ClickListeners
     protected View.OnClickListener setBookmarkMode = new View.OnClickListener() {
         @Override
         public void onClick(View v) {
@@ -84,6 +85,7 @@ public class DefaultCollapsedPanelFragment extends GeoViewFragmentBase {
             }
         }
     };
+    //endregion
 
     private void setViewMode(String viewMode) {
         GoogleMapFragment mapFragment = (GoogleMapFragment)(((MainActivity) getActivity()).getContentFragment());

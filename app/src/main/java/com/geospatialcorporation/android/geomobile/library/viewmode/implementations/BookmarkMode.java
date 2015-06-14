@@ -1,21 +1,15 @@
 package com.geospatialcorporation.android.geomobile.library.viewmode.implementations;
 
-import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.view.View;
-import android.widget.Toast;
 
 import com.geospatialcorporation.android.geomobile.R;
-import com.geospatialcorporation.android.geomobile.application;
-import com.geospatialcorporation.android.geomobile.library.helpers.MapStateManager;
 import com.geospatialcorporation.android.geomobile.library.helpers.panelmanager.SlidingPanelManager;
 import com.geospatialcorporation.android.geomobile.library.viewmode.IViewMode;
-import com.geospatialcorporation.android.geomobile.ui.fragments.panel_fragments.BookmarkFragment;
-import com.geospatialcorporation.android.geomobile.ui.fragments.panel_fragments.QuickSearchFragment;
+import com.geospatialcorporation.android.geomobile.ui.fragments.panel_fragments.BookmarkPanelFragment;
 import com.google.android.gms.maps.GoogleMap;
 import com.melnykov.fab.FloatingActionButton;
-import com.sothree.slidinguppanel.SlidingUpPanelLayout;
 
 /**
  * Created by andre on 6/6/2015.
@@ -66,7 +60,7 @@ public class BookmarkMode implements IViewMode {
                 public void onClick(View v) {
                     mPanelManager.touch(false);
 
-                    Fragment f = new BookmarkFragment.Builder(mMap).create();
+                    Fragment f = new BookmarkPanelFragment.Builder(mMap).create();
 
                     fm.beginTransaction()
                             .replace(R.id.slider_content, f)

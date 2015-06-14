@@ -8,7 +8,7 @@ import com.geospatialcorporation.android.geomobile.R;
 import com.geospatialcorporation.android.geomobile.library.sectionbuilders.ISectionBuilder;
 import com.geospatialcorporation.android.geomobile.library.sectionbuilders.TreeSectionBuilderBase;
 import com.geospatialcorporation.android.geomobile.models.Folders.Folder;
-import com.geospatialcorporation.android.geomobile.ui.adapters.ListItemAdapter;
+import com.geospatialcorporation.android.geomobile.ui.adapters.recycler.ListItemAdapter;
 import com.geospatialcorporation.android.geomobile.ui.viewmodels.ListItem;
 
 import java.util.List;

@@ -3,31 +3,18 @@ package com.geospatialcorporation.android.geomobile.ui.fragments.detail_fragment
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
-import android.support.v4.app.Fragment;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.inputmethod.EditorInfo;
-import android.widget.TextView;
 
 import com.geospatialcorporation.android.geomobile.R;
-import com.geospatialcorporation.android.geomobile.application;
-import com.geospatialcorporation.android.geomobile.database.DataRepository.IDataRepository;
-import com.geospatialcorporation.android.geomobile.database.DataRepository.Implementations.Bookmark.BookmarkAppSource;
-import com.geospatialcorporation.android.geomobile.library.helpers.GeoDialogHelper;
-import com.geospatialcorporation.android.geomobile.library.helpers.MapStateManager;
-import com.geospatialcorporation.android.geomobile.library.rest.SublayerService;
 import com.geospatialcorporation.android.geomobile.library.services.SublayerTreeService;
-import com.geospatialcorporation.android.geomobile.models.Bookmarks.Bookmark;
 import com.geospatialcorporation.android.geomobile.models.Layers.Layer;
-import com.geospatialcorporation.android.geomobile.ui.adapters.SublayerAdapter;
-import com.geospatialcorporation.android.geomobile.ui.fragments.GeoViewFragmentBase;
+import com.geospatialcorporation.android.geomobile.ui.adapters.recycler.SublayerAdapter;
 import com.geospatialcorporation.android.geomobile.ui.fragments.detail_fragment.GeoDetailsTabBase;
-import com.melnykov.fab.FloatingActionButton;
 import com.sothree.slidinguppanel.SlidingUpPanelLayout;
 
 import java.util.ArrayList;
@@ -35,7 +22,6 @@ import java.util.List;
 
 import butterknife.ButterKnife;
 import butterknife.InjectView;
-import butterknife.OnClick;
 
 /**
  * Created by andre on 6/7/2015.

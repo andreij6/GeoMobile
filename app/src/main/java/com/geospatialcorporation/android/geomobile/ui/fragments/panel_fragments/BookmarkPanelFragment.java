@@ -1,7 +1,6 @@
 package com.geospatialcorporation.android.geomobile.ui.fragments.panel_fragments;
 
 import android.os.Bundle;
-import android.support.v4.app.Fragment;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -18,7 +17,6 @@ import com.geospatialcorporation.android.geomobile.library.helpers.panelmanager.
 import com.geospatialcorporation.android.geomobile.models.Bookmarks.Bookmark;
 import com.geospatialcorporation.android.geomobile.ui.fragments.GeoViewFragmentBase;
 import com.google.android.gms.maps.GoogleMap;
-import com.sothree.slidinguppanel.SlidingUpPanelLayout;
 
 import butterknife.ButterKnife;
 import butterknife.InjectView;
@@ -27,7 +25,7 @@ import butterknife.OnClick;
 /**
  * Created by andre on 6/6/2015.
  */
-public class BookmarkFragment extends GeoViewFragmentBase {
+public class BookmarkPanelFragment extends GeoViewFragmentBase {
     View mView;
     @InjectView(R.id.bookMarkNameInput)EditText mName;
 
@@ -54,7 +52,7 @@ public class BookmarkFragment extends GeoViewFragmentBase {
 
     @OnClick(R.id.close)
     public void close(){
-        mPanelManager.collapse();
+        mPanelManager.hide();
     }
 
     @Override
@@ -90,8 +88,8 @@ public class BookmarkFragment extends GeoViewFragmentBase {
     }
 
     @Override
-    public void onDetach(){
-        super.onDetach();
+    public void onDestroyView(){
+        super.onDestroyView();
         SetTitle(R.string.app_name);
     }
 
@@ -102,8 +100,8 @@ public class BookmarkFragment extends GeoViewFragmentBase {
             mGoogleMap = map;
         }
 
-        public BookmarkFragment create(){
-            BookmarkFragment result = new BookmarkFragment();
+        public BookmarkPanelFragment create(){
+            BookmarkPanelFragment result = new BookmarkPanelFragment();
             result.mMap = mGoogleMap;
             return result;
         }

@@ -5,10 +5,8 @@ import android.support.v4.app.FragmentManager;
 
 import com.geospatialcorporation.android.geomobile.R;
 import com.geospatialcorporation.android.geomobile.library.helpers.panelmanager.ISlidingPanelManager;
-import com.geospatialcorporation.android.geomobile.library.helpers.panelmanager.SlidingPanelManager;
 import com.geospatialcorporation.android.geomobile.library.viewmode.IViewMode;
-import com.geospatialcorporation.android.geomobile.ui.fragments.panel_fragments.QuickSearchFragment;
-import com.sothree.slidinguppanel.SlidingUpPanelLayout;
+import com.geospatialcorporation.android.geomobile.ui.fragments.panel_fragments.QuickSearchPanelFragment;
 
 /**
  * Created by andre on 6/6/2015.
@@ -37,9 +35,10 @@ public class SearchMode implements IViewMode {
 
             mPanelManager.touch(false);
 
-            Fragment quickSearchFragment = new QuickSearchFragment();
+            Fragment quickSearchFragment = new QuickSearchPanelFragment();
 
             supportFragmentManager.beginTransaction()
+                    .disallowAddToBackStack()
                     .replace(R.id.slider_content, quickSearchFragment)
                     .commit();
 

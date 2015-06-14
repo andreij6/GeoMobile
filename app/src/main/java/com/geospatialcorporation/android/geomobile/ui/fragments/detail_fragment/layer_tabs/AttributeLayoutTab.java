@@ -3,33 +3,21 @@ package com.geospatialcorporation.android.geomobile.ui.fragments.detail_fragment
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
-import android.support.v4.app.Fragment;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
-import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.LinearLayout;
-import android.widget.TableLayout;
-import android.widget.TableRow;
-import android.widget.TextView;
-import android.widget.Toast;
 
 import com.geospatialcorporation.android.geomobile.R;
-import com.geospatialcorporation.android.geomobile.library.constants.GeometryTypeCodes;
 import com.geospatialcorporation.android.geomobile.library.services.LayerTreeService;
 import com.geospatialcorporation.android.geomobile.models.Layers.Layer;
 import com.geospatialcorporation.android.geomobile.models.Layers.LayerAttributeColumns;
-import com.geospatialcorporation.android.geomobile.models.Layers.LayerDetailsVm;
-import com.geospatialcorporation.android.geomobile.ui.adapters.AttributeAdapter;
-import com.geospatialcorporation.android.geomobile.ui.fragments.GeoViewFragmentBase;
+import com.geospatialcorporation.android.geomobile.ui.adapters.recycler.AttributeAdapter;
 import com.geospatialcorporation.android.geomobile.ui.fragments.detail_fragment.GeoDetailsTabBase;
 import com.melnykov.fab.FloatingActionButton;
-
-import org.w3c.dom.Text;
 
 import java.util.List;
 

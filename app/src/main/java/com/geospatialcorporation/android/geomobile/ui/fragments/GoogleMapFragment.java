@@ -278,7 +278,7 @@ public class GoogleMapFragment extends GeoViewFragmentBase implements
     private IViewMode querySetup() {
         return new QueryMode.Builder()
                 .setDependents(mMap, mListener, getActivity())
-                .setControls(mBoxQueryBtn, mPointQueryBtn, mCloseBtn)
+                .setControls(mBoxQueryBtn, mPointQueryBtn, mCloseBtn, getActivity().getSupportFragmentManager())
                 .setupUI()
                 .create();
 

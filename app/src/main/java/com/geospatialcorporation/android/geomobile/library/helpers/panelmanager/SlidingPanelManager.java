@@ -40,7 +40,6 @@ public class SlidingPanelManager implements ISlidingPanelManager{
     public void setup() {
         setDefaultCollapsedUI();
 
-
         mMapPanel.setPanelSlideListener(new SlidingUpPanelLayout.PanelSlideListener() {
             @Override
             public void onPanelSlide(View view, float v) {}

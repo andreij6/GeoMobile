@@ -18,7 +18,7 @@ import com.geospatialcorporation.android.geomobile.library.helpers.panelmanager.
 import com.geospatialcorporation.android.geomobile.library.rest.QueryService;
 import com.geospatialcorporation.android.geomobile.models.Query.quickSearch.QuickSearchRequest;
 import com.geospatialcorporation.android.geomobile.models.Query.quickSearch.QuickSearchResponse;
-import com.geospatialcorporation.android.geomobile.ui.adapters.QuickSearchAdapter;
+import com.geospatialcorporation.android.geomobile.ui.adapters.recycler.QuickSearchAdapter;
 import com.geospatialcorporation.android.geomobile.ui.fragments.GeoViewFragmentBase;
 
 import java.util.List;
@@ -30,32 +30,27 @@ import retrofit.Callback;
 import retrofit.RetrofitError;
 import retrofit.client.Response;
 
-/**
- * Created by andre on 6/5/2015.
- */
-public class QuickSearchFragment extends GeoViewFragmentBase {
+public class QuickSearchPanelFragment extends GeoViewFragmentBase {
 
-    private static final String TAG = QuickSearchFragment.class.getSimpleName();
+    private static final String TAG = QuickSearchPanelFragment.class.getSimpleName();
 
-    View mView;
     QueryService mService;
 
+    //region Butterknife
     @InjectView(R.id.searchBox) EditText SearchBox;
     @InjectView(R.id.searchRecyclerView) RecyclerView mRecyclerView;
 
     @OnClick(R.id.close)
     public void close(){
-        SlidingPanelManager m = new SlidingPanelManager(getActivity());
-
-        m.collapse();
+        mPanelManager.collapse();
     }
+    //endregion
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState){
-        mView = inflater.inflate(R.layout.fragment_panel_search_quick, container, false);
-        ButterKnife.inject(this, mView);
-
+        setView(inflater, container, R.layout.fragment_panel_search_quick);
         SetTitle(R.string.quicksearch);
+        setPanelManager();
 
         RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(container.getContext());
 
@@ -81,7 +76,7 @@ public class QuickSearchFragment extends GeoViewFragmentBase {
         return mView;
     }
 
-    private void sendSearch() {
+    protected void sendSearch() {
         String query = SearchBox.getText().toString();
 
         mService.quickSearch(new QuickSearchRequest(query), new Callback<List<QuickSearchResponse>>() {
@@ -89,7 +84,7 @@ public class QuickSearchFragment extends GeoViewFragmentBase {
             public void success(List<QuickSearchResponse> response, Response response2) {
                 mRecyclerView.setVisibility(View.VISIBLE);
 
-                if(response != null || response.size() == 0) {
+                if (response != null || response.size() == 0) {
                     QuickSearchAdapter adapter = new QuickSearchAdapter(getActivity(), response);
                     mRecyclerView.setAdapter(adapter);
                 } else {
@@ -106,20 +101,8 @@ public class QuickSearchFragment extends GeoViewFragmentBase {
     }
 
     @Override
-    public void onDetach(){
-        super.onDetach();
-        SetTitle(R.string.app_name);
-    }
-
-    @Override
     public void onDestroyView() {
         super.onDestroyView();
-        SetTitle(R.string.app_name);
-    }
-
-    @Override
-    public void onDestroy() {
-        super.onDestroy();
         SetTitle(R.string.app_name);
     }
 }

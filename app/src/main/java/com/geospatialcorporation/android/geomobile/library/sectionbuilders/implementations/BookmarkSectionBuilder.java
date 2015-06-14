@@ -8,7 +8,7 @@ import com.geospatialcorporation.android.geomobile.R;
 import com.geospatialcorporation.android.geomobile.library.sectionbuilders.ISectionBuilder;
 import com.geospatialcorporation.android.geomobile.library.sectionbuilders.SectionBuilderBase;
 import com.geospatialcorporation.android.geomobile.models.Bookmarks.Bookmark;
-import com.geospatialcorporation.android.geomobile.ui.adapters.BookmarkAdapter;
+import com.geospatialcorporation.android.geomobile.ui.adapters.recycler.BookmarkAdapter;
 import com.geospatialcorporation.android.geomobile.ui.adapters.SimpleSectionedRecyclerViewAdapter;
 
 import java.util.ArrayList;

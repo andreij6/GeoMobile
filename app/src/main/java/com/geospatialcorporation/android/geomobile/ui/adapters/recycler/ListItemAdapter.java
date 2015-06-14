@@ -1,4 +1,4 @@
-package com.geospatialcorporation.android.geomobile.ui.adapters;
+package com.geospatialcorporation.android.geomobile.ui.adapters.recycler;
 
 import android.app.Activity;
 import android.graphics.Color;
@@ -7,8 +7,6 @@ import android.support.v4.app.FragmentManager;
 import android.content.Context;
 import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
-import android.support.v7.widget.RecyclerView;
-import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageButton;
@@ -19,15 +17,14 @@ import com.geospatialcorporation.android.geomobile.R;
 import com.geospatialcorporation.android.geomobile.database.DataRepository.Implementations.Documents.DocumentsAppSource;
 import com.geospatialcorporation.android.geomobile.database.DataRepository.Implementations.Folders.FolderAppSource;
 import com.geospatialcorporation.android.geomobile.database.DataRepository.Implementations.IAppDataRepository;
-import com.geospatialcorporation.android.geomobile.library.helpers.DataHelper;
 import com.geospatialcorporation.android.geomobile.library.services.LayerTreeService;
 import com.geospatialcorporation.android.geomobile.library.map.MapActions;
 import com.geospatialcorporation.android.geomobile.library.util.Dialogs;
 import com.geospatialcorporation.android.geomobile.models.Folders.Folder;
 import com.geospatialcorporation.android.geomobile.models.Layers.Layer;
 import com.geospatialcorporation.android.geomobile.models.Document.Document;
-import com.geospatialcorporation.android.geomobile.ui.adapters.base.GeoHolderBase;
-import com.geospatialcorporation.android.geomobile.ui.adapters.base.GeoRecyclerAdapterBase;
+import com.geospatialcorporation.android.geomobile.ui.adapters.recycler.base.GeoHolderBase;
+import com.geospatialcorporation.android.geomobile.ui.adapters.recycler.base.GeoRecyclerAdapterBase;
 import com.geospatialcorporation.android.geomobile.ui.fragments.detail_fragment.DocumentDetailFragment;
 import com.geospatialcorporation.android.geomobile.ui.fragments.detail_fragment.LayerFolderDetailFragment;
 import com.geospatialcorporation.android.geomobile.ui.fragments.tree_fragments.DocumentFragment;
@@ -39,7 +36,6 @@ import com.geospatialcorporation.android.geomobile.ui.viewmodels.ListItem;
 
 import java.util.List;
 
-import butterknife.ButterKnife;
 import butterknife.InjectView;
 
 public class ListItemAdapter extends GeoRecyclerAdapterBase<ListItemAdapter.Holder, ListItem> {

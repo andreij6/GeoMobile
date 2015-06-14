@@ -1,11 +1,12 @@
 package com.geospatialcorporation.android.geomobile.library.viewmode.implementations;
 
 import android.graphics.Color;
+import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
+import android.support.v4.app.FragmentManager;
 import android.view.View;
 
 import com.geospatialcorporation.android.geomobile.R;
-import com.geospatialcorporation.android.geomobile.library.constants.SlidingPanelAction;
 import com.geospatialcorporation.android.geomobile.library.helpers.MarkerComparer;
 import com.geospatialcorporation.android.geomobile.library.helpers.QueryMachine;
 import com.geospatialcorporation.android.geomobile.library.helpers.QuerySenderHelper;
@@ -15,6 +16,8 @@ import com.geospatialcorporation.android.geomobile.library.viewmode.IViewMode;
 import com.geospatialcorporation.android.geomobile.models.Query.point.Max;
 import com.geospatialcorporation.android.geomobile.models.Query.point.Min;
 import com.geospatialcorporation.android.geomobile.ui.Interfaces.OnFragmentInteractionListener;
+import com.geospatialcorporation.android.geomobile.ui.fragments.panel_fragments.QueryPanelFragment;
+import com.geospatialcorporation.android.geomobile.ui.fragments.panel_fragments.QuickSearchPanelFragment;
 import com.google.android.gms.maps.CameraUpdate;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
@@ -26,7 +29,6 @@ import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.maps.model.Polygon;
 import com.google.android.gms.maps.model.PolygonOptions;
 import com.melnykov.fab.FloatingActionButton;
-import com.sothree.slidinguppanel.SlidingUpPanelLayout;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -69,6 +71,7 @@ public class QueryMode implements IViewMode {
         OnFragmentInteractionListener mListener;
         QueryMachine mQueryMachine;
         ISlidingPanelManager mPanelManager;
+        FragmentManager mFragmentManager;
 
         Polygon mShape;
         List<Marker> mMarkers = new ArrayList<>();
@@ -78,8 +81,8 @@ public class QueryMode implements IViewMode {
         public static final Integer POINTQUERYBTN = 2;
         public static final Integer CLOSEBTN = 3;
 
-        public Builder setControls(FloatingActionButton boxQueryBtn, FloatingActionButton pointQueryBtn, FloatingActionButton closeBtn) {
-
+        public Builder setControls(FloatingActionButton boxQueryBtn, FloatingActionButton pointQueryBtn, FloatingActionButton closeBtn, FragmentManager fm) {
+            mFragmentManager = fm;
             List<FloatingActionButton> controls = Arrays.asList(boxQueryBtn, pointQueryBtn, closeBtn);
 
             SetVisibility(controls, View.VISIBLE);
@@ -272,9 +275,7 @@ public class QueryMode implements IViewMode {
             QuerySenderHelper q = new QuerySenderHelper();
             q.sendBoxQuery(max, min);
 
-            //clearMapQueryPoints();
-            mPanelManager.anchor();
-
+            openPanel();
         }
         //endregion
 
@@ -292,13 +293,28 @@ public class QueryMode implements IViewMode {
 
             pointQueryStep2SendToGeoU(options.getPosition());
 
-            mPanelManager.anchor();
+            openPanel();
         }
 
         private void pointQueryStep2SendToGeoU(LatLng ll) {
             QuerySenderHelper q = new QuerySenderHelper();
 
             q.sendPointQuery(ll);
+        }
+
+        protected void openPanel(){
+            mPanelManager.touch(false);
+
+            Fragment queryPanelFragment = new QueryPanelFragment();
+
+            mFragmentManager.beginTransaction()
+                    .disallowAddToBackStack()
+                    .replace(R.id.slider_content, queryPanelFragment)
+                    .commit();
+
+            mPanelManager.anchor();
+
+
         }
         //endregion
 

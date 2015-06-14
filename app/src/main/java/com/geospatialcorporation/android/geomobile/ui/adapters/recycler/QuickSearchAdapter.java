@@ -1,4 +1,4 @@
-package com.geospatialcorporation.android.geomobile.ui.adapters;
+package com.geospatialcorporation.android.geomobile.ui.adapters.recycler;
 
 import android.content.Context;
 import android.view.View;
@@ -12,8 +12,8 @@ import com.geospatialcorporation.android.geomobile.R;
 import com.geospatialcorporation.android.geomobile.library.constants.NodeTypeCodes;
 import com.geospatialcorporation.android.geomobile.models.Query.quickSearch.QuickSearchResponse;
 import com.geospatialcorporation.android.geomobile.models.Query.quickSearch.QuickSearchResult;
-import com.geospatialcorporation.android.geomobile.ui.adapters.base.GeoHolderBase;
-import com.geospatialcorporation.android.geomobile.ui.adapters.base.GeoRecyclerAdapterBase;
+import com.geospatialcorporation.android.geomobile.ui.adapters.recycler.base.GeoHolderBase;
+import com.geospatialcorporation.android.geomobile.ui.adapters.recycler.base.GeoRecyclerAdapterBase;
 
 import java.util.ArrayList;
 import java.util.List;

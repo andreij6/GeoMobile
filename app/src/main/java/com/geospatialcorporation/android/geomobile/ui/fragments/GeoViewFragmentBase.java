@@ -2,9 +2,15 @@ package com.geospatialcorporation.android.geomobile.ui.fragments;
 
 import android.app.Activity;
 import android.support.v4.app.Fragment;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
 import android.widget.Toast;
 
+import com.geospatialcorporation.android.geomobile.library.helpers.panelmanager.SlidingPanelManager;
 import com.geospatialcorporation.android.geomobile.ui.Interfaces.OnFragmentInteractionListener;
+
+import butterknife.ButterKnife;
 
 /**
  * Created by andre on 6/4/2015.
@@ -12,6 +18,18 @@ import com.geospatialcorporation.android.geomobile.ui.Interfaces.OnFragmentInter
 public class GeoViewFragmentBase extends Fragment {
 
     OnFragmentInteractionListener mListener;
+
+    protected View mView;
+    protected SlidingPanelManager mPanelManager;
+
+    protected void setView(LayoutInflater inflater, ViewGroup container, int layout) {
+        mView = inflater.inflate(layout, container, false);
+        ButterKnife.inject(this, mView);
+    }
+
+    protected void setPanelManager() {
+        mPanelManager = new SlidingPanelManager(getActivity());
+    }
 
     @Override
     public void onAttach(Activity activity) {

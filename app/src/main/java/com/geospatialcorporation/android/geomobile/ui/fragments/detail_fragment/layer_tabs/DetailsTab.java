@@ -2,26 +2,18 @@ package com.geospatialcorporation.android.geomobile.ui.fragments.detail_fragment
 
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.geospatialcorporation.android.geomobile.R;
 import com.geospatialcorporation.android.geomobile.library.helpers.GeoDialogHelper;
 import com.geospatialcorporation.android.geomobile.library.services.LayerTreeService;
-import com.geospatialcorporation.android.geomobile.library.services.SublayerTreeService;
 import com.geospatialcorporation.android.geomobile.models.Layers.Layer;
 import com.geospatialcorporation.android.geomobile.models.Layers.LayerDetailsVm;
-import com.geospatialcorporation.android.geomobile.ui.adapters.SublayerAdapter;
-import com.geospatialcorporation.android.geomobile.ui.fragments.GeoViewFragmentBase;
 import com.geospatialcorporation.android.geomobile.ui.fragments.detail_fragment.GeoDetailsTabBase;
 import com.melnykov.fab.FloatingActionButton;
-
-import java.util.List;
-import java.util.TooManyListenersException;
 
 import butterknife.ButterKnife;
 import butterknife.InjectView;
