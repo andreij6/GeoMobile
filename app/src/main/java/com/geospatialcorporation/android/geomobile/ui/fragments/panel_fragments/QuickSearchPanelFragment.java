@@ -75,6 +75,13 @@ public class QuickSearchPanelFragment extends GeoViewFragmentBase {
         return mView;
     }
 
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        SetTitle(R.string.app_name);
+    }
+
+    //region Helpers
     protected void sendSearch() {
         String query = SearchBox.getText().toString();
 
@@ -100,10 +107,5 @@ public class QuickSearchPanelFragment extends GeoViewFragmentBase {
             }
         });
     }
-
-    @Override
-    public void onDestroyView() {
-        super.onDestroyView();
-        SetTitle(R.string.app_name);
-    }
+    //endregion
 }

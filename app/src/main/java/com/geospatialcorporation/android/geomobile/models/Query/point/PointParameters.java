@@ -7,7 +7,7 @@ import com.geospatialcorporation.android.geomobile.models.Query.ParametersBase;
 /**
  * Created by andre on 6/9/2015.
  */
-public class Parameters extends ParametersBase {
+public class PointParameters extends ParametersBase {
 
     //region Getters and Setters
     public Point getPoint() {
@@ -21,12 +21,8 @@ public class Parameters extends ParametersBase {
     public double getBuffer() {
         return mBuffer;
     }
-
-    public void setBuffer(double buffer) {
-        mBuffer = buffer;
-    }
     //endregion
 
-    double mBuffer;
+    final double mBuffer = 0.7;
     Point mPoint;
 }

@@ -38,4 +38,10 @@ public class Box {
     int GeometryTypeCode;
     Max mMax;
     Min mMin;
+
+    public Box(Max max, Min min){
+        mMax = max;
+        mMin = min;
+        GeometryTypeCode = 8;
+    }
 }

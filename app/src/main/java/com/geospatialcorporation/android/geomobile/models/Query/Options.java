@@ -1,4 +1,4 @@
-package com.geospatialcorporation.android.geomobile.models.Query.box;
+package com.geospatialcorporation.android.geomobile.models.Query;
 
 /**
  * Created by andre on 6/4/2015.
