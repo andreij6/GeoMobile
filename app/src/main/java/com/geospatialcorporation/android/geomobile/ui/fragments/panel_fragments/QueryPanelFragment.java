@@ -19,7 +19,6 @@ public class QueryPanelFragment extends GeoViewFragmentBase {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState){
         setView(inflater, container, R.layout.fragment_panel_query);
-        SetTitle(R.string.query);
         setPanelManager();
 
         return mView;

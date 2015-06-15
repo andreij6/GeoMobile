@@ -88,8 +88,8 @@ public class LayerTreeService implements ITreeService {
         mLayerService.rename(id, new RenameRequest(name), new Callback<Response>() {
             @Override
             public void success(Response response, Response response2) {
-                Layer l = LayerRepo.getById(id);
-                l.setName(name);
+                //Layer l = LayerRepo.getById(id);
+                //l.setName(name);
             }
 
             @Override

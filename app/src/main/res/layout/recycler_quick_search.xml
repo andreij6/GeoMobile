@@ -2,7 +2,7 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
               android:orientation="vertical"
               android:layout_width="match_parent"
-              android:layout_height="wrap_content"
+              android:layout_height="match_parent"
               android:paddingTop="12dp"
               android:paddingLeft="12dp">
    <LinearLayout
@@ -20,18 +20,22 @@
             android:layout_height="wrap_content"
             android:textAppearance="?android:attr/textAppearanceMedium"
             android:text="Medium Text"
-            android:id="@+id/nodeTypeName"
-            android:gravity="center_horizontal"
-            android:paddingBottom="12dp"/>
+            android:id="@+id/resultValue"
+            android:paddingLeft="8dp"/>
     </LinearLayout>
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceMedium"
+        android:text="Medium Text"
+        android:id="@+id/resultFoundIn"
+        android:gravity="end"
+        android:paddingRight="5dp"
+        android:textStyle="italic"
+        android:textSize="15sp"/>
     <View
         android:layout_width="match_parent"
         android:layout_height="2dp"
         android:background="@color/primary_dark"/>
 
-    <ListView
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:id="@+id/resultListView"
-        android:layout_gravity="center_horizontal"/>
 </LinearLayout>

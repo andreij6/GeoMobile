@@ -1,9 +1,13 @@
 package com.geospatialcorporation.android.geomobile.library.helpers;
 
 import com.geospatialcorporation.android.geomobile.R;
+import com.geospatialcorporation.android.geomobile.library.constants.NodeTypeCodes;
 import com.geospatialcorporation.android.geomobile.models.Folders.Folder;
 import com.geospatialcorporation.android.geomobile.models.Layers.Layer;
 import com.geospatialcorporation.android.geomobile.models.Document.Document;
+import com.geospatialcorporation.android.geomobile.models.Query.quickSearch.QuickSearchResponse;
+import com.geospatialcorporation.android.geomobile.models.Query.quickSearch.QuickSearchResult;
+import com.geospatialcorporation.android.geomobile.models.Query.quickSearch.QuickSearchResultVM;
 import com.geospatialcorporation.android.geomobile.ui.viewmodels.ListItem;
 
 import java.util.ArrayList;
@@ -11,6 +15,10 @@ import java.util.Collections;
 import java.util.List;
 
 public class DataHelper {
+
+    private QuickSearchResult mDocumentResults;
+    private QuickSearchResult mLayerResults;
+    private QuickSearchResult mFolderResults;
 
     public ArrayList<Folder> getFoldersRecursively(Folder folder, Folder parentFolder) {
         ArrayList<Folder> result = new ArrayList<>();
@@ -155,5 +163,87 @@ public class DataHelper {
             ListItem listItem = new ListItem(new Folder(), true);
             results.add(listItem);
         }
+    }
+
+    public List<QuickSearchResultVM> normalizeQuickSearchResults(List<QuickSearchResponse> responses) {
+
+        List<QuickSearchResultVM> qsr = new ArrayList<>();
+
+        if(responses != null){
+            for(QuickSearchResponse response : responses){
+                for(QuickSearchResult result : response.getResults()){
+                    qsr.add(setResultVM(response.getType(), result));
+                }
+            }
+        }
+
+        return qsr;
+
+    }
+
+    protected QuickSearchResultVM setResultVM(int type, QuickSearchResult result) {
+        QuickSearchResultVM qsr;
+        switch (type){
+            case NodeTypeCodes.FOLDER:
+                qsr = setFolderResults(result);
+                break;
+            case NodeTypeCodes.LAYER:
+                qsr = setLayerResults(result);
+                break;
+            case NodeTypeCodes.SUBLAYER:
+                qsr =showSublayerResults(result);
+                break;
+            case NodeTypeCodes.DOCUMENT:
+                qsr = setDocumentResults(result);
+                break;
+            case NodeTypeCodes.MAPFEATURE:
+                qsr = setMapFeatureResults(result);
+                break;
+            default:
+                qsr = null;
+                break;
+        }
+
+        return qsr;
+    }
+
+    protected QuickSearchResultVM showSublayerResults(QuickSearchResult result) {
+        QuickSearchResultVM vm = new QuickSearchResultVM();
+        vm.setIcon(R.drawable.ic_layers_black_18dp);
+        vm.setResult(result.getName());
+        vm.setFoundIn("Sublayers");
+        return vm;
+    }
+
+    protected QuickSearchResultVM setMapFeatureResults(QuickSearchResult result) {
+        QuickSearchResultVM vm = new QuickSearchResultVM();
+        vm.setIcon(R.drawable.ic_layers_black_18dp);
+        vm.setResult(result.getLayerName() + " : " + result.getValue());
+        vm.setFoundIn("Map Features");
+        return vm;
+    }
+
+    protected QuickSearchResultVM setDocumentResults(QuickSearchResult result) {
+        QuickSearchResultVM vm = new QuickSearchResultVM();
+        vm.setIcon(R.drawable.ic_file_document_box_black_18dp);
+        vm.setResult(result.getName() + result.getExt());
+        vm.setFoundIn("Documents");
+        return vm;
+    }
+
+    protected QuickSearchResultVM setLayerResults(QuickSearchResult result) {
+        QuickSearchResultVM vm = new QuickSearchResultVM();
+        vm.setIcon(R.drawable.ic_layers_black_18dp);
+        vm.setResult(result.getName());
+        vm.setFoundIn("Layers");
+        return vm;
+    }
+
+    protected QuickSearchResultVM setFolderResults(QuickSearchResult result) {
+        QuickSearchResultVM vm = new QuickSearchResultVM();
+        vm.setIcon(R.drawable.ic_folder_black_18dp);
+        vm.setResult(result.getName());
+        vm.setFoundIn("Folders");
+        return vm;
     }
 }

@@ -14,10 +14,12 @@ import android.widget.TextView;
 
 import com.geospatialcorporation.android.geomobile.R;
 import com.geospatialcorporation.android.geomobile.application;
+import com.geospatialcorporation.android.geomobile.library.helpers.DataHelper;
 import com.geospatialcorporation.android.geomobile.library.helpers.panelmanager.SlidingPanelManager;
 import com.geospatialcorporation.android.geomobile.library.rest.QueryService;
 import com.geospatialcorporation.android.geomobile.models.Query.quickSearch.QuickSearchRequest;
 import com.geospatialcorporation.android.geomobile.models.Query.quickSearch.QuickSearchResponse;
+import com.geospatialcorporation.android.geomobile.models.Query.quickSearch.QuickSearchResultVM;
 import com.geospatialcorporation.android.geomobile.ui.adapters.recycler.QuickSearchAdapter;
 import com.geospatialcorporation.android.geomobile.ui.fragments.GeoViewFragmentBase;
 
@@ -39,6 +41,7 @@ public class QuickSearchPanelFragment extends GeoViewFragmentBase {
     //region Butterknife
     @InjectView(R.id.searchBox) EditText SearchBox;
     @InjectView(R.id.searchRecyclerView) RecyclerView mRecyclerView;
+    @InjectView(R.id.resultCount) TextView mResultCount;
 
     @OnClick(R.id.close)
     public void close(){
@@ -63,10 +66,6 @@ public class QuickSearchPanelFragment extends GeoViewFragmentBase {
                     sendSearch();
                 }
 
-                if(mRecyclerView.getVisibility() != View.GONE){
-                    mRecyclerView.setVisibility(View.GONE);
-                }
-
                 return false;
             }
         });
@@ -82,10 +81,12 @@ public class QuickSearchPanelFragment extends GeoViewFragmentBase {
         mService.quickSearch(new QuickSearchRequest(query), new Callback<List<QuickSearchResponse>>() {
             @Override
             public void success(List<QuickSearchResponse> response, Response response2) {
-                mRecyclerView.setVisibility(View.VISIBLE);
 
                 if (response != null || response.size() == 0) {
-                    QuickSearchAdapter adapter = new QuickSearchAdapter(getActivity(), response);
+                    DataHelper dh = new DataHelper();
+                    List<QuickSearchResultVM> data = dh.normalizeQuickSearchResults(response);
+                    QuickSearchAdapter adapter = new QuickSearchAdapter(getActivity(), data);
+                    mResultCount.setText("Result Count: " + data.size());
                     mRecyclerView.setAdapter(adapter);
                 } else {
                     Toaster("No Results");

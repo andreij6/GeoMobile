@@ -63,8 +63,9 @@ public class QueryMode implements IViewMode {
         return mode instanceof QueryMode;
     }
 
-    public static class Builder{
+    public static class Builder {
 
+        //region Properties
         HashMap<Integer, FloatingActionButton> mControls;
         GoogleMap mMap;
         FragmentActivity mActivity;
@@ -80,6 +81,7 @@ public class QueryMode implements IViewMode {
         public static final Integer BOXQUERYBTN = 1;
         public static final Integer POINTQUERYBTN = 2;
         public static final Integer CLOSEBTN = 3;
+        //endregion
 
         public Builder setControls(FloatingActionButton boxQueryBtn, FloatingActionButton pointQueryBtn, FloatingActionButton closeBtn, FragmentManager fm) {
             mFragmentManager = fm;
@@ -116,6 +118,8 @@ public class QueryMode implements IViewMode {
                             boxQueryStep2AddPoint(ll.latitude, ll.longitude);
                         }
                     });
+
+                    SetTitle(R.string.box_query);
                 }
             });
 
@@ -133,6 +137,8 @@ public class QueryMode implements IViewMode {
                             setPointMarker(latLng.latitude, latLng.longitude);
                         }
                     });
+
+                    SetTitle(R.string.point_query);
                 }
             });
 
@@ -254,7 +260,7 @@ public class QueryMode implements IViewMode {
 
             LatLngBounds bounds = builder.build();
 
-            int padding = 80;
+            int padding = 120;
             CameraUpdate u = CameraUpdateFactory.newLatLngBounds(bounds, padding);
             mMap.animateCamera(u);
         }
