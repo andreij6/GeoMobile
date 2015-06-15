@@ -50,12 +50,14 @@ public abstract class DataSourceGenericBase<T> extends DataSourceBase implements
     }
 
     public List<T> getAll(){
-        InTransaction(GetAllEntities);
+        InReadTransaction(GetAllEntities);
 
         List<T> result = new ArrayList<>();
 
-        for(T entity : mEntities){
-            result.add(entity);
+        if(mEntities != null) {
+            for (T entity : mEntities) {
+                result.add(entity);
+            }
         }
 
         return result;

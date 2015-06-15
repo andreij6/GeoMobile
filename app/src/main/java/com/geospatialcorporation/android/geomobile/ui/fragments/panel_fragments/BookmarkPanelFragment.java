@@ -74,10 +74,6 @@ public class BookmarkPanelFragment extends GeoViewFragmentBase {
                     mPanelManager.hide();
 
                     Toaster("Bookmark saved");
-
-                    IDataRepository<Bookmark> repo = new BookmarkAppSource();
-
-                    Toaster(" Not Implemented");
                 }
 
                 return false;

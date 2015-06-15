@@ -347,24 +347,6 @@ public class GoogleMapFragment extends GeoViewFragmentBase implements
                                     .transparency(0.5f));
 
     } **/
-    //endregionge
-
-    //region GoogleAPIClient Interface Methods
-    /*@Override
-    public void onConnected(Bundle bundle) {
-        //Toast.makeText(getActivity(), "Connected to location service", Toast.LENGTH_LONG).show();
-    }
-
-    @Override
-    public void onConnectionSuspended(int i) {
-
-    }
-
-    @Override
-    public void onConnectionFailed(ConnectionResult connectionResult) {
-        //
-    }
-    **/
     //endregion
 
     //region ViewMode Listener
@@ -391,6 +373,7 @@ public class GoogleMapFragment extends GeoViewFragmentBase implements
         switch(mode){
             case ViewModes.BOOKMARK:
                 GeoDialogHelper.showBookmarks(getActivity(), getFragmentManager(), mSaveBtn, mBmClose, mPanel, mMap);
+                mPanelManager.collapse();
                 break;
             case ViewModes.QUERY:
                 setViewMode(querySetup());

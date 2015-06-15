@@ -226,7 +226,7 @@ public class QueryMode implements IViewMode {
         protected MarkerOptions getMarkerOptions(double latitude, double longitude) {
             return new MarkerOptions()
                     .position(new LatLng(latitude, longitude))
-                    .icon(BitmapDescriptorFactory.fromResource(R.drawable.ic_map_marker_radius_black_48dp))
+                    .icon(BitmapDescriptorFactory.fromResource(R.drawable.ic_map_marker_circle_black_24dp))
                     .anchor(.5f, .5f);
         }
 

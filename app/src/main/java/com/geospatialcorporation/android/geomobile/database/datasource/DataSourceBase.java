@@ -23,7 +23,19 @@ public abstract class DataSourceBase {
     }
 
     protected SQLiteDatabase open(){
+        if(mDatabase != null && mDatabase.isOpen()){
+            close(mDatabase);
+        }
+
         return mGeoDbHelper.getWritableDatabase();
+    }
+
+    protected SQLiteDatabase openRead(){
+        if(mDatabase != null && mDatabase.isOpen()){
+            close(mDatabase);
+        }
+
+        return mGeoDbHelper.getReadableDatabase();
     }
 
     protected void close(SQLiteDatabase db){
@@ -50,7 +62,7 @@ public abstract class DataSourceBase {
     }
 
     protected void InReadTransaction(DbAction action){
-        mDatabase  = open();
+        mDatabase  = openRead();
 
         action.Run();
 
@@ -89,6 +101,12 @@ public abstract class DataSourceBase {
         return cursor.getInt(columnIndex);
     }
 
+    protected float getFloatFromColumnName(Cursor cursor, String columnName){
+        int columnIndex = cursor.getColumnIndex(columnName);
+
+        return cursor.getFloat(columnIndex);
+    }
+
     protected Boolean getBooleanFromColumnName(Cursor cursor, String columnName){
         int columnIndex = cursor.getColumnIndex(columnName);
 
@@ -118,10 +136,10 @@ public abstract class DataSourceBase {
     }
     //endregion
 
-    public class DbAction {
-        public void Run(){
-
-        }
+    public abstract class DbAction {
+        public abstract void Run();
     }
+
+
 
 }

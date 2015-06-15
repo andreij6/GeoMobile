@@ -10,11 +10,14 @@ import com.geospatialcorporation.android.geomobile.library.sectionbuilders.Secti
 import com.geospatialcorporation.android.geomobile.models.Bookmarks.Bookmark;
 import com.geospatialcorporation.android.geomobile.ui.adapters.recycler.BookmarkAdapter;
 import com.geospatialcorporation.android.geomobile.ui.adapters.SimpleSectionedRecyclerViewAdapter;
+import com.google.android.gms.maps.GoogleMap;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public class BookmarkSectionBuilder extends SectionBuilderBase<Bookmark> implements ISectionBuilder<Bookmark> {
+
+    GoogleMap mGoogleMap;
 
     public BookmarkSectionBuilder(Context context){
         super(context);
@@ -23,11 +26,11 @@ public class BookmarkSectionBuilder extends SectionBuilderBase<Bookmark> impleme
     public BookmarkSectionBuilder BuildAdapter(List<Bookmark> data, int defaultSectionCount) {
         mData = data;
 
-        BookmarkAdapter adapter = new BookmarkAdapter(mContext, mData);
+        BookmarkAdapter adapter = new BookmarkAdapter(mContext, mData, mGoogleMap);
 
         List<SimpleSectionedRecyclerViewAdapter.Section> sections = new ArrayList<>();
 
-        sections.add(new SimpleSectionedRecyclerViewAdapter.Section(0, "Default Section"));
+        sections.add(new SimpleSectionedRecyclerViewAdapter.Section(0, "All Bookmarks - Click to Zoom"));  //Later I want to section bookmarks by folder
 
         SimpleSectionedRecyclerViewAdapter.Section[] sectionArray = new SimpleSectionedRecyclerViewAdapter.Section[sections.size()];
 
@@ -44,6 +47,11 @@ public class BookmarkSectionBuilder extends SectionBuilderBase<Bookmark> impleme
         RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(mContext);
 
         recycler.setLayoutManager(layoutManager);
+        return this;
+    }
+
+    public ISectionBuilder AddMap(GoogleMap map) {
+        mGoogleMap = map;
         return this;
     }
 }

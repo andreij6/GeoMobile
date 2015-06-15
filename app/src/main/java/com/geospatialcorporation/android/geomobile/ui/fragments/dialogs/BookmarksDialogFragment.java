@@ -13,6 +13,8 @@ import android.widget.Button;
 import android.widget.LinearLayout;
 
 import com.geospatialcorporation.android.geomobile.R;
+import com.geospatialcorporation.android.geomobile.database.DataRepository.IDataRepository;
+import com.geospatialcorporation.android.geomobile.database.DataRepository.Implementations.Bookmark.BookmarkDataSource;
 import com.geospatialcorporation.android.geomobile.library.helpers.panelmanager.SlidingPanelManager;
 import com.geospatialcorporation.android.geomobile.library.sectionbuilders.implementations.BookmarkSectionBuilder;
 import com.geospatialcorporation.android.geomobile.library.viewmode.implementations.BookmarkMode;
@@ -71,6 +73,7 @@ public class BookmarksDialogFragment extends GeoDialogFragmentBase{
         RecyclerView recycler = (RecyclerView)v.findViewById(R.id.bookmarkRecycler);
 
         new BookmarkSectionBuilder(mContext)
+                .AddMap(mMap)
                 .BuildAdapter(getData(), 0)
                 .setRecycler(recycler);
 
@@ -104,6 +107,8 @@ public class BookmarksDialogFragment extends GeoDialogFragmentBase{
 
 
     public List<Bookmark> getData() {
-        return new ArrayList<Bookmark>();
+        IDataRepository<Bookmark> BookmarkRepo = new BookmarkDataSource(mContext);
+
+        return BookmarkRepo.getAll();
     }
 }
