@@ -54,6 +54,7 @@ public class GeoSQLiteHelper extends SQLiteOpenHelper {
 
     //endregion
 
+    //region Bookmark Table Setup
     public static final String BOOKMARK_TABLE = "BOOKMARKS";
     public static final String COLUMN_BOOKMARK_NAME = "Name";
     public static final String COLUMN_BEARING = "Bearing";
@@ -71,6 +72,7 @@ public class GeoSQLiteHelper extends SQLiteOpenHelper {
             + COLUMN_LATITUDE + " REAL, "
             + COLUMN_LONGITUDE + " REAL, "
             + COLUMN_ZOOM + " REAL)";
+    //endregion
 
     public void onCreate(SQLiteDatabase db) {
         db.execSQL(CREATE_LAYERS_TABLE);

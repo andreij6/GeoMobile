@@ -14,9 +14,9 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.geospatialcorporation.android.geomobile.R;
+import com.geospatialcorporation.android.geomobile.database.DataRepository.IFullDataRepository;
 import com.geospatialcorporation.android.geomobile.database.DataRepository.Implementations.Documents.DocumentsAppSource;
 import com.geospatialcorporation.android.geomobile.database.DataRepository.Implementations.Folders.FolderAppSource;
-import com.geospatialcorporation.android.geomobile.database.DataRepository.Implementations.IAppDataRepository;
 import com.geospatialcorporation.android.geomobile.library.services.LayerTreeService;
 import com.geospatialcorporation.android.geomobile.library.map.MapActions;
 import com.geospatialcorporation.android.geomobile.library.util.Dialogs;
@@ -70,8 +70,8 @@ public class ListItemAdapter extends GeoRecyclerAdapterBase<ListItemAdapter.Hold
         @InjectView(R.id.infoImageView) ImageButton itemInfo;
         @InjectView(R.id.listitem_container) RelativeLayout Container;
 
-        IAppDataRepository<Document> DocumentRepo;
-        IAppDataRepository<Folder> FolderRepo;
+        IFullDataRepository<Document> DocumentRepo;
+        IFullDataRepository<Folder> FolderRepo;
 
         public Holder(View itemView) {
             super(itemView);

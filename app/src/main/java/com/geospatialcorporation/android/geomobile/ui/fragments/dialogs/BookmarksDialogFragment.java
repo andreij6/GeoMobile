@@ -13,7 +13,7 @@ import android.widget.Button;
 import android.widget.LinearLayout;
 
 import com.geospatialcorporation.android.geomobile.R;
-import com.geospatialcorporation.android.geomobile.database.DataRepository.IDataRepository;
+import com.geospatialcorporation.android.geomobile.database.DataRepository.IFullDataRepository;
 import com.geospatialcorporation.android.geomobile.database.DataRepository.Implementations.Bookmark.BookmarkDataSource;
 import com.geospatialcorporation.android.geomobile.library.helpers.panelmanager.SlidingPanelManager;
 import com.geospatialcorporation.android.geomobile.library.sectionbuilders.implementations.BookmarkSectionBuilder;
@@ -26,7 +26,6 @@ import com.google.android.gms.maps.GoogleMap;
 import com.melnykov.fab.FloatingActionButton;
 import com.sothree.slidinguppanel.SlidingUpPanelLayout;
 
-import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -107,7 +106,7 @@ public class BookmarksDialogFragment extends GeoDialogFragmentBase{
 
 
     public List<Bookmark> getData() {
-        IDataRepository<Bookmark> BookmarkRepo = new BookmarkDataSource(mContext);
+        IFullDataRepository<Bookmark> BookmarkRepo = new BookmarkDataSource(mContext);
 
         return BookmarkRepo.getAll();
     }

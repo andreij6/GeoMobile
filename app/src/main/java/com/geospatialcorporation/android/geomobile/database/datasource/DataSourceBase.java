@@ -42,7 +42,7 @@ public abstract class DataSourceBase {
         db.close();
     }
 
-    protected void InTransaction(DbAction action){
+    protected void inWriteTransaction(DbAction action){
         mDatabase = open();
         mDatabase.beginTransaction();
 
@@ -61,7 +61,7 @@ public abstract class DataSourceBase {
 
     }
 
-    protected void InReadTransaction(DbAction action){
+    protected void inReadTransaction(DbAction action){
         mDatabase  = openRead();
 
         action.Run();
@@ -139,7 +139,5 @@ public abstract class DataSourceBase {
     public abstract class DbAction {
         public abstract void Run();
     }
-
-
 
 }

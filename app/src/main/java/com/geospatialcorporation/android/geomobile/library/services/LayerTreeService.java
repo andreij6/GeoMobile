@@ -3,7 +3,7 @@ package com.geospatialcorporation.android.geomobile.library.services;
 import android.widget.Toast;
 
 import com.geospatialcorporation.android.geomobile.application;
-import com.geospatialcorporation.android.geomobile.database.DataRepository.Implementations.IAppDataRepository;
+import com.geospatialcorporation.android.geomobile.database.DataRepository.IFullDataRepository;
 import com.geospatialcorporation.android.geomobile.database.DataRepository.Implementations.Layers.LayersAppSource;
 import com.geospatialcorporation.android.geomobile.library.helpers.Interfaces.ITreeService;
 import com.geospatialcorporation.android.geomobile.library.rest.AttributeService;
@@ -28,7 +28,7 @@ public class LayerTreeService implements ITreeService {
 
     LayerService mLayerService;
     AttributeService mAttributeService;
-    IAppDataRepository<Layer> LayerRepo;
+    IFullDataRepository<Layer> LayerRepo;
 
     public LayerTreeService(){
         mLayerService = application.getRestAdapter().create(LayerService.class);

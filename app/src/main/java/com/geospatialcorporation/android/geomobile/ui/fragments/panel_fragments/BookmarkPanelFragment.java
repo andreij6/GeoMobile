@@ -10,11 +10,8 @@ import android.widget.EditText;
 import android.widget.TextView;
 
 import com.geospatialcorporation.android.geomobile.R;
-import com.geospatialcorporation.android.geomobile.database.DataRepository.IDataRepository;
-import com.geospatialcorporation.android.geomobile.database.DataRepository.Implementations.Bookmark.BookmarkAppSource;
 import com.geospatialcorporation.android.geomobile.library.helpers.MapStateManager;
 import com.geospatialcorporation.android.geomobile.library.helpers.panelmanager.SlidingPanelManager;
-import com.geospatialcorporation.android.geomobile.models.Bookmarks.Bookmark;
 import com.geospatialcorporation.android.geomobile.ui.fragments.GeoViewFragmentBase;
 import com.google.android.gms.maps.GoogleMap;
 

@@ -8,8 +8,8 @@ import android.util.Log;
 import android.widget.Toast;
 
 import com.geospatialcorporation.android.geomobile.application;
+import com.geospatialcorporation.android.geomobile.database.DataRepository.IFullDataRepository;
 import com.geospatialcorporation.android.geomobile.database.DataRepository.Implementations.Documents.DocumentsAppSource;
-import com.geospatialcorporation.android.geomobile.database.DataRepository.Implementations.IAppDataRepository;
 import com.geospatialcorporation.android.geomobile.library.helpers.Interfaces.ITreeService;
 import com.geospatialcorporation.android.geomobile.library.rest.DocumentService;
 import com.geospatialcorporation.android.geomobile.library.rest.DownloadService;
@@ -33,7 +33,7 @@ public class DocumentTreeService implements ITreeService {
 
     //region Properties
     DocumentService Service;
-    IAppDataRepository<Document> DocumentRepo;
+    IFullDataRepository<Document> DocumentRepo;
     //endregion
 
     public DocumentTreeService(){

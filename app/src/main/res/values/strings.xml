@@ -171,4 +171,6 @@
     <string name="query">Box/Point Query</string>
     <string name="query_results">Query Results</string>
     <string name="clear_bookmarks">Clear Bookmarks</string>
+    <string name="geounderground">GeoUnderground</string>
+    <string name="portal">Portal</string>
 </resources>

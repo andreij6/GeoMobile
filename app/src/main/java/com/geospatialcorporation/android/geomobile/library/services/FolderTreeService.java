@@ -4,9 +4,8 @@ import android.util.Log;
 import android.widget.Toast;
 
 import com.geospatialcorporation.android.geomobile.application;
-import com.geospatialcorporation.android.geomobile.database.DataRepository.IAddDataRepository;
+import com.geospatialcorporation.android.geomobile.database.DataRepository.IFullDataRepository;
 import com.geospatialcorporation.android.geomobile.database.DataRepository.Implementations.Folders.FolderAppSource;
-import com.geospatialcorporation.android.geomobile.database.DataRepository.Implementations.IAppDataRepository;
 import com.geospatialcorporation.android.geomobile.database.DataRepository.Implementations.Layers.LayersAppSource;
 import com.geospatialcorporation.android.geomobile.library.helpers.Interfaces.ITreeService;
 import com.geospatialcorporation.android.geomobile.library.rest.FolderService;
@@ -31,8 +30,8 @@ public class FolderTreeService implements ITreeService {
 
     //region Properties
     private FolderService mFolderService;
-    IAppDataRepository<Folder> FolderRepo;
-    IAddDataRepository<Layer> LayerRepo;
+    FolderAppSource FolderRepo;
+    IFullDataRepository<Layer> LayerRepo;
     private TreeService mTreeService;
     //endregion
 

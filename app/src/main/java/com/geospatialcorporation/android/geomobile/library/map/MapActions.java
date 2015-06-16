@@ -7,7 +7,7 @@ import android.widget.Toast;
 
 import com.geospatialcorporation.android.geomobile.application;
 import com.geospatialcorporation.android.geomobile.database.DataRepository.IAddDataRepository;
-import com.geospatialcorporation.android.geomobile.database.DataRepository.Implementations.IAppDataRepository;
+import com.geospatialcorporation.android.geomobile.database.DataRepository.IFullDataRepository;
 import com.geospatialcorporation.android.geomobile.database.DataRepository.Implementations.Layers.LayersAppSource;
 import com.geospatialcorporation.android.geomobile.library.constants.GeometryTypeCodes;
 import com.geospatialcorporation.android.geomobile.library.rest.LayerService;
@@ -28,7 +28,7 @@ public class MapActions {
     private GoogleMap mMap;
     private LayerService layerService;
     private SublayerService sublayerService;
-    private IAppDataRepository<Layer> LayerRepo;
+    private IFullDataRepository<Layer> LayerRepo;
 
     public MapActions() {
         GoogleMapFragment mMapFragment = application.getMapFragment();

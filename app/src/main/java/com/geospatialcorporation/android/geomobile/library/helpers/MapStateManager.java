@@ -4,7 +4,7 @@ import android.content.Context;
 import android.content.SharedPreferences;
 
 import com.geospatialcorporation.android.geomobile.application;
-import com.geospatialcorporation.android.geomobile.database.DataRepository.IDataRepository;
+import com.geospatialcorporation.android.geomobile.database.DataRepository.IFullDataRepository;
 import com.geospatialcorporation.android.geomobile.database.DataRepository.Implementations.Bookmark.BookmarkDataSource;
 import com.geospatialcorporation.android.geomobile.models.Bookmarks.Bookmark;
 import com.geospatialcorporation.android.geomobile.models.Bookmarks.BookmarkPosition;
@@ -82,7 +82,7 @@ public class MapStateManager {
 
 
     public void saveMapStateForBookMark(GoogleMap map, String name) {
-        IDataRepository<Bookmark> BookmarkRepo = new BookmarkDataSource(application.getAppContext()); //not cache repo
+        IFullDataRepository<Bookmark> BookmarkRepo = new BookmarkDataSource(application.getAppContext()); //not cache repo
 
         CameraPosition position = map.getCameraPosition();
 

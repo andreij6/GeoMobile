@@ -14,8 +14,8 @@ import android.view.ViewGroup;
 import com.geospatialcorporation.android.geomobile.R;
 import com.geospatialcorporation.android.geomobile.application;
 import com.geospatialcorporation.android.geomobile.database.DataRepository.IAddDataRepository;
+import com.geospatialcorporation.android.geomobile.database.DataRepository.IFullDataRepository;
 import com.geospatialcorporation.android.geomobile.database.DataRepository.Implementations.Folders.FolderAppSource;
-import com.geospatialcorporation.android.geomobile.database.DataRepository.Implementations.IAppDataRepository;
 import com.geospatialcorporation.android.geomobile.database.DataRepository.Implementations.Layers.LayersAppSource;
 import com.geospatialcorporation.android.geomobile.library.helpers.DataHelper;
 import com.geospatialcorporation.android.geomobile.library.sectionbuilders.implementations.LayerTreeSectionBuilder;
@@ -118,7 +118,7 @@ public class LayerFragment extends GeoViewFragmentBase {
             }
             else { Log.d(TAG, "allFolders empty."); }
             if (allLayers.size() > 0) {
-                IAppDataRepository<Layer> LayerRepo = new LayersAppSource();
+                IAddDataRepository<Layer> LayerRepo = new LayersAppSource();
                 LayerRepo.Add(allLayers);
             }
             else { Log.d(TAG, "allLayers empty."); }

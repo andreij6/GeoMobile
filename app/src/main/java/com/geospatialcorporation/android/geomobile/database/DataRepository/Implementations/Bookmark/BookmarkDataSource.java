@@ -20,82 +20,12 @@ public class BookmarkDataSource extends DataSourceGenericBase<Bookmark> {
 
     public BookmarkDataSource(Context context) {
         super(context);
-        GetEntityById = GetBookmarkById;
-        GetAllEntities = GetAllBookmarks;
-        UpdateEntity = UpdateBookmark;
-        CreateEntity = CreateBookmark;
-        CreateMultiple = CreateBookmarks;
         mTableName = GeoSQLiteHelper.BOOKMARK_TABLE;
+        mEntityIdColumn = BaseColumns._ID;
     }
 
-    //region DbActions
-
-    protected DbAction GetBookmarkById = new DbAction() {
-        @Override
-        public void Run() {
-            Cursor cursor = RawGetById(BaseColumns._ID);
-
-            if(cursor.moveToFirst()){
-                SetBookmarkProperties(mEntity, cursor);
-            }
-        }
-    };
-
-    protected DbAction GetAllBookmarks = new DbAction() {
-        @Override
-        public void Run() {
-            List<Bookmark> bookmarks = new ArrayList<>();
-
-            Cursor cursor = GetAllCursor();
-
-            if(cursor.moveToNext()){
-                do {
-                    Bookmark bookmark = new Bookmark();
-                    SetBookmarkProperties(bookmark, cursor);
-                    bookmarks.add(bookmark);
-                }while (cursor.moveToNext());
-            }
-
-            mEntities = bookmarks;
-        }
-    };
-
-    protected DbAction UpdateBookmark = new DbAction() {
-        @Override
-        public void Run() {
-            ContentValues bookmarkValues = setBookmarkContentValues(mEntity);  //Just updates the name not position
-
-            mDatabase.update(GeoSQLiteHelper.BOOKMARK_TABLE, bookmarkValues, WhereId(mEntityId), null);
-        }
-    };
-
-    protected DbAction CreateBookmark = new DbAction() {
-        @Override
-        public void Run() {
-            ContentValues bookmarkValues = setBookmarkContentValues(mEntity);
-
-            InsertBookmark(bookmarkValues);
-        }
-    };
-
-    protected DbAction CreateBookmarks = new DbAction() {
-        @Override
-        public void Run() {
-            for(Bookmark bookmark : mEntities) {
-                ContentValues bookmarkValues = setBookmarkContentValues(bookmark);
-
-                InsertBookmark(bookmarkValues);
-            }
-        }
-    };
-    //endregion
-
-    //region Helpers
-    private void InsertBookmark(ContentValues bookmarkValues) {
-        mEntityId = (int)mDatabase.insert(GeoSQLiteHelper.BOOKMARK_TABLE, null, bookmarkValues);
-    }
-
-    protected void SetBookmarkProperties(Bookmark entity, Cursor cursor) {
+    @Override
+    protected void setEntityProperties(Bookmark entity, Cursor cursor) {
         entity.setId(getIntFromColumnName(cursor, BaseColumns._ID));
         entity.setName(getStringFromColumnName(cursor, GeoSQLiteHelper.COLUMN_BOOKMARK_NAME));
 
@@ -110,7 +40,8 @@ public class BookmarkDataSource extends DataSourceGenericBase<Bookmark> {
         entity.setPosition(bp);
     }
 
-    public ContentValues setBookmarkContentValues(Bookmark bookmark) {
+    @Override
+    protected ContentValues setEntityContentValues(Bookmark bookmark) {
         ContentValues bValues = new ContentValues();
 
         bValues.put(GeoSQLiteHelper.COLUMN_BOOKMARK_NAME, bookmark.getName());
@@ -122,5 +53,14 @@ public class BookmarkDataSource extends DataSourceGenericBase<Bookmark> {
 
         return bValues;
     }
-    //endregion
+
+    @Override
+    protected Bookmark createSetEntityProperties(Cursor cursor) {
+        Bookmark result = new Bookmark();
+
+        setEntityProperties(result, cursor);
+
+        return result;
+    }
+
 }
