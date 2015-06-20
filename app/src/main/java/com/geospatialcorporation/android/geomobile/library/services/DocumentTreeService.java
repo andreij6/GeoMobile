@@ -11,6 +11,8 @@ import com.geospatialcorporation.android.geomobile.application;
 import com.geospatialcorporation.android.geomobile.database.DataRepository.IFullDataRepository;
 import com.geospatialcorporation.android.geomobile.database.DataRepository.Implementations.Documents.DocumentsAppSource;
 import com.geospatialcorporation.android.geomobile.library.helpers.Interfaces.ITreeService;
+import com.geospatialcorporation.android.geomobile.library.requestcallback.RequestCallback;
+import com.geospatialcorporation.android.geomobile.library.requestcallback.listener_implementations.DocumentModifiedListener;
 import com.geospatialcorporation.android.geomobile.library.rest.DocumentService;
 import com.geospatialcorporation.android.geomobile.library.rest.DownloadService;
 import com.geospatialcorporation.android.geomobile.models.Document.MoveRequest;
@@ -63,19 +65,7 @@ public class DocumentTreeService implements ITreeService {
 
     public void SendDocument(Folder currentFolder, Uri data) {
         TypedFile typedFile = new TypedFile("multipart/form-data", new File(data.getPath()));
-        Service.create(currentFolder.getId(), typedFile, new Callback<DocumentCreateResponse>() {
-            @Override
-            public void success(DocumentCreateResponse documentCreateResponse, Response response) {
-
-                Toast.makeText(application.getAppContext(), "Success!", Toast.LENGTH_SHORT).show();
-                Toast.makeText(application.getAppContext(), "Pull Down Refresh", Toast.LENGTH_LONG).show();
-            }
-
-            @Override
-            public void failure(RetrofitError error) {
-                Toast.makeText(application.getAppContext(), error.getMessage(), Toast.LENGTH_SHORT).show();
-            }
-        });
+        Service.create(currentFolder.getId(), typedFile, new RequestCallback<>(new DocumentModifiedListener()));
     }
 
     public void SendTakenImage(Folder currentFolder, Uri data) {
@@ -136,47 +126,22 @@ public class DocumentTreeService implements ITreeService {
         new DownloadService(documentId, docName);
     }
 
-    public Boolean rename(final int documentId, final String docName){
-        if(!AuthorizedToRenameDocument(documentId)) return false;
+    public void rename(final int documentId, final String docName){
+        if(AuthorizedToRenameDocument(documentId)) {
+            Service.rename(documentId, new RenameRequest(docName), new RequestCallback<>(new DocumentModifiedListener()));
 
-        Service.rename(documentId, new RenameRequest(docName), new Callback<Response>() {
-            @Override
-            public void success(Response response, Response response2) {
-                Document l = DocumentRepo.getById(documentId);
-                if(l != null){
-                    l.setName(docName);
-                }
-            }
-
-            @Override
-            public void failure(RetrofitError error) {
-
-            }
-        });
-
-        Document doc = DocumentRepo.getById(documentId);
-        doc.setName(docName);
-
-        return true;
-
-
+            Document doc = DocumentRepo.getById(documentId);
+            doc.setName(docName);
+            DocumentRepo.update(doc, documentId);
+        } else {
+            Toast.makeText(application.getAppContext(), "Not Authorized to Rename Layer", Toast.LENGTH_LONG).show();
+        }
     }
 
     public void move(Document document, int toFolderId){
         MoveRequest moveRequest = new MoveRequest(document, toFolderId);
 
-        Service.moveDocument(document.getId(), moveRequest, new Callback<Response>() {
-            @Override
-            public void success(Response response, Response response2) {
-                Log.d("DocumentTreeService", "Success");
-            }
-
-            @Override
-            public void failure(RetrofitError error) {
-                Log.d("DocumentTreeService", "Failure. " + error.getMessage());
-
-            }
-        });
+        Service.moveDocument(document.getId(), moveRequest, new RequestCallback<>(new DocumentModifiedListener(false)));
     }
     //endregion
 
@@ -187,22 +152,7 @@ public class DocumentTreeService implements ITreeService {
     }
 
     protected void SendImage(Folder currentFolder, final TypedFile t, final String path) {
-        Service.create(currentFolder.getId(), t, new Callback<DocumentCreateResponse>() {
-            @Override
-            public void success(DocumentCreateResponse documentCreateResponse, Response response) {
-
-                Toast.makeText(application.getAppContext(), "Success!", Toast.LENGTH_SHORT).show();
-                Toast.makeText(application.getAppContext(), "Pull Down Refresh", Toast.LENGTH_LONG).show();
-            }
-
-            @Override
-            public void failure(RetrofitError error) {
-
-                Toast.makeText(application.getAppContext(), "Name: " + t.fileName(), Toast.LENGTH_LONG).show();
-                Toast.makeText(application.getAppContext(), "Path: " + path, Toast.LENGTH_LONG).show();
-                Toast.makeText(application.getAppContext(), error.getMessage(), Toast.LENGTH_LONG).show();
-            }
-        });
+        Service.create(currentFolder.getId(), t, new RequestCallback<Response>(new DocumentModifiedListener()));
     }
 
     protected String getMimeTypeOfFile(String pathName) {

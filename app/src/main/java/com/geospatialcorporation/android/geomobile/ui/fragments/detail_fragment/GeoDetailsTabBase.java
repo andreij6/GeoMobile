@@ -36,7 +36,6 @@ public abstract class GeoDetailsTabBase<T> extends GeoViewFragmentBase {
     }
 
 
-
-
+    public abstract void refresh();
 
 }

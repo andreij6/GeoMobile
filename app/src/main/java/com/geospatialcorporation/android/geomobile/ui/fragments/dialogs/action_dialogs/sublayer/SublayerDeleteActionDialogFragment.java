@@ -22,8 +22,6 @@ public class SublayerDeleteActionDialogFragment extends SublayerActionDialogFrag
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
                         mService.delete(mSublayer.getId());
-
-                        Toast.makeText(application.getAppContext(), "Delete Request Sent!", Toast.LENGTH_LONG).show();
                     }
                 }).setNegativeButton(android.R.string.cancel, new DialogInterface.OnClickListener() {
                     @Override

@@ -134,7 +134,9 @@ public class DocumentFragment extends GeoViewFragmentBase {
 
     }
 
-
+    public void refresh() {
+        handleArguments();
+    }
 
     private class GetDocumentsTask extends AsyncTask<Integer, Void, Void> {
         @Override

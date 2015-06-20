@@ -1,6 +1,4 @@
-package com.geospatialcorporation.android.geomobile.library.helpers.panelmanager;
-
-import android.view.Menu;
+package com.geospatialcorporation.android.geomobile.library.panelmanager;
 
 import com.sothree.slidinguppanel.SlidingUpPanelLayout;
 
@@ -9,9 +7,9 @@ import com.sothree.slidinguppanel.SlidingUpPanelLayout;
  */
 public interface ISlidingPanelManager {
 
-    void anchor();
-
     void setup();
+
+    void anchor();
 
     void collapse();
 
@@ -20,4 +18,6 @@ public interface ISlidingPanelManager {
     void touch(Boolean enabled);
 
     SlidingUpPanelLayout.PanelState getPanelState();
+
+    void toggle();
 }

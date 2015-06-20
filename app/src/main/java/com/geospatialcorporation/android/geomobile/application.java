@@ -10,11 +10,13 @@ import android.util.Log;
 import com.facebook.stetho.Stetho;
 import com.facebook.stetho.okhttp.StethoInterceptor;
 import com.geospatialcorporation.android.geomobile.library.constants.Domains;
+import com.geospatialcorporation.android.geomobile.library.constants.GeoPanel;
 import com.geospatialcorporation.android.geomobile.models.Bookmarks.Bookmark;
 import com.geospatialcorporation.android.geomobile.models.Client;
 import com.geospatialcorporation.android.geomobile.models.Folders.Folder;
 import com.geospatialcorporation.android.geomobile.models.Layers.Layer;
 import com.geospatialcorporation.android.geomobile.models.Document.Document;
+import com.geospatialcorporation.android.geomobile.ui.MainActivity;
 import com.geospatialcorporation.android.geomobile.ui.fragments.GoogleMapFragment;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.sothree.slidinguppanel.SlidingUpPanelLayout;
@@ -53,6 +55,9 @@ public class application extends Application {
     private static HashMap<Integer, Bookmark> bookmarkHashMap;
     private static DrawerLayout layerDrawer;
     private static SlidingUpPanelLayout mapFragmentPanel;
+    private static SlidingUpPanelLayout sublayerFragmentPanel;
+    private static SlidingUpPanelLayout layerAttributePanel;
+    private static MainActivity mainActivity;
 
     //region Tree Entity Getters & Setters
     public static HashMap<Integer, Folder> getFolderHashMap() {
@@ -109,6 +114,22 @@ public class application extends Application {
 
     public static void setMapFragmentPanel(SlidingUpPanelLayout mapFragmentPanel) {
         application.mapFragmentPanel = mapFragmentPanel;
+    }
+
+    public static void setSublayerFragmentPanel(SlidingUpPanelLayout sublayerFragmentPanel){
+        application.sublayerFragmentPanel = sublayerFragmentPanel;
+    }
+
+    public static void setLayerAttributePanel(SlidingUpPanelLayout layerAttributePanel) {
+        application.layerAttributePanel = layerAttributePanel;
+    }
+
+    public static MainActivity getMainActivity() {
+        return mainActivity;
+    }
+
+    public static void setMainActivity(MainActivity mainActivity) {
+        application.mainActivity = mainActivity;
     }
 
     public void onCreate() {
@@ -219,6 +240,26 @@ public class application extends Application {
 
     public static RestAdapter getRestAdapter() {
         return restAdapter;
+    }
+
+    public static SlidingUpPanelLayout getSlidingPanel(int panelType) {
+        SlidingUpPanelLayout panel = null;
+
+        switch (panelType){
+            case GeoPanel.MAP:
+                panel = mapFragmentPanel;
+                break;
+            case GeoPanel.SUBLAYER:
+                panel = sublayerFragmentPanel;
+                break;
+            case GeoPanel.LAYER_ATTRIBUTE:
+                panel = layerAttributePanel;
+                break;
+            default:
+                break;
+        }
+
+        return panel;
     }
 
     class TokenInterceptor implements Interceptor {

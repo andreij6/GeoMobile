@@ -38,10 +38,10 @@ public interface FolderService {
     List<Document> getDocumentsByFolder(@Path("folderId") int folderId);
 
     @POST("/API/Folders")
-    void createFolder(@Body FolderCreateRequest createRequest, Callback<FolderCreateResponse> cb);
+    void createFolder(@Body FolderCreateRequest createRequest, Callback<Response> cb);
 
     @DELETE("/API/Folders/{folderId}")
-    void remove(@Path("folderId") int folderId, Callback<Folder> cb);
+    void remove(@Path("folderId") int folderId, Callback<Response> cb);
 
     @PUT("/API/Folders/{folderId}/Rename")
     void rename(@Path("folderId") int folderId, @Body RenameRequest name, Callback<Response> cb);

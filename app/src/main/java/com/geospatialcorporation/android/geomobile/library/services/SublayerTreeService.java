@@ -4,8 +4,11 @@ import android.util.Log;
 
 import com.geospatialcorporation.android.geomobile.application;
 import com.geospatialcorporation.android.geomobile.library.helpers.Interfaces.ITreeService;
+import com.geospatialcorporation.android.geomobile.library.requestcallback.RequestCallback;
+import com.geospatialcorporation.android.geomobile.library.requestcallback.listener_implementations.SublayerModifiedListner;
 import com.geospatialcorporation.android.geomobile.library.rest.SublayerService;
 import com.geospatialcorporation.android.geomobile.models.Layers.Layer;
+import com.geospatialcorporation.android.geomobile.models.Layers.SublayerCreateRequest;
 import com.geospatialcorporation.android.geomobile.models.RenameRequest;
 
 import java.util.List;
@@ -25,38 +28,18 @@ public class SublayerTreeService implements ITreeService {
     public SublayerTreeService(){
         mService = application.getRestAdapter().create(SublayerService.class);
     }
+
     @Override
-    public Boolean rename(int id, String name) {
+    public void rename(int id, String name) {
 
         RenameRequest request = new RenameRequest(name);
 
-        mService.rename(id, request, new Callback<Response>() {
-            @Override
-            public void success(Response response, Response response2) {
-                Log.d(TAG, "rename was a success");
-            }
-
-            @Override
-            public void failure(RetrofitError error) {
-                Log.d(TAG, "Error: " + error.getMessage());
-            }
-        });
-
-        return true;
+        mService.rename(id, request, new RequestCallback<>(new SublayerModifiedListner()));
     }
 
     public void delete(int sublayerId){
-        mService.delete(sublayerId, new Callback<Response>() {
-            @Override
-            public void success(Response response, Response response2) {
-                Log.d(TAG, "sUCCEss");
-            }
 
-            @Override
-            public void failure(RetrofitError error) {
-                Log.d(TAG, error.getMessage());
-            }
-        });
+        mService.delete(sublayerId, new RequestCallback<>(new SublayerModifiedListner()));
     }
 
     public List<Layer> getSublayersByLayerId(int layerId){
@@ -72,5 +55,9 @@ public class SublayerTreeService implements ITreeService {
 
         return sublayers;
 
+    }
+
+    public void createSublayer(SublayerCreateRequest model) {
+        mService.create(model, new RequestCallback<>(new SublayerModifiedListner()));
     }
 }

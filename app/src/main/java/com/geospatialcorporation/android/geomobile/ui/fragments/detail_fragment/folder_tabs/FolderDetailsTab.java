@@ -67,6 +67,11 @@ public class FolderDetailsTab extends GeoDetailsTabBase<Folder> {
         }
     };
 
+    @Override
+    public void refresh() {
+        new GetFolderDetailsTask().execute();
+    }
+
 
     private class GetFolderDetailsTask extends AsyncTask<Void, Void, FolderDetailsResponse>{
 

@@ -36,8 +36,6 @@ public class RenameLayerActionDialogFragment extends LayerActionDialogBase {
 
                         if (!newName.isEmpty()) {
                             mService.rename(mLayer.getId(), newName);
-                            Toaster("Layer Renamed");
-                            Toaster("Pull down Refresh");
                             getFragmentManager().popBackStack();
                         } else {
                             Toaster("Please add a valid Name");

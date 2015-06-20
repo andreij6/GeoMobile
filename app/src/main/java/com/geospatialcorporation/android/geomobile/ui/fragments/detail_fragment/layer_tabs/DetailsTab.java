@@ -54,6 +54,11 @@ public class DetailsTab extends GeoDetailsTabBase<Layer> {
         return v;
     }
 
+    @Override
+    public void refresh() {
+        new GetDetailsTask().execute();
+    }
+
     private class GetDetailsTask extends AsyncTask<Void, Void, LayerDetailsVm> {
 
         @Override

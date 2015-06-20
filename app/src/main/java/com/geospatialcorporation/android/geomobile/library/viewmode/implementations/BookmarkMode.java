@@ -5,9 +5,9 @@ import android.support.v4.app.FragmentManager;
 import android.view.View;
 
 import com.geospatialcorporation.android.geomobile.R;
-import com.geospatialcorporation.android.geomobile.library.helpers.panelmanager.SlidingPanelManager;
+import com.geospatialcorporation.android.geomobile.library.panelmanager.ISlidingPanelManager;
 import com.geospatialcorporation.android.geomobile.library.viewmode.IViewMode;
-import com.geospatialcorporation.android.geomobile.ui.fragments.panel_fragments.BookmarkPanelFragment;
+import com.geospatialcorporation.android.geomobile.ui.fragments.panel_fragments.map_fragment_panels.BookmarkPanelFragment;
 import com.google.android.gms.maps.GoogleMap;
 import com.melnykov.fab.FloatingActionButton;
 
@@ -37,9 +37,9 @@ public class BookmarkMode implements IViewMode {
         FloatingActionButton mSave;
         FloatingActionButton mClose;
         GoogleMap mMap;
-        SlidingPanelManager mPanelManager;
+        ISlidingPanelManager mPanelManager;
 
-       public Builder init(FloatingActionButton add, FloatingActionButton close, SlidingPanelManager panelManager, final GoogleMap map, FragmentManager fm){
+       public Builder init(FloatingActionButton add, FloatingActionButton close, ISlidingPanelManager panelManager, final GoogleMap map, FragmentManager fm){
             mSave = add;
            mClose = close;
            mMap = map;

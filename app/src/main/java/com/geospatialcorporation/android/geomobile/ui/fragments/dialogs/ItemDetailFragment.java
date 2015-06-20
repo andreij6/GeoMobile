@@ -81,14 +81,7 @@ public class ItemDetailFragment<ITreeEntity> extends GeoViewFragmentBase {
                     }
 
                     if (service != null) {
-
-                        Boolean success = service.rename(((IdModel) mEntity).getId(), mEditText.getText().toString());
-
-                        if (!success) {
-                            Toast.makeText(getActivity(), "Not Authorized to rename " + mEntity.getClass().getSimpleName(), Toast.LENGTH_LONG).show();
-                        } else {
-                            Toast.makeText(getActivity(), "Success!", Toast.LENGTH_LONG).show();
-                        }
+                        service.rename(((IdModel) mEntity).getId(), mEditText.getText().toString());
                     }
 
                     mEditText.setVisibility(View.GONE);

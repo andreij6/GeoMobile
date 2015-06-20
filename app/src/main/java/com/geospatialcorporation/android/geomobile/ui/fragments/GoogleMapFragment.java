@@ -32,11 +32,12 @@ import android.view.ViewGroup;
 
 import com.geospatialcorporation.android.geomobile.R;
 import com.geospatialcorporation.android.geomobile.application;
+import com.geospatialcorporation.android.geomobile.library.constants.GeoPanel;
 import com.geospatialcorporation.android.geomobile.library.constants.ViewModes;
 import com.geospatialcorporation.android.geomobile.library.helpers.GeoDialogHelper;
 import com.geospatialcorporation.android.geomobile.library.helpers.MapStateManager;
-import com.geospatialcorporation.android.geomobile.library.helpers.panelmanager.ISlidingPanelManager;
-import com.geospatialcorporation.android.geomobile.library.helpers.panelmanager.SlidingPanelManager;
+import com.geospatialcorporation.android.geomobile.library.panelmanager.ISlidingPanelManager;
+import com.geospatialcorporation.android.geomobile.library.panelmanager.PanelManager;
 import com.geospatialcorporation.android.geomobile.library.viewmode.IViewMode;
 import com.geospatialcorporation.android.geomobile.library.viewmode.implementations.FullScreenMode;
 import com.geospatialcorporation.android.geomobile.library.viewmode.implementations.QueryMode;
@@ -168,9 +169,12 @@ public class GoogleMapFragment extends GeoViewFragmentBase implements
 
         ButterKnife.inject(this, rootView);
         SetTitle(R.string.app_name);
+
         application.setMapFragmentPanel(mPanel);
-        mPanelManager = new SlidingPanelManager(getActivity());
+        mPanelManager = new PanelManager(GeoPanel.MAP);
+        mPanelManager.setup();
         mPanelManager.touch(false);
+
 
         initializeGoogleMap(savedInstanceState);
 
@@ -203,7 +207,6 @@ public class GoogleMapFragment extends GeoViewFragmentBase implements
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
         inflater.inflate(R.menu.map_menu, menu);
         mMenu = menu;
-        mPanelManager.setup();
         super.onCreateOptionsMenu(menu, inflater);
     }
 
@@ -212,6 +215,7 @@ public class GoogleMapFragment extends GeoViewFragmentBase implements
         super.onResume();
         mMapView.onResume();
         setMapState();
+        mPanelManager.collapse();
     }
 
     @Override
@@ -231,6 +235,7 @@ public class GoogleMapFragment extends GeoViewFragmentBase implements
                 return super.onOptionsItemSelected(item);
         }
     }
+
 
     @Override
     public void onDestroy() {
@@ -264,6 +269,8 @@ public class GoogleMapFragment extends GeoViewFragmentBase implements
             mViewMode.Disable(true);
             mViewMode = null;
         }
+
+        mPanelManager.collapse();
     }
 
     @Override

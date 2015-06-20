@@ -173,4 +173,15 @@
     <string name="clear_bookmarks">Clear Bookmarks</string>
     <string name="geounderground">GeoUnderground</string>
     <string name="portal">Portal</string>
+    <string name="hidden">Hidden</string>
+    <string name="save_new"><![CDATA[Save & New]]></string>
+    <string name="add_sublayer">Add Sublayer</string>
+    <string name="attribute_name">Attribute Name</string>
+
+    <!-- Validation Messages -->
+        <!-- Add LayerAttributeColumn -->
+    <string name="column_type_null">Column type must have a value.</string>
+    <string name="name_invalid">Attribute name must have a value</string>
+    <string name="boolean_type_invalid">Default Value must be true or false</string>
+    <string name="success">Success</string>
 </resources>

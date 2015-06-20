@@ -1,4 +1,4 @@
-package com.geospatialcorporation.android.geomobile.ui.fragments.panel_fragments;
+package com.geospatialcorporation.android.geomobile.ui.fragments.panel_fragments.map_fragment_panels;
 
 import android.os.Bundle;
 import android.view.KeyEvent;
@@ -10,8 +10,10 @@ import android.widget.EditText;
 import android.widget.TextView;
 
 import com.geospatialcorporation.android.geomobile.R;
+import com.geospatialcorporation.android.geomobile.library.constants.GeoPanel;
 import com.geospatialcorporation.android.geomobile.library.helpers.MapStateManager;
-import com.geospatialcorporation.android.geomobile.library.helpers.panelmanager.SlidingPanelManager;
+import com.geospatialcorporation.android.geomobile.library.panelmanager.ISlidingPanelManager;
+import com.geospatialcorporation.android.geomobile.library.panelmanager.PanelManager;
 import com.geospatialcorporation.android.geomobile.ui.fragments.GeoViewFragmentBase;
 import com.google.android.gms.maps.GoogleMap;
 
@@ -35,17 +37,17 @@ public class BookmarkPanelFragment extends GeoViewFragmentBase {
         mMap = map;
     }
 
-    public SlidingPanelManager getPanelManager() {
+    public ISlidingPanelManager getPanelManager() {
         return mPanelManager;
     }
 
-    public void setPanelManager(SlidingPanelManager panelManager) {
+    public void setPanelManager(ISlidingPanelManager panelManager) {
         mPanelManager = panelManager;
     }
     //endregion
 
     GoogleMap mMap;
-    SlidingPanelManager mPanelManager;
+    ISlidingPanelManager mPanelManager;
 
     @OnClick(R.id.close)
     public void close(){
@@ -56,7 +58,7 @@ public class BookmarkPanelFragment extends GeoViewFragmentBase {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState){
         mView = inflater.inflate(R.layout.fragment_panel_bookmarkmode, container, false);
         ButterKnife.inject(this, mView);
-        mPanelManager = new SlidingPanelManager(getActivity());
+        mPanelManager = new PanelManager(GeoPanel.MAP);
 
         SetTitle(R.string.add_bookmark);
 

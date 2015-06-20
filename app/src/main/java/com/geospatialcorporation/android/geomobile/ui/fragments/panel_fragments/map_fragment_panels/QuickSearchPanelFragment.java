@@ -1,4 +1,4 @@
-package com.geospatialcorporation.android.geomobile.ui.fragments.panel_fragments;
+package com.geospatialcorporation.android.geomobile.ui.fragments.panel_fragments.map_fragment_panels;
 
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
@@ -14,8 +14,8 @@ import android.widget.TextView;
 
 import com.geospatialcorporation.android.geomobile.R;
 import com.geospatialcorporation.android.geomobile.application;
+import com.geospatialcorporation.android.geomobile.library.constants.GeoPanel;
 import com.geospatialcorporation.android.geomobile.library.helpers.DataHelper;
-import com.geospatialcorporation.android.geomobile.library.helpers.panelmanager.SlidingPanelManager;
 import com.geospatialcorporation.android.geomobile.library.rest.QueryService;
 import com.geospatialcorporation.android.geomobile.models.Query.quickSearch.QuickSearchRequest;
 import com.geospatialcorporation.android.geomobile.models.Query.quickSearch.QuickSearchResponse;
@@ -25,7 +25,6 @@ import com.geospatialcorporation.android.geomobile.ui.fragments.GeoViewFragmentB
 
 import java.util.List;
 
-import butterknife.ButterKnife;
 import butterknife.InjectView;
 import butterknife.OnClick;
 import retrofit.Callback;
@@ -53,7 +52,7 @@ public class QuickSearchPanelFragment extends GeoViewFragmentBase {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState){
         setView(inflater, container, R.layout.fragment_panel_search_quick);
         SetTitle(R.string.quicksearch);
-        setPanelManager();
+        setPanelManager(GeoPanel.MAP);
 
         RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(container.getContext());
 

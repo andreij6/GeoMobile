@@ -36,7 +36,6 @@ public class RenameDocumentDialogFragment extends DocumentActionDialogBase {
 
                         if (!newName.isEmpty()) {
                             Service.rename(mDocument.getId(), newName);
-                            Toaster("Document Renamed");
                             getFragmentManager().popBackStack();
                         } else {
                             Toaster("Please add a valid Name");

@@ -1,6 +1,7 @@
 package com.geospatialcorporation.android.geomobile.ui.fragments.detail_fragment;
 
 import android.os.Bundle;
+import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTabHost;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -26,27 +27,30 @@ public class LayerDetailFragment extends ItemDetailFragment<Layer> implements Ta
     private static final String ATTRIBUTES = "Attributes";
     private static final String DETAILS = "Details";
 
+    FragmentTabHost mTabHost;
+    View mView;
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState){
         super.onCreate(savedInstanceState);
 
-        View view = inflater.inflate(R.layout.fragment_tree_detail, null);
+        mView = inflater.inflate(R.layout.fragment_tree_detail, null);
 
-        ButterKnife.inject(this, view);
+        ButterKnife.inject(this, mView);
 
         HandleArguments();
 
-        FragmentTabHost tabHost = (FragmentTabHost)view.findViewById(R.id.tabHost);
+        mTabHost = (FragmentTabHost)mView.findViewById(R.id.tabHost);
 
-        tabHost.setup(getActivity(), getChildFragmentManager(), android.R.id.tabcontent);
+        mTabHost.setup(getActivity(), getChildFragmentManager(), android.R.id.tabcontent);
 
-        tabHost.addTab(tabHost.newTabSpec(SUBLAYERS).setIndicator(SUBLAYERS), SublayersTab.class, getArguments());
-        tabHost.addTab(tabHost.newTabSpec(ATTRIBUTES).setIndicator(ATTRIBUTES), AttributeLayoutTab.class, getArguments());
-        tabHost.addTab(tabHost.newTabSpec(DETAILS).setIndicator(DETAILS), DetailsTab.class, getArguments());
+        mTabHost.addTab(mTabHost.newTabSpec(SUBLAYERS).setIndicator(SUBLAYERS), SublayersTab.class, getArguments());
+        mTabHost.addTab(mTabHost.newTabSpec(ATTRIBUTES).setIndicator(ATTRIBUTES), AttributeLayoutTab.class, getArguments());
+        mTabHost.addTab(mTabHost.newTabSpec(DETAILS).setIndicator(DETAILS), DetailsTab.class, getArguments());
 
-        tabHost.setCurrentTab(0);
+        mTabHost.setCurrentTab(0);
 
-        return view;
+        return mView;
     }
 
     @Override
@@ -69,4 +73,8 @@ public class LayerDetailFragment extends ItemDetailFragment<Layer> implements Ta
            //GeoDialogHelper.deleteLayer(getActivity(), mEntity, getFragmentManager());
         }
     };
+
+    public Fragment getCurrentTab() {
+        return getChildFragmentManager().findFragmentById(android.R.id.tabcontent);
+    }
 }

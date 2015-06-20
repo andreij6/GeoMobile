@@ -137,6 +137,7 @@ public class Layer implements Parcelable, ITreeEntity {
     }
 
     public void setMapObject(Object mapObject) { MapObject = mapObject; }
+
     public Object getMapObject() { return MapObject; }
     //endregion
 

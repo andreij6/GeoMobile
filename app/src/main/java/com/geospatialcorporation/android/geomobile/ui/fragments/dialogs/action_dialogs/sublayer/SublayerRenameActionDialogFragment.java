@@ -36,9 +36,7 @@ public class SublayerRenameActionDialogFragment extends SublayerActionDialogFrag
 
                         if (!newName.isEmpty()) {
                             mService.rename(mSublayer.getId(), newName);
-                            Toaster("Sublayer Renamed");
-                            Toaster("Pull down Refresh");
-                            getFragmentManager().popBackStack();
+                            //getFragmentManager().popBackStack();
                         } else {
                             Toaster("Please add a valid Name");
                         }

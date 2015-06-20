@@ -25,7 +25,7 @@ public interface DocumentService {
 
     @Multipart
     @POST("/API/Folders/{folderId}/Documents")
-    void create(@Path("folderId") int folderId, @Part("file") TypedFile file, Callback<DocumentCreateResponse> cb);
+    void create(@Path("folderId") int folderId, @Part("file") TypedFile file, Callback<Response> cb);  //was DocumentCreateResponse
 
     @DELETE("/API/Documents/{documentId}")
     void delete(@Path("documentId") int documentId, Callback<Document> cb);

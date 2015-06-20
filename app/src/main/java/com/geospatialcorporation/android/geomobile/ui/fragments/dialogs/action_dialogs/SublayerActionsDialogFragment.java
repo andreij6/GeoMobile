@@ -11,7 +11,10 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.geospatialcorporation.android.geomobile.R;
+import com.geospatialcorporation.android.geomobile.library.constants.GeoPanel;
 import com.geospatialcorporation.android.geomobile.library.helpers.GeoDialogHelper;
+import com.geospatialcorporation.android.geomobile.library.panelmanager.ISlidingPanelManager;
+import com.geospatialcorporation.android.geomobile.library.panelmanager.PanelManager;
 import com.geospatialcorporation.android.geomobile.models.Layers.Layer;
 import com.geospatialcorporation.android.geomobile.ui.fragments.dialogs.base.GeoDialogFragmentBase;
 
@@ -24,10 +27,13 @@ import butterknife.InjectView;
 public class SublayerActionsDialogFragment extends GeoDialogFragmentBase {
 
     Layer mSublayer;
+    ISlidingPanelManager mPanelManager;
 
     public void init(Context context, Layer layer){
        setContext(context);
         mSublayer = layer;
+        mPanelManager = new PanelManager(GeoPanel.SUBLAYER);
+        mPanelManager.setup();
     }
 
     //region ButterKnife
@@ -89,7 +95,7 @@ public class SublayerActionsDialogFragment extends GeoDialogFragmentBase {
 
         @Override
         public void onClick(View v) {
-            Toaster("Modify Style");
+            mPanelManager.anchor();
         }
     };
 
@@ -97,7 +103,7 @@ public class SublayerActionsDialogFragment extends GeoDialogFragmentBase {
 
         @Override
         public void onClick(View v) {
-            Toaster("Edit Filter");
+            mPanelManager.anchor();
         }
     };
 

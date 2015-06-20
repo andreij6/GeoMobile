@@ -89,7 +89,7 @@ public class MainActivity extends ActionBarActivity
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         ButterKnife.inject(this);
-
+        application.setMainActivity(this);
         dialog = new Dialogs();
         getSupportActionBar().setElevation(0);
         mMapFragment = application.getMapFragment();
@@ -136,10 +136,10 @@ public class MainActivity extends ActionBarActivity
         Fragment pageFragment = setPageFragment(position);
 
         FragmentManager fragmentManager = getSupportFragmentManager();
+
         fragmentManager.beginTransaction()
                 .replace(R.id.content_frame, pageFragment)
-                .addToBackStack(null)
-                .commit();
+                .addToBackStack(null).commit();
     }
 
     protected Fragment setPageFragment(int position) {
@@ -147,7 +147,7 @@ public class MainActivity extends ActionBarActivity
             switch (position) {
                 case ViewConstants.HEADER:
                 case ViewConstants.MAP:
-                    return mMapFragment;
+                    return mMapFragment = application.getMapFragment();
                 case ViewConstants.LAYER:
                     return new LayerFragment();
                 case ViewConstants.LIBRARY:
@@ -203,6 +203,10 @@ public class MainActivity extends ActionBarActivity
 
     public DrawerLayout getRightDrawer() {
         return (DrawerLayout)findViewById(R.id.drawer_layout);
+    }
+
+    public LayerSelectorDrawerFragment getLayerDrawerFragment(){
+        return (LayerSelectorDrawerFragment)getSupportFragmentManager().findFragmentById(R.id.layer_drawer);
     }
 
     public View getLayerListView() {

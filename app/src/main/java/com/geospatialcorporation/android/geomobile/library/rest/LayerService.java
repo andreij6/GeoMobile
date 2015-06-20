@@ -20,7 +20,7 @@ import retrofit.http.Path;
 public interface LayerService {
 
     @POST("/API/Layers")
-    void createLayer(@Body LayerCreateRequest layer, Callback<LayerCreateResponse> cb);
+    void createLayer(@Body LayerCreateRequest layer, Callback<Response> cb);
 
     @GET("/API/Layers")
     List<Layer> getLayers();
@@ -35,7 +35,7 @@ public interface LayerService {
     void rename(@Path("id") int id, @Body RenameRequest rename, Callback<Response> cb);
 
     @DELETE("/API/Layers/{id}")
-    void delete(@Path("id") int id, Callback<Layer> cb);
+    void delete(@Path("id") int id, Callback<Response> cb);
 
     @GET("/API/Layers/{id}/Style")
     Layer.StyleInfo getStyle(@Path("id") int id);

@@ -39,7 +39,7 @@ public class PermissionsTab extends GeoDetailsTabBase<Folder> {
 
         mFab.setOnClickListener(showActions);
 
-        new GetFolderPermissionsTask().execute();
+        refresh();
 
         return v;
     }
@@ -50,6 +50,11 @@ public class PermissionsTab extends GeoDetailsTabBase<Folder> {
             Toaster("Allow user to edit Permissions");
         }
     };
+
+    @Override
+    public void refresh() {
+        new GetFolderPermissionsTask().execute();
+    }
 
     private class GetFolderPermissionsTask extends AsyncTask<Void, Void, List<FolderPermissionsResponse>>{
 

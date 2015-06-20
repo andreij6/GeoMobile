@@ -1,12 +1,13 @@
 package com.geospatialcorporation.android.geomobile.models.Layers;
 
+import com.geospatialcorporation.android.geomobile.R;
+import com.geospatialcorporation.android.geomobile.application;
 import com.geospatialcorporation.android.geomobile.library.constants.LayerAttributeColumnDataTypeCodes;
 
+import java.util.List;
 
-/**
- * Created by andre on 6/9/2015.
- */
-public class LayerAttributeColumns {
+
+public class LayerAttributeColumn {
     //region GETTERS & SETTERS
     public Integer getOrderNum() {
         return OrderNum;
@@ -44,37 +45,6 @@ public class LayerAttributeColumns {
         return DataType;
     }
 
-    public String getDataTypeName() {
-        String result = "Missing Data Type";
-
-        //switch wouldnt work right here IDK y.
-        if (getDataType() == LayerAttributeColumnDataTypeCodes.IDFIELD) {
-            result = "IdField";
-        }
-        if (getDataType() == LayerAttributeColumnDataTypeCodes.TEXT) {
-            result = "Text";
-        }
-
-        if (getDataType() == LayerAttributeColumnDataTypeCodes.BOOLEAN){
-            result = "Boolean";
-        }
-
-        if (getDataType() == LayerAttributeColumnDataTypeCodes.DATE){
-            result = "Date";
-        }
-        if (getDataType() ==LayerAttributeColumnDataTypeCodes.DATETIME) {
-            result = "DateTime";
-        }
-        if (getDataType() ==LayerAttributeColumnDataTypeCodes.INTEGER) {
-            result = "Integer";
-        }
-        if (getDataType() ==LayerAttributeColumnDataTypeCodes.DECIMAL) {
-            result = "Decimal";
-        }
-
-        return result;
-    }
-
     public String getDataTypeViewName() {
         String result = "Missing Data Type";
 
@@ -110,6 +80,31 @@ public class LayerAttributeColumns {
         DataType = dataType;
     }
 
+    public void setDataType(String dataType){
+
+        switch (dataType){
+            case "Text":
+                setDataType(LayerAttributeColumnDataTypeCodes.TEXT);
+                break;
+            case "True/False":
+                setDataType(LayerAttributeColumnDataTypeCodes.BOOLEAN);
+                break;
+            case "Date":
+                setDataType(LayerAttributeColumnDataTypeCodes.DATE);
+                break;
+            case "DateTime":
+                setDataType(LayerAttributeColumnDataTypeCodes.DATETIME);
+                break;
+            case "Integer":
+                setDataType(LayerAttributeColumnDataTypeCodes.INTEGER);
+                break;
+            case "Decimal":
+                setDataType(LayerAttributeColumnDataTypeCodes.DECIMAL);
+                break;
+
+        }
+    }
+
     public Boolean getIsHidden() {
         return IsHidden;
     }
@@ -125,6 +120,7 @@ public class LayerAttributeColumns {
     public void setDefaultValue(String defaultValue) {
         DefaultValue = defaultValue;
     }
+
     //endregion
 
     Integer OrderNum;
@@ -134,4 +130,6 @@ public class LayerAttributeColumns {
     Integer DataType;
     Boolean IsHidden;
     String DefaultValue;
+
+
 }

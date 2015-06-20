@@ -15,7 +15,8 @@ import android.widget.LinearLayout;
 import com.geospatialcorporation.android.geomobile.R;
 import com.geospatialcorporation.android.geomobile.database.DataRepository.IFullDataRepository;
 import com.geospatialcorporation.android.geomobile.database.DataRepository.Implementations.Bookmark.BookmarkDataSource;
-import com.geospatialcorporation.android.geomobile.library.helpers.panelmanager.SlidingPanelManager;
+import com.geospatialcorporation.android.geomobile.library.constants.GeoPanel;
+import com.geospatialcorporation.android.geomobile.library.panelmanager.PanelManager;
 import com.geospatialcorporation.android.geomobile.library.sectionbuilders.implementations.BookmarkSectionBuilder;
 import com.geospatialcorporation.android.geomobile.library.viewmode.implementations.BookmarkMode;
 import com.geospatialcorporation.android.geomobile.models.Bookmarks.Bookmark;
@@ -95,10 +96,10 @@ public class BookmarksDialogFragment extends GeoDialogFragmentBase{
             Toaster("Set Bookmark mode");
             Fragment contentFragment = ((MainActivity)getActivity()).getContentFragment();
 
-            ((IViewModeListener)contentFragment).setViewMode(
-                    new BookmarkMode.Builder()
-                            .init(mSaveBtn, mCloseBtn, new SlidingPanelManager(getActivity()), mMap, mFragmentManager)
-                            .create()
+            ((IViewModeListener) contentFragment).setViewMode(
+            new BookmarkMode.Builder()
+                    .init(mSaveBtn, mCloseBtn, new PanelManager(GeoPanel.MAP), mMap, mFragmentManager)
+                    .create()
             );
             BookmarksDialogFragment.this.getDialog().cancel();
         }

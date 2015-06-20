@@ -11,6 +11,10 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.geospatialcorporation.android.geomobile.R;
+import com.geospatialcorporation.android.geomobile.application;
+import com.geospatialcorporation.android.geomobile.library.constants.GeoPanel;
+import com.geospatialcorporation.android.geomobile.library.panelmanager.ISlidingPanelManager;
+import com.geospatialcorporation.android.geomobile.library.panelmanager.PanelManager;
 import com.geospatialcorporation.android.geomobile.library.services.SublayerTreeService;
 import com.geospatialcorporation.android.geomobile.models.Layers.Layer;
 import com.geospatialcorporation.android.geomobile.ui.adapters.recycler.SublayerAdapter;
@@ -41,7 +45,11 @@ public class SublayersTab extends GeoDetailsTabBase<Layer> {
         mSwipeRefreshLayout.setOnRefreshListener(new SublayerRefreshListener());
         mSwipeRefreshLayout.setProgressBackgroundColorSchemeColor(getActivity().getResources().getColor(R.color.accent));
 
+        application.setSublayerFragmentPanel(mPanel);
         mPanel.setBackgroundColor(getActivity().getResources().getColor(R.color.primary_light));
+
+        ISlidingPanelManager manager = new PanelManager(GeoPanel.SUBLAYER);
+        manager.setup();
 
         setIntentString(Layer.LAYER_INTENT);
         handleArgs();
@@ -53,6 +61,11 @@ public class SublayersTab extends GeoDetailsTabBase<Layer> {
         mRecyclerView.setLayoutManager(layoutManager);
 
         return v;
+    }
+
+    @Override
+    public void refresh() {
+        new GetSublayersTask().execute();
     }
 
     private class GetSublayersTask extends AsyncTask<Void, Void, List<Layer>> {
@@ -91,7 +104,7 @@ public class SublayersTab extends GeoDetailsTabBase<Layer> {
             new Handler().postDelayed(new Runnable() {
                 @Override
                 public void run() {
-                    new GetSublayersTask().execute();
+                    refresh();
                     mSwipeRefreshLayout.setRefreshing(false);
                 }
             }, 2000);

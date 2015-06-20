@@ -225,6 +225,10 @@ public class LayerSelectorDrawerFragment extends Fragment {
         return ((ActionBarActivity) getActivity()).getSupportActionBar();
     }
 
+    public void refresh() {
+        new GetLayersTask().execute(0);
+    }
+
     private class GetLayersTask extends AsyncTask<Integer, Void, List<Folder>> {
         @Override
         protected List<Folder> doInBackground(Integer... params) {
