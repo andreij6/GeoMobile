@@ -26,20 +26,6 @@
         android:textColor="@color/primary_dark"
         android:editable="true"/>
 
-    <com.melnykov.fab.FloatingActionButton
-        android:id="@+id/fab"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:src="@drawable/ic_action_add"
-        fab:fab_colorNormal="@color/accent"
-        fab:fab_colorPressed="@color/primary_dark"
-        fab:fab_colorRipple="@color/primary_light"
-        android:layout_marginLeft="16dp"
-        android:layout_marginRight="16dp"
-        android:layout_marginEnd="43dp"
-        android:layout_below="@+id/backgroundImageView"
-        android:layout_alignParentEnd="true"/>
-
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
@@ -63,7 +49,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:textAppearance="?android:attr/textAppearanceMedium"
-                    android:text="Created"
+                    android:text="Created:"
                     android:id="@+id/textView5"
                     android:layout_weight="1"
                     android:layout_gravity="center_vertical"/>
@@ -88,7 +74,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:textAppearance="?android:attr/textAppearanceMedium"
-                    android:text="Created By"
+                    android:text="Created By:"
                     android:id="@+id/createdByLabel"
                     android:layout_weight="1"/>
 

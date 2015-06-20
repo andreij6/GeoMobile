@@ -15,9 +15,6 @@ import com.geospatialcorporation.android.geomobile.ui.fragments.dialogs.ItemDeta
 
 import butterknife.ButterKnife;
 
-/**
- * Created by andre on 6/7/2015.
- */
 public class LayerFolderDetailFragment extends ItemDetailFragment<Folder> implements TabHost.OnTabChangeListener {
 
     private static final String DETAILS = "Details";

@@ -5,8 +5,6 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageView;
-import android.widget.TabHost;
 import android.widget.TextView;
 
 import com.geospatialcorporation.android.geomobile.R;
@@ -14,24 +12,18 @@ import com.geospatialcorporation.android.geomobile.library.helpers.GeoDialogHelp
 import com.geospatialcorporation.android.geomobile.library.services.FolderTreeService;
 import com.geospatialcorporation.android.geomobile.models.Folders.Folder;
 import com.geospatialcorporation.android.geomobile.models.Folders.FolderDetailsResponse;
-import com.geospatialcorporation.android.geomobile.ui.MainActivity;
-import com.geospatialcorporation.android.geomobile.ui.fragments.GeoViewFragmentBase;
 import com.geospatialcorporation.android.geomobile.ui.fragments.detail_fragment.GeoDetailsTabBase;
 import com.melnykov.fab.FloatingActionButton;
 
 import butterknife.ButterKnife;
 import butterknife.InjectView;
 
-/**
- * Created by andre on 6/8/2015.
- */
 public class FolderDetailsTab extends GeoDetailsTabBase<Folder> {
 
     private static final String TAG = FolderDetailsTab.class.getSimpleName();
 
     FolderDetailsResponse mDetails;
     String mFolderType;
-    @InjectView(R.id.fab) FloatingActionButton mFab;
     @InjectView(R.id.createdByValue) TextView mCreatedBy;
     @InjectView(R.id.createdValue) TextView mDateCreated;
     @InjectView(R.id.lastUpdatedValue) TextView mUpdated;
@@ -44,8 +36,6 @@ public class FolderDetailsTab extends GeoDetailsTabBase<Folder> {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState){
         View v = inflater.inflate(R.layout.fragment_folder_details_tab, container, false);
         ButterKnife.inject(this, v);
-
-        mFab.setOnClickListener(showActions);
 
         setIntentString(Folder.FOLDER_INTENT);
 
@@ -95,14 +85,14 @@ public class FolderDetailsTab extends GeoDetailsTabBase<Folder> {
             }
 
             if(mFolderType.equals("Layer")) {
-                mEntityCountLabel.setText("Layer Count");
+                mEntityCountLabel.setText("Layer Count:");
                 if (mEntity.getLayers() != null) {
                     mEntityCount.setText(mEntity.getLayers().size() + "");
                 } else {
                     mEntityCount.setText("0");
                 }
             } else {
-                mEntityCountLabel.setText("Document Count");
+                mEntityCountLabel.setText("Document Count:");
                 if (mEntity.getDocuments() != null) {
                     mEntityCount.setText(mEntity.getDocuments().size() + "");
                 } else {

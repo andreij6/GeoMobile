@@ -22,28 +22,16 @@ import android.content.Intent;
 import android.location.Location;
 import android.os.Bundle;
 import android.provider.Settings;
-import android.support.v4.widget.DrawerLayout;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 
 import com.geospatialcorporation.android.geomobile.R;
-import com.geospatialcorporation.android.geomobile.application;
-import com.geospatialcorporation.android.geomobile.library.constants.ViewModes;
-import com.geospatialcorporation.android.geomobile.library.helpers.GeoDialogHelper;
 import com.geospatialcorporation.android.geomobile.library.helpers.MapStateManager;
-import com.geospatialcorporation.android.geomobile.library.helpers.panelmanager.ISlidingPanelManager;
-import com.geospatialcorporation.android.geomobile.library.helpers.panelmanager.SlidingPanelManager;
 import com.geospatialcorporation.android.geomobile.library.viewmode.IViewMode;
-import com.geospatialcorporation.android.geomobile.library.viewmode.implementations.FullScreenMode;
-import com.geospatialcorporation.android.geomobile.library.viewmode.implementations.QueryMode;
-import com.geospatialcorporation.android.geomobile.library.viewmode.implementations.SearchMode;
 import com.geospatialcorporation.android.geomobile.ui.Interfaces.IViewModeListener;
-import com.geospatialcorporation.android.geomobile.ui.MainActivity;
-import com.geospatialcorporation.android.geomobile.ui.fragments.dialogs.MapTypeSelectDialogFragment;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.location.LocationServices;
@@ -54,8 +42,6 @@ import com.google.android.gms.maps.MapView;
 import com.google.android.gms.maps.MapsInitializer;
 import com.google.android.gms.maps.model.CameraPosition;
 import com.google.android.gms.maps.model.LatLng;
-import com.melnykov.fab.FloatingActionButton;
-import com.sothree.slidinguppanel.SlidingUpPanelLayout;
 
 import butterknife.ButterKnife;
 import butterknife.InjectView;
@@ -67,49 +53,49 @@ import butterknife.OnClick;
 public class GoogleMapFragment extends GeoViewFragmentBase implements
         IViewModeListener,
         GoogleApiClient.ConnectionCallbacks,
-        GoogleApiClient.OnConnectionFailedListener
-{
+        GoogleApiClient.OnConnectionFailedListener {
     private static final String TAG = GoogleMapFragment.class.getSimpleName();
 
     //region Properties
     public GoogleMap mMap;
     IViewMode mViewMode;
     GoogleApiClient mLocationClient;
-    ISlidingPanelManager mPanelManager;
-    @InjectView(R.id.map) MapView mMapView;
-    @InjectView(R.id.sliding_layout) SlidingUpPanelLayout mPanel;
-    @InjectView(R.id.fab_box) FloatingActionButton mBoxQueryBtn;
-    @InjectView(R.id.fab_point) FloatingActionButton mPointQueryBtn;
-    @InjectView(R.id.fab_close) FloatingActionButton mCloseBtn;
-    @InjectView(R.id.fab_save) FloatingActionButton mSaveBtn;
-    @InjectView(R.id.fab_bm_close) FloatingActionButton mBmClose;
-    @InjectView(R.id.fab_fullscreen_close) FloatingActionButton mFullScreenClose;
+    @InjectView(R.id.map)
+    MapView mMapView;
+    //    ISlidingPanelManager mPanelManager;
+//    @InjectView(R.id.sliding_layout) SlidingUpPanelLayout mPanel;
+//    @InjectView(R.id.fab_box) FloatingActionButton mBoxQueryBtn;
+//    @InjectView(R.id.fab_point) FloatingActionButton mPointQueryBtn;
+//    @InjectView(R.id.fab_close) FloatingActionButton mCloseBtn;
+//    @InjectView(R.id.fab_save) FloatingActionButton mSaveBtn;
+//    @InjectView(R.id.fab_bm_close) FloatingActionButton mBmClose;
+//    @InjectView(R.id.fab_fullscreen_close) FloatingActionButton mFullScreenClose;
     Menu mMenu;
     //endregion
 
     //region OnClicks
     @SuppressWarnings("unused")
-    @OnClick(R.id.fab)
-    public void getLocation(){
+    @OnClick(R.id.fab_location)
+    public void getLocation() {
         Location currentLocation = LocationServices.FusedLocationApi.getLastLocation(mLocationClient);
 
-        if(currentLocation == null){
+        if (currentLocation == null) {
             AlertDialog.Builder builder1 = new AlertDialog.Builder(getActivity());
             builder1.setMessage(getString(R.string.location_not_found))
                     .setPositiveButton(getString(R.string.enable_gps),
-                    new DialogInterface.OnClickListener() {
-                        public void onClick(DialogInterface dialog, int id) {
-                            Intent gpsOptions = new Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS);
+                            new DialogInterface.OnClickListener() {
+                                public void onClick(DialogInterface dialog, int id) {
+                                    Intent gpsOptions = new Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS);
 
-                            startActivity(gpsOptions);
-                        }
-                    })
+                                    startActivity(gpsOptions);
+                                }
+                            })
                     .setNegativeButton(getString(R.string.cancel),
                             new DialogInterface.OnClickListener() {
                                 public void onClick(DialogInterface dialog, int id) {
                                     dialog.cancel();
-                        }
-                    });
+                                }
+                            });
 
             AlertDialog alert11 = builder1.create();
             alert11.show();
@@ -122,23 +108,23 @@ public class GoogleMapFragment extends GeoViewFragmentBase implements
         }
     }
 
-    @SuppressWarnings("unused")
-    @OnClick(R.id.fab_layers)
-    public void showLayersDrawer(){
-        DrawerLayout mDrawerLayout = ((MainActivity)getActivity()).getRightDrawer();
-        View layerView = ((MainActivity)getActivity()).getLayerListView();
-
-        mDrawerLayout.openDrawer(layerView);
-    }
-
-    @SuppressWarnings("unused")
-    @OnClick(R.id.fab_fullscreen_close)
-    public void closeFullScreenMode(){
-        //probably an expensive way to reset after fullscreen mode but I havent found a good solution yet to disable fullscreen mode
-        onStop();
-        getActivity().finish();
-        startActivity(getActivity().getIntent());
-    }
+//    @SuppressWarnings("unused")
+//    @OnClick(R.id.fab_layers)
+//    public void showLayersDrawer(){
+//        DrawerLayout mDrawerLayout = ((MainActivity)getActivity()).getRightDrawer();
+//        View layerView = ((MainActivity)getActivity()).getLayerListView();
+//
+//        mDrawerLayout.openDrawer(layerView);
+//    }
+//
+//    @SuppressWarnings("unused")
+//    @OnClick(R.id.fab_fullscreen_close)
+//    public void closeFullScreenMode(){
+//        //probably an expensive way to reset after fullscreen mode but I havent found a good solution yet to disable fullscreen mode
+//        onStop();
+//        getActivity().finish();
+//        startActivity(getActivity().getIntent());
+//    }
 
     //endregion
 
@@ -150,10 +136,10 @@ public class GoogleMapFragment extends GeoViewFragmentBase implements
 
     //region Base Overrides
     @Override
-    public void onCreate(Bundle savedInstance){
+    public void onCreate(Bundle savedInstance) {
         super.onCreate(savedInstance);
 
-        if(mMapView != null){
+        if (mMapView != null) {
             mMapView.onCreate(savedInstance);
         }
 
@@ -163,14 +149,14 @@ public class GoogleMapFragment extends GeoViewFragmentBase implements
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        setHasOptionsMenu(true);
+        setHasOptionsMenu(false);
         View rootView = inflater.inflate(R.layout.fragment_map, container, false);
 
         ButterKnife.inject(this, rootView);
         SetTitle(R.string.app_name);
-        application.setMapFragmentPanel(mPanel);
-        mPanelManager = new SlidingPanelManager(getActivity());
-        mPanelManager.touch(false);
+//        application.setMapFragmentPanel(mPanel);
+//        mPanelManager = new SlidingPanelManager(getActivity());
+//        mPanelManager.touch(false);
 
         initializeGoogleMap(savedInstanceState);
 
@@ -201,10 +187,10 @@ public class GoogleMapFragment extends GeoViewFragmentBase implements
 
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
-        inflater.inflate(R.menu.map_menu, menu);
-        mMenu = menu;
-        mPanelManager.setup();
-        super.onCreateOptionsMenu(menu, inflater);
+//        inflater.inflate(R.menu.map_menu, menu);
+//        mMenu = menu;
+//        mPanelManager.setup();
+//        super.onCreateOptionsMenu(menu, inflater);
     }
 
     @Override
@@ -214,23 +200,23 @@ public class GoogleMapFragment extends GeoViewFragmentBase implements
         setMapState();
     }
 
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action buttons
-        switch (item.getItemId()) {
-            case R.id.action_map_settings:
-                MapTypeSelectDialogFragment m = new MapTypeSelectDialogFragment();
-                m.setContext(getActivity());
-                m.setMap(mMap);
-                m.show(getFragmentManager(), "styles");
-                return true;
-            case R.id.action_fullscreen:
-                mPanel.setPanelState(SlidingUpPanelLayout.PanelState.HIDDEN);
-                setViewMode(fullScreenSetup());
-            default:
-                return super.onOptionsItemSelected(item);
-        }
-    }
+//    @Override
+//    public boolean onOptionsItemSelected(MenuItem item) {
+//        // Handle action buttons
+//        switch (item.getItemId()) {
+//            case R.id.action_map_settings:
+//                MapTypeSelectDialogFragment m = new MapTypeSelectDialogFragment();
+//                m.setContext(getActivity());
+//                m.setMap(mMap);
+//                m.show(getFragmentManager(), "styles");
+//                return true;
+//            case R.id.action_fullscreen:
+//                mPanel.setPanelState(SlidingUpPanelLayout.PanelState.HIDDEN);
+//                setViewMode(fullScreenSetup());
+//            default:
+//                return super.onOptionsItemSelected(item);
+//        }
+//    }
 
     @Override
     public void onDestroy() {
@@ -241,13 +227,13 @@ public class GoogleMapFragment extends GeoViewFragmentBase implements
     @Override
     public void onLowMemory() {
         super.onLowMemory();
-        if(mMapView != null) {
+        if (mMapView != null) {
             mMapView.onLowMemory();
         }
     }
 
     @Override
-    public void onStop(){
+    public void onStop() {
         super.onStop();
         saveMapState();
     }
@@ -258,16 +244,16 @@ public class GoogleMapFragment extends GeoViewFragmentBase implements
     }
 
     @Override
-    public void onDestroyView(){
+    public void onDestroyView() {
         super.onDestroyView();
-        if(mViewMode != null){
+        if (mViewMode != null) {
             mViewMode.Disable(true);
             mViewMode = null;
         }
     }
 
     @Override
-    public void onPause(){
+    public void onPause() {
         mMapView.onPause();
         super.onPause();
     }
@@ -275,29 +261,28 @@ public class GoogleMapFragment extends GeoViewFragmentBase implements
     //endregion
 
     //region ViewModeSetups
-    private IViewMode querySetup() {
-        return new QueryMode.Builder()
-                .setDependents(mMap, mListener, getActivity())
-                .setControls(mBoxQueryBtn, mPointQueryBtn, mCloseBtn, getActivity().getSupportFragmentManager())
-                .setupUI()
-                .create();
+//    private IViewMode querySetup() {
+//        return new QueryMode.Builder()
+//                .setDependents(mMap, mListener, getActivity())
+//                .setControls(mBoxQueryBtn, mPointQueryBtn, mCloseBtn, getActivity().getSupportFragmentManager())
+//                .setupUI()
+//                .create();
+//
+//    }
 
-    }
+//    protected IViewMode searchSetup() {
+//        return new SearchMode.Builder()
+//                        .init(getActivity().getSupportFragmentManager(), mPanelManager)
+//                        .create();
+//    }
 
-    protected IViewMode searchSetup() {
-
-        return new SearchMode.Builder()
-                        .init(getActivity().getSupportFragmentManager(), mPanelManager)
-                        .create();
-    }
-
-    protected IViewMode fullScreenSetup(){
-        MainActivity activity = (MainActivity)getActivity();
-        return new FullScreenMode.Builder()
-                        .create(activity.getSupportActionBar(),
-                                activity.getRightDrawer(),
-                                mPanel, mFullScreenClose);
-    }
+//    protected IViewMode fullScreenSetup(){
+//        MainActivity activity = (MainActivity)getActivity();
+//        return new FullScreenMode.Builder()
+//                        .create(activity.getSupportActionBar(),
+//                                activity.getRightDrawer(),
+//                                mPanel, mFullScreenClose);
+//    }
     //endregion
 
     //region Test Layers
@@ -353,8 +338,8 @@ public class GoogleMapFragment extends GeoViewFragmentBase implements
     @Override
     public void setViewMode(IViewMode mode) {
 
-        if(mViewMode != null){
-            if(mViewMode.isSame(mode)){
+        if (mViewMode != null) {
+            if (mViewMode.isSame(mode)) {
                 mViewMode.Disable(true);
                 mViewMode = null;
             } else {
@@ -369,22 +354,22 @@ public class GoogleMapFragment extends GeoViewFragmentBase implements
     }
 
 
-    public void setViewMode(String mode){
-        switch(mode){
-            case ViewModes.BOOKMARK:
-                GeoDialogHelper.showBookmarks(getActivity(), getFragmentManager(), mSaveBtn, mBmClose, mPanel, mMap);
-                mPanelManager.collapse();
-                break;
-            case ViewModes.QUERY:
-                setViewMode(querySetup());
-                break;
-            case ViewModes.QUICKSEARCH:
-                setViewMode(searchSetup());
-                break;
-            default:
-                Toaster("Mode Not Set");
-                break;
-        }
+    public void setViewMode(String mode) {
+//        switch(mode){
+//            case ViewModes.BOOKMARK:
+//                GeoDialogHelper.showBookmarks(getActivity(), getFragmentManager(), mSaveBtn, mBmClose, mPanel, mMap);
+//                mPanelManager.collapse();
+//                break;
+//            case ViewModes.QUERY:
+//                setViewMode(querySetup());
+//                break;
+//            case ViewModes.QUICKSEARCH:
+//                setViewMode(searchSetup());
+//                break;
+//            default:
+//                Toaster("Mode Not Set");
+//                break;
+//        }
     }
 
     @Override
@@ -410,7 +395,7 @@ public class GoogleMapFragment extends GeoViewFragmentBase implements
 
         mMap.setMapType(mapType);
 
-        if(position != null){
+        if (position != null) {
             CameraUpdate update = CameraUpdateFactory.newCameraPosition(position);
             mMap.moveCamera(update);
         }

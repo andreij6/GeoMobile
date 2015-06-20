@@ -45,7 +45,6 @@ public class ClientAdapter extends GeoRecyclerAdapterBase<ClientAdapter.Holder, 
     protected class Holder extends GeoHolderBase<Client> {
         //region Properties
         @InjectView(R.id.clientNameLabel) TextView mClientName;
-        @InjectView(R.id.impersonate) Button mImpersonateBtn;
         @InjectView(R.id.clientTypeLabel) TextView mClientType;
         ClientTypeCodes mClientTypeCodes;
         Client mClient;
@@ -56,7 +55,7 @@ public class ClientAdapter extends GeoRecyclerAdapterBase<ClientAdapter.Holder, 
 
             mClientTypeCodes = new ClientTypeCodes();
 
-            mImpersonateBtn.setOnClickListener(new View.OnClickListener() {
+            itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     mSelectedClient = mClient;

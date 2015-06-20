@@ -70,9 +70,10 @@ public class ClientSelectorActivity extends ActionBarActivity implements ActionB
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
+        return false;
         // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.menu_client_selector, menu);
-        return true;
+//        getMenuInflater().inflate(R.menu.menu_client_selector, menu);
+//        return true;
     }
 
     @Override

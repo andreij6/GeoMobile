@@ -54,23 +54,11 @@ public class DocumentFragment extends GeoViewFragmentBase {
     //endregion
 
     @InjectView(R.id.libraryitem_recyclerView) RecyclerView mRecyclerView;
-    @InjectView(R.id.fab) FloatingActionButton mCircleButton;
     @InjectView(R.id.swipe_refresh_layout) SwipeRefreshLayout mSwipeRefreshLayout;
-
-
-    @OnClick(R.id.fab)
-    @SuppressWarnings("unused")
-    public void libraryActionOnClick(){
-        LibraryActionDialogFragment l = new LibraryActionDialogFragment();
-
-        l.setContext(getActivity());
-        l.setFolder(mCurrentFolder);
-        l.show(getFragmentManager(), "library actions");
-    }
 
     @Override
     public void onCreate(Bundle savedInstance){
-        setHasOptionsMenu(true);
+        setHasOptionsMenu(false);
         super.onCreate(savedInstance);
 
     }

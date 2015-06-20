@@ -16,9 +16,6 @@ import com.geospatialcorporation.android.geomobile.ui.fragments.dialogs.ItemDeta
 
 import butterknife.ButterKnife;
 
-/**
- * Created by andre on 6/2/2015.
- */
 public class DocumentFolderDetailFragment extends ItemDetailFragment<Folder> implements TabHost.OnTabChangeListener {
     private static final String TAG = DocumentFolderDetailFragment.class.getSimpleName();
 

@@ -13,9 +13,6 @@ import com.geospatialcorporation.android.geomobile.ui.viewmodels.ListItem;
 
 import java.util.List;
 
-/**
- * Created by andre on 6/5/2015.
- */
 public class LayerTreeSectionBuilder extends TreeSectionBuilderBase<ListItem> implements ISectionBuilder<ListItem> {
 
     public LayerTreeSectionBuilder(Context context, FragmentManager fm, Folder parent) {

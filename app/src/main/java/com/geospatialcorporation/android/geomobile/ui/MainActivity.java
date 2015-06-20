@@ -30,8 +30,6 @@ import android.widget.Toast;
 import com.geospatialcorporation.android.geomobile.R;
 import com.geospatialcorporation.android.geomobile.application;
 import com.geospatialcorporation.android.geomobile.library.constants.ViewConstants;
-import com.geospatialcorporation.android.geomobile.library.util.Dialogs;
-import com.geospatialcorporation.android.geomobile.library.viewmode.IViewMode;
 import com.geospatialcorporation.android.geomobile.ui.Interfaces.OnFragmentInteractionListener;
 import com.geospatialcorporation.android.geomobile.ui.fragments.tree_fragments.AccountFragment;
 import com.geospatialcorporation.android.geomobile.ui.fragments.tree_fragments.DocumentFragment;
@@ -78,7 +76,6 @@ public class MainActivity extends ActionBarActivity
     //region Properties
     private GoogleMapFragment mMapFragment;
     GoogleMap mMap;
-    private Dialogs dialog;
     private boolean mIsAdmin;
     MainNavigationDrawerFragment mMainMainNavigationDrawerFragment;
     LayerSelectorDrawerFragment mLayerDrawerFragement;
@@ -90,7 +87,6 @@ public class MainActivity extends ActionBarActivity
         setContentView(R.layout.activity_main);
         ButterKnife.inject(this);
 
-        dialog = new Dialogs();
         getSupportActionBar().setElevation(0);
         mMapFragment = application.getMapFragment();
 
@@ -117,9 +113,10 @@ public class MainActivity extends ActionBarActivity
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        MenuInflater inflater = getMenuInflater();
-        inflater.inflate(R.menu.main, menu);
-        return super.onCreateOptionsMenu(menu);
+        return false;
+//        MenuInflater inflater = getMenuInflater();
+//        inflater.inflate(R.menu.main, menu);
+//        return super.onCreateOptionsMenu(menu);
     }
 
     /* Called whenever we call invalidateOptionsMenu() */
@@ -135,6 +132,8 @@ public class MainActivity extends ActionBarActivity
     public void onNavigationDrawerItemSelected(int position) {
         Fragment pageFragment = setPageFragment(position);
 
+        if (pageFragment == null) return;
+
         FragmentManager fragmentManager = getSupportFragmentManager();
         fragmentManager.beginTransaction()
                 .replace(R.id.content_frame, pageFragment)
@@ -143,6 +142,7 @@ public class MainActivity extends ActionBarActivity
     }
 
     protected Fragment setPageFragment(int position) {
+        if (position == ViewConstants.HEADER) { return null; }
         if(mIsAdmin) {
             switch (position) {
                 case ViewConstants.HEADER:

@@ -93,7 +93,7 @@ public class LayerSelectorDrawerFragment extends Fragment {
 
         new GetLayersTask().execute(0);
 
-        setHasOptionsMenu(true);
+        setHasOptionsMenu(false);
     }
 
     @Override

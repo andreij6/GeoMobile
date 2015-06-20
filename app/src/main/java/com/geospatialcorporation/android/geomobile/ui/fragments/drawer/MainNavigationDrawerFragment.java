@@ -112,8 +112,6 @@ public class MainNavigationDrawerFragment extends Fragment {
             }
         });
 
-
-
         if(mIsAdmin){
             mViewTitles = Arrays.asList(new String[]{MenuConstants.MAP, MenuConstants.LAYERS, MenuConstants.LIBRARY, MenuConstants.ACCOUNTS, MenuConstants.ADMINCLITENTS, MenuConstants.LOGOUT});
         } else {

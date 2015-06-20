@@ -13,9 +13,6 @@ import com.geospatialcorporation.android.geomobile.ui.adapters.SimpleSectionedRe
 import java.util.ArrayList;
 import java.util.List;
 
-/**
- * Created by andre on 6/5/2015.
- */
 public abstract class TreeSectionBuilderBase<T> extends SectionBuilderBase<T>{
 
     protected FragmentManager mFragmentManager;

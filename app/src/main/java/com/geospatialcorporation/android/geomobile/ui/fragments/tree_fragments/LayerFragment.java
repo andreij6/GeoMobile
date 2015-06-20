@@ -14,7 +14,6 @@ import android.view.ViewGroup;
 import com.geospatialcorporation.android.geomobile.R;
 import com.geospatialcorporation.android.geomobile.application;
 import com.geospatialcorporation.android.geomobile.database.DataRepository.IAddDataRepository;
-import com.geospatialcorporation.android.geomobile.database.DataRepository.IFullDataRepository;
 import com.geospatialcorporation.android.geomobile.database.DataRepository.Implementations.Folders.FolderAppSource;
 import com.geospatialcorporation.android.geomobile.database.DataRepository.Implementations.Layers.LayersAppSource;
 import com.geospatialcorporation.android.geomobile.library.helpers.DataHelper;
@@ -51,18 +50,7 @@ public class LayerFragment extends GeoViewFragmentBase {
     }
 
     @InjectView(R.id.layer_recyclerView) RecyclerView mRecycler;
-    @InjectView(R.id.fab) FloatingActionButton mCircleButton;
     @InjectView(R.id.swipe_refresh_layout) SwipeRefreshLayout mSwipeRefreshLayout;
-
-    @OnClick(R.id.fab)
-    @SuppressWarnings("unused")
-    public void layerActionClick(){
-        LayerTreeActionDialogFragment l = new LayerTreeActionDialogFragment();
-
-        l.setContext(getActivity());
-        l.setFolder(mCurrentFolder);
-        l.show(getFragmentManager(), "layer actions");
-    }
 
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {

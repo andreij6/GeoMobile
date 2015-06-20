@@ -34,6 +34,10 @@
     <string name="layer_visible_label">visible</string>
     <string name="title_activity_folder_documents">FolderDocumentsActivity</string>
 
+<!-- Main Application Navigational Drawer -->
+    <string name="map_menu_base_map">Base Map</string>
+    <string name="map_menu_full_screen">Full Screen</string>
+
 <!-- Activity Account -->
     <string name="account_first_name">First Name</string>
     <string name="account_last_name">Last Name</string>
@@ -44,7 +48,7 @@
 <!-- Activity Login -->
     <string name="title_activity_login">Sign in</string>
     <string name="prompt_email">Email</string>
-    <string name="prompt_password">Password (optional)</string>
+    <string name="prompt_password">Password</string>
     <string name="action_sign_in">Sign In</string>
     <string name="action_sign_in_short">Sign in</string>
     <string name="plus_sign_out">Switch Google+ account</string>
@@ -159,9 +163,12 @@
     <string name="move">Move</string>
     <string name="edit_sublayer">Edit Sublayer</string>
     <string name="show_all">Show All</string>
-    <string name="access_level">Access Level</string>
-    <string name="shape_type">Shape Type</string>
-    <string name="feature_count">Feature Count</string>
+
+<!-- Layer - Details tabs -->
+    <string name="access_level">Access Level:</string>
+    <string name="shape_type">Shape Type:</string>
+    <string name="feature_count">Feature Count:</string>
+
     <string name="layer_actions">Layer Actions</string>
     <string name="finish">Finish</string>
     <string name="move_document">Move Document</string>

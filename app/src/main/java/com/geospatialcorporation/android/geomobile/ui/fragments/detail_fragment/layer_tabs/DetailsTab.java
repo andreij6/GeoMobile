@@ -33,13 +33,6 @@ public class DetailsTab extends GeoDetailsTabBase<Layer> {
     @InjectView(R.id.userUpdateValue) TextView mUserUpdated;
     @InjectView(R.id.shapeTypeValue) TextView mShapeType;
     @InjectView(R.id.entityCountValue) TextView mFeatureCount;
-    @InjectView(R.id.fab) FloatingActionButton mEdit;
-
-    @OnClick(R.id.fab)
-    public void showLayerActions(){
-        GeoDialogHelper.showLayerActions(getActivity(), mEntity, getActivity().getSupportFragmentManager());
-    }
-
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState){

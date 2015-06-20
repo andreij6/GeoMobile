@@ -14,9 +14,6 @@ import com.geospatialcorporation.android.geomobile.ui.fragments.GoogleMapFragmen
 import com.geospatialcorporation.android.geomobile.ui.fragments.panel_fragments.DefaultCollapsedPanelFragment;
 import com.sothree.slidinguppanel.SlidingUpPanelLayout;
 
-/**
- * Created by andre on 6/7/2015.
- */
 public class SlidingPanelManager implements ISlidingPanelManager{
     SlidingUpPanelLayout mMapPanel;
     Context mContext;
@@ -96,8 +93,8 @@ public class SlidingPanelManager implements ISlidingPanelManager{
 
         FragmentManager fragmentManager = ((MainActivity)mContext).getSupportFragmentManager();
 
-        fragmentManager.beginTransaction()
-                .replace(R.id.slider_content, collapsedFragment)
-                .commit();
+//        fragmentManager.beginTransaction()
+//                .replace(R.id.slider_content, collapsedFragment)
+//                .commit();
     }
 }

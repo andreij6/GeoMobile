@@ -13,15 +13,11 @@ import com.geospatialcorporation.android.geomobile.ui.viewmodels.ListItem;
 
 import java.util.List;
 
-/**
- * Created by andre on 6/5/2015.
- */
 public class LibraryTreeSectionBuilder extends TreeSectionBuilderBase<ListItem> implements ISectionBuilder<ListItem> {
 
     public LibraryTreeSectionBuilder(Context context, FragmentManager fm, Folder parent) {
         super(context, fm, parent, R.string.documents_section);
     }
-
 
     @Override
     public ISectionBuilder<ListItem> BuildAdapter(List<ListItem> data, int folderCount) {
