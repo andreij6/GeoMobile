@@ -10,11 +10,7 @@
 
     <LinearLayout
         android:orientation="vertical"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_weight="1"
-        android:paddingTop="20dp"
-        android:paddingBottom="20dp"
+        style="@style/actionDialog_linearLayout"
         android:id="@+id/takeSection">
 
         <ImageView
@@ -27,7 +23,7 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textAppearance="?android:attr/textAppearanceMedium"
+            style="@style/actionDialog_textView"
             android:text="@string/take_photo"
             android:id="@+id/takeTV"
             android:layout_gravity="center_horizontal"/>
@@ -35,11 +31,7 @@
 
     <LinearLayout
         android:orientation="vertical"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_weight="1"
-        android:paddingTop="20dp"
-        android:paddingBottom="20dp"
+        style="@style/actionDialog_linearLayout"
         android:id="@+id/selectSection">
 
         <ImageView
@@ -52,7 +44,7 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textAppearance="?android:attr/textAppearanceMedium"
+            style="@style/actionDialog_textView"
             android:text="@string/upload_existing"
             android:id="@+id/uploadTV"
             android:layout_gravity="center_horizontal"/>

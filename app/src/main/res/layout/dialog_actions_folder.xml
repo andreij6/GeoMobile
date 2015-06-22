@@ -9,16 +9,12 @@
         android:layout_height="wrap_content"
         android:layout_centerHorizontal="true"
         android:layout_gravity="center"
-        android:layout_alignParentTop="true"
-        android:paddingTop="20dp"
-        android:paddingBottom="20dp">
+        android:layout_alignParentTop="true">
 
         <LinearLayout
             android:orientation="vertical"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_weight="1"
-            android:id="@+id/renameSection">
+            android:id="@+id/renameSection"
+            style="@style/actionDialog_linearLayout">
 
             <ImageView
                 android:layout_width="match_parent"
@@ -31,7 +27,7 @@
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:textAppearance="?android:attr/textAppearanceLarge"
+                style="@style/actionDialog_textView"
                 android:text="@string/rename"
                 android:id="@+id/renameTV"
                 android:layout_weight="1"
@@ -40,10 +36,8 @@
 
         <LinearLayout
             android:orientation="vertical"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_weight="1"
-            android:id="@+id/deleteSection">
+            android:id="@+id/deleteSection"
+            style="@style/actionDialog_linearLayout">
 
             <ImageView
                 android:layout_width="match_parent"
@@ -56,7 +50,7 @@
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:textAppearance="?android:attr/textAppearanceLarge"
+                style="@style/actionDialog_textView"
                 android:text="@string/delete"
                 android:id="@+id/deleteTV"
                 android:layout_weight="1"

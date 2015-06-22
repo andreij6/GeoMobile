@@ -19,4 +19,6 @@
     <color name="accent_dark">#BF360C</color>
     <!--End Pallet -->
 
+    <color name="transparent">#00000000</color>
+
 </resources>

@@ -22,6 +22,7 @@ import retrofit.http.PUT;
 import retrofit.http.Path;
 
 public interface FolderService {
+
     @GET("/API/Folders?folderType={type}")
     List<Folder> getFolders(@Path("type") String type);
 
@@ -54,4 +55,5 @@ public interface FolderService {
 
     @PUT("/API/Folders/{folderId}/Permissions")
     void saveFolderPermissions(int folderId, @Body PermissionsSaveRequest permissions);
+
 }

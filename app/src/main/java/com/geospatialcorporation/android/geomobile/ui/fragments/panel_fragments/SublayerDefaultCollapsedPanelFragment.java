@@ -66,6 +66,12 @@ public class SublayerDefaultCollapsedPanelFragment extends GeoViewFragmentBase {
         return mView;
     }
 
+    @Override
+    public void onResume(){
+        super.onResume();
+        mPanelManager.collapse();
+    }
+
     protected void handleArgs() {
         Bundle args = getArguments();
 

@@ -6,8 +6,8 @@ import android.widget.Toast;
 import com.geospatialcorporation.android.geomobile.application;
 import com.geospatialcorporation.android.geomobile.database.DataRepository.IFullDataRepository;
 import com.geospatialcorporation.android.geomobile.database.DataRepository.Implementations.Layers.LayersAppSource;
-import com.geospatialcorporation.android.geomobile.library.helpers.Interfaces.ITreeService;
 import com.geospatialcorporation.android.geomobile.library.requestcallback.RequestCallback;
+import com.geospatialcorporation.android.geomobile.library.requestcallback.listener_implementations.AttributeColumnModifiedListener;
 import com.geospatialcorporation.android.geomobile.library.requestcallback.listener_implementations.LayerModifiedListener;
 import com.geospatialcorporation.android.geomobile.library.rest.AttributeService;
 import com.geospatialcorporation.android.geomobile.library.rest.LayerService;
@@ -15,7 +15,6 @@ import com.geospatialcorporation.android.geomobile.models.Layers.Layer;
 import com.geospatialcorporation.android.geomobile.models.Layers.LayerAttributeColumn;
 import com.geospatialcorporation.android.geomobile.models.Layers.Columns;
 import com.geospatialcorporation.android.geomobile.models.Layers.LayerCreateRequest;
-import com.geospatialcorporation.android.geomobile.models.Layers.LayerCreateResponse;
 import com.geospatialcorporation.android.geomobile.models.Layers.LayerDetailsVm;
 import com.geospatialcorporation.android.geomobile.models.RenameRequest;
 
@@ -25,22 +24,24 @@ import retrofit.Callback;
 import retrofit.RetrofitError;
 import retrofit.client.Response;
 
-/**
- * Created by andre on 6/1/2015.
- */
 public class LayerTreeService implements ITreeService {
     private final static String TAG = LayerTreeService.class.getSimpleName();
 
+    //region Properties
     LayerService mLayerService;
     AttributeService mAttributeService;
-    IFullDataRepository<Layer> LayerRepo;
+    IFullDataRepository<Layer> mLayerRepo;
+    //endregion
 
+    //region Constructor
     public LayerTreeService(){
         mLayerService = application.getRestAdapter().create(LayerService.class);
         mAttributeService = application.getRestAdapter().create(AttributeService.class);
-        LayerRepo = new LayersAppSource();
+        mLayerRepo = new LayersAppSource();
     }
+    //endregion
 
+    //region Layer
     public void createLayer(String name, int shape, int parentFolder){
         LayerCreateRequest layer = new LayerCreateRequest(shape, name, parentFolder);
 
@@ -52,7 +53,7 @@ public class LayerTreeService implements ITreeService {
     }
 
     public Layer getLayer(int id) {
-        Layer layer = LayerRepo.getById(id);
+        Layer layer = mLayerRepo.getById(id);
 
         if(layer == null){
             layer = mLayerService.getLayer(id);
@@ -66,9 +67,9 @@ public class LayerTreeService implements ITreeService {
         if(AuthorizedToRename(id)) {
             mLayerService.rename(id, new RenameRequest(name), new RequestCallback<>(new LayerModifiedListener()));
 
-            Layer layer = LayerRepo.getById(id);
+            Layer layer = mLayerRepo.getById(id);
             layer.setName(name);
-            LayerRepo.update(layer, id);
+            mLayerRepo.update(layer, id);
         } else {
             Toast.makeText(application.getAppContext(), "Not Authorized to Rename Folder", Toast.LENGTH_LONG).show();
         }
@@ -78,31 +79,25 @@ public class LayerTreeService implements ITreeService {
     public LayerDetailsVm getDetails(int id){
         return mLayerService.getDetails(id);
     }
+    //endregion
 
-    public List<LayerAttributeColumn> getLayerAttributeColumns(int id){
-        return mAttributeService.getLayerAttributeColumns(id);
+    //region LayerAttributeColumns
+    public List<LayerAttributeColumn> getLayerAttributeColumns(int layerId){
+        return mAttributeService.getLayerAttributeColumns(layerId);
     }
 
-    public void addLayerAttributeColumn(int id, List<Columns> data){
-        mAttributeService.addLayerAttributeColumn(id, data, new Callback<Response>() {
-            @Override
-            public void success(Response response, Response response2) {
-                Log.d(TAG, response.getBody().toString());
-            }
-
-            @Override
-            public void failure(RetrofitError error) {
-                Log.d(TAG, error.getBody().toString());
-            }
-        });
+    public void addLayerAttributeColumn(int id, Columns data){
+        mAttributeService.addLayerAttributeColumn(id, data, new RequestCallback<Response>(new AttributeColumnModifiedListener()));
     }
 
     public void deleteLayerAttributeColumn(int layerId, int columnId){
         mAttributeService.deleteColumn(layerId, columnId);
     }
+    //endregion
 
+    //region Helpers
     protected boolean AuthorizedToRename(int id) {
-        //Layer l = LayerRepo.getById(id);
+        //Layer l = mLayerRepo.getById(id);
 
         //if(l != null && l.getIsOwner()){
         //    return true;
@@ -110,4 +105,5 @@ public class LayerTreeService implements ITreeService {
 
         return true;
     }
+    //endregion
 }

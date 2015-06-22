@@ -55,6 +55,11 @@ public class PanelManager implements ISlidingPanelManager {
     }
 
     @Override
+    public void expand() {
+        mGeoPanel.expand();
+    }
+
+    @Override
     public void touch(Boolean enabled) {
         mGeoPanel.touch(enabled);
     }

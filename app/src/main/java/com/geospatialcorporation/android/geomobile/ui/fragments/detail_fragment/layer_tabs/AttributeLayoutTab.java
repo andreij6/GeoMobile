@@ -14,6 +14,7 @@ import android.view.ViewGroup;
 import com.geospatialcorporation.android.geomobile.R;
 import com.geospatialcorporation.android.geomobile.application;
 import com.geospatialcorporation.android.geomobile.library.constants.GeoPanel;
+import com.geospatialcorporation.android.geomobile.library.helpers.GeoAsyncTask;
 import com.geospatialcorporation.android.geomobile.library.panelmanager.PanelManager;
 import com.geospatialcorporation.android.geomobile.library.services.LayerTreeService;
 import com.geospatialcorporation.android.geomobile.models.Layers.Layer;
@@ -69,7 +70,7 @@ public class AttributeLayoutTab extends GeoDetailsTabBase<Layer> {
         new GetAttributeColumns().execute();
     }
 
-    private class GetAttributeColumns extends AsyncTask<Void, Void, List<LayerAttributeColumn>> {
+    private class GetAttributeColumns extends GeoAsyncTask<Void, Void, List<LayerAttributeColumn>> {
 
         @Override
         protected List<LayerAttributeColumn> doInBackground(Void... params) {
@@ -89,6 +90,8 @@ public class AttributeLayoutTab extends GeoDetailsTabBase<Layer> {
             AttributeAdapter adapter = new AttributeAdapter(getActivity(), attributes);
 
             mRecyclerView.setAdapter(adapter);
+
+            super.onPostExecute(attributes);
         }
 
     }

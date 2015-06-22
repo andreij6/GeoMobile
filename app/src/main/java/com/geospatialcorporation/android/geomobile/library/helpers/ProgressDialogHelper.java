@@ -12,15 +12,17 @@ public class ProgressDialogHelper {
     Context mContext;
     ProgressDialog mProgressDialog;
 
-    public ProgressDialogHelper(Context context)
-    {
+    //login is the only process that consistently takes time.  the other dialogs just flash by - either change styling, or set a minimum time to show dialog
+
+    public ProgressDialogHelper(Context context) {
         mProgressDialog = new ProgressDialog(context);
-        mProgressDialog.setMessage(context.getString(R.string.loading_dots));
+        mProgressDialog.setMessage("Loading...");
         mProgressDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
+
     }
 
     public void toggleProgressDialog() {
-        if(mProgressDialog.isShowing()) {
+        if (mProgressDialog.isShowing()) {
             mProgressDialog.dismiss();
         } else {
             mProgressDialog.show();

@@ -1,4 +1,4 @@
-package com.geospatialcorporation.android.geomobile.library.helpers.Interfaces;
+package com.geospatialcorporation.android.geomobile.library.services;
 
 /**
  * Created by andre on 6/3/2015.

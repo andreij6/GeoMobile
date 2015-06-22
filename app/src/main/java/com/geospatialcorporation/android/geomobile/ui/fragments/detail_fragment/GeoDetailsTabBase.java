@@ -1,13 +1,8 @@
 package com.geospatialcorporation.android.geomobile.ui.fragments.detail_fragment;
 
 import android.os.Bundle;
-import android.util.Log;
 
-import com.geospatialcorporation.android.geomobile.library.helpers.Interfaces.ITreeService;
-import com.geospatialcorporation.android.geomobile.models.Document.Document;
-import com.geospatialcorporation.android.geomobile.models.Folders.Folder;
-import com.geospatialcorporation.android.geomobile.models.Interfaces.ITreeEntity;
-import com.geospatialcorporation.android.geomobile.models.Layers.Layer;
+import com.geospatialcorporation.android.geomobile.library.services.ITreeService;
 import com.geospatialcorporation.android.geomobile.ui.fragments.GeoViewFragmentBase;
 
 /**

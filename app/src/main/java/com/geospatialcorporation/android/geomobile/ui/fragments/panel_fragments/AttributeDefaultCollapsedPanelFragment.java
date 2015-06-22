@@ -75,6 +75,12 @@ public class AttributeDefaultCollapsedPanelFragment extends GeoViewFragmentBase 
         return mView;
     }
 
+    @Override
+    public void onResume(){
+        super.onResume();
+        mPanelManager.collapse();
+    }
+
     protected void handleArgs() {
         Bundle args = getArguments();
 
@@ -133,11 +139,7 @@ public class AttributeDefaultCollapsedPanelFragment extends GeoViewFragmentBase 
 
             Columns vm = new Columns(orderNum, newColumn);
 
-            List<Columns> data = new ArrayList<>();
-
-            data.add(vm);
-
-            mService.addLayerAttributeColumn(mLayer.getId(), data);
+            mService.addLayerAttributeColumn(mLayer.getId(), vm);
         }
 
 

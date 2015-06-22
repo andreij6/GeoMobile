@@ -38,7 +38,7 @@ public abstract class GeoSlidingPanelBase {
 
             @Override
             public void onPanelExpanded(View view) {
-
+                expandedBehaviour();
             }
 
             @Override
@@ -51,6 +51,10 @@ public abstract class GeoSlidingPanelBase {
 
             }
         });
+    }
+
+    protected void expandedBehaviour() {
+
     }
 
     protected abstract void setDefaultCollapsedUI();
@@ -82,6 +86,13 @@ public abstract class GeoSlidingPanelBase {
         if(getPanelState() != SlidingUpPanelLayout.PanelState.COLLAPSED) {
             mPanel.setPanelState(SlidingUpPanelLayout.PanelState.COLLAPSED);
             mPanel.setTouchEnabled(true);
+        }
+    }
+
+    public void expand(){
+        if(getPanelState() != SlidingUpPanelLayout.PanelState.EXPANDED) {
+            mPanel.setPanelState(SlidingUpPanelLayout.PanelState.EXPANDED);
+            mPanel.setTouchEnabled(false);
         }
     }
 

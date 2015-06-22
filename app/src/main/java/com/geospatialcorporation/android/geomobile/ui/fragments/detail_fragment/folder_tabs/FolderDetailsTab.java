@@ -10,6 +10,7 @@ import android.widget.TabHost;
 import android.widget.TextView;
 
 import com.geospatialcorporation.android.geomobile.R;
+import com.geospatialcorporation.android.geomobile.library.helpers.GeoAsyncTask;
 import com.geospatialcorporation.android.geomobile.library.helpers.GeoDialogHelper;
 import com.geospatialcorporation.android.geomobile.library.services.FolderTreeService;
 import com.geospatialcorporation.android.geomobile.models.Folders.Folder;
@@ -29,6 +30,7 @@ public class FolderDetailsTab extends GeoDetailsTabBase<Folder> {
 
     private static final String TAG = FolderDetailsTab.class.getSimpleName();
 
+    //region Properties & Butterknife
     FolderDetailsResponse mDetails;
     String mFolderType;
     @InjectView(R.id.fab) FloatingActionButton mFab;
@@ -39,6 +41,7 @@ public class FolderDetailsTab extends GeoDetailsTabBase<Folder> {
     @InjectView(R.id.folderCountValue) TextView mFolderCount;
     @InjectView(R.id.entityCountValue) TextView mEntityCount;
     @InjectView(R.id.entityCountLabel) TextView mEntityCountLabel;
+    //endregion
 
 
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState){
@@ -60,7 +63,7 @@ public class FolderDetailsTab extends GeoDetailsTabBase<Folder> {
         return v;
     }
 
-    private View.OnClickListener showActions = new View.OnClickListener() {
+    protected View.OnClickListener showActions = new View.OnClickListener() {
         @Override
         public void onClick(View v) {
             GeoDialogHelper.folderActions(getActivity(), mEntity, getActivity().getSupportFragmentManager());
@@ -73,7 +76,7 @@ public class FolderDetailsTab extends GeoDetailsTabBase<Folder> {
     }
 
 
-    private class GetFolderDetailsTask extends AsyncTask<Void, Void, FolderDetailsResponse>{
+    private class GetFolderDetailsTask extends GeoAsyncTask<Void, Void, FolderDetailsResponse> {
 
         @Override
         protected FolderDetailsResponse doInBackground(Void... params) {
@@ -114,6 +117,8 @@ public class FolderDetailsTab extends GeoDetailsTabBase<Folder> {
                     mEntityCount.setText("0");
                 }
             }
+
+            super.onPostExecute(response);
         }
     }
 }

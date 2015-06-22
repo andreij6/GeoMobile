@@ -4,13 +4,11 @@ import android.database.Cursor;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.provider.MediaStore;
-import android.util.Log;
 import android.widget.Toast;
 
 import com.geospatialcorporation.android.geomobile.application;
 import com.geospatialcorporation.android.geomobile.database.DataRepository.IFullDataRepository;
 import com.geospatialcorporation.android.geomobile.database.DataRepository.Implementations.Documents.DocumentsAppSource;
-import com.geospatialcorporation.android.geomobile.library.helpers.Interfaces.ITreeService;
 import com.geospatialcorporation.android.geomobile.library.requestcallback.RequestCallback;
 import com.geospatialcorporation.android.geomobile.library.requestcallback.listener_implementations.DocumentModifiedListener;
 import com.geospatialcorporation.android.geomobile.library.rest.DocumentService;
@@ -18,7 +16,6 @@ import com.geospatialcorporation.android.geomobile.library.rest.DownloadService;
 import com.geospatialcorporation.android.geomobile.models.Document.MoveRequest;
 import com.geospatialcorporation.android.geomobile.models.Folders.Folder;
 import com.geospatialcorporation.android.geomobile.models.Document.Document;
-import com.geospatialcorporation.android.geomobile.models.Document.DocumentCreateResponse;
 import com.geospatialcorporation.android.geomobile.models.RenameRequest;
 
 import java.io.File;
@@ -38,10 +35,12 @@ public class DocumentTreeService implements ITreeService {
     IFullDataRepository<Document> DocumentRepo;
     //endregion
 
+    //region Constructor
     public DocumentTreeService(){
         Service = application.getRestAdapter().create(DocumentService.class);
         DocumentRepo = new DocumentsAppSource();
     }
+    //endregion
 
     //region Public Methods
     public void delete(Document document) {
@@ -176,6 +175,5 @@ public class DocumentTreeService implements ITreeService {
             }
         }
     }
-
     //endregion
 }

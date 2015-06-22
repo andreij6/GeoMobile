@@ -13,6 +13,7 @@ import android.view.ViewGroup;
 import com.geospatialcorporation.android.geomobile.R;
 import com.geospatialcorporation.android.geomobile.application;
 import com.geospatialcorporation.android.geomobile.library.constants.GeoPanel;
+import com.geospatialcorporation.android.geomobile.library.helpers.GeoAsyncTask;
 import com.geospatialcorporation.android.geomobile.library.panelmanager.ISlidingPanelManager;
 import com.geospatialcorporation.android.geomobile.library.panelmanager.PanelManager;
 import com.geospatialcorporation.android.geomobile.library.services.SublayerTreeService;
@@ -64,11 +65,17 @@ public class SublayersTab extends GeoDetailsTabBase<Layer> {
     }
 
     @Override
+    public void onDetach() {
+        super.onDetach();
+        mPanelManager.collapse();
+    }
+
+    @Override
     public void refresh() {
         new GetSublayersTask().execute();
     }
 
-    private class GetSublayersTask extends AsyncTask<Void, Void, List<Layer>> {
+    private class GetSublayersTask extends GeoAsyncTask<Void, Void, List<Layer>> {
 
         @Override
         protected List<Layer> doInBackground(Void... params) {
@@ -92,6 +99,8 @@ public class SublayersTab extends GeoDetailsTabBase<Layer> {
             SublayerAdapter adapter = new SublayerAdapter(getActivity(), mData);
 
             mRecyclerView.setAdapter(adapter);
+
+            super.onPostExecute(sublayers);
         }
 
 

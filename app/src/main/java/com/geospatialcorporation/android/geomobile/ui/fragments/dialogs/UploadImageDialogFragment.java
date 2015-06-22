@@ -60,7 +60,7 @@ public class UploadImageDialogFragment extends GeoUploadDialogFragmentBase {
     public Dialog onCreateDialog(Bundle savedInstanceState){
         AlertDialog.Builder builder = getDialogBuilder();
 
-        final View v = getDialogView(R.layout.dialog_image_upload);
+        final View v = getDialogView(R.layout.dialog_action_image_upload);
         ButterKnife.inject(this, v);
 
         TextView takeTV = (TextView)v.findViewById(R.id.takeTV);
@@ -119,9 +119,13 @@ public class UploadImageDialogFragment extends GeoUploadDialogFragmentBase {
     }
 
     private boolean isHighlighted(LinearLayout d) {
-        Integer b = ((ColorDrawable)d.getBackground()).getColor();
+        if(d != null && d.getBackground() != null){
+            Integer b = ((ColorDrawable)d.getBackground()).getColor();
 
-        return (b == Color.WHITE);
+            return (b == Color.WHITE);
+        }
+
+        return false;
     }
 
 }

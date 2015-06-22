@@ -10,7 +10,6 @@ import android.widget.TextView;
 
 import com.geospatialcorporation.android.geomobile.R;
 import com.geospatialcorporation.android.geomobile.library.helpers.GeoDialogHelper;
-import com.geospatialcorporation.android.geomobile.library.rest.DownloadService;
 import com.geospatialcorporation.android.geomobile.library.services.DocumentTreeService;
 import com.geospatialcorporation.android.geomobile.models.Document.Document;
 import com.geospatialcorporation.android.geomobile.ui.fragments.dialogs.ItemDetailFragment;
@@ -56,7 +55,7 @@ public class DocumentDetailFragment extends ItemDetailFragment<Document>  {
         ButterKnife.inject(this, view);
         mService = new DocumentTreeService();
 
-        HandleArguments();
+        handleArguments();
 
         mDocumentName.setText(mEntity.getNameWithExt());
         mFileTypeImage.setImageDrawable(getActivity().getResources().getDrawable(mEntity.getFileTypeDrawable(true)));
@@ -80,7 +79,7 @@ public class DocumentDetailFragment extends ItemDetailFragment<Document>  {
     }
 
     @Override
-    protected void HandleArguments() {
+    protected void handleArguments() {
         Bundle args = getArguments();
 
         mEntity = args.getParcelable(Document.INTENT);

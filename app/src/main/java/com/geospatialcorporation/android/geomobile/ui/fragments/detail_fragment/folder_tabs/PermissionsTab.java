@@ -7,6 +7,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.geospatialcorporation.android.geomobile.R;
+import com.geospatialcorporation.android.geomobile.library.helpers.GeoAsyncTask;
 import com.geospatialcorporation.android.geomobile.library.helpers.GeoDialogHelper;
 import com.geospatialcorporation.android.geomobile.library.services.FolderTreeService;
 import com.geospatialcorporation.android.geomobile.models.Folders.Folder;
@@ -44,7 +45,7 @@ public class PermissionsTab extends GeoDetailsTabBase<Folder> {
         return v;
     }
 
-    private View.OnClickListener showActions = new View.OnClickListener() {
+    protected View.OnClickListener showActions = new View.OnClickListener() {
         @Override
         public void onClick(View v) {
             Toaster("Allow user to edit Permissions");
@@ -56,8 +57,7 @@ public class PermissionsTab extends GeoDetailsTabBase<Folder> {
         new GetFolderPermissionsTask().execute();
     }
 
-    private class GetFolderPermissionsTask extends AsyncTask<Void, Void, List<FolderPermissionsResponse>>{
-
+    private class GetFolderPermissionsTask extends GeoAsyncTask<Void, Void, List<FolderPermissionsResponse>> {
 
         @Override
         protected List<FolderPermissionsResponse> doInBackground(Void... params) {
@@ -72,6 +72,8 @@ public class PermissionsTab extends GeoDetailsTabBase<Folder> {
 
         @Override
         protected void onPostExecute(List<FolderPermissionsResponse> permissions){
+            super.onPostExecute(permissions);
+
             if(permissions != null) {
                 Toaster(permissions.get(0).getRoleName());
                 Toaster(permissions.get(0).getIsFixed() + "");

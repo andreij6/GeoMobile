@@ -73,7 +73,7 @@ public class DocumentActionsDialogFragment extends GeoDialogFragmentBase {
     public Dialog onCreateDialog(Bundle savedInstanceState){
         AlertDialog.Builder builder = getDialogBuilder();
 
-        View v = getDialogView(R.layout.dialog_document_actions);
+        View v = getDialogView(R.layout.dialog_actions_document);
         ButterKnife.inject(this, v);
 
         builder.setTitle(R.string.document_actions).setView(v).setPositiveButton(R.string.close, new DialogInterface.OnClickListener() {

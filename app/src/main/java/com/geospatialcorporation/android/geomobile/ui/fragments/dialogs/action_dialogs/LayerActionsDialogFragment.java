@@ -2,7 +2,6 @@ package com.geospatialcorporation.android.geomobile.ui.fragments.dialogs.action_
 
 import android.app.AlertDialog;
 import android.app.Dialog;
-import android.app.DialogFragment;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.os.Bundle;
@@ -54,7 +53,7 @@ public class LayerActionsDialogFragment extends GeoDialogFragmentBase {
     public Dialog onCreateDialog(Bundle savedInstanceState){
         AlertDialog.Builder builder = getDialogBuilder();
 
-        View v = getDialogView(R.layout.dialog_layer_actions);
+        View v = getDialogView(R.layout.dialog_actions_layer);
 
         ButterKnife.inject(this, v);
 

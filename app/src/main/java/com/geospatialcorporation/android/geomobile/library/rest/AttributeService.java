@@ -22,7 +22,7 @@ public interface AttributeService {
     List<LayerAttributeColumn> getLayerAttributeColumns(@Path("layerId") int layerId);
 
     @PUT("/API/Layers/{layerId}/Attributes/Columns")
-    void addLayerAttributeColumn(@Path("layerId") int layerId, @Body List<Columns> data, Callback<Response> cb);
+    void addLayerAttributeColumn(@Path("layerId") int layerId, @Body Columns data, Callback<Response> cb);
 
     @DELETE("/API/Layers/{id}/Attributes/Columns/{columnId}")
     void deleteColumn(@Path("id") int layerId, @Path("columnId") int columnId);

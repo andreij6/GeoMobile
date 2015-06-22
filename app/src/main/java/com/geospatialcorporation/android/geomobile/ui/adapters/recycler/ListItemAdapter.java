@@ -158,9 +158,7 @@ public class ListItemAdapter extends GeoRecyclerAdapterBase<ListItemAdapter.Hold
             Fragment f = new DocumentDetailFragment();
             Document d = DocumentRepo.getById(item.getId());
 
-            Bundle b = new Bundle();
-            b.putParcelable(Document.INTENT, d);
-            f.setArguments(b);
+            f.setArguments(d.toBundle());
 
             mFragmentManager.beginTransaction()
                     .addToBackStack(null)
@@ -198,9 +196,7 @@ public class ListItemAdapter extends GeoRecyclerAdapterBase<ListItemAdapter.Hold
             Fragment f = mViewType.equals(ListItemAdapter.LAYER) ? new LayerFolderDetailFragment() : new DocumentFolderDetailFragment();
             Folder folder = FolderRepo.getById(item.getId());
 
-            Bundle b = new Bundle();
-            b.putParcelable(Folder.FOLDER_INTENT, folder);
-            f.setArguments(b);
+            f.setArguments(folder.toBundle());
 
             mFragmentManager.beginTransaction()
                     .addToBackStack(null)
@@ -217,9 +213,7 @@ public class ListItemAdapter extends GeoRecyclerAdapterBase<ListItemAdapter.Hold
             LayerTreeService service = new LayerTreeService();
             Layer layer = service.getLayer(item.getId());
 
-            Bundle b = new Bundle();
-            b.putParcelable(Layer.LAYER_INTENT, layer);
-            f.setArguments(b);
+            f.setArguments(layer.toBundle());
 
             mFragmentManager.beginTransaction()
                     .addToBackStack(null)

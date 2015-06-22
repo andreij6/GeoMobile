@@ -52,7 +52,7 @@ public class LayerFolderDetailFragment extends ItemDetailFragment<Folder> implem
     }
 
     @Override
-    protected void HandleArguments() {
+    protected void handleArguments() {
         Bundle args = getArguments();
 
         mEntity = args.getParcelable(Folder.FOLDER_INTENT);

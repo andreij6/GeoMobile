@@ -33,7 +33,7 @@ public class DocumentFolderDetailFragment extends ItemDetailFragment<Folder> imp
 
         ButterKnife.inject(this, view);
 
-        HandleArguments();
+        handleArguments();
         Bundle args = getArguments();
         args.putString("Folder Type", "Document");
 
@@ -50,7 +50,7 @@ public class DocumentFolderDetailFragment extends ItemDetailFragment<Folder> imp
     }
 
     @Override
-    protected void HandleArguments() {
+    protected void handleArguments() {
         Bundle args = getArguments();
 
         mEntity = args.getParcelable(Folder.FOLDER_INTENT);

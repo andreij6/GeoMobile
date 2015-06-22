@@ -27,5 +27,4 @@ public class AttributeSlidingPanel extends GeoSlidingPanelBase {
         completeDefaultCollapsedUI(collapsedFragment);
     }
 
-
 }

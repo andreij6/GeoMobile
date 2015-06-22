@@ -38,7 +38,7 @@ public class LayerDetailFragment extends ItemDetailFragment<Layer> implements Ta
 
         ButterKnife.inject(this, mView);
 
-        HandleArguments();
+        handleArguments();
 
         mTabHost = (FragmentTabHost)mView.findViewById(R.id.tabHost);
 
@@ -54,7 +54,7 @@ public class LayerDetailFragment extends ItemDetailFragment<Layer> implements Ta
     }
 
     @Override
-    protected void HandleArguments() {
+    protected void handleArguments() {
         Bundle args = getArguments();
 
         mEntity = args.getParcelable(Layer.LAYER_INTENT);

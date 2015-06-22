@@ -67,9 +67,7 @@ public class LegendLayerAdapter extends GeoRecyclerAdapterBase<LegendLayerAdapte
                 Fragment frag = new LayerDetailFragment();
                 FragmentManager fm = activity.getSupportFragmentManager();
 
-                Bundle b = new Bundle();
-                b.putParcelable(Layer.LAYER_INTENT, mLayer);
-                frag.setArguments(b);
+                frag.setArguments(mLayer.toBundle());
 
                 fm.beginTransaction()
                         .replace(R.id.content_frame, frag)

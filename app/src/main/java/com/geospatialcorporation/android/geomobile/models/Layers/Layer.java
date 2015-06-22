@@ -1,5 +1,6 @@
 package com.geospatialcorporation.android.geomobile.models.Layers;
 
+import android.os.Bundle;
 import android.os.Parcel;
 import android.os.Parcelable;
 import android.text.TextUtils;
@@ -143,6 +144,7 @@ public class Layer implements Parcelable, ITreeEntity {
 
     public static String LAYER_INTENT = "Layer Intent";
 
+    //region Parcelable
     @Override
     public int describeContents() {
         return 0;
@@ -173,6 +175,7 @@ public class Layer implements Parcelable, ITreeEntity {
             return new Layer[size];
         }
     };
+    //endregion
 
     public String getReadableGeometryType() {
         int code = getGeometryTypeCodeId();
@@ -210,6 +213,12 @@ public class Layer implements Parcelable, ITreeEntity {
         return result;
     }
 
+    @Override
+    public Bundle toBundle() {
+        Bundle b = new Bundle();
+        b.putParcelable(LAYER_INTENT, this);
+        return b;
+    }
 
     public class StyleInfo {
         public int StyleInfoId;

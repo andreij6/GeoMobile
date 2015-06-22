@@ -63,7 +63,7 @@ public class SublayerActionsDialogFragment extends GeoDialogFragmentBase {
     public Dialog onCreateDialog(Bundle savedInstanceState){
         AlertDialog.Builder builder = getDialogBuilder();
 
-        View v = getDialogView(R.layout.dialog_sublayer_actions);
+        View v = getDialogView(R.layout.dialog_actions_sublayers);
 
         ButterKnife.inject(this, v);
 
@@ -95,7 +95,9 @@ public class SublayerActionsDialogFragment extends GeoDialogFragmentBase {
 
         @Override
         public void onClick(View v) {
+
             mPanelManager.anchor();
+            SublayerActionsDialogFragment.this.getDialog().cancel();
         }
     };
 
@@ -103,7 +105,9 @@ public class SublayerActionsDialogFragment extends GeoDialogFragmentBase {
 
         @Override
         public void onClick(View v) {
+
             mPanelManager.anchor();
+            SublayerActionsDialogFragment.this.getDialog().cancel();
         }
     };
 

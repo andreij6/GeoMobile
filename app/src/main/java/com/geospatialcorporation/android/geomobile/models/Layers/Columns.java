@@ -1,7 +1,5 @@
 package com.geospatialcorporation.android.geomobile.models.Layers;
 
-import android.text.style.TtsSpan;
-
 /**
  * Created by andre on 6/19/2015.
  */

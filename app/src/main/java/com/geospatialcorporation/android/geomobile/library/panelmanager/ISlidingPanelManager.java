@@ -15,6 +15,8 @@ public interface ISlidingPanelManager {
 
     void hide();
 
+    void expand();
+
     void touch(Boolean enabled);
 
     SlidingUpPanelLayout.PanelState getPanelState();

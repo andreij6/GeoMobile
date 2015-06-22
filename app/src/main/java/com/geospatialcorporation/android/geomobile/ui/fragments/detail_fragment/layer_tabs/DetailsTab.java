@@ -8,6 +8,7 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.geospatialcorporation.android.geomobile.R;
+import com.geospatialcorporation.android.geomobile.library.helpers.GeoAsyncTask;
 import com.geospatialcorporation.android.geomobile.library.helpers.GeoDialogHelper;
 import com.geospatialcorporation.android.geomobile.library.services.LayerTreeService;
 import com.geospatialcorporation.android.geomobile.models.Layers.Layer;
@@ -24,6 +25,7 @@ import butterknife.OnClick;
  */
 public class DetailsTab extends GeoDetailsTabBase<Layer> {
 
+    //region Properties ButterKnife
     LayerDetailsVm mDetails;
 
     @InjectView(R.id.access_level) TextView mAccessLevel;
@@ -39,7 +41,7 @@ public class DetailsTab extends GeoDetailsTabBase<Layer> {
     public void showLayerActions(){
         GeoDialogHelper.showLayerActions(getActivity(), mEntity, getActivity().getSupportFragmentManager());
     }
-
+    //endregion
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState){
@@ -59,7 +61,7 @@ public class DetailsTab extends GeoDetailsTabBase<Layer> {
         new GetDetailsTask().execute();
     }
 
-    private class GetDetailsTask extends AsyncTask<Void, Void, LayerDetailsVm> {
+    private class GetDetailsTask extends GeoAsyncTask<Void, Void, LayerDetailsVm> {
 
         @Override
         protected LayerDetailsVm doInBackground(Void... params) {
@@ -84,8 +86,9 @@ public class DetailsTab extends GeoDetailsTabBase<Layer> {
             }else{
                 Toaster("details null");
             }
-        }
 
+            super.onPostExecute(details);
+        }
 
     }
 

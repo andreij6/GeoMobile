@@ -1,13 +1,11 @@
 package com.geospatialcorporation.android.geomobile.library.services;
 
-import android.util.Log;
 import android.widget.Toast;
 
 import com.geospatialcorporation.android.geomobile.application;
 import com.geospatialcorporation.android.geomobile.database.DataRepository.IFullDataRepository;
 import com.geospatialcorporation.android.geomobile.database.DataRepository.Implementations.Folders.FolderAppSource;
 import com.geospatialcorporation.android.geomobile.database.DataRepository.Implementations.Layers.LayersAppSource;
-import com.geospatialcorporation.android.geomobile.library.helpers.Interfaces.ITreeService;
 import com.geospatialcorporation.android.geomobile.library.requestcallback.RequestCallback;
 import com.geospatialcorporation.android.geomobile.library.requestcallback.listener_implementations.FolderModifiedListener;
 import com.geospatialcorporation.android.geomobile.library.rest.FolderService;
@@ -22,8 +20,6 @@ import com.geospatialcorporation.android.geomobile.models.RenameRequest;
 
 import java.util.List;
 
-import retrofit.Callback;
-import retrofit.RetrofitError;
 import retrofit.client.Response;
 
 public class FolderTreeService implements ITreeService {
@@ -36,12 +32,14 @@ public class FolderTreeService implements ITreeService {
     private TreeService mTreeService;
     //endregion
 
+    //region Constructors
     public FolderTreeService(){
         mFolderService = application.getRestAdapter().create(FolderService.class);
         FolderRepo = new FolderAppSource();
         LayerRepo = new LayersAppSource();
         mTreeService = application.getRestAdapter().create(TreeService.class);
     }
+    //endregion
 
     //region Public Methods
     public Folder getFolderById(Integer folderId) {
@@ -52,12 +50,6 @@ public class FolderTreeService implements ITreeService {
         }
 
         return folder;
-    }
-
-    public void createFolder(String name, int parentFolder){
-        FolderCreateRequest createRequest = new FolderCreateRequest(name, parentFolder);
-
-        mFolderService.createFolder(createRequest, new RequestCallback<>(new FolderModifiedListener()));
     }
 
     public List<Folder> getFoldersByFolder(Integer folderId, boolean checkCache) {
@@ -84,6 +76,12 @@ public class FolderTreeService implements ITreeService {
     public List<Document> getDocumentsByFolder(Integer folderId){
         return mFolderService.getDocumentsByFolder(folderId);
 
+    }
+
+    public void createFolder(String name, int parentFolder){
+        FolderCreateRequest createRequest = new FolderCreateRequest(name, parentFolder);
+
+        mFolderService.createFolder(createRequest, new RequestCallback<>(new FolderModifiedListener()));
     }
 
     public void deleteFolder(Folder folder) {

@@ -1,5 +1,6 @@
 package com.geospatialcorporation.android.geomobile.models.Document;
 
+import android.os.Bundle;
 import android.os.Parcel;
 import android.os.Parcelable;
 
@@ -199,7 +200,12 @@ public class Document implements Parcelable, ITreeEntity {
         return R.drawable.ic_file_document_box_black_24dp;
     }
 
-
+    @Override
+    public Bundle toBundle() {
+        Bundle b = new Bundle();
+        b.putParcelable(INTENT, this);
+        return b;
+    }
     //endregion
 
 }

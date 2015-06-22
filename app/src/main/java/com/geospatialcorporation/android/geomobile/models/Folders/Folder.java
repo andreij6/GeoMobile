@@ -1,6 +1,7 @@
 package com.geospatialcorporation.android.geomobile.models.Folders;
 
 
+import android.os.Bundle;
 import android.os.Parcel;
 import android.os.Parcelable;
 
@@ -14,6 +15,7 @@ import java.util.List;
 
 public class Folder implements Parcelable, ITreeEntity {
 
+    //region Constructor
     public Folder(){
         Documents = new ArrayList<>();
         Layers = new ArrayList<>();
@@ -22,6 +24,7 @@ public class Folder implements Parcelable, ITreeEntity {
         IsFixed = false;
         AccessLevel = AccessLevelCodes.FullControl;  //TODO: test - may want to start with readonly in production
     }
+    //endregion
 
     //region Properties
     private Boolean IsImportFolder;
@@ -95,8 +98,6 @@ public class Folder implements Parcelable, ITreeEntity {
 
     //region Constants
     public static final String FOLDER_INTENT = "Folder";
-    public static final String LAYER = "Layer";
-    public static final String LIBRARY = "Library";
     //endregion
 
     //region Parcelable Contract
@@ -143,9 +144,13 @@ public class Folder implements Parcelable, ITreeEntity {
             return new Folder[size];
         }
     };
-
-
-
     //endregion
 
+    //region Methods
+    public Bundle toBundle(){
+        Bundle b = new Bundle();
+        b.putParcelable(FOLDER_INTENT, this);
+        return b;
+    }
+    //endregion
 }
