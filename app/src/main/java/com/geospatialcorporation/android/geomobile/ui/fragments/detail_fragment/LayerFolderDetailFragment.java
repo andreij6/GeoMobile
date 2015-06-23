@@ -31,6 +31,8 @@ public class LayerFolderDetailFragment extends ItemDetailFragment<Folder> implem
 
         ButterKnife.inject(this, view);
 
+        sendScreenName();
+
         FragmentTabHost tabHost = (FragmentTabHost)view.findViewById(R.id.tabHost);
 
         tabHost.setup(getActivity(), getChildFragmentManager(), android.R.id.tabcontent);
@@ -58,5 +60,9 @@ public class LayerFolderDetailFragment extends ItemDetailFragment<Folder> implem
         mEntity = args.getParcelable(Folder.FOLDER_INTENT);
 
         SetTitle(mEntity.getName());
+    }
+
+    protected void sendScreenName() {
+        mAnalytics.sendScreenName(R.string.layer_folder_detail_screen);
     }
 }

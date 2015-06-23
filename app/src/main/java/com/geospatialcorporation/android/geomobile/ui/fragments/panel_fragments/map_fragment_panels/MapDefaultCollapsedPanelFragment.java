@@ -95,4 +95,7 @@ public class MapDefaultCollapsedPanelFragment extends GeoViewFragmentBase {
     }
 
 
+    protected void sendScreenName() {
+
+    }
 }

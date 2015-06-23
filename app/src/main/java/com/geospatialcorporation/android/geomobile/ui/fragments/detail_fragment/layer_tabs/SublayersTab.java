@@ -67,7 +67,9 @@ public class SublayersTab extends GeoDetailsTabBase<Layer> {
     @Override
     public void onDetach() {
         super.onDetach();
-        mPanelManager.collapse();
+        if(mPanelManager != null) {
+            mPanelManager.collapse();
+        }
     }
 
     @Override

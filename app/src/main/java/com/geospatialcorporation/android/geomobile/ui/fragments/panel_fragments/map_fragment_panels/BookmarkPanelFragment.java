@@ -62,6 +62,8 @@ public class BookmarkPanelFragment extends GeoViewFragmentBase {
 
         SetTitle(R.string.add_bookmark);
 
+        sendScreenName();
+
         mName.setOnEditorActionListener(new TextView.OnEditorActionListener() {
             @Override
             public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
@@ -86,6 +88,10 @@ public class BookmarkPanelFragment extends GeoViewFragmentBase {
     public void onDestroyView(){
         super.onDestroyView();
         SetTitle(R.string.app_name);
+    }
+
+    protected void sendScreenName() {
+        mAnalytics.sendScreenName(R.string.entering_bookmark_name);
     }
 
     public static class Builder {

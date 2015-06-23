@@ -53,7 +53,6 @@ public class QuickSearchPanelFragment extends GeoViewFragmentBase {
         setView(inflater, container, R.layout.fragment_panel_search_quick);
         SetTitle(R.string.quicksearch);
         setPanelManager(GeoPanel.MAP);
-
         RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(container.getContext());
 
         mRecyclerView.setLayoutManager(layoutManager);
@@ -105,6 +104,11 @@ public class QuickSearchPanelFragment extends GeoViewFragmentBase {
                 Log.d(TAG, error.getMessage());
             }
         });
+    }
+
+
+    protected void sendScreenName() {
+
     }
     //endregion
 }

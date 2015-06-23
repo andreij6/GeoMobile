@@ -110,7 +110,6 @@ public class GoogleApiActivity extends Activity implements
 
     protected void onStop() {
         super.onStop();
-
         if (mGoogleApiClient.isConnected()) {
             mGoogleApiClient.disconnect();
         }

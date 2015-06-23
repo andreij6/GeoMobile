@@ -18,6 +18,8 @@ import com.geospatialcorporation.android.geomobile.models.Layers.Layer;
 import com.geospatialcorporation.android.geomobile.models.Document.Document;
 import com.geospatialcorporation.android.geomobile.ui.MainActivity;
 import com.geospatialcorporation.android.geomobile.ui.fragments.GoogleMapFragment;
+import com.google.android.gms.analytics.GoogleAnalytics;
+import com.google.android.gms.analytics.Tracker;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.sothree.slidinguppanel.SlidingUpPanelLayout;
 import com.squareup.okhttp.Interceptor;
@@ -58,6 +60,18 @@ public class application extends Application {
     private static SlidingUpPanelLayout sublayerFragmentPanel;
     private static SlidingUpPanelLayout layerAttributePanel;
     private static MainActivity mainActivity;
+
+    private static GoogleAnalytics analytics;
+
+    private static Tracker tracker;
+
+    public static GoogleAnalytics analytics() {
+        return analytics;
+    }
+
+    public static Tracker tracker() {
+        return tracker;
+    }
 
     //region Tree Entity Getters & Setters
     public static HashMap<Integer, Folder> getFolderHashMap() {
@@ -137,6 +151,14 @@ public class application extends Application {
 
         context = getApplicationContext();
         appState = getSharedPreferences(prefsName, 0);
+
+        analytics = GoogleAnalytics.getInstance(this);
+        analytics.setLocalDispatchPeriod(1800);
+
+        tracker = analytics.newTracker("UA-49521639-6");
+        tracker.enableExceptionReporting(true);
+        tracker.enableAdvertisingIdCollection(true);
+        tracker.enableAutoActivityTracking(true);
 
         if (BuildConfig.DEBUG) {
             domain = Domains.DEVELOPMENT;

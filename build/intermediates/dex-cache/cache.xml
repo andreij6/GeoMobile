@@ -23,18 +23,18 @@
         <dex dex="C:\GeoUndergroundMobile\geomobile\app\build\intermediates\pre-dexed\debug\classes-6c4d2ed5b99e081bf513a8695bf8c4fedd01d015.jar" />
     </item>
     <item
-        jar="C:\Users\andre\.gradle\caches\modules-2\files-2.1\com.jakewharton\butterknife\6.1.0\63735f48b82bcd24cdd33821342428252eb1ca5a\butterknife-6.1.0.jar"
-        jumboMode="false"
-        revision="21.1.2"
-        sha1="63735f48b82bcd24cdd33821342428252eb1ca5a">
-        <dex dex="C:\GeoUndergroundMobile\geomobile\app\build\intermediates\pre-dexed\debug\butterknife-6.1.0-810c290e2e1529c110489de82ea7a67386e664ac.jar" />
-    </item>
-    <item
         jar="C:\Users\andre\AppData\Local\Android\sdk\extras\android\m2repository\com\android\support\support-annotations\22.0.0\support-annotations-22.0.0.jar"
         jumboMode="false"
         revision="21.1.2"
         sha1="685d0b2c590447e85284ed84712cb363ba04eff8">
         <dex dex="C:\GeoUndergroundMobile\geomobile\app\build\intermediates\pre-dexed\debug\support-annotations-22.0.0-bf37536added4ef1d95ed19784ea6416cf5c3821.jar" />
+    </item>
+    <item
+        jar="C:\Users\andre\.gradle\caches\modules-2\files-2.1\com.jakewharton\butterknife\6.1.0\63735f48b82bcd24cdd33821342428252eb1ca5a\butterknife-6.1.0.jar"
+        jumboMode="false"
+        revision="21.1.2"
+        sha1="63735f48b82bcd24cdd33821342428252eb1ca5a">
+        <dex dex="C:\GeoUndergroundMobile\geomobile\app\build\intermediates\pre-dexed\debug\butterknife-6.1.0-810c290e2e1529c110489de82ea7a67386e664ac.jar" />
     </item>
     <item
         jar="C:\GeoUndergroundMobile\geomobile\app\build\intermediates\exploded-aar\com.android.support\appcompat-v7\22.0.0\classes.jar"

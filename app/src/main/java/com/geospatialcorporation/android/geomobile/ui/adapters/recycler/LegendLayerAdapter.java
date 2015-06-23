@@ -13,12 +13,15 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.geospatialcorporation.android.geomobile.R;
+import com.geospatialcorporation.android.geomobile.application;
+import com.geospatialcorporation.android.geomobile.library.helpers.AnalyticsHelper;
 import com.geospatialcorporation.android.geomobile.models.Layers.Layer;
 import com.geospatialcorporation.android.geomobile.ui.MainActivity;
 import com.geospatialcorporation.android.geomobile.ui.adapters.recycler.base.GeoHolderBase;
 import com.geospatialcorporation.android.geomobile.ui.adapters.recycler.base.GeoRecyclerAdapterBase;
 import com.geospatialcorporation.android.geomobile.ui.fragments.GoogleMapFragment;
 import com.geospatialcorporation.android.geomobile.ui.fragments.detail_fragment.LayerDetailFragment;
+import com.google.android.gms.analytics.HitBuilders;
 
 import java.util.List;
 
@@ -56,10 +59,26 @@ public class LegendLayerAdapter extends GeoRecyclerAdapterBase<LegendLayerAdapte
             mLayerName.setText(layer.getName());
             mLayerName.setOnClickListener(ZoomToLayer);
             isVisibleCB.setChecked(layer.getIsShowing());
+            isVisibleCB.setOnClickListener(ToggleShowLayers);
             gotoSublayer.setOnClickListener(GoToSublayer);
         }
 
         //region Click Listeners
+        protected View.OnClickListener ToggleShowLayers = new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if(isVisibleCB.isChecked()){
+                    //Show Layer
+                    new AnalyticsHelper().sendClickEvent(R.string.showLayerCheckBox);
+
+                } else {
+                    //remove layer
+                    new AnalyticsHelper().sendClickEvent(R.string.hideLayerCheckBox);
+
+                }
+            }
+        };
+
         private View.OnClickListener GoToSublayer = new View.OnClickListener(){
             @Override
             public void onClick(View v){

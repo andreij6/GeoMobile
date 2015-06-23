@@ -10,6 +10,7 @@ import android.widget.ImageView;
 
 import com.geospatialcorporation.android.geomobile.R;
 import com.geospatialcorporation.android.geomobile.library.constants.GeoPanel;
+import com.geospatialcorporation.android.geomobile.library.panelmanager.PanelManager;
 import com.geospatialcorporation.android.geomobile.library.services.SublayerTreeService;
 import com.geospatialcorporation.android.geomobile.models.Layers.Layer;
 import com.geospatialcorporation.android.geomobile.models.Layers.SublayerCreateRequest;
@@ -54,9 +55,7 @@ public class SublayerDefaultCollapsedPanelFragment extends GeoViewFragmentBase {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         mView = inflater.inflate(R.layout.fragment_panel_sublayer_collapsed, container, false);
         ButterKnife.inject(this, mView);
-
         setPanelManager(GeoPanel.SUBLAYER);
-
         mPanelManager.touch(false);
 
         handleArgs();
@@ -65,6 +64,8 @@ public class SublayerDefaultCollapsedPanelFragment extends GeoViewFragmentBase {
 
         return mView;
     }
+
+
 
     @Override
     public void onResume(){

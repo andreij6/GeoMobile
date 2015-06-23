@@ -13,6 +13,7 @@ import android.widget.Spinner;
 
 import com.geospatialcorporation.android.geomobile.R;
 import com.geospatialcorporation.android.geomobile.library.constants.GeoPanel;
+import com.geospatialcorporation.android.geomobile.library.panelmanager.PanelManager;
 import com.geospatialcorporation.android.geomobile.library.services.LayerTreeService;
 import com.geospatialcorporation.android.geomobile.library.validation.requests.IValidateRequest;
 import com.geospatialcorporation.android.geomobile.library.validation.requests.LayerAttributeValidateRequest;
@@ -62,8 +63,7 @@ public class AttributeDefaultCollapsedPanelFragment extends GeoViewFragmentBase 
         mView = inflater.inflate(R.layout.fragment_panel_attribute_collapsed, container, false);
         ButterKnife.inject(this, mView);
 
-        setPanelManager(GeoPanel.LAYER_ATTRIBUTE);
-
+        mPanelManager = new PanelManager(GeoPanel.LAYER_ATTRIBUTE);
         mPanelManager.touch(false);
 
         handleArgs();

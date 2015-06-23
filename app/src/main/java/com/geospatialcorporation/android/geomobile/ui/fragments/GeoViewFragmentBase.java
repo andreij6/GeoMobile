@@ -1,6 +1,7 @@
 package com.geospatialcorporation.android.geomobile.ui.fragments;
 
 import android.app.Activity;
+import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -9,6 +10,7 @@ import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.Toast;
 
+import com.geospatialcorporation.android.geomobile.library.helpers.AnalyticsHelper;
 import com.geospatialcorporation.android.geomobile.library.panelmanager.ISlidingPanelManager;
 import com.geospatialcorporation.android.geomobile.library.panelmanager.PanelManager;
 import com.geospatialcorporation.android.geomobile.ui.Interfaces.OnFragmentInteractionListener;
@@ -24,10 +26,17 @@ public class GeoViewFragmentBase extends Fragment {
 
     protected View mView;
     protected ISlidingPanelManager mPanelManager;
+    protected AnalyticsHelper mAnalytics;
 
     protected void setView(LayoutInflater inflater, ViewGroup container, int layout) {
         mView = inflater.inflate(layout, container, false);
         ButterKnife.inject(this, mView);
+    }
+
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        mAnalytics = new AnalyticsHelper();
     }
 
     @Override
@@ -59,19 +68,20 @@ public class GeoViewFragmentBase extends Fragment {
         }
     }
 
-    public void setPanelManager(int panel) {
-        mPanelManager = new PanelManager(panel);
-    }
-
     protected void Toaster(String message){
         Toast.makeText(getActivity(), message, Toast.LENGTH_LONG).show();
     }
 
-    protected String getValue(EditText nameET) {
-        return nameET.getText().toString();
+    protected void setPanelManager(int panelId) {
+        mPanelManager = new PanelManager(panelId);
+    }
+
+    protected String getValue(EditText et){
+        return et.getText().toString();
     }
 
     protected String getValue(Spinner spinner){
         return spinner.getSelectedItem().toString();
     }
+
 }
