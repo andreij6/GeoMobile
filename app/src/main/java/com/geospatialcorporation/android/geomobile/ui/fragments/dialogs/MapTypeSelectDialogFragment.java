@@ -8,7 +8,6 @@ import android.os.Bundle;
 import com.geospatialcorporation.android.geomobile.R;
 import com.geospatialcorporation.android.geomobile.ui.fragments.dialogs.base.GeoDialogFragmentBase;
 import com.google.android.gms.maps.GoogleMap;
-import com.google.android.gms.maps.MapView;
 
 import java.util.ArrayList;
 import java.util.Arrays;

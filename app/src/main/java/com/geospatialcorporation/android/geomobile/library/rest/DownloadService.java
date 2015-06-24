@@ -41,7 +41,7 @@ public class DownloadService {
         request.setDestinationInExternalPublicDir(dir, docName);
 
         // get download service and enqueue file
-        DownloadManager manager = (DownloadManager) appContext.getSystemService(appContext.DOWNLOAD_SERVICE);
+        DownloadManager manager = (DownloadManager) appContext.getSystemService(Context.DOWNLOAD_SERVICE);
         manager.enqueue(request);
 
         Toast.makeText(application.getAppContext(), "Downloading: " + docName + " Check notification for details.", Toast.LENGTH_LONG).show();

@@ -1,7 +1,6 @@
 package com.geospatialcorporation.android.geomobile.ui.fragments.dialogs.action_dialogs.document;
 
 import android.app.Dialog;
-import android.app.DialogFragment;
 import android.content.DialogInterface;
 import android.os.AsyncTask;
 import android.os.Bundle;

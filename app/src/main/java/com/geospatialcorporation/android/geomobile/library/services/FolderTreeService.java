@@ -20,8 +20,6 @@ import com.geospatialcorporation.android.geomobile.models.RenameRequest;
 
 import java.util.List;
 
-import retrofit.client.Response;
-
 public class FolderTreeService implements ITreeService {
     private static final String TAG = FolderTreeService.class.getSimpleName();
 
@@ -100,7 +98,7 @@ public class FolderTreeService implements ITreeService {
     }
 
     public void delete(Folder folder) {
-        mFolderService.remove(folder.getId(), new RequestCallback<Response>(new FolderModifiedListener()));
+        mFolderService.remove(folder.getId(), new RequestCallback<>(new FolderModifiedListener()));
     }
 
     public FolderDetailsResponse details(int folderId){
@@ -116,11 +114,8 @@ public class FolderTreeService implements ITreeService {
     protected boolean AuthorizedToRename(int id) {
         Folder f = FolderRepo.getById(id);
 
-        if(f.getIsFixed() || f.getIsImportFolder()){
-            return false;
-        }
+        return !(f.getIsFixed() || f.getIsImportFolder());
 
-        return true;
     }
     //endregion
 

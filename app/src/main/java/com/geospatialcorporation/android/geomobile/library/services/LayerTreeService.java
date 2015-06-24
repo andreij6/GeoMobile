@@ -1,6 +1,5 @@
 package com.geospatialcorporation.android.geomobile.library.services;
 
-import android.util.Log;
 import android.widget.Toast;
 
 import com.geospatialcorporation.android.geomobile.application;
@@ -19,10 +18,6 @@ import com.geospatialcorporation.android.geomobile.models.Layers.LayerDetailsVm;
 import com.geospatialcorporation.android.geomobile.models.RenameRequest;
 
 import java.util.List;
-
-import retrofit.Callback;
-import retrofit.RetrofitError;
-import retrofit.client.Response;
 
 public class LayerTreeService implements ITreeService {
     private final static String TAG = LayerTreeService.class.getSimpleName();
@@ -87,7 +82,7 @@ public class LayerTreeService implements ITreeService {
     }
 
     public void addLayerAttributeColumn(int id, Columns data){
-        mAttributeService.addLayerAttributeColumn(id, data, new RequestCallback<Response>(new AttributeColumnModifiedListener()));
+        mAttributeService.addLayerAttributeColumn(id, data, new RequestCallback<>(new AttributeColumnModifiedListener()));
     }
 
     public void deleteLayerAttributeColumn(int layerId, int columnId){

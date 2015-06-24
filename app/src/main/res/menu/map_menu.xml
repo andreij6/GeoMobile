@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
     <item android:id="@+id/action_map_settings"
-          android:title="Base Map"
+          android:title="@string/base_map"
           android:icon="@drawable/ic_map_marker_circle_white_24dp"
           android:showAsAction="always"/>
     <item android:id="@+id/action_fullscreen"
-          android:title="Full Screen"
+          android:title="@string/full_screen"
           android:showAsAction="always"/>
 </menu>

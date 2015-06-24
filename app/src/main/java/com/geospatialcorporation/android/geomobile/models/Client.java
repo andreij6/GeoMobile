@@ -1,7 +1,5 @@
 package com.geospatialcorporation.android.geomobile.models;
 
-import com.geospatialcorporation.android.geomobile.library.constants.ClientTypeCodes;
-
 public class Client {
     //region Getters & Setters
     public String getName() {

@@ -78,7 +78,7 @@ public class LegendLayerSectionBuilder extends SectionBuilderBase<Folder> implem
         List<Layer> result = new ArrayList<>();
 
         for(Folder folder : layerFolders){
-            if(folder.getLayers() != null || !folder.getLayers().isEmpty()){
+            if(folder.getLayers() != null && !folder.getLayers().isEmpty()){
                 result.addAll(folder.getLayers());
             }
         }

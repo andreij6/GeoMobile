@@ -1,16 +1,12 @@
 package com.geospatialcorporation.android.geomobile.ui.fragments.dialogs.action_dialogs.layer;
 
 import android.app.Dialog;
-import android.content.Context;
 import android.content.DialogInterface;
 import android.os.Bundle;
 import android.widget.Toast;
 
 import com.geospatialcorporation.android.geomobile.R;
 import com.geospatialcorporation.android.geomobile.application;
-import com.geospatialcorporation.android.geomobile.library.services.LayerTreeService;
-import com.geospatialcorporation.android.geomobile.models.Layers.Layer;
-import com.geospatialcorporation.android.geomobile.ui.fragments.dialogs.base.GeoDialogFragmentBase;
 
 /**
  * Created by andre on 6/2/2015.

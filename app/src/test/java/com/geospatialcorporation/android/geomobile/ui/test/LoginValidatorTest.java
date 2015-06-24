@@ -1,7 +1,6 @@
 package com.geospatialcorporation.android.geomobile.ui.test;
 
 import com.geospatialcorporation.android.geomobile.library.util.LoginValidator;
-import com.geospatialcorporation.android.geomobile.ui.LoginActivity;
 
 import static org.junit.Assert.*;
 import org.junit.Test;

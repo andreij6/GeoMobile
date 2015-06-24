@@ -94,6 +94,8 @@ public class GoogleMapFragment extends GeoViewFragmentBase implements
     public void getLocation(){
         Location currentLocation = LocationServices.FusedLocationApi.getLastLocation(mLocationClient);
 
+        mAnalytics.sendClickEvent(R.string.current_location);
+
         if(currentLocation == null){
             AlertDialog.Builder builder1 = new AlertDialog.Builder(getActivity());
             builder1.setMessage(getString(R.string.location_not_found))
@@ -126,6 +128,7 @@ public class GoogleMapFragment extends GeoViewFragmentBase implements
     @SuppressWarnings("unused")
     @OnClick(R.id.fab_layers)
     public void showLayersDrawer(){
+        mAnalytics.sendClickEvent(R.string.show_layers);
         DrawerLayout mDrawerLayout = ((MainActivity)getActivity()).getRightDrawer();
         View layerView = ((MainActivity)getActivity()).getLayerListView();
 
@@ -169,6 +172,8 @@ public class GoogleMapFragment extends GeoViewFragmentBase implements
 
         ButterKnife.inject(this, rootView);
         SetTitle(R.string.app_name);
+
+        mAnalytics.sendScreenName(R.string.map_screen);
 
         application.setMapFragmentPanel(mPanel);
         mPanelManager = new PanelManager(GeoPanel.MAP);
@@ -223,6 +228,7 @@ public class GoogleMapFragment extends GeoViewFragmentBase implements
         // Handle action buttons
         switch (item.getItemId()) {
             case R.id.action_map_settings:
+                mAnalytics.sendClickEvent(R.string.change_basemap);
                 MapTypeSelectDialogFragment m = new MapTypeSelectDialogFragment();
                 m.setContext(getActivity());
                 m.setMap(mMap);
@@ -283,6 +289,8 @@ public class GoogleMapFragment extends GeoViewFragmentBase implements
 
     //region ViewModeSetups
     private IViewMode querySetup() {
+        mAnalytics.sendClickEvent(R.string.query_mode);
+
         return new QueryMode.Builder()
                 .setDependents(mMap, mListener, getActivity())
                 .setControls(mBoxQueryBtn, mPointQueryBtn, mCloseBtn, getActivity().getSupportFragmentManager())
@@ -292,6 +300,7 @@ public class GoogleMapFragment extends GeoViewFragmentBase implements
     }
 
     protected IViewMode searchSetup() {
+        mAnalytics.sendClickEvent(R.string.quicksearch_mode);
 
         return new SearchMode.Builder()
                         .init(getActivity().getSupportFragmentManager(), mPanelManager)
@@ -299,6 +308,7 @@ public class GoogleMapFragment extends GeoViewFragmentBase implements
     }
 
     protected IViewMode fullScreenSetup(){
+        mAnalytics.sendClickEvent(R.string.full_screen_mode);
         MainActivity activity = (MainActivity)getActivity();
         return new FullScreenMode.Builder()
                         .create(activity.getSupportActionBar(),

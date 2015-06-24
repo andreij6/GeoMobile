@@ -14,7 +14,6 @@ import android.view.ViewGroup;
 import com.geospatialcorporation.android.geomobile.R;
 import com.geospatialcorporation.android.geomobile.application;
 import com.geospatialcorporation.android.geomobile.database.DataRepository.IAddDataRepository;
-import com.geospatialcorporation.android.geomobile.database.DataRepository.IFullDataRepository;
 import com.geospatialcorporation.android.geomobile.database.DataRepository.Implementations.Folders.FolderAppSource;
 import com.geospatialcorporation.android.geomobile.database.DataRepository.Implementations.Layers.LayersAppSource;
 import com.geospatialcorporation.android.geomobile.library.helpers.DataHelper;

@@ -92,14 +92,13 @@ public class DataHelper {
             results.add(listItem);
         }
 
-        if (infolders != null) {
-            for (Folder folder : infolders) {
-                ListItem listItem = new ListItem(folder);
-                results.add(listItem);
-            }
-
-            SetupEmptyFolder(infolders, results);
+        for (Folder folder : infolders) {
+            ListItem listItem = new ListItem(folder);
+            results.add(listItem);
         }
+
+        SetupEmptyFolder(infolders, results);
+
 
         if (layers != null) {
             for (Layer layer : layers) {
@@ -131,14 +130,14 @@ public class DataHelper {
             results.add(listItem);
         }
 
-        if (infolders != null) {
-            for (Folder folder : infolders) {
-                ListItem listItem = new ListItem(folder);
-                results.add(listItem);
-            }
 
-            SetupEmptyFolder(infolders, results);
+        for (Folder folder : infolders) {
+            ListItem listItem = new ListItem(folder);
+            results.add(listItem);
         }
+
+        SetupEmptyFolder(infolders, results);
+
 
         if (documents != null) {
             for (Document document : documents) {

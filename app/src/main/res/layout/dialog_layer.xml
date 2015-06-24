@@ -2,7 +2,8 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
               android:orientation="horizontal"
               android:layout_width="match_parent"
-              android:layout_height="match_parent">
+              android:layout_height="match_parent"
+              android:baselineAligned="false">
 
 
     <LinearLayout
@@ -19,7 +20,8 @@
             android:layout_height="wrap_content"
             android:id="@+id/addLayerFolderIcon"
             android:layout_gravity="center_horizontal"
-            android:src="@drawable/ic_folder_plus_black_24dp"/>
+            android:src="@drawable/ic_folder_plus_black_24dp"
+            android:contentDescription="@string/add_folder"/>
 
         <TextView
             android:layout_width="wrap_content"
@@ -46,7 +48,8 @@
             android:layout_height="wrap_content"
             android:id="@+id/addLayerIcon"
             android:layout_gravity="center_horizontal"
-            android:src="@drawable/ic_layers_black_24dp"/>
+            android:src="@drawable/ic_layers_black_24dp"
+            android:contentDescription="@string/add_layer"/>
 
         <TextView
             android:layout_width="wrap_content"

@@ -1,7 +1,6 @@
 package com.geospatialcorporation.android.geomobile.library.rest;
 
 import com.geospatialcorporation.android.geomobile.models.Document.Document;
-import com.geospatialcorporation.android.geomobile.models.Document.DocumentCreateResponse;
 import com.geospatialcorporation.android.geomobile.models.Document.MoveRequest;
 import com.geospatialcorporation.android.geomobile.models.RenameRequest;
 

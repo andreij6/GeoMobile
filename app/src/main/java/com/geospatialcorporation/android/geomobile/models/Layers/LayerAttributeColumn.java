@@ -1,10 +1,8 @@
 package com.geospatialcorporation.android.geomobile.models.Layers;
 
-import com.geospatialcorporation.android.geomobile.R;
-import com.geospatialcorporation.android.geomobile.application;
 import com.geospatialcorporation.android.geomobile.library.constants.LayerAttributeColumnDataTypeCodes;
 
-import java.util.List;
+import java.util.Objects;
 
 
 public class LayerAttributeColumn {
@@ -49,27 +47,27 @@ public class LayerAttributeColumn {
         String result = "Missing Data Type";
 
         //switch wouldnt work right here IDK y.
-        if (getDataType() == LayerAttributeColumnDataTypeCodes.IDFIELD) {
+        if (Objects.equals(getDataType(), LayerAttributeColumnDataTypeCodes.IDFIELD)) {
             result = "Id Field";
         }
-        if (getDataType() == LayerAttributeColumnDataTypeCodes.TEXT) {
+        if (Objects.equals(getDataType(), LayerAttributeColumnDataTypeCodes.TEXT)) {
             result = "Text";
         }
 
-        if (getDataType() == LayerAttributeColumnDataTypeCodes.BOOLEAN){
+        if (Objects.equals(getDataType(), LayerAttributeColumnDataTypeCodes.BOOLEAN)){
             result = "True / False";
         }
 
-        if (getDataType() == LayerAttributeColumnDataTypeCodes.DATE){
+        if (Objects.equals(getDataType(), LayerAttributeColumnDataTypeCodes.DATE)){
             result = "Date";
         }
-        if (getDataType() ==LayerAttributeColumnDataTypeCodes.DATETIME) {
+        if (Objects.equals(getDataType(), LayerAttributeColumnDataTypeCodes.DATETIME)) {
             result = "DateTime";
         }
-        if (getDataType() ==LayerAttributeColumnDataTypeCodes.INTEGER) {
+        if (Objects.equals(getDataType(), LayerAttributeColumnDataTypeCodes.INTEGER)) {
             result = "Integer";
         }
-        if (getDataType() ==LayerAttributeColumnDataTypeCodes.DECIMAL) {
+        if (Objects.equals(getDataType(), LayerAttributeColumnDataTypeCodes.DECIMAL)) {
             result = "Decimal";
         }
 

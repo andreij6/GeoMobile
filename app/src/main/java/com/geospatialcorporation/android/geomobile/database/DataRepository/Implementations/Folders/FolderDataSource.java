@@ -9,8 +9,6 @@ import com.geospatialcorporation.android.geomobile.database.DataRepository.Imple
 import com.geospatialcorporation.android.geomobile.database.sqlitehelper.GeoSQLiteHelper;
 import com.geospatialcorporation.android.geomobile.models.Folders.Folder;
 
-import java.util.ArrayList;
-
 public class FolderDataSource extends DataSourceGenericBase<Folder> {
 
     //region Constructor

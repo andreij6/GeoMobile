@@ -99,7 +99,7 @@ public class application extends Application {
     }
     //endregion
 
-    public static void setIsAdminUser(boolean isAdminUser) {
+    public static void setIsAdminUser(Boolean isAdminUser) {
         application.isAdminUser = isAdminUser;
     }
 

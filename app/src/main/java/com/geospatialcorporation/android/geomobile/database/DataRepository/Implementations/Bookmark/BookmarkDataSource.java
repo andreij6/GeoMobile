@@ -10,9 +10,6 @@ import com.geospatialcorporation.android.geomobile.database.sqlitehelper.GeoSQLi
 import com.geospatialcorporation.android.geomobile.models.Bookmarks.Bookmark;
 import com.geospatialcorporation.android.geomobile.models.Bookmarks.BookmarkPosition;
 
-import java.util.ArrayList;
-import java.util.List;
-
 /**
  * Created by andre on 6/6/2015.
  */

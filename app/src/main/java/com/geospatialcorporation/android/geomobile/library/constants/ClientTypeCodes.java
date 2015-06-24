@@ -1,13 +1,7 @@
 package com.geospatialcorporation.android.geomobile.library.constants;
 
-import com.geospatialcorporation.android.geomobile.models.Client;
-
-import java.security.KeyPair;
-import java.util.AbstractList;
 import java.util.AbstractMap;
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 
 /**
  * Created by andre on 5/31/2015.

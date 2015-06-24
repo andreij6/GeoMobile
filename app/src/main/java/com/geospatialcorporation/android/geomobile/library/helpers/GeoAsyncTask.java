@@ -2,8 +2,6 @@ package com.geospatialcorporation.android.geomobile.library.helpers;
 
 import android.os.AsyncTask;
 
-import com.geospatialcorporation.android.geomobile.application;
-
 /**
  * Created by andre on 6/22/2015.
  */

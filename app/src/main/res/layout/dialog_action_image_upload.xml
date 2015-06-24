@@ -18,7 +18,8 @@
             android:layout_height="wrap_content"
             android:id="@+id/takeIV"
             android:layout_gravity="center_horizontal"
-            android:src="@drawable/ic_camera_black_36dp"/>
+            android:src="@drawable/ic_camera_black_36dp"
+            android:contentDescription="@string/take_photo"/>
 
         <TextView
             android:layout_width="wrap_content"
@@ -39,7 +40,8 @@
             android:layout_height="wrap_content"
             android:id="@+id/uploadIV"
             android:layout_gravity="center_horizontal"
-            android:src="@drawable/ic_upload_black_36dp"/>
+            android:src="@drawable/ic_upload_black_36dp"
+            android:contentDescription="@string/upload_photo"/>
 
         <TextView
             android:layout_width="wrap_content"

@@ -15,13 +15,13 @@
         android:background="@color/primary"
         android:minHeight="100dp"
         android:src="@drawable/ic_file_document_box_white_24dp"
-        android:layout_marginTop="?attr/actionBarSize"/>
+        android:layout_marginTop="?attr/actionBarSize"
+        android:contentDescription="@string/document_icon"/>
 
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:textAppearance="?android:attr/textAppearanceLarge"
-        android:text="TopSecret.docx"
         android:id="@+id/documentNameTV"
         android:layout_below="@+id/backgroundImageView"
         android:layout_alignParentStart="true"
@@ -29,7 +29,7 @@
         android:background="@color/primary"
         android:paddingBottom="10dp"
         android:textColor="@color/white"
-        android:editable="true"/>
+        />
 
     <com.melnykov.fab.FloatingActionButton
         android:id="@+id/fab"
@@ -50,16 +50,14 @@
         android:layout_height="wrap_content"
         android:id="@+id/backImageView"
         android:src="@drawable/ic_arrow_left_bold_white_24dp"
-        android:layout_alignParentTop="true"
-        android:layout_alignParentStart="true"
-        android:layout_marginStart="24dp"
-        android:layout_marginTop="23dp"/>
+        android:contentDescription="@string/back_arrow"
+        android:layout_alignTop="@+id/backgroundImageView"
+        android:layout_toEndOf="@+id/documentNameET"/>
 
     <EditText
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:inputType="textPersonName"
-        android:text="Name"
         android:ems="10"
         android:id="@+id/documentNameET"
         android:layout_below="@+id/documentNameTV"
@@ -72,7 +70,6 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textAppearance="?android:attr/textAppearanceLarge"
-        android:text="Large Text"
         android:id="@+id/fileSizeValue"
         android:layout_below="@+id/fab"
         android:layout_alignStart="@+id/backImageView"
@@ -91,7 +88,6 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textAppearance="?android:attr/textAppearanceLarge"
-        android:text="Large Text"
         android:id="@+id/uploadTimeValue"
         android:layout_marginTop="34dp"
         android:layout_below="@+id/fileSizeLabel"

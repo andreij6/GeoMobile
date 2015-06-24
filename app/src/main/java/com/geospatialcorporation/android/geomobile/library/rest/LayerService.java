@@ -2,7 +2,6 @@ package com.geospatialcorporation.android.geomobile.library.rest;
 
 import com.geospatialcorporation.android.geomobile.models.Layers.Layer;
 import com.geospatialcorporation.android.geomobile.models.Layers.LayerCreateRequest;
-import com.geospatialcorporation.android.geomobile.models.Layers.LayerCreateResponse;
 import com.geospatialcorporation.android.geomobile.models.Layers.LayerDetailsVm;
 import com.geospatialcorporation.android.geomobile.models.RenameRequest;
 

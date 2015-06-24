@@ -1,6 +1,5 @@
 package com.geospatialcorporation.android.geomobile.library.requestcallback.listener_implementations;
 
-import android.content.Context;
 import android.support.v4.app.Fragment;
 import android.util.Log;
 import android.widget.Toast;

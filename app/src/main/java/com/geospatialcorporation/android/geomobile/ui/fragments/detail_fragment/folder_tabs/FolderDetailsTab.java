@@ -1,12 +1,9 @@
 package com.geospatialcorporation.android.geomobile.ui.fragments.detail_fragment.folder_tabs;
 
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageView;
-import android.widget.TabHost;
 import android.widget.TextView;
 
 import com.geospatialcorporation.android.geomobile.R;
@@ -15,8 +12,6 @@ import com.geospatialcorporation.android.geomobile.library.helpers.GeoDialogHelp
 import com.geospatialcorporation.android.geomobile.library.services.FolderTreeService;
 import com.geospatialcorporation.android.geomobile.models.Folders.Folder;
 import com.geospatialcorporation.android.geomobile.models.Folders.FolderDetailsResponse;
-import com.geospatialcorporation.android.geomobile.ui.MainActivity;
-import com.geospatialcorporation.android.geomobile.ui.fragments.GeoViewFragmentBase;
 import com.geospatialcorporation.android.geomobile.ui.fragments.detail_fragment.GeoDetailsTabBase;
 import com.melnykov.fab.FloatingActionButton;
 

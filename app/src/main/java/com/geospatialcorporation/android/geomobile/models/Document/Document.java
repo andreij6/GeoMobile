@@ -151,10 +151,10 @@ public class Document implements Parcelable, ITreeEntity {
     public static String INTENT = "Document Intent";
 
     public int getFileTypeDrawable(Boolean white) {
-        List<String> word = Arrays.asList(new String[]{".docx", ".docm", ".dotx", ".dotm", ".docb"});
-        List<String> excel = Arrays.asList(new String[]{".xls", ".xlt", ".xlm", ".xlsx", ".xltx", ".xltm", ".xlsb", ".xla", ".xlam", ".xll", ".xlw"});
-        List<String> powerpoint = Arrays.asList(new String[] { ".ppt", ".pot", ".pps", ".pptx"});
-        List<String> images = Arrays.asList(new String[] { ".jpg", ".png", ".jpeg"});
+        List<String> word = Arrays.asList(".docx", ".docm", ".dotx", ".dotm", ".docb");
+        List<String> excel = Arrays.asList(".xls", ".xlt", ".xlm", ".xlsx", ".xltx", ".xltm", ".xlsb", ".xla", ".xlam", ".xll", ".xlw");
+        List<String> powerpoint = Arrays.asList(".ppt", ".pot", ".pps", ".pptx");
+        List<String> images = Arrays.asList(".jpg", ".png", ".jpeg");
 
 
         String lowerExt = getExtension().toLowerCase();

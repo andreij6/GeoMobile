@@ -20,8 +20,8 @@ import com.google.android.gms.auth.GooglePlayServicesAvailabilityException;
 import com.google.android.gms.auth.UserRecoverableAuthException;
 import com.google.android.gms.common.AccountPicker;
 import com.google.android.gms.common.ConnectionResult;
-import com.google.android.gms.common.GooglePlayServicesClient.ConnectionCallbacks;
-import com.google.android.gms.common.GooglePlayServicesClient.OnConnectionFailedListener;
+import com.google.android.gms.common.api.GoogleApiClient.ConnectionCallbacks;
+import com.google.android.gms.common.api.GoogleApiClient.OnConnectionFailedListener;
 import com.google.android.gms.common.GooglePlayServicesUtil;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.plus.Plus;
@@ -116,10 +116,6 @@ public class GoogleApiActivity extends Activity implements
     }
 
     @Override
-    public void onDisconnected() {
-        // TODO: implement
-    }
-
     protected void onActivityResult(final int requestCode, final int responseCode, final Intent data) {
 
         //region Commented code
@@ -196,6 +192,11 @@ public class GoogleApiActivity extends Activity implements
         // code
     }
 
+    @Override
+    public void onConnectionSuspended(int i) {
+        // TODO: implement
+    }
+
     //public void onConnectionSuspended(int cause) {
     //    mGoogleApiClient.connect();
     //}
@@ -203,8 +204,6 @@ public class GoogleApiActivity extends Activity implements
     public GoogleApiClient getGoogleApiClient() {
         return mGoogleApiClient;
     }
-
-
 
     // Example of how to use AsyncTask to call blocking code on a background thread.
     private class GetAndUseAuthTokenInAsyncTask extends AsyncTask<Object, Void, Boolean>{
@@ -247,7 +246,6 @@ public class GoogleApiActivity extends Activity implements
                     // consider retrying getAndUseTokenBlocking() once more
                     return;
                 }
-                return;
             } catch (GooglePlayServicesAvailabilityException playEx) {
                 Dialog alert = GooglePlayServicesUtil.getErrorDialog(
                         playEx.getConnectionStatusCode(),
@@ -259,16 +257,10 @@ public class GoogleApiActivity extends Activity implements
                 mContext.startActivityForResult(
                         userAuthEx.getIntent(),
                         ACTIVITY_AUTH_REQUEST_CODE);
-                return;
-            } catch (IOException transientEx) {
+            } catch (IOException | GoogleAuthException transientEx) {
                 // network or server error, the call is expected to succeed if you try again later.
                 // Don't attempt to call again immediately - the request is likely to
                 // fail, you'll hit quotas or back-off.
-                return;
-            } catch (GoogleAuthException authEx) {
-                // Failure. The call is not expected to ever succeed so it should not be
-                // retried.
-                return;
             }
         }
 
@@ -348,8 +340,8 @@ public class GoogleApiActivity extends Activity implements
         protected String doInBackground(String... urls) {
             try {
                 Response response = application.getRestAdapter().create(LoginService.class).google(urls[0]);
-                String authToken = response.getBody().toString();
-                return authToken;
+                return response.getBody().toString();
+
             } catch (Exception e) {
                 Log.e(TAG, "Login by GoogleAuthToken failed.");
                 this.exception = e;

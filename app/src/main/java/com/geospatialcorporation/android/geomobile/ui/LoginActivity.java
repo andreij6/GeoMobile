@@ -28,7 +28,6 @@ import com.geospatialcorporation.android.geomobile.R;
 import com.geospatialcorporation.android.geomobile.application;
 import com.geospatialcorporation.android.geomobile.library.helpers.AnalyticsHelper;
 import com.geospatialcorporation.android.geomobile.library.util.LoginValidator;
-import com.google.android.gms.analytics.HitBuilders;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GooglePlayServicesUtil;
 import com.google.android.gms.common.SignInButton;
@@ -39,7 +38,6 @@ import java.util.List;
 import butterknife.ButterKnife;
 import butterknife.InjectView;
 import butterknife.OnClick;
-import org.apache.commons.validator.routines.EmailValidator;
 
 
 /**
@@ -70,7 +68,7 @@ public class LoginActivity extends GoogleApiActivity implements LoaderCallbacks<
             "foo@example.com:hello", "bar@example.com:world"
     };
 
-    private static final String TEST_CREDENTIALS = new String("jon.shaffer@geospatialcorp.com:secretDev1");
+    private static final String TEST_CREDENTIALS = "jon.shaffer@geospatialcorp.com:secretDev1";
     /**
      * Keep track of the login task to ensure we can cancel it if requested.
      */
@@ -125,6 +123,8 @@ public class LoginActivity extends GoogleApiActivity implements LoaderCallbacks<
         }
 
         populateAutoComplete();
+
+        mPlusSignInButton.requestFocus();
 
         mPasswordView.setOnEditorActionListener(new TextView.OnEditorActionListener() {
             @Override
@@ -265,7 +265,7 @@ public class LoginActivity extends GoogleApiActivity implements LoaderCallbacks<
 
     @Override
     public void onLoadFinished(Loader<Cursor> cursorLoader, Cursor cursor) {
-        List<String> emails = new ArrayList<String>();
+        List<String> emails = new ArrayList<>();
         cursor.moveToFirst();
         while (!cursor.isAfterLast()) {
             emails.add(cursor.getString(ProfileQuery.ADDRESS));
@@ -293,7 +293,7 @@ public class LoginActivity extends GoogleApiActivity implements LoaderCallbacks<
     private void addEmailsToAutoComplete(List<String> emailAddressCollection) {
         //Create adapter to tell the AutoCompleteTextView what to show in its dropdown list.
         ArrayAdapter<String> adapter =
-                new ArrayAdapter<String>(LoginActivity.this,
+                new ArrayAdapter<>(LoginActivity.this,
                         android.R.layout.simple_dropdown_item_1line, emailAddressCollection);
 
         mEmailView.setAdapter(adapter);

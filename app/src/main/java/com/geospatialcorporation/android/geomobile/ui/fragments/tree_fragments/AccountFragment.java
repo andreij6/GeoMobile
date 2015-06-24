@@ -1,6 +1,5 @@
 package com.geospatialcorporation.android.geomobile.ui.fragments.tree_fragments;
 
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -11,7 +10,6 @@ import android.widget.TextView;
 import com.geospatialcorporation.android.geomobile.R;
 import com.geospatialcorporation.android.geomobile.application;
 import com.geospatialcorporation.android.geomobile.library.helpers.GeoAsyncTask;
-import com.geospatialcorporation.android.geomobile.library.helpers.ProgressDialogHelper;
 import com.geospatialcorporation.android.geomobile.library.rest.AccountService;
 import com.geospatialcorporation.android.geomobile.models.UserAccount;
 import com.geospatialcorporation.android.geomobile.ui.fragments.GeoViewFragmentBase;

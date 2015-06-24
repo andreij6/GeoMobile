@@ -18,7 +18,7 @@
             android:layout_height="20dp"
             android:gravity="center_vertical"
             android:textColor="@android:color/black"
-            android:textSize="14dp"
+            android:textSize="14sp"
             android:paddingTop="5sp"
             android:paddingLeft="5sp"/>
 
@@ -27,7 +27,6 @@
             android:layout_height="wrap_content"
             android:textAppearance="?android:attr/textAppearanceLarge"
             android:id="@+id/clientNameLabel"
-            android:text="Client Name"
             android:textColor="@android:color/black"
             android:layout_below="@+id/clientTypeLabel"
             android:layout_centerHorizontal="true"/>

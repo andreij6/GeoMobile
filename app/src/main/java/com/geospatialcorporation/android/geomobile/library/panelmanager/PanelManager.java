@@ -6,7 +6,6 @@ import com.geospatialcorporation.android.geomobile.library.panelmanager.paneltyp
 import com.geospatialcorporation.android.geomobile.library.panelmanager.paneltype.GeoSlidingPanelBase;
 import com.geospatialcorporation.android.geomobile.library.panelmanager.paneltype.MapSlidingPanel;
 import com.geospatialcorporation.android.geomobile.library.panelmanager.paneltype.SublayerSlidingPanel;
-import com.geospatialcorporation.android.geomobile.models.Layers.Layer;
 import com.sothree.slidinguppanel.SlidingUpPanelLayout;
 
 /**

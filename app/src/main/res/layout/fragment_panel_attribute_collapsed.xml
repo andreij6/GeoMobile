@@ -19,7 +19,7 @@
     <Button
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Toggle"
+        android:text="@string/toggle"
         android:id="@+id/toggle"
         android:layout_marginEnd="31dp"
         android:layout_alignTop="@+id/textView3"

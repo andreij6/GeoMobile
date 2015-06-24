@@ -7,8 +7,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Toast;
 
-import com.geospatialcorporation.android.geomobile.models.Folders.Folder;
-
 /**
  * Created by andre on 6/2/2015.
  */

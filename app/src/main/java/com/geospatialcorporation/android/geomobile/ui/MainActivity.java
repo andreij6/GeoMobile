@@ -22,6 +22,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarActivity;
+import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.View;
@@ -31,7 +32,6 @@ import com.geospatialcorporation.android.geomobile.R;
 import com.geospatialcorporation.android.geomobile.application;
 import com.geospatialcorporation.android.geomobile.library.constants.ViewConstants;
 import com.geospatialcorporation.android.geomobile.library.util.Dialogs;
-import com.geospatialcorporation.android.geomobile.library.viewmode.IViewMode;
 import com.geospatialcorporation.android.geomobile.ui.Interfaces.OnFragmentInteractionListener;
 import com.geospatialcorporation.android.geomobile.ui.fragments.tree_fragments.AccountFragment;
 import com.geospatialcorporation.android.geomobile.ui.fragments.tree_fragments.DocumentFragment;
@@ -100,7 +100,7 @@ public class MainActivity extends ActionBarActivity
         mMainMainNavigationDrawerFragment.setUp(R.id.navigation_left_drawer, (DrawerLayout) findViewById(R.id.drawer_layout));
 
         mLayerDrawerFragement = (LayerSelectorDrawerFragment)getSupportFragmentManager().findFragmentById(R.id.layer_drawer);
-        mLayerDrawerFragement.setUp(R.id.layer_drawer, (DrawerLayout) findViewById(R.id.drawer_layout));
+        mLayerDrawerFragement.setUp(R.id.layer_drawer, (DrawerLayout) findViewById(R.id.drawer_layout), (Toolbar)findViewById(R.id.my_toolbar));
 
     }
 

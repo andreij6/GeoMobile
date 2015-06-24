@@ -3,8 +3,6 @@ package com.geospatialcorporation.android.geomobile.library.helpers;
 import android.app.ProgressDialog;
 import android.content.Context;
 
-import com.geospatialcorporation.android.geomobile.R;
-
 /**
  * Created by andre on 5/29/2015.
  */

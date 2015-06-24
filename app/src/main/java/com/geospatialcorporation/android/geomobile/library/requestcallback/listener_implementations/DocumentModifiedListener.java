@@ -2,7 +2,6 @@ package com.geospatialcorporation.android.geomobile.library.requestcallback.list
 
 import com.geospatialcorporation.android.geomobile.library.requestcallback.RequestListener;
 import com.geospatialcorporation.android.geomobile.ui.fragments.tree_fragments.DocumentFragment;
-import com.geospatialcorporation.android.geomobile.ui.fragments.tree_fragments.LayerFragment;
 
 import retrofit.client.Response;
 

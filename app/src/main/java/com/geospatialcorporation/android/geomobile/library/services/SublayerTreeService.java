@@ -12,11 +12,6 @@ import com.geospatialcorporation.android.geomobile.models.RenameRequest;
 
 import java.util.List;
 
-import retrofit.RetrofitError;
-
-/**
- * Created by andre on 6/8/2015.
- */
 public class SublayerTreeService implements ITreeService {
     private static String TAG = SublayerTreeService.class.getSimpleName();
 
@@ -42,8 +37,6 @@ public class SublayerTreeService implements ITreeService {
 
         try {
             sublayers = mService.getSublayers(layerId);
-        }catch (RetrofitError error){
-            Log.d(TAG, error.getMessage());
         } catch (Exception e){
             Log.d(TAG, e.getMessage());
         }

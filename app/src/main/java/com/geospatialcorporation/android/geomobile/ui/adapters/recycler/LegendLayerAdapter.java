@@ -1,7 +1,6 @@
 package com.geospatialcorporation.android.geomobile.ui.adapters.recycler;
 
 import android.content.Context;
-import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.widget.DrawerLayout;
@@ -13,7 +12,6 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.geospatialcorporation.android.geomobile.R;
-import com.geospatialcorporation.android.geomobile.application;
 import com.geospatialcorporation.android.geomobile.library.helpers.AnalyticsHelper;
 import com.geospatialcorporation.android.geomobile.models.Layers.Layer;
 import com.geospatialcorporation.android.geomobile.ui.MainActivity;
@@ -21,7 +19,6 @@ import com.geospatialcorporation.android.geomobile.ui.adapters.recycler.base.Geo
 import com.geospatialcorporation.android.geomobile.ui.adapters.recycler.base.GeoRecyclerAdapterBase;
 import com.geospatialcorporation.android.geomobile.ui.fragments.GoogleMapFragment;
 import com.geospatialcorporation.android.geomobile.ui.fragments.detail_fragment.LayerDetailFragment;
-import com.google.android.gms.analytics.HitBuilders;
 
 import java.util.List;
 

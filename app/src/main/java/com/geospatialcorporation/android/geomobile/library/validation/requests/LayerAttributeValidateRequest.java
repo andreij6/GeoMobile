@@ -1,8 +1,8 @@
 package com.geospatialcorporation.android.geomobile.library.validation.requests;
 
 import com.geospatialcorporation.android.geomobile.R;
-import com.geospatialcorporation.android.geomobile.application;
-import com.geospatialcorporation.android.geomobile.models.Bookmarks.Bookmark;
+
+import java.util.Objects;
 
 /**
  * Created by andre on 6/19/2015.
@@ -124,7 +124,7 @@ public class LayerAttributeValidateRequest extends ValidateRequestBase implement
         }
 
         if(type instanceof Boolean){
-            if(mDefaultValue.toLowerCase() != "true" && mDefaultValue.toLowerCase() != "false"){
+            if(!Objects.equals(mDefaultValue.toLowerCase(), "true") && !Objects.equals(mDefaultValue.toLowerCase(), "false")){
                 mIsValid = false;
             }
         }

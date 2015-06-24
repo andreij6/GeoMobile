@@ -151,7 +151,7 @@ public class DocumentTreeService implements ITreeService {
     }
 
     protected void SendImage(Folder currentFolder, final TypedFile t, final String path) {
-        Service.create(currentFolder.getId(), t, new RequestCallback<Response>(new DocumentModifiedListener()));
+        Service.create(currentFolder.getId(), t, new RequestCallback<>(new DocumentModifiedListener()));
     }
 
     protected String getMimeTypeOfFile(String pathName) {

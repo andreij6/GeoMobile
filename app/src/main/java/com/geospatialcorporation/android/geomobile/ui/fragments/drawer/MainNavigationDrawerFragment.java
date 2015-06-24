@@ -1,8 +1,6 @@
 package com.geospatialcorporation.android.geomobile.ui.fragments.drawer;
 
 import android.app.Activity;
-import android.app.SearchManager;
-import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.res.Configuration;
 import android.os.Bundle;
@@ -20,10 +18,8 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.geospatialcorporation.android.geomobile.R;
 import com.geospatialcorporation.android.geomobile.application;
@@ -115,9 +111,9 @@ public class MainNavigationDrawerFragment extends Fragment {
 
 
         if(mIsAdmin){
-            mViewTitles = Arrays.asList(new String[]{MenuConstants.MAP, MenuConstants.LAYERS, MenuConstants.LIBRARY, MenuConstants.ACCOUNTS, MenuConstants.ADMINCLITENTS, MenuConstants.LOGOUT});
+            mViewTitles = Arrays.asList(MenuConstants.MAP, MenuConstants.LAYERS, MenuConstants.LIBRARY, MenuConstants.ACCOUNTS, MenuConstants.ADMINCLITENTS, MenuConstants.LOGOUT);
         } else {
-            mViewTitles = Arrays.asList(new String[]{MenuConstants.MAP, MenuConstants.LAYERS, MenuConstants.LIBRARY, MenuConstants.ACCOUNTS, MenuConstants.LOGOUT});
+            mViewTitles = Arrays.asList(MenuConstants.MAP, MenuConstants.LAYERS, MenuConstants.LIBRARY, MenuConstants.ACCOUNTS, MenuConstants.LOGOUT);
         }
         View header = inflater.inflate(R.layout.header_main_navigation, container, false);
         TextView clientName = (TextView)header.findViewById(R.id.clientName);
@@ -305,7 +301,7 @@ public class MainNavigationDrawerFragment extends Fragment {
     /**
      * Callbacks interface that all activities using this fragment must implement.
      */
-    public static interface NavigationDrawerCallbacks {
+    public interface NavigationDrawerCallbacks {
         /**
          * Called when an item in the navigation drawer is selected.
          */
