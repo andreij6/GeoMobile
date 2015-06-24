@@ -21,6 +21,7 @@ import com.geospatialcorporation.android.geomobile.ui.fragments.GoogleMapFragmen
 import com.google.android.gms.analytics.GoogleAnalytics;
 import com.google.android.gms.analytics.Tracker;
 import com.google.android.gms.common.api.GoogleApiClient;
+import com.google.android.gms.maps.GoogleMap;
 import com.sothree.slidinguppanel.SlidingUpPanelLayout;
 import com.squareup.okhttp.Interceptor;
 import com.squareup.okhttp.OkHttpClient;
@@ -64,6 +65,7 @@ public class application extends Application {
     private static GoogleAnalytics analytics;
 
     private static Tracker tracker;
+    private static GoogleMap googleMap;
 
     public static GoogleAnalytics analytics() {
         return analytics;
@@ -144,6 +146,14 @@ public class application extends Application {
 
     public static void setMainActivity(MainActivity mainActivity) {
         application.mainActivity = mainActivity;
+    }
+
+    public static void setGoogleMap(GoogleMap googleMap) {
+        application.googleMap = googleMap;
+    }
+
+    public static GoogleMap getGoogleMap() {
+        return googleMap;
     }
 
     public void onCreate() {
@@ -282,6 +292,10 @@ public class application extends Application {
         }
 
         return panel;
+    }
+
+    public static void setMapFragment() {
+
     }
 
     class TokenInterceptor implements Interceptor {

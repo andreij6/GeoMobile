@@ -1,6 +1,7 @@
 package com.geospatialcorporation.android.geomobile.ui.adapters.recycler;
 
 import android.content.Context;
+import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.widget.DrawerLayout;
@@ -12,14 +13,25 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.geospatialcorporation.android.geomobile.R;
+import com.geospatialcorporation.android.geomobile.application;
 import com.geospatialcorporation.android.geomobile.library.helpers.AnalyticsHelper;
+import com.geospatialcorporation.android.geomobile.library.map.MapActions;
 import com.geospatialcorporation.android.geomobile.models.Layers.Layer;
 import com.geospatialcorporation.android.geomobile.ui.MainActivity;
 import com.geospatialcorporation.android.geomobile.ui.adapters.recycler.base.GeoHolderBase;
 import com.geospatialcorporation.android.geomobile.ui.adapters.recycler.base.GeoRecyclerAdapterBase;
 import com.geospatialcorporation.android.geomobile.ui.fragments.GoogleMapFragment;
 import com.geospatialcorporation.android.geomobile.ui.fragments.detail_fragment.LayerDetailFragment;
+import com.google.android.gms.maps.CameraUpdate;
+import com.google.android.gms.maps.CameraUpdateFactory;
+import com.google.android.gms.maps.GoogleMap;
+import com.google.android.gms.maps.model.BitmapDescriptorFactory;
+import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.LatLngBounds;
+import com.google.android.gms.maps.model.Marker;
+import com.google.android.gms.maps.model.MarkerOptions;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import butterknife.InjectView;
@@ -67,6 +79,7 @@ public class LegendLayerAdapter extends GeoRecyclerAdapterBase<LegendLayerAdapte
                 if(isVisibleCB.isChecked()){
                     //Show Layer
                     new AnalyticsHelper().sendClickEvent(R.string.showLayerCheckBox);
+                    new MapActions().showLayer(mLayer.getId());
 
                 } else {
                     //remove layer
@@ -101,10 +114,10 @@ public class LegendLayerAdapter extends GeoRecyclerAdapterBase<LegendLayerAdapte
 
                 Fragment currentFragment = activity.getContentFragment();
 
-                if(currentFragment instanceof GoogleMapFragment){
-                    zoomToLayer();
-                } else {
+                if(!(currentFragment instanceof GoogleMapFragment)){
                     goToMap(activity);
+                } else {
+                    zoomToLayer();
                 }
 
                 closeDrawer(activity);
@@ -112,7 +125,25 @@ public class LegendLayerAdapter extends GeoRecyclerAdapterBase<LegendLayerAdapte
         };
 
         protected void zoomToLayer(){
-            Toast.makeText(mContext, "Zoom to " + mLayer.getName() + " Layer", Toast.LENGTH_LONG).show();
+            if(mLayer.getExtent() != null) {
+                LatLng first = mLayer.getExtent().getMaxLatLng();
+                LatLng second = mLayer.getExtent().getMinLatLng();
+
+                GoogleMap mMap = application.getGoogleMap();
+
+                LatLngBounds bounds = new LatLngBounds(second, first);
+
+                int padding = 50;
+                CameraUpdate u = CameraUpdateFactory.newLatLngBounds(bounds, padding);
+                mMap.animateCamera(u);
+            }
+        }
+
+        protected MarkerOptions getMarkerOptions(double latitude, double longitude) {
+            return new MarkerOptions()
+                    .position(new LatLng(latitude, longitude))
+                    .icon(BitmapDescriptorFactory.fromResource(R.drawable.ic_map_marker_circle_black_24dp))
+                    .anchor(.5f, .5f);
         }
 
         protected void closeDrawer(MainActivity activity) {
@@ -123,12 +154,15 @@ public class LegendLayerAdapter extends GeoRecyclerAdapterBase<LegendLayerAdapte
         }
 
         protected void goToMap(MainActivity activity) {
-            Toast.makeText(mContext, "Zoom to " + mLayer.getName() + " Layer", Toast.LENGTH_LONG).show();
 
             FragmentManager fm = activity.getSupportFragmentManager();
 
+            GoogleMapFragment gFrag = new GoogleMapFragment();
+
+            gFrag.setArguments(mLayer.toBundle());
+
             fm.beginTransaction()
-                    .replace(R.id.content_frame, new GoogleMapFragment())
+                    .replace(R.id.content_frame, gFrag)
                     .addToBackStack(null)
                     .commit();
         }

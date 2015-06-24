@@ -42,6 +42,7 @@ import com.geospatialcorporation.android.geomobile.library.viewmode.IViewMode;
 import com.geospatialcorporation.android.geomobile.library.viewmode.implementations.FullScreenMode;
 import com.geospatialcorporation.android.geomobile.library.viewmode.implementations.QueryMode;
 import com.geospatialcorporation.android.geomobile.library.viewmode.implementations.SearchMode;
+import com.geospatialcorporation.android.geomobile.models.Layers.Layer;
 import com.geospatialcorporation.android.geomobile.ui.Interfaces.IViewModeListener;
 import com.geospatialcorporation.android.geomobile.ui.MainActivity;
 import com.geospatialcorporation.android.geomobile.ui.fragments.dialogs.MapTypeSelectDialogFragment;
@@ -55,6 +56,7 @@ import com.google.android.gms.maps.MapView;
 import com.google.android.gms.maps.MapsInitializer;
 import com.google.android.gms.maps.model.CameraPosition;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.LatLngBounds;
 import com.melnykov.fab.FloatingActionButton;
 import com.sothree.slidinguppanel.SlidingUpPanelLayout;
 
@@ -161,6 +163,7 @@ public class GoogleMapFragment extends GeoViewFragmentBase implements
             mMapView.onCreate(savedInstance);
         }
 
+        application.setMapFragment();
 
     }
 
@@ -180,17 +183,44 @@ public class GoogleMapFragment extends GeoViewFragmentBase implements
         mPanelManager.setup();
         mPanelManager.touch(false);
 
-
         initializeGoogleMap(savedInstanceState);
 
         return rootView;
     }
 
+    //region Args Handler -
+    //clicking the show layer button from another fragment should zoom to the extent on the map
+    //sometimes this runs thru before mMap is ready I tried placing the call after initializeGoogleMap but didnt work
+    protected void handleArgs() {
+        Bundle args = getArguments();
+
+        if(args != null && args.getParcelable(Layer.LAYER_INTENT) != null){
+            Layer layer = args.getParcelable(Layer.LAYER_INTENT);
+            zoomToLayer(layer);
+        }
+    }
+
+    protected void zoomToLayer(Layer layer){
+        if(layer.getExtent() != null) {
+            LatLng first = layer.getExtent().getMaxLatLng();
+            LatLng second = layer.getExtent().getMinLatLng();
+
+            LatLngBounds bounds = new LatLngBounds(second, first);
+
+            int padding = 50;
+            CameraUpdate u = CameraUpdateFactory.newLatLngBounds(bounds, padding);
+
+            mMap.animateCamera(u);
+        }
+    }
+    //endregion
 
     protected void initializeGoogleMap(Bundle savedInstanceState) {
         mMapView.onCreate(savedInstanceState);
 
         mMap = mMapView.getMap();
+
+        application.setGoogleMap(mMap);
 
         mLocationClient = new GoogleApiClient.Builder(getActivity())
                 .addApi(LocationServices.API)
@@ -206,7 +236,6 @@ public class GoogleMapFragment extends GeoViewFragmentBase implements
             e.printStackTrace();
         }
     }
-
 
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
@@ -384,7 +413,6 @@ public class GoogleMapFragment extends GeoViewFragmentBase implements
             mViewMode = mode;
         }
     }
-
 
     public void setViewMode(String mode){
         switch(mode){
