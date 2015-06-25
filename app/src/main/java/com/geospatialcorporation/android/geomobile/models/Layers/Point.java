@@ -1,5 +1,7 @@
 package com.geospatialcorporation.android.geomobile.models.Layers;
 
+import com.google.android.gms.maps.model.LatLng;
+
 public class Point {
     //region Properties
     private Integer GeometryType;
@@ -40,6 +42,10 @@ public class Point {
 
     public void setY(double y) {
         Y = y;
+    }
+
+    public LatLng getLatLng() {
+        return new LatLng(getY(), getX());
     }
     //endregion
 

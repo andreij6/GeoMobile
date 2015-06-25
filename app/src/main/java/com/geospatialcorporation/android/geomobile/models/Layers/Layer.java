@@ -11,6 +11,7 @@ import com.geospatialcorporation.android.geomobile.library.map.MapActions;
 import com.geospatialcorporation.android.geomobile.models.Interfaces.ITreeEntity;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.model.Marker;
+import com.google.android.gms.maps.model.Polygon;
 import com.google.android.gms.maps.model.Polyline;
 
 import java.util.ArrayList;
@@ -236,6 +237,9 @@ public class Layer implements Parcelable, ITreeEntity {
             }
             if(mapObject instanceof Polyline){
                 ((Polyline) mapObject).remove();
+            }
+            if(mapObject instanceof Polygon){
+                ((Polygon) mapObject).remove();
             }
         }
     }

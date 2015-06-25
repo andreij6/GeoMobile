@@ -1,20 +1,26 @@
 package com.geospatialcorporation.android.geomobile.library.map.featureMappers;
 
 import com.geospatialcorporation.android.geomobile.models.Layers.Layer;
-import com.geospatialcorporation.android.geomobile.models.Layers.Point;
 import com.geospatialcorporation.android.geomobile.models.Query.map.response.Feature;
-import com.geospatialcorporation.android.geomobile.models.Query.map.response.Ring;
+import com.geospatialcorporation.android.geomobile.models.Query.map.response.Geometry;
 import com.geospatialcorporation.android.geomobile.models.Query.map.response.Style;
 import com.google.android.gms.maps.model.PolygonOptions;
 
 /**
- * Created by andre on 6/24/2015.
+ * Created by andre on 6/25/2015.
  */
-public class PolygonFeatureMapper extends PolygonFeatureMapperBase {
+public class MultiPolygonFeatureMapper extends PolygonFeatureMapperBase {
 
     @Override
     public IFeatureMapper draw(Feature feature) {
-        drawPolygon(feature.getGeometry());
+        int polygonCount = feature.getGeometry().getPolygons().size();
+
+        Geometry[] polygons = new Geometry[polygonCount];
+        feature.getGeometry().getPolygons().toArray(polygons);
+
+        for(int i = 0; i < polygonCount; i++){
+            drawPolygon(polygons[i]);
+        }
 
         return this;
     }
@@ -22,12 +28,10 @@ public class PolygonFeatureMapper extends PolygonFeatureMapperBase {
     @Override
     public IFeatureMapper addStyle(Style style) {
         int stroke = mGeoColor.parseColor(style.getBorderColor());
-        int fill = mGeoColor.parseColor(style.getFillColor());
+        int fillColor = mGeoColor.parseColor(style.getFillColor());
 
         mMapFeature.strokeColor(stroke);
-        mMapFeature.fillColor(fill);
-
-        mMapFeature.geodesic(true);
+        mMapFeature.fillColor(fillColor);
 
         return this;
     }
@@ -41,4 +45,5 @@ public class PolygonFeatureMapper extends PolygonFeatureMapperBase {
     public void reset() {
         mMapFeature = new PolygonOptions();
     }
+
 }

@@ -5,13 +5,15 @@ import com.google.android.gms.maps.model.LatLng;
 import java.util.List;
 
 public class Geometry {
+
     Integer GeometryTypeCode;
     double X;
     double Y;
     double Z;
     double M;
-
+    List<Ring> Rings;
     List<Geometry> Points;
+    List<Geometry> Polygons;
 
     //region Getters & Setters
     public Integer getGeometryTypeCode() {
@@ -64,6 +66,22 @@ public class Geometry {
 
     public LatLng getLatLng() {
         return new LatLng(getY(), getX());
+    }
+
+    public List<Ring> getRings() {
+        return Rings;
+    }
+
+    public void setRings(List<Ring> rings) {
+        Rings = rings;
+    }
+
+    public List<Geometry> getPolygons() {
+        return Polygons;
+    }
+
+    public void setPolygons(List<Geometry> polygons) {
+        Polygons = polygons;
     }
     //endregion
 }
