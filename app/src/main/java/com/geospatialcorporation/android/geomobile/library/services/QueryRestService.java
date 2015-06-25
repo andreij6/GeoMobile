@@ -4,6 +4,7 @@ import com.geospatialcorporation.android.geomobile.application;
 import com.geospatialcorporation.android.geomobile.library.requestcallback.RequestCallback;
 import com.geospatialcorporation.android.geomobile.library.requestcallback.listener_implementations.MapQueryListener;
 import com.geospatialcorporation.android.geomobile.library.rest.QueryService;
+import com.geospatialcorporation.android.geomobile.models.Layers.Layer;
 import com.geospatialcorporation.android.geomobile.models.Query.map.MapDefaultQueryRequest;
 
 import retrofit.client.Response;
@@ -19,7 +20,7 @@ public class QueryRestService  {
         mService = application.getRestAdapter().create(QueryService.class);
     }
 
-    public void mapQuery(MapDefaultQueryRequest request){
-        mService.map(request, new RequestCallback<>(new MapQueryListener()));
+    public void mapQuery(MapDefaultQueryRequest request, Layer layer){
+        mService.map(request, new RequestCallback<>(new MapQueryListener(layer)));
     }
 }

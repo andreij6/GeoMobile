@@ -93,13 +93,14 @@ public class LegendLayerAdapter extends GeoRecyclerAdapterBase<LegendLayerAdapte
 
                     MapDefaultQueryRequest request = new MapDefaultQueryRequest(layers);
 
-                    mService.mapQuery(request);
+                    mService.mapQuery(request, mLayer);
 
 
                 } else {
                     //remove layer
                     new AnalyticsHelper().sendClickEvent(R.string.hideLayerCheckBox);
 
+                    mLayer.clearMapFeatures();
                 }
             }
         };

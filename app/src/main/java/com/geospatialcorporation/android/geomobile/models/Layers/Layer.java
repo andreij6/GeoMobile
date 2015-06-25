@@ -5,11 +5,17 @@ import android.os.Parcel;
 import android.os.Parcelable;
 import android.text.TextUtils;
 
+import com.geospatialcorporation.android.geomobile.application;
 import com.geospatialcorporation.android.geomobile.library.constants.GeometryTypeCodes;
 import com.geospatialcorporation.android.geomobile.library.map.MapActions;
 import com.geospatialcorporation.android.geomobile.models.Interfaces.ITreeEntity;
+import com.google.android.gms.maps.GoogleMap;
+import com.google.android.gms.maps.model.Marker;
+import com.google.android.gms.maps.model.Polyline;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 public class Layer implements Parcelable, ITreeEntity {
 
@@ -17,10 +23,12 @@ public class Layer implements Parcelable, ITreeEntity {
     public Layer(String name) {
         Name = name;
         IsShowing = false;
+        MapObjects = new ArrayList<>();
     }
 
     public Layer(){
         IsShowing = false;
+        MapObjects = new ArrayList<>();
     }
 
     private Layer(Parcel in){
@@ -48,7 +56,7 @@ public class Layer implements Parcelable, ITreeEntity {
     private Boolean IsShowing;
     private List<Layer> Sublayers;
     private StyleInfo StyleInfo;
-    private Object MapObject;
+    private List<Object> MapObjects;
     //endregion
 
     //region Getters & Setters
@@ -137,9 +145,9 @@ public class Layer implements Parcelable, ITreeEntity {
         return StyleInfo;
     }
 
-    public void setMapObject(Object mapObject) { MapObject = mapObject; }
+    public void setMapObject(Object mapObject) { MapObjects.add(mapObject); }
 
-    public Object getMapObject() { return MapObject; }
+    public List<Object> getMapObject() { return MapObjects; }
     //endregion
 
     public static String LAYER_INTENT = "Layer Intent";
@@ -218,6 +226,18 @@ public class Layer implements Parcelable, ITreeEntity {
         Bundle b = new Bundle();
         b.putParcelable(LAYER_INTENT, this);
         return b;
+    }
+
+    public void clearMapFeatures() {
+
+        for(Object mapObject : MapObjects){
+            if(mapObject instanceof Marker){
+                ((Marker) mapObject).remove();
+            }
+            if(mapObject instanceof Polyline){
+                ((Polyline) mapObject).remove();
+            }
+        }
     }
 
     public class StyleInfo {

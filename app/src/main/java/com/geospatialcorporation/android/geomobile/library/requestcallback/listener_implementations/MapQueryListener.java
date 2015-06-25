@@ -4,6 +4,7 @@ import android.util.Log;
 
 import com.geospatialcorporation.android.geomobile.library.map.GeoMapper;
 import com.geospatialcorporation.android.geomobile.library.requestcallback.RequestListener;
+import com.geospatialcorporation.android.geomobile.models.Layers.Layer;
 import com.geospatialcorporation.android.geomobile.models.Query.map.response.MapQueryResponse;
 
 import java.util.List;
@@ -18,6 +19,7 @@ public class MapQueryListener extends RequestListenerBase<List<MapQueryResponse>
     private static final String TAG = MapQueryListener.class.getSimpleName();
 
     GeoMapper mGeoMapper;
+    Layer mLayer;
 
     public MapQueryListener(Boolean shouldRefresh) {
 
@@ -25,15 +27,16 @@ public class MapQueryListener extends RequestListenerBase<List<MapQueryResponse>
         mGeoMapper = new GeoMapper();
     }
 
-    public MapQueryListener(){
+    public MapQueryListener(Layer layer){
         super(false);
         mGeoMapper = new GeoMapper();
+        mLayer = layer;
     }
 
     @Override
     public void onSuccess(List<MapQueryResponse> response) {
         super.onSuccess(response);
 
-        mGeoMapper.map(response);
+        mGeoMapper.map(response, mLayer);
     }
 }

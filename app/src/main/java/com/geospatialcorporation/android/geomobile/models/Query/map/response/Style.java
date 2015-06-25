@@ -69,6 +69,4 @@ public class Style {
     Integer LineStyleCode;
     Integer PointStyleCode;
     Integer Width;
-
-
 }

@@ -2,15 +2,12 @@ package com.geospatialcorporation.android.geomobile.library.map.featureMappers;
 
 
 import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
-import android.graphics.ColorFilter;
-import android.graphics.PorterDuff;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 
 import com.geospatialcorporation.android.geomobile.R;
 import com.geospatialcorporation.android.geomobile.application;
-import com.geospatialcorporation.android.geomobile.library.helpers.GeoColor;
+import com.geospatialcorporation.android.geomobile.models.Layers.Layer;
 import com.geospatialcorporation.android.geomobile.models.Query.map.response.Feature;
 import com.geospatialcorporation.android.geomobile.models.Query.map.response.Style;
 import com.google.android.gms.maps.model.BitmapDescriptor;
@@ -54,8 +51,8 @@ public class PointFeatureMapper extends FeatureMapperBase<MarkerOptions> {
     }
 
     @Override
-    public void commit() {
-        mMap.addMarker(mMapFeature);
+    public void commit(Layer layer) {
+        layer.setMapObject(mMap.addMarker(mMapFeature));
     }
 
     @Override

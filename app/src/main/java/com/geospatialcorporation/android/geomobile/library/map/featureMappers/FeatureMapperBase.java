@@ -24,7 +24,5 @@ public abstract class FeatureMapperBase<T> implements IFeatureMapper {
 
     public abstract IFeatureMapper addStyle(Style style);
 
-    public abstract void commit();
-
     public abstract void reset();
 }
