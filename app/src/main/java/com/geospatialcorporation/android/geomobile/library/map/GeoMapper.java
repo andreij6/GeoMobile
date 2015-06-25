@@ -25,11 +25,12 @@ public class GeoMapper implements IGeoMapper  {
     HashMap<Integer, IFeatureMapper> mStrategies;
 
     public GeoMapper(){
-        mStrategies = new HashMap<>();
         setStrategies();
     }
 
     protected void setStrategies() {
+        mStrategies = new HashMap<>();
+
         mStrategies.put(GeometryTypeCodes.Point, new PointFeatureMapper());
         mStrategies.put(GeometryTypeCodes.Line, new LineFeatureMapper());
         mStrategies.put(GeometryTypeCodes.Polygon, new PolygonFeatureMapper());

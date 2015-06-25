@@ -24,7 +24,7 @@ public class PointFeatureMapper extends FeatureMaperBase {
     }
 
     private LatLng getLatLng(Feature feature) {
-        return new LatLng(feature.getGeometry().getY(), feature.getGeometry().getX());
+        return feature.getGeometry().getLatLng();
     }
 
 

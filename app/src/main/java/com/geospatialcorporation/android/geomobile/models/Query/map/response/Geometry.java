@@ -1,14 +1,17 @@
 package com.geospatialcorporation.android.geomobile.models.Query.map.response;
 
-/**
- * Created by andre on 6/24/2015.
- */
+import com.google.android.gms.maps.model.LatLng;
+
+import java.util.List;
+
 public class Geometry {
     Integer GeometryTypeCode;
     double X;
     double Y;
     double Z;
     double M;
+
+    List<Geometry> Points;
 
     //region Getters & Setters
     public Integer getGeometryTypeCode() {
@@ -49,6 +52,18 @@ public class Geometry {
 
     public void setM(double m) {
         M = m;
+    }
+
+    public List<Geometry> getPoints() {
+        return Points;
+    }
+
+    public void setPoints(List<Geometry> points) {
+        Points = points;
+    }
+
+    public LatLng getLatLng() {
+        return new LatLng(getY(), getX());
     }
     //endregion
 }
