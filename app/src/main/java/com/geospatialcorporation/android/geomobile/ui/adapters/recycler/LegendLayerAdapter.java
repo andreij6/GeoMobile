@@ -15,8 +15,12 @@ import android.widget.Toast;
 import com.geospatialcorporation.android.geomobile.R;
 import com.geospatialcorporation.android.geomobile.application;
 import com.geospatialcorporation.android.geomobile.library.helpers.AnalyticsHelper;
+import com.geospatialcorporation.android.geomobile.library.helpers.DataHelper;
 import com.geospatialcorporation.android.geomobile.library.map.MapActions;
+import com.geospatialcorporation.android.geomobile.library.services.QueryRestService;
 import com.geospatialcorporation.android.geomobile.models.Layers.Layer;
+import com.geospatialcorporation.android.geomobile.models.Query.map.Layers;
+import com.geospatialcorporation.android.geomobile.models.Query.map.MapDefaultQueryRequest;
 import com.geospatialcorporation.android.geomobile.ui.MainActivity;
 import com.geospatialcorporation.android.geomobile.ui.adapters.recycler.base.GeoHolderBase;
 import com.geospatialcorporation.android.geomobile.ui.adapters.recycler.base.GeoRecyclerAdapterBase;
@@ -41,8 +45,11 @@ import butterknife.InjectView;
  */
 public class LegendLayerAdapter extends GeoRecyclerAdapterBase<LegendLayerAdapter.Holder, Layer> {
 
+    QueryRestService mService;
+
     public LegendLayerAdapter(Context context, List<Layer> layers){
         super(context, layers, R.layout.recycler_legend_layers, Holder.class);
+        mService = new QueryRestService();
     }
 
     @Override
@@ -79,7 +86,15 @@ public class LegendLayerAdapter extends GeoRecyclerAdapterBase<LegendLayerAdapte
                 if(isVisibleCB.isChecked()){
                     //Show Layer
                     new AnalyticsHelper().sendClickEvent(R.string.showLayerCheckBox);
-                    new MapActions().showLayer(mLayer.getId());
+
+                    Layers single = new Layers(mLayer);
+                    List<Layers> layers = new ArrayList<>();
+                    layers.add(single);
+
+                    MapDefaultQueryRequest request = new MapDefaultQueryRequest(layers);
+
+                    mService.mapQuery(request);
+
 
                 } else {
                     //remove layer

@@ -11,7 +11,7 @@ import retrofit.client.Response;
 /**
  * Created by andre on 6/20/2015.
  */
-public class SublayerModifiedListner extends RequestListenerBase implements RequestListener<Response> {
+public class SublayerModifiedListner extends RequestListenerBase<Response> implements RequestListener<Response> {
 
     public SublayerModifiedListner(){ super(true);}
     public SublayerModifiedListner(Boolean shouldRefresh){ super(shouldRefresh);}

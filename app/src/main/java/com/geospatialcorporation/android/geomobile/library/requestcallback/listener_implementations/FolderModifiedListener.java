@@ -9,7 +9,7 @@ import retrofit.client.Response;
 /**
  * Created by andre on 6/20/2015.
  */
-public class FolderModifiedListener extends RequestListenerBase implements RequestListener<Response> {
+public class FolderModifiedListener extends RequestListenerBase<Response> implements RequestListener<Response> {
 
     public FolderModifiedListener(){
         super(true);

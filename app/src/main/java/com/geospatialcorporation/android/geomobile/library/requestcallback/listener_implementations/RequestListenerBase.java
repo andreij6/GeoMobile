@@ -14,7 +14,7 @@ import retrofit.client.Response;
 /**
  * Created by andre on 6/20/2015.
  */
-public abstract class RequestListenerBase {
+public abstract class RequestListenerBase<T> {
     private static final String TAG = RequestListenerBase.class.getSimpleName();
 
     protected Fragment mContentFragment;
@@ -24,7 +24,7 @@ public abstract class RequestListenerBase {
         mShouldRefresh = shouldRefresh;
     }
 
-    public void onSuccess(Response response) {
+    public void onSuccess(T response) {
         Toaster(getString(R.string.success));
 
         MainActivity activity = getMainActivity();

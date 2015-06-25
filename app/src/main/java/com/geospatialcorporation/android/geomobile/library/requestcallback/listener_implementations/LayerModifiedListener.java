@@ -9,7 +9,7 @@ import retrofit.client.Response;
 /**
  * Created by andre on 6/20/2015.
  */
-public class LayerModifiedListener extends RequestListenerBase implements RequestListener<Response> {
+public class LayerModifiedListener extends RequestListenerBase<Response> implements RequestListener<Response> {
 
     public LayerModifiedListener(boolean shouldRefresh){
         super(shouldRefresh);
@@ -18,6 +18,7 @@ public class LayerModifiedListener extends RequestListenerBase implements Reques
     public LayerModifiedListener(){
         super(true);
     }
+
     @Override
     public void onSuccess(Response response) {
         super.onSuccess(response);

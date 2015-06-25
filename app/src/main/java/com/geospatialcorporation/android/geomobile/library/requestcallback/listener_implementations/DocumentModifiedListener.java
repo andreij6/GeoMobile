@@ -8,7 +8,7 @@ import retrofit.client.Response;
 /**
  * Created by andre on 6/20/2015.
  */
-public class DocumentModifiedListener extends RequestListenerBase implements RequestListener<Response> {
+public class DocumentModifiedListener extends RequestListenerBase<Response> implements RequestListener<Response> {
 
     public DocumentModifiedListener(){ super(true);}
     public DocumentModifiedListener(Boolean shouldRefresh) {

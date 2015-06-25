@@ -7,7 +7,7 @@ import retrofit.client.Response;
 /**
  * Created by andre on 6/22/2015.
  */
-public class AttributeColumnModifiedListener extends RequestListenerBase implements RequestListener<Response> {
+public class AttributeColumnModifiedListener extends RequestListenerBase<Response> implements RequestListener<Response> {
     public AttributeColumnModifiedListener(Boolean shouldRefresh) {
         super(shouldRefresh);
     }

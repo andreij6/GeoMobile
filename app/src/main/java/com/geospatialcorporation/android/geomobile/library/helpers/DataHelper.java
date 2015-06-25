@@ -5,6 +5,8 @@ import com.geospatialcorporation.android.geomobile.library.constants.NodeTypeCod
 import com.geospatialcorporation.android.geomobile.models.Folders.Folder;
 import com.geospatialcorporation.android.geomobile.models.Layers.Layer;
 import com.geospatialcorporation.android.geomobile.models.Document.Document;
+import com.geospatialcorporation.android.geomobile.models.Query.map.Layers;
+import com.geospatialcorporation.android.geomobile.models.Query.map.MapDefaultQueryRequest;
 import com.geospatialcorporation.android.geomobile.models.Query.quickSearch.QuickSearchResponse;
 import com.geospatialcorporation.android.geomobile.models.Query.quickSearch.QuickSearchResult;
 import com.geospatialcorporation.android.geomobile.models.Query.quickSearch.QuickSearchResultVM;
@@ -245,4 +247,6 @@ public class DataHelper {
         vm.setFoundIn("Folders");
         return vm;
     }
+
+
 }
