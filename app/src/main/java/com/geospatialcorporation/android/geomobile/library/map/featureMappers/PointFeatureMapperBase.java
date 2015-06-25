@@ -1,0 +1,62 @@
+package com.geospatialcorporation.android.geomobile.library.map.featureMappers;
+
+import android.graphics.Bitmap;
+import android.graphics.drawable.BitmapDrawable;
+import android.graphics.drawable.Drawable;
+
+import com.geospatialcorporation.android.geomobile.R;
+import com.geospatialcorporation.android.geomobile.application;
+import com.geospatialcorporation.android.geomobile.models.Layers.Layer;
+import com.geospatialcorporation.android.geomobile.models.Query.map.response.Geometry;
+import com.geospatialcorporation.android.geomobile.models.Query.map.response.Style;
+import com.google.android.gms.maps.model.BitmapDescriptor;
+import com.google.android.gms.maps.model.BitmapDescriptorFactory;
+import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.MarkerOptions;
+
+/**
+ * Created by andre on 6/25/2015.
+ */
+public abstract class PointFeatureMapperBase extends FeatureMapperBase<MarkerOptions>{
+
+    public void drawPoint(Geometry geom){
+        mMapFeature.position(getLatLng(geom));
+
+        mMapFeature.flat(true);
+    }
+
+    @Override
+    public IFeatureMapper addStyle(Style style) {
+
+        Drawable d = application.getAppContext().getDrawable(R.drawable.ic_checkbox_blank_circle_black_18dp);
+        int fillColor = mGeoColor.parseColor(style.getFillColor());
+
+        Bitmap iconBitmap;
+
+        if(d instanceof BitmapDrawable){
+            iconBitmap = ((BitmapDrawable)d).getBitmap();
+
+            Bitmap coloredBitmap = mGeoColor.changeColor(iconBitmap, fillColor);
+
+            BitmapDescriptor icon = BitmapDescriptorFactory.fromBitmap(coloredBitmap);
+
+            mMapFeature.icon(icon);
+        }
+
+        return this;
+    }
+
+    @Override
+    public void commit(Layer layer) {
+        layer.setMapObject(mMap.addMarker(mMapFeature));
+    }
+
+    @Override
+    public void reset() {
+        mMapFeature = new MarkerOptions();
+    }
+
+    protected LatLng getLatLng(Geometry geom) {
+        return geom.getLatLng();
+    }
+}

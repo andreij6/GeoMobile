@@ -19,26 +19,4 @@ public class PolygonFeatureMapper extends PolygonFeatureMapperBase {
         return this;
     }
 
-    @Override
-    public IFeatureMapper addStyle(Style style) {
-        int stroke = mGeoColor.parseColor(style.getBorderColor());
-        int fill = mGeoColor.parseColor(style.getFillColor());
-
-        mMapFeature.strokeColor(stroke);
-        mMapFeature.fillColor(fill);
-
-        mMapFeature.geodesic(true);
-
-        return this;
-    }
-
-    @Override
-    public void commit(Layer layer) {
-        layer.setMapObject(mMap.addPolygon(mMapFeature));
-    }
-
-    @Override
-    public void reset() {
-        mMapFeature = new PolygonOptions();
-    }
 }

@@ -6,10 +6,19 @@ import com.geospatialcorporation.android.geomobile.models.Query.map.response.Geo
 import com.geospatialcorporation.android.geomobile.models.Query.map.response.Style;
 import com.google.android.gms.maps.model.PolygonOptions;
 
+import java.util.ArrayList;
+import java.util.List;
+
 /**
  * Created by andre on 6/25/2015.
  */
 public class MultiPolygonFeatureMapper extends PolygonFeatureMapperBase {
+
+    List<PolygonOptions> options;
+
+    public MultiPolygonFeatureMapper() {
+        options = new ArrayList<>();
+    }
 
     @Override
     public IFeatureMapper draw(Feature feature) {
@@ -18,32 +27,39 @@ public class MultiPolygonFeatureMapper extends PolygonFeatureMapperBase {
         Geometry[] polygons = new Geometry[polygonCount];
         feature.getGeometry().getPolygons().toArray(polygons);
 
-        for(int i = 0; i < polygonCount; i++){
-            drawPolygon(polygons[i]);
+        for (int i = 0; i < polygonCount; i++) {
+
+            PolygonOptions option = new PolygonOptions();
+            drawPolygon(polygons[i], option);
+            options.add(option);
+
+        }
+
+        return this;
+    }
+
+
+    @Override
+    public IFeatureMapper addStyle(Style style) {
+        int stroke = mGeoColor.parseColor(style.getBorderColor());
+        int fill = mGeoColor.parseColor(style.getFillColor());
+
+        for (PolygonOptions option : options) {
+            addStyles(option, stroke, fill);
         }
 
         return this;
     }
 
     @Override
-    public IFeatureMapper addStyle(Style style) {
-        int stroke = mGeoColor.parseColor(style.getBorderColor());
-        int fillColor = mGeoColor.parseColor(style.getFillColor());
-
-        mMapFeature.strokeColor(stroke);
-        mMapFeature.fillColor(fillColor);
-
-        return this;
-    }
-
-    @Override
     public void commit(Layer layer) {
-        layer.setMapObject(mMap.addPolygon(mMapFeature));
+        for (PolygonOptions option : options) {
+            layer.setMapObject(mMap.addPolygon(option));
+        }
     }
 
     @Override
     public void reset() {
-        mMapFeature = new PolygonOptions();
+        options = new ArrayList<>();
     }
-
 }

@@ -8,25 +8,12 @@ import com.google.android.gms.maps.model.MarkerOptions;
 /**
  * Created by andre on 6/25/2015.
  */
-public class MultiPointFeatureMapper extends FeatureMapperBase<MarkerOptions> {
+public class MultiPointFeatureMapper extends PointFeatureMapperBase {
 
     @Override
     public IFeatureMapper draw(Feature feature) {
+
         return null;
     }
 
-    @Override
-    public IFeatureMapper addStyle(Style style) {
-        return null;
-    }
-
-    @Override
-    public void commit(Layer layer) {
-
-    }
-
-    @Override
-    public void reset() {
-
-    }
 }
