@@ -9,10 +9,6 @@ import com.google.android.gms.maps.model.PolygonOptions;
  */
 public class PolygonFeatureMapper extends FeatureMapperBase<PolygonOptions> {
 
-    public PolygonFeatureMapper(){
-        reset();
-    }
-
     @Override
     public IFeatureMapper draw(Feature feature) {
         return null;

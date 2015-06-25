@@ -18,7 +18,7 @@ public class GeoColorTest {
 
         int actual = new GeoColor().parseColor(geoFormat);
 
-        int expected = Color.parseColor("FF0F279E");
+        int expected = Color.parseColor("#FF0F279E");
 
         assertTrue("GeoColor did now generate the same color Id.", actual == expected);
     }

@@ -52,9 +52,18 @@ public class Style {
     public void setWidth(Integer width) {
         Width = width;
     }
+
+    public String getFillColor() {
+        return FillColor;
+    }
+
+    public void setFillColor(String fillColor) {
+        FillColor = fillColor;
+    }
     //endregion
 
     String BorderColor;
+    String FillColor;
     Integer BorderWidth;
     Integer Id;
     Integer LineStyleCode;

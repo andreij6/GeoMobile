@@ -18,10 +18,6 @@ import java.util.List;
  */
 public class LineFeatureMapper extends FeatureMapperBase<PolylineOptions> {
 
-    public LineFeatureMapper(){
-        reset();
-    }
-
     @Override
     public IFeatureMapper draw(Feature feature) {
         int pointsCount = feature.getGeometry().getPoints().size();
