@@ -2,23 +2,28 @@ package com.geospatialcorporation.android.geomobile.library.map.featureMappers;
 
 import android.graphics.Color;
 
-import com.geospatialcorporation.android.geomobile.models.Layers.Layer;
+import com.geospatialcorporation.android.geomobile.library.helpers.GeoColor;
 import com.geospatialcorporation.android.geomobile.models.Query.map.response.Feature;
 import com.geospatialcorporation.android.geomobile.models.Query.map.response.Geometry;
+import com.geospatialcorporation.android.geomobile.models.Query.map.response.Style;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.PolylineOptions;
 
 import java.util.ArrayList;
 import java.util.List;
 
+
 /**
  * Created by andre on 6/24/2015.
  */
-public class LineFeatureMapper extends FeatureMaperBase {
+public class LineFeatureMapper extends FeatureMapperBase<PolylineOptions> {
+
+    public LineFeatureMapper(){
+        reset();
+    }
 
     @Override
-    public void draw(Feature feature) {
-        PolylineOptions polyline = new PolylineOptions();
+    public IFeatureMapper draw(Feature feature) {
         int pointsCount = feature.getGeometry().getPoints().size();
 
         Geometry[] points = new Geometry[pointsCount];
@@ -30,13 +35,31 @@ public class LineFeatureMapper extends FeatureMaperBase {
             vertices[i] = points[i].getLatLng();
         }
 
-        polyline.add(vertices);
+        mMapFeature.add(vertices);
 
-        polyline.width(2f); //use styles from Response
+        return this;
+    }
 
-        polyline.color(Color.BLACK);
+    @Override
+    public IFeatureMapper addStyle(Style style) {
+        String geoColor = style.getBorderColor();
+        int borderWidth = style.getBorderWidth();
 
-        mMap.addPolyline(polyline);
+        int color = new GeoColor().parseColor(geoColor);
 
+        mMapFeature.width(borderWidth); //use styles from Response
+        mMapFeature.color(color);
+
+        return this;
+    }
+
+    @Override
+    public void commit() {
+        mMap.addPolyline(mMapFeature);
+    }
+
+    @Override
+    public void reset() {
+        mMapFeature = new PolylineOptions();
     }
 }

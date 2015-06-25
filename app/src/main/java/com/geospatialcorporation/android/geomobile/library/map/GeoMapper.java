@@ -5,9 +5,6 @@ import com.geospatialcorporation.android.geomobile.library.map.featureMappers.Co
 import com.geospatialcorporation.android.geomobile.library.map.featureMappers.ExtentFeatureMapper;
 import com.geospatialcorporation.android.geomobile.library.map.featureMappers.IFeatureMapper;
 import com.geospatialcorporation.android.geomobile.library.map.featureMappers.LineFeatureMapper;
-import com.geospatialcorporation.android.geomobile.library.map.featureMappers.MultiLineFeatureMapper;
-import com.geospatialcorporation.android.geomobile.library.map.featureMappers.MultiPointFeatureMapper;
-import com.geospatialcorporation.android.geomobile.library.map.featureMappers.MultiPolygonFeatureMapper;
 import com.geospatialcorporation.android.geomobile.library.map.featureMappers.PointFeatureMapper;
 import com.geospatialcorporation.android.geomobile.library.map.featureMappers.PolygonFeatureMapper;
 import com.geospatialcorporation.android.geomobile.library.map.featureMappers.RasterFeatureMapper;
@@ -34,9 +31,6 @@ public class GeoMapper implements IGeoMapper  {
         mStrategies.put(GeometryTypeCodes.Point, new PointFeatureMapper());
         mStrategies.put(GeometryTypeCodes.Line, new LineFeatureMapper());
         mStrategies.put(GeometryTypeCodes.Polygon, new PolygonFeatureMapper());
-        mStrategies.put(GeometryTypeCodes.MultiLine, new MultiLineFeatureMapper());
-        mStrategies.put(GeometryTypeCodes.MultiPoint, new MultiPointFeatureMapper());
-        mStrategies.put(GeometryTypeCodes.MultiPolygon, new MultiPolygonFeatureMapper());
         mStrategies.put(GeometryTypeCodes.Extent, new ExtentFeatureMapper());
         mStrategies.put(GeometryTypeCodes.Collection, new CollectionFeatureMapper());
         mStrategies.put(GeometryTypeCodes.Raster, new RasterFeatureMapper());
@@ -49,7 +43,11 @@ public class GeoMapper implements IGeoMapper  {
 
                 IFeatureMapper mapper = mStrategies.get(feature.getGeometry().getGeometryTypeCode());
 
-                mapper.draw(feature);
+                mapper.reset();
+
+                mapper.draw(feature)
+                        .addStyle(response.getStyle())
+                        .commit();
             }
         }
     }
