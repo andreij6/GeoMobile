@@ -34,8 +34,4 @@ public class MapDefaultQueryRequest {
     Parameters Parameters;
     Options Options;
 
-
-
-
-
 }
