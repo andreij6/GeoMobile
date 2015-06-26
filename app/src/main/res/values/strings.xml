@@ -231,5 +231,6 @@
     <string name="map_screen">Map Screen</string>
     <string name="current_location">Get Current Location Clicked</string>
     <string name="change_basemap">Change Basemap clicked</string>
+    <string name="geometryIV">Geometry Type Image View</string>
 
 </resources>

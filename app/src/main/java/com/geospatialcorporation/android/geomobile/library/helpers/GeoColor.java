@@ -2,6 +2,12 @@ package com.geospatialcorporation.android.geomobile.library.helpers;
 
 import android.graphics.Bitmap;
 import android.graphics.Color;
+import android.graphics.drawable.BitmapDrawable;
+import android.graphics.drawable.Drawable;
+
+import com.geospatialcorporation.android.geomobile.application;
+import com.google.android.gms.maps.model.BitmapDescriptor;
+import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 
 /**
  * Created by andre on 6/25/2015.
@@ -15,6 +21,14 @@ public class GeoColor {
         String finalColor = String.format("#%s%s", alpha, color);
 
         return Color.parseColor(finalColor);
+    }
+
+    public Drawable changeColor(Drawable drawable, int desiredColor){
+        Bitmap iconBitmap = ((BitmapDrawable) drawable).getBitmap();
+
+        Bitmap coloredBitmap = new GeoColor().changeColor(iconBitmap, desiredColor);
+
+        return new BitmapDrawable(application.getAppContext().getResources(), coloredBitmap);
     }
 
     public Bitmap changeColor(Bitmap iconBitmap, int fillColor) {

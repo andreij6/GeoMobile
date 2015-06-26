@@ -12,6 +12,7 @@ import com.geospatialcorporation.android.geomobile.library.map.featureMappers.Po
 import com.geospatialcorporation.android.geomobile.library.map.featureMappers.PolygonFeatureMapper;
 import com.geospatialcorporation.android.geomobile.library.map.featureMappers.RasterFeatureMapper;
 import com.geospatialcorporation.android.geomobile.models.Layers.Layer;
+import com.geospatialcorporation.android.geomobile.models.Layers.LegendLayer;
 import com.geospatialcorporation.android.geomobile.models.Query.map.response.Feature;
 import com.geospatialcorporation.android.geomobile.models.Query.map.response.Geometry;
 import com.geospatialcorporation.android.geomobile.models.Query.map.response.MapQueryResponse;
@@ -45,7 +46,7 @@ public class GeoMapper implements IGeoMapper  {
     }
 
     @Override
-    public void map(List<MapQueryResponse> responses, Layer layer) {
+    public void map(List<MapQueryResponse> responses, LegendLayer llayer) {
         for(MapQueryResponse response : responses){
             for(Feature feature : response.getFeatures()){
 
@@ -55,7 +56,7 @@ public class GeoMapper implements IGeoMapper  {
 
                 mapper.draw(feature)
                         .addStyle(response.getStyle())
-                        .commit(layer);
+                        .commit(llayer);
 
             }
         }

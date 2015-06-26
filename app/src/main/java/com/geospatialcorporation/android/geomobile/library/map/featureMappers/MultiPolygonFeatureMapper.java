@@ -1,6 +1,7 @@
 package com.geospatialcorporation.android.geomobile.library.map.featureMappers;
 
 import com.geospatialcorporation.android.geomobile.models.Layers.Layer;
+import com.geospatialcorporation.android.geomobile.models.Layers.LegendLayer;
 import com.geospatialcorporation.android.geomobile.models.Query.map.response.Feature;
 import com.geospatialcorporation.android.geomobile.models.Query.map.response.Geometry;
 import com.geospatialcorporation.android.geomobile.models.Query.map.response.Style;
@@ -38,7 +39,6 @@ public class MultiPolygonFeatureMapper extends PolygonFeatureMapperBase {
         return this;
     }
 
-
     @Override
     public IFeatureMapper addStyle(Style style) {
         int stroke = mGeoColor.parseColor(style.getBorderColor());
@@ -52,10 +52,12 @@ public class MultiPolygonFeatureMapper extends PolygonFeatureMapperBase {
     }
 
     @Override
-    public void commit(Layer layer) {
+    public void commit(LegendLayer layer) {
         for (PolygonOptions option : options) {
             layer.setMapObject(mMap.addPolygon(option));
         }
+
+        setLegendIcon(layer);
     }
 
     @Override

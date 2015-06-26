@@ -1,6 +1,7 @@
 package com.geospatialcorporation.android.geomobile.library.map;
 
 import com.geospatialcorporation.android.geomobile.models.Layers.Layer;
+import com.geospatialcorporation.android.geomobile.models.Layers.LegendLayer;
 import com.geospatialcorporation.android.geomobile.models.Query.map.response.MapQueryResponse;
 
 import java.util.List;
@@ -9,5 +10,5 @@ import java.util.List;
  * Created by andre on 6/24/2015.
  */
 public interface IGeoMapper {
-    void map(List<MapQueryResponse> response, Layer layer);
+    void map(List<MapQueryResponse> response, LegendLayer llayer);
 }

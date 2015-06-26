@@ -1,6 +1,8 @@
 package com.geospatialcorporation.android.geomobile.ui.adapters.recycler;
 
 import android.content.Context;
+import android.graphics.drawable.Drawable;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
@@ -14,11 +16,13 @@ import android.widget.Toast;
 
 import com.geospatialcorporation.android.geomobile.R;
 import com.geospatialcorporation.android.geomobile.application;
+import com.geospatialcorporation.android.geomobile.library.constants.GeometryTypeCodes;
 import com.geospatialcorporation.android.geomobile.library.helpers.AnalyticsHelper;
 import com.geospatialcorporation.android.geomobile.library.helpers.DataHelper;
 import com.geospatialcorporation.android.geomobile.library.map.MapActions;
 import com.geospatialcorporation.android.geomobile.library.services.QueryRestService;
 import com.geospatialcorporation.android.geomobile.models.Layers.Layer;
+import com.geospatialcorporation.android.geomobile.models.Layers.LegendLayer;
 import com.geospatialcorporation.android.geomobile.models.Query.map.Layers;
 import com.geospatialcorporation.android.geomobile.models.Query.map.MapDefaultQueryRequest;
 import com.geospatialcorporation.android.geomobile.ui.MainActivity;
@@ -43,11 +47,11 @@ import butterknife.InjectView;
 /**
  * Created by andre on 6/5/2015.
  */
-public class LegendLayerAdapter extends GeoRecyclerAdapterBase<LegendLayerAdapter.Holder, Layer> {
+public class LegendLayerAdapter extends GeoRecyclerAdapterBase<LegendLayerAdapter.Holder, LegendLayer> {
 
     QueryRestService mService;
 
-    public LegendLayerAdapter(Context context, List<Layer> layers){
+    public LegendLayerAdapter(Context context, List<LegendLayer> layers) {
         super(context, layers, R.layout.recycler_legend_layers, Holder.class);
         mService = new QueryRestService();
     }
@@ -58,32 +62,71 @@ public class LegendLayerAdapter extends GeoRecyclerAdapterBase<LegendLayerAdapte
         return new Holder(mView);
     }
 
-    public class Holder extends GeoHolderBase<Layer> {
+    public class Holder extends GeoHolderBase<LegendLayer> {
 
-        @InjectView(R.id.layerNameTV) TextView mLayerName;
-        @InjectView(R.id.isVisible)CheckBox isVisibleCB;
-        @InjectView(R.id.sublayerExpander) ImageView gotoSublayer;
+        @InjectView(R.id.layerNameTV)
+        TextView mLayerName;
+        @InjectView(R.id.isVisible)
+        CheckBox isVisibleCB;
+        @InjectView(R.id.sublayerExpander)
+        ImageView gotoSublayer;
+        @InjectView(R.id.geometryIV)
+        ImageView geomIV;
 
         private Layer mLayer;
+        private LegendLayer mLegendLayer;
+
         public Holder(View itemView) {
             super(itemView);
         }
 
-        public void bind(Layer layer){
-            mLayer = layer;
+        public void bind(LegendLayer llayer) {
+            mLayer = llayer.getLayer();
+            mLegendLayer = llayer;
 
-            mLayerName.setText(layer.getName());
+            mLayerName.setText(mLayer.getName());
             mLayerName.setOnClickListener(ZoomToLayer);
-            isVisibleCB.setChecked(layer.getIsShowing());
+            isVisibleCB.setChecked(mLayer.getIsShowing());
             isVisibleCB.setOnClickListener(ToggleShowLayers);
             gotoSublayer.setOnClickListener(GoToSublayer);
+
+            if(!mLegendLayer.isIconSet()) {
+                mLegendLayer.setLegendIcon(getDrawable(mLayer.getGeometryTypeCodeId()));
+            }
+
+            mLegendLayer.setImageView(geomIV);
+            mLegendLayer.setImageSrc();
+
+        }
+
+        protected Drawable getDrawable(Integer geometryTypeCodeId) {
+            Drawable d = mContext.getDrawable(R.drawable.ic_select_off_white_18dp);
+
+            switch (geometryTypeCodeId) {
+                case GeometryTypeCodes.Line:
+                case GeometryTypeCodes.MultiLine:
+                    d = mContext.getDrawable(R.drawable.ic_select_off_white_18dp);
+                    break;
+                case GeometryTypeCodes.Point:
+                case GeometryTypeCodes.MultiPoint:
+                    d = mContext.getDrawable(R.drawable.ic_checkbox_blank_circle_white_18dp);
+                    break;
+                case GeometryTypeCodes.Polygon:
+                case GeometryTypeCodes.MultiPolygon:
+                    d = mContext.getDrawable(R.drawable.ic_hexagon_outline_white_18dp);
+                    break;
+                default:
+                    break;
+            }
+
+            return d;
         }
 
         //region Click Listeners
         protected View.OnClickListener ToggleShowLayers = new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(isVisibleCB.isChecked()){
+                if (isVisibleCB.isChecked()) {
                     //Show Layer
                     new AnalyticsHelper().sendClickEvent(R.string.showLayerCheckBox);
 
@@ -93,22 +136,27 @@ public class LegendLayerAdapter extends GeoRecyclerAdapterBase<LegendLayerAdapte
 
                     MapDefaultQueryRequest request = new MapDefaultQueryRequest(layers);
                     mLayer.setIsShowing(true);
-                    mService.mapQuery(request, mLayer);
+
+                    mService.mapQuery(request, mLegendLayer);
+
                 } else {
                     //remove layer
                     new AnalyticsHelper().sendClickEvent(R.string.hideLayerCheckBox);
 
-                    mLayer.clearMapFeatures();
+                    mLegendLayer.clearMapFeatures();
 
                     mLayer.setIsShowing(false);
+
+                    mLegendLayer.setLegendIcon(getDrawable(mLayer.getGeometryTypeCodeId()));
+                    mLegendLayer.setImageSrc();
                 }
             }
         };
 
-        private View.OnClickListener GoToSublayer = new View.OnClickListener(){
+        private View.OnClickListener GoToSublayer = new View.OnClickListener() {
             @Override
-            public void onClick(View v){
-                MainActivity activity = (MainActivity)mContext;
+            public void onClick(View v) {
+                MainActivity activity = (MainActivity) mContext;
                 Fragment frag = new LayerDetailFragment();
                 FragmentManager fm = activity.getSupportFragmentManager();
 
@@ -123,14 +171,14 @@ public class LegendLayerAdapter extends GeoRecyclerAdapterBase<LegendLayerAdapte
             }
         };
 
-        private View.OnClickListener ZoomToLayer = new View.OnClickListener(){
+        private View.OnClickListener ZoomToLayer = new View.OnClickListener() {
             @Override
-            public void onClick(View v){
-                MainActivity activity = (MainActivity)mContext;
+            public void onClick(View v) {
+                MainActivity activity = (MainActivity) mContext;
 
                 Fragment currentFragment = activity.getContentFragment();
 
-                if(!(currentFragment instanceof GoogleMapFragment)){
+                if (!(currentFragment instanceof GoogleMapFragment)) {
                     goToMap(activity);
                 } else {
                     zoomToLayer();
@@ -140,8 +188,8 @@ public class LegendLayerAdapter extends GeoRecyclerAdapterBase<LegendLayerAdapte
             }
         };
 
-        protected void zoomToLayer(){
-            if(mLayer.getExtent() != null) {
+        protected void zoomToLayer() {
+            if (mLayer.getExtent() != null) {
                 LatLng first = mLayer.getExtent().getMaxLatLng();
                 LatLng second = mLayer.getExtent().getMinLatLng();
 
@@ -183,5 +231,25 @@ public class LegendLayerAdapter extends GeoRecyclerAdapterBase<LegendLayerAdapte
                     .commit();
         }
         //endregion
+
+        private class MapFeaturesTask extends AsyncTask<Void, Void, Integer> {
+
+            MapDefaultQueryRequest mRequest;
+
+            public MapFeaturesTask(MapDefaultQueryRequest request) {
+                mRequest = request;
+            }
+
+            @Override
+            protected Integer doInBackground(Void... params) {
+
+                return 5;
+            }
+
+            @Override
+            protected void onPostExecute(Integer aVoid) {
+
+            }
+        }
     }
 }

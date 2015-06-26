@@ -2,6 +2,7 @@ package com.geospatialcorporation.android.geomobile.library.map.featureMappers;
 
 import com.geospatialcorporation.android.geomobile.library.helpers.GeoColor;
 import com.geospatialcorporation.android.geomobile.models.Layers.Layer;
+import com.geospatialcorporation.android.geomobile.models.Layers.LegendLayer;
 import com.geospatialcorporation.android.geomobile.models.Query.map.response.Geometry;
 import com.geospatialcorporation.android.geomobile.models.Query.map.response.Style;
 import com.google.android.gms.maps.model.LatLng;
@@ -11,6 +12,7 @@ import com.google.android.gms.maps.model.PolylineOptions;
  * Created by andre on 6/25/2015.
  */
 public abstract class LineFeatureMapperBase extends FeatureMapperBase<PolylineOptions> {
+
     public void drawLines(Geometry geometry){
         int pointsCount = geometry.getPoints().size();
 
@@ -31,17 +33,19 @@ public abstract class LineFeatureMapperBase extends FeatureMapperBase<PolylineOp
         String geoColor = style.getBorderColor();
         int borderWidth = style.getBorderWidth();
 
-        int color = new GeoColor().parseColor(geoColor);
+        mColor = new GeoColor().parseColor(geoColor);
 
         mMapFeature.width(borderWidth); //use styles from Response
-        mMapFeature.color(color);
+        mMapFeature.color(mColor);
 
         return this;
     }
 
     @Override
-    public void commit(Layer layer) {
+    public void commit(LegendLayer layer) {
         layer.setMapObject(mMap.addPolyline(mMapFeature));
+
+        setLegendIcon(layer);
     }
 
     @Override

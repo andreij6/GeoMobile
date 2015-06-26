@@ -9,6 +9,7 @@ import com.geospatialcorporation.android.geomobile.library.sectionbuilders.ISect
 import com.geospatialcorporation.android.geomobile.library.sectionbuilders.SectionBuilderBase;
 import com.geospatialcorporation.android.geomobile.models.Folders.Folder;
 import com.geospatialcorporation.android.geomobile.models.Layers.Layer;
+import com.geospatialcorporation.android.geomobile.models.Layers.LegendLayer;
 import com.geospatialcorporation.android.geomobile.ui.adapters.recycler.LegendLayerAdapter;
 import com.geospatialcorporation.android.geomobile.ui.adapters.SimpleSectionedRecyclerViewAdapter;
 
@@ -28,9 +29,9 @@ public class LegendLayerSectionBuilder extends SectionBuilderBase<Folder> implem
     public ISectionBuilder<Folder> BuildAdapter(List<Folder> data, int folderCount) {
         mData = data;
 
-        List<Layer> layers = getLayersFromFolders(data);
+        List<LegendLayer> llayers = getLayersFromFolders(data);
 
-        LegendLayerAdapter adapter = new LegendLayerAdapter(mContext, layers);
+        LegendLayerAdapter adapter = new LegendLayerAdapter(mContext, llayers);
 
         List<SimpleSectionedRecyclerViewAdapter.Section> sections = new ArrayList<>();
 
@@ -74,13 +75,19 @@ public class LegendLayerSectionBuilder extends SectionBuilderBase<Folder> implem
         return this;
     }
 
-    private List<Layer> getLayersFromFolders(List<Folder> layerFolders) {
-        List<Layer> result = new ArrayList<>();
+    private List<LegendLayer> getLayersFromFolders(List<Folder> layerFolders) {
+        List<Layer> layers = new ArrayList<>();
 
         for(Folder folder : layerFolders){
             if(folder.getLayers() != null && !folder.getLayers().isEmpty()){
-                result.addAll(folder.getLayers());
+                layers.addAll(folder.getLayers());
             }
+        }
+
+        List<LegendLayer> result = new ArrayList<>();
+
+        for(Layer layer : layers){
+            result.add(new LegendLayer(layer));
         }
 
         return result;

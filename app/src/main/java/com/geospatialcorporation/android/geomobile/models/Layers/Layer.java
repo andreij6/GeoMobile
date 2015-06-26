@@ -24,12 +24,10 @@ public class Layer implements Parcelable, ITreeEntity {
     public Layer(String name) {
         Name = name;
         IsShowing = false;
-        MapObjects = new ArrayList<>();
     }
 
     public Layer(){
         IsShowing = false;
-        MapObjects = new ArrayList<>();
     }
 
     private Layer(Parcel in){
@@ -57,7 +55,7 @@ public class Layer implements Parcelable, ITreeEntity {
     private Boolean IsShowing;
     private List<Layer> Sublayers;
     private StyleInfo StyleInfo;
-    private List<Object> MapObjects;
+
     //endregion
 
     //region Getters & Setters
@@ -145,10 +143,6 @@ public class Layer implements Parcelable, ITreeEntity {
     public StyleInfo getStyleInfo() {
         return StyleInfo;
     }
-
-    public void setMapObject(Object mapObject) { MapObjects.add(mapObject); }
-
-    public List<Object> getMapObject() { return MapObjects; }
     //endregion
 
     public static String LAYER_INTENT = "Layer Intent";
@@ -229,20 +223,7 @@ public class Layer implements Parcelable, ITreeEntity {
         return b;
     }
 
-    public void clearMapFeatures() {
 
-        for(Object mapObject : MapObjects){
-            if(mapObject instanceof Marker){
-                ((Marker) mapObject).remove();
-            }
-            if(mapObject instanceof Polyline){
-                ((Polyline) mapObject).remove();
-            }
-            if(mapObject instanceof Polygon){
-                ((Polygon) mapObject).remove();
-            }
-        }
-    }
 
     public class StyleInfo {
         public int StyleInfoId;

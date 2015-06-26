@@ -106,7 +106,7 @@ public class MapActions {
         MarkerOptions point = new MarkerOptions().position(layer.getExtent().getMinLatLng());
         point.flat(true);
 
-        layer.setMapObject(mMap.addMarker(point));
+        //layer.setMapObject(mMap.addMarker(point));
         layer.setIsShowing(true);
     }
 
@@ -136,7 +136,7 @@ public class MapActions {
             polyline.width(styleInfo.Width);
             polyline.color(Color.parseColor(styleInfo.BorderColor));
 
-            layer.setMapObject(mMap.addPolyline(polyline));
+            //layer.setMapObject(mMap.addPolyline(polyline));
             layer.setIsShowing(true);
         }
     }
@@ -156,7 +156,7 @@ public class MapActions {
     private void showPolygon(Layer layer) {
         List<Layer> sublayers = getLayerSublayers(layer);
 
-        layer.setMapObject(mMap.addPolygon(new PolygonOptions()));
+        //layer.setMapObject(mMap.addPolygon(new PolygonOptions()));
         layer.setIsShowing(true);
     }
 

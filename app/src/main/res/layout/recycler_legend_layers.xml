@@ -17,6 +17,15 @@
             android:id="@+id/isVisible"
             />
 
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/geometryIV"
+            android:src="@drawable/ic_select_off_grey600_18dp"
+            android:padding="8dp"
+            android:contentDescription="@string/geometryIV"
+            android:layout_gravity="center_vertical"/>
+
         <TextView
             android:layout_width="0dp"
             android:layout_height="match_parent"
