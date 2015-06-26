@@ -40,4 +40,6 @@ public class MapQueryListener extends RequestListenerBase<List<MapQueryResponse>
 
         mGeoMapper.map(response, mLLayer);
     }
+
+
 }

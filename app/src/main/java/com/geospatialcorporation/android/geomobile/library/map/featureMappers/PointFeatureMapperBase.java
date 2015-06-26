@@ -7,7 +7,6 @@ import android.graphics.drawable.Drawable;
 import com.geospatialcorporation.android.geomobile.R;
 import com.geospatialcorporation.android.geomobile.application;
 import com.geospatialcorporation.android.geomobile.library.constants.PointStyleCodes;
-import com.geospatialcorporation.android.geomobile.models.Layers.Layer;
 import com.geospatialcorporation.android.geomobile.models.Layers.LegendLayer;
 import com.geospatialcorporation.android.geomobile.models.Query.map.response.Geometry;
 import com.geospatialcorporation.android.geomobile.models.Query.map.response.Style;
@@ -19,17 +18,24 @@ import com.google.android.gms.maps.model.MarkerOptions;
 /**
  * Created by andre on 6/25/2015.
  */
-public abstract class PointFeatureMapperBase extends FeatureMapperBase<MarkerOptions> {
+public abstract class PointFeatureMapperBase extends SingleFeatureMapperBase<MarkerOptions> {
 
-    public void drawPoint(Geometry geom) {
-        mMapFeature.position(getLatLng(geom));
+    @Override
+    public void drawFeature(Geometry geom, MarkerOptions options) {
+        options.position(getLatLng(geom));
 
-        mMapFeature.flat(true);
+        options.flat(true);
     }
 
     @Override
     public IFeatureMapper addStyle(Style style) {
+        addStyles(mMapFeature, style);
 
+        return this;
+    }
+
+    @Override
+    public int addStyles(MarkerOptions options, Style style){
         Drawable d = setDrawable(style);
 
         mColor = mGeoColor.parseColor(style.getFillColor());
@@ -40,9 +46,9 @@ public abstract class PointFeatureMapperBase extends FeatureMapperBase<MarkerOpt
 
         BitmapDescriptor icon = BitmapDescriptorFactory.fromBitmap(coloredBitmap);
 
-        mMapFeature.icon(icon);
+        options.icon(icon);
 
-        return this;
+        return mColor;
     }
 
     private Drawable setDrawable(Style style) {
@@ -67,9 +73,19 @@ public abstract class PointFeatureMapperBase extends FeatureMapperBase<MarkerOpt
 
     @Override
     public void commit(LegendLayer layer) {
-        layer.setMapObject(mMap.addMarker(mMapFeature));
+        addMapObject(layer, mMapFeature);
 
         setLegendIcon(layer);
+    }
+
+    @Override
+    public void addMapObject(final LegendLayer layer, final MarkerOptions option){
+        application.getMainActivity().runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                layer.setMapObject(mMap.addMarker(option));
+            }
+        });
     }
 
     @Override

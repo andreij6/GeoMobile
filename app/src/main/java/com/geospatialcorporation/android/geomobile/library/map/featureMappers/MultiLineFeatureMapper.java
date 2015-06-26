@@ -1,15 +1,29 @@
 package com.geospatialcorporation.android.geomobile.library.map.featureMappers;
 
 import com.geospatialcorporation.android.geomobile.models.Query.map.response.Feature;
+import com.geospatialcorporation.android.geomobile.models.Query.map.response.Geometry;
+import com.google.android.gms.maps.model.PolylineOptions;
+
 
 /**
  * Created by andre on 6/25/2015.
  */
-public class MultiLineFeatureMapper extends LineFeatureMapperBase{
+public class MultiLineFeatureMapper extends MultiFeatureMapperBase<PolylineOptions, LineFeatureMapperBase> {
+
+    public MultiLineFeatureMapper() {
+        super(new LineFeatureMapper());
+    }
 
     @Override
     public IFeatureMapper draw(Feature feature) {
-        return null;
+
+        drawFeature(feature.getGeometry().getLines());
+
+        return this;
     }
 
+    @Override
+    protected PolylineOptions newOptionType() {
+        return new PolylineOptions();
+    }
 }

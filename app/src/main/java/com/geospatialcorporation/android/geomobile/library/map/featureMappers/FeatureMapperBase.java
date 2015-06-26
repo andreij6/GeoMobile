@@ -8,6 +8,7 @@ import com.geospatialcorporation.android.geomobile.models.Layers.LegendLayer;
 import com.geospatialcorporation.android.geomobile.models.Query.map.response.Feature;
 import com.geospatialcorporation.android.geomobile.models.Query.map.response.Style;
 import com.google.android.gms.maps.GoogleMap;
+import com.google.android.gms.maps.model.PolygonOptions;
 
 /**
  * Created by andre on 6/24/2015.
@@ -32,6 +33,7 @@ public abstract class FeatureMapperBase<T> implements IFeatureMapper {
         Drawable newDrawable = mGeoColor.changeColor(layer.getLegendIcon(), mColor);
 
         layer.setLegendIcon(newDrawable);
+
         layer.setImageSrc();
     }
 

@@ -64,17 +64,15 @@ public class LegendLayerAdapter extends GeoRecyclerAdapterBase<LegendLayerAdapte
 
     public class Holder extends GeoHolderBase<LegendLayer> {
 
-        @InjectView(R.id.layerNameTV)
-        TextView mLayerName;
-        @InjectView(R.id.isVisible)
-        CheckBox isVisibleCB;
-        @InjectView(R.id.sublayerExpander)
-        ImageView gotoSublayer;
-        @InjectView(R.id.geometryIV)
-        ImageView geomIV;
+        //region ButterKnife
+        @InjectView(R.id.layerNameTV) TextView mLayerName;
+        @InjectView(R.id.isVisible) CheckBox isVisibleCB;
+        @InjectView(R.id.sublayerExpander) ImageView gotoSublayer;
+        @InjectView(R.id.geometryIV) ImageView geomIV;
+        //endregionxxx
 
-        private Layer mLayer;
-        private LegendLayer mLegendLayer;
+        Layer mLayer;
+        LegendLayer mLegendLayer;
 
         public Holder(View itemView) {
             super(itemView);
@@ -84,42 +82,21 @@ public class LegendLayerAdapter extends GeoRecyclerAdapterBase<LegendLayerAdapte
             mLayer = llayer.getLayer();
             mLegendLayer = llayer;
 
+            if(!mLegendLayer.isIconSet()) {
+                mLegendLayer.setLegendIcon(getDrawable(mLayer.getGeometryTypeCodeId()));
+            }
+
+            shouldShowLayer();
+
             mLayerName.setText(mLayer.getName());
             mLayerName.setOnClickListener(ZoomToLayer);
             isVisibleCB.setChecked(mLayer.getIsShowing());
             isVisibleCB.setOnClickListener(ToggleShowLayers);
             gotoSublayer.setOnClickListener(GoToSublayer);
 
-            if(!mLegendLayer.isIconSet()) {
-                mLegendLayer.setLegendIcon(getDrawable(mLayer.getGeometryTypeCodeId()));
-            }
-
             mLegendLayer.setImageView(geomIV);
             mLegendLayer.setImageSrc();
 
-        }
-
-        protected Drawable getDrawable(Integer geometryTypeCodeId) {
-            Drawable d = mContext.getDrawable(R.drawable.ic_select_off_white_18dp);
-
-            switch (geometryTypeCodeId) {
-                case GeometryTypeCodes.Line:
-                case GeometryTypeCodes.MultiLine:
-                    d = mContext.getDrawable(R.drawable.ic_select_off_white_18dp);
-                    break;
-                case GeometryTypeCodes.Point:
-                case GeometryTypeCodes.MultiPoint:
-                    d = mContext.getDrawable(R.drawable.ic_checkbox_blank_circle_white_18dp);
-                    break;
-                case GeometryTypeCodes.Polygon:
-                case GeometryTypeCodes.MultiPolygon:
-                    d = mContext.getDrawable(R.drawable.ic_hexagon_outline_white_18dp);
-                    break;
-                default:
-                    break;
-            }
-
-            return d;
         }
 
         //region Click Listeners
@@ -130,14 +107,9 @@ public class LegendLayerAdapter extends GeoRecyclerAdapterBase<LegendLayerAdapte
                     //Show Layer
                     new AnalyticsHelper().sendClickEvent(R.string.showLayerCheckBox);
 
-                    Layers single = new Layers(mLayer);
-                    List<Layers> layers = new ArrayList<>();
-                    layers.add(single);
+                    addLayerToMap();
 
-                    MapDefaultQueryRequest request = new MapDefaultQueryRequest(layers);
-                    mLayer.setIsShowing(true);
-
-                    mService.mapQuery(request, mLegendLayer);
+                    application.getMapLayerState().addLayer(mLayer);
 
                 } else {
                     //remove layer
@@ -149,9 +121,13 @@ public class LegendLayerAdapter extends GeoRecyclerAdapterBase<LegendLayerAdapte
 
                     mLegendLayer.setLegendIcon(getDrawable(mLayer.getGeometryTypeCodeId()));
                     mLegendLayer.setImageSrc();
+
+                    application.getMapLayerState().removeLayer(mLayer);
                 }
             }
         };
+
+
 
         private View.OnClickListener GoToSublayer = new View.OnClickListener() {
             @Override
@@ -232,24 +208,47 @@ public class LegendLayerAdapter extends GeoRecyclerAdapterBase<LegendLayerAdapte
         }
         //endregion
 
-        private class MapFeaturesTask extends AsyncTask<Void, Void, Integer> {
+        //region Helpers
+        protected void addLayerToMap() {
+            Layers single = new Layers(mLayer);
+            List<Layers> layers = new ArrayList<>();
+            layers.add(single);
 
-            MapDefaultQueryRequest mRequest;
+            MapDefaultQueryRequest request = new MapDefaultQueryRequest(layers);
+            mLayer.setIsShowing(true);
 
-            public MapFeaturesTask(MapDefaultQueryRequest request) {
-                mRequest = request;
-            }
+            mService.mapQuery(request, mLegendLayer);
+        }
 
-            @Override
-            protected Integer doInBackground(Void... params) {
-
-                return 5;
-            }
-
-            @Override
-            protected void onPostExecute(Integer aVoid) {
-
+        protected void shouldShowLayer() {
+            if(application.getMapLayerState().shouldShow(mLayer.getId())){
+                //addLayerToMap();
             }
         }
+
+        protected Drawable getDrawable(Integer geometryTypeCodeId) {
+            Drawable d = mContext.getDrawable(R.drawable.ic_select_off_white_18dp);
+
+            switch (geometryTypeCodeId) {
+                case GeometryTypeCodes.Line:
+                case GeometryTypeCodes.MultiLine:
+                    d = mContext.getDrawable(R.drawable.ic_select_off_white_18dp);
+                    break;
+                case GeometryTypeCodes.Point:
+                case GeometryTypeCodes.MultiPoint:
+                    d = mContext.getDrawable(R.drawable.ic_checkbox_blank_circle_white_18dp);
+                    break;
+                case GeometryTypeCodes.Polygon:
+                case GeometryTypeCodes.MultiPolygon:
+                    d = mContext.getDrawable(R.drawable.ic_hexagon_outline_white_18dp);
+                    break;
+                default:
+                    break;
+            }
+
+            return d;
+        }
+        //endregion
+
     }
 }

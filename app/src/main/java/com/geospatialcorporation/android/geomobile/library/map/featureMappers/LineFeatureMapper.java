@@ -15,7 +15,7 @@ public class LineFeatureMapper extends LineFeatureMapperBase {
 
     @Override
     public IFeatureMapper draw(Feature feature) {
-        drawLines(feature.getGeometry());
+        drawFeature(feature.getGeometry(), mMapFeature);
 
         return this;
     }

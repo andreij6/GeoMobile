@@ -1,7 +1,7 @@
 package com.geospatialcorporation.android.geomobile.library.map.featureMappers;
 
+import com.geospatialcorporation.android.geomobile.application;
 import com.geospatialcorporation.android.geomobile.library.helpers.GeoColor;
-import com.geospatialcorporation.android.geomobile.models.Layers.Layer;
 import com.geospatialcorporation.android.geomobile.models.Layers.LegendLayer;
 import com.geospatialcorporation.android.geomobile.models.Query.map.response.Geometry;
 import com.geospatialcorporation.android.geomobile.models.Query.map.response.Style;
@@ -11,9 +11,10 @@ import com.google.android.gms.maps.model.PolylineOptions;
 /**
  * Created by andre on 6/25/2015.
  */
-public abstract class LineFeatureMapperBase extends FeatureMapperBase<PolylineOptions> {
+public abstract class LineFeatureMapperBase extends SingleFeatureMapperBase<PolylineOptions> {
 
-    public void drawLines(Geometry geometry){
+    @Override
+    public void drawFeature(Geometry geometry, PolylineOptions options){
         int pointsCount = geometry.getPoints().size();
 
         Geometry[] points = new Geometry[pointsCount];
@@ -25,27 +26,39 @@ public abstract class LineFeatureMapperBase extends FeatureMapperBase<PolylineOp
             vertices[i] = points[i].getLatLng();
         }
 
-        mMapFeature.add(vertices);
+        options.add(vertices);
     }
 
     @Override
     public IFeatureMapper addStyle(Style style) {
-        String geoColor = style.getBorderColor();
-        int borderWidth = style.getBorderWidth();
-
-        mColor = new GeoColor().parseColor(geoColor);
-
-        mMapFeature.width(borderWidth); //use styles from Response
-        mMapFeature.color(mColor);
+        addStyles(mMapFeature, style);
 
         return this;
     }
 
     @Override
+    public int addStyles(PolylineOptions option, Style style) {
+        String geoColor = style.getBorderColor();
+        int borderWidth = style.getBorderWidth();
+
+        mColor = new GeoColor().parseColor(geoColor);
+
+        option.width(borderWidth);
+        option.color(mColor);
+
+        return mColor;
+    }
+
+    @Override
     public void commit(LegendLayer layer) {
-        layer.setMapObject(mMap.addPolyline(mMapFeature));
+        addMapObject(layer, mMapFeature);
 
         setLegendIcon(layer);
+    }
+
+    @Override
+    public void addMapObject(final LegendLayer layer, final PolylineOptions option) {
+        layer.setMapObject(mMap.addPolyline(option));
     }
 
     @Override

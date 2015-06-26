@@ -1,8 +1,6 @@
 package com.geospatialcorporation.android.geomobile.library.map.featureMappers;
 
-import android.graphics.drawable.Drawable;
-
-import com.geospatialcorporation.android.geomobile.models.Layers.Layer;
+import com.geospatialcorporation.android.geomobile.application;
 import com.geospatialcorporation.android.geomobile.models.Layers.LegendLayer;
 import com.geospatialcorporation.android.geomobile.models.Layers.Point;
 import com.geospatialcorporation.android.geomobile.models.Query.map.response.Geometry;
@@ -13,24 +11,9 @@ import com.google.android.gms.maps.model.PolygonOptions;
 /**
  * Created by andre on 6/25/2015.
  */
-public abstract class PolygonFeatureMapperBase extends FeatureMapperBase<PolygonOptions> {
+public abstract class PolygonFeatureMapperBase extends SingleFeatureMapperBase<PolygonOptions> {
 
-    public void drawPolygon(Geometry geometry){
-        int ringSize = geometry.getRings().size();
-
-        Ring[] rings = new Ring[ringSize];
-        geometry.getRings().toArray(rings);
-
-        for(int i = 0; i < ringSize; i++){
-            for(int x = 0; x < rings[i].getPoints().size(); x++){
-                Point point = rings[i].getPoints().get(x);
-
-                mMapFeature.add(point.getLatLng());
-            }
-        }
-    }
-
-    public void drawPolygon(Geometry geometry, PolygonOptions option){
+    public void drawFeature(Geometry geometry, PolygonOptions option){
         int ringSize = geometry.getRings().size();
 
         Ring[] rings = new Ring[ringSize];
@@ -47,28 +30,36 @@ public abstract class PolygonFeatureMapperBase extends FeatureMapperBase<Polygon
 
     @Override
     public IFeatureMapper addStyle(Style style) {
-        int stroke = mGeoColor.parseColor(style.getBorderColor());
-        mColor = mGeoColor.parseColor(style.getFillColor());
-
-        addStyles(mMapFeature, stroke, mColor);
+        addStyles(mMapFeature, style);
 
         return this;
     }
 
-    protected void addStyles(PolygonOptions mapFeature, Integer stroke, Integer fill) {
+    @Override
+    public int addStyles(PolygonOptions mapFeature, Style style) {
+        int stroke = mGeoColor.parseColor(style.getBorderColor());
+        mColor = mGeoColor.parseColor(style.getFillColor());
+
         mapFeature.strokeColor(stroke);
-        mapFeature.fillColor(fill);
+        mapFeature.fillColor(mColor);
 
         mapFeature.geodesic(true);
+
+        return mColor;
     }
 
     @Override
     public void commit(LegendLayer layer) {
 
-        layer.setMapObject(mMap.addPolygon(mMapFeature));
+        addMapObject(layer, mMapFeature);
 
         setLegendIcon(layer);
 
+    }
+
+    @Override
+    public void addMapObject(final LegendLayer layer, final PolygonOptions option){
+        layer.setMapObject(mMap.addPolygon(option));
     }
 
     @Override

@@ -16,6 +16,7 @@ import com.geospatialcorporation.android.geomobile.models.Client;
 import com.geospatialcorporation.android.geomobile.models.Folders.Folder;
 import com.geospatialcorporation.android.geomobile.models.Layers.Layer;
 import com.geospatialcorporation.android.geomobile.models.Document.Document;
+import com.geospatialcorporation.android.geomobile.models.MapLayerState;
 import com.geospatialcorporation.android.geomobile.ui.MainActivity;
 import com.geospatialcorporation.android.geomobile.ui.fragments.GoogleMapFragment;
 import com.google.android.gms.analytics.GoogleAnalytics;
@@ -61,6 +62,7 @@ public class application extends Application {
     private static SlidingUpPanelLayout sublayerFragmentPanel;
     private static SlidingUpPanelLayout layerAttributePanel;
     private static MainActivity mainActivity;
+    private static MapLayerState mapLayerState;
 
     private static GoogleAnalytics analytics;
 
@@ -100,6 +102,14 @@ public class application extends Application {
         application.layerHashMap = layerHashMap;
     }
     //endregion
+
+    public static MapLayerState getMapLayerState() {
+        return mapLayerState;
+    }
+
+    public static void setMapLayerState(MapLayerState mapLayerState) {
+        application.mapLayerState = mapLayerState;
+    }
 
     public static void setIsAdminUser(Boolean isAdminUser) {
         application.isAdminUser = isAdminUser;
@@ -216,6 +226,8 @@ public class application extends Application {
         }
 
         isAdminUser = false;
+
+        mapLayerState = new MapLayerState();
 
         initializeApplication();
     }

@@ -25,8 +25,6 @@ public abstract class RequestListenerBase<T> {
     }
 
     public void onSuccess(T response) {
-        Toaster(getString(R.string.success));
-
         MainActivity activity = getMainActivity();
 
         mContentFragment = activity.getContentFragment();

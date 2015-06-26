@@ -1,6 +1,11 @@
 package com.geospatialcorporation.android.geomobile.library.map;
 
+import android.os.AsyncTask;
+
+import com.geospatialcorporation.android.geomobile.application;
 import com.geospatialcorporation.android.geomobile.library.constants.GeometryTypeCodes;
+import com.geospatialcorporation.android.geomobile.library.helpers.GeoAsyncTask;
+import com.geospatialcorporation.android.geomobile.library.helpers.ProgressDialogHelper;
 import com.geospatialcorporation.android.geomobile.library.map.featureMappers.CollectionFeatureMapper;
 import com.geospatialcorporation.android.geomobile.library.map.featureMappers.ExtentFeatureMapper;
 import com.geospatialcorporation.android.geomobile.library.map.featureMappers.IFeatureMapper;
@@ -47,18 +52,54 @@ public class GeoMapper implements IGeoMapper  {
 
     @Override
     public void map(List<MapQueryResponse> responses, LegendLayer llayer) {
-        for(MapQueryResponse response : responses){
+        for(final MapQueryResponse response : responses){
             for(Feature feature : response.getFeatures()){
 
                 IFeatureMapper mapper = mStrategies.get(feature.getGeometry().getGeometryTypeCode());
 
                 mapper.reset();
 
-                mapper.draw(feature)
-                        .addStyle(response.getStyle())
-                        .commit(llayer);
-
+                mapper.draw(feature).addStyle(response.getStyle()).commit(llayer);
             }
         }
+
     }
+    //region task attempt
+/*
+    private class MapFeaturesTask extends AsyncTask<Void, Void, Integer>{
+
+        public MapFeaturesTask(List<MapQueryResponse> responses, LegendLayer llayer){
+            mResponses = responses;
+            mLlayer = llayer;
+        }
+
+        //region properties
+        ProgressDialogHelper mProgressHelper;
+        LegendLayer mLlayer;
+        List<MapQueryResponse> mResponses;
+        IFeatureMapper mMapper;
+        //endregion
+
+        @Override
+        protected void onPreExecute() {
+            mProgressHelper = new ProgressDialogHelper(application.getMainActivity());
+            mProgressHelper.toggleProgressDialog();
+        }
+
+        @Override
+        protected Integer doInBackground(Void... params) {
+            for(final MapQueryResponse response : mResponses){
+
+            }
+
+            return 1;
+        }
+
+        @Override
+        protected void onPostExecute(Integer integer) {
+            mProgressHelper.toggleProgressDialog();
+        }
+    }
+    */
+    //endregion
 }

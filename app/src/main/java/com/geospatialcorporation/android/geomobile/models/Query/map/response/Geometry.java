@@ -14,8 +14,17 @@ public class Geometry {
     List<Ring> Rings;
     List<Geometry> Points;
     List<Geometry> Polygons;
+    List<Geometry> Lines;
 
     //region Getters & Setters
+    public List<Geometry> getLines() {
+        return Lines;
+    }
+
+    public void setLines(List<Geometry> lines) {
+        Lines = lines;
+    }
+
     public Integer getGeometryTypeCode() {
         return GeometryTypeCode;
     }
