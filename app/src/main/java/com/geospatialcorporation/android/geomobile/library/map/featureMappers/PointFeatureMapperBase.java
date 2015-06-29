@@ -35,7 +35,7 @@ public abstract class PointFeatureMapperBase extends SingleFeatureMapperBase<Mar
     }
 
     @Override
-    public int addStyles(MarkerOptions options, Style style){
+    public int addStyles(MarkerOptions options, Style style) {
         Drawable d = setDrawable(style);
 
         mColor = mGeoColor.parseColor(style.getFillColor());
@@ -51,7 +51,29 @@ public abstract class PointFeatureMapperBase extends SingleFeatureMapperBase<Mar
         return mColor;
     }
 
-    private Drawable setDrawable(Style style) {
+
+
+    @Override
+    public void commit(LegendLayer layer) {
+        addMapObject(layer, mMapFeature);
+
+        setLegendIcon(layer);
+    }
+
+    @Override
+    public void addMapObject(LegendLayer layer, MarkerOptions option) {
+        layer.setMapObject(mMap.addMarker(option));
+
+
+    }
+
+    @Override
+    public void reset() {
+        mMapFeature = new MarkerOptions();
+    }
+
+    //region
+    protected Drawable setDrawable(Style style) {
         Drawable d = null;
 
         switch (style.getPointStyleCode()) {
@@ -69,28 +91,6 @@ public abstract class PointFeatureMapperBase extends SingleFeatureMapperBase<Mar
         }
 
         return d;
-    }
-
-    @Override
-    public void commit(LegendLayer layer) {
-        addMapObject(layer, mMapFeature);
-
-        setLegendIcon(layer);
-    }
-
-    @Override
-    public void addMapObject(final LegendLayer layer, final MarkerOptions option){
-        application.getMainActivity().runOnUiThread(new Runnable() {
-            @Override
-            public void run() {
-                layer.setMapObject(mMap.addMarker(option));
-            }
-        });
-    }
-
-    @Override
-    public void reset() {
-        mMapFeature = new MarkerOptions();
     }
 
     protected LatLng getLatLng(Geometry geom) {

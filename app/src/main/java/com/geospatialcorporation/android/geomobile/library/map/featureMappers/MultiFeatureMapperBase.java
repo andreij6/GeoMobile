@@ -29,7 +29,6 @@ public abstract class MultiFeatureMapperBase<T, H extends SingleFeatureMapperBas
         for (int i = 0; i < geomCount; i++) {
 
             T option = newOptionType();
-
             mSingleMapper.drawFeature(features[i], option);
             mOptions.add(option);
         }
