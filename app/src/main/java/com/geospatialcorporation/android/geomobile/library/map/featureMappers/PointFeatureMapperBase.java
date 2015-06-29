@@ -51,8 +51,6 @@ public abstract class PointFeatureMapperBase extends SingleFeatureMapperBase<Mar
         return mColor;
     }
 
-
-
     @Override
     public void commit(LegendLayer layer) {
         addMapObject(layer, mMapFeature);

@@ -1,6 +1,5 @@
 package com.geospatialcorporation.android.geomobile.library.map.featureMappers;
 
-import com.geospatialcorporation.android.geomobile.application;
 import com.geospatialcorporation.android.geomobile.library.helpers.GeoColor;
 import com.geospatialcorporation.android.geomobile.models.Layers.LegendLayer;
 import com.geospatialcorporation.android.geomobile.models.Query.map.response.Geometry;

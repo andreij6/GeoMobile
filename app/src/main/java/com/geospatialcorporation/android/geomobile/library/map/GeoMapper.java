@@ -65,8 +65,8 @@ public class GeoMapper implements IGeoMapper  {
 
     }
     //region task attempt
-/*
-    private class MapFeaturesTask extends AsyncTask<Void, Void, Integer>{
+
+    protected class MapFeaturesTask extends AsyncTask<Void, Void, Integer>{
 
         public MapFeaturesTask(List<MapQueryResponse> responses, LegendLayer llayer){
             mResponses = responses;
@@ -100,6 +100,6 @@ public class GeoMapper implements IGeoMapper  {
             mProgressHelper.toggleProgressDialog();
         }
     }
-    */
+
     //endregion
 }

@@ -19,24 +19,27 @@ import java.util.List;
 public abstract class PolygonFeatureMapperBase extends SingleFeatureMapperBase<PolygonOptions> {
 
     public void drawFeature(Geometry geometry, PolygonOptions option) {
-        int ringSize = geometry.getRings().size();
+        List<Ring> ringList = geometry.getRings();
+        int ringSize = ringList.size();
 
         Ring[] rings = new Ring[ringSize];
-        geometry.getRings().toArray(rings);
+        ringList.toArray(rings);
 
         for (int i = 0; i < ringSize; i++) {
-            List<LatLng> points = new ArrayList<>();
+            List<LatLng> points = new ArrayList<>(ringSize);
+            List<Point> ringPoints = rings[i].getPoints();
 
-            for (int x = 0; x < rings[i].getPoints().size(); x++) {
-                Point point = rings[i].getPoints().get(x);
+            for (int x = 0; x < ringPoints.size(); x++) {
+                Point point = ringPoints.get(x);
 
                 points.add(point.getLatLng());
             }
 
-            if(i == 0)
+            if(i == 0) {
                 option.addAll(points);
-            else
+            } else {
                 option.addHole(points);
+            }
         }
 
 
@@ -81,27 +84,4 @@ public abstract class PolygonFeatureMapperBase extends SingleFeatureMapperBase<P
         mMapFeature = new PolygonOptions();
     }
 
-    //region
-    protected Iterable<LatLng> ensureCountClockwise(List<LatLng> points) {
-        if (isClockwise(points)) {
-            Collections.reverse(points);
-        }
-
-        return points;
-    }
-
-    ;
-
-    public boolean isClockwise(List<LatLng> region) {
-        final int size = region.size();
-        LatLng a = region.get(size - 1);
-        double aux = 0;
-        for (int i = 0; i < size; i++) {
-            LatLng b = region.get(i);
-            aux += (b.latitude - a.latitude) * (b.longitude + a.longitude);
-            a = b;
-        }
-        return aux <= 0;
-    }
-    //endregion
 }
