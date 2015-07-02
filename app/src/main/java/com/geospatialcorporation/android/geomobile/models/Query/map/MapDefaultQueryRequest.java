@@ -8,9 +8,9 @@ import java.util.List;
  */
 public class MapDefaultQueryRequest {
 
-    public MapDefaultQueryRequest(List<Layers> layers){
+    public MapDefaultQueryRequest(List<Layers> layers, String optionsCode){
         Parameters = new Parameters(layers);
-        Options = new Options();
+        Options = new Options(optionsCode);
     }
 
     //region Getters & Setters

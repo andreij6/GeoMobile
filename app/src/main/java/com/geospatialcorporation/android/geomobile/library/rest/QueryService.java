@@ -2,7 +2,8 @@ package com.geospatialcorporation.android.geomobile.library.rest;
 
 import com.geospatialcorporation.android.geomobile.models.Query.box.BoxQueryRequest;
 import com.geospatialcorporation.android.geomobile.models.Query.map.MapDefaultQueryRequest;
-import com.geospatialcorporation.android.geomobile.models.Query.map.response.MapQueryResponse;
+import com.geospatialcorporation.android.geomobile.models.Query.map.response.featurewindow.FeatureQueryResponse;
+import com.geospatialcorporation.android.geomobile.models.Query.map.response.mapquery.MapQueryResponse;
 import com.geospatialcorporation.android.geomobile.models.Query.point.PointQueryRequest;
 import com.geospatialcorporation.android.geomobile.models.Query.quickSearch.QuickSearchRequest;
 import com.geospatialcorporation.android.geomobile.models.Query.quickSearch.QuickSearchResponse;
@@ -30,4 +31,7 @@ public interface QueryService {
 
     @POST("/API/Query/Map")
     void map(@Body MapDefaultQueryRequest request, Callback<List<MapQueryResponse>> cb);
+
+    @POST("/API/Query/Map")
+    void featureWindow(@Body MapDefaultQueryRequest request, Callback<List<FeatureQueryResponse>> cb);
 }

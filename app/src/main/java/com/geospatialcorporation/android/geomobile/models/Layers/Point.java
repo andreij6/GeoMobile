@@ -7,6 +7,8 @@ public class Point {
     private Integer GeometryType;
     private double X;
     private double Y;
+    private double Z;
+    private double M;
     //endregion
 
     //region Constructors
@@ -46,6 +48,22 @@ public class Point {
 
     public LatLng getLatLng() {
         return new LatLng(getY(), getX());
+    }
+
+    public double getM() {
+        return M;
+    }
+
+    public void setM(double m) {
+        M = m;
+    }
+
+    public double getZ() {
+        return Z;
+    }
+
+    public void setZ(double z) {
+        Z = z;
     }
     //endregion
 

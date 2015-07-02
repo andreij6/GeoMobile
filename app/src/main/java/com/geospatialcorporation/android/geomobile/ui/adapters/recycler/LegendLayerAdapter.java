@@ -25,6 +25,7 @@ import com.geospatialcorporation.android.geomobile.models.Layers.Layer;
 import com.geospatialcorporation.android.geomobile.models.Layers.LegendLayer;
 import com.geospatialcorporation.android.geomobile.models.Query.map.Layers;
 import com.geospatialcorporation.android.geomobile.models.Query.map.MapDefaultQueryRequest;
+import com.geospatialcorporation.android.geomobile.models.Query.map.Options;
 import com.geospatialcorporation.android.geomobile.ui.MainActivity;
 import com.geospatialcorporation.android.geomobile.ui.adapters.recycler.base.GeoHolderBase;
 import com.geospatialcorporation.android.geomobile.ui.adapters.recycler.base.GeoRecyclerAdapterBase;
@@ -115,8 +116,9 @@ public class LegendLayerAdapter extends GeoRecyclerAdapterBase<LegendLayerAdapte
                     //remove layer
                     new AnalyticsHelper().sendClickEvent(R.string.hideLayerCheckBox);
 
-                    mLegendLayer.clearMapFeatures();
+                    application.getLayerManager().removeLayer(mLayer.getId(), mLayer.getGeometryTypeCodeId());
 
+                    //probably move this the Layer manager removeLayer
                     mLayer.setIsShowing(false);
 
                     mLegendLayer.setLegendIcon(getDrawable(mLayer.getGeometryTypeCodeId()));
@@ -214,7 +216,7 @@ public class LegendLayerAdapter extends GeoRecyclerAdapterBase<LegendLayerAdapte
             List<Layers> layers = new ArrayList<>();
             layers.add(single);
 
-            MapDefaultQueryRequest request = new MapDefaultQueryRequest(layers);
+            MapDefaultQueryRequest request = new MapDefaultQueryRequest(layers, Options.MAP_QUERY);
             mLayer.setIsShowing(true);
 
             mService.mapQuery(request, mLegendLayer);

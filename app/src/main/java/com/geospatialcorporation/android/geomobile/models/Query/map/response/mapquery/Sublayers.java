@@ -1,4 +1,4 @@
-package com.geospatialcorporation.android.geomobile.models.Query.map.response;
+package com.geospatialcorporation.android.geomobile.models.Query.map.response.mapquery;
 
 import java.util.List;
 

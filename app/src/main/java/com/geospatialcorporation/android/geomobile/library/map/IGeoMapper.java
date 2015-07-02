@@ -1,8 +1,7 @@
 package com.geospatialcorporation.android.geomobile.library.map;
 
-import com.geospatialcorporation.android.geomobile.models.Layers.Layer;
 import com.geospatialcorporation.android.geomobile.models.Layers.LegendLayer;
-import com.geospatialcorporation.android.geomobile.models.Query.map.response.MapQueryResponse;
+import com.geospatialcorporation.android.geomobile.models.Query.map.response.mapquery.MapQueryResponse;
 
 import java.util.List;
 

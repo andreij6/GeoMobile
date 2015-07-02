@@ -1,11 +1,11 @@
-package com.geospatialcorporation.android.geomobile.models.Query.map.response;
+package com.geospatialcorporation.android.geomobile.models.Query.map.response.mapquery;
 
 
 /**
  * Created by andre on 6/24/2015.
  */
 public class Feature {
-    String Id;       //i think SSP sublayers use string Ids
+    String Id;
     Geometry Shape;
 
     //region Getters & Setters

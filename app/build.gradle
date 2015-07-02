@@ -54,10 +54,12 @@ dependencies {
     compile 'com.sothree.slidinguppanel:library:3.0.0'
     compile 'com.android.support:support-v4:22.0.0'
     compile 'commons-io:commons-io:2.4'
+
     // Unit testing dependencies
     testCompile 'junit:junit:4.12'
     // Set this dependency if you want to use the Hamcrest matcher library
     testCompile 'org.hamcrest:hamcrest-library:1.3'
     // more stuff, e.g., Mockito
+    //compile files('/libs/commons-validator-1.4.1.jar')
     compile files('C:/GeoUndergroundMobile/geomobile/libs/commons-validator-1.4.1.jar')
 }

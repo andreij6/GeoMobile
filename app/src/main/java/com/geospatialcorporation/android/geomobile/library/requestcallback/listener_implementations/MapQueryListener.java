@@ -1,16 +1,11 @@
 package com.geospatialcorporation.android.geomobile.library.requestcallback.listener_implementations;
 
-import android.util.Log;
-
 import com.geospatialcorporation.android.geomobile.library.map.GeoMapper;
 import com.geospatialcorporation.android.geomobile.library.requestcallback.RequestListener;
-import com.geospatialcorporation.android.geomobile.models.Layers.Layer;
 import com.geospatialcorporation.android.geomobile.models.Layers.LegendLayer;
-import com.geospatialcorporation.android.geomobile.models.Query.map.response.MapQueryResponse;
+import com.geospatialcorporation.android.geomobile.models.Query.map.response.mapquery.MapQueryResponse;
 
 import java.util.List;
-
-import retrofit.client.Response;
 
 /**
  * Created by andre on 6/24/2015.
@@ -23,7 +18,6 @@ public class MapQueryListener extends RequestListenerBase<List<MapQueryResponse>
     LegendLayer mLLayer;
 
     public MapQueryListener(Boolean shouldRefresh) {
-
         super(shouldRefresh);
         mGeoMapper = new GeoMapper();
     }

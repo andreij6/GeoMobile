@@ -38,6 +38,7 @@ import com.geospatialcorporation.android.geomobile.library.helpers.GeoDialogHelp
 import com.geospatialcorporation.android.geomobile.library.helpers.MapStateManager;
 import com.geospatialcorporation.android.geomobile.library.panelmanager.ISlidingPanelManager;
 import com.geospatialcorporation.android.geomobile.library.panelmanager.PanelManager;
+import com.geospatialcorporation.android.geomobile.library.services.QueryRestService;
 import com.geospatialcorporation.android.geomobile.library.viewmode.IViewMode;
 import com.geospatialcorporation.android.geomobile.library.viewmode.implementations.FullScreenMode;
 import com.geospatialcorporation.android.geomobile.library.viewmode.implementations.QueryMode;
@@ -57,6 +58,7 @@ import com.google.android.gms.maps.MapsInitializer;
 import com.google.android.gms.maps.model.CameraPosition;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.LatLngBounds;
+import com.google.android.gms.maps.model.Marker;
 import com.melnykov.fab.FloatingActionButton;
 import com.sothree.slidinguppanel.SlidingUpPanelLayout;
 
@@ -184,6 +186,33 @@ public class GoogleMapFragment extends GeoViewFragmentBase implements
         mPanelManager.touch(false);
 
         initializeGoogleMap(savedInstanceState);
+
+        mMap.setOnCameraChangeListener(new GoogleMap.OnCameraChangeListener() {
+            @Override
+            public void onCameraChange(CameraPosition cameraPosition) {
+                application.getLayerManager().showLayers();
+            }
+        });
+
+        mMap.setOnMarkerClickListener(new GoogleMap.OnMarkerClickListener() {
+            @Override
+            public boolean onMarkerClick(Marker marker) {
+                //mPanelManager.anchor();
+                String featureId = application.getLayerManager().getFeatureId(marker.getId());
+                int layerId = application.getLayerManager().getLayerId(marker.getId());
+
+                QueryRestService QueryService = new QueryRestService();
+                QueryService.featureWindow(featureId, layerId);
+                return false;
+            }
+        });
+
+        mMap.setOnMapClickListener(new GoogleMap.OnMapClickListener() {
+            @Override
+            public void onMapClick(LatLng latLng) {
+                //Toaster(latLng.latitude + ":" + latLng.longitude);
+            }
+        });
 
         return rootView;
     }

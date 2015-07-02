@@ -27,12 +27,18 @@ public class Layers{
     }
     //endregion
 
-    Integer Id;
     List<Integer> SublayerIds;
+    List<String> FeatureIds;
+    Integer Id; //LayerId
 
     public Layers(Layer layer){
         Id = layer.getId();
         SublayerIds = getSublayerIds(layer);
+    }
+
+    public Layers(List<String> featureIds, Integer id){
+        Id = id;
+        FeatureIds = featureIds;
     }
 
     private List<Integer> getSublayerIds(Layer layer) {
@@ -47,4 +53,14 @@ public class Layers{
 
         return sublayerIds;
     }
+
+    //region Gs & Ss
+    public List<String> getFeatureIds() {
+        return FeatureIds;
+    }
+
+    public void setFeatureIds(List<String> featureIds) {
+        FeatureIds = featureIds;
+    }
+    //endregion
 }

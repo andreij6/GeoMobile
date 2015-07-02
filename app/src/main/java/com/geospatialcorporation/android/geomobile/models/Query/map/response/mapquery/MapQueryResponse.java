@@ -1,17 +1,14 @@
-package com.geospatialcorporation.android.geomobile.models.Query.map.response;
+package com.geospatialcorporation.android.geomobile.models.Query.map.response.mapquery;
 
 import java.util.List;
 
-/**
- * Created by andre on 6/24/2015.
- */
 public class MapQueryResponse {
     //region Getters & Setters
-    public List<com.geospatialcorporation.android.geomobile.models.Query.map.response.Sublayers> getSublayers() {
+    public List<com.geospatialcorporation.android.geomobile.models.Query.map.response.mapquery.Sublayers> getSublayers() {
         return Sublayers;
     }
 
-    public void setSublayers(List<com.geospatialcorporation.android.geomobile.models.Query.map.response.Sublayers> sublayers) {
+    public void setSublayers(List<com.geospatialcorporation.android.geomobile.models.Query.map.response.mapquery.Sublayers> sublayers) {
         Sublayers = sublayers;
     }
 

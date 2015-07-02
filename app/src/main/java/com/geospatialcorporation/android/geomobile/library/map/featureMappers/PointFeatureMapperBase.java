@@ -7,9 +7,10 @@ import android.graphics.drawable.Drawable;
 import com.geospatialcorporation.android.geomobile.R;
 import com.geospatialcorporation.android.geomobile.application;
 import com.geospatialcorporation.android.geomobile.library.constants.PointStyleCodes;
+import com.geospatialcorporation.android.geomobile.models.Layers.Layer;
 import com.geospatialcorporation.android.geomobile.models.Layers.LegendLayer;
-import com.geospatialcorporation.android.geomobile.models.Query.map.response.Geometry;
-import com.geospatialcorporation.android.geomobile.models.Query.map.response.Style;
+import com.geospatialcorporation.android.geomobile.models.Query.map.response.mapquery.Geometry;
+import com.geospatialcorporation.android.geomobile.models.Query.map.response.mapquery.Style;
 import com.google.android.gms.maps.model.BitmapDescriptor;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
@@ -20,10 +21,11 @@ import com.google.android.gms.maps.model.MarkerOptions;
  */
 public abstract class PointFeatureMapperBase extends SingleFeatureMapperBase<MarkerOptions> {
 
-    @Override
-    public void drawFeature(Geometry geom, MarkerOptions options) {
-        options.position(getLatLng(geom));
+    BitmapDescriptor mIcon;
 
+    @Override
+    public void drawFeature(Geometry geometry, MarkerOptions options) {
+        options.position(getLatLng(geometry));
         options.flat(true);
     }
 
@@ -36,17 +38,23 @@ public abstract class PointFeatureMapperBase extends SingleFeatureMapperBase<Mar
 
     @Override
     public int addStyles(MarkerOptions options, Style style) {
-        Drawable d = setDrawable(style);
+        if(mIcon == null) {
+            Drawable d = setDrawable(style);
 
-        mColor = mGeoColor.parseColor(style.getFillColor());
+            mColor = mGeoColor.parseColor(style.getFillColor());
 
-        Bitmap iconBitmap = ((BitmapDrawable) d).getBitmap();
+            Bitmap iconBitmap = ((BitmapDrawable) d).getBitmap();
 
-        Bitmap coloredBitmap = mGeoColor.changeColor(iconBitmap, mColor);
+            Bitmap coloredBitmap = mGeoColor.changeColor(iconBitmap, mColor);
 
-        BitmapDescriptor icon = BitmapDescriptorFactory.fromBitmap(coloredBitmap);
+            BitmapDescriptor icon = BitmapDescriptorFactory.fromBitmap(coloredBitmap);
 
-        options.icon(icon);
+            mIcon = icon;
+
+            options.icon(icon);
+        } else  {
+            options.icon(mIcon);
+        }
 
         return mColor;
     }
@@ -60,9 +68,13 @@ public abstract class PointFeatureMapperBase extends SingleFeatureMapperBase<Mar
 
     @Override
     public void addMapObject(LegendLayer layer, MarkerOptions option) {
-        layer.setMapObject(mMap.addMarker(option));
+        setTitle(option, layer.getLayer());
+        mLayerManager.addPoint(layer.getLayer().getId(), option);
 
+    }
 
+    private void setTitle(MarkerOptions options, Layer layer) {
+        options.title(mFeatureId + "_" + layer.getId());
     }
 
     @Override

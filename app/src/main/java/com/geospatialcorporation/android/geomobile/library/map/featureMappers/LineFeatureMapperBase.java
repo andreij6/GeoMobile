@@ -2,8 +2,8 @@ package com.geospatialcorporation.android.geomobile.library.map.featureMappers;
 
 import com.geospatialcorporation.android.geomobile.library.helpers.GeoColor;
 import com.geospatialcorporation.android.geomobile.models.Layers.LegendLayer;
-import com.geospatialcorporation.android.geomobile.models.Query.map.response.Geometry;
-import com.geospatialcorporation.android.geomobile.models.Query.map.response.Style;
+import com.geospatialcorporation.android.geomobile.models.Query.map.response.mapquery.Geometry;
+import com.geospatialcorporation.android.geomobile.models.Query.map.response.mapquery.Style;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.PolylineOptions;
 
@@ -12,6 +12,11 @@ import com.google.android.gms.maps.model.PolylineOptions;
  */
 public abstract class LineFeatureMapperBase extends SingleFeatureMapperBase<PolylineOptions> {
 
+    int mBorderWidth;
+
+    public LineFeatureMapperBase(){
+        mBorderWidth = 0;
+    }
     @Override
     public void drawFeature(Geometry geometry, PolylineOptions options){
         int pointsCount = geometry.getPoints().size();
@@ -37,12 +42,14 @@ public abstract class LineFeatureMapperBase extends SingleFeatureMapperBase<Poly
 
     @Override
     public int addStyles(PolylineOptions option, Style style) {
-        String geoColor = style.getBorderColor();
-        int borderWidth = style.getBorderWidth();
+        if(mColor == 0) {
+            String geoColor = style.getBorderColor();
+            mBorderWidth = style.getBorderWidth();
 
-        mColor = new GeoColor().parseColor(geoColor);
+            mColor = new GeoColor().parseColor(geoColor);
+        }
 
-        option.width(borderWidth);
+        option.width(mBorderWidth);
         option.color(mColor);
 
         return mColor;
@@ -56,8 +63,8 @@ public abstract class LineFeatureMapperBase extends SingleFeatureMapperBase<Poly
     }
 
     @Override
-    public void addMapObject(final LegendLayer layer, final PolylineOptions option) {
-        layer.setMapObject(mMap.addPolyline(option));
+    public void addMapObject(LegendLayer layer, PolylineOptions option) {
+        mLayerManager.addLine(layer.getLayer().getId(), option);
     }
 
     @Override

@@ -1,9 +1,8 @@
 package com.geospatialcorporation.android.geomobile.library.map.featureMappers;
 
-import com.geospatialcorporation.android.geomobile.models.Layers.Layer;
 import com.geospatialcorporation.android.geomobile.models.Layers.LegendLayer;
-import com.geospatialcorporation.android.geomobile.models.Query.map.response.Feature;
-import com.geospatialcorporation.android.geomobile.models.Query.map.response.Style;
+import com.geospatialcorporation.android.geomobile.models.Query.map.response.mapquery.Feature;
+import com.geospatialcorporation.android.geomobile.models.Query.map.response.mapquery.Style;
 import com.google.android.gms.maps.model.PolygonOptions;
 
 /**

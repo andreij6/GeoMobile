@@ -11,6 +11,7 @@ import com.facebook.stetho.Stetho;
 import com.facebook.stetho.okhttp.StethoInterceptor;
 import com.geospatialcorporation.android.geomobile.library.constants.Domains;
 import com.geospatialcorporation.android.geomobile.library.constants.GeoPanel;
+import com.geospatialcorporation.android.geomobile.library.map.layerManager.LayerManager;
 import com.geospatialcorporation.android.geomobile.models.Bookmarks.Bookmark;
 import com.geospatialcorporation.android.geomobile.models.Client;
 import com.geospatialcorporation.android.geomobile.models.Folders.Folder;
@@ -23,6 +24,8 @@ import com.google.android.gms.analytics.GoogleAnalytics;
 import com.google.android.gms.analytics.Tracker;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.maps.GoogleMap;
+import com.google.android.gms.maps.model.MarkerOptions;
+import com.google.android.gms.maps.model.PolygonOptions;
 import com.sothree.slidinguppanel.SlidingUpPanelLayout;
 import com.squareup.okhttp.Interceptor;
 import com.squareup.okhttp.OkHttpClient;
@@ -30,7 +33,9 @@ import com.squareup.okhttp.Request;
 import com.squareup.okhttp.Response;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 
 import retrofit.RequestInterceptor;
 import retrofit.RestAdapter;
@@ -69,6 +74,10 @@ public class application extends Application {
     private static Tracker tracker;
     private static GoogleMap googleMap;
 
+    private static LayerManager layerManager;
+
+
+    //region stuff
     public static GoogleAnalytics analytics() {
         return analytics;
     }
@@ -166,6 +175,10 @@ public class application extends Application {
         return googleMap;
     }
 
+    public static LayerManager getLayerManager() {
+        return layerManager;
+    }
+
     public void onCreate() {
         super.onCreate();
 
@@ -228,6 +241,7 @@ public class application extends Application {
         isAdminUser = false;
 
         mapLayerState = new MapLayerState();
+        layerManager = new LayerManager();
 
         initializeApplication();
     }
@@ -365,4 +379,5 @@ public class application extends Application {
         //googleMap = new GoogleMapFragment();
         geoAuthToken = appState.getString(geoAuthTokenName, null);
     }
+    //endregion
 }
