@@ -16,4 +16,5 @@ public interface ILayerManager {
     void addPolygon(int id, PolygonOptions option);
     void removeLayer(int layerId, int geometryTypeCode);
     int getLayerId(String markerID);
+    void reset();
 }

@@ -75,6 +75,13 @@ public class LayerManager implements ILayerManager {
         return Integer.parseInt(mMarkerManager.getFeatureId(id)[1]);
     }
 
+    @Override
+    public void reset() {
+        mMarkerManager = new MarkerOptionsManager();
+        mPolygonOptionsManager = new PolygonOptionsManager();
+        mPolylineOptionsManager = new PolylineOptionsManager();
+    }
+
 
     public String getFeatureId(String id) {
         return mMarkerManager.getFeatureId(id)[0];

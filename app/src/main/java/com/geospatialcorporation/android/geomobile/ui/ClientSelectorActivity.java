@@ -38,6 +38,7 @@ public class ClientSelectorActivity extends ActionBarActivity implements ActionB
         setTitle(R.string.title_activity_select_client);
         setBackButtonClickOnce(false);
         getSupportActionBar().setElevation(0);
+        application.getLayerManager().reset();
         setContentView(R.layout.activity_client_selector);
         final ActionBar actionBar = getSupportActionBar();
         actionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_TABS);
