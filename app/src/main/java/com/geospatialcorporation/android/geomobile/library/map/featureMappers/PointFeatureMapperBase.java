@@ -7,6 +7,7 @@ import android.graphics.drawable.Drawable;
 import com.geospatialcorporation.android.geomobile.R;
 import com.geospatialcorporation.android.geomobile.application;
 import com.geospatialcorporation.android.geomobile.library.constants.PointStyleCodes;
+import com.geospatialcorporation.android.geomobile.models.Layers.FeatureInfo;
 import com.geospatialcorporation.android.geomobile.models.Layers.Layer;
 import com.geospatialcorporation.android.geomobile.models.Layers.LegendLayer;
 import com.geospatialcorporation.android.geomobile.models.Query.map.response.mapquery.Geometry;
@@ -68,13 +69,8 @@ public abstract class PointFeatureMapperBase extends SingleFeatureMapperBase<Mar
 
     @Override
     public void addMapObject(LegendLayer layer, MarkerOptions option) {
-        setTitle(option, layer.getLayer());
-        mLayerManager.addPoint(layer.getLayer().getId(), option);
+        mLayerManager.addPoint(layer.getLayer().getId(), option, new FeatureInfo(layer.getLayer().getId(), mFeatureId));
 
-    }
-
-    private void setTitle(MarkerOptions options, Layer layer) {
-        options.title(mFeatureId + "_" + layer.getId());
     }
 
     @Override

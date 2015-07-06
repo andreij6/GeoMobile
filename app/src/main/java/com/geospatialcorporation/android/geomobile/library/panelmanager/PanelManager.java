@@ -76,4 +76,9 @@ public class PanelManager implements ISlidingPanelManager {
             anchor();
         }
     }
+
+    @Override
+    public void halfAnchor() {
+        mGeoPanel.halfAnchor();
+    }
 }

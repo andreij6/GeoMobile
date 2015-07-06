@@ -1,6 +1,7 @@
 package com.geospatialcorporation.android.geomobile.library.map.featureMappers;
 
 import com.geospatialcorporation.android.geomobile.library.helpers.GeoColor;
+import com.geospatialcorporation.android.geomobile.models.Layers.FeatureInfo;
 import com.geospatialcorporation.android.geomobile.models.Layers.LegendLayer;
 import com.geospatialcorporation.android.geomobile.models.Query.map.response.mapquery.Geometry;
 import com.geospatialcorporation.android.geomobile.models.Query.map.response.mapquery.Style;
@@ -64,7 +65,7 @@ public abstract class LineFeatureMapperBase extends SingleFeatureMapperBase<Poly
 
     @Override
     public void addMapObject(LegendLayer layer, PolylineOptions option) {
-        mLayerManager.addLine(layer.getLayer().getId(), option);
+        mLayerManager.addLine(layer.getLayer().getId(), option, new FeatureInfo(layer.getLayer().getId(), mFeatureId));
     }
 
     @Override

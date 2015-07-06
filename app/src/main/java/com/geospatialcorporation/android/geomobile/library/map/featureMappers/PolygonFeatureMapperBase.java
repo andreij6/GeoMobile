@@ -1,5 +1,6 @@
 package com.geospatialcorporation.android.geomobile.library.map.featureMappers;
 
+import com.geospatialcorporation.android.geomobile.models.Layers.FeatureInfo;
 import com.geospatialcorporation.android.geomobile.models.Layers.LegendLayer;
 import com.geospatialcorporation.android.geomobile.models.Layers.Point;
 import com.geospatialcorporation.android.geomobile.models.Query.map.response.mapquery.Geometry;
@@ -80,7 +81,7 @@ public abstract class PolygonFeatureMapperBase extends SingleFeatureMapperBase<P
 
     @Override
     public void addMapObject(LegendLayer layer, PolygonOptions option) {
-        mLayerManager.addPolygon(layer.getLayer().getId(), option);
+        mLayerManager.addPolygon(layer.getLayer().getId(), option, new FeatureInfo(layer.getLayer().getId(), mFeatureId));
     }
 
     @Override

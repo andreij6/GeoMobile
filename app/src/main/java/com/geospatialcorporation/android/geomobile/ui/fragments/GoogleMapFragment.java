@@ -19,9 +19,11 @@ package com.geospatialcorporation.android.geomobile.ui.fragments;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.graphics.drawable.shapes.Shape;
 import android.location.Location;
 import android.os.Bundle;
 import android.provider.Settings;
+import android.support.v4.app.Fragment;
 import android.support.v4.widget.DrawerLayout;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -29,6 +31,7 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
 import com.geospatialcorporation.android.geomobile.R;
 import com.geospatialcorporation.android.geomobile.application;
@@ -36,6 +39,8 @@ import com.geospatialcorporation.android.geomobile.library.constants.GeoPanel;
 import com.geospatialcorporation.android.geomobile.library.constants.ViewModes;
 import com.geospatialcorporation.android.geomobile.library.helpers.GeoDialogHelper;
 import com.geospatialcorporation.android.geomobile.library.helpers.MapStateManager;
+import com.geospatialcorporation.android.geomobile.library.map.layerManager.ILayerManager;
+import com.geospatialcorporation.android.geomobile.library.map.layerManager.LayerManager;
 import com.geospatialcorporation.android.geomobile.library.panelmanager.ISlidingPanelManager;
 import com.geospatialcorporation.android.geomobile.library.panelmanager.PanelManager;
 import com.geospatialcorporation.android.geomobile.library.services.QueryRestService;
@@ -44,9 +49,11 @@ import com.geospatialcorporation.android.geomobile.library.viewmode.implementati
 import com.geospatialcorporation.android.geomobile.library.viewmode.implementations.QueryMode;
 import com.geospatialcorporation.android.geomobile.library.viewmode.implementations.SearchMode;
 import com.geospatialcorporation.android.geomobile.models.Layers.Layer;
+import com.geospatialcorporation.android.geomobile.models.Query.map.response.featurewindow.FeatureQueryResponse;
 import com.geospatialcorporation.android.geomobile.ui.Interfaces.IViewModeListener;
 import com.geospatialcorporation.android.geomobile.ui.MainActivity;
 import com.geospatialcorporation.android.geomobile.ui.fragments.dialogs.MapTypeSelectDialogFragment;
+import com.geospatialcorporation.android.geomobile.ui.fragments.panel_fragments.map_fragment_panels.FeatureWindowPanelFragment;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.location.LocationServices;
@@ -55,12 +62,19 @@ import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.MapView;
 import com.google.android.gms.maps.MapsInitializer;
+import com.google.android.gms.maps.Projection;
 import com.google.android.gms.maps.model.CameraPosition;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.LatLngBounds;
 import com.google.android.gms.maps.model.Marker;
+import com.google.android.gms.maps.model.Polygon;
+import com.google.android.gms.maps.model.Polyline;
+import com.google.maps.android.PolyUtil;
 import com.melnykov.fab.FloatingActionButton;
 import com.sothree.slidinguppanel.SlidingUpPanelLayout;
+
+import java.util.Collection;
+import java.util.List;
 
 import butterknife.ButterKnife;
 import butterknife.InjectView;
@@ -81,6 +95,7 @@ public class GoogleMapFragment extends GeoViewFragmentBase implements
     IViewMode mViewMode;
     GoogleApiClient mLocationClient;
     ISlidingPanelManager mPanelManager;
+    ILayerManager mLayerManager;
     @InjectView(R.id.map) MapView mMapView;
     @InjectView(R.id.sliding_layout) SlidingUpPanelLayout mPanel;
     @InjectView(R.id.fab_box) FloatingActionButton mBoxQueryBtn;
@@ -184,6 +199,7 @@ public class GoogleMapFragment extends GeoViewFragmentBase implements
         mPanelManager = new PanelManager(GeoPanel.MAP);
         mPanelManager.setup();
         mPanelManager.touch(false);
+        mLayerManager = application.getLayerManager();
 
         initializeGoogleMap(savedInstanceState);
 
@@ -198,11 +214,7 @@ public class GoogleMapFragment extends GeoViewFragmentBase implements
             @Override
             public boolean onMarkerClick(Marker marker) {
                 //mPanelManager.anchor();
-                String featureId = application.getLayerManager().getFeatureId(marker.getId());
-                int layerId = application.getLayerManager().getLayerId(marker.getId());
-
-                QueryRestService QueryService = new QueryRestService();
-                QueryService.featureWindow(featureId, layerId);
+                getFeatureWindow(marker.getId(), LayerManager.POINT);
                 return false;
             }
         });
@@ -210,11 +222,38 @@ public class GoogleMapFragment extends GeoViewFragmentBase implements
         mMap.setOnMapClickListener(new GoogleMap.OnMapClickListener() {
             @Override
             public void onMapClick(LatLng latLng) {
-                //Toaster(latLng.latitude + ":" + latLng.longitude);
+
+                Iterable<Polyline> lines = mLayerManager.getVisiblePolylines();
+
+                for (Polyline line : lines) {
+                    if (PolyUtil.isLocationOnPath(latLng, line.getPoints(), false, 200.0)) { //idea: reset tolerance by zoom level
+                        getFeatureWindow(line.getId(), LayerManager.LINE);
+
+                    }
+                }
+
+                Iterable<Polygon> polygons = mLayerManager.getVisiblePolygons();
+
+                for (Polygon ss : polygons) {
+                    if (PolyUtil.containsLocation(latLng, ss.getPoints(), true)) {
+                        getFeatureWindow(ss.getId(), LayerManager.POLYGON);
+                    }
+
+                }
+
+
             }
         });
 
         return rootView;
+    }
+
+    protected void getFeatureWindow(String id, int shapeCode){
+        String featureId = mLayerManager.getFeatureId(id, shapeCode);
+        int layerId = mLayerManager.getLayerId(id, shapeCode);
+        Toaster(featureId + " : " + layerId);
+        QueryRestService QueryService = new QueryRestService();
+        QueryService.featureWindow(featureId, layerId);
     }
 
     //region Args Handler -
@@ -340,7 +379,7 @@ public class GoogleMapFragment extends GeoViewFragmentBase implements
     //endregion
 
     //region ViewModeSetups
-    private IViewMode querySetup() {
+    protected IViewMode querySetup() {
         mAnalytics.sendClickEvent(R.string.query_mode);
 
         return new QueryMode.Builder()
@@ -448,6 +487,19 @@ public class GoogleMapFragment extends GeoViewFragmentBase implements
 
     }
     //endregion
+
+    public void showFeatureWindow(List<FeatureQueryResponse> response) {
+        mPanelManager = new PanelManager(GeoPanel.MAP);
+
+        Fragment f = new FeatureWindowPanelFragment();
+
+        application.getMainActivity().getSupportFragmentManager()
+                .beginTransaction()
+                .replace(R.id.slider_content, f)
+                .commit();
+
+        mPanelManager.halfAnchor();
+    }
 
 
 }

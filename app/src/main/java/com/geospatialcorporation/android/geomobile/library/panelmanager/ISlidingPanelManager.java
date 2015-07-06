@@ -22,4 +22,6 @@ public interface ISlidingPanelManager {
     SlidingUpPanelLayout.PanelState getPanelState();
 
     void toggle();
+
+    void halfAnchor();
 }

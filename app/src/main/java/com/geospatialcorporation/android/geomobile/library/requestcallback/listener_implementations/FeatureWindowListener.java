@@ -2,6 +2,7 @@ package com.geospatialcorporation.android.geomobile.library.requestcallback.list
 
 import android.util.Log;
 
+import com.geospatialcorporation.android.geomobile.application;
 import com.geospatialcorporation.android.geomobile.library.requestcallback.RequestListener;
 import com.geospatialcorporation.android.geomobile.models.Query.map.response.featurewindow.FeatureQueryResponse;
 import com.geospatialcorporation.android.geomobile.models.Query.map.response.mapquery.MapQueryResponse;
@@ -15,6 +16,7 @@ public class FeatureWindowListener extends RequestListenerBase<List<FeatureQuery
 
     private static final String TAG = FeatureWindowListener.class.getSimpleName();
 
+    //region Constructors
     public FeatureWindowListener(Boolean shouldRefresh) {
         super(shouldRefresh);
     }
@@ -22,11 +24,12 @@ public class FeatureWindowListener extends RequestListenerBase<List<FeatureQuery
     public FeatureWindowListener() {
         super(false);
     }
+    //endregion
 
     @Override
     public void onSuccess(List<FeatureQueryResponse> response) {
         super.onSuccess(response);
 
-        Log.d(TAG, "response recieved");
+        application.getMapFragment().showFeatureWindow(response);
     }
 }

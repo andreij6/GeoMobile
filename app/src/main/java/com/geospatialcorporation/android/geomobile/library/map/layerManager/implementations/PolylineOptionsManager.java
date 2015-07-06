@@ -1,6 +1,8 @@
 package com.geospatialcorporation.android.geomobile.library.map.layerManager.implementations;
 
+import com.geospatialcorporation.android.geomobile.library.map.layerManager.OptionFeature;
 import com.geospatialcorporation.android.geomobile.library.map.layerManager.OptionsManagerBase;
+import com.geospatialcorporation.android.geomobile.models.Layers.FeatureInfo;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.model.Polyline;
 import com.google.android.gms.maps.model.PolylineOptions;
@@ -17,24 +19,22 @@ public class PolylineOptionsManager extends OptionsManagerBase<PolylineOptions, 
 
     @Override
     public void showLayers(GoogleMap map) {
-        List<HashMap<UUID, PolylineOptions>> CachedOptions = getOption();
+        List<HashMap<UUID, OptionFeature<PolylineOptions>>> CachedOptions = getOption();
 
-        for (HashMap<UUID, PolylineOptions> cachedOptions : CachedOptions) {
-            for (Map.Entry<UUID, PolylineOptions> entry : cachedOptions.entrySet()) {
+        for (HashMap<UUID, OptionFeature<PolylineOptions>> cachedOptions : CachedOptions) {
+            for (Map.Entry<UUID, OptionFeature<PolylineOptions>> entry : cachedOptions.entrySet()) {
 
-                PolylineOptions option = entry.getValue();
+                PolylineOptions option = entry.getValue().getOption();
+                FeatureInfo featureInfo = entry.getValue().getFeatureInfo();
                 UUID key = entry.getKey();
 
                 if (!mVisibleLayers.containsKey(key)) {
-                    mVisibleLayers.put(key, map.addPolyline(option));
+                    Polyline polyline = map.addPolyline(option);
+                    mIdFeatureIdMap.put(polyline.getId(), featureInfo);
+                    mVisibleLayers.put(key, polyline);
                 }
             }
         }
-    }
-
-    @Override
-    public int getLayerId(int id) {
-        return 0;
     }
 
     @Override

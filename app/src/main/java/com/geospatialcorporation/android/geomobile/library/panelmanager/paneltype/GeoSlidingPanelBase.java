@@ -72,10 +72,7 @@ public abstract class GeoSlidingPanelBase {
     }
 
     public void anchor() {
-        if(getPanelState() != SlidingUpPanelLayout.PanelState.ANCHORED) {
-            mPanel.setAnchorPoint(0.7f);
-            mPanel.setPanelState(SlidingUpPanelLayout.PanelState.ANCHORED);
-        }
+        anchorPanel(0.7f);
     }
 
     public SlidingUpPanelLayout.PanelState getPanelState() {
@@ -106,5 +103,16 @@ public abstract class GeoSlidingPanelBase {
 
     protected Bundle getArguments() {
         return (((MainActivity)mContext).getContentFragment()).getArguments();
+    }
+
+    public void halfAnchor() {
+        anchorPanel(0.5f);
+    }
+
+    protected void anchorPanel(float anchorPoint) {
+        if (getPanelState() != SlidingUpPanelLayout.PanelState.ANCHORED) {
+            mPanel.setAnchorPoint(anchorPoint);
+            mPanel.setPanelState(SlidingUpPanelLayout.PanelState.ANCHORED);
+        }
     }
 }
