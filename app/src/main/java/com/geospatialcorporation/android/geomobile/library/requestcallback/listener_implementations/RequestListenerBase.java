@@ -48,5 +48,4 @@ public abstract class RequestListenerBase<T> {
         return getMainActivity().getString(stringId);
     }
 
-
 }

@@ -21,7 +21,6 @@ public class LayerManager implements ILayerManager {
     IOptionsManager<PolygonOptions> mPolygonOptionsManager;
     IOptionsManager<PolylineOptions> mPolylineOptionsManager;
 
-
     GoogleMap mMap;
 
     public LayerManager(){
@@ -81,7 +80,6 @@ public class LayerManager implements ILayerManager {
         mPolygonOptionsManager = new PolygonOptionsManager();
         mPolylineOptionsManager = new PolylineOptionsManager();
     }
-
 
     public String getFeatureId(String id) {
         return mMarkerManager.getFeatureId(id)[0];

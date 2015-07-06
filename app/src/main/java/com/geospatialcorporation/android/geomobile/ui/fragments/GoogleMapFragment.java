@@ -300,7 +300,6 @@ public class GoogleMapFragment extends GeoViewFragmentBase implements
         }
     }
 
-
     @Override
     public void onDestroy() {
         mMapView.onDestroy();
@@ -319,11 +318,6 @@ public class GoogleMapFragment extends GeoViewFragmentBase implements
     public void onStop(){
         super.onStop();
         saveMapState();
-    }
-
-    private void saveMapState() {
-        MapStateManager msm = new MapStateManager(getActivity());
-        msm.saveMapState(mMap);
     }
 
     @Override
@@ -375,55 +369,6 @@ public class GoogleMapFragment extends GeoViewFragmentBase implements
     }
     //endregion
 
-    //region Test Layers
-    /*
-
-     //Sets up the map if it is possible to do so
-
-    public void setUpMapIfNeeded() {
-        // Check if we were successful in obtaining the map.
-        if (mMap != null) {
-            testMapMarker();
-            testMapCircle();
-            testMapRaster();
-        }
-    }
-
-
-    //This is where we can add markers or lines, add listeners or move the camera. In this case, we
-    //just add a marker near Africa.
-    //<p/>
-    //This should only be called once and when we are sure that {@link #mMap} is not null.
-
-    private void testMapMarker() {
-        mMap.addMarker(new MarkerOptions().position(new LatLng(38.3448001, -96.5878515)).title("Marker"));
-    }
-
-    private void testMapCircle() {
-        mMap.addCircle(new CircleOptions()
-                .center(new LatLng(38.3448001, -96.5878515))
-                .strokeColor(Color.BLUE)
-                .fillColor(0x330000FF)
-                .radius(30432.02 * 10)); // radius in meters || 1m == 0.000621371mi
-
-
-    }
-
-    private void testMapRaster(){
-        BitmapDescriptor image = BitmapDescriptorFactory.fromResource(R.drawable.ic_launcher);
-        LatLng northeast = new LatLng(40.5118451,-79.6953338);
-        LatLng southwest = new LatLng(40.3947741,-79.9599499);
-
-        LatLngBounds bounds = new LatLngBounds(southwest, northeast);
-
-        GroundOverlay overlay = mMap.addGroundOverlay(new GroundOverlayOptions()
-                                    .image(image)
-                                    .positionFromBounds(bounds)
-                                    .transparency(0.5f));
-
-    } **/
-    //endregion
-
     //region ViewMode Listener
     @Override
     public void setViewMode(IViewMode mode) {
@@ -461,19 +406,16 @@ public class GoogleMapFragment extends GeoViewFragmentBase implements
         }
     }
 
-    @Override
-    public void onConnected(Bundle bundle) {
 
+
+    public void resetViewMode() {
+        mViewMode = null;
     }
+    //endregion
 
-    @Override
-    public void onConnectionSuspended(int i) {
-
-    }
-
-    @Override
-    public void onConnectionFailed(ConnectionResult connectionResult) {
-
+    private void saveMapState() {
+        MapStateManager msm = new MapStateManager(getActivity());
+        msm.saveMapState(mMap);
     }
 
     private void setMapState() {
@@ -490,8 +432,20 @@ public class GoogleMapFragment extends GeoViewFragmentBase implements
         }
     }
 
-    public void resetViewMode() {
-        mViewMode = null;
+    //region GoogleAPI Client Interface
+    @Override
+    public void onConnected(Bundle bundle) {
+
+    }
+
+    @Override
+    public void onConnectionSuspended(int i) {
+
+    }
+
+    @Override
+    public void onConnectionFailed(ConnectionResult connectionResult) {
+
     }
     //endregion
 
