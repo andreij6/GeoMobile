@@ -202,6 +202,7 @@ public class ListItemAdapter extends GeoRecyclerAdapterBase<ListItemAdapter.Hold
                     .addToBackStack(null)
                     .replace(R.id.content_frame, f)
                     .commit();
+
         }
 
         protected void LayerAction(ListItem item) {
