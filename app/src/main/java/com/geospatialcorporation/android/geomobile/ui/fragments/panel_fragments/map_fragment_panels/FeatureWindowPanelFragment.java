@@ -25,7 +25,6 @@ public class FeatureWindowPanelFragment extends GeoViewFragmentBase {
 
     @OnClick(R.id.close)
     public void close(){
-
         mPanelManager.collapse();
     }
 

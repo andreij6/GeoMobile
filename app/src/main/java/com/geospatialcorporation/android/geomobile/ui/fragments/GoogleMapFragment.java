@@ -50,6 +50,7 @@ import com.geospatialcorporation.android.geomobile.library.viewmode.implementati
 import com.geospatialcorporation.android.geomobile.library.viewmode.implementations.SearchMode;
 import com.geospatialcorporation.android.geomobile.models.Layers.Layer;
 import com.geospatialcorporation.android.geomobile.models.Query.map.response.featurewindow.FeatureQueryResponse;
+import com.geospatialcorporation.android.geomobile.models.Query.map.response.featurewindow.ParcelableFeatureQueryResponse;
 import com.geospatialcorporation.android.geomobile.ui.Interfaces.IViewModeListener;
 import com.geospatialcorporation.android.geomobile.ui.MainActivity;
 import com.geospatialcorporation.android.geomobile.ui.fragments.dialogs.MapTypeSelectDialogFragment;
@@ -210,6 +211,8 @@ public class GoogleMapFragment extends GeoViewFragmentBase implements
             }
         });
 
+        //region Show Feature Window Code
+
         mMap.setOnMarkerClickListener(new GoogleMap.OnMarkerClickListener() {
             @Override
             public boolean onMarkerClick(Marker marker) {
@@ -244,6 +247,8 @@ public class GoogleMapFragment extends GeoViewFragmentBase implements
 
             }
         });
+
+        //endregion
 
         return rootView;
     }
@@ -332,7 +337,7 @@ public class GoogleMapFragment extends GeoViewFragmentBase implements
                 m.show(getFragmentManager(), "styles");
                 return true;
             case R.id.action_fullscreen:
-                mPanel.setPanelState(SlidingUpPanelLayout.PanelState.HIDDEN);
+                mPanelManager.hide();
                 setViewMode(fullScreenSetup());
             default:
                 return super.onOptionsItemSelected(item);
@@ -366,8 +371,8 @@ public class GoogleMapFragment extends GeoViewFragmentBase implements
             mViewMode.Disable(true);
             mViewMode = null;
         }
-
-        mPanelManager.collapse();
+        mPanelManager.hide();
+       // mPanelManager.collapse();
     }
 
     @Override
@@ -488,10 +493,12 @@ public class GoogleMapFragment extends GeoViewFragmentBase implements
     }
     //endregion
 
-    public void showFeatureWindow(List<FeatureQueryResponse> response) {
+    public void showFeatureWindow(ParcelableFeatureQueryResponse response) {
         mPanelManager = new PanelManager(GeoPanel.MAP);
 
         Fragment f = new FeatureWindowPanelFragment();
+
+        f.setArguments(response.toBundle());
 
         application.getMainActivity().getSupportFragmentManager()
                 .beginTransaction()

@@ -6,18 +6,24 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.geospatialcorporation.android.geomobile.R;
-import com.geospatialcorporation.android.geomobile.ui.fragments.GeoViewFragmentBase;
 
 import butterknife.ButterKnife;
 
 /**
  * Created by andre on 7/6/2015.
  */
-public class FeatureDocumentsTab extends GeoViewFragmentBase {
+public class FeatureDocumentsTab extends FeatureTabBase {
+    
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        View v = inflater.inflate(R.layout.fragment_layer_attributes_tab, container, false);
-        ButterKnife.inject(this, v);
-        return v;
+        mLayout = R.layout.fragment_feature_window_documents_tab;
+        return super.onCreateView(inflater, container, savedInstanceState);
     }
+
+    @Override
+    protected void setRecycler() {
+
+    }
+
+
 }

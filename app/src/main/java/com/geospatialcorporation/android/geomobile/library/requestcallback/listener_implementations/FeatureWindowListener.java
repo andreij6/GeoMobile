@@ -1,11 +1,10 @@
 package com.geospatialcorporation.android.geomobile.library.requestcallback.listener_implementations;
 
-import android.util.Log;
 
 import com.geospatialcorporation.android.geomobile.application;
 import com.geospatialcorporation.android.geomobile.library.requestcallback.RequestListener;
 import com.geospatialcorporation.android.geomobile.models.Query.map.response.featurewindow.FeatureQueryResponse;
-import com.geospatialcorporation.android.geomobile.models.Query.map.response.mapquery.MapQueryResponse;
+import com.geospatialcorporation.android.geomobile.models.Query.map.response.featurewindow.ParcelableFeatureQueryResponse;
 
 import java.util.List;
 
@@ -30,6 +29,6 @@ public class FeatureWindowListener extends RequestListenerBase<List<FeatureQuery
     public void onSuccess(List<FeatureQueryResponse> response) {
         super.onSuccess(response);
 
-        application.getMapFragment().showFeatureWindow(response);
+        application.getMapFragment().showFeatureWindow(new ParcelableFeatureQueryResponse(response));
     }
 }

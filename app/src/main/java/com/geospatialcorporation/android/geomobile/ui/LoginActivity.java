@@ -15,6 +15,7 @@ import android.os.Build;
 import android.os.Bundle;
 import android.provider.ContactsContract;
 import android.text.TextUtils;
+import android.text.method.LinkMovementMethod;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.inputmethod.EditorInfo;
@@ -75,20 +76,14 @@ public class LoginActivity extends GoogleApiActivity implements LoaderCallbacks<
     private UserLoginTask mAuthTask = null;
 
     //region  UI references.
-    @InjectView(R.id.email)
-    AutoCompleteTextView mEmailView;
-    @InjectView(R.id.password)
-    EditText mPasswordView;
-    @InjectView(R.id.plus_sign_in_button)
-    SignInButton mPlusSignInButton;
-    @InjectView(R.id.login_form)
-    View mLoginFormView;
-    @InjectView(R.id.email_login_form)
-    View mEmailLoginFormView;
-    @InjectView(R.id.plus_sign_out_buttons)
-    View mSignOutButtons;
-    @InjectView(R.id.email_sign_in_button)
-    Button mEmailSignInButton;
+    @InjectView(R.id.email) AutoCompleteTextView mEmailView;
+    @InjectView(R.id.password) EditText mPasswordView;
+    @InjectView(R.id.plus_sign_in_button) SignInButton mPlusSignInButton;
+    @InjectView(R.id.login_form) View mLoginFormView;
+    @InjectView(R.id.email_login_form) View mEmailLoginFormView;
+    @InjectView(R.id.plus_sign_out_buttons) View mSignOutButtons;
+    @InjectView(R.id.email_sign_in_button) Button mEmailSignInButton;
+    @InjectView(R.id.signUpLink) TextView mSignUpLink;
     //endregion
 
     //region OnclickListeners
@@ -113,7 +108,10 @@ public class LoginActivity extends GoogleApiActivity implements LoaderCallbacks<
         if (hasAuthToken()) {
             setContentView(R.layout.activity_login);
             ButterKnife.inject(this);
+            mSignUpLink.setMovementMethod(LinkMovementMethod.getInstance());
         }
+
+
 
         if (!supportsGooglePlayServices()) {
             // Don't offer G+ sign in if the app's version is too low to support Google Play
