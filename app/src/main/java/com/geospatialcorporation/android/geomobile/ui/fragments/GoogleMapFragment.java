@@ -211,6 +211,9 @@ public class GoogleMapFragment extends GeoViewFragmentBase implements
             }
         });
 
+
+        mLayerManager.showLayers();
+
         //region Show Feature Window Code
 
         mMap.setOnMarkerClickListener(new GoogleMap.OnMarkerClickListener() {
@@ -256,7 +259,7 @@ public class GoogleMapFragment extends GeoViewFragmentBase implements
     protected void getFeatureWindow(String id, int shapeCode){
         String featureId = mLayerManager.getFeatureId(id, shapeCode);
         int layerId = mLayerManager.getLayerId(id, shapeCode);
-        Toaster(featureId + " : " + layerId);
+        //Toaster(featureId + " : " + layerId);
         QueryRestService QueryService = new QueryRestService();
         QueryService.featureWindow(featureId, layerId);
     }
@@ -323,6 +326,7 @@ public class GoogleMapFragment extends GeoViewFragmentBase implements
         mMapView.onResume();
         setMapState();
         mPanelManager.collapse();
+        mLayerManager.showLayers();
     }
 
     @Override
@@ -346,6 +350,7 @@ public class GoogleMapFragment extends GeoViewFragmentBase implements
 
     @Override
     public void onDestroy() {
+        mLayerManager.clearVisibleLayers();
         mMapView.onDestroy();
         super.onDestroy();
     }
@@ -367,6 +372,7 @@ public class GoogleMapFragment extends GeoViewFragmentBase implements
     @Override
     public void onDestroyView(){
         super.onDestroyView();
+        mLayerManager.clearVisibleLayers();
         if(mViewMode != null){
             mViewMode.Disable(true);
             mViewMode = null;
@@ -378,6 +384,7 @@ public class GoogleMapFragment extends GeoViewFragmentBase implements
     @Override
     public void onPause(){
         mMapView.onPause();
+        mLayerManager.clearVisibleLayers();
         super.onPause();
     }
 
@@ -457,12 +464,12 @@ public class GoogleMapFragment extends GeoViewFragmentBase implements
     }
     //endregion
 
-    private void saveMapState() {
+    protected void saveMapState() {
         MapStateManager msm = new MapStateManager(getActivity());
         msm.saveMapState(mMap);
     }
 
-    private void setMapState() {
+    protected void setMapState() {
         MapStateManager msm = new MapStateManager(getActivity());
 
         CameraPosition position = msm.getSavedCameraPosition();
@@ -507,6 +514,5 @@ public class GoogleMapFragment extends GeoViewFragmentBase implements
 
         mPanelManager.halfAnchor();
     }
-
 
 }

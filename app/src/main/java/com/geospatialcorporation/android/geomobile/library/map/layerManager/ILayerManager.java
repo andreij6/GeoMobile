@@ -22,4 +22,6 @@ public interface ILayerManager {
     Iterable<Polygon> getVisiblePolygons();
     Iterable<Polyline> getVisiblePolylines();
     String getFeatureId(String id, int shapeCode);
+    void showLayers();
+    void clearVisibleLayers();
 }

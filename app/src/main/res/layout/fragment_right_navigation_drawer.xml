@@ -15,36 +15,12 @@
 
     <android.support.v7.widget.RecyclerView
         android:layout_width="match_parent"
-        android:layout_height="406dp"
+        android:layout_height="match_parent"
         android:id="@+id/layerRecyclerView"
         android:divider="@android:color/transparent"
         android:dividerHeight="0dp"
         android:background="#cf37474f"
         android:layout_alignParentStart="true"
-        android:layout_alignParentTop="true"
-        android:layout_above="@+id/imageView"/>
-
-    <ImageView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:id="@+id/imageView"
-        android:layout_alignParentStart="true"
-        android:src="@drawable/ic_layers_black_24dp"
-        android:paddingLeft="12dp"
-        android:background="#ffdcdcdc"
-        android:layout_alignParentBottom="true"
-        android:paddingRight="12dp"
-        android:layout_alignTop="@+id/checkBox"/>
-
-    <CheckBox
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="@string/show_all"
-        android:id="@+id/checkBox"
-        android:background="#ffdcdcdc"
-        android:paddingTop="8dp"
-        android:paddingBottom="8dp"
-        android:layout_alignParentBottom="true"
-        android:layout_toEndOf="@+id/imageView"/>
+        android:layout_alignParentTop="true"/>
 
 </RelativeLayout>

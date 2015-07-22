@@ -11,6 +11,7 @@ import com.facebook.stetho.Stetho;
 import com.facebook.stetho.okhttp.StethoInterceptor;
 import com.geospatialcorporation.android.geomobile.library.constants.Domains;
 import com.geospatialcorporation.android.geomobile.library.constants.GeoPanel;
+import com.geospatialcorporation.android.geomobile.library.map.layerManager.ILayerManager;
 import com.geospatialcorporation.android.geomobile.library.map.layerManager.LayerManager;
 import com.geospatialcorporation.android.geomobile.models.Bookmarks.Bookmark;
 import com.geospatialcorporation.android.geomobile.models.Client;
@@ -42,6 +43,7 @@ import retrofit.RestAdapter;
 import retrofit.client.OkClient;
 
 public class application extends Application {
+    //region Properties
     private final static String TAG = "application";
     private final static String prefsName = "AppState";
     private static final String geoAuthTokenName = "geoAuthToken";
@@ -75,7 +77,7 @@ public class application extends Application {
     private static GoogleMap googleMap;
 
     private static LayerManager layerManager;
-
+    //endregion
 
     //region stuff
     public static GoogleAnalytics analytics() {
@@ -175,9 +177,10 @@ public class application extends Application {
         return googleMap;
     }
 
-    public static LayerManager getLayerManager() {
+    public static ILayerManager getLayerManager() {
         return layerManager;
     }
+    //endregion
 
     public void onCreate() {
         super.onCreate();
@@ -379,5 +382,5 @@ public class application extends Application {
         //googleMap = new GoogleMapFragment();
         geoAuthToken = appState.getString(geoAuthTokenName, null);
     }
-    //endregion
+
 }

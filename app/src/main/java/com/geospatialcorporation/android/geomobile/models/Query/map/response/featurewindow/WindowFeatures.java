@@ -9,6 +9,7 @@ public class WindowFeatures {
     List<String> Attributes;
     Integer Id;
     MapInfo MapInfo;
+    List<MapFeatureFiles> Files;
 
     //region Gs & Ss
     public MapInfo getMapInfo() {
@@ -33,6 +34,14 @@ public class WindowFeatures {
 
     public void setId(Integer id) {
         Id = id;
+    }
+
+    public void setFiles(List<MapFeatureFiles> files){
+        Files = files;
+    }
+
+    public List<MapFeatureFiles> getFiles(){
+        return Files;
     }
     //endregion
 

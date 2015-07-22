@@ -31,12 +31,21 @@ public class LayerManager implements ILayerManager {
         mPolylineOptionsManager = new PolylineOptionsManager();
     }
 
+    @Override
     public void showLayers(){
         mMap = application.getGoogleMap();
 
         mMarkerManager.showLayers(mMap);
         mPolygonOptionsManager.showLayers(mMap);
         mPolylineOptionsManager.showLayers(mMap);
+    }
+
+    @Override
+    public void clearVisibleLayers() {
+
+        mMarkerManager.clearVisibleLayers();
+        mPolygonOptionsManager.clearVisibleLayers();
+        mPolylineOptionsManager.clearVisibleLayers();
     }
 
     @Override

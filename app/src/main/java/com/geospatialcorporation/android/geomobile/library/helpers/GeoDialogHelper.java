@@ -135,4 +135,5 @@ public class GeoDialogHelper {
         sdad.init(context, sublayer);
         sdad.show(fragmentManager, "Delete Sublayer");
     }
+
 }

@@ -3,4 +3,18 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent">
 
+    <Button
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/add_feature_window_document"
+        android:id="@+id/addDocument"
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true"/>
+
+    <android.support.v7.widget.RecyclerView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:id="@+id/featureWindowDocumentsRecycler"
+        android:layout_below="@+id/addDocument"/>
+
 </RelativeLayout>

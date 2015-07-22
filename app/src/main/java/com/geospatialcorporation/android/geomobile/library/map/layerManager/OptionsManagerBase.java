@@ -82,6 +82,12 @@ public abstract class OptionsManagerBase<T, S> implements IOptionsManager<T, S> 
 
         mLayerOptions.remove(layerId);
     }
+
+    @Override
+    public void clearVisibleLayers() {
+        mVisibleLayers.clear();
+    }
+
     //endregion
 
     protected abstract void removeLayer(UUID key);

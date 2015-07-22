@@ -162,7 +162,6 @@
     <string name="document_actions">Document Actions</string>
     <string name="move">Move</string>
     <string name="edit_sublayer">Edit Sublayer</string>
-    <string name="show_all">Show All</string>
 
 <!-- Layer - Details tabs -->
     <string name="access_level">Access Level:</string>
@@ -232,5 +231,6 @@
     <string name="current_location">Get Current Location Clicked</string>
     <string name="change_basemap">Change Basemap clicked</string>
     <string name="geometryIV">Geometry Type Image View</string>
+    <string name="add_feature_window_document">Add Document</string>
 
 </resources>

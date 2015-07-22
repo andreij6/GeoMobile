@@ -1,6 +1,7 @@
 package com.geospatialcorporation.android.geomobile.library.map.featureMappers;
 
 import com.geospatialcorporation.android.geomobile.application;
+import com.geospatialcorporation.android.geomobile.library.map.layerManager.ILayerManager;
 import com.geospatialcorporation.android.geomobile.library.map.layerManager.LayerManager;
 import com.geospatialcorporation.android.geomobile.models.Layers.FeatureInfo;
 import com.geospatialcorporation.android.geomobile.models.Layers.LegendLayer;
@@ -12,7 +13,7 @@ import com.geospatialcorporation.android.geomobile.models.Query.map.response.map
  */
 public abstract class SingleFeatureMapperBase<T> extends FeatureMapperBase<T> {
 
-    protected LayerManager mLayerManager;
+    protected ILayerManager mLayerManager;
     protected String mFeatureId;
 
     public SingleFeatureMapperBase(){

@@ -132,6 +132,15 @@ public class MainActivity extends ActionBarActivity
     }
 
     @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+
+        if(getContentFragment() == null){
+            onNavigationDrawerItemSelected(0);
+        }
+    }
+
+    @Override
     public void onNavigationDrawerItemSelected(int position) {
         Fragment pageFragment = setPageFragment(position);
 

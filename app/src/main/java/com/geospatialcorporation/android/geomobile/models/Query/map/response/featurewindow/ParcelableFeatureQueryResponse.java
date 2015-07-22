@@ -13,8 +13,6 @@ import java.util.List;
  */
 public class ParcelableFeatureQueryResponse implements Parcelable {
 
-    private List<FeatureQueryResponse> mFeatureQueryResponse;
-
     //region Constructors
     public ParcelableFeatureQueryResponse(List<FeatureQueryResponse> response) {
         mResponse = response;
@@ -54,7 +52,6 @@ public class ParcelableFeatureQueryResponse implements Parcelable {
     };
     //endregion
 
-
     public Bundle toBundle(){
         Bundle b = new Bundle();
         b.putParcelable(FEATURE_QUERY_RESPONSE, this);
@@ -62,6 +59,6 @@ public class ParcelableFeatureQueryResponse implements Parcelable {
     }
 
     public List<FeatureQueryResponse> getFeatureQueryResponse() {
-        return mFeatureQueryResponse;
+        return mResponse;
     }
 }

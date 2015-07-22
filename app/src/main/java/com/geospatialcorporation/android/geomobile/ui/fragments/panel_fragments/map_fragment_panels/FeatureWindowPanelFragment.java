@@ -23,11 +23,6 @@ import butterknife.OnClick;
  */
 public class FeatureWindowPanelFragment extends GeoViewFragmentBase {
 
-    @OnClick(R.id.close)
-    public void close(){
-        mPanelManager.collapse();
-    }
-
     private static final String MAPINFO = "Map Info";
     private static final String ATTRIBUTES = "Attributes";
     private static final String DOCUMENTS = "Documents";

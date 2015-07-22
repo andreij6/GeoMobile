@@ -23,4 +23,6 @@ public interface IOptionsManager<T, S> {
     FeatureInfo getFeatureIdLayerId(String id);
 
     Iterable<S> getShowingLayers();
+
+    void clearVisibleLayers();
 }
