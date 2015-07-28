@@ -232,5 +232,6 @@
     <string name="change_basemap">Change Basemap clicked</string>
     <string name="geometryIV">Geometry Type Image View</string>
     <string name="add_feature_window_document">Add Document</string>
+    <string name="GeoUndergroundSignIn">GeoUnderground Sign In Button Clicked</string>
 
 </resources>

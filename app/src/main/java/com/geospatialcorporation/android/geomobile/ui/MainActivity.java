@@ -16,8 +16,6 @@
 
 package com.geospatialcorporation.android.geomobile.ui;
 
-import android.content.Context;
-import android.os.PersistableBundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.content.Intent;
@@ -25,23 +23,18 @@ import android.os.Bundle;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarActivity;
 import android.support.v7.widget.Toolbar;
-import android.util.AttributeSet;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.View;
-import android.widget.Toast;
 
 import com.geospatialcorporation.android.geomobile.R;
 import com.geospatialcorporation.android.geomobile.application;
-import com.geospatialcorporation.android.geomobile.library.DI.module.DaggerMainNavCtrlComponent;
-import com.geospatialcorporation.android.geomobile.library.DI.module.MainNavCtrlComponent;
-import com.geospatialcorporation.android.geomobile.library.MainNavCtrl;
+import com.geospatialcorporation.android.geomobile.library.DI.MainNavigationController.DaggerMainNavCtrlComponent;
+import com.geospatialcorporation.android.geomobile.library.DI.MainNavigationController.MainNavCtrlComponent;
+import com.geospatialcorporation.android.geomobile.library.DI.MainNavigationController.Implementations.MainNavCtrl;
 import com.geospatialcorporation.android.geomobile.library.util.Dialogs;
 import com.geospatialcorporation.android.geomobile.ui.Interfaces.OnFragmentInteractionListener;
-import com.geospatialcorporation.android.geomobile.ui.fragments.tree_fragments.AccountFragment;
-import com.geospatialcorporation.android.geomobile.ui.fragments.tree_fragments.DocumentFragment;
 import com.geospatialcorporation.android.geomobile.ui.fragments.GoogleMapFragment;
-import com.geospatialcorporation.android.geomobile.ui.fragments.tree_fragments.LayerFragment;
 import com.geospatialcorporation.android.geomobile.ui.fragments.drawer.LayerSelectorDrawerFragment;
 import com.geospatialcorporation.android.geomobile.ui.fragments.drawer.MainNavigationDrawerFragment;
 import com.google.android.gms.maps.GoogleMap;

@@ -6,9 +6,16 @@ import android.content.SharedPreferences;
 import android.net.Uri;
 import android.support.v4.widget.DrawerLayout;
 import android.util.Log;
+import android.widget.Toast;
 
 import com.facebook.stetho.Stetho;
 import com.facebook.stetho.okhttp.StethoInterceptor;
+import com.geospatialcorporation.android.geomobile.library.DI.Authentication.AuthenticationComponent;
+import com.geospatialcorporation.android.geomobile.library.DI.Authentication.DaggerAuthenticationComponent;
+import com.geospatialcorporation.android.geomobile.library.DI.SharedPreferences.DaggerGeoSharedPrefsComponent;
+import com.geospatialcorporation.android.geomobile.library.DI.SharedPreferences.GeoSharedPrefsComponent;
+import com.geospatialcorporation.android.geomobile.library.DI.SharedPreferences.IGeoSharedPrefs;
+import com.geospatialcorporation.android.geomobile.library.DI.SharedPreferences.Implementations.GeoSharedPrefs;
 import com.geospatialcorporation.android.geomobile.library.constants.Domains;
 import com.geospatialcorporation.android.geomobile.library.constants.GeoPanel;
 import com.geospatialcorporation.android.geomobile.library.map.layerManager.ILayerManager;
@@ -180,6 +187,10 @@ public class application extends Application {
     public static ILayerManager getLayerManager() {
         return layerManager;
     }
+
+    public static void setGeoAuthToken(String geoAuthToken) {
+        application.geoAuthToken = geoAuthToken;
+    }
     //endregion
 
     public void onCreate() {
@@ -337,9 +348,21 @@ public class application extends Application {
             if (newToken != null) {
                 geoAuthToken = newToken;
                 Log.d(TAG, "Set GeoToken to: " + newToken);
+                addTokenToSharedPreferences(newToken);
             }
 
             return response;
+        }
+
+        private void addTokenToSharedPreferences(String token) {
+            Context context = application.this;
+            SharedPreferences preferences = context.getSharedPreferences("geoAuthToken", Context.MODE_PRIVATE);
+
+            SharedPreferences.Editor editor = preferences.edit();
+
+            editor.putString("GeoUndergroundAuthToken", token);
+
+            editor.apply();
         }
     }
 
@@ -369,6 +392,11 @@ public class application extends Application {
         layerHashMap = null;
         documentHashMap = null;
         folderHashMap = null;
+
+        GeoSharedPrefsComponent component = DaggerGeoSharedPrefsComponent.builder().build();
+        IGeoSharedPrefs prefs = component.provideGeoSharedPrefs();
+        prefs.remove(GeoSharedPrefs.Items.GOOGLE_ACCOUNT_NAME);
+
 
         appState.getStringSet(geoAuthTokenName, null);
 

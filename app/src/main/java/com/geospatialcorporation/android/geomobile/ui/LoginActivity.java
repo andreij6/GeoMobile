@@ -4,6 +4,7 @@ import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
 import android.annotation.TargetApi;
 import android.app.LoaderManager.LoaderCallbacks;
+import android.content.Context;
 import android.content.CursorLoader;
 import android.content.Intent;
 import android.content.Loader;
@@ -24,15 +25,12 @@ import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.geospatialcorporation.android.geomobile.R;
 import com.geospatialcorporation.android.geomobile.application;
+import com.geospatialcorporation.android.geomobile.library.DI.SharedPreferences.Implementations.GeoSharedPrefs;
 import com.geospatialcorporation.android.geomobile.library.helpers.AnalyticsHelper;
 import com.geospatialcorporation.android.geomobile.library.util.LoginValidator;
-import com.geospatialcorporation.android.geomobile.models.DITest.Vehicle;
-import com.geospatialcorporation.android.geomobile.models.DITest.module.DaggerVehicleComponent;
-import com.geospatialcorporation.android.geomobile.models.DITest.module.VehicleComponent;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GooglePlayServicesUtil;
 import com.google.android.gms.common.SignInButton;
@@ -101,6 +99,7 @@ public class LoginActivity extends GoogleApiActivity implements LoaderCallbacks<
 
     @OnClick(R.id.email_sign_in_button)
     public void EmailSignInClick(){
+        new AnalyticsHelper().sendClickEvent(R.string.GeoUndergroundSignIn);
         attemptLogin();
     }
     //endregion
@@ -115,10 +114,6 @@ public class LoginActivity extends GoogleApiActivity implements LoaderCallbacks<
             mSignUpLink.setMovementMethod(LinkMovementMethod.getInstance());
         }
 
-        VehicleComponent component = DaggerVehicleComponent.builder().build();
-        Vehicle car = component.provideVehicle();
-        Toast.makeText(this, car.getSpeed() + "", Toast.LENGTH_LONG).show();
-
         if (!supportsGooglePlayServices()) {
             // Don't offer G+ sign in if the app's version is too low to support Google Play
             // Services.
@@ -127,6 +122,8 @@ public class LoginActivity extends GoogleApiActivity implements LoaderCallbacks<
         }
 
         populateAutoComplete();
+        
+        AttemptAutomaticLogin();
 
         mPlusSignInButton.requestFocus();
 
@@ -141,6 +138,14 @@ public class LoginActivity extends GoogleApiActivity implements LoaderCallbacks<
             }
         });
 
+    }
+
+    private void AttemptAutomaticLogin() {
+        String accountName = mGeoSharedPrefs.get(GeoSharedPrefs.Items.GOOGLE_ACCOUNT_NAME);
+
+        if(accountName != null){
+            mGoogleAuthTokenService.GetAndUseAuthToken(getGoogleAuthParmaters(accountName, ProgressHelper));
+        }
     }
 
     private void populateAutoComplete() {

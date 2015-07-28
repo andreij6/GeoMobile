@@ -1,6 +1,6 @@
-package com.geospatialcorporation.android.geomobile.library.DI.module;
+package com.geospatialcorporation.android.geomobile.library.DI.MainNavigationController;
 
-import com.geospatialcorporation.android.geomobile.library.MainNavCtrl;
+import com.geospatialcorporation.android.geomobile.library.DI.MainNavigationController.Implementations.MainNavCtrl;
 
 import javax.inject.Singleton;
 

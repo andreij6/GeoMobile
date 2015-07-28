@@ -1,4 +1,4 @@
-package com.geospatialcorporation.android.geomobile.library;
+package com.geospatialcorporation.android.geomobile.library.DI.MainNavigationController.Implementations;
 
 import android.content.Intent;
 import android.support.v4.app.Fragment;
@@ -22,7 +22,7 @@ public class MainNavCtrl {
                 if(map == null){
                     mapFragment = application.getMapFragment();
                 }
-                return mapFragment = application.getMapFragment();
+                return mapFragment;
             case ViewConstants.LIBRARY:
                 return new DocumentFragment();
             case ViewConstants.ACCOUNT:
