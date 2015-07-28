@@ -98,7 +98,7 @@ public class GoogleMapFragment extends GeoViewFragmentBase implements
     ISlidingPanelManager mPanelManager;
     ILayerManager mLayerManager;
     @InjectView(R.id.map) MapView mMapView;
-    @InjectView(R.id.sliding_layout) SlidingUpPanelLayout mPanel;
+    //@InjectView(R.id.sliding_layout) SlidingUpPanelLayout mPanel;
     @InjectView(R.id.fab_box) FloatingActionButton mBoxQueryBtn;
     @InjectView(R.id.fab_point) FloatingActionButton mPointQueryBtn;
     @InjectView(R.id.fab_close) FloatingActionButton mCloseBtn;
@@ -196,10 +196,10 @@ public class GoogleMapFragment extends GeoViewFragmentBase implements
 
         mAnalytics.sendScreenName(R.string.map_screen);
 
-        application.setMapFragmentPanel(mPanel);
-        mPanelManager = new PanelManager(GeoPanel.MAP);
-        mPanelManager.setup();
-        mPanelManager.touch(false);
+        //application.setMapFragmentPanel(mPanel);
+        //mPanelManager = new PanelManager(GeoPanel.MAP);
+        //mPanelManager.setup();
+        //mPanelManager.touch(false);
         mLayerManager = application.getLayerManager();
 
         initializeGoogleMap(savedInstanceState);
@@ -220,7 +220,7 @@ public class GoogleMapFragment extends GeoViewFragmentBase implements
             @Override
             public boolean onMarkerClick(Marker marker) {
                 //mPanelManager.anchor();
-                getFeatureWindow(marker.getId(), LayerManager.POINT);
+                //getFeatureWindow(marker.getId(), LayerManager.POINT);
                 return false;
             }
         });
@@ -231,21 +231,21 @@ public class GoogleMapFragment extends GeoViewFragmentBase implements
 
                 Iterable<Polyline> lines = mLayerManager.getVisiblePolylines();
 
-                for (Polyline line : lines) {
-                    if (PolyUtil.isLocationOnPath(latLng, line.getPoints(), false, 200.0)) { //idea: reset tolerance by zoom level
-                        getFeatureWindow(line.getId(), LayerManager.LINE);
-
-                    }
-                }
+                //for (Polyline line : lines) {
+                //    if (PolyUtil.isLocationOnPath(latLng, line.getPoints(), false, 200.0)) { //idea: reset tolerance by zoom level
+                //        getFeatureWindow(line.getId(), LayerManager.LINE);
+                //
+                //    }
+                //}
 
                 Iterable<Polygon> polygons = mLayerManager.getVisiblePolygons();
 
-                for (Polygon ss : polygons) {
-                    if (PolyUtil.containsLocation(latLng, ss.getPoints(), true)) {
-                        getFeatureWindow(ss.getId(), LayerManager.POLYGON);
-                    }
-
-                }
+                //for (Polygon ss : polygons) {
+                //    if (PolyUtil.containsLocation(latLng, ss.getPoints(), true)) {
+                //        getFeatureWindow(ss.getId(), LayerManager.POLYGON);
+                //    }
+                //
+                //}
 
 
             }
@@ -325,7 +325,7 @@ public class GoogleMapFragment extends GeoViewFragmentBase implements
         super.onResume();
         mMapView.onResume();
         setMapState();
-        mPanelManager.collapse();
+        //mPanelManager.collapse();
         mLayerManager.showLayers();
     }
 
@@ -340,9 +340,9 @@ public class GoogleMapFragment extends GeoViewFragmentBase implements
                 m.setMap(mMap);
                 m.show(getFragmentManager(), "styles");
                 return true;
-            case R.id.action_fullscreen:
-                mPanelManager.hide();
-                setViewMode(fullScreenSetup());
+            //case R.id.action_fullscreen:
+            //    mPanelManager.hide();
+            //    setViewMode(fullScreenSetup());
             default:
                 return super.onOptionsItemSelected(item);
         }
@@ -377,7 +377,7 @@ public class GoogleMapFragment extends GeoViewFragmentBase implements
             mViewMode.Disable(true);
             mViewMode = null;
         }
-        mPanelManager.hide();
+        //mPanelManager.hide();
        // mPanelManager.collapse();
     }
 
@@ -410,14 +410,14 @@ public class GoogleMapFragment extends GeoViewFragmentBase implements
                         .create();
     }
 
-    protected IViewMode fullScreenSetup(){
-        mAnalytics.sendClickEvent(R.string.full_screen_mode);
-        MainActivity activity = (MainActivity)getActivity();
-        return new FullScreenMode.Builder()
-                        .create(activity.getSupportActionBar(),
-                                activity.getRightDrawer(),
-                                mPanel, mFullScreenClose);
-    }
+    //protected IViewMode fullScreenSetup(){
+    //    mAnalytics.sendClickEvent(R.string.full_screen_mode);
+    //    MainActivity activity = (MainActivity)getActivity();
+    //    return new FullScreenMode.Builder()
+    //                    .create(activity.getSupportActionBar(),
+    //                            activity.getRightDrawer(),
+    //                            mPanel, mFullScreenClose);
+    //}
     //endregion
 
     //region ViewMode Listener
@@ -439,23 +439,23 @@ public class GoogleMapFragment extends GeoViewFragmentBase implements
         }
     }
 
-    public void setViewMode(String mode){
-        switch(mode){
-            case ViewModes.BOOKMARK:
-                GeoDialogHelper.showBookmarks(getActivity(), getFragmentManager(), mSaveBtn, mBmClose, mPanel, mMap);
-                mPanelManager.collapse();
-                break;
-            case ViewModes.QUERY:
-                setViewMode(querySetup());
-                break;
-            case ViewModes.QUICKSEARCH:
-                setViewMode(searchSetup());
-                break;
-            default:
-                Toaster("Mode Not Set");
-                break;
-        }
-    }
+    //public void setViewMode(String mode){
+    //    switch(mode){
+    //        case ViewModes.BOOKMARK:
+    //            GeoDialogHelper.showBookmarks(getActivity(), getFragmentManager(), mSaveBtn, mBmClose, mPanel, mMap);
+    //            mPanelManager.collapse();
+    //            break;
+    //        case ViewModes.QUERY:
+    //            setViewMode(querySetup());
+    //            break;
+    //        case ViewModes.QUICKSEARCH:
+    //            setViewMode(searchSetup());
+    //            break;
+    //        default:
+    //            Toaster("Mode Not Set");
+    //            break;
+    //    }
+    //}
 
 
 

@@ -5,7 +5,7 @@
               android:layout_height="match_parent"
                 android:background="@color/primary">
 
-    <com.sothree.slidinguppanel.SlidingUpPanelLayout
+    <!--<com.sothree.slidinguppanel.SlidingUpPanelLayout
         xmlns:sothree="http://schemas.android.com/apk/res-auto"
         android:id="@+id/sliding_layout"
         android:layout_width="match_parent"
@@ -17,7 +17,7 @@
 
         <RelativeLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent">
+            android:layout_height="match_parent"> -->
 
             <android.support.v4.widget.SwipeRefreshLayout
                 android:id="@+id/swipe_refresh_layout"
@@ -32,18 +32,18 @@
 
             </android.support.v4.widget.SwipeRefreshLayout>
 
-        </RelativeLayout>
+    <!--</RelativeLayout>
 
-        <RelativeLayout
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:id="@+id/slider_content">
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:id="@+id/slider_content">
 
 
 
-        </RelativeLayout>
+    </RelativeLayout>
 
-    </com.sothree.slidinguppanel.SlidingUpPanelLayout>
+</com.sothree.slidinguppanel.SlidingUpPanelLayout> -->
 
 
 </RelativeLayout>

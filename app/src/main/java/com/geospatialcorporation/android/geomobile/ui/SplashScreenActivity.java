@@ -34,6 +34,9 @@ public class SplashScreenActivity extends Activity {
             public void run() {
                 // This method will be executed once the timer is over
                 // Start your app main activity
+
+                //if device is online
+                //
                 if (application.getAuthToken() == null) {
                     startActivity(login);
                 } else {

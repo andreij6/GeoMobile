@@ -52,7 +52,7 @@ public class SublayerAdapter extends GeoRecyclerAdapterBase<SublayerAdapter.Hold
 
         @InjectView(R.id.sublayerLabel) TextView mSublayerName;
         @InjectView(R.id.fab_edit)FloatingActionButton mEdit;
-        @InjectView(R.id.showingCB) CheckBox mVisible;
+        //@InjectView(R.id.showingCB) CheckBox mVisible;
 
         @OnClick(R.id.fab_edit)
         public void showEditDialog(){
@@ -77,7 +77,7 @@ public class SublayerAdapter extends GeoRecyclerAdapterBase<SublayerAdapter.Hold
 
         public void bindLayer(Layer layer){
             mSublayerName.setText(layer.getName());
-            mVisible.setChecked(layer.getIsShowing());
+            //mVisible.setChecked(layer.getIsShowing());
             mSublayer = layer;
         }
     }

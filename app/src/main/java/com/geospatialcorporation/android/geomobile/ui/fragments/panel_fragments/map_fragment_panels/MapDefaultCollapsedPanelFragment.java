@@ -43,9 +43,9 @@ public class MapDefaultCollapsedPanelFragment extends GeoViewFragmentBase {
 
         mPanelManager = new PanelManager(GeoPanel.MAP);
 
-        mBookmark.setOnClickListener(setBookmarkMode);
-        mSearch.setOnClickListener(performQuickSearch);
-        mQuery.setOnClickListener(setQueryMode);
+        //mBookmark.setOnClickListener(setBookmarkMode);
+        //mSearch.setOnClickListener(performQuickSearch);
+        //mQuery.setOnClickListener(setQueryMode);
         mAnchor.setOnClickListener(anchorPanel);
         Title.setOnClickListener(anchorPanel);
 
@@ -53,26 +53,26 @@ public class MapDefaultCollapsedPanelFragment extends GeoViewFragmentBase {
     }
 
     //region ClickListeners
-    protected View.OnClickListener setBookmarkMode = new View.OnClickListener() {
-        @Override
-        public void onClick(View v) {
-            setViewMode(ViewModes.BOOKMARK);
-        }
-    };
+    //protected View.OnClickListener setBookmarkMode = new View.OnClickListener() {
+    //    @Override
+    //    public void onClick(View v) {
+    //        setViewMode(ViewModes.BOOKMARK);
+    //    }
+    //};
 
-    protected View.OnClickListener performQuickSearch = new View.OnClickListener() {
-        @Override
-        public void onClick(View v) {
-            setViewMode(ViewModes.QUICKSEARCH);
-        }
-    };
+    //protected View.OnClickListener performQuickSearch = new View.OnClickListener() {
+    //    @Override
+    //    public void onClick(View v) {
+    //        setViewMode(ViewModes.QUICKSEARCH);
+    //    }
+    //};
 
-    protected View.OnClickListener setQueryMode = new View.OnClickListener() {
-        @Override
-        public void onClick(View v) {
-            setViewMode(ViewModes.QUERY);
-        }
-    };
+    //protected View.OnClickListener setQueryMode = new View.OnClickListener() {
+    //    @Override
+    //    public void onClick(View v) {
+    //        setViewMode(ViewModes.QUERY);
+    //    }
+    //};
 
     protected View.OnClickListener anchorPanel = new View.OnClickListener(){
 
@@ -89,13 +89,9 @@ public class MapDefaultCollapsedPanelFragment extends GeoViewFragmentBase {
     };
     //endregion
 
-    private void setViewMode(String viewMode) {
-        GoogleMapFragment mapFragment = (GoogleMapFragment)(((MainActivity) getActivity()).getContentFragment());
-        mapFragment.setViewMode(viewMode);
-    }
+    //private void setViewMode(String viewMode) {
+    //    GoogleMapFragment mapFragment = (GoogleMapFragment)(((MainActivity) getActivity()).getContentFragment());
+    //    mapFragment.setViewMode(viewMode);
+    //}
 
-
-    protected void sendScreenName() {
-
-    }
 }

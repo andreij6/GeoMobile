@@ -35,7 +35,7 @@ public class SublayersTab extends GeoDetailsTabBase<Layer> {
     List<Layer> mData;
     @InjectView(R.id.sublayerRecyclerView) RecyclerView mRecyclerView;
     @InjectView(R.id.swipe_refresh_layout) SwipeRefreshLayout mSwipeRefreshLayout;
-    @InjectView(R.id.sliding_layout) SlidingUpPanelLayout mPanel;
+    //@InjectView(R.id.sliding_layout) SlidingUpPanelLayout mPanel;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState){
@@ -45,11 +45,11 @@ public class SublayersTab extends GeoDetailsTabBase<Layer> {
         mSwipeRefreshLayout.setOnRefreshListener(new SublayerRefreshListener());
         mSwipeRefreshLayout.setProgressBackgroundColorSchemeColor(getActivity().getResources().getColor(R.color.accent));
 
-        application.setSublayerFragmentPanel(mPanel);
-        mPanel.setBackgroundColor(getActivity().getResources().getColor(R.color.primary_light));
+        //application.setSublayerFragmentPanel(mPanel);
+        //mPanel.setBackgroundColor(getActivity().getResources().getColor(R.color.primary_light));
 
-        ISlidingPanelManager manager = new PanelManager(GeoPanel.SUBLAYER);
-        manager.setup();
+        //ISlidingPanelManager manager = new PanelManager(GeoPanel.SUBLAYER);
+        //manager.setup();
 
         setIntentString(Layer.LAYER_INTENT);
         handleArgs();
@@ -66,9 +66,9 @@ public class SublayersTab extends GeoDetailsTabBase<Layer> {
     @Override
     public void onDetach() {
         super.onDetach();
-        if(mPanelManager != null) {
-            mPanelManager.collapse();
-        }
+        //if(mPanelManager != null) {
+        //    mPanelManager.collapse();
+        //}
     }
 
     @Override

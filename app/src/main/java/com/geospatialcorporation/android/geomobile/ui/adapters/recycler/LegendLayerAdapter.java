@@ -229,12 +229,12 @@ public class LegendLayerAdapter extends GeoRecyclerAdapterBase<LegendLayerAdapte
         }
 
         protected Drawable getDrawable(Integer geometryTypeCodeId) {
-            Drawable d = mContext.getDrawable(R.drawable.ic_select_off_white_18dp);
+            Drawable d = mContext.getDrawable(R.drawable.ic_window_minimize_white_18dp);
 
             switch (geometryTypeCodeId) {
                 case GeometryTypeCodes.Line:
                 case GeometryTypeCodes.MultiLine:
-                    d = mContext.getDrawable(R.drawable.ic_select_off_white_18dp);
+                    d = mContext.getDrawable(R.drawable.ic_window_minimize_white_18dp);
                     break;
                 case GeometryTypeCodes.Point:
                 case GeometryTypeCodes.MultiPoint:
