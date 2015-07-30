@@ -32,6 +32,7 @@ public class PolylineOptionsManager extends OptionsManagerBase<PolylineOptions, 
                     Polyline polyline = map.addPolyline(option);
                     mIdFeatureIdMap.put(polyline.getId(), featureInfo);
                     mVisibleLayers.put(key, polyline);
+
                 }
             }
         }
