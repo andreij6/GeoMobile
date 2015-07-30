@@ -1,22 +1,19 @@
 package com.geospatialcorporation.android.geomobile.ui.fragments.detail_fragment.feature_window_tabs;
 
 import android.os.Bundle;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
+import android.widget.TableLayout;
 
 import com.geospatialcorporation.android.geomobile.R;
+import com.geospatialcorporation.android.geomobile.library.DI.FeatureWindow.models.FeatureWindowData;
 import com.geospatialcorporation.android.geomobile.library.helpers.GeoDialogHelper;
 import com.geospatialcorporation.android.geomobile.models.Query.map.response.featurewindow.MapFeatureFiles;
-import com.geospatialcorporation.android.geomobile.ui.adapters.recycler.FeatureWindow.DocumentVMAdapter;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import butterknife.ButterKnife;
 import butterknife.InjectView;
 import butterknife.OnClick;
 
@@ -25,14 +22,16 @@ import butterknife.OnClick;
  */
 public class FeatureDocumentsTab extends FeatureTabBase {
 
+    int mLayerId;
+    String mFeatureId;
+
     @SuppressWarnings("unused")
     @OnClick(R.id.addDocument)
     public void addDocument(){
-        Toaster("Not Implmented");
-        //GeoDialogHelper.addMapFeatureDocument();
+        GeoDialogHelper.addMapFeatureDocument(getActivity(), getFragmentManager(), mLayerId, mFeatureId);
     }
 
-    @InjectView(R.id.featureWindowDocumentsRecycler) RecyclerView mRecyclerView;
+    @InjectView(R.id.featureWindowDocumentsTable) TableLayout mTableLayout;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -41,55 +40,24 @@ public class FeatureDocumentsTab extends FeatureTabBase {
     }
 
     @Override
-    protected void setRecycler() {
-        List<FeatureWindowDocumentVM> dvms = getDocumentVMList(mResponse.getFeatures().get(0).getFiles());
+    protected void setDataView() {
+        List<FeatureWindowData.KeyValue> data = getDocumentVMList(mResponse.getFeatures().get(0).getFiles());
 
-        RecyclerView.LayoutManager manager = new LinearLayoutManager(getActivity());
+        mLayerId = mResponse.getId();
+        mFeatureId = mResponse.getFeatures().get(0).getId();
 
-        mRecyclerView.setLayoutManager(manager);
-
-        DocumentVMAdapter adapter = new DocumentVMAdapter(getActivity(), dvms);
-
-        mRecyclerView.setAdapter(adapter);
+        setTable(data, mTableLayout, "");
     }
 
-    protected List<FeatureWindowDocumentVM> getDocumentVMList(List<MapFeatureFiles> files) {
-        List<FeatureWindowDocumentVM> result = new ArrayList<>();
+    protected List<FeatureWindowData.KeyValue> getDocumentVMList(List<MapFeatureFiles> files) {
+        List<FeatureWindowData.KeyValue> result = new ArrayList<>();
 
         if(files != null) {
             for (MapFeatureFiles file : files) {
-                result.add(new FeatureWindowDocumentVM(file));
+                result.add(new FeatureWindowData.KeyValue(file.nameWithExt(), file.getSize() + ""));
             }
         }
 
         return result;
-    }
-
-    public class FeatureWindowDocumentVM {
-        String mFileName;
-        String mFileSize;
-
-        public FeatureWindowDocumentVM(MapFeatureFiles file) {
-            mFileName = file.nameWithExt();
-            mFileSize = file.getSize() + "";
-        }
-
-        //region Gs & Ss
-        public String getFileSize() {
-            return mFileSize;
-        }
-
-        public void setFileSize(String fileSize) {
-            mFileSize = fileSize;
-        }
-
-        public String getFileName() {
-            return mFileName;
-        }
-
-        public void setFileName(String fileName) {
-            mFileName = fileName;
-        }
-        //endregion
     }
 }

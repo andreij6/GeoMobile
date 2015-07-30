@@ -38,7 +38,7 @@ public class PolylineOptionsManager extends OptionsManagerBase<PolylineOptions, 
     }
 
     @Override
-    protected void removeLayer(UUID key) {
+    public void removeMapObject(UUID key){
         mVisibleLayers.get(key).remove();
     }
 }

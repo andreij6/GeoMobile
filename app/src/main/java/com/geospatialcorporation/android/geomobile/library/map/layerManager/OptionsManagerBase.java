@@ -85,12 +85,22 @@ public abstract class OptionsManagerBase<T, S> implements IOptionsManager<T, S> 
 
     @Override
     public void clearVisibleLayers() {
+
+        for(UUID key : mVisibleLayers.keySet()) {
+            removeMapObject(key);
+        }
+
         mVisibleLayers.clear();
     }
 
     //endregion
 
-    protected abstract void removeLayer(UUID key);
+    protected void removeLayer(UUID key) {
+        removeMapObject(key);
+        mVisibleLayers.remove(key);
+    }
+
+    protected abstract void removeMapObject(UUID key);
 
     @Override
     public FeatureInfo getFeatureIdLayerId(String id) {

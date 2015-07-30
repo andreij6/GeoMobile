@@ -8,18 +8,18 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textAppearance="?android:attr/textAppearanceLarge"
-        android:text="Map Actions"
+        android:text="@string/map_window_title"
         android:id="@+id/title"
         android:textColor="@color/white"
         android:layout_marginTop="0dp"
         android:layout_alignParentTop="true"
         android:layout_alignParentStart="true"
-        android:paddingTop="20dp"
-        android:paddingBottom="20dp"
+        android:paddingTop="8dp"
+        android:paddingBottom="8dp"
         android:layout_toStartOf="@+id/panelAnchor"
         android:paddingLeft="10dp"/>
 
-    <Button
+   <!-- <Button
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="@string/query"
@@ -43,7 +43,7 @@
         android:text="@string/bookmark"
         android:id="@+id/bookmarkBtn"
         android:layout_below="@+id/quickSearchBtn"
-        android:layout_centerHorizontal="true"/>
+        android:layout_centerHorizontal="true"/> -->
 
     <ImageView
         android:layout_width="wrap_content"

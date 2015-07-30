@@ -43,6 +43,7 @@ public class PolygonOptionsManager extends OptionsManagerBase<PolygonOptions, Po
     }
 
     @Override
-    protected void removeLayer(UUID key) {mVisibleLayers.get(key).remove(); }
-
+    protected void removeMapObject(UUID key) {
+        mVisibleLayers.get(key).remove();
+    }
 }

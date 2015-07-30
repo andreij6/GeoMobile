@@ -4,27 +4,31 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TableLayout;
 
 import com.geospatialcorporation.android.geomobile.R;
+import com.geospatialcorporation.android.geomobile.library.DI.FeatureWindow.Implementations.FeatureWindowDataParser;
+import com.geospatialcorporation.android.geomobile.library.DI.FeatureWindow.models.FeatureWindowData;
 
-import butterknife.ButterKnife;
+import butterknife.InjectView;
 
 /**
  * Created by andre on 7/6/2015.
  */
 public class FeatureMapInfoTab extends FeatureTabBase {
+    private static final String TAG = FeatureMapInfoTab.class.getSimpleName();
 
-    @Override
+    @InjectView(R.id.mapInfoTable) TableLayout mTableLayout;
+
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         mLayout = R.layout.fragment_feature_window_mapinfo_tab;
-
         return super.onCreateView(inflater, container, savedInstanceState);
     }
 
     @Override
-    protected void setRecycler() {
+    protected void setDataView() {
+        FeatureWindowData data = DataParser.parseResponse(mResponse, FeatureWindowDataParser.MAPINFO);
 
+        setTable(data.getList(), mTableLayout, ":");
     }
-
-
 }

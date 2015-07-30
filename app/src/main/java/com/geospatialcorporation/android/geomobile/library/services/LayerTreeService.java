@@ -19,6 +19,10 @@ import com.geospatialcorporation.android.geomobile.models.RenameRequest;
 
 import java.util.List;
 
+import retrofit.Callback;
+import retrofit.RetrofitError;
+import retrofit.client.Response;
+
 public class LayerTreeService implements ITreeService {
     private final static String TAG = LayerTreeService.class.getSimpleName();
 
@@ -87,6 +91,22 @@ public class LayerTreeService implements ITreeService {
 
     public void deleteLayerAttributeColumn(int layerId, int columnId){
         mAttributeService.deleteColumn(layerId, columnId);
+    }
+    //endregion
+
+    //region MapFeature Document
+    public void addMapFeatureDocument(int layerId, String featureId, int documentId){
+        mLayerService.addMapFeatureDocument(layerId, featureId, documentId, new Callback<Response>() {
+            @Override
+            public void success(Response response, Response response2) {
+                Toast.makeText(application.getAppContext(), "Request Successful", Toast.LENGTH_LONG).show();
+            }
+
+            @Override
+            public void failure(RetrofitError error) {
+
+            }
+        });
     }
     //endregion
 

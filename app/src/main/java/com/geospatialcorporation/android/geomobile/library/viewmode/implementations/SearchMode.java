@@ -37,10 +37,10 @@ public class SearchMode implements IViewMode {
 
             Fragment quickSearchFragment = new QuickSearchPanelFragment();
 
-            supportFragmentManager.beginTransaction()
-                    .disallowAddToBackStack()
-                    .replace(R.id.slider_content, quickSearchFragment)
-                    .commit();
+            //supportFragmentManager.beginTransaction()
+            //        .disallowAddToBackStack()
+            //        .replace(R.id.slider_content, quickSearchFragment)
+            //        .commit();
 
             mPanelManager.anchor();
 

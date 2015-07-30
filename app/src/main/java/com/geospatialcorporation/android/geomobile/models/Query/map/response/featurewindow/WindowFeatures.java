@@ -7,7 +7,7 @@ import java.util.List;
  */
 public class WindowFeatures {
     List<String> Attributes;
-    Integer Id;
+    String Id;
     MapInfo MapInfo;
     List<MapFeatureFiles> Files;
 
@@ -28,11 +28,11 @@ public class WindowFeatures {
         Attributes = attributes;
     }
 
-    public Integer getId() {
+    public String getId() {
         return Id;
     }
 
-    public void setId(Integer id) {
+    public void setId(String id) {
         Id = id;
     }
 

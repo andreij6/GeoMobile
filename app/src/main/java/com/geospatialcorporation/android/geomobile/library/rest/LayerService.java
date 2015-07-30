@@ -38,4 +38,7 @@ public interface LayerService {
 
     @GET("/API/Layers/{id}/Style")
     Layer.StyleInfo getStyle(@Path("id") int id);
+
+    @PUT("/API/Layers/{id}/Features/{featureId}/Documents/{documentId}")
+    void addMapFeatureDocument(@Path("id") int id, @Path("featureId") String featureId, @Path("documentId") int documentId, Callback<Response> cb);
 }

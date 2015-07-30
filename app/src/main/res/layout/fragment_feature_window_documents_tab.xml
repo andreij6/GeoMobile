@@ -11,10 +11,13 @@
         android:layout_alignParentTop="true"
         android:layout_centerHorizontal="true"/>
 
-    <android.support.v7.widget.RecyclerView
+    <TableLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:id="@+id/featureWindowDocumentsRecycler"
-        android:layout_below="@+id/addDocument"/>
+        android:layout_below="@+id/addDocument"
+        android:layout_centerVertical="true"
+        android:layout_centerHorizontal="true"
+        android:id="@+id/featureWindowDocumentsTable">
+    </TableLayout>
 
 </RelativeLayout>

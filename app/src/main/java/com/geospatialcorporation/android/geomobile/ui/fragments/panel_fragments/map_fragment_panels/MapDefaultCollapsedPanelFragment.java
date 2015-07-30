@@ -31,9 +31,9 @@ public class MapDefaultCollapsedPanelFragment extends GeoViewFragmentBase {
     ISlidingPanelManager mPanelManager;
 
     @InjectView(R.id.title) TextView Title;
-    @InjectView(R.id.bookmarkBtn) Button mBookmark;
-    @InjectView(R.id.quickSearchBtn) Button mSearch;
-    @InjectView(R.id.queryBtn) Button mQuery;
+    //@InjectView(R.id.bookmarkBtn) Button mBookmark;
+    //@InjectView(R.id.quickSearchBtn) Button mSearch;
+    //@InjectView(R.id.queryBtn) Button mQuery;
     @InjectView(R.id.panelAnchor) ImageView mAnchor;
 
     @Override
@@ -46,8 +46,8 @@ public class MapDefaultCollapsedPanelFragment extends GeoViewFragmentBase {
         //mBookmark.setOnClickListener(setBookmarkMode);
         //mSearch.setOnClickListener(performQuickSearch);
         //mQuery.setOnClickListener(setQueryMode);
-        mAnchor.setOnClickListener(anchorPanel);
-        Title.setOnClickListener(anchorPanel);
+        //mAnchor.setOnClickListener(anchorPanel);
+        //Title.setOnClickListener(anchorPanel);
 
         return mView;
     }
