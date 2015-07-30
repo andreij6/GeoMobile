@@ -46,5 +46,4 @@ public class FeatureAttributesTab extends FeatureTabBase {
         return columnValues;
     }
 
-
 }
