@@ -35,6 +35,7 @@ import android.widget.Toast;
 
 import com.geospatialcorporation.android.geomobile.R;
 import com.geospatialcorporation.android.geomobile.application;
+import com.geospatialcorporation.android.geomobile.library.DI.Analytics.Models.GoogleAnalyticEvent;
 import com.geospatialcorporation.android.geomobile.library.constants.GeoPanel;
 import com.geospatialcorporation.android.geomobile.library.constants.ViewModes;
 import com.geospatialcorporation.android.geomobile.library.helpers.GeoDialogHelper;
@@ -114,7 +115,7 @@ public class GoogleMapFragment extends GeoViewFragmentBase implements
     public void getLocation(){
         Location currentLocation = LocationServices.FusedLocationApi.getLastLocation(mLocationClient);
 
-        mAnalytics.sendClickEvent(R.string.current_location);
+        mAnalytics.trackClick(new GoogleAnalyticEvent().CurrentLocation());
 
         if(currentLocation == null){
             AlertDialog.Builder builder1 = new AlertDialog.Builder(getActivity());
@@ -148,7 +149,7 @@ public class GoogleMapFragment extends GeoViewFragmentBase implements
     @SuppressWarnings("unused")
     @OnClick(R.id.fab_layers)
     public void showLayersDrawer(){
-        mAnalytics.sendClickEvent(R.string.show_layers);
+        mAnalytics.trackClick(new GoogleAnalyticEvent().OpenLayerDrawer());
         DrawerLayout mDrawerLayout = ((MainActivity)getActivity()).getRightDrawer();
         View layerView = ((MainActivity)getActivity()).getLayerListView();
 
@@ -194,7 +195,7 @@ public class GoogleMapFragment extends GeoViewFragmentBase implements
         ButterKnife.inject(this, rootView);
         SetTitle(R.string.app_name);
 
-        mAnalytics.sendScreenName(R.string.map_screen);
+        mAnalytics.trackScreen(new GoogleAnalyticEvent().MapScreen());
 
         application.setMapFragmentPanel(mPanel);
         mPanelManager = new PanelManager(GeoPanel.MAP);
@@ -325,7 +326,7 @@ public class GoogleMapFragment extends GeoViewFragmentBase implements
         // Handle action buttons
         switch (item.getItemId()) {
             case R.id.action_map_settings:
-                mAnalytics.sendClickEvent(R.string.change_basemap);
+                mAnalytics.trackClick(new GoogleAnalyticEvent().ChangeBaseMap());
                 MapTypeSelectDialogFragment m = new MapTypeSelectDialogFragment();
                 m.setContext(getActivity());
                 m.setMap(mMap);
@@ -383,7 +384,7 @@ public class GoogleMapFragment extends GeoViewFragmentBase implements
 
     //region ViewModeSetups
     protected IViewMode querySetup() {
-        mAnalytics.sendClickEvent(R.string.query_mode);
+        mAnalytics.trackClick(new GoogleAnalyticEvent().QueryModeInit());
 
         return new QueryMode.Builder()
                 .setDependents(mMap, mListener, getActivity())
@@ -394,7 +395,7 @@ public class GoogleMapFragment extends GeoViewFragmentBase implements
     }
 
     protected IViewMode searchSetup() {
-        mAnalytics.sendClickEvent(R.string.quicksearch_mode);
+        mAnalytics.trackClick(new GoogleAnalyticEvent().QuickSearchInit());
 
         return new SearchMode.Builder()
                         .init(getActivity().getSupportFragmentManager(), mPanelManager)

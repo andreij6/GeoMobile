@@ -9,6 +9,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.geospatialcorporation.android.geomobile.R;
+import com.geospatialcorporation.android.geomobile.library.DI.Analytics.Models.GoogleAnalyticEvent;
 import com.geospatialcorporation.android.geomobile.library.helpers.GeoDialogHelper;
 import com.geospatialcorporation.android.geomobile.library.services.DocumentTreeService;
 import com.geospatialcorporation.android.geomobile.models.Document.Document;
@@ -41,6 +42,8 @@ public class DocumentDetailFragment extends ItemDetailFragment<Document>  {
 
     @OnClick(R.id.fab)
     public void showDocumentActions(){
+        mAnalytics.trackClick(new GoogleAnalyticEvent().ShowDocumentActions());
+
         GeoDialogHelper.showDocumentActions(getActivity(), mEntity, getActivity().getSupportFragmentManager());
     }
 
@@ -54,6 +57,8 @@ public class DocumentDetailFragment extends ItemDetailFragment<Document>  {
 
         ButterKnife.inject(this, view);
         mService = new DocumentTreeService();
+
+        mAnalytics.trackScreen(new GoogleAnalyticEvent().DocumentDetailScreen());
 
         handleArguments();
 
@@ -71,7 +76,9 @@ public class DocumentDetailFragment extends ItemDetailFragment<Document>  {
         mDownload.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                mService.download(mEntity.getId(), mEntity.getNameWithExt());
+            mAnalytics.trackClick(new GoogleAnalyticEvent().DownloadDocument());
+
+            mService.download(mEntity.getId(), mEntity.getNameWithExt());
             }
         });
 
@@ -90,6 +97,8 @@ public class DocumentDetailFragment extends ItemDetailFragment<Document>  {
     public View.OnClickListener DeleteonClickListner = new View.OnClickListener(){
         @Override
         public void onClick(View v){
+            mAnalytics.trackClick(new GoogleAnalyticEvent().DeleteDocument());
+
             GeoDialogHelper.deleteDocument(getActivity(), mEntity, getFragmentManager());
         }
     };

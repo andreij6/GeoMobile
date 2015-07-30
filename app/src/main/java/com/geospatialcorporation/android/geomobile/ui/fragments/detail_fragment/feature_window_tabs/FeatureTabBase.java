@@ -10,6 +10,8 @@ import android.widget.TableRow;
 import android.widget.TextView;
 
 import com.geospatialcorporation.android.geomobile.R;
+import com.geospatialcorporation.android.geomobile.library.DI.Analytics.AnalyticsComponent;
+import com.geospatialcorporation.android.geomobile.library.DI.Analytics.DaggerAnalyticsComponent;
 import com.geospatialcorporation.android.geomobile.library.DI.FeatureWindow.DaggerFeatureWindowComponent;
 import com.geospatialcorporation.android.geomobile.library.DI.FeatureWindow.FeatureWindowComponent;
 import com.geospatialcorporation.android.geomobile.library.DI.FeatureWindow.IFeatureWindowDataParser;

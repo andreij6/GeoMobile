@@ -10,7 +10,9 @@ import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.Toast;
 
-import com.geospatialcorporation.android.geomobile.library.helpers.AnalyticsHelper;
+import com.geospatialcorporation.android.geomobile.library.DI.Analytics.AnalyticsComponent;
+import com.geospatialcorporation.android.geomobile.library.DI.Analytics.DaggerAnalyticsComponent;
+import com.geospatialcorporation.android.geomobile.library.DI.Analytics.Interfaces.IGeoAnalytics;
 import com.geospatialcorporation.android.geomobile.library.panelmanager.ISlidingPanelManager;
 import com.geospatialcorporation.android.geomobile.library.panelmanager.PanelManager;
 import com.geospatialcorporation.android.geomobile.ui.Interfaces.OnFragmentInteractionListener;
@@ -26,7 +28,8 @@ public class GeoViewFragmentBase extends Fragment {
 
     protected View mView;
     protected ISlidingPanelManager mPanelManager;
-    protected AnalyticsHelper mAnalytics;
+    protected IGeoAnalytics mAnalytics;
+    private AnalyticsComponent mAnalyticsComponent;
 
     protected void setView(LayoutInflater inflater, ViewGroup container, int layout) {
         mView = inflater.inflate(layout, container, false);
@@ -36,7 +39,8 @@ public class GeoViewFragmentBase extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        mAnalytics = new AnalyticsHelper();
+        mAnalyticsComponent = DaggerAnalyticsComponent.builder().build();
+        mAnalytics = mAnalyticsComponent.provideGeoAnalytics();
     }
 
     @Override

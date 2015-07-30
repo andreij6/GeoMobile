@@ -8,6 +8,7 @@ import android.os.Bundle;
 import android.util.Log;
 
 import com.geospatialcorporation.android.geomobile.application;
+import com.geospatialcorporation.android.geomobile.library.DI.Analytics.Interfaces.IGeoAnalytics;
 import com.geospatialcorporation.android.geomobile.library.DI.Authentication.IGoogleAuthTokenService;
 import com.geospatialcorporation.android.geomobile.library.DI.Authentication.Implementations.GoogleAuthTokenService;
 import com.geospatialcorporation.android.geomobile.library.DI.SharedPreferences.IGeoSharedPrefs;
@@ -37,6 +38,7 @@ public class GoogleApiActivity extends GeoActivityBase implements
 
     protected IGoogleAuthTokenService mGoogleAuthTokenService;
     protected IGeoSharedPrefs mGeoSharedPrefs;
+    protected IGeoAnalytics mAnalytics;
     /* A flag indicating that a PendingIntent is in progress and prevents
      * us from starting further intents.
      */
@@ -51,6 +53,8 @@ public class GoogleApiActivity extends GeoActivityBase implements
 
         mGoogleAuthTokenService = mAuthComponent.provideGoogleAuthTokenService();
         mGeoSharedPrefs = mSharedPrefsComponent.provideGeoSharedPrefs();
+        mAnalytics = mAnalyticsComponent.provideGeoAnalytics();
+
 
         if (application.getGoogleClient() == null) {
             mGoogleApiClient = new GoogleApiClient.Builder(context)

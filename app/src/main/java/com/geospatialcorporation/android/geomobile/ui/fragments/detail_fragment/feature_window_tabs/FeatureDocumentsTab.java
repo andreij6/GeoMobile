@@ -7,6 +7,7 @@ import android.view.ViewGroup;
 import android.widget.TableLayout;
 
 import com.geospatialcorporation.android.geomobile.R;
+import com.geospatialcorporation.android.geomobile.library.DI.Analytics.Models.GoogleAnalyticEvent;
 import com.geospatialcorporation.android.geomobile.library.DI.FeatureWindow.models.FeatureWindowData;
 import com.geospatialcorporation.android.geomobile.library.helpers.GeoDialogHelper;
 import com.geospatialcorporation.android.geomobile.models.Query.map.response.featurewindow.MapFeatureFiles;
@@ -28,6 +29,7 @@ public class FeatureDocumentsTab extends FeatureTabBase {
     @SuppressWarnings("unused")
     @OnClick(R.id.addDocument)
     public void addDocument(){
+        mAnalytics.trackClick(new GoogleAnalyticEvent().ShowAddFeatureDocumentDialog());
         GeoDialogHelper.addMapFeatureDocument(getActivity(), getFragmentManager(), mLayerId, mFeatureId);
     }
 
@@ -36,6 +38,7 @@ public class FeatureDocumentsTab extends FeatureTabBase {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         mLayout = R.layout.fragment_feature_window_documents_tab;
+        mAnalytics.trackScreen(new GoogleAnalyticEvent().MapFeatureDocumentsTab());
         return super.onCreateView(inflater, container, savedInstanceState);
     }
 

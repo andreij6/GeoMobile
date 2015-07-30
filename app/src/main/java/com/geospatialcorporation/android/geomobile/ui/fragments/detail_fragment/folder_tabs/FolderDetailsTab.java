@@ -7,6 +7,7 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.geospatialcorporation.android.geomobile.R;
+import com.geospatialcorporation.android.geomobile.library.DI.Analytics.Models.GoogleAnalyticEvent;
 import com.geospatialcorporation.android.geomobile.library.helpers.GeoAsyncTask;
 import com.geospatialcorporation.android.geomobile.library.helpers.GeoDialogHelper;
 import com.geospatialcorporation.android.geomobile.library.services.FolderTreeService;
@@ -49,6 +50,8 @@ public class FolderDetailsTab extends GeoDetailsTabBase<Folder> {
 
         Bundle args = getArguments();
 
+        mAnalytics.trackScreen(new GoogleAnalyticEvent().FolderDetailTab());
+
         mEntity = args.getParcelable(Folder.FOLDER_INTENT);
 
         mFolderType = args.getString("Folder Type");
@@ -61,6 +64,7 @@ public class FolderDetailsTab extends GeoDetailsTabBase<Folder> {
     protected View.OnClickListener showActions = new View.OnClickListener() {
         @Override
         public void onClick(View v) {
+            mAnalytics.trackClick(new GoogleAnalyticEvent().ShowFolderActions());
             GeoDialogHelper.folderActions(getActivity(), mEntity, getActivity().getSupportFragmentManager());
         }
     };

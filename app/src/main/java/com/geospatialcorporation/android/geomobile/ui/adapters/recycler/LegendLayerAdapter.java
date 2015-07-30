@@ -2,8 +2,6 @@ package com.geospatialcorporation.android.geomobile.ui.adapters.recycler;
 
 import android.content.Context;
 import android.graphics.drawable.Drawable;
-import android.os.AsyncTask;
-import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.widget.DrawerLayout;
@@ -12,14 +10,11 @@ import android.view.ViewGroup;
 import android.widget.CheckBox;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.geospatialcorporation.android.geomobile.R;
 import com.geospatialcorporation.android.geomobile.application;
+import com.geospatialcorporation.android.geomobile.library.DI.Analytics.Models.GoogleAnalyticEvent;
 import com.geospatialcorporation.android.geomobile.library.constants.GeometryTypeCodes;
-import com.geospatialcorporation.android.geomobile.library.helpers.AnalyticsHelper;
-import com.geospatialcorporation.android.geomobile.library.helpers.DataHelper;
-import com.geospatialcorporation.android.geomobile.library.map.MapActions;
 import com.geospatialcorporation.android.geomobile.library.services.QueryRestService;
 import com.geospatialcorporation.android.geomobile.models.Layers.Layer;
 import com.geospatialcorporation.android.geomobile.models.Layers.LegendLayer;
@@ -37,7 +32,6 @@ import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.LatLngBounds;
-import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 
 import java.util.ArrayList;
@@ -106,7 +100,8 @@ public class LegendLayerAdapter extends GeoRecyclerAdapterBase<LegendLayerAdapte
             public void onClick(View v) {
                 if (isVisibleCB.isChecked()) {
                     //Show Layer
-                    new AnalyticsHelper().sendClickEvent(R.string.showLayerCheckBox);
+
+                    mAnalytics.trackClick(new GoogleAnalyticEvent().ShowLayer());
 
                     addLayerToMap();
 
@@ -114,7 +109,7 @@ public class LegendLayerAdapter extends GeoRecyclerAdapterBase<LegendLayerAdapte
 
                 } else {
                     //remove layer
-                    new AnalyticsHelper().sendClickEvent(R.string.hideLayerCheckBox);
+                    mAnalytics.trackClick(new GoogleAnalyticEvent().HideLayer());
 
                     application.getLayerManager().removeLayer(mLayer.getId(), mLayer.getGeometryTypeCodeId());
 

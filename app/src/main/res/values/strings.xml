@@ -235,5 +235,18 @@
     <string name="GeoUndergroundSignIn">GeoUnderground Sign In Button Clicked</string>
     <string name="map_window_title">Map Window Title</string>
     <string name="add_mapfeature_document">Add Document to Feature</string>
+    <string name="document_detail_screen">Document Detail Screen</string>
+    <string name="show_document_actions">Show Document Actions Window</string>
+    <string name="sublayers_tab_screen">Sublayers Tab Screen</string>
+    <string name="show_layer_actions">Show Layer Actions</string>
+    <string name="layer_detail_tab_screen">Layer Details Tab</string>
+    <string name="folder_permission_click">the user clicked the folder permissions button</string>
+    <string name="folder_permissions_screen">Folder Permissions Screen</string>
+    <string name="show_folder_actions">the user clicked the show folder actions button</string>
+    <string name="folder_detail_screen">Folder Detail Screen</string>
+    <string name="feature_window_attributes_tab">Feature Window Attributes Tab</string>
+    <string name="map_info_tab">Map Info Tab</string>
+    <string name="map_feature_document">Map Feature Documents Tab</string>
+    <string name="show_add_feature_document_dialog">the user clicked the show Add Document to Map Feature Button</string>
 
 </resources>

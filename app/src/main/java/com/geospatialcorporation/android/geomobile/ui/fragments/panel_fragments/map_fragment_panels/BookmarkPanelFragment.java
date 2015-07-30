@@ -10,6 +10,7 @@ import android.widget.EditText;
 import android.widget.TextView;
 
 import com.geospatialcorporation.android.geomobile.R;
+import com.geospatialcorporation.android.geomobile.library.DI.Analytics.Models.GoogleAnalyticEvent;
 import com.geospatialcorporation.android.geomobile.library.constants.GeoPanel;
 import com.geospatialcorporation.android.geomobile.library.helpers.MapStateManager;
 import com.geospatialcorporation.android.geomobile.library.panelmanager.ISlidingPanelManager;
@@ -91,7 +92,7 @@ public class BookmarkPanelFragment extends GeoViewFragmentBase {
     }
 
     protected void sendScreenName() {
-        mAnalytics.sendScreenName(R.string.entering_bookmark_name);
+        mAnalytics.trackScreen(new GoogleAnalyticEvent().BookmarkScreen());
     }
 
     public static class Builder {

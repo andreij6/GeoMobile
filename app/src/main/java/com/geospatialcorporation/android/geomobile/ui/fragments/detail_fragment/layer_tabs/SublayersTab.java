@@ -11,6 +11,7 @@ import android.view.ViewGroup;
 
 import com.geospatialcorporation.android.geomobile.R;
 import com.geospatialcorporation.android.geomobile.application;
+import com.geospatialcorporation.android.geomobile.library.DI.Analytics.Models.GoogleAnalyticEvent;
 import com.geospatialcorporation.android.geomobile.library.constants.GeoPanel;
 import com.geospatialcorporation.android.geomobile.library.helpers.GeoAsyncTask;
 import com.geospatialcorporation.android.geomobile.library.panelmanager.ISlidingPanelManager;
@@ -44,6 +45,8 @@ public class SublayersTab extends GeoDetailsTabBase<Layer> {
 
         mSwipeRefreshLayout.setOnRefreshListener(new SublayerRefreshListener());
         mSwipeRefreshLayout.setProgressBackgroundColorSchemeColor(getActivity().getResources().getColor(R.color.accent));
+
+        mAnalytics.trackScreen(new GoogleAnalyticEvent().SublayersTab());
 
         //application.setSublayerFragmentPanel(mPanel);
         //mPanel.setBackgroundColor(getActivity().getResources().getColor(R.color.primary_light));

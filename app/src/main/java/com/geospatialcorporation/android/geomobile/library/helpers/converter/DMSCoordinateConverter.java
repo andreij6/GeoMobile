@@ -17,7 +17,10 @@ public class DMSCoordinateConverter implements ICoordinateConverter {
         int m = (int)t1;
         double s = (t1 - m) * 60;
 
-        return d + " " + m + " " + String.format("%.4f", s) + " " + getDirection(position, pos_neg.get(0), pos_neg.get(1));
+        String degrees = d + "";
+        String degreesWithSymbol = degrees + (char) 0x00B0;
+
+        return degreesWithSymbol + " " + m + "' " + String.format("%.4f", s) + "\" " + getDirection(position, pos_neg.get(0), pos_neg.get(1));
     }
 
     private String getDirection(double dd, String pos, String neg) {

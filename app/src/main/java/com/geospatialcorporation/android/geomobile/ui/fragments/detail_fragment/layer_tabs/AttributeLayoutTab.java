@@ -12,6 +12,7 @@ import android.view.ViewGroup;
 
 import com.geospatialcorporation.android.geomobile.R;
 import com.geospatialcorporation.android.geomobile.application;
+import com.geospatialcorporation.android.geomobile.library.DI.Analytics.Models.GoogleAnalyticEvent;
 import com.geospatialcorporation.android.geomobile.library.constants.GeoPanel;
 import com.geospatialcorporation.android.geomobile.library.helpers.GeoAsyncTask;
 import com.geospatialcorporation.android.geomobile.library.panelmanager.PanelManager;
@@ -48,6 +49,8 @@ public class AttributeLayoutTab extends GeoDetailsTabBase<Layer> {
         //application.setLayerAttributePanel(mPanel);
         //mPanelManager = new PanelManager(GeoPanel.LAYER_ATTRIBUTE);
         //mPanelManager.setup();
+
+        mAnalytics.trackScreen(new GoogleAnalyticEvent().AttributeLayoutTab());
 
         setIntentString(Layer.LAYER_INTENT);
         handleArgs();

@@ -8,6 +8,7 @@ import android.view.ViewGroup;
 import android.widget.TabHost;
 
 import com.geospatialcorporation.android.geomobile.R;
+import com.geospatialcorporation.android.geomobile.library.DI.Analytics.Models.GoogleAnalyticEvent;
 import com.geospatialcorporation.android.geomobile.models.Folders.Folder;
 import com.geospatialcorporation.android.geomobile.ui.fragments.detail_fragment.folder_tabs.FolderDetailsTab;
 import com.geospatialcorporation.android.geomobile.ui.fragments.detail_fragment.folder_tabs.PermissionsTab;
@@ -63,6 +64,6 @@ public class LayerFolderDetailFragment extends ItemDetailFragment<Folder> implem
     }
 
     protected void sendScreenName() {
-        mAnalytics.sendScreenName(R.string.layer_folder_detail_screen);
+        mAnalytics.trackScreen(new GoogleAnalyticEvent().LayerFolderDetail());
     }
 }

@@ -21,6 +21,7 @@ import com.geospatialcorporation.android.geomobile.application;
 import com.geospatialcorporation.android.geomobile.database.DataRepository.IAddDataRepository;
 import com.geospatialcorporation.android.geomobile.database.DataRepository.Implementations.Documents.DocumentsAppSource;
 import com.geospatialcorporation.android.geomobile.database.DataRepository.Implementations.Folders.FolderAppSource;
+import com.geospatialcorporation.android.geomobile.library.DI.Analytics.Models.GoogleAnalyticEvent;
 import com.geospatialcorporation.android.geomobile.library.helpers.DataHelper;
 import com.geospatialcorporation.android.geomobile.library.sectionbuilders.implementations.LibraryTreeSectionBuilder;
 import com.geospatialcorporation.android.geomobile.library.services.DocumentTreeService;
@@ -75,7 +76,7 @@ public class DocumentFragment extends GeoViewFragmentBase {
     }
 
     protected void sendScreenName() {
-        mAnalytics.sendScreenName(R.string.library_tree_screen);
+        mAnalytics.trackScreen(new GoogleAnalyticEvent().LibraryTreeScreen());
     }
 
     public View onCreateView(LayoutInflater inflater, ViewGroup container,

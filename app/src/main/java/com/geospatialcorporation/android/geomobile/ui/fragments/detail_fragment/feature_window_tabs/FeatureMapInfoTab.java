@@ -7,6 +7,7 @@ import android.view.ViewGroup;
 import android.widget.TableLayout;
 
 import com.geospatialcorporation.android.geomobile.R;
+import com.geospatialcorporation.android.geomobile.library.DI.Analytics.Models.GoogleAnalyticEvent;
 import com.geospatialcorporation.android.geomobile.library.DI.FeatureWindow.Implementations.FeatureWindowDataParser;
 import com.geospatialcorporation.android.geomobile.library.DI.FeatureWindow.models.FeatureWindowData;
 
@@ -22,6 +23,7 @@ public class FeatureMapInfoTab extends FeatureTabBase {
 
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         mLayout = R.layout.fragment_feature_window_mapinfo_tab;
+        mAnalytics.trackScreen(new GoogleAnalyticEvent().MapInfoTab());
         return super.onCreateView(inflater, container, savedInstanceState);
     }
 

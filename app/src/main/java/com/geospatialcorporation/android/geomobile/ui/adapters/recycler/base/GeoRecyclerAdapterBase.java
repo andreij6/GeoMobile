@@ -6,6 +6,10 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.geospatialcorporation.android.geomobile.library.DI.Analytics.AnalyticsComponent;
+import com.geospatialcorporation.android.geomobile.library.DI.Analytics.DaggerAnalyticsComponent;
+import com.geospatialcorporation.android.geomobile.library.DI.Analytics.Interfaces.IGeoAnalytics;
+
 import java.util.List;
 
 /**
@@ -21,12 +25,17 @@ public abstract class GeoRecyclerAdapterBase<Holder extends GeoHolderBase<T>, T>
     protected Integer mLayoutId;
     private Class<Holder> mClazz;
     protected View mView;
+    protected IGeoAnalytics mAnalytics;
+    private AnalyticsComponent mAnalyticsComponent;
+
 
     public GeoRecyclerAdapterBase(Context context, List<T> data, int layoutId, Class<Holder> clazz){
         mContext = context;
         mLayoutId = layoutId;
         mData = data;
         mClazz = clazz;
+        mAnalyticsComponent  = DaggerAnalyticsComponent.builder().build();
+        mAnalytics = mAnalyticsComponent.provideGeoAnalytics();
     }
 
     @Override

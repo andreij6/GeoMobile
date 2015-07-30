@@ -4,7 +4,6 @@ import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
 import android.annotation.TargetApi;
 import android.app.LoaderManager.LoaderCallbacks;
-import android.content.Context;
 import android.content.CursorLoader;
 import android.content.Intent;
 import android.content.Loader;
@@ -28,8 +27,8 @@ import android.widget.TextView;
 
 import com.geospatialcorporation.android.geomobile.R;
 import com.geospatialcorporation.android.geomobile.application;
+import com.geospatialcorporation.android.geomobile.library.DI.Analytics.Models.GoogleAnalyticEvent;
 import com.geospatialcorporation.android.geomobile.library.DI.SharedPreferences.Implementations.GeoSharedPrefs;
-import com.geospatialcorporation.android.geomobile.library.helpers.AnalyticsHelper;
 import com.geospatialcorporation.android.geomobile.library.util.LoginValidator;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GooglePlayServicesUtil;
@@ -92,14 +91,16 @@ public class LoginActivity extends GoogleApiActivity implements LoaderCallbacks<
     @OnClick(R.id.plus_sign_in_button)
     public void GooglePlusSignInClick(){
 
-        new AnalyticsHelper().sendClickEvent(R.string.GoogleSignIn);
+        mAnalytics.trackClick(new GoogleAnalyticEvent().GoogleSignIn());
 
         signIn();
     }
 
     @OnClick(R.id.email_sign_in_button)
     public void EmailSignInClick(){
-        new AnalyticsHelper().sendClickEvent(R.string.GeoUndergroundSignIn);
+
+        mAnalytics.trackClick(new GoogleAnalyticEvent().SignInBtn());
+
         attemptLogin();
     }
     //endregion
@@ -206,7 +207,8 @@ public class LoginActivity extends GoogleApiActivity implements LoaderCallbacks<
         } else {
             // Show a progress spinner, and kick off a background task to
             // perform the user login attempt.
-            new AnalyticsHelper().sendClickEvent(R.string.loginAttempt);
+
+            mAnalytics.trackClick(new GoogleAnalyticEvent().LoginAttempt());
 
             showProgress(true);
             mAuthTask = new UserLoginTask(email, password);

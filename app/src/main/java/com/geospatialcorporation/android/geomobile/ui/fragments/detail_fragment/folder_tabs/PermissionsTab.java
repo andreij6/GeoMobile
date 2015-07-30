@@ -6,6 +6,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.geospatialcorporation.android.geomobile.R;
+import com.geospatialcorporation.android.geomobile.library.DI.Analytics.Models.GoogleAnalyticEvent;
 import com.geospatialcorporation.android.geomobile.library.helpers.GeoAsyncTask;
 import com.geospatialcorporation.android.geomobile.library.services.FolderTreeService;
 import com.geospatialcorporation.android.geomobile.models.Folders.Folder;
@@ -35,6 +36,8 @@ public class PermissionsTab extends GeoDetailsTabBase<Folder> {
         setIntentString(Folder.FOLDER_INTENT);
         handleArgs();
 
+        mAnalytics.trackScreen(new GoogleAnalyticEvent().FolderPermissionsScreen());
+
         mFab.setOnClickListener(showActions);
 
         refresh();
@@ -46,6 +49,7 @@ public class PermissionsTab extends GeoDetailsTabBase<Folder> {
         @Override
         public void onClick(View v) {
             Toaster("Allow user to edit Permissions");
+            mAnalytics.trackClick(new GoogleAnalyticEvent().FolderPermissionsClick());
         }
     };
 

@@ -7,6 +7,7 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.geospatialcorporation.android.geomobile.R;
+import com.geospatialcorporation.android.geomobile.library.DI.Analytics.Models.GoogleAnalyticEvent;
 import com.geospatialcorporation.android.geomobile.library.helpers.GeoAsyncTask;
 import com.geospatialcorporation.android.geomobile.library.helpers.GeoDialogHelper;
 import com.geospatialcorporation.android.geomobile.library.services.LayerTreeService;
@@ -38,6 +39,7 @@ public class DetailsTab extends GeoDetailsTabBase<Layer> {
 
     @OnClick(R.id.fab)
     public void showLayerActions(){
+        mAnalytics.trackClick(new GoogleAnalyticEvent().ShowLayerActions());
         GeoDialogHelper.showLayerActions(getActivity(), mEntity, getActivity().getSupportFragmentManager());
     }
     //endregion
@@ -49,6 +51,8 @@ public class DetailsTab extends GeoDetailsTabBase<Layer> {
 
         setIntentString(Layer.LAYER_INTENT);
         handleArgs();
+
+        mAnalytics.trackScreen(new GoogleAnalyticEvent().LayerDetailScreen());
 
         new GetDetailsTask().execute();
 
