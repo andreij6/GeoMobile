@@ -5,6 +5,7 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 
 import com.geospatialcorporation.android.geomobile.R;
+import com.geospatialcorporation.android.geomobile.application;
 import com.geospatialcorporation.android.geomobile.library.sectionbuilders.ISectionBuilder;
 import com.geospatialcorporation.android.geomobile.library.sectionbuilders.SectionBuilderBase;
 import com.geospatialcorporation.android.geomobile.models.Folders.Folder;
@@ -14,6 +15,7 @@ import com.geospatialcorporation.android.geomobile.ui.adapters.recycler.LegendLa
 import com.geospatialcorporation.android.geomobile.ui.adapters.SimpleSectionedRecyclerViewAdapter;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 /**
@@ -86,9 +88,14 @@ public class LegendLayerSectionBuilder extends SectionBuilderBase<Folder> implem
 
         List<LegendLayer> result = new ArrayList<>();
 
+        HashMap<Integer, Layer> layerHashMap = new HashMap<>();
+
         for(Layer layer : layers){
+            layerHashMap.put(layer.getId(), layer);
             result.add(new LegendLayer(layer));
         }
+
+        application.setLayerHashMap(layerHashMap);
 
         return result;
     }

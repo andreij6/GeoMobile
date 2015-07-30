@@ -18,7 +18,7 @@ public class AttributeSlidingPanel extends GeoSlidingPanelBase {
     protected void setDefaultCollapsedUI() {
         Fragment collapsedFragment = new AttributeDefaultCollapsedPanelFragment();
 
-        completeDefaultCollapsedUI(collapsedFragment);
+        //completeDefaultCollapsedUI(collapsedFragment);
     }
 
 }

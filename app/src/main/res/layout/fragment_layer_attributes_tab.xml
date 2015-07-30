@@ -4,7 +4,7 @@
               android:layout_width="match_parent"
               android:layout_height="match_parent">
 
-    <com.sothree.slidinguppanel.SlidingUpPanelLayout
+    <!--<com.sothree.slidinguppanel.SlidingUpPanelLayout
         xmlns:sothree="http://schemas.android.com/apk/res-auto"
         android:id="@+id/sliding_layout"
         android:layout_width="match_parent"
@@ -12,7 +12,7 @@
         android:gravity="bottom"
         sothree:umanoPanelHeight="68dp"
         sothree:umanoShadowHeight="4dp"
-        android:background="@color/white">
+        android:background="@color/white">-->
 
         <RelativeLayout
             android:layout_width="match_parent"
@@ -99,7 +99,7 @@
             </LinearLayout>
         </RelativeLayout>
 
-        <RelativeLayout
+       <!-- <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:id="@+id/slider_content"
@@ -107,6 +107,6 @@
 
         </RelativeLayout>
 
-    </com.sothree.slidinguppanel.SlidingUpPanelLayout>
+    </com.sothree.slidinguppanel.SlidingUpPanelLayout> -->
 
 </RelativeLayout>

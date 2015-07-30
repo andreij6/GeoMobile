@@ -72,7 +72,7 @@ public class SublayerAdapter extends GeoRecyclerAdapterBase<SublayerAdapter.Hold
         public void bind(Layer layer) {
             bindLayer(layer);
 
-            mEdit.setVisibility(View.VISIBLE);
+            mEdit.setVisibility(View.GONE); //wAS visible
         }
 
         public void bindLayer(Layer layer){

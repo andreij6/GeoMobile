@@ -19,7 +19,6 @@ public class MarkerOptionsManager extends OptionsManagerBase<MarkerOptions, Mark
 
     @Override
     public void showLayers(GoogleMap map) {
-        LatLngBounds bounds = map.getProjection().getVisibleRegion().latLngBounds;
         List<HashMap<UUID, OptionFeature<MarkerOptions>>> CachedOptions = getOption();
 
         for (HashMap<UUID, OptionFeature<MarkerOptions>> cachedOptions : CachedOptions) {
@@ -30,29 +29,22 @@ public class MarkerOptionsManager extends OptionsManagerBase<MarkerOptions, Mark
 
                 UUID key = entry.getKey();
 
-                if (bounds.contains(new LatLng(option.getPosition().latitude, option.getPosition().longitude))) {
-                    if(!mVisibleLayers.containsKey(key)) {
-                        Marker marker = map.addMarker(option);
+                if(!mVisibleLayers.containsKey(key)) {
+                    Marker marker = map.addMarker(option);
 
-                        mIdFeatureIdMap.put(marker.getId(), featureInfo);
-                        marker.setTitle("");
-                        mVisibleLayers.put(key, marker);
-                    }
-                } else {
-                    if(mVisibleLayers.containsKey(key)){
-
-                        mVisibleLayers.get(key).remove();
-
-                        mVisibleLayers.remove(key);
-                    }
+                    mIdFeatureIdMap.put(marker.getId(), featureInfo);
+                    marker.setTitle("");
+                    mVisibleLayers.put(key, marker);
                 }
+
 
             }
         }
     }
-
     @Override
-    protected void removeLayer(UUID key) {
+    public void removeMapObject(UUID key){
         mVisibleLayers.get(key).remove();
     }
+
+
 }

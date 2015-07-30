@@ -27,9 +27,6 @@ import java.util.List;
 import butterknife.ButterKnife;
 import butterknife.InjectView;
 
-/**
- * Created by andre on 6/7/2015.
- */
 public class AttributeLayoutTab extends GeoDetailsTabBase<Layer> {
 
     private static final String TAG = AttributeLayoutTab.class.getSimpleName();
@@ -38,7 +35,7 @@ public class AttributeLayoutTab extends GeoDetailsTabBase<Layer> {
 
     @InjectView(R.id.attributeRecycler) RecyclerView mRecyclerView;
     @InjectView(R.id.swipe_refresh_layout) SwipeRefreshLayout mSwipeRefreshLayout;
-    @InjectView(R.id.sliding_layout) SlidingUpPanelLayout mPanel;
+    //@InjectView(R.id.sliding_layout) SlidingUpPanelLayout mPanel;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState){
@@ -48,9 +45,9 @@ public class AttributeLayoutTab extends GeoDetailsTabBase<Layer> {
         mSwipeRefreshLayout.setOnRefreshListener(new AttributeRefreshListener());
         mSwipeRefreshLayout.setProgressBackgroundColorSchemeColor(getActivity().getResources().getColor(R.color.accent));
 
-        application.setLayerAttributePanel(mPanel);
-        mPanelManager = new PanelManager(GeoPanel.LAYER_ATTRIBUTE);
-        mPanelManager.setup();
+        //application.setLayerAttributePanel(mPanel);
+        //mPanelManager = new PanelManager(GeoPanel.LAYER_ATTRIBUTE);
+        //mPanelManager.setup();
 
         setIntentString(Layer.LAYER_INTENT);
         handleArgs();

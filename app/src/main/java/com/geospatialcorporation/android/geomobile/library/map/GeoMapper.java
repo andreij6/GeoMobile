@@ -1,6 +1,8 @@
 package com.geospatialcorporation.android.geomobile.library.map;
 
 import android.os.AsyncTask;
+import android.util.Log;
+import android.widget.Toast;
 
 import com.geospatialcorporation.android.geomobile.application;
 import com.geospatialcorporation.android.geomobile.library.constants.GeometryTypeCodes;
@@ -77,33 +79,45 @@ public class GeoMapper implements IGeoMapper  {
 
         @Override
         protected Integer doInBackground(Void... params) {
-            int geometryTypeCode = mResponses.get(0).getFeatures().get(0).getGeometry().getGeometryTypeCode();
+            int result = 1;
+            try {
+                int geometryTypeCode = mResponses.get(0).getFeatures().get(0).getGeometry().getGeometryTypeCode();
 
-            mMapper = mStrategies.get(geometryTypeCode);
+                mMapper = mStrategies.get(geometryTypeCode);
 
-            for(MapQueryResponse response : mResponses){
+                for (MapQueryResponse response : mResponses) {
 
-                List<Feature> FeaturesList = response.getFeatures();
+                    List<Feature> FeaturesList = response.getFeatures();
 
-                for(Feature feature : FeaturesList){
+                    for (Feature feature : FeaturesList) {
 
-                    mMapper.reset();
+                        mMapper.reset();
 
-                    mMapper.draw(feature).addStyle(response.getStyle()).commit(mLlayer);
+                        mMapper.draw(feature).addStyle(response.getStyle()).commit(mLlayer);
+                    }
                 }
+
+                result = 1;
+            } catch (Exception e){
+                Log.d(TAG, e.getMessage());
+
+                result = 2;
             }
 
-            return 1;
+            return result;
         }
 
         @Override
         protected void onPostExecute(Integer integer) {
-
             mProgressHelper.toggleProgressDialog();
-            mLlayer.setLegendIcon(mMapper.getActiveDrawable());
-            mLlayer.setImageSrc();
 
-            application.getLayerManager().showLayers();
+            if(integer == 1) {
+
+                mLlayer.setLegendIcon(mMapper.getActiveDrawable());
+                mLlayer.setImageSrc();
+
+                application.getLayerManager().showLayers();
+            }
         }
     }
 

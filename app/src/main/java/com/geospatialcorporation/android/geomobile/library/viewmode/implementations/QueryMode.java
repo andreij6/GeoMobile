@@ -314,10 +314,10 @@ public class QueryMode implements IViewMode {
 
             Fragment queryPanelFragment = new QueryPanelFragment();
 
-            mFragmentManager.beginTransaction()
-                    .disallowAddToBackStack()
-                    .replace(R.id.slider_content, queryPanelFragment)
-                    .commit();
+            //mFragmentManager.beginTransaction()
+            //        .disallowAddToBackStack()
+            //        .replace(R.id.slider_content, queryPanelFragment)
+            //        .commit();
 
             mPanelManager.anchor();
 

@@ -60,6 +60,12 @@
         <item name="android:textAppearance">?android:attr/textAppearanceSmall</item>
     </style>
 
+    <style name="table_columnName">
+        <item name="android:layout_columnWeight">1</item>
+        <item name="android:paddingLeft">8dp</item>
+        <item name="android:paddingTop">8dp</item>
+    </style>
+
     <!-- Clickable ImageButtons -->
     <style name="information_img_btn">
         <item name="android:background">?android:attr/selectableItemBackground</item>

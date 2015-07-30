@@ -21,6 +21,6 @@ public class SublayerSlidingPanel extends GeoSlidingPanelBase {
     protected void setDefaultCollapsedUI() {
         Fragment collapsedFragment = new SublayerDefaultCollapsedPanelFragment();
 
-        completeDefaultCollapsedUI(collapsedFragment);
+        //completeDefaultCollapsedUI(collapsedFragment);
     }
 }

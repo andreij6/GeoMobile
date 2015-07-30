@@ -61,11 +61,8 @@ public abstract class GeoSlidingPanelBase {
 
     protected void completeDefaultCollapsedUI(Fragment collapsedFragment){
         Bundle args = getArguments();
-
         collapsedFragment.setArguments(args);
-
         FragmentManager fragmentManager = ((MainActivity) mContext).getSupportFragmentManager();
-
         fragmentManager.beginTransaction()
                 .replace(R.id.slider_content, collapsedFragment)
                 .commit();

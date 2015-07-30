@@ -98,7 +98,7 @@ public class GoogleMapFragment extends GeoViewFragmentBase implements
     ISlidingPanelManager mPanelManager;
     ILayerManager mLayerManager;
     @InjectView(R.id.map) MapView mMapView;
-    //@InjectView(R.id.sliding_layout) SlidingUpPanelLayout mPanel;
+    @InjectView(R.id.sliding_layout) SlidingUpPanelLayout mPanel;
     @InjectView(R.id.fab_box) FloatingActionButton mBoxQueryBtn;
     @InjectView(R.id.fab_point) FloatingActionButton mPointQueryBtn;
     @InjectView(R.id.fab_close) FloatingActionButton mCloseBtn;
@@ -196,31 +196,21 @@ public class GoogleMapFragment extends GeoViewFragmentBase implements
 
         mAnalytics.sendScreenName(R.string.map_screen);
 
-        //application.setMapFragmentPanel(mPanel);
-        //mPanelManager = new PanelManager(GeoPanel.MAP);
-        //mPanelManager.setup();
-        //mPanelManager.touch(false);
+        application.setMapFragmentPanel(mPanel);
+        mPanelManager = new PanelManager(GeoPanel.MAP);
+        mPanelManager.setup();
+        mPanelManager.touch(false);
         mLayerManager = application.getLayerManager();
 
+
         initializeGoogleMap(savedInstanceState);
-
-        mMap.setOnCameraChangeListener(new GoogleMap.OnCameraChangeListener() {
-            @Override
-            public void onCameraChange(CameraPosition cameraPosition) {
-                application.getLayerManager().showLayers();
-            }
-        });
-
-
-        mLayerManager.showLayers();
 
         //region Show Feature Window Code
 
         mMap.setOnMarkerClickListener(new GoogleMap.OnMarkerClickListener() {
             @Override
             public boolean onMarkerClick(Marker marker) {
-                //mPanelManager.anchor();
-                //getFeatureWindow(marker.getId(), LayerManager.POINT);
+                getFeatureWindow(marker.getId(), LayerManager.POINT);
                 return false;
             }
         });
@@ -231,21 +221,21 @@ public class GoogleMapFragment extends GeoViewFragmentBase implements
 
                 Iterable<Polyline> lines = mLayerManager.getVisiblePolylines();
 
-                //for (Polyline line : lines) {
-                //    if (PolyUtil.isLocationOnPath(latLng, line.getPoints(), false, 200.0)) { //idea: reset tolerance by zoom level
-                //        getFeatureWindow(line.getId(), LayerManager.LINE);
-                //
-                //    }
-                //}
+                for (Polyline line : lines) {
+                    if (PolyUtil.isLocationOnPath(latLng, line.getPoints(), false, 200.0)) { //idea: reset tolerance by zoom level
+                        getFeatureWindow(line.getId(), LayerManager.LINE);
+
+                    }
+                }
 
                 Iterable<Polygon> polygons = mLayerManager.getVisiblePolygons();
 
-                //for (Polygon ss : polygons) {
-                //    if (PolyUtil.containsLocation(latLng, ss.getPoints(), true)) {
-                //        getFeatureWindow(ss.getId(), LayerManager.POLYGON);
-                //    }
-                //
-                //}
+                for (Polygon ss : polygons) {
+                    if (PolyUtil.containsLocation(latLng, ss.getPoints(), true)) {
+                        getFeatureWindow(ss.getId(), LayerManager.POLYGON);
+                    }
+
+                }
 
 
             }
@@ -259,7 +249,6 @@ public class GoogleMapFragment extends GeoViewFragmentBase implements
     protected void getFeatureWindow(String id, int shapeCode){
         String featureId = mLayerManager.getFeatureId(id, shapeCode);
         int layerId = mLayerManager.getLayerId(id, shapeCode);
-        //Toaster(featureId + " : " + layerId);
         QueryRestService QueryService = new QueryRestService();
         QueryService.featureWindow(featureId, layerId);
     }
@@ -298,6 +287,8 @@ public class GoogleMapFragment extends GeoViewFragmentBase implements
 
         application.setGoogleMap(mMap);
 
+        mLayerManager.showLayers();
+
         mLocationClient = new GoogleApiClient.Builder(getActivity())
                 .addApi(LocationServices.API)
                 .addConnectionCallbacks(this)
@@ -325,7 +316,7 @@ public class GoogleMapFragment extends GeoViewFragmentBase implements
         super.onResume();
         mMapView.onResume();
         setMapState();
-        //mPanelManager.collapse();
+        mPanelManager.collapse();
         mLayerManager.showLayers();
     }
 
@@ -383,8 +374,8 @@ public class GoogleMapFragment extends GeoViewFragmentBase implements
 
     @Override
     public void onPause(){
-        mMapView.onPause();
         mLayerManager.clearVisibleLayers();
+        mMapView.onPause();
         super.onPause();
     }
 

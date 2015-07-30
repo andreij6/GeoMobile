@@ -62,9 +62,9 @@ public class BookmarkMode implements IViewMode {
 
                     Fragment f = new BookmarkPanelFragment.Builder(mMap).create();
 
-                    fm.beginTransaction()
-                            .replace(R.id.slider_content, f)
-                            .commit();
+                    //fm.beginTransaction()
+                    //        .replace(R.id.slider_content, f)
+                    //        .commit();
 
                     mPanelManager.anchor();
 

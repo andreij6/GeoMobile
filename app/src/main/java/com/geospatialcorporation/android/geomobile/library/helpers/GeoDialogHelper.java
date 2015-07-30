@@ -1,5 +1,6 @@
 package com.geospatialcorporation.android.geomobile.library.helpers;
 
+import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
 import android.content.Context;
 import com.geospatialcorporation.android.geomobile.models.Folders.Folder;
@@ -8,6 +9,7 @@ import com.geospatialcorporation.android.geomobile.models.Document.Document;
 import com.geospatialcorporation.android.geomobile.ui.fragments.dialogs.BookmarksDialogFragment;
 import com.geospatialcorporation.android.geomobile.ui.fragments.dialogs.CreateFolderDialogFragment;
 import com.geospatialcorporation.android.geomobile.ui.fragments.dialogs.CreateLayerDialogFragment;
+import com.geospatialcorporation.android.geomobile.ui.fragments.dialogs.MapFeatureDocumentDialogFragment;
 import com.geospatialcorporation.android.geomobile.ui.fragments.dialogs.action_dialogs.document.DeleteDocumentDialogFragment;
 import com.geospatialcorporation.android.geomobile.ui.fragments.dialogs.DeleteFolderDialogFragment;
 import com.geospatialcorporation.android.geomobile.ui.fragments.dialogs.action_dialogs.layer.DeleteLayerDialogFragment;
@@ -136,4 +138,9 @@ public class GeoDialogHelper {
         sdad.show(fragmentManager, "Delete Sublayer");
     }
 
+    public static void addMapFeatureDocument(Context context, FragmentManager fm, int layerId, String featureId) {
+        MapFeatureDocumentDialogFragment mfddf = new MapFeatureDocumentDialogFragment();
+        mfddf.init(context, layerId, featureId);
+        mfddf.show(fm, "Add Document to Feature");
+    }
 }

@@ -233,5 +233,7 @@
     <string name="geometryIV">Geometry Type Image View</string>
     <string name="add_feature_window_document">Add Document</string>
     <string name="GeoUndergroundSignIn">GeoUnderground Sign In Button Clicked</string>
+    <string name="map_window_title">Map Window Title</string>
+    <string name="add_mapfeature_document">Add Document to Feature</string>
 
 </resources>
