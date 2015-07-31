@@ -7,6 +7,8 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Toast;
 
+import com.geospatialcorporation.android.geomobile.library.DI.Analytics.Interfaces.IGeoAnalytics;
+
 /**
  * Created by andre on 6/2/2015.
  */
@@ -24,6 +26,7 @@ public class GeoDialogFragmentBase extends DialogFragment {
 
 
     protected Context mContext;
+    protected IGeoAnalytics mAnalytics;
 
     protected AlertDialog.Builder getDialogBuilder(){
         return new AlertDialog.Builder(mContext);

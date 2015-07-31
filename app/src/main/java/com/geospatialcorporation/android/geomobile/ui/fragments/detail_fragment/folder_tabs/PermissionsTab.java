@@ -1,5 +1,6 @@
 package com.geospatialcorporation.android.geomobile.ui.fragments.detail_fragment.folder_tabs;
 
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -7,7 +8,6 @@ import android.view.ViewGroup;
 
 import com.geospatialcorporation.android.geomobile.R;
 import com.geospatialcorporation.android.geomobile.library.DI.Analytics.Models.GoogleAnalyticEvent;
-import com.geospatialcorporation.android.geomobile.library.helpers.GeoAsyncTask;
 import com.geospatialcorporation.android.geomobile.library.services.FolderTreeService;
 import com.geospatialcorporation.android.geomobile.models.Folders.Folder;
 import com.geospatialcorporation.android.geomobile.models.Folders.FolderPermissionsResponse;
@@ -58,7 +58,7 @@ public class PermissionsTab extends GeoDetailsTabBase<Folder> {
         new GetFolderPermissionsTask().execute();
     }
 
-    private class GetFolderPermissionsTask extends GeoAsyncTask<Void, Void, List<FolderPermissionsResponse>> {
+    private class GetFolderPermissionsTask extends AsyncTask<Void, Void, List<FolderPermissionsResponse>> {
 
         @Override
         protected List<FolderPermissionsResponse> doInBackground(Void... params) {

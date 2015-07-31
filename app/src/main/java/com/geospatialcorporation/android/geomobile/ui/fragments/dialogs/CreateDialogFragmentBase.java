@@ -5,6 +5,8 @@ import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 
+import com.geospatialcorporation.android.geomobile.application;
+import com.geospatialcorporation.android.geomobile.library.DI.Analytics.Interfaces.IGeoAnalytics;
 import com.geospatialcorporation.android.geomobile.models.Folders.Folder;
 import com.geospatialcorporation.android.geomobile.ui.fragments.dialogs.base.GeoDialogFragmentBase;
 
@@ -23,12 +25,15 @@ public class CreateDialogFragmentBase extends GeoDialogFragmentBase {
     //endregion
 
 
+
     public void init(Context context, Folder folder){
         setContext(context);
         setFolder(folder);
+        mAnalytics = application.getAnalyticsComponent().provideGeoAnalytics();
     }
 
     protected Folder mFolder;
+    protected IGeoAnalytics mAnalytics;
 
     protected AlertDialog.Builder getDialogBuilder(){
         return new AlertDialog.Builder(mContext);

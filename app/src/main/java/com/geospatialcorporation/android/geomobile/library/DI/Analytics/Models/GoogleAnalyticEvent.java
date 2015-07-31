@@ -15,6 +15,8 @@ public class GoogleAnalyticEvent extends AnalyticEvent {
 
     public GoogleAnalyticEvent(){
         mContext = application.getAppContext();
+        setCategory(R.string.ui);
+        setAction(R.string.clicked);
     }
 
     //region Gs & Ss
@@ -40,6 +42,81 @@ public class GoogleAnalyticEvent extends AnalyticEvent {
 
     public void setScreenName(int screenName) {
         mScreenName = mContext.getString(screenName);
+    }
+
+    public void setCategory(int categoryId){
+        mCategory = mContext.getString(categoryId);
+    }
+
+    public void setAction(int actionId){
+        mAction = mContext.getString(actionId);
+    }
+    //endregion
+
+    //region Screen Events
+    public GoogleAnalyticEvent MapScreen() {
+        this.setScreenName(R.string.map_screen);
+        return this;
+    }
+
+    public GoogleAnalyticEvent LayerFolderDetail() {
+        this.setScreenName(R.string.layer_folder_detail_screen);
+        return this;
+    }
+
+    public GoogleAnalyticEvent BookmarkScreen() {
+        this.setScreenName(R.string.bookmark);
+        return this;
+    }
+
+    public GoogleAnalyticEvent LibraryTreeScreen() {
+        this.setScreenName(R.string.library_tree_screen);
+        return this;
+    }
+
+    public GoogleAnalyticEvent DocumentDetailScreen() {
+        this.setScreenName(R.string.document_detail_screen);
+        return this;
+    }
+
+    public GoogleAnalyticEvent SublayersTab() {
+        this.setScreenName(R.string.sublayers_tab_screen);
+        return this;
+    }
+
+    public GoogleAnalyticEvent LayerDetailScreen() {
+        this.setScreenName(R.string.layer_detail_tab_screen);
+        return this;
+    }
+
+    public GoogleAnalyticEvent AttributeLayoutTab() {
+        this.setScreenName(R.string.attribute_layout);
+        return this;
+    }
+
+    public GoogleAnalyticEvent FolderPermissionsScreen() {
+        this.setScreenName(R.string.folder_permissions_screen);
+        return this;
+    }
+
+    public GoogleAnalyticEvent FolderDetailTab() {
+        this.setScreenName(R.string.folder_detail_screen);
+        return this;
+    }
+
+    public GoogleAnalyticEvent FeatureAttributesTab() {
+        this.setScreenName(R.string.feature_window_attributes_tab);
+        return this;
+    }
+
+    public GoogleAnalyticEvent MapInfoTab() {
+        this.setScreenName(R.string.map_info_tab);
+        return this;
+    }
+
+    public GoogleAnalyticEvent MapFeatureDocumentsTab() {
+        this.setScreenName(R.string.map_feature_document);
+        return this;
     }
     //endregion
 
@@ -128,71 +205,34 @@ public class GoogleAnalyticEvent extends AnalyticEvent {
         this.setLabel(R.string.show_add_feature_document_dialog);
         return this;
     }
-    //endregion
 
-    //region Screen Events
-    public GoogleAnalyticEvent MapScreen() {
-        this.setScreenName(R.string.map_screen);
+    public GoogleAnalyticEvent Logout() {
+        this.setLabel(R.string.logout_event);
         return this;
     }
 
-    public GoogleAnalyticEvent LayerFolderDetail() {
-        this.setScreenName(R.string.layer_folder_detail_screen);
+    public GoogleAnalyticEvent UploadImage() {
+        this.setLabel(R.string.upload_image_event);
         return this;
     }
 
-    public GoogleAnalyticEvent BookmarkScreen() {
-        this.setScreenName(R.string.bookmark);
+    public GoogleAnalyticEvent CreateLayer() {
+        this.setLabel(R.string.create_layer_event);
         return this;
     }
 
-    public GoogleAnalyticEvent LibraryTreeScreen() {
-        this.setScreenName(R.string.library_tree_screen);
+    public GoogleAnalyticEvent CreateFolder() {
+        this.setLabel(R.string.create_folder_event);
         return this;
     }
 
-    public GoogleAnalyticEvent DocumentDetailScreen() {
-        this.setScreenName(R.string.document_detail_screen);
+    public GoogleAnalyticEvent DeleteFolder() {
+        this.setLabel(R.string.delete_folder_event);
         return this;
     }
 
-    public GoogleAnalyticEvent SublayersTab() {
-        this.setScreenName(R.string.sublayers_tab_screen);
-        return this;
-    }
-
-    public GoogleAnalyticEvent LayerDetailScreen() {
-        this.setScreenName(R.string.layer_detail_tab_screen);
-        return this;
-    }
-
-    public GoogleAnalyticEvent AttributeLayoutTab() {
-        this.setScreenName(R.string.attribute_layout);
-        return this;
-    }
-
-    public GoogleAnalyticEvent FolderPermissionsScreen() {
-        this.setScreenName(R.string.folder_permissions_screen);
-        return this;
-    }
-
-    public GoogleAnalyticEvent FolderDetailTab() {
-        this.setScreenName(R.string.folder_detail_screen);
-        return this;
-    }
-
-    public GoogleAnalyticEvent FeatureAttributesTab() {
-        this.setScreenName(R.string.feature_window_attributes_tab);
-        return this;
-    }
-
-    public GoogleAnalyticEvent MapInfoTab() {
-        this.setScreenName(R.string.map_info_tab);
-        return this;
-    }
-
-    public GoogleAnalyticEvent MapFeatureDocumentsTab() {
-        this.setScreenName(R.string.map_feature_document);
+    public GoogleAnalyticEvent MapfeatureDocument() {
+        this.setLabel(R.string.map_feature_document_event);
         return this;
     }
     //endregion

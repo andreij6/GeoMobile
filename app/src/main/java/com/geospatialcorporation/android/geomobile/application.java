@@ -1,17 +1,15 @@
 package com.geospatialcorporation.android.geomobile;
 
-import android.app.Application;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.net.Uri;
 import android.support.v4.widget.DrawerLayout;
 import android.util.Log;
-import android.widget.Toast;
 
 import com.facebook.stetho.Stetho;
 import com.facebook.stetho.okhttp.StethoInterceptor;
-import com.geospatialcorporation.android.geomobile.library.DI.Authentication.AuthenticationComponent;
-import com.geospatialcorporation.android.geomobile.library.DI.Authentication.DaggerAuthenticationComponent;
+import com.geospatialcorporation.android.geomobile.library.DI.Analytics.Interfaces.IGeoAnalytics;
+import com.geospatialcorporation.android.geomobile.library.DI.Analytics.Models.GoogleAnalyticEvent;
 import com.geospatialcorporation.android.geomobile.library.DI.SharedPreferences.DaggerGeoSharedPrefsComponent;
 import com.geospatialcorporation.android.geomobile.library.DI.SharedPreferences.GeoSharedPrefsComponent;
 import com.geospatialcorporation.android.geomobile.library.DI.SharedPreferences.IGeoSharedPrefs;
@@ -32,8 +30,6 @@ import com.google.android.gms.analytics.GoogleAnalytics;
 import com.google.android.gms.analytics.Tracker;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.maps.GoogleMap;
-import com.google.android.gms.maps.model.MarkerOptions;
-import com.google.android.gms.maps.model.PolygonOptions;
 import com.sothree.slidinguppanel.SlidingUpPanelLayout;
 import com.squareup.okhttp.Interceptor;
 import com.squareup.okhttp.OkHttpClient;
@@ -41,15 +37,13 @@ import com.squareup.okhttp.Request;
 import com.squareup.okhttp.Response;
 
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 
 import retrofit.RequestInterceptor;
 import retrofit.RestAdapter;
 import retrofit.client.OkClient;
 
-public class application extends Application {
+public class application extends applicationDIBase {
     //region Properties
     private final static String TAG = "application";
     private final static String prefsName = "AppState";
@@ -393,10 +387,11 @@ public class application extends Application {
         documentHashMap = null;
         folderHashMap = null;
 
-        GeoSharedPrefsComponent component = DaggerGeoSharedPrefsComponent.builder().build();
-        IGeoSharedPrefs prefs = component.provideGeoSharedPrefs();
+        IGeoSharedPrefs prefs = getGeoSharedPrefsComponent().provideGeoSharedPrefs();
         prefs.remove(GeoSharedPrefs.Items.GOOGLE_ACCOUNT_NAME);
 
+        IGeoAnalytics analytics = getAnalyticsComponent().provideGeoAnalytics();
+        analytics.trackClick(new GoogleAnalyticEvent().Logout());
 
         appState.getStringSet(geoAuthTokenName, null);
 

@@ -1,5 +1,6 @@
 package com.geospatialcorporation.android.geomobile.ui.fragments.detail_fragment.layer_tabs;
 
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -8,7 +9,6 @@ import android.widget.TextView;
 
 import com.geospatialcorporation.android.geomobile.R;
 import com.geospatialcorporation.android.geomobile.library.DI.Analytics.Models.GoogleAnalyticEvent;
-import com.geospatialcorporation.android.geomobile.library.helpers.GeoAsyncTask;
 import com.geospatialcorporation.android.geomobile.library.helpers.GeoDialogHelper;
 import com.geospatialcorporation.android.geomobile.library.services.LayerTreeService;
 import com.geospatialcorporation.android.geomobile.models.Layers.Layer;
@@ -64,7 +64,7 @@ public class DetailsTab extends GeoDetailsTabBase<Layer> {
         new GetDetailsTask().execute();
     }
 
-    private class GetDetailsTask extends GeoAsyncTask<Void, Void, LayerDetailsVm> {
+    private class GetDetailsTask extends AsyncTask<Void, Void, LayerDetailsVm> {
 
         @Override
         protected LayerDetailsVm doInBackground(Void... params) {

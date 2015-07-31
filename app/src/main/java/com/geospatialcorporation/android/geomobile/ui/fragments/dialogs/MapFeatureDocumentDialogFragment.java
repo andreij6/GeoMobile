@@ -14,6 +14,7 @@ import android.widget.Spinner;
 
 import com.geospatialcorporation.android.geomobile.R;
 import com.geospatialcorporation.android.geomobile.application;
+import com.geospatialcorporation.android.geomobile.library.DI.Analytics.Models.GoogleAnalyticEvent;
 import com.geospatialcorporation.android.geomobile.library.helpers.DataHelper;
 import com.geospatialcorporation.android.geomobile.library.rest.TreeService;
 import com.geospatialcorporation.android.geomobile.library.services.FolderTreeService;
@@ -43,6 +44,7 @@ public class MapFeatureDocumentDialogFragment extends GeoDialogFragmentBase {
         mLayerId = layerId;
         mFeatureId = featureId;
         mLayerTreeService = new LayerTreeService();
+        mAnalytics = application.getAnalyticsComponent().provideGeoAnalytics();
     }
 
     @NonNull
@@ -60,6 +62,7 @@ public class MapFeatureDocumentDialogFragment extends GeoDialogFragmentBase {
                 .setPositiveButton(R.string.add, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
+                        mAnalytics.trackClick(new GoogleAnalyticEvent().MapfeatureDocument());
                         mLayerTreeService.addMapFeatureDocument(mLayerId, mFeatureId, mSelected.getId());
                         dialog.cancel();
                     }

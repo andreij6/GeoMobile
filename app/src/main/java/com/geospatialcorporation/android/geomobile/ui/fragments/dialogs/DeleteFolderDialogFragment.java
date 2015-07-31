@@ -8,6 +8,8 @@ import android.widget.Toast;
 
 import com.geospatialcorporation.android.geomobile.R;
 import com.geospatialcorporation.android.geomobile.application;
+import com.geospatialcorporation.android.geomobile.library.DI.Analytics.Interfaces.IGeoAnalytics;
+import com.geospatialcorporation.android.geomobile.library.DI.Analytics.Models.GoogleAnalyticEvent;
 import com.geospatialcorporation.android.geomobile.library.services.FolderTreeService;
 import com.geospatialcorporation.android.geomobile.models.Folders.Folder;
 import com.geospatialcorporation.android.geomobile.ui.fragments.dialogs.base.GeoDialogFragmentBase;
@@ -31,6 +33,8 @@ public class DeleteFolderDialogFragment extends GeoDialogFragmentBase {
         setContext(context);
         setFolder(folder);
         mService = new FolderTreeService();
+        mAnalytics = application.getAnalyticsComponent().provideGeoAnalytics();
+
     }
 
 
@@ -44,7 +48,7 @@ public class DeleteFolderDialogFragment extends GeoDialogFragmentBase {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
                         mService.deleteFolder(mFolder);
-
+                        mAnalytics.trackClick(new GoogleAnalyticEvent().DeleteFolder());
                         Toast.makeText(application.getAppContext(), "Delete Request Sent!", Toast.LENGTH_LONG).show();
                     }
                 }).setNegativeButton(android.R.string.cancel, new DialogInterface.OnClickListener() {

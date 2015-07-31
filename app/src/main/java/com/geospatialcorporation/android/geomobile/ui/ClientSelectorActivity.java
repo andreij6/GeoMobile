@@ -12,6 +12,7 @@ import android.widget.Toast;
 
 import com.geospatialcorporation.android.geomobile.R;
 import com.geospatialcorporation.android.geomobile.application;
+import com.geospatialcorporation.android.geomobile.library.DI.ErrorHandler.Interfaces.IGeoErrorHandler;
 import com.geospatialcorporation.android.geomobile.ui.adapters.ClientSelectorSectionsPagerAdapter;
 
 public class ClientSelectorActivity extends ActionBarActivity implements ActionBar.TabListener {
@@ -19,6 +20,7 @@ public class ClientSelectorActivity extends ActionBarActivity implements ActionB
     ClientSelectorSectionsPagerAdapter mSectionsPagerAdapter;
 
     ViewPager mViewPager;
+    IGeoErrorHandler mErrorHandler;
 
     //region Getters & Setters
     public boolean isBackButtonClickOnce() {
@@ -46,6 +48,9 @@ public class ClientSelectorActivity extends ActionBarActivity implements ActionB
         mViewPager = (ViewPager) findViewById(R.id.pager);
 
         mSectionsPagerAdapter = new ClientSelectorSectionsPagerAdapter(getSupportFragmentManager(), this);
+
+        mErrorHandler = application.getErrorsComponent().provideErrorHandler();
+        Thread.setDefaultUncaughtExceptionHandler(mErrorHandler.UncaughtExceptionHandler());
 
         mViewPager.setAdapter(mSectionsPagerAdapter);
 

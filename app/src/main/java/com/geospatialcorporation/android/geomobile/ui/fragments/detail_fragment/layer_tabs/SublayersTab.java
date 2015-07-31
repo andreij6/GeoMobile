@@ -1,5 +1,6 @@
 package com.geospatialcorporation.android.geomobile.ui.fragments.detail_fragment.layer_tabs;
 
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.v4.widget.SwipeRefreshLayout;
@@ -10,17 +11,11 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.geospatialcorporation.android.geomobile.R;
-import com.geospatialcorporation.android.geomobile.application;
 import com.geospatialcorporation.android.geomobile.library.DI.Analytics.Models.GoogleAnalyticEvent;
-import com.geospatialcorporation.android.geomobile.library.constants.GeoPanel;
-import com.geospatialcorporation.android.geomobile.library.helpers.GeoAsyncTask;
-import com.geospatialcorporation.android.geomobile.library.panelmanager.ISlidingPanelManager;
-import com.geospatialcorporation.android.geomobile.library.panelmanager.PanelManager;
 import com.geospatialcorporation.android.geomobile.library.services.SublayerTreeService;
 import com.geospatialcorporation.android.geomobile.models.Layers.Layer;
 import com.geospatialcorporation.android.geomobile.ui.adapters.recycler.SublayerAdapter;
 import com.geospatialcorporation.android.geomobile.ui.fragments.detail_fragment.GeoDetailsTabBase;
-import com.sothree.slidinguppanel.SlidingUpPanelLayout;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -79,7 +74,7 @@ public class SublayersTab extends GeoDetailsTabBase<Layer> {
         new GetSublayersTask().execute();
     }
 
-    private class GetSublayersTask extends GeoAsyncTask<Void, Void, List<Layer>> {
+    private class GetSublayersTask extends AsyncTask<Void, Void, List<Layer>> {
 
         @Override
         protected List<Layer> doInBackground(Void... params) {

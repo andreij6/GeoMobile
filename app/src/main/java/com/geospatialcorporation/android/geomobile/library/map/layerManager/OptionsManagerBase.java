@@ -60,10 +60,14 @@ public abstract class OptionsManagerBase<T, S> implements IOptionsManager<T, S> 
     @Override
     public void remove(int layerId) {
         List<HashMap<UUID, OptionFeature<T>>> values = new ArrayList<>();
-        Collection<HashMap<UUID, OptionFeature<T>>> um = mLayerOptions.values();
+        HashMap<UUID, OptionFeature<T>> layerHashMap = mLayerOptions.get(layerId);
 
-        for (HashMap<UUID, OptionFeature<T>> m : um) {
-            values.add(m);
+        if(layerHashMap != null) {
+            for (UUID m : layerHashMap.keySet()) {
+                HashMap<UUID, OptionFeature<T>> map = new HashMap<>();
+                map.put(m, layerHashMap.get(m));
+                values.add(map);
+            }
         }
 
         for (HashMap<UUID, OptionFeature<T>> cachedOptions : values) {

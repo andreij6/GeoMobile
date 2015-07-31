@@ -29,6 +29,7 @@ import android.view.View;
 
 import com.geospatialcorporation.android.geomobile.R;
 import com.geospatialcorporation.android.geomobile.application;
+import com.geospatialcorporation.android.geomobile.library.DI.ErrorHandler.Interfaces.IGeoErrorHandler;
 import com.geospatialcorporation.android.geomobile.library.DI.MainNavigationController.DaggerMainNavCtrlComponent;
 import com.geospatialcorporation.android.geomobile.library.DI.MainNavigationController.MainNavCtrlComponent;
 import com.geospatialcorporation.android.geomobile.library.DI.MainNavigationController.Implementations.MainNavCtrl;
@@ -81,6 +82,7 @@ public class MainActivity extends ActionBarActivity
     MainNavigationDrawerFragment mMainMainNavigationDrawerFragment;
     LayerSelectorDrawerFragment mLayerDrawerFragement;
     MainNavCtrl mMainNavCtrl;
+    IGeoErrorHandler mErrorHandler;
     //endregion
 
     @Override
@@ -92,6 +94,9 @@ public class MainActivity extends ActionBarActivity
         dialog = new Dialogs();
         getSupportActionBar().setElevation(0);
         mMapFragment = application.getMapFragment();
+
+        mErrorHandler = application.getErrorsComponent().provideErrorHandler();
+        Thread.setDefaultUncaughtExceptionHandler(mErrorHandler.UncaughtExceptionHandler());
 
         mIsAdmin = application.getIsAdminUser();
 

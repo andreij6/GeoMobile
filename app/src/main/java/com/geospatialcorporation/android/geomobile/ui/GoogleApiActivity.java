@@ -1,6 +1,7 @@
 package com.geospatialcorporation.android.geomobile.ui;
 
 import android.accounts.AccountManager;
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentSender;
@@ -11,6 +12,7 @@ import com.geospatialcorporation.android.geomobile.application;
 import com.geospatialcorporation.android.geomobile.library.DI.Analytics.Interfaces.IGeoAnalytics;
 import com.geospatialcorporation.android.geomobile.library.DI.Authentication.IGoogleAuthTokenService;
 import com.geospatialcorporation.android.geomobile.library.DI.Authentication.Implementations.GoogleAuthTokenService;
+import com.geospatialcorporation.android.geomobile.library.DI.ErrorHandler.Interfaces.IGeoErrorHandler;
 import com.geospatialcorporation.android.geomobile.library.DI.SharedPreferences.IGeoSharedPrefs;
 import com.geospatialcorporation.android.geomobile.library.DI.SharedPreferences.Implementations.GeoSharedPrefs;
 import com.geospatialcorporation.android.geomobile.library.helpers.ProgressDialogHelper;
@@ -22,7 +24,7 @@ import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.plus.Plus;
 
 
-public class GoogleApiActivity extends GeoActivityBase implements
+public class GoogleApiActivity extends Activity implements
         ConnectionCallbacks, OnConnectionFailedListener {
 
     private static final String TAG = GoogleApiActivity.class.getSimpleName();
@@ -39,6 +41,7 @@ public class GoogleApiActivity extends GeoActivityBase implements
     protected IGoogleAuthTokenService mGoogleAuthTokenService;
     protected IGeoSharedPrefs mGeoSharedPrefs;
     protected IGeoAnalytics mAnalytics;
+    protected IGeoErrorHandler mErrorHandler;
     /* A flag indicating that a PendingIntent is in progress and prevents
      * us from starting further intents.
      */
@@ -49,12 +52,12 @@ public class GoogleApiActivity extends GeoActivityBase implements
         context = this;
         ProgressHelper = new ProgressDialogHelper(context);
 
-        setComponents();
+        mGoogleAuthTokenService = application.getGoogleAuthComponent().provideGoogleAuthTokenService();
+        mGeoSharedPrefs = application.getGeoSharedPrefsComponent().provideGeoSharedPrefs();
+        mAnalytics = application.getAnalyticsComponent().provideGeoAnalytics();
+        mErrorHandler = application.getErrorsComponent().provideErrorHandler();
 
-        mGoogleAuthTokenService = mAuthComponent.provideGoogleAuthTokenService();
-        mGeoSharedPrefs = mSharedPrefsComponent.provideGeoSharedPrefs();
-        mAnalytics = mAnalyticsComponent.provideGeoAnalytics();
-
+        Thread.setDefaultUncaughtExceptionHandler(mErrorHandler.UncaughtExceptionHandler());
 
         if (application.getGoogleClient() == null) {
             mGoogleApiClient = new GoogleApiClient.Builder(context)

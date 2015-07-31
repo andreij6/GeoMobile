@@ -7,4 +7,6 @@ public interface IGeoAnalytics<T extends  AnalyticEvent> {
     void trackClick(T event);
 
     void trackScreen(T event);
+
+    Thread.UncaughtExceptionHandler getExceptionReporter(Thread.UncaughtExceptionHandler defaultHandler);
 }

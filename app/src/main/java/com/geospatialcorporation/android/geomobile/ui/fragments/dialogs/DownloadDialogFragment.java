@@ -9,6 +9,9 @@ import android.view.View;
 import android.widget.TextView;
 
 import com.geospatialcorporation.android.geomobile.R;
+import com.geospatialcorporation.android.geomobile.application;
+import com.geospatialcorporation.android.geomobile.library.DI.Analytics.Interfaces.IGeoAnalytics;
+import com.geospatialcorporation.android.geomobile.library.DI.Analytics.Models.GoogleAnalyticEvent;
 import com.geospatialcorporation.android.geomobile.library.services.DocumentTreeService;
 import com.geospatialcorporation.android.geomobile.models.Document.Document;
 import com.geospatialcorporation.android.geomobile.ui.fragments.dialogs.base.GeoDialogFragmentBase;
@@ -23,23 +26,17 @@ public class DownloadDialogFragment extends GeoDialogFragmentBase {
     public void setDocument(Document document) {
         mDocument = document;
     }
-
-    public ListItem getListItem() {
-        return mListItem;
-    }
-
-    public void setListItem(ListItem listItem) {
-        mListItem = listItem;
-    }
     //endregion
 
     Document mDocument;
-    ListItem mListItem;
+
 
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {
         // Use the Builder class for convenient dialog construction
         AlertDialog.Builder builder = new AlertDialog.Builder(mContext);
+
+        mAnalytics = application.getAnalyticsComponent().provideGeoAnalytics();
 
         LayoutInflater inflater = LayoutInflater.from(mContext);
         View v = inflater.inflate(R.layout.dialog_download, null);
@@ -50,6 +47,8 @@ public class DownloadDialogFragment extends GeoDialogFragmentBase {
 
         builder.setPositiveButton(R.string.download, new DialogInterface.OnClickListener() {
                 public void onClick(DialogInterface dialog, int id) {
+                    mAnalytics.trackClick(new GoogleAnalyticEvent().DownloadDocument());
+
                     DocumentTreeService Service = new DocumentTreeService();
                     Service.download(mDocument.getId(), mDocument.getNameWithExt());
 
