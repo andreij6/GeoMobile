@@ -2,7 +2,8 @@ package com.geospatialcorporation.android.geomobile.ui.fragments.dialogs.action_
 
 import android.content.Context;
 
-import com.geospatialcorporation.android.geomobile.library.services.LayerTreeService;
+import com.geospatialcorporation.android.geomobile.application;
+import com.geospatialcorporation.android.geomobile.library.DI.TreeServices.Interfaces.ILayerTreeService;
 import com.geospatialcorporation.android.geomobile.models.Layers.Layer;
 import com.geospatialcorporation.android.geomobile.ui.fragments.dialogs.base.GeoDialogFragmentBase;
 
@@ -11,11 +12,11 @@ import com.geospatialcorporation.android.geomobile.ui.fragments.dialogs.base.Geo
  */
 public class LayerActionDialogBase extends GeoDialogFragmentBase {
     protected Layer mLayer;
-    protected LayerTreeService mService;
+    protected ILayerTreeService mService;
 
     public void init(Context context, Layer layer){
         setContext(context);
         mLayer = layer;
-        mService = new LayerTreeService();
+        mService = application.getTreeServiceComponent().provideLayerTreeService();
     }
 }

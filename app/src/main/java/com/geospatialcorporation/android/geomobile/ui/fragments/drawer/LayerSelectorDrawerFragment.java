@@ -24,10 +24,14 @@ import android.widget.ListView;
 
 import com.geospatialcorporation.android.geomobile.R;
 import com.geospatialcorporation.android.geomobile.application;
+import com.geospatialcorporation.android.geomobile.library.DI.Tasks.Interfaces.IGetLayersTask;
+import com.geospatialcorporation.android.geomobile.library.DI.Tasks.models.GetLayersTaskParams;
 import com.geospatialcorporation.android.geomobile.library.helpers.DataHelper;
 import com.geospatialcorporation.android.geomobile.library.rest.TreeService;
 import com.geospatialcorporation.android.geomobile.library.sectionbuilders.implementations.LegendLayerSectionBuilder;
 import com.geospatialcorporation.android.geomobile.models.Folders.Folder;
+import com.geospatialcorporation.android.geomobile.models.Layers.Layer;
+import com.geospatialcorporation.android.geomobile.ui.Interfaces.IPostExecuter;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -40,7 +44,7 @@ import retrofit.RetrofitError;
  * See the <a href="https://developer.android.com/design/patterns/navigation-drawer.html#Interaction">
  * design guidelines</a> for a complete explanation of the behaviors implemented here.
  */
-public class LayerSelectorDrawerFragment extends Fragment {
+public class LayerSelectorDrawerFragment extends Fragment implements IPostExecuter<List<Folder>> {
 
     private static final String STATE_SELECTED_POSITION = "selected_navigation_drawer_position";
     private static final String TAG = LayerSelectorDrawerFragment.class.getSimpleName();
@@ -54,6 +58,7 @@ public class LayerSelectorDrawerFragment extends Fragment {
     private View mFragmentContainerView;
     private View mRootView;
     @InjectView(R.id.layerRecyclerView) RecyclerView mRecyclerView;
+    IGetLayersTask mGetLayersTask;
 
     private int mCurrentSelectedPosition = 0;
     private boolean mFromSavedInstanceState;
@@ -87,9 +92,18 @@ public class LayerSelectorDrawerFragment extends Fragment {
         // Indicate that this fragment would like to influence the set of actions in the action bar.
         mRecyclerView = (RecyclerView)mRootView.findViewById(R.id.layerRecyclerView);
 
-        new GetLayersTask().execute(0);
+        mGetLayersTask = setTask();
+        mGetLayersTask.getAll(new GetLayersTaskParams(mDrawerLayout, this));
 
         setHasOptionsMenu(true);
+    }
+
+    private IGetLayersTask setTask() {
+        if(mGetLayersTask == null){
+            return application.getTasksComponent().provideLayersTask();
+        }
+
+        return mGetLayersTask;
     }
 
     @Override
@@ -218,45 +232,14 @@ public class LayerSelectorDrawerFragment extends Fragment {
     }
 
     public void refresh() {
-        new GetLayersTask().execute(0);
+        mGetLayersTask = setTask();
+        mGetLayersTask.getAll(new GetLayersTaskParams(mDrawerLayout, this));
     }
 
-    private class GetLayersTask extends AsyncTask<Integer, Void, List<Folder>> {
-        @Override
-        protected List<Folder> doInBackground(Integer... params) {
-            List<Folder> folders = new ArrayList<>();
-
-            try {
-                TreeService treeService = application.getRestAdapter().create(TreeService.class);
-
-                List<Folder> root = treeService.getLayers();
-
-                DataHelper helper = new DataHelper();
-
-                folders = helper.getFoldersRecursively(root.get(0), null);
-
-                int index = folders.indexOf(root.get(0));  //putting the root folder in front
-                folders.remove(index);
-                folders.add(0, root.get(0));
-
-                application.setLayerDrawer(mDrawerLayout);
-
-            } catch (RetrofitError e) {
-                Log.d(TAG, "Messed up.");
-            } catch (Exception e) {
-                Log.d(TAG, e.getMessage());
-            }
-
-            return folders;
-        }
-
-        @Override
-        protected void onPostExecute(List<Folder> folders) {
-
-            new LegendLayerSectionBuilder(getActivity())
-                    .BuildAdapter(folders, 0)
-                    .setRecycler(mRecyclerView);
-        }
+    @Override
+    public void onPostExecute(List<Folder> folders) {
+        new LegendLayerSectionBuilder(getActivity())
+                .BuildAdapter(folders, 0)
+                .setRecycler(mRecyclerView);
     }
-
 }

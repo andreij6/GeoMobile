@@ -6,20 +6,17 @@ import android.os.Bundle;
 
 import com.geospatialcorporation.android.geomobile.R;
 
-/**
- * Created by andre on 6/12/2015.
- */
 public class SublayerDeleteActionDialogFragment extends SublayerActionDialogFragmentBase {
 
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState){
         return getDialogBuilder()
                 .setTitle(R.string.are_you_sure_title)
-                .setMessage(getString(R.string.are_you_sure) + " " + mSublayer.getName())
+                .setMessage(getString(R.string.are_you_sure) + " " + mEntity.getName())
                 .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
-                        mService.delete(mSublayer.getId());
+                        mService.delete(mEntity.getId());
                     }
                 }).setNegativeButton(android.R.string.cancel, new DialogInterface.OnClickListener() {
                     @Override

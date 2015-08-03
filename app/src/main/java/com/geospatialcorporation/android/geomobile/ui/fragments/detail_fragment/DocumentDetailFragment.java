@@ -9,9 +9,10 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.geospatialcorporation.android.geomobile.R;
+import com.geospatialcorporation.android.geomobile.application;
 import com.geospatialcorporation.android.geomobile.library.DI.Analytics.Models.GoogleAnalyticEvent;
-import com.geospatialcorporation.android.geomobile.library.helpers.GeoDialogHelper;
-import com.geospatialcorporation.android.geomobile.library.services.DocumentTreeService;
+import com.geospatialcorporation.android.geomobile.library.DI.TreeServices.Interfaces.IDocumentTreeService;
+import com.geospatialcorporation.android.geomobile.library.DI.UIHelpers.Interfaces.DialogHelpers.IDocumentDialog;
 import com.geospatialcorporation.android.geomobile.models.Document.Document;
 import com.geospatialcorporation.android.geomobile.ui.fragments.dialogs.ItemDetailFragment;
 import com.melnykov.fab.FloatingActionButton;
@@ -20,14 +21,12 @@ import butterknife.ButterKnife;
 import butterknife.InjectView;
 import butterknife.OnClick;
 
-/**
- * Created by andre on 6/2/2015.
- */
 public class DocumentDetailFragment extends ItemDetailFragment<Document>  {
     private static final String TAG = DocumentDetailFragment.class.getSimpleName();
 
 
-    DocumentTreeService mService;
+    IDocumentTreeService mService;
+    IDocumentDialog mDocumentDialog;
 
     //region Butterknife
     @InjectView(R.id.backgroundImageView) ImageView mFileTypeImage;
@@ -44,7 +43,7 @@ public class DocumentDetailFragment extends ItemDetailFragment<Document>  {
     public void showDocumentActions(){
         mAnalytics.trackClick(new GoogleAnalyticEvent().ShowDocumentActions());
 
-        GeoDialogHelper.showDocumentActions(getActivity(), mEntity, getActivity().getSupportFragmentManager());
+        mDocumentDialog.actions(mEntity, getActivity(), getActivity().getSupportFragmentManager());
     }
 
     //endregion
@@ -56,7 +55,9 @@ public class DocumentDetailFragment extends ItemDetailFragment<Document>  {
         View view = inflater.inflate(R.layout.fragment_detail_document, null);
 
         ButterKnife.inject(this, view);
-        mService = new DocumentTreeService();
+
+        mService = application.getTreeServiceComponent().provideDocumentTreeService();
+        mDocumentDialog = application.getUIHelperComponent().provideDocumentDialog();
 
         mAnalytics.trackScreen(new GoogleAnalyticEvent().DocumentDetailScreen());
 
@@ -99,7 +100,7 @@ public class DocumentDetailFragment extends ItemDetailFragment<Document>  {
         public void onClick(View v){
             mAnalytics.trackClick(new GoogleAnalyticEvent().DeleteDocument());
 
-            GeoDialogHelper.deleteDocument(getActivity(), mEntity, getFragmentManager());
+            mDocumentDialog.delete(mEntity, getActivity(), getFragmentManager());
         }
     };
 

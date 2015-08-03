@@ -6,9 +6,7 @@ import android.os.Bundle;
 
 import com.geospatialcorporation.android.geomobile.R;
 
-/**
- * Created by andre on 6/2/2015.
- */
+
 public class DeleteDocumentDialogFragment extends DocumentActionDialogBase {
     private static final String TAG = DeleteDocumentDialogFragment.class.getSimpleName();
 
@@ -20,7 +18,7 @@ public class DeleteDocumentDialogFragment extends DocumentActionDialogBase {
                 .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
-                        Service.delete(mDocument);
+                        Service.delete(mDocument.getId());
                     }
                 }).setNegativeButton(android.R.string.cancel, new DialogInterface.OnClickListener() {
                     @Override

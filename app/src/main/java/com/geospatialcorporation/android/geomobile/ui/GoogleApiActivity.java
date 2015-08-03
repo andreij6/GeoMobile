@@ -134,16 +134,16 @@ public class GoogleApiActivity extends Activity implements
             if (responseCode == RESULT_OK) {
                 accountName = data.getStringExtra(AccountManager.KEY_ACCOUNT_NAME);
 
-                mGeoSharedPrefs.add(GeoSharedPrefs.Items.GOOGLE_ACCOUNT_NAME, accountName);
+                mGeoSharedPrefs.add(mGeoSharedPrefs.getGoogleAccountName(), accountName);
 
                 ProgressHelper = new ProgressDialogHelper(this);
 
                 mGoogleAuthTokenService.GetAndUseAuthToken(getGoogleAuthParmaters(accountName, ProgressHelper));
             }
 
-            if (responseCode == RESULT_CANCELED) {
-                //dialog.message("Result cancelled.");
-            }
+            //if (responseCode == RESULT_CANCELED) {
+            //    //dialog.message("Result cancelled.");
+            //}
         }
 
         //region Commented Code

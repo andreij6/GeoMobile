@@ -1,8 +1,6 @@
 package com.geospatialcorporation.android.geomobile.ui.fragments.tree_fragments;
 
-import android.os.AsyncTask;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -10,21 +8,21 @@ import android.widget.TextView;
 
 import com.geospatialcorporation.android.geomobile.R;
 import com.geospatialcorporation.android.geomobile.application;
-import com.geospatialcorporation.android.geomobile.library.rest.AccountService;
+import com.geospatialcorporation.android.geomobile.library.DI.Tasks.Interfaces.IGetProfileTask;
+import com.geospatialcorporation.android.geomobile.library.DI.Tasks.models.ProfileTaskParams;
 import com.geospatialcorporation.android.geomobile.models.UserAccount;
+import com.geospatialcorporation.android.geomobile.ui.Interfaces.IPostExecuter;
 import com.geospatialcorporation.android.geomobile.ui.fragments.GeoViewFragmentBase;
 
 import butterknife.ButterKnife;
 import butterknife.InjectView;
-import retrofit.RetrofitError;
 
-public class AccountFragment extends GeoViewFragmentBase {
+public class AccountFragment extends GeoViewFragmentBase implements IPostExecuter<UserAccount>{
 
     protected static final String TAG = AccountFragment.class.getSimpleName();
 
     //region Properties
-    View mRootView;
-    AccountService mService;
+    IGetProfileTask mProfileTask;
     //endregion
 
     //region View Setup
@@ -37,45 +35,23 @@ public class AccountFragment extends GeoViewFragmentBase {
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState){
-        mRootView = inflater.inflate(R.layout.fragment_account, container, false);
-        ButterKnife.inject(this, mRootView);
+        View v = inflater.inflate(R.layout.fragment_account, container, false);
+        ButterKnife.inject(this, v);
 
         SetTitle(R.string.account_title);
 
-        mService = application.getRestAdapter().create(AccountService.class);
-        new GetProfileTask().execute();
+        mProfileTask = application.getTasksComponent().provideProfileTask();
+        mProfileTask.run(new ProfileTaskParams(this));
 
-        return mRootView;
+        return v;
     }
 
-    private void SetupUI(UserAccount mUserAccount) {
-        FirstName.setText(mUserAccount.getFirstName());
-        LastName.setText(mUserAccount.getLastName());
-        Email.setText(mUserAccount.getEmail());
-        CellPhone.setText(mUserAccount.getCellPhone());
-        OfficePhone.setText(mUserAccount.getOfficePhone());
+    @Override
+    public void onPostExecute(UserAccount model) {
+        FirstName.setText(model.getFirstName());
+        LastName.setText(model.getLastName());
+        Email.setText(model.getEmail());
+        CellPhone.setText(model.getCellPhone());
+        OfficePhone.setText(model.getOfficePhone());
     }
-
-    private class GetProfileTask extends AsyncTask<Void, Void, UserAccount> {
-        @Override
-        protected UserAccount doInBackground(Void... params) {
-            UserAccount mUserAccount = new UserAccount();
-            try {
-                mUserAccount = mService.getProfile();
-            } catch (RetrofitError e) {
-                if (e.getResponse() != null) {
-                    Log.d(TAG, e.getResponse().getStatus() + " : Line 70");
-                }
-            }
-
-            return mUserAccount;
-        }
-
-        @Override
-        protected void onPostExecute(UserAccount account){
-            SetupUI(account);
-            super.onPostExecute(account);
-        }
-    }
-
 }

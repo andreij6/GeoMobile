@@ -9,15 +9,13 @@ import com.geospatialcorporation.android.geomobile.application;
 import com.geospatialcorporation.android.geomobile.database.DataRepository.IAddDataRepository;
 import com.geospatialcorporation.android.geomobile.database.DataRepository.IFullDataRepository;
 import com.geospatialcorporation.android.geomobile.database.DataRepository.Implementations.Layers.LayersAppSource;
+import com.geospatialcorporation.android.geomobile.library.DI.TreeServices.Interfaces.ILayerTreeService;
 import com.geospatialcorporation.android.geomobile.library.constants.GeometryTypeCodes;
 import com.geospatialcorporation.android.geomobile.library.rest.LayerService;
 import com.geospatialcorporation.android.geomobile.library.rest.SublayerService;
-import com.geospatialcorporation.android.geomobile.library.services.LayerTreeService;
 import com.geospatialcorporation.android.geomobile.models.Layers.Layer;
-import com.geospatialcorporation.android.geomobile.ui.fragments.GoogleMapFragment;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.model.MarkerOptions;
-import com.google.android.gms.maps.model.PolygonOptions;
 import com.google.android.gms.maps.model.PolylineOptions;
 
 import java.util.List;
@@ -31,14 +29,14 @@ public class MapActions {
     private LayerService layerService;
     private SublayerService sublayerService;
     private IFullDataRepository<Layer> LayerRepo;
-    LayerTreeService mLayerTreeService;
+    ILayerTreeService mLayerTreeService;
 
     public MapActions() {
         layerService = application.getRestAdapter().create(LayerService.class);
         sublayerService = application.getRestAdapter().create(SublayerService.class);
         mMap = application.getGoogleMap();
         LayerRepo = new LayersAppSource();
-        mLayerTreeService = new LayerTreeService();
+        mLayerTreeService = application.getTreeServiceComponent().provideLayerTreeService();
     }
 
     public void showLayer(Layer layer) {
@@ -65,10 +63,11 @@ public class MapActions {
     }
 
     private void showLayerData(Layer layer) {
-        int geometryTypeCode = layer.getGeometryTypeCodeId();
         if (layer == null) {
             Toast.makeText(application.getAppContext(), "Layer showing failed, layer not found.", Toast.LENGTH_LONG).show();
         }
+
+        int geometryTypeCode = layer.getGeometryTypeCodeId();
 
         try {
             switch (geometryTypeCode) {

@@ -2,8 +2,7 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
               android:orientation="vertical"
               android:layout_width="match_parent"
-              android:layout_height="match_parent"
-                android:background="@color/primary">
+              android:layout_height="match_parent">
 
     <!--<com.sothree.slidinguppanel.SlidingUpPanelLayout
         xmlns:sothree="http://schemas.android.com/apk/res-auto"
@@ -19,16 +18,39 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"> -->
 
+        <Button
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Add Sublayer"
+            android:id="@+id/addSublayers"
+            android:layout_alignParentTop="true"
+            android:layout_centerHorizontal="true"/>
+
             <android.support.v4.widget.SwipeRefreshLayout
                 android:id="@+id/swipe_refresh_layout"
+                android:layout_below="@id/addSublayers"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content">
 
-                <android.support.v7.widget.RecyclerView
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:id="@+id/sublayerRecyclerView"
-                    android:layout_alignParentTop="true" />
+                <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+                            android:layout_width="match_parent"
+                            android:fadeScrollbars="false"
+                            android:layout_height="match_parent">
+
+                    <TableLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:stretchColumns="1"
+                        android:background="@color/white"
+                        android:layout_centerVertical="true"
+                        android:layout_centerHorizontal="true"
+                        android:paddingRight="10dp"
+                        android:paddingBottom="25dp"
+                        android:id="@+id/sublayerTableLayout">
+
+                    </TableLayout>
+
+                </ScrollView>
 
             </android.support.v4.widget.SwipeRefreshLayout>
 

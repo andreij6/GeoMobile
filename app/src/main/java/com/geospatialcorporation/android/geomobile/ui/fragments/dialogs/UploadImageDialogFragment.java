@@ -24,9 +24,6 @@ import butterknife.ButterKnife;
 import butterknife.InjectView;
 import butterknife.OnClick;
 
-/**
- * Created by andre on 6/2/2015.
- */
 public class UploadImageDialogFragment extends GeoUploadDialogFragmentBase {
 
     //region Inject
@@ -50,13 +47,6 @@ public class UploadImageDialogFragment extends GeoUploadDialogFragmentBase {
     }
     //endregion
 
-    private void highlight(LinearLayout layout){
-        layout.setBackgroundColor(Color.LTGRAY);
-    }
-
-    private void unhighlight(LinearLayout layout){
-        layout.setBackgroundColor(Color.WHITE);
-    }
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState){
         AlertDialog.Builder builder = getDialogBuilder();
@@ -128,6 +118,14 @@ public class UploadImageDialogFragment extends GeoUploadDialogFragmentBase {
         }
 
         return false;
+    }
+
+    private void highlight(LinearLayout layout){
+        layout.setBackgroundColor(Color.LTGRAY);
+    }
+
+    private void unhighlight(LinearLayout layout){
+        layout.setBackgroundColor(Color.WHITE);
     }
 
 }

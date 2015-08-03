@@ -3,10 +3,18 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent">
 
-    <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
-                android:layout_width="match_parent"
+    <Button
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/edit_attributes"
+        android:id="@+id/edit_attributes"
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true"/>
+
+    <ScrollView android:layout_width="match_parent"
                 android:fadeScrollbars="false"
-                android:layout_height="200dp">
+                android:layout_height="200dp"
+                android:layout_below="@id/edit_attributes">
         <TableLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -14,6 +22,9 @@
             android:layout_centerHorizontal="true"
             android:id="@+id/featureWindowAttributesTable">
         </TableLayout>
+
     </ScrollView>
+
+
 
 </RelativeLayout>

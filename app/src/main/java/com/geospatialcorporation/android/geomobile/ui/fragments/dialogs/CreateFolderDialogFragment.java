@@ -8,19 +8,18 @@ import android.view.View;
 import android.widget.EditText;
 
 import com.geospatialcorporation.android.geomobile.R;
+import com.geospatialcorporation.android.geomobile.application;
 import com.geospatialcorporation.android.geomobile.library.DI.Analytics.Models.GoogleAnalyticEvent;
-import com.geospatialcorporation.android.geomobile.library.services.FolderTreeService;
+import com.geospatialcorporation.android.geomobile.library.DI.TreeServices.Interfaces.IFolderTreeService;
 
-/**
- * Created by andre on 6/1/2015.
- */
+
 public class CreateFolderDialogFragment extends CreateDialogFragmentBase {
 
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState){
         AlertDialog.Builder builder = getDialogBuilder();
         View v = getDialogView(R.layout.dialog_create_folder);
-        final FolderTreeService service = new FolderTreeService();
+        final IFolderTreeService service = application.getTreeServiceComponent().provideFolderTreeService();
 
         final EditText name = (EditText)v.findViewById(R.id.folderNameInput);
 
@@ -31,7 +30,7 @@ public class CreateFolderDialogFragment extends CreateDialogFragmentBase {
                         public void onClick(DialogInterface dialog, int which) {
                             //TODO: Validation
                             mAnalytics.trackClick(new GoogleAnalyticEvent().CreateFolder());
-                            service.createFolder(name.getText().toString(), mFolder.getId());
+                            service.create(name.getText().toString(), mFolder.getId());
                         }
                     }).setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
                         @Override

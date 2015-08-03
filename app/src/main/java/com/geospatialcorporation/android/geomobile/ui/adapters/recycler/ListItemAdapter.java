@@ -14,11 +14,11 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.geospatialcorporation.android.geomobile.R;
+import com.geospatialcorporation.android.geomobile.application;
 import com.geospatialcorporation.android.geomobile.database.DataRepository.IFullDataRepository;
 import com.geospatialcorporation.android.geomobile.database.DataRepository.Implementations.Documents.DocumentsAppSource;
 import com.geospatialcorporation.android.geomobile.database.DataRepository.Implementations.Folders.FolderAppSource;
-import com.geospatialcorporation.android.geomobile.library.services.LayerTreeService;
-import com.geospatialcorporation.android.geomobile.library.map.MapActions;
+import com.geospatialcorporation.android.geomobile.library.DI.TreeServices.Interfaces.ILayerTreeService;
 import com.geospatialcorporation.android.geomobile.library.util.Dialogs;
 import com.geospatialcorporation.android.geomobile.models.Folders.Folder;
 import com.geospatialcorporation.android.geomobile.models.Layers.Layer;
@@ -87,20 +87,24 @@ public class ListItemAdapter extends GeoRecyclerAdapterBase<ListItemAdapter.Hold
             mItem = item;
             itemName.setText(item.getName());
 
+            itemIcon.setVisibility(View.VISIBLE);
+            itemInfo.setVisibility(View.VISIBLE);
+            Container.setBackgroundColor(Color.WHITE);
+
             if(item.getIsCompletelyEmpty()) {
-                itemIcon.setVisibility(View.GONE);
-                itemInfo.setVisibility(View.GONE);
+                itemIcon.setVisibility(View.INVISIBLE);
+                itemInfo.setVisibility(View.INVISIBLE);
                 Container.setBackgroundColor(Color.TRANSPARENT);
 
             } else if(!item.getShowInfoIcon() && item.getIconId() == 0) {
                 itemName.setOnClickListener(null);
-                itemIcon.setVisibility(View.GONE);
-                itemInfo.setVisibility(View.GONE);
+                itemIcon.setVisibility(View.INVISIBLE);
+                itemInfo.setVisibility(View.INVISIBLE);
             } else {
                 itemIcon.setImageDrawable(mContext.getDrawable(item.getIconId()));
 
                 if(!item.getShowInfoIcon()){
-                    itemInfo.setVisibility(View.GONE);  //for parent folder
+                    itemInfo.setVisibility(View.INVISIBLE);  //for parent folder
                 }
             }
 
@@ -171,8 +175,8 @@ public class ListItemAdapter extends GeoRecyclerAdapterBase<ListItemAdapter.Hold
 
             Fragment fragment;
 
-            if (mFolder.getAccessLevel() != null && mFolder.getAccessLevel() < 1) {
-                new Dialogs().error("You don't have access to folder: " + mFolder.getName());
+            if (mFolder != null && mFolder.getAccessLevel() != null && mFolder.getAccessLevel() < 1) {
+                //new Dialogs().error("You don't have access to folder: " + mFolder.getName());
             }
 
             Bundle bundle = new Bundle();
@@ -215,8 +219,8 @@ public class ListItemAdapter extends GeoRecyclerAdapterBase<ListItemAdapter.Hold
         //region Helper
         protected void toLayerDetailView(ListItem item) {
             Fragment f = new LayerDetailFragment();
-            LayerTreeService service = new LayerTreeService();
-            Layer layer = service.getLayer(item.getId());
+            ILayerTreeService service = application.getTreeServiceComponent().provideLayerTreeService();
+            Layer layer = service.get(item.getId());
 
             f.setArguments(layer.toBundle());
 

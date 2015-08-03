@@ -16,6 +16,9 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.geospatialcorporation.android.geomobile.R;
+import com.geospatialcorporation.android.geomobile.application;
+import com.geospatialcorporation.android.geomobile.library.DI.UIHelpers.Interfaces.DialogHelpers.IDocumentDialog;
+import com.geospatialcorporation.android.geomobile.library.DI.UIHelpers.Interfaces.DialogHelpers.IFolderDialog;
 import com.geospatialcorporation.android.geomobile.library.helpers.GeoDialogHelper;
 import com.geospatialcorporation.android.geomobile.models.Folders.Folder;
 import com.geospatialcorporation.android.geomobile.ui.MainActivity;
@@ -46,6 +49,8 @@ public class LibraryActionDialogFragment extends DialogFragment {
     //region Properties
     Context mContext;
     Folder mFolder;
+    IDocumentDialog mDocumentDialog;
+    IFolderDialog mFolderDialog;
     @InjectView(R.id.addLibraryFolderTV) TextView mFolderTextView;
     @InjectView(R.id.addLibraryFolderIcon) ImageView mFolderImageView;
     @InjectView(R.id.addDocumentIcon) ImageView mDocumentImageView;
@@ -95,6 +100,9 @@ public class LibraryActionDialogFragment extends DialogFragment {
 
         LayoutInflater inflater = LayoutInflater.from(mContext);
 
+        mFolderDialog = application.getUIHelperComponent().provideFolderDialog();
+        mDocumentDialog = application.getUIHelperComponent().provideDocumentDialog();
+
         final View v = inflater.inflate(R.layout.dialog_actions_library, null);
         ButterKnife.inject(this, v);
 
@@ -116,11 +124,11 @@ public class LibraryActionDialogFragment extends DialogFragment {
                 }
 
                 if (isHighlighted(i)) {
-                    GeoDialogHelper.uploadImage(mContext, mFolder, getFragmentManager());
+                    mDocumentDialog.uploadImage(mFolder, mContext, getFragmentManager());
                 }
 
                 if (isHighlighted(f)) {
-                    GeoDialogHelper.createFolder(mContext, mFolder, getFragmentManager());
+                    mFolderDialog.create(mFolder, mContext, getFragmentManager());
                 }
 
                 dialog.cancel();

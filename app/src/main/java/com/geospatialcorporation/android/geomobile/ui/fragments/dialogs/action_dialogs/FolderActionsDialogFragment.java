@@ -12,6 +12,8 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.geospatialcorporation.android.geomobile.R;
+import com.geospatialcorporation.android.geomobile.application;
+import com.geospatialcorporation.android.geomobile.library.DI.UIHelpers.Interfaces.DialogHelpers.IFolderDialog;
 import com.geospatialcorporation.android.geomobile.library.helpers.GeoDialogHelper;
 import com.geospatialcorporation.android.geomobile.models.Folders.Folder;
 import com.geospatialcorporation.android.geomobile.ui.fragments.dialogs.base.GeoDialogFragmentBase;
@@ -19,12 +21,11 @@ import com.geospatialcorporation.android.geomobile.ui.fragments.dialogs.base.Geo
 import butterknife.ButterKnife;
 import butterknife.InjectView;
 
-/**
- * Created by andre on 6/10/2015.
- */
+
 public class FolderActionsDialogFragment extends GeoDialogFragmentBase {
 
     Folder mFolder;
+    IFolderDialog mFolderDialog;
 
     public void init(Context context, Folder folder){
         setContext(context);
@@ -59,6 +60,8 @@ public class FolderActionsDialogFragment extends GeoDialogFragmentBase {
 
         ButterKnife.inject(this, v);
 
+        mFolderDialog = application.getUIHelperComponent().provideFolderDialog();
+
         mDeleteIV.setOnClickListener(deleteFolder);
         mDeleteTV.setOnClickListener(deleteFolder);
 
@@ -81,7 +84,7 @@ public class FolderActionsDialogFragment extends GeoDialogFragmentBase {
     protected View.OnClickListener renameFolder = new View.OnClickListener() {
         @Override
         public void onClick(View v) {
-            GeoDialogHelper.renameFolder(getContext(), mFolder, getFragmentManager());
+            mFolderDialog.rename(mFolder, getContext(), getFragmentManager());
             FolderActionsDialogFragment.this.getDialog().cancel();
         }
     };
@@ -89,7 +92,7 @@ public class FolderActionsDialogFragment extends GeoDialogFragmentBase {
     protected View.OnClickListener deleteFolder = new View.OnClickListener() {
         @Override
         public void onClick(View v) {
-            GeoDialogHelper.deleteFolder(getContext(), mFolder, getFragmentManager());
+            mFolderDialog.delete(mFolder, getContext(), getFragmentManager());
             FolderActionsDialogFragment.this.getDialog().cancel();
         }
     };

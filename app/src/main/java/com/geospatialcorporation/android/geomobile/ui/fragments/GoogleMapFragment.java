@@ -19,12 +19,14 @@ package com.geospatialcorporation.android.geomobile.ui.fragments;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.IntentSender;
 import android.graphics.drawable.shapes.Shape;
 import android.location.Location;
 import android.os.Bundle;
 import android.provider.Settings;
 import android.support.v4.app.Fragment;
 import android.support.v4.widget.DrawerLayout;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -58,6 +60,7 @@ import com.geospatialcorporation.android.geomobile.ui.fragments.dialogs.MapTypeS
 import com.geospatialcorporation.android.geomobile.ui.fragments.panel_fragments.map_fragment_panels.FeatureWindowPanelFragment;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
+import com.google.android.gms.location.LocationListener;
 import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.maps.CameraUpdate;
 import com.google.android.gms.maps.CameraUpdateFactory;
@@ -69,6 +72,7 @@ import com.google.android.gms.maps.model.CameraPosition;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.LatLngBounds;
 import com.google.android.gms.maps.model.Marker;
+import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.maps.model.Polygon;
 import com.google.android.gms.maps.model.Polyline;
 import com.google.maps.android.PolyUtil;
@@ -88,12 +92,15 @@ import butterknife.OnClick;
 public class GoogleMapFragment extends GeoViewFragmentBase implements
         IViewModeListener,
         GoogleApiClient.ConnectionCallbacks,
-        GoogleApiClient.OnConnectionFailedListener
+        GoogleApiClient.OnConnectionFailedListener,
+        LocationListener
 {
     private static final String TAG = GoogleMapFragment.class.getSimpleName();
+    private final static int CONNECTION_FAILURE_RESOLUTION_REQUEST = 9000;
 
     //region Properties
     public GoogleMap mMap;
+    Marker mCurrentLocationMaker;
     IViewMode mViewMode;
     GoogleApiClient mLocationClient;
     ISlidingPanelManager mPanelManager;
@@ -113,6 +120,7 @@ public class GoogleMapFragment extends GeoViewFragmentBase implements
     @SuppressWarnings("unused")
     @OnClick(R.id.fab)
     public void getLocation(){
+        Toaster(mLocationClient.isConnected() + "");
         Location currentLocation = LocationServices.FusedLocationApi.getLastLocation(mLocationClient);
 
         mAnalytics.trackClick(new GoogleAnalyticEvent().CurrentLocation());
@@ -138,12 +146,28 @@ public class GoogleMapFragment extends GeoViewFragmentBase implements
             AlertDialog alert11 = builder1.create();
             alert11.show();
         } else {
-            LatLng ll = new LatLng(currentLocation.getLatitude(), currentLocation.getLongitude());
-
-            CameraUpdate update = CameraUpdateFactory.newLatLngZoom(ll, 13);
-
-            mMap.animateCamera(update);
+            handleNewLocation(currentLocation);
         }
+    }
+
+    private void handleNewLocation(Location currentLocation) {
+
+        if(mCurrentLocationMaker != null){
+            mCurrentLocationMaker.remove();
+        }
+
+        LatLng ll = new LatLng(currentLocation.getLatitude(), currentLocation.getLongitude());
+
+        CameraUpdate update = CameraUpdateFactory.newLatLngZoom(ll, 16);
+
+        mMap.animateCamera(update);
+
+        MarkerOptions options = new MarkerOptions();
+        options.position(ll);
+
+        mCurrentLocationMaker = mMap.addMarker(options);
+
+
     }
 
     @SuppressWarnings("unused")
@@ -319,6 +343,7 @@ public class GoogleMapFragment extends GeoViewFragmentBase implements
         setMapState();
         mPanelManager.collapse();
         mLayerManager.showLayers();
+        mLocationClient.connect();
     }
 
     @Override
@@ -377,6 +402,7 @@ public class GoogleMapFragment extends GeoViewFragmentBase implements
     public void onPause(){
         mLayerManager.clearVisibleLayers();
         mMapView.onPause();
+        mLocationClient.disconnect();
         super.onPause();
     }
 
@@ -488,7 +514,16 @@ public class GoogleMapFragment extends GeoViewFragmentBase implements
 
     @Override
     public void onConnectionFailed(ConnectionResult connectionResult) {
-
+        if (connectionResult.hasResolution()) {
+            try {
+                // Start an Activity that tries to resolve the error
+                connectionResult.startResolutionForResult(getActivity(), CONNECTION_FAILURE_RESOLUTION_REQUEST);
+            } catch (IntentSender.SendIntentException e) {
+                e.printStackTrace();
+            }
+        } else {
+            Log.i(TAG, "Location services connection failed with code " + connectionResult.getErrorCode());
+        }
     }
     //endregion
 
@@ -507,4 +542,8 @@ public class GoogleMapFragment extends GeoViewFragmentBase implements
         mPanelManager.halfAnchor();
     }
 
+    @Override
+    public void onLocationChanged(Location location) {
+        handleNewLocation(location);
+    }
 }

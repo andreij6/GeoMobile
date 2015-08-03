@@ -1,62 +1,79 @@
 package com.geospatialcorporation.android.geomobile.ui.fragments.detail_fragment.layer_tabs;
 
-import android.os.AsyncTask;
 import android.os.Bundle;
-import android.os.Handler;
 import android.support.v4.widget.SwipeRefreshLayout;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.CheckBox;
+import android.widget.ImageView;
+import android.widget.TableLayout;
+import android.widget.TableRow;
+import android.widget.TextView;
 
 import com.geospatialcorporation.android.geomobile.R;
+import com.geospatialcorporation.android.geomobile.application;
 import com.geospatialcorporation.android.geomobile.library.DI.Analytics.Models.GoogleAnalyticEvent;
-import com.geospatialcorporation.android.geomobile.library.services.SublayerTreeService;
+import com.geospatialcorporation.android.geomobile.library.DI.Tasks.Interfaces.IGetSublayersTask;
+import com.geospatialcorporation.android.geomobile.library.DI.Tasks.models.GetSublayersTaskParams;
+import com.geospatialcorporation.android.geomobile.library.DI.UIHelpers.Interfaces.DialogHelpers.ISublayerDialog;
+import com.geospatialcorporation.android.geomobile.library.DI.UIHelpers.Interfaces.ILayoutRefresher;
+import com.geospatialcorporation.android.geomobile.library.helpers.TableFactory;
+import com.geospatialcorporation.android.geomobile.ui.Interfaces.IContentRefresher;
 import com.geospatialcorporation.android.geomobile.models.Layers.Layer;
-import com.geospatialcorporation.android.geomobile.ui.adapters.recycler.SublayerAdapter;
+import com.geospatialcorporation.android.geomobile.ui.Interfaces.IPostExecuter;
 import com.geospatialcorporation.android.geomobile.ui.fragments.detail_fragment.GeoDetailsTabBase;
 
-import java.util.ArrayList;
+import org.w3c.dom.Text;
+
 import java.util.List;
 
 import butterknife.ButterKnife;
 import butterknife.InjectView;
+import butterknife.OnClick;
 
-/**
- * Created by andre on 6/7/2015.
- */
-public class SublayersTab extends GeoDetailsTabBase<Layer> {
+
+public class SublayersTab extends GeoDetailsTabBase<Layer> implements IContentRefresher, IPostExecuter<List<Layer>> {
 
     List<Layer> mData;
-    @InjectView(R.id.sublayerRecyclerView) RecyclerView mRecyclerView;
+    IGetSublayersTask mTask;
+    ILayoutRefresher mRefresher;
+    @InjectView(R.id.sublayerTableLayout) TableLayout mSublayerDataView;
     @InjectView(R.id.swipe_refresh_layout) SwipeRefreshLayout mSwipeRefreshLayout;
+    LayoutInflater mInflater;
+    ISublayerDialog mDialog;
     //@InjectView(R.id.sliding_layout) SlidingUpPanelLayout mPanel;
+
+    @OnClick(R.id.addSublayers)
+    public void addSublayer(){
+        mDialog.create(mEntity, getActivity(), getFragmentManager());
+    }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState){
         View v = inflater.inflate(R.layout.fragment_layer_sublayers_tab, container, false);
+        mInflater = inflater;
         ButterKnife.inject(this, v);
 
-        mSwipeRefreshLayout.setOnRefreshListener(new SublayerRefreshListener());
+        mRefresher = application.getUIHelperComponent().provideLayoutRefresher();
+        mDialog = application.getUIHelperComponent().provideSublayerDialog();
+
+        mSwipeRefreshLayout.setOnRefreshListener(mRefresher.build(mSwipeRefreshLayout, this));
         mSwipeRefreshLayout.setProgressBackgroundColorSchemeColor(getActivity().getResources().getColor(R.color.accent));
 
         mAnalytics.trackScreen(new GoogleAnalyticEvent().SublayersTab());
 
         //application.setSublayerFragmentPanel(mPanel);
         //mPanel.setBackgroundColor(getActivity().getResources().getColor(R.color.primary_light));
-
         //ISlidingPanelManager manager = new PanelManager(GeoPanel.SUBLAYER);
         //manager.setup();
 
         setIntentString(Layer.LAYER_INTENT);
         handleArgs();
 
-        new GetSublayersTask().execute();
+        refresh();
 
-        RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(container.getContext());
 
-        mRecyclerView.setLayoutManager(layoutManager);
 
         return v;
     }
@@ -71,51 +88,63 @@ public class SublayersTab extends GeoDetailsTabBase<Layer> {
 
     @Override
     public void refresh() {
-        new GetSublayersTask().execute();
+        mTask = application.getTasksComponent().provideSublayersTask();
+        mTask.getSublayers(new GetSublayersTaskParams(mData, mEntity, getActivity(), this));
     }
 
-    private class GetSublayersTask extends AsyncTask<Void, Void, List<Layer>> {
+    @Override
+    public void onPostExecute(List<Layer> model) {
+        mSublayerDataView.removeAllViews();
 
-        @Override
-        protected List<Layer> doInBackground(Void... params) {
-            mData = new ArrayList<>();
+        TableFactory factory = new TableFactory(getActivity(), mSublayerDataView, mInflater);
 
-            try {
-                mService = new SublayerTreeService();
+        factory.addHeaders(R.layout.template_table_header, "Visible", "Name", "Edit");
 
-                if (mEntity != null) {
-                    mData = ((SublayerTreeService) mService).getSublayersByLayerId(mEntity.getId());
-                }
-            } catch (Exception e){
-                Toaster(e.getMessage());
+        mSublayerDataView = factory.build();
+
+        AddAllFeatures();
+
+        if(model != null) {
+            for (final Layer layer : model) {
+                TableRow row = new TableRow(getActivity());
+
+                CheckBox visible = (CheckBox) mInflater.inflate(R.layout.template_table_checkbox, null);
+                visible.setChecked(layer.getIsShowing());
+
+                TextView columnName = (TextView) mInflater.inflate(R.layout.template_table_column, null);
+                columnName.setText(layer.getName());
+
+                ImageView edit = (ImageView) mInflater.inflate(R.layout.template_table_column_image, null);
+                edit.setImageDrawable(getActivity().getDrawable(R.drawable.ic_rename_box_black_18dp));
+
+                edit.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        mDialog.modify(layer, getActivity(), getFragmentManager());
+                    }
+                });
+
+                row.addView(visible);
+                row.addView(columnName);
+                row.addView(edit);
+
+                mSublayerDataView.addView(row);
             }
-
-            return mData;
         }
-
-        @Override
-        protected void onPostExecute(List<Layer> sublayers){
-            SublayerAdapter adapter = new SublayerAdapter(getActivity(), mData);
-
-            mRecyclerView.setAdapter(adapter);
-
-            super.onPostExecute(sublayers);
-        }
-
-
     }
 
-    private class SublayerRefreshListener implements SwipeRefreshLayout.OnRefreshListener {
+    protected void AddAllFeatures() {
+        TableRow row = new TableRow(getActivity());
 
-        @Override
-        public void onRefresh() {
-            new Handler().postDelayed(new Runnable() {
-                @Override
-                public void run() {
-                    refresh();
-                    mSwipeRefreshLayout.setRefreshing(false);
-                }
-            }, 2000);
-        }
+        CheckBox visible = (CheckBox)mInflater.inflate(R.layout.template_table_checkbox, null);
+        visible.setChecked(true);
+
+        TextView columnName = (TextView)mInflater.inflate(R.layout.template_table_column, null);
+        columnName.setText("All Features");
+
+        row.addView(visible);
+        row.addView(columnName);
+
+        mSublayerDataView.addView(row);
     }
 }

@@ -2,21 +2,21 @@ package com.geospatialcorporation.android.geomobile.ui.fragments.dialogs.action_
 
 import android.content.Context;
 
-import com.geospatialcorporation.android.geomobile.library.services.FolderTreeService;
+import com.geospatialcorporation.android.geomobile.application;
+import com.geospatialcorporation.android.geomobile.library.DI.TreeServices.Implementations.FolderTreeService;
+import com.geospatialcorporation.android.geomobile.library.DI.TreeServices.Interfaces.IFolderTreeService;
 import com.geospatialcorporation.android.geomobile.models.Folders.Folder;
 import com.geospatialcorporation.android.geomobile.ui.fragments.dialogs.base.GeoDialogFragmentBase;
 
-/**
- * Created by andre on 6/12/2015.
- */
+
 public class FolderActionDialogBase extends GeoDialogFragmentBase {
 
     Folder mFolder;
-    FolderTreeService mService;
+    IFolderTreeService mService;
 
     public void init(Context context, Folder folder){
         setContext(context);
         mFolder = folder;
-        mService = new FolderTreeService();
+        mService = application.getTreeServiceComponent().provideFolderTreeService();
     }
 }

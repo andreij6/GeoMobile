@@ -6,9 +6,7 @@ import android.os.Bundle;
 
 import com.geospatialcorporation.android.geomobile.R;
 
-/**
- * Created by andre on 6/12/2015.
- */
+
 public class DeleteFolderActionDialogFragment extends FolderActionDialogBase {
     private static final String TAG = DeleteFolderActionDialogFragment.class.getSimpleName();
 
@@ -20,7 +18,7 @@ public class DeleteFolderActionDialogFragment extends FolderActionDialogBase {
                 .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
-                        mService.delete(mFolder);
+                        mService.delete(mFolder.getId());
                     }
                 }).setNegativeButton(android.R.string.cancel, new DialogInterface.OnClickListener() {
                     @Override

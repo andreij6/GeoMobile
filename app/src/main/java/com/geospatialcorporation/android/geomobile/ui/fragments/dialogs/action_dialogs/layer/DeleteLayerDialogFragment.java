@@ -8,9 +8,7 @@ import android.widget.Toast;
 import com.geospatialcorporation.android.geomobile.R;
 import com.geospatialcorporation.android.geomobile.application;
 
-/**
- * Created by andre on 6/2/2015.
- */
+
 public class DeleteLayerDialogFragment extends LayerActionDialogBase {
 
     @Override
@@ -21,7 +19,7 @@ public class DeleteLayerDialogFragment extends LayerActionDialogBase {
                 .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
-                        mService.deleteLayer(mLayer.getId());
+                        mService.delete(mLayer.getId());
 
                         Toast.makeText(application.getAppContext(), "Delete Request Sent!", Toast.LENGTH_LONG).show();
                     }

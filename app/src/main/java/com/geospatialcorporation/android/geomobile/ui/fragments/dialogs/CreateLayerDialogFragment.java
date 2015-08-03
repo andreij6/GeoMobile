@@ -9,20 +9,20 @@ import android.widget.EditText;
 import android.widget.RadioButton;
 
 import com.geospatialcorporation.android.geomobile.R;
+import com.geospatialcorporation.android.geomobile.application;
 import com.geospatialcorporation.android.geomobile.library.DI.Analytics.Models.GoogleAnalyticEvent;
+import com.geospatialcorporation.android.geomobile.library.DI.TreeServices.Implementations.LayerTreeService;
+import com.geospatialcorporation.android.geomobile.library.DI.TreeServices.Interfaces.ILayerTreeService;
 import com.geospatialcorporation.android.geomobile.library.constants.GeometryTypeCodes;
-import com.geospatialcorporation.android.geomobile.library.services.LayerTreeService;
 
-/**
- * Created by andre on 6/1/2015.
- */
+
 public class CreateLayerDialogFragment extends CreateDialogFragmentBase {
 
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState){
         AlertDialog.Builder builder = getDialogBuilder();
 
-        final LayerTreeService layerService = new LayerTreeService();
+        final ILayerTreeService layerService = application.getTreeServiceComponent().provideLayerTreeService();
 
         View v = getDialogView(R.layout.dialog_create_layer);
 
@@ -51,7 +51,7 @@ public class CreateLayerDialogFragment extends CreateDialogFragmentBase {
 
                 mAnalytics.trackClick(new GoogleAnalyticEvent().CreateLayer());
 
-                layerService.createLayer(name.getText().toString(), shape, mFolder.getId());
+                layerService.create(name.getText().toString(), shape, mFolder.getId());
 
             }
         }).setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {

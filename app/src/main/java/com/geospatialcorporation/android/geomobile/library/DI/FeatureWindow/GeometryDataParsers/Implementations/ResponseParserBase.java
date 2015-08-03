@@ -37,8 +37,8 @@ public abstract class ResponseParserBase {
     }
 
     protected String getLatLngtString(Point point, ICoordinateConverter converter){
-        String point_Lat = converter.convert(point.getY(), DMSCoordinateConverter.LAT);
-        String point_Lng = converter.convert(point.getX(), DMSCoordinateConverter.LONG);
+        String point_Lat = converter.convert(point.getY(), converter.getLatitiude_PosNeg());
+        String point_Lng = converter.convert(point.getX(), converter.getLongitude_PosNeg());
         return point_Lat + " \n " + point_Lng;
     }
 

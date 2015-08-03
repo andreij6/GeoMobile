@@ -5,9 +5,6 @@ import java.util.List;
 
 public class DMSCoordinateConverter implements ICoordinateConverter {
 
-    public static final List<String> LAT = Arrays.asList("N", "S");
-    public static final List<String> LONG = Arrays.asList("E", "W");
-
     @Override
     public String convert(double position, List<String> pos_neg) {
         double dd = Math.abs(position);
@@ -23,7 +20,18 @@ public class DMSCoordinateConverter implements ICoordinateConverter {
         return degreesWithSymbol + " " + m + "' " + String.format("%.4f", s) + "\" " + getDirection(position, pos_neg.get(0), pos_neg.get(1));
     }
 
-    private String getDirection(double dd, String pos, String neg) {
+    @Override
+    public List<String> getLatitiude_PosNeg() {
+        return Arrays.asList("N", "S");
+    }
+
+    @Override
+    public List<String> getLongitude_PosNeg() {
+        return Arrays.asList("E", "W");
+    }
+
+
+    protected String getDirection(double dd, String pos, String neg) {
         double direction = Math.signum(dd);
 
         if(direction == -1){

@@ -11,6 +11,8 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.geospatialcorporation.android.geomobile.R;
+import com.geospatialcorporation.android.geomobile.application;
+import com.geospatialcorporation.android.geomobile.library.DI.UIHelpers.Interfaces.DialogHelpers.ILayerDialog;
 import com.geospatialcorporation.android.geomobile.library.helpers.GeoDialogHelper;
 import com.geospatialcorporation.android.geomobile.models.Layers.Layer;
 import com.geospatialcorporation.android.geomobile.ui.fragments.dialogs.base.GeoDialogFragmentBase;
@@ -18,11 +20,9 @@ import com.geospatialcorporation.android.geomobile.ui.fragments.dialogs.base.Geo
 import butterknife.ButterKnife;
 import butterknife.InjectView;
 
-/**
- * Created by andre on 6/12/2015.
- */
 public class LayerActionsDialogFragment extends GeoDialogFragmentBase {
     Layer mLayer;
+    ILayerDialog mLayerDialog;
 
     public void init(Context context, Layer layer){
         setContext(context);
@@ -57,6 +57,8 @@ public class LayerActionsDialogFragment extends GeoDialogFragmentBase {
 
         ButterKnife.inject(this, v);
 
+        mLayerDialog = application.getUIHelperComponent().provideLayerDialog();
+
         mStyleIV.setOnClickListener(styleLayer);
         mStyleTV.setOnClickListener(styleLayer);
 
@@ -82,8 +84,7 @@ public class LayerActionsDialogFragment extends GeoDialogFragmentBase {
 
         @Override
         public void onClick(View v) {
-
-            GeoDialogHelper.renameLayer(getContext(), mLayer, getFragmentManager());
+            mLayerDialog.rename(mLayer, getContext(), getFragmentManager());
             LayerActionsDialogFragment.this.getDialog().cancel();
         }
     };
@@ -101,7 +102,7 @@ public class LayerActionsDialogFragment extends GeoDialogFragmentBase {
 
         @Override
         public void onClick(View v) {
-            GeoDialogHelper.deleteLayer(getContext(), mLayer, getFragmentManager());
+            mLayerDialog.delete(mLayer, getContext(), getFragmentManager());
             LayerActionsDialogFragment.this.getDialog().cancel();
 
 

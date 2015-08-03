@@ -10,8 +10,6 @@ import com.facebook.stetho.Stetho;
 import com.facebook.stetho.okhttp.StethoInterceptor;
 import com.geospatialcorporation.android.geomobile.library.DI.Analytics.Interfaces.IGeoAnalytics;
 import com.geospatialcorporation.android.geomobile.library.DI.Analytics.Models.GoogleAnalyticEvent;
-import com.geospatialcorporation.android.geomobile.library.DI.SharedPreferences.DaggerGeoSharedPrefsComponent;
-import com.geospatialcorporation.android.geomobile.library.DI.SharedPreferences.GeoSharedPrefsComponent;
 import com.geospatialcorporation.android.geomobile.library.DI.SharedPreferences.IGeoSharedPrefs;
 import com.geospatialcorporation.android.geomobile.library.DI.SharedPreferences.Implementations.GeoSharedPrefs;
 import com.geospatialcorporation.android.geomobile.library.constants.Domains;
@@ -388,7 +386,7 @@ public class application extends applicationDIBase {
         folderHashMap = null;
 
         IGeoSharedPrefs prefs = getGeoSharedPrefsComponent().provideGeoSharedPrefs();
-        prefs.remove(GeoSharedPrefs.Items.GOOGLE_ACCOUNT_NAME);
+        prefs.remove(prefs.getGoogleAccountName());
 
         IGeoAnalytics analytics = getAnalyticsComponent().provideGeoAnalytics();
         analytics.trackClick(new GoogleAnalyticEvent().Logout());

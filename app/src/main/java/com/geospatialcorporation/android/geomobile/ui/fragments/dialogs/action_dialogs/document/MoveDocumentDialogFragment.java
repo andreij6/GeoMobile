@@ -11,10 +11,13 @@ import android.widget.Spinner;
 
 import com.geospatialcorporation.android.geomobile.R;
 import com.geospatialcorporation.android.geomobile.application;
+import com.geospatialcorporation.android.geomobile.library.DI.Tasks.Interfaces.IGetDocumentsTask;
 import com.geospatialcorporation.android.geomobile.library.helpers.DataHelper;
+import com.geospatialcorporation.android.geomobile.library.helpers.ItemSelectedListener;
 import com.geospatialcorporation.android.geomobile.library.rest.TreeService;
 import com.geospatialcorporation.android.geomobile.models.Document.Document;
 import com.geospatialcorporation.android.geomobile.models.Folders.Folder;
+import com.geospatialcorporation.android.geomobile.ui.Interfaces.ISpinnerListener;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -22,10 +25,7 @@ import java.util.List;
 import butterknife.ButterKnife;
 import butterknife.InjectView;
 
-/**
- * Created by andre on 6/12/2015.
- */
-public class MoveDocumentDialogFragment extends DocumentActionDialogBase {
+public class MoveDocumentDialogFragment extends DocumentActionDialogBase implements ISpinnerListener<Folder> {
     TreeService mTreeService;
     List<Folder> mFolders;
     Folder mSelected;
@@ -35,7 +35,8 @@ public class MoveDocumentDialogFragment extends DocumentActionDialogBase {
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState){
 
-        new GetDocumentFoldersTask().execute();
+        IGetDocumentsTask task = application.getTasksComponent().provideGetDocumentsTask();
+        task.getDocumentFolders(this);
 
         View v = getDialogView(R.layout.dialog_document_move);
         ButterKnife.inject(this, v);
@@ -48,6 +49,8 @@ public class MoveDocumentDialogFragment extends DocumentActionDialogBase {
                     public void onClick(DialogInterface dialog, int which) {
                         if (mSelected != null) {
                             Service.move(mDocument, mSelected.getId());
+                        } else {
+                            Toaster("Selected was null");
                         }
                     }
                 }).setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
@@ -58,18 +61,21 @@ public class MoveDocumentDialogFragment extends DocumentActionDialogBase {
                 }).create();
     }
 
-    // add items into spinner dynamically
-    public void addItemsOnSpinner() {
+    public void addItemsOnSpinner(List<Folder> folders) {
+
+        mFolders = folders;
 
         List<String> list = new ArrayList<>();
 
         list.add("Choose A Folder");
 
-        for(Folder folder : mFolders){
-            if(!FolderContainsDocument(folder)) {
-                list.add(folder.getName());
-            } else {
-                mFolders.remove(folder);
+        if(mFolders != null) {
+            for (Folder folder : mFolders) {
+                if (!FolderContainsDocument(folder)) {
+                    list.add(folder.getName());
+                } else {
+                    mFolders.remove(folder);
+                }
             }
         }
 
@@ -81,10 +87,10 @@ public class MoveDocumentDialogFragment extends DocumentActionDialogBase {
     }
 
     public void addListenerOnSpinnerItemSelection() {
-        mFolderSpinner.setOnItemSelectedListener(new CustomOnItemSelectedListener());
+        mFolderSpinner.setOnItemSelectedListener(new ItemSelectedListener<>(this));
     }
 
-    private boolean FolderContainsDocument(Folder folder) {
+    protected boolean FolderContainsDocument(Folder folder) {
         List<Document> documents = folder.getDocuments();
         Boolean result = false;
         for(Document document : documents){
@@ -96,41 +102,13 @@ public class MoveDocumentDialogFragment extends DocumentActionDialogBase {
         return result;
     }
 
-    private class GetDocumentFoldersTask extends AsyncTask<Void, Void, List<Folder>> {
-
-        @Override
-        protected List<Folder> doInBackground(Void... params) {
-            mTreeService = application.getRestAdapter().create(TreeService.class);
-
-            List<Folder> folders = mTreeService.getDocuments();
-            DataHelper dh = new DataHelper();
-            mFolders = dh.getFoldersRecursively(folders.get(0), null);
-
-            return mFolders;
-        }
-
-        @Override
-        protected void onPostExecute(List<Folder> folders){
-            addItemsOnSpinner();
-            addListenerOnSpinnerItemSelection();
-        }
+    @Override
+    public void setSelected(Folder selected) {
+        mSelected = selected;
     }
 
-    protected class CustomOnItemSelectedListener implements AdapterView.OnItemSelectedListener {
-
-        @Override
-        public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-
-            if(id != 0) {
-                int folderPosition = (int)id - 1;
-
-                mSelected = mFolders.get(folderPosition);
-            }
-        }
-
-        @Override
-        public void onNothingSelected(AdapterView<?> parent) {
-
-        }
+    @Override
+    public List<Folder> getData() {
+        return mFolders;
     }
 }

@@ -11,12 +11,9 @@ import com.geospatialcorporation.android.geomobile.R;
 import butterknife.ButterKnife;
 import butterknife.InjectView;
 
-/**
- * Created by andre on 6/12/2015.
- */
+
 public class SublayerRenameActionDialogFragment extends SublayerActionDialogFragmentBase {
-    @InjectView(R.id.renameInput)
-    EditText mRenameInput;
+    @InjectView(R.id.renameInput) EditText mRenameInput;
 
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState){
@@ -24,7 +21,7 @@ public class SublayerRenameActionDialogFragment extends SublayerActionDialogFrag
         View v = getDialogView(R.layout.dialog_shared_rename);
         ButterKnife.inject(this, v);
 
-        mRenameInput.setText(mSublayer.getName());
+        mRenameInput.setText(mEntity.getName());
 
         return getDialogBuilder()
                 .setTitle(R.string.rename)
@@ -35,7 +32,7 @@ public class SublayerRenameActionDialogFragment extends SublayerActionDialogFrag
                         String newName = mRenameInput.getText().toString();
 
                         if (!newName.isEmpty()) {
-                            mService.rename(mSublayer.getId(), newName);
+                            mService.rename(mEntity.getId(), newName);
                             //getFragmentManager().popBackStack();
                         } else {
                             Toaster("Please add a valid Name");

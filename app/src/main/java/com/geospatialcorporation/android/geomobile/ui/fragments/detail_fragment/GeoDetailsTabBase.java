@@ -2,12 +2,10 @@ package com.geospatialcorporation.android.geomobile.ui.fragments.detail_fragment
 
 import android.os.Bundle;
 
-import com.geospatialcorporation.android.geomobile.library.services.ITreeService;
+import com.geospatialcorporation.android.geomobile.library.DI.TreeServices.Interfaces.ITreeService;
 import com.geospatialcorporation.android.geomobile.ui.fragments.GeoViewFragmentBase;
 
-/**
- * Created by andre on 6/9/2015.
- */
+
 public abstract class GeoDetailsTabBase<T> extends GeoViewFragmentBase {
     private static final String TAG = GeoDetailsTabBase.class.getSimpleName();
 
