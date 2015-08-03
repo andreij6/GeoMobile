@@ -4,5 +4,5 @@ import com.geospatialcorporation.android.geomobile.library.DI.Tasks.models.Login
 import com.geospatialcorporation.android.geomobile.library.DI.Tasks.models.UserLoginModel;
 
 public interface IUserLoginTask {
-    void Login(UserLoginModel loginModel, LoginUIModel uiModel);
+    void Login(UserLoginModel loginModel);
 }

@@ -32,6 +32,8 @@ import com.geospatialcorporation.android.geomobile.library.DI.Tasks.Interfaces.I
 import com.geospatialcorporation.android.geomobile.library.DI.Tasks.models.LoginUIModel;
 import com.geospatialcorporation.android.geomobile.library.DI.Tasks.models.UserLoginModel;
 import com.geospatialcorporation.android.geomobile.library.util.LoginValidator;
+import com.geospatialcorporation.android.geomobile.ui.Interfaces.IFullExecuter;
+import com.geospatialcorporation.android.geomobile.ui.Interfaces.IPostExecuter;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GooglePlayServicesUtil;
 import com.google.android.gms.common.SignInButton;
@@ -52,7 +54,7 @@ import butterknife.OnClick;
  * https://developers.google.com/+/mobile/android/getting-started#step_1_enable_the_google_api
  * and follow the steps in "Step 1" to create an OAuth 2.0 client for your package.
  */
-public class LoginActivity extends GoogleApiActivity implements LoaderCallbacks<Cursor> {
+public class LoginActivity extends GoogleApiActivity implements LoaderCallbacks<Cursor>, IFullExecuter<Boolean> {
     private final static String TAG = LoginActivity.class.getSimpleName();
     /**
     * Login workflow:
@@ -166,7 +168,7 @@ public class LoginActivity extends GoogleApiActivity implements LoaderCallbacks<
             return;
         }
 
-        Intent mainActivityIntent = new Intent(this, MainActivity.class);
+        //Intent mainActivityIntent = new Intent(this, MainActivity.class);
 
         // Reset errors.
         mEmailView.setError(null);
@@ -215,11 +217,9 @@ public class LoginActivity extends GoogleApiActivity implements LoaderCallbacks<
             showProgress(true);
 
             mUserLoginTask = application.getTasksComponent().provideUserLoginTask();
-            mUserLoginTask.Login(new UserLoginModel(email, password), new LoginUIModel(mPasswordView, this, mUserLoginTask));
+            mUserLoginTask.Login(new UserLoginModel(email, password, this));
 
-            // TODO: add logic checking login
-            mainActivityIntent.putExtra("authToken", authtoken);
-            startActivity(mainActivityIntent);
+
         }
     }
 
@@ -292,6 +292,35 @@ public class LoginActivity extends GoogleApiActivity implements LoaderCallbacks<
     @Override
     public void onLoaderReset(Loader<Cursor> cursorLoader) {
 
+    }
+
+    @Override
+    public void onPostExecute(Boolean success) {
+        mUserLoginTask = null;
+
+        showProgress(false);
+
+        if (success) {
+            Intent mainActivityIntent = new Intent(this, MainActivity.class);
+
+            String authtoken = (application.getAuthToken() == null) ? "fakeAuthToken" : application.getAuthToken();
+
+            // TODO: add logic checking login
+            mainActivityIntent.putExtra("authToken", authtoken);
+            startActivity(mainActivityIntent);
+
+            finish();
+        } else {
+            mPasswordView.setError(getString(R.string.error_incorrect_password));
+            mPasswordView.requestFocus();
+        }
+    }
+
+    @Override
+    public void onCancelled() {
+        mUserLoginTask = null;
+
+        showProgress(false);
     }
 
     private interface ProfileQuery {

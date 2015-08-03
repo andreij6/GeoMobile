@@ -7,6 +7,9 @@ import com.geospatialcorporation.android.geomobile.R;
 import com.geospatialcorporation.android.geomobile.library.DI.Tasks.Interfaces.IUserLoginTask;
 import com.geospatialcorporation.android.geomobile.library.DI.Tasks.models.LoginUIModel;
 import com.geospatialcorporation.android.geomobile.library.DI.Tasks.models.UserLoginModel;
+import com.geospatialcorporation.android.geomobile.models.GeoAsyncTask;
+import com.geospatialcorporation.android.geomobile.ui.Interfaces.IFullExecuter;
+import com.geospatialcorporation.android.geomobile.ui.Interfaces.IPostExecuter;
 import com.geospatialcorporation.android.geomobile.ui.LoginActivity;
 
 public class GeoUserLoginTask implements IUserLoginTask {
@@ -16,26 +19,22 @@ public class GeoUserLoginTask implements IUserLoginTask {
     };
 
     @Override
-    public void Login(UserLoginModel loginModel, LoginUIModel model) {
-        new UserLoginTask(loginModel, model).execute();
+    public void Login(UserLoginModel loginModel) {
+        new UserLoginTask(loginModel).execute();
     }
 
     //TODO: use geoAsync
-    private class UserLoginTask extends AsyncTask<Void, Void, Boolean> {
+    private class UserLoginTask extends GeoAsyncTask<Void, Void, Boolean> {
 
         private final String mEmail;
         private final String mPassword;
-        private LoginActivity mContext;
-        private EditText mPasswordView;
-        private IUserLoginTask mTask;
+        private IFullExecuter mContext;
 
 
-        UserLoginTask(UserLoginModel loginModel, LoginUIModel uiModel) {
+        UserLoginTask(UserLoginModel loginModel) {
+            super(loginModel.getExecuter());
             mEmail = loginModel.getEmail();
             mPassword = loginModel.getPassword();
-            mContext = uiModel.getContext();
-            mPasswordView = uiModel.getPasswordView();
-            mTask = uiModel.getTask();
         }
 
         @Override
@@ -62,24 +61,8 @@ public class GeoUserLoginTask implements IUserLoginTask {
         }
 
         @Override
-        protected void onPostExecute(final Boolean success) {
-            mTask = null;
-
-            mContext.showProgress(false);
-
-            if (success) {
-                mContext.finish();
-            } else {
-                mPasswordView.setError(mContext.getString(R.string.error_incorrect_password));
-                mPasswordView.requestFocus();
-            }
-        }
-
-        @Override
         protected void onCancelled() {
-            mTask = null;
-
-            mContext.showProgress(false);
+            mContext.onCancelled();
         }
     }
 }
