@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+
+    <Button
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/add_feature_window_document"
+        android:id="@+id/addDocument"
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true"/>
+
+    <ScrollView android:layout_below="@+id/addDocument"
+                android:id="@+id/contentScrollView"
+                android:layout_width="match_parent"
+                android:fadeScrollbars="false"
+                android:layout_height="200dp">
+        <TableLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_centerHorizontal="true"
+            android:id="@+id/featureWindowDocumentsTable">
+        </TableLayout>
+    </ScrollView>
+
+</RelativeLayout>

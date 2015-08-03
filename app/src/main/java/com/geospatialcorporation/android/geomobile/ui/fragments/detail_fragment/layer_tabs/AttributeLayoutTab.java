@@ -12,27 +12,27 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.geospatialcorporation.android.geomobile.R;
+import com.geospatialcorporation.android.geomobile.library.DI.Analytics.Models.GoogleAnalyticEvent;
 import com.geospatialcorporation.android.geomobile.library.services.LayerTreeService;
 import com.geospatialcorporation.android.geomobile.models.Layers.Layer;
-import com.geospatialcorporation.android.geomobile.models.Layers.LayerAttributeColumns;
+import com.geospatialcorporation.android.geomobile.models.Layers.LayerAttributeColumn;
 import com.geospatialcorporation.android.geomobile.ui.adapters.recycler.AttributeAdapter;
 import com.geospatialcorporation.android.geomobile.ui.fragments.detail_fragment.GeoDetailsTabBase;
-import com.melnykov.fab.FloatingActionButton;
 
 import java.util.List;
 
 import butterknife.ButterKnife;
 import butterknife.InjectView;
-import butterknife.OnClick;
 
 public class AttributeLayoutTab extends GeoDetailsTabBase<Layer> {
 
     private static final String TAG = AttributeLayoutTab.class.getSimpleName();
 
-    List<LayerAttributeColumns> mAttributeColumns;
+    List<LayerAttributeColumn> mAttributeColumns;
 
     @InjectView(R.id.attributeRecycler) RecyclerView mRecyclerView;
     @InjectView(R.id.swipe_refresh_layout) SwipeRefreshLayout mSwipeRefreshLayout;
+    //@InjectView(R.id.sliding_layout) SlidingUpPanelLayout mPanel;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState){
@@ -42,10 +42,16 @@ public class AttributeLayoutTab extends GeoDetailsTabBase<Layer> {
         mSwipeRefreshLayout.setOnRefreshListener(new AttributeRefreshListener());
         mSwipeRefreshLayout.setProgressBackgroundColorSchemeColor(getActivity().getResources().getColor(R.color.accent));
 
+        //application.setLayerAttributePanel(mPanel);
+        //mPanelManager = new PanelManager(GeoPanel.LAYER_ATTRIBUTE);
+        //mPanelManager.setup();
+
+        mAnalytics.trackScreen(new GoogleAnalyticEvent().AttributeLayoutTab());
+
         setIntentString(Layer.LAYER_INTENT);
         handleArgs();
 
-        new GetAttributeColumns().execute();
+        refresh();
 
         RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(container.getContext());
 
@@ -54,10 +60,15 @@ public class AttributeLayoutTab extends GeoDetailsTabBase<Layer> {
         return v;
     }
 
-    private class GetAttributeColumns extends AsyncTask<Void, Void, List<LayerAttributeColumns>> {
+    @Override
+    public void refresh() {
+        new GetAttributeColumns().execute();
+    }
+
+    private class GetAttributeColumns extends AsyncTask<Void, Void, List<LayerAttributeColumn>> {
 
         @Override
-        protected List<LayerAttributeColumns> doInBackground(Void... params) {
+        protected List<LayerAttributeColumn> doInBackground(Void... params) {
             mService = new LayerTreeService();
 
             if(mEntity != null){
@@ -70,10 +81,12 @@ public class AttributeLayoutTab extends GeoDetailsTabBase<Layer> {
         }
 
         @Override
-        protected void onPostExecute(List<LayerAttributeColumns> attributes){
+        protected void onPostExecute(List<LayerAttributeColumn> attributes){
             AttributeAdapter adapter = new AttributeAdapter(getActivity(), attributes);
 
             mRecyclerView.setAdapter(adapter);
+
+            super.onPostExecute(attributes);
         }
 
     }
@@ -85,7 +98,7 @@ public class AttributeLayoutTab extends GeoDetailsTabBase<Layer> {
             new Handler().postDelayed(new Runnable() {
                 @Override
                 public void run() {
-                    new GetAttributeColumns().execute();
+                    refresh();
                     mSwipeRefreshLayout.setRefreshing(false);
                 }
             }, 2000);

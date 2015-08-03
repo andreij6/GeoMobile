@@ -1,7 +1,5 @@
 package com.geospatialcorporation.android.geomobile.models.Query.point;
 
-import android.os.Bundle;
-
 import com.geospatialcorporation.android.geomobile.models.Query.ParametersBase;
 
 /**

@@ -22,19 +22,19 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarActivity;
+import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.View;
-import android.widget.Toast;
 
 import com.geospatialcorporation.android.geomobile.R;
 import com.geospatialcorporation.android.geomobile.application;
-import com.geospatialcorporation.android.geomobile.library.constants.ViewConstants;
+import com.geospatialcorporation.android.geomobile.library.DI.ErrorHandler.Interfaces.IGeoErrorHandler;
+import com.geospatialcorporation.android.geomobile.library.DI.MainNavigationController.DaggerMainNavCtrlComponent;
+import com.geospatialcorporation.android.geomobile.library.DI.MainNavigationController.MainNavCtrlComponent;
+import com.geospatialcorporation.android.geomobile.library.DI.MainNavigationController.Implementations.MainNavCtrl;
 import com.geospatialcorporation.android.geomobile.ui.Interfaces.OnFragmentInteractionListener;
-import com.geospatialcorporation.android.geomobile.ui.fragments.tree_fragments.AccountFragment;
-import com.geospatialcorporation.android.geomobile.ui.fragments.tree_fragments.DocumentFragment;
 import com.geospatialcorporation.android.geomobile.ui.fragments.GoogleMapFragment;
-import com.geospatialcorporation.android.geomobile.ui.fragments.tree_fragments.LayerFragment;
 import com.geospatialcorporation.android.geomobile.ui.fragments.drawer.LayerSelectorDrawerFragment;
 import com.geospatialcorporation.android.geomobile.ui.fragments.drawer.MainNavigationDrawerFragment;
 import com.google.android.gms.maps.GoogleMap;
@@ -79,6 +79,8 @@ public class MainActivity extends ActionBarActivity
     private boolean mIsAdmin;
     MainNavigationDrawerFragment mMainMainNavigationDrawerFragment;
     LayerSelectorDrawerFragment mLayerDrawerFragement;
+    MainNavCtrl mMainNavCtrl;
+    IGeoErrorHandler mErrorHandler;
     //endregion
 
     @Override
@@ -86,9 +88,12 @@ public class MainActivity extends ActionBarActivity
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         ButterKnife.inject(this);
-
+        application.setMainActivity(this);
         getSupportActionBar().setElevation(0);
         mMapFragment = application.getMapFragment();
+
+        mErrorHandler = application.getErrorsComponent().provideErrorHandler();
+        Thread.setDefaultUncaughtExceptionHandler(mErrorHandler.UncaughtExceptionHandler());
 
         mIsAdmin = application.getIsAdminUser();
 
@@ -96,7 +101,8 @@ public class MainActivity extends ActionBarActivity
         mMainMainNavigationDrawerFragment.setUp(R.id.navigation_left_drawer, (DrawerLayout) findViewById(R.id.drawer_layout));
 
         mLayerDrawerFragement = (LayerSelectorDrawerFragment)getSupportFragmentManager().findFragmentById(R.id.layer_drawer);
-        mLayerDrawerFragement.setUp(R.id.layer_drawer, (DrawerLayout) findViewById(R.id.drawer_layout));
+        mLayerDrawerFragement.setUp(R.id.layer_drawer, (DrawerLayout) findViewById(R.id.drawer_layout), (Toolbar) findViewById(R.id.my_toolbar));
+
 
     }
 
@@ -122,10 +128,16 @@ public class MainActivity extends ActionBarActivity
     /* Called whenever we call invalidateOptionsMenu() */
     @Override
     public boolean onPrepareOptionsMenu(Menu menu) {
-        // If the nav drawer is open, hide action items related to the content view
-        //boolean drawerOpen = mDrawerLayout.isDrawerOpen(mLeftDrawerList);
-        //menu.findItem(R.id.action_websearch).setVisible(!drawerOpen);
         return super.onPrepareOptionsMenu(menu);
+    }
+
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+
+        if(getContentFragment() == null){
+            onNavigationDrawerItemSelected(0);
+        }
     }
 
     @Override
@@ -135,61 +147,23 @@ public class MainActivity extends ActionBarActivity
         if (pageFragment == null) return;
 
         FragmentManager fragmentManager = getSupportFragmentManager();
+
         fragmentManager.beginTransaction()
                 .replace(R.id.content_frame, pageFragment)
-                .addToBackStack(null)
-                .commit();
+                .addToBackStack(null).commit();
     }
 
     protected Fragment setPageFragment(int position) {
-        if (position == ViewConstants.HEADER) { return null; }
-        if(mIsAdmin) {
-            switch (position) {
-                case ViewConstants.HEADER:
-                case ViewConstants.MAP:
-                    return mMapFragment;
-                case ViewConstants.LAYER:
-                    return new LayerFragment();
-                case ViewConstants.LIBRARY:
-                    return new DocumentFragment();
-                case ViewConstants.ACCOUNT:
-                    return new AccountFragment();
-                case ViewConstants.LOGOUT_ADMIN:
-                    application.Logout();
-                    startActivity(new Intent(this, LoginActivity.class));
-                    break;
-                case ViewConstants.ADMINCLIENTS:
-                    startActivity(new Intent(this, ClientSelectorActivity.class));
-                    finish();
-                    break;
-                default:
-                    Toast.makeText(application.getAppContext(), "Drawer view not yet implemented.", Toast.LENGTH_LONG).show();
-                    break;
-            }
-        } else {
-            switch (position) {
-                case ViewConstants.HEADER:
-                case ViewConstants.MAP:
-                    if(mMap == null)
-                        mMapFragment = application.getMapFragment();
-                    return mMapFragment;
-                case ViewConstants.LAYER:
-                    return new LayerFragment();
-                case ViewConstants.LIBRARY:
-                    return new DocumentFragment();
-                case ViewConstants.ACCOUNT:
-                    return new AccountFragment();
-                case ViewConstants.LOGOUT_REGULAR:
-                    application.Logout();
-                    startActivity(new Intent(this, LoginActivity.class));
-                    break;
-                default:
-                    Toast.makeText(application.getAppContext(), "Drawer view not yet implemented.", Toast.LENGTH_LONG).show();
-                    break;
-            }
-        }
+        mIsAdmin = application.getIsAdminUser();
 
-        return mMapFragment;
+        MainNavCtrlComponent component = DaggerMainNavCtrlComponent.builder().build();
+        mMainNavCtrl = component.provideMainNavCtrl();
+
+        if(mIsAdmin) {
+            return mMainNavCtrl.setAdminView(this, mMap, mMapFragment, position);
+        } else {
+            return mMainNavCtrl.setStandardView(this, mMap, mMapFragment, position);
+        }
     }
 
     public Fragment getContentFragment(){
@@ -203,6 +177,10 @@ public class MainActivity extends ActionBarActivity
 
     public DrawerLayout getRightDrawer() {
         return (DrawerLayout)findViewById(R.id.drawer_layout);
+    }
+
+    public LayerSelectorDrawerFragment getLayerDrawerFragment(){
+        return (LayerSelectorDrawerFragment)getSupportFragmentManager().findFragmentById(R.id.layer_drawer);
     }
 
     public View getLayerListView() {

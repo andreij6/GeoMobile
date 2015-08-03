@@ -2,7 +2,6 @@ package com.geospatialcorporation.android.geomobile.library.rest;
 
 import com.geospatialcorporation.android.geomobile.models.Folders.Folder;
 import com.geospatialcorporation.android.geomobile.models.Folders.FolderCreateRequest;
-import com.geospatialcorporation.android.geomobile.models.Folders.FolderCreateResponse;
 import com.geospatialcorporation.android.geomobile.models.Folders.FolderDetailsResponse;
 import com.geospatialcorporation.android.geomobile.models.Folders.FolderPermissionsResponse;
 import com.geospatialcorporation.android.geomobile.models.Layers.Layer;
@@ -22,6 +21,7 @@ import retrofit.http.PUT;
 import retrofit.http.Path;
 
 public interface FolderService {
+
     @GET("/API/Folders?folderType={type}")
     List<Folder> getFolders(@Path("type") String type);
 
@@ -38,10 +38,10 @@ public interface FolderService {
     List<Document> getDocumentsByFolder(@Path("folderId") int folderId);
 
     @POST("/API/Folders")
-    void createFolder(@Body FolderCreateRequest createRequest, Callback<FolderCreateResponse> cb);
+    void createFolder(@Body FolderCreateRequest createRequest, Callback<Response> cb);
 
     @DELETE("/API/Folders/{folderId}")
-    void remove(@Path("folderId") int folderId, Callback<Folder> cb);
+    void remove(@Path("folderId") int folderId, Callback<Response> cb);
 
     @PUT("/API/Folders/{folderId}/Rename")
     void rename(@Path("folderId") int folderId, @Body RenameRequest name, Callback<Response> cb);
@@ -54,4 +54,5 @@ public interface FolderService {
 
     @PUT("/API/Folders/{folderId}/Permissions")
     void saveFolderPermissions(int folderId, @Body PermissionsSaveRequest permissions);
+
 }

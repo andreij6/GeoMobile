@@ -19,4 +19,7 @@
     <color name="accent_dark">#BF360C</color>
     <!--End Pallet -->
 
+    <color name="transparent">#00000000</color>
+    <color name="primary_legend">#37474F</color>
+
 </resources>

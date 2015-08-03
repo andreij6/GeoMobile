@@ -12,6 +12,7 @@ import android.widget.Toast;
 
 import com.geospatialcorporation.android.geomobile.R;
 import com.geospatialcorporation.android.geomobile.application;
+import com.geospatialcorporation.android.geomobile.library.DI.ErrorHandler.Interfaces.IGeoErrorHandler;
 import com.geospatialcorporation.android.geomobile.ui.adapters.ClientSelectorSectionsPagerAdapter;
 
 public class ClientSelectorActivity extends ActionBarActivity implements ActionBar.TabListener {
@@ -19,6 +20,7 @@ public class ClientSelectorActivity extends ActionBarActivity implements ActionB
     ClientSelectorSectionsPagerAdapter mSectionsPagerAdapter;
 
     ViewPager mViewPager;
+    IGeoErrorHandler mErrorHandler;
 
     //region Getters & Setters
     public boolean isBackButtonClickOnce() {
@@ -38,6 +40,7 @@ public class ClientSelectorActivity extends ActionBarActivity implements ActionB
         setTitle(R.string.title_activity_select_client);
         setBackButtonClickOnce(false);
         getSupportActionBar().setElevation(0);
+        application.getLayerManager().reset();
         setContentView(R.layout.activity_client_selector);
         final ActionBar actionBar = getSupportActionBar();
         actionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_TABS);
@@ -45,6 +48,9 @@ public class ClientSelectorActivity extends ActionBarActivity implements ActionB
         mViewPager = (ViewPager) findViewById(R.id.pager);
 
         mSectionsPagerAdapter = new ClientSelectorSectionsPagerAdapter(getSupportFragmentManager(), this);
+
+        mErrorHandler = application.getErrorsComponent().provideErrorHandler();
+        Thread.setDefaultUncaughtExceptionHandler(mErrorHandler.UncaughtExceptionHandler());
 
         mViewPager.setAdapter(mSectionsPagerAdapter);
 
@@ -80,11 +86,8 @@ public class ClientSelectorActivity extends ActionBarActivity implements ActionB
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
 
-        if (id == R.id.action_settings) {
-            return true;
-        }
+        return id == R.id.action_settings || super.onOptionsItemSelected(item);
 
-        return super.onOptionsItemSelected(item);
     }
 
     @Override

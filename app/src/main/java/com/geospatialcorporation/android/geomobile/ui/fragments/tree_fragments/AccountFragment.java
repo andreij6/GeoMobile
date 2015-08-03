@@ -10,7 +10,6 @@ import android.widget.TextView;
 
 import com.geospatialcorporation.android.geomobile.R;
 import com.geospatialcorporation.android.geomobile.application;
-import com.geospatialcorporation.android.geomobile.library.helpers.ProgressDialogHelper;
 import com.geospatialcorporation.android.geomobile.library.rest.AccountService;
 import com.geospatialcorporation.android.geomobile.models.UserAccount;
 import com.geospatialcorporation.android.geomobile.ui.fragments.GeoViewFragmentBase;
@@ -57,18 +56,7 @@ public class AccountFragment extends GeoViewFragmentBase {
         OfficePhone.setText(mUserAccount.getOfficePhone());
     }
 
-    private class GetProfileTask extends AsyncTask<Void, Void, UserAccount>{
-        ProgressDialogHelper mProgressHelper;
-
-        public GetProfileTask(){
-            mProgressHelper = new ProgressDialogHelper(getActivity());
-        }
-
-        @Override
-        protected void onPreExecute(){
-            mProgressHelper.toggleProgressDialog();
-        }
-
+    private class GetProfileTask extends AsyncTask<Void, Void, UserAccount> {
         @Override
         protected UserAccount doInBackground(Void... params) {
             UserAccount mUserAccount = new UserAccount();
@@ -86,7 +74,7 @@ public class AccountFragment extends GeoViewFragmentBase {
         @Override
         protected void onPostExecute(UserAccount account){
             SetupUI(account);
-            mProgressHelper.toggleProgressDialog();
+            super.onPostExecute(account);
         }
     }
 

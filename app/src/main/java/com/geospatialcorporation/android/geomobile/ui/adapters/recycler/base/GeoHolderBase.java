@@ -12,6 +12,7 @@ public abstract class GeoHolderBase<T> extends RecyclerView.ViewHolder {
 
     protected View mView;
 
+
     public GeoHolderBase(View itemView) {
         super(itemView);
         mView = itemView;

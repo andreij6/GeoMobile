@@ -29,7 +29,7 @@ public abstract class TreeSectionBuilderBase<T> extends SectionBuilderBase<T>{
     }
 
     protected void buildAdapter(ListItemAdapter adapter, int folderCount){
-        List<SimpleSectionedRecyclerViewAdapter.Section> sections = new ArrayList<SimpleSectionedRecyclerViewAdapter.Section>();
+        List<SimpleSectionedRecyclerViewAdapter.Section> sections = new ArrayList<>();
 
         if(mParent != null){
             sections.add(new SimpleSectionedRecyclerViewAdapter.Section(0, setParentName()));

@@ -2,7 +2,6 @@ package com.geospatialcorporation.android.geomobile.library.rest;
 
 import com.geospatialcorporation.android.geomobile.models.Layers.Layer;
 import com.geospatialcorporation.android.geomobile.models.Layers.LayerCreateRequest;
-import com.geospatialcorporation.android.geomobile.models.Layers.LayerCreateResponse;
 import com.geospatialcorporation.android.geomobile.models.Layers.LayerDetailsVm;
 import com.geospatialcorporation.android.geomobile.models.RenameRequest;
 
@@ -20,7 +19,7 @@ import retrofit.http.Path;
 public interface LayerService {
 
     @POST("/API/Layers")
-    void createLayer(@Body LayerCreateRequest layer, Callback<LayerCreateResponse> cb);
+    void createLayer(@Body LayerCreateRequest layer, Callback<Response> cb);
 
     @GET("/API/Layers")
     List<Layer> getLayers();
@@ -35,8 +34,11 @@ public interface LayerService {
     void rename(@Path("id") int id, @Body RenameRequest rename, Callback<Response> cb);
 
     @DELETE("/API/Layers/{id}")
-    void delete(@Path("id") int id, Callback<Layer> cb);
+    void delete(@Path("id") int id, Callback<Response> cb);
 
     @GET("/API/Layers/{id}/Style")
     Layer.StyleInfo getStyle(@Path("id") int id);
+
+    @PUT("/API/Layers/{id}/Features/{featureId}/Documents/{documentId}")
+    void addMapFeatureDocument(@Path("id") int id, @Path("featureId") String featureId, @Path("documentId") int documentId, Callback<Response> cb);
 }

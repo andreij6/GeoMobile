@@ -10,8 +10,8 @@ import com.geospatialcorporation.android.geomobile.ui.fragments.dialogs.base.Geo
  * Created by andre on 6/12/2015.
  */
 public class LayerActionDialogBase extends GeoDialogFragmentBase {
-    Layer mLayer;
-    LayerTreeService mService;
+    protected Layer mLayer;
+    protected LayerTreeService mService;
 
     public void init(Context context, Layer layer){
         setContext(context);

@@ -37,8 +37,6 @@ public class RenameFolderActionDialogFragment extends FolderActionDialogBase {
 
                         if (!newName.isEmpty()) {
                             mService.rename(mFolder.getId(), newName);
-                            Toaster("Folder Renamed");
-                            Toaster("Pull down Refresh");
                             getFragmentManager().popBackStack();
                         } else {
                             Toaster("Please add a valid Name");

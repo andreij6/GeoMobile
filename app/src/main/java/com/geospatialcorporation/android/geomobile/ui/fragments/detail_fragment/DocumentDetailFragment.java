@@ -10,6 +10,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.geospatialcorporation.android.geomobile.R;
+import com.geospatialcorporation.android.geomobile.library.DI.Analytics.Models.GoogleAnalyticEvent;
 import com.geospatialcorporation.android.geomobile.library.helpers.GeoDialogHelper;
 import com.geospatialcorporation.android.geomobile.library.services.DocumentTreeService;
 import com.geospatialcorporation.android.geomobile.models.Document.Document;
@@ -36,6 +37,8 @@ public class DocumentDetailFragment extends ItemDetailFragment<Document>  {
     @InjectView(R.id.backImageView) ImageView mBack;
     @InjectView(R.id.downloadBtn) Button mDownload;
 
+        mAnalytics.trackClick(new GoogleAnalyticEvent().ShowDocumentActions());
+
     //endregion
 
     @Override
@@ -47,7 +50,9 @@ public class DocumentDetailFragment extends ItemDetailFragment<Document>  {
         ButterKnife.inject(this, view);
         mService = new DocumentTreeService();
 
-        HandleArguments();
+        mAnalytics.trackScreen(new GoogleAnalyticEvent().DocumentDetailScreen());
+
+        handleArguments();
 
         mDocumentName.setText(mEntity.getNameWithExt());
         mFileTypeImage.setImageDrawable(getActivity().getResources().getDrawable(mEntity.getFileTypeDrawable(true)));
@@ -65,7 +70,9 @@ public class DocumentDetailFragment extends ItemDetailFragment<Document>  {
         mDownload.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                mService.download(mEntity.getId(), mEntity.getNameWithExt());
+            mAnalytics.trackClick(new GoogleAnalyticEvent().DownloadDocument());
+
+            mService.download(mEntity.getId(), mEntity.getNameWithExt());
             }
         });
 
@@ -73,7 +80,7 @@ public class DocumentDetailFragment extends ItemDetailFragment<Document>  {
     }
 
     @Override
-    protected void HandleArguments() {
+    protected void handleArguments() {
         Bundle args = getArguments();
 
         mEntity = args.getParcelable(Document.INTENT);
@@ -84,6 +91,8 @@ public class DocumentDetailFragment extends ItemDetailFragment<Document>  {
     public View.OnClickListener DeleteonClickListner = new View.OnClickListener(){
         @Override
         public void onClick(View v){
+            mAnalytics.trackClick(new GoogleAnalyticEvent().DeleteDocument());
+
             GeoDialogHelper.deleteDocument(getActivity(), mEntity, getFragmentManager());
         }
     };

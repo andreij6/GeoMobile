@@ -15,6 +15,7 @@ import android.os.Build;
 import android.os.Bundle;
 import android.provider.ContactsContract;
 import android.text.TextUtils;
+import android.text.method.LinkMovementMethod;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.inputmethod.EditorInfo;
@@ -26,6 +27,9 @@ import android.widget.TextView;
 
 import com.geospatialcorporation.android.geomobile.R;
 import com.geospatialcorporation.android.geomobile.application;
+import com.geospatialcorporation.android.geomobile.library.DI.Analytics.Models.GoogleAnalyticEvent;
+import com.geospatialcorporation.android.geomobile.library.DI.SharedPreferences.Implementations.GeoSharedPrefs;
+import com.geospatialcorporation.android.geomobile.library.util.LoginValidator;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GooglePlayServicesUtil;
 import com.google.android.gms.common.SignInButton;
@@ -66,37 +70,37 @@ public class LoginActivity extends GoogleApiActivity implements LoaderCallbacks<
             "foo@example.com:hello", "bar@example.com:world"
     };
 
-    private static final String TEST_CREDENTIALS = new String("jon.shaffer@geospatialcorp.com:secretDev1");
+    private static final String TEST_CREDENTIALS = "jon.shaffer@geospatialcorp.com:secretDev1";
     /**
      * Keep track of the login task to ensure we can cancel it if requested.
      */
     private UserLoginTask mAuthTask = null;
 
     //region  UI references.
-    @InjectView(R.id.email)
-    AutoCompleteTextView mEmailView;
-    @InjectView(R.id.password)
-    EditText mPasswordView;
-    @InjectView(R.id.plus_sign_in_button)
-    SignInButton mPlusSignInButton;
-    @InjectView(R.id.login_form)
-    View mLoginFormView;
-    @InjectView(R.id.email_login_form)
-    View mEmailLoginFormView;
-    @InjectView(R.id.plus_sign_out_buttons)
-    View mSignOutButtons;
-    @InjectView(R.id.email_sign_in_button)
-    Button mEmailSignInButton;
+    @InjectView(R.id.email) AutoCompleteTextView mEmailView;
+    @InjectView(R.id.password) EditText mPasswordView;
+    @InjectView(R.id.plus_sign_in_button) SignInButton mPlusSignInButton;
+    @InjectView(R.id.login_form) View mLoginFormView;
+    @InjectView(R.id.email_login_form) View mEmailLoginFormView;
+    @InjectView(R.id.plus_sign_out_buttons) View mSignOutButtons;
+    @InjectView(R.id.email_sign_in_button) Button mEmailSignInButton;
+    @InjectView(R.id.signUpLink) TextView mSignUpLink;
     //endregion
 
     //region OnclickListeners
     @OnClick(R.id.plus_sign_in_button)
     public void GooglePlusSignInClick(){
+
+        mAnalytics.trackClick(new GoogleAnalyticEvent().GoogleSignIn());
+
         signIn();
     }
 
     @OnClick(R.id.email_sign_in_button)
     public void EmailSignInClick(){
+
+        mAnalytics.trackClick(new GoogleAnalyticEvent().SignInBtn());
+
         attemptLogin();
     }
     //endregion
@@ -108,6 +112,7 @@ public class LoginActivity extends GoogleApiActivity implements LoaderCallbacks<
         if (hasAuthToken()) {
             setContentView(R.layout.activity_login);
             ButterKnife.inject(this);
+            mSignUpLink.setMovementMethod(LinkMovementMethod.getInstance());
         }
 
         if (!supportsGooglePlayServices()) {
@@ -118,6 +123,10 @@ public class LoginActivity extends GoogleApiActivity implements LoaderCallbacks<
         }
 
         populateAutoComplete();
+        
+        AttemptAutomaticLogin();
+
+        mPlusSignInButton.requestFocus();
 
         mPasswordView.setOnEditorActionListener(new TextView.OnEditorActionListener() {
             @Override
@@ -132,6 +141,14 @@ public class LoginActivity extends GoogleApiActivity implements LoaderCallbacks<
 
     }
 
+    private void AttemptAutomaticLogin() {
+        String accountName = mGeoSharedPrefs.get(GeoSharedPrefs.Items.GOOGLE_ACCOUNT_NAME);
+
+        if(accountName != null){
+            mGoogleAuthTokenService.GetAndUseAuthToken(getGoogleAuthParmaters(accountName, ProgressHelper));
+        }
+    }
+
     private void populateAutoComplete() {
         getLoaderManager().initLoader(0, null, this);
     }
@@ -142,6 +159,7 @@ public class LoginActivity extends GoogleApiActivity implements LoaderCallbacks<
      * errors are presented and no actual login attempt is made.
      */
     public void attemptLogin() {
+
         if (mAuthTask != null) {
             return;
         }
@@ -165,7 +183,7 @@ public class LoginActivity extends GoogleApiActivity implements LoaderCallbacks<
         startActivity(mainActivityIntent);
 
         // Check for a valid password, if the user entered one.
-        if (!TextUtils.isEmpty(password) && !isPasswordValid(password)) {
+        if (!TextUtils.isEmpty(password) && !LoginValidator.isPasswordValid(password)) {
             mPasswordView.setError(getString(R.string.error_invalid_password));
             focusView = mPasswordView;
             cancel = true;
@@ -176,7 +194,7 @@ public class LoginActivity extends GoogleApiActivity implements LoaderCallbacks<
             mEmailView.setError(getString(R.string.error_field_required));
             focusView = mEmailView;
             cancel = true;
-        } else if (!isEmailValid(email)) {
+        } else if (!LoginValidator.isEmailValid(email)) {
             mEmailView.setError(getString(R.string.error_invalid_email));
             focusView = mEmailView;
             cancel = true;
@@ -189,6 +207,9 @@ public class LoginActivity extends GoogleApiActivity implements LoaderCallbacks<
         } else {
             // Show a progress spinner, and kick off a background task to
             // perform the user login attempt.
+
+            mAnalytics.trackClick(new GoogleAnalyticEvent().LoginAttempt());
+
             showProgress(true);
             mAuthTask = new UserLoginTask(email, password);
             mAuthTask.execute((Void) null);
@@ -197,16 +218,6 @@ public class LoginActivity extends GoogleApiActivity implements LoaderCallbacks<
             mainActivityIntent.putExtra("authToken", authtoken);
             startActivity(mainActivityIntent);
         }
-    }
-
-    private boolean isEmailValid(String email) {
-        // TODO: Replace this with your own logic
-        return email.contains("@");
-    }
-
-    private boolean isPasswordValid(String password) {
-        // TODO: Replace this with your own logic
-        return password.length() > 4;
     }
 
     /**
@@ -265,7 +276,7 @@ public class LoginActivity extends GoogleApiActivity implements LoaderCallbacks<
 
     @Override
     public void onLoadFinished(Loader<Cursor> cursorLoader, Cursor cursor) {
-        List<String> emails = new ArrayList<String>();
+        List<String> emails = new ArrayList<>();
         cursor.moveToFirst();
         while (!cursor.isAfterLast()) {
             emails.add(cursor.getString(ProfileQuery.ADDRESS));
@@ -290,11 +301,10 @@ public class LoginActivity extends GoogleApiActivity implements LoaderCallbacks<
         int IS_PRIMARY = 1;
     }
 
-
     private void addEmailsToAutoComplete(List<String> emailAddressCollection) {
         //Create adapter to tell the AutoCompleteTextView what to show in its dropdown list.
         ArrayAdapter<String> adapter =
-                new ArrayAdapter<String>(LoginActivity.this,
+                new ArrayAdapter<>(LoginActivity.this,
                         android.R.layout.simple_dropdown_item_1line, emailAddressCollection);
 
         mEmailView.setAdapter(adapter);

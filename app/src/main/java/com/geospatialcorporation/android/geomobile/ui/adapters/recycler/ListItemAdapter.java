@@ -145,7 +145,7 @@ public class ListItemAdapter extends GeoRecyclerAdapterBase<ListItemAdapter.Hold
         };
 
         //region ListItem Actions by Type
-        private void DocumentAction(ListItem item) {
+        protected void DocumentAction(ListItem item) {
             Document document = DocumentRepo.getById(item.getId());
 
             DownloadDialogFragment d = new DownloadDialogFragment();
@@ -154,13 +154,11 @@ public class ListItemAdapter extends GeoRecyclerAdapterBase<ListItemAdapter.Hold
             d.show(mFragmentManager, "download");
         }
 
-        private void DocumentDetailAction(ListItem item) {
+        protected void DocumentDetailAction(ListItem item) {
             Fragment f = new DocumentDetailFragment();
             Document d = DocumentRepo.getById(item.getId());
 
-            Bundle b = new Bundle();
-            b.putParcelable(Document.INTENT, d);
-            f.setArguments(b);
+            f.setArguments(d.toBundle());
 
             mFragmentManager.beginTransaction()
                     .addToBackStack(null)
@@ -168,7 +166,7 @@ public class ListItemAdapter extends GeoRecyclerAdapterBase<ListItemAdapter.Hold
                     .commit();
         }
 
-        private void FolderAction(ListItem item) {
+        protected void FolderAction(ListItem item) {
             mFolder = FolderRepo.getById(mItem.getId());
 
             Fragment fragment;
@@ -194,32 +192,33 @@ public class ListItemAdapter extends GeoRecyclerAdapterBase<ListItemAdapter.Hold
                     .commit();
         }
 
-        private void FolderDetailAction(ListItem item) {
+        protected void FolderDetailAction(ListItem item) {
             Fragment f = mViewType.equals(ListItemAdapter.LAYER) ? new LayerFolderDetailFragment() : new DocumentFolderDetailFragment();
             Folder folder = FolderRepo.getById(item.getId());
 
-            Bundle b = new Bundle();
-            b.putParcelable(Folder.FOLDER_INTENT, folder);
-            f.setArguments(b);
+            f.setArguments(folder.toBundle());
 
             mFragmentManager.beginTransaction()
                     .addToBackStack(null)
                     .replace(R.id.content_frame, f)
                     .commit();
+
         }
 
-        private void LayerAction(ListItem item) {
-            new MapActions().showLayer(item.getId());
+        protected void LayerAction(ListItem item) {
+            toLayerDetailView(item);
         }
 
-        private void LayerDetailAction(ListItem item) {
+        protected void LayerDetailAction(ListItem item) {
+            toLayerDetailView(item);
+        }
+        //region Helper
+        protected void toLayerDetailView(ListItem item) {
             Fragment f = new LayerDetailFragment();
             LayerTreeService service = new LayerTreeService();
             Layer layer = service.getLayer(item.getId());
 
-            Bundle b = new Bundle();
-            b.putParcelable(Layer.LAYER_INTENT, layer);
-            f.setArguments(b);
+            f.setArguments(layer.toBundle());
 
             mFragmentManager.beginTransaction()
                     .addToBackStack(null)
@@ -227,7 +226,7 @@ public class ListItemAdapter extends GeoRecyclerAdapterBase<ListItemAdapter.Hold
                     .commit();
         }
         //endregion
+        //endregion
     }
-
 
 }

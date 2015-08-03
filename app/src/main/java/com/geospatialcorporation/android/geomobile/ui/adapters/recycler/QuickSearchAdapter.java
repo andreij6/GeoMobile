@@ -3,20 +3,14 @@ package com.geospatialcorporation.android.geomobile.ui.adapters.recycler;
 import android.content.Context;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ArrayAdapter;
 import android.widget.ImageView;
-import android.widget.ListView;
 import android.widget.TextView;
 
 import com.geospatialcorporation.android.geomobile.R;
-import com.geospatialcorporation.android.geomobile.library.constants.NodeTypeCodes;
-import com.geospatialcorporation.android.geomobile.models.Query.quickSearch.QuickSearchResponse;
-import com.geospatialcorporation.android.geomobile.models.Query.quickSearch.QuickSearchResult;
 import com.geospatialcorporation.android.geomobile.models.Query.quickSearch.QuickSearchResultVM;
 import com.geospatialcorporation.android.geomobile.ui.adapters.recycler.base.GeoHolderBase;
 import com.geospatialcorporation.android.geomobile.ui.adapters.recycler.base.GeoRecyclerAdapterBase;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import butterknife.InjectView;

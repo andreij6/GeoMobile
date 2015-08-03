@@ -5,7 +5,6 @@ import com.geospatialcorporation.android.geomobile.database.DataRepository.IFull
 import com.geospatialcorporation.android.geomobile.models.Interfaces.IdModel;
 
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 

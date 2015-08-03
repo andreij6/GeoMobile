@@ -1,5 +1,6 @@
 package com.geospatialcorporation.android.geomobile.models.Document;
 
+import android.os.Bundle;
 import android.os.Parcel;
 import android.os.Parcelable;
 
@@ -150,10 +151,10 @@ public class Document implements Parcelable, ITreeEntity {
     public static String INTENT = "Document Intent";
 
     public int getFileTypeDrawable(Boolean white) {
-        List<String> word = Arrays.asList(new String[]{".docx", ".docm", ".dotx", ".dotm", ".docb"});
-        List<String> excel = Arrays.asList(new String[]{".xls", ".xlt", ".xlm", ".xlsx", ".xltx", ".xltm", ".xlsb", ".xla", ".xlam", ".xll", ".xlw"});
-        List<String> powerpoint = Arrays.asList(new String[] { ".ppt", ".pot", ".pps", ".pptx"});
-        List<String> images = Arrays.asList(new String[] { ".jpg", ".png", ".jpeg"});
+        List<String> word = Arrays.asList(".docx", ".docm", ".dotx", ".dotm", ".docb");
+        List<String> excel = Arrays.asList(".xls", ".xlt", ".xlm", ".xlsx", ".xltx", ".xltm", ".xlsb", ".xla", ".xlam", ".xll", ".xlw");
+        List<String> powerpoint = Arrays.asList(".ppt", ".pot", ".pps", ".pptx");
+        List<String> images = Arrays.asList(".jpg", ".png", ".jpeg");
 
 
         String lowerExt = getExtension().toLowerCase();
@@ -199,7 +200,12 @@ public class Document implements Parcelable, ITreeEntity {
         return R.drawable.ic_file_document_box_black_24dp;
     }
 
-
+    @Override
+    public Bundle toBundle() {
+        Bundle b = new Bundle();
+        b.putParcelable(INTENT, this);
+        return b;
+    }
     //endregion
 
 }

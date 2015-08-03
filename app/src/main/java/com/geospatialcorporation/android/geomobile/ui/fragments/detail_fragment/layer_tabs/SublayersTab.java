@@ -11,11 +11,11 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.geospatialcorporation.android.geomobile.R;
+import com.geospatialcorporation.android.geomobile.library.DI.Analytics.Models.GoogleAnalyticEvent;
 import com.geospatialcorporation.android.geomobile.library.services.SublayerTreeService;
 import com.geospatialcorporation.android.geomobile.models.Layers.Layer;
 import com.geospatialcorporation.android.geomobile.ui.adapters.recycler.SublayerAdapter;
 import com.geospatialcorporation.android.geomobile.ui.fragments.detail_fragment.GeoDetailsTabBase;
-import com.sothree.slidinguppanel.SlidingUpPanelLayout;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -31,7 +31,7 @@ public class SublayersTab extends GeoDetailsTabBase<Layer> {
     List<Layer> mData;
     @InjectView(R.id.sublayerRecyclerView) RecyclerView mRecyclerView;
     @InjectView(R.id.swipe_refresh_layout) SwipeRefreshLayout mSwipeRefreshLayout;
-    @InjectView(R.id.sliding_layout) SlidingUpPanelLayout mPanel;
+    //@InjectView(R.id.sliding_layout) SlidingUpPanelLayout mPanel;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState){
@@ -41,7 +41,13 @@ public class SublayersTab extends GeoDetailsTabBase<Layer> {
         mSwipeRefreshLayout.setOnRefreshListener(new SublayerRefreshListener());
         mSwipeRefreshLayout.setProgressBackgroundColorSchemeColor(getActivity().getResources().getColor(R.color.accent));
 
-        mPanel.setBackgroundColor(getActivity().getResources().getColor(R.color.primary_light));
+        mAnalytics.trackScreen(new GoogleAnalyticEvent().SublayersTab());
+
+        //application.setSublayerFragmentPanel(mPanel);
+        //mPanel.setBackgroundColor(getActivity().getResources().getColor(R.color.primary_light));
+
+        //ISlidingPanelManager manager = new PanelManager(GeoPanel.SUBLAYER);
+        //manager.setup();
 
         setIntentString(Layer.LAYER_INTENT);
         handleArgs();
@@ -53,6 +59,19 @@ public class SublayersTab extends GeoDetailsTabBase<Layer> {
         mRecyclerView.setLayoutManager(layoutManager);
 
         return v;
+    }
+
+    @Override
+    public void onDetach() {
+        super.onDetach();
+        //if(mPanelManager != null) {
+        //    mPanelManager.collapse();
+        //}
+    }
+
+    @Override
+    public void refresh() {
+        new GetSublayersTask().execute();
     }
 
     private class GetSublayersTask extends AsyncTask<Void, Void, List<Layer>> {
@@ -79,6 +98,8 @@ public class SublayersTab extends GeoDetailsTabBase<Layer> {
             SublayerAdapter adapter = new SublayerAdapter(getActivity(), mData);
 
             mRecyclerView.setAdapter(adapter);
+
+            super.onPostExecute(sublayers);
         }
 
 
@@ -91,7 +112,7 @@ public class SublayersTab extends GeoDetailsTabBase<Layer> {
             new Handler().postDelayed(new Runnable() {
                 @Override
                 public void run() {
-                    new GetSublayersTask().execute();
+                    refresh();
                     mSwipeRefreshLayout.setRefreshing(false);
                 }
             }, 2000);

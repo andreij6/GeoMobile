@@ -29,7 +29,7 @@ public class MapStateManager {
     private Client mClient;
 
     public MapStateManager(Context context){
-        mapStatePrefs = context.getSharedPreferences(PREFS_NAME, context.MODE_PRIVATE);
+        mapStatePrefs = context.getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE);
         mClient = application.getGeoClient();
     }
 
@@ -45,7 +45,7 @@ public class MapStateManager {
         editor.putFloat(makeKey(BEARING), position.bearing);
         editor.putInt(makeKey(MAPTYPE), map.getMapType());
 
-        editor.commit();
+        editor.apply();
     }
 
     private String makeKey(String key){

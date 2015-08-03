@@ -9,7 +9,7 @@ import android.widget.Toast;
 
 import com.geospatialcorporation.android.geomobile.library.services.DocumentTreeService;
 import com.geospatialcorporation.android.geomobile.library.services.FolderTreeService;
-import com.geospatialcorporation.android.geomobile.library.helpers.Interfaces.ITreeService;
+import com.geospatialcorporation.android.geomobile.library.services.ITreeService;
 import com.geospatialcorporation.android.geomobile.library.services.LayerTreeService;
 import com.geospatialcorporation.android.geomobile.models.Folders.Folder;
 import com.geospatialcorporation.android.geomobile.models.Interfaces.INamedEntity;
@@ -39,7 +39,7 @@ public class ItemDetailFragment<ITreeEntity> extends GeoViewFragmentBase {
 
 
 
-    protected void HandleArguments(){
+    protected void handleArguments(){
         Toast.makeText(getActivity(), "Override Me", Toast.LENGTH_LONG).show();
     }
 
@@ -81,14 +81,7 @@ public class ItemDetailFragment<ITreeEntity> extends GeoViewFragmentBase {
                     }
 
                     if (service != null) {
-
-                        Boolean success = service.rename(((IdModel) mEntity).getId(), mEditText.getText().toString());
-
-                        if (!success) {
-                            Toast.makeText(getActivity(), "Not Authorized to rename " + mEntity.getClass().getSimpleName(), Toast.LENGTH_LONG).show();
-                        } else {
-                            Toast.makeText(getActivity(), "Success!", Toast.LENGTH_LONG).show();
-                        }
+                        service.rename(((IdModel) mEntity).getId(), mEditText.getText().toString());
                     }
 
                     mEditText.setVisibility(View.GONE);

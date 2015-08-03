@@ -1,7 +1,5 @@
 package com.geospatialcorporation.android.geomobile.models.Document;
 
-import com.geospatialcorporation.android.geomobile.models.Folders.Folder;
-
 /**
  * Created by andre on 6/9/2015.
  */

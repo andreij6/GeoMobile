@@ -30,7 +30,7 @@ public class DocumentFolderDetailFragment extends ItemDetailFragment<Folder> imp
 
         ButterKnife.inject(this, view);
 
-        HandleArguments();
+        handleArguments();
         Bundle args = getArguments();
         args.putString("Folder Type", "Document");
 
@@ -39,7 +39,7 @@ public class DocumentFolderDetailFragment extends ItemDetailFragment<Folder> imp
         tabHost.setup(getActivity(), getChildFragmentManager(), android.R.id.tabcontent);
 
         tabHost.addTab(tabHost.newTabSpec(DETAILS).setIndicator(DETAILS), FolderDetailsTab.class, args);
-        tabHost.addTab(tabHost.newTabSpec(PERMISSIONS).setIndicator(PERMISSIONS), PermissionsTab.class, getArguments());
+        tabHost.addTab(tabHost.newTabSpec(PERMISSIONS).setIndicator(PERMISSIONS), PermissionsTab.class, args);
 
         tabHost.setCurrentTab(0);
 
@@ -47,7 +47,7 @@ public class DocumentFolderDetailFragment extends ItemDetailFragment<Folder> imp
     }
 
     @Override
-    protected void HandleArguments() {
+    protected void handleArguments() {
         Bundle args = getArguments();
 
         mEntity = args.getParcelable(Folder.FOLDER_INTENT);

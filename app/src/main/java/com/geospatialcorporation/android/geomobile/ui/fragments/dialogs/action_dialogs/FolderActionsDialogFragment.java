@@ -2,7 +2,6 @@ package com.geospatialcorporation.android.geomobile.ui.fragments.dialogs.action_
 
 import android.app.AlertDialog;
 import android.app.Dialog;
-import android.app.DialogFragment;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.os.Bundle;
@@ -19,7 +18,6 @@ import com.geospatialcorporation.android.geomobile.ui.fragments.dialogs.base.Geo
 
 import butterknife.ButterKnife;
 import butterknife.InjectView;
-import butterknife.OnClick;
 
 /**
  * Created by andre on 6/10/2015.
@@ -57,7 +55,7 @@ public class FolderActionsDialogFragment extends GeoDialogFragmentBase {
     public Dialog onCreateDialog(Bundle savedInstanceState){
         AlertDialog.Builder builder = getDialogBuilder();
 
-        View v = getDialogView(R.layout.dialog_folder_actions);
+        View v = getDialogView(R.layout.dialog_actions_folder);
 
         ButterKnife.inject(this, v);
 

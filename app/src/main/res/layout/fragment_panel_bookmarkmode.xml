@@ -32,6 +32,7 @@
         android:layout_marginEnd="30dp"
         android:layout_marginTop="30dp"
         android:layout_alignParentTop="true"
-        android:layout_alignEnd="@+id/bookMarkNameInput"/>
+        android:layout_alignEnd="@+id/bookMarkNameInput"
+        android:contentDescription="@string/close"/>
 
 </RelativeLayout>

@@ -9,6 +9,7 @@ import android.widget.EditText;
 import android.widget.RadioButton;
 
 import com.geospatialcorporation.android.geomobile.R;
+import com.geospatialcorporation.android.geomobile.library.DI.Analytics.Models.GoogleAnalyticEvent;
 import com.geospatialcorporation.android.geomobile.library.constants.GeometryTypeCodes;
 import com.geospatialcorporation.android.geomobile.library.services.LayerTreeService;
 
@@ -47,6 +48,8 @@ public class CreateLayerDialogFragment extends CreateDialogFragmentBase {
 
                 if(line.isChecked())
                     shape = GeometryTypeCodes.Line;
+
+                mAnalytics.trackClick(new GoogleAnalyticEvent().CreateLayer());
 
                 layerService.createLayer(name.getText().toString(), shape, mFolder.getId());
 

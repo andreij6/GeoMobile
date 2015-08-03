@@ -1,10 +1,14 @@
 package com.geospatialcorporation.android.geomobile.models.Layers;
 
+import com.google.android.gms.maps.model.LatLng;
+
 public class Point {
     //region Properties
     private Integer GeometryType;
     private double X;
     private double Y;
+    private double Z;
+    private double M;
     //endregion
 
     //region Constructors
@@ -40,6 +44,26 @@ public class Point {
 
     public void setY(double y) {
         Y = y;
+    }
+
+    public LatLng getLatLng() {
+        return new LatLng(getY(), getX());
+    }
+
+    public double getM() {
+        return M;
+    }
+
+    public void setM(double m) {
+        M = m;
+    }
+
+    public double getZ() {
+        return Z;
+    }
+
+    public void setZ(double z) {
+        Z = z;
     }
     //endregion
 

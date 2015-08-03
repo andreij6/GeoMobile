@@ -82,7 +82,7 @@
     <string name="select_map_style">Select a Style</string>
     <string name="impersonate">Impersonate</string>
     <string name="download_file">Download File</string>
-    <string name="loading_dots">Loading...</string>
+    <string name="loading_dots">Loading…</string>
     <string name="logout">Logout</string>
     <string name="title_activity_folder_detail">FolderDetailActivity</string>
     <string name="title_activity_document_detail">DocumentDetailActivity</string>
@@ -162,12 +162,12 @@
     <string name="document_actions">Document Actions</string>
     <string name="move">Move</string>
     <string name="edit_sublayer">Edit Sublayer</string>
-    <string name="show_all">Show All</string>
 
 <!-- Layer - Details tabs -->
     <string name="access_level">Access Level:</string>
     <string name="shape_type">Shape Type:</string>
     <string name="feature_count">Feature Count:</string>
+
 
     <string name="layer_actions">Layer Actions</string>
     <string name="finish">Finish</string>
@@ -180,4 +180,80 @@
     <string name="clear_bookmarks">Clear Bookmarks</string>
     <string name="geounderground">GeoUnderground</string>
     <string name="portal">Portal</string>
+    <string name="hidden">Hidden</string>
+    <string name="attribute_name">Attribute Name</string>
+    <string name="add_sublayer">Add Sublayer</string>
+    <string name="library_tree_screen">Library Tree Screen</string>
+    <string name="ui">UI</string>
+    <string name="clicked">Clicked</string>
+    <string name="success">Success</string>
+    <string name="column_type_null">Type Should contain a value</string>
+    <string name="layer_folder_detail_screen">Layer Folder Detail Screen</string>
+    <string name="entering_bookmark_name">Entering Bookmark Name Panel</string>
+    <string name="GoogleSignIn">Google Signin button clicked</string>
+    <string name="loginAttempt">Login Attempt</string>
+    <string name="name_invalid">Name must have a value</string>
+    <string name="boolean_type_invalid">Default Value must be true or false</string>
+    <string name="hideLayerCheckBox">Hide Layer Checkbox</string>
+    <string name="showLayerCheckBox">Show Layer Checkbox</string>
+    <string name="add">Add</string>
+    <string name="base_map">Base Map</string>
+    <string name="full_screen">Full Screen</string>
+    <string name="toggle">Toggle</string>
+    <string name="created">Created</string>
+    <string name="created_by">Created By</string>
+    <string name="folder_count">Folder Count:</string>
+
+    <!-- Content Descriptions -->
+    <string name="upload_photo">Upload Photo</string>
+    <string name="rename_document">Rename Document</string>
+    <string name="delete_document">Delete Document</string>
+    <string name="delete_folder">Delete Folder</string>
+    <string name="style_layer">Edit Layer Styles</string>
+    <string name="rename_layer">Rename Layer</string>
+    <string name="rename_sublayer">Rename Sublayer</string>
+    <string name="delete_sublayer">Delete Sublayer</string>
+    <string name="view_sublayers">View Sublayers</string>
+    <string name="menu_icon">Menu Icon</string>
+    <string name="document_icon">Document Icon</string>
+    <string name="back_arrow">Back Arrow</string>
+    <string name="folder_detail_icon">Folder Detail Icon</string>
+    <string name="folder_permissions_icon">Folder Permissions Icon</string>
+    <string name="layer_detail_icon">Layer Detail Icon</string>
+
+
+    <string name="or">OR</string>
+    <string name="powered_by">Powered by Geospatial Corporation</string>
+    <string name="sign_up_invitation"><a href="https://www.geounderground.com/register">Don\'t have an account? Sign Up.</a></string>
+    <string name="full_screen_mode">Fullscreen mode initialized</string>
+    <string name="query_mode">Query Mode Initialized</string>
+    <string name="quicksearch_mode">Quick Search opened</string>
+    <string name="map_screen">Map Screen</string>
+    <string name="current_location">Get Current Location Clicked</string>
+    <string name="change_basemap">Change Basemap clicked</string>
+    <string name="geometryIV">Geometry Type Image View</string>
+    <string name="add_feature_window_document">Add Document</string>
+    <string name="GeoUndergroundSignIn">GeoUnderground Sign In Button Clicked</string>
+    <string name="map_window_title">Map Window Title</string>
+    <string name="add_mapfeature_document">Add Document to Feature</string>
+    <string name="document_detail_screen">Document Detail Screen</string>
+    <string name="show_document_actions">Show Document Actions Window</string>
+    <string name="sublayers_tab_screen">Sublayers Tab Screen</string>
+    <string name="show_layer_actions">Show Layer Actions</string>
+    <string name="layer_detail_tab_screen">Layer Details Tab</string>
+    <string name="folder_permission_click">the user clicked the folder permissions button</string>
+    <string name="folder_permissions_screen">Folder Permissions Screen</string>
+    <string name="show_folder_actions">the user clicked the show folder actions button</string>
+    <string name="folder_detail_screen">Folder Detail Screen</string>
+    <string name="feature_window_attributes_tab">Feature Window Attributes Tab</string>
+    <string name="map_info_tab">Map Info Tab</string>
+    <string name="map_feature_document">Map Feature Documents Tab</string>
+    <string name="show_add_feature_document_dialog">the user clicked the show Add Document to Map Feature Button</string>
+    <string name="logout_event">User Logged Out</string>
+    <string name="upload_image_event">The user is upload an image</string>
+    <string name="create_layer_event">The User is creating a layer</string>
+    <string name="create_folder_event">The User Created a new Folder</string>
+    <string name="delete_folder_event">The User is Deleting a Folder</string>
+    <string name="map_feature_document_event">Adding Document to Map Feature Window</string>
+
 </resources>

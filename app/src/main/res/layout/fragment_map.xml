@@ -3,6 +3,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent">
 
+        android:layout_marginTop="?attr/actionBarSize"
         <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
@@ -47,6 +48,10 @@
                 android:layout_alignEnd="@+id/fab_location"
                 />
 
+       <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:id="@+id/slider_content">
         </RelativeLayout>
 
 </RelativeLayout>

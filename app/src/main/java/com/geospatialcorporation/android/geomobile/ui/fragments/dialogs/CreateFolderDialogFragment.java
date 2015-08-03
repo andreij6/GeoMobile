@@ -8,6 +8,7 @@ import android.view.View;
 import android.widget.EditText;
 
 import com.geospatialcorporation.android.geomobile.R;
+import com.geospatialcorporation.android.geomobile.library.DI.Analytics.Models.GoogleAnalyticEvent;
 import com.geospatialcorporation.android.geomobile.library.services.FolderTreeService;
 
 /**
@@ -29,6 +30,7 @@ public class CreateFolderDialogFragment extends CreateDialogFragmentBase {
                         @Override
                         public void onClick(DialogInterface dialog, int which) {
                             //TODO: Validation
+                            mAnalytics.trackClick(new GoogleAnalyticEvent().CreateFolder());
                             service.createFolder(name.getText().toString(), mFolder.getId());
                         }
                     }).setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {

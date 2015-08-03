@@ -71,6 +71,10 @@ public class LayerFragment extends GeoViewFragmentBase {
         return mRootView;
     }
 
+    public void refresh() {
+        handleArguments();
+    }
+
     private class GetLayersTask extends AsyncTask<Integer, Void, Folder> {
         @Override
         protected Folder doInBackground(Integer... params) {

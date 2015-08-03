@@ -37,11 +37,11 @@ public class Extent {
     //endregion
 
     public LatLng getMinLatLng() {
-        return new LatLng(Min.getX(), Min.getY());
+        return new LatLng(Min.getY(), Min.getX());
     }
 
     public LatLng getMaxLatLng() {
-        return new LatLng(Max.getX(), Max.getY());
+        return new LatLng(Max.getY(), Max.getX());
     }
 
 }

@@ -7,17 +7,17 @@ import android.support.v4.app.FragmentManager;
 import android.view.View;
 
 import com.geospatialcorporation.android.geomobile.R;
+import com.geospatialcorporation.android.geomobile.library.constants.GeoPanel;
 import com.geospatialcorporation.android.geomobile.library.helpers.MarkerComparer;
 import com.geospatialcorporation.android.geomobile.library.helpers.QueryMachine;
 import com.geospatialcorporation.android.geomobile.library.helpers.QuerySenderHelper;
-import com.geospatialcorporation.android.geomobile.library.helpers.panelmanager.ISlidingPanelManager;
-import com.geospatialcorporation.android.geomobile.library.helpers.panelmanager.SlidingPanelManager;
+import com.geospatialcorporation.android.geomobile.library.panelmanager.ISlidingPanelManager;
+import com.geospatialcorporation.android.geomobile.library.panelmanager.PanelManager;
 import com.geospatialcorporation.android.geomobile.library.viewmode.IViewMode;
 import com.geospatialcorporation.android.geomobile.models.Query.point.Max;
 import com.geospatialcorporation.android.geomobile.models.Query.point.Min;
 import com.geospatialcorporation.android.geomobile.ui.Interfaces.OnFragmentInteractionListener;
-import com.geospatialcorporation.android.geomobile.ui.fragments.panel_fragments.QueryPanelFragment;
-import com.geospatialcorporation.android.geomobile.ui.fragments.panel_fragments.QuickSearchPanelFragment;
+import com.geospatialcorporation.android.geomobile.ui.fragments.panel_fragments.map_fragment_panels.QueryPanelFragment;
 import com.google.android.gms.maps.CameraUpdate;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
@@ -174,7 +174,8 @@ public class QueryMode implements IViewMode {
             mListener = listener;
             mActivity = activity;
 
-            mPanelManager = new SlidingPanelManager(mActivity);
+            mPanelManager = new PanelManager(GeoPanel.MAP);
+            mPanelManager.setup();
 
             return this;
         }
@@ -313,10 +314,10 @@ public class QueryMode implements IViewMode {
 
             Fragment queryPanelFragment = new QueryPanelFragment();
 
-            mFragmentManager.beginTransaction()
-                    .disallowAddToBackStack()
-                    .replace(R.id.slider_content, queryPanelFragment)
-                    .commit();
+            //mFragmentManager.beginTransaction()
+            //        .disallowAddToBackStack()
+            //        .replace(R.id.slider_content, queryPanelFragment)
+            //        .commit();
 
             mPanelManager.anchor();
 

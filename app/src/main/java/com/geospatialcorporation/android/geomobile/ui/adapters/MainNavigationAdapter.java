@@ -39,9 +39,9 @@ public class MainNavigationAdapter extends ArrayAdapter<String> {
             case MenuConstants.MAP:
                 icon.setImageDrawable(mContext.getDrawable(R.drawable.ic_map_marker_white_18dp));
                 break;
-            case MenuConstants.LAYERS:
-                icon.setImageDrawable(mContext.getDrawable(R.drawable.ic_layers_white_18dp));
-                break;
+            //case MenuConstants.LAYERS:
+                //icon.setImageDrawable(mContext.getDrawable(R.drawable.ic_layers_white_18dp));
+                //break;
             case MenuConstants.LIBRARY:
                 icon.setImageDrawable(mContext.getDrawable(R.drawable.ic_book_white_18dp));
                 break;

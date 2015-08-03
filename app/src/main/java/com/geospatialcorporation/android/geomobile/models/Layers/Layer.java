@@ -1,14 +1,22 @@
 package com.geospatialcorporation.android.geomobile.models.Layers;
 
+import android.os.Bundle;
 import android.os.Parcel;
 import android.os.Parcelable;
 import android.text.TextUtils;
 
+import com.geospatialcorporation.android.geomobile.application;
 import com.geospatialcorporation.android.geomobile.library.constants.GeometryTypeCodes;
 import com.geospatialcorporation.android.geomobile.library.map.MapActions;
 import com.geospatialcorporation.android.geomobile.models.Interfaces.ITreeEntity;
+import com.google.android.gms.maps.GoogleMap;
+import com.google.android.gms.maps.model.Marker;
+import com.google.android.gms.maps.model.Polygon;
+import com.google.android.gms.maps.model.Polyline;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 public class Layer implements Parcelable, ITreeEntity {
 
@@ -47,7 +55,7 @@ public class Layer implements Parcelable, ITreeEntity {
     private Boolean IsShowing;
     private List<Layer> Sublayers;
     private StyleInfo StyleInfo;
-    private Object MapObject;
+
     //endregion
 
     //region Getters & Setters
@@ -135,13 +143,11 @@ public class Layer implements Parcelable, ITreeEntity {
     public StyleInfo getStyleInfo() {
         return StyleInfo;
     }
-
-    public void setMapObject(Object mapObject) { MapObject = mapObject; }
-    public Object getMapObject() { return MapObject; }
     //endregion
 
     public static String LAYER_INTENT = "Layer Intent";
 
+    //region Parcelable
     @Override
     public int describeContents() {
         return 0;
@@ -172,6 +178,7 @@ public class Layer implements Parcelable, ITreeEntity {
             return new Layer[size];
         }
     };
+    //endregion
 
     public String getReadableGeometryType() {
         int code = getGeometryTypeCodeId();
@@ -209,6 +216,12 @@ public class Layer implements Parcelable, ITreeEntity {
         return result;
     }
 
+    @Override
+    public Bundle toBundle() {
+        Bundle b = new Bundle();
+        b.putParcelable(LAYER_INTENT, this);
+        return b;
+    }
 
     public class StyleInfo {
         public int StyleInfoId;

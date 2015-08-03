@@ -7,4 +7,14 @@
         <item>Normal</item>
         <item>None</item>
     </string-array>
+
+    <string-array name="layer_attribute_column_types">
+        <item>Text</item>
+        <item>True/False</item>
+        <item>Date</item>
+        <item>DateTime</item>
+        <item>Integer</item>
+        <item>Decimal</item>
+    </string-array>
+
 </resources>

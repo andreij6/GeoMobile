@@ -12,6 +12,7 @@ import com.geospatialcorporation.android.geomobile.database.DataRepository.Imple
 import com.geospatialcorporation.android.geomobile.library.constants.GeometryTypeCodes;
 import com.geospatialcorporation.android.geomobile.library.rest.LayerService;
 import com.geospatialcorporation.android.geomobile.library.rest.SublayerService;
+import com.geospatialcorporation.android.geomobile.library.services.LayerTreeService;
 import com.geospatialcorporation.android.geomobile.models.Layers.Layer;
 import com.geospatialcorporation.android.geomobile.ui.fragments.GoogleMapFragment;
 import com.google.android.gms.maps.GoogleMap;
@@ -24,18 +25,20 @@ import java.util.List;
 import retrofit.RetrofitError;
 
 public class MapActions {
+
     protected final static String TAG = MapActions.class.getSimpleName();
     private GoogleMap mMap;
     private LayerService layerService;
     private SublayerService sublayerService;
     private IFullDataRepository<Layer> LayerRepo;
+    LayerTreeService mLayerTreeService;
 
     public MapActions() {
-        GoogleMapFragment mMapFragment = application.getMapFragment();
         layerService = application.getRestAdapter().create(LayerService.class);
         sublayerService = application.getRestAdapter().create(SublayerService.class);
-        mMap = mMapFragment.mMap;
+        mMap = application.getGoogleMap();
         LayerRepo = new LayersAppSource();
+        mLayerTreeService = new LayerTreeService();
     }
 
     public void showLayer(Layer layer) {
@@ -103,7 +106,7 @@ public class MapActions {
         MarkerOptions point = new MarkerOptions().position(layer.getExtent().getMinLatLng());
         point.flat(true);
 
-        layer.setMapObject(mMap.addMarker(point));
+        //layer.setMapObject(mMap.addMarker(point));
         layer.setIsShowing(true);
     }
 
@@ -133,7 +136,7 @@ public class MapActions {
             polyline.width(styleInfo.Width);
             polyline.color(Color.parseColor(styleInfo.BorderColor));
 
-            layer.setMapObject(mMap.addPolyline(polyline));
+            //layer.setMapObject(mMap.addPolyline(polyline));
             layer.setIsShowing(true);
         }
     }
@@ -153,7 +156,7 @@ public class MapActions {
     private void showPolygon(Layer layer) {
         List<Layer> sublayers = getLayerSublayers(layer);
 
-        layer.setMapObject(mMap.addPolygon(new PolygonOptions()));
+        //layer.setMapObject(mMap.addPolygon(new PolygonOptions()));
         layer.setIsShowing(true);
     }
 

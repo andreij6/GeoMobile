@@ -1,18 +1,17 @@
 package com.geospatialcorporation.android.geomobile.library.services;
 
-import android.util.Log;
 import android.widget.Toast;
 
 import com.geospatialcorporation.android.geomobile.application;
 import com.geospatialcorporation.android.geomobile.database.DataRepository.IFullDataRepository;
 import com.geospatialcorporation.android.geomobile.database.DataRepository.Implementations.Folders.FolderAppSource;
 import com.geospatialcorporation.android.geomobile.database.DataRepository.Implementations.Layers.LayersAppSource;
-import com.geospatialcorporation.android.geomobile.library.helpers.Interfaces.ITreeService;
+import com.geospatialcorporation.android.geomobile.library.requestcallback.RequestCallback;
+import com.geospatialcorporation.android.geomobile.library.requestcallback.listener_implementations.FolderModifiedListener;
 import com.geospatialcorporation.android.geomobile.library.rest.FolderService;
 import com.geospatialcorporation.android.geomobile.library.rest.TreeService;
 import com.geospatialcorporation.android.geomobile.models.Folders.Folder;
 import com.geospatialcorporation.android.geomobile.models.Folders.FolderCreateRequest;
-import com.geospatialcorporation.android.geomobile.models.Folders.FolderCreateResponse;
 import com.geospatialcorporation.android.geomobile.models.Folders.FolderDetailsResponse;
 import com.geospatialcorporation.android.geomobile.models.Folders.FolderPermissionsResponse;
 import com.geospatialcorporation.android.geomobile.models.Layers.Layer;
@@ -20,10 +19,6 @@ import com.geospatialcorporation.android.geomobile.models.Document.Document;
 import com.geospatialcorporation.android.geomobile.models.RenameRequest;
 
 import java.util.List;
-
-import retrofit.Callback;
-import retrofit.RetrofitError;
-import retrofit.client.Response;
 
 public class FolderTreeService implements ITreeService {
     private static final String TAG = FolderTreeService.class.getSimpleName();
@@ -35,12 +30,14 @@ public class FolderTreeService implements ITreeService {
     private TreeService mTreeService;
     //endregion
 
+    //region Constructors
     public FolderTreeService(){
         mFolderService = application.getRestAdapter().create(FolderService.class);
         FolderRepo = new FolderAppSource();
         LayerRepo = new LayersAppSource();
         mTreeService = application.getRestAdapter().create(TreeService.class);
     }
+    //endregion
 
     //region Public Methods
     public Folder getFolderById(Integer folderId) {
@@ -51,25 +48,6 @@ public class FolderTreeService implements ITreeService {
         }
 
         return folder;
-    }
-
-    public void createFolder(String name, int parentFolder){
-        FolderCreateRequest createRequest = new FolderCreateRequest(name, parentFolder);
-
-
-            mFolderService.createFolder(createRequest, new Callback<FolderCreateResponse>() {
-            @Override
-            public void success(FolderCreateResponse cr, Response response) {
-                Toast.makeText(application.getAppContext(), "Success!", Toast.LENGTH_SHORT).show();
-                Toast.makeText(application.getAppContext(), "Pull to Refresh", Toast.LENGTH_LONG).show();
-            }
-
-            @Override
-            public void failure(RetrofitError error) {
-                Toast.makeText(application.getAppContext(), "Failure", Toast.LENGTH_LONG).show();
-            }
-        });
-
     }
 
     public List<Folder> getFoldersByFolder(Integer folderId, boolean checkCache) {
@@ -94,47 +72,33 @@ public class FolderTreeService implements ITreeService {
     }
 
     public List<Document> getDocumentsByFolder(Integer folderId){
-
         return mFolderService.getDocumentsByFolder(folderId);
 
     }
 
-    public void deleteFolder(Folder folder) {
-        mFolderService.remove(folder.getId(), new Callback<Folder>() {
-            @Override
-            public void success(Folder folder, Response response) {
-                Toast.makeText(application.getAppContext(), "Success", Toast.LENGTH_SHORT).show();
-                Toast.makeText(application.getAppContext(), "Pull to Refresh", Toast.LENGTH_LONG).show();
-            }
+    public void createFolder(String name, int parentFolder){
+        FolderCreateRequest createRequest = new FolderCreateRequest(name, parentFolder);
 
-            @Override
-            public void failure(RetrofitError error) {
-                Toast.makeText(application.getAppContext(), "Failure", Toast.LENGTH_LONG).show();
-            }
-        });
-        FolderRepo.Remove(folder.getId());
+        mFolderService.createFolder(createRequest, new RequestCallback<>(new FolderModifiedListener()));
     }
 
-    public Boolean rename(final int folderId,final String folderName){
+    public void deleteFolder(Folder folder) {
+        mFolderService.remove(folder.getId(), new RequestCallback<>(new FolderModifiedListener()));
+    }
 
-        if(!AuthorizedToRename(folderId)) return false;
+    public void rename(final int folderId,final String folderName){
 
-        mFolderService.rename(folderId, new RenameRequest(folderName), new Callback<Response>() {
-            @Override
-            public void success(Response response, Response response2) {
-                Folder f = FolderRepo.getById(folderId);
+        if(AuthorizedToRename(folderId)) {
 
-                f.setName(folderName);
-            }
+            mFolderService.rename(folderId, new RenameRequest(folderName), new RequestCallback<>(new FolderModifiedListener()));
+        } else {
+            Toast.makeText(application.getAppContext(), "Not Authorized to Rename Layer", Toast.LENGTH_LONG).show();
+        }
 
-            @Override
-            public void failure(RetrofitError error) {
+    }
 
-            }
-        });
-
-        return true;
-
+    public void delete(Folder folder) {
+        mFolderService.remove(folder.getId(), new RequestCallback<>(new FolderModifiedListener()));
     }
 
     public FolderDetailsResponse details(int folderId){
@@ -150,27 +114,9 @@ public class FolderTreeService implements ITreeService {
     protected boolean AuthorizedToRename(int id) {
         Folder f = FolderRepo.getById(id);
 
-        if(f.getIsFixed() || f.getIsImportFolder()){
-            return false;
-        }
+        return !(f.getIsFixed() || f.getIsImportFolder());
 
-        return true;
     }
-
-    public void delete(Folder folder) {
-        mFolderService.remove(folder.getId(), new Callback<Folder>() {
-            @Override
-            public void success(Folder folder, Response response) {
-                Log.d(TAG, "Success!");
-            }
-
-            @Override
-            public void failure(RetrofitError error) {
-                Log.d(TAG, "ERROR! " + error.getMessage());
-            }
-        });
-    }
-
     //endregion
 
 

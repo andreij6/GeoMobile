@@ -10,7 +10,7 @@
         android:id="@+id/layerRecyclerView"
         android:divider="@android:color/transparent"
         android:dividerHeight="0dp"
-        android:background="@color/primary"
+        android:background="#cf37474f"
         android:layout_alignParentStart="true"
         android:layout_alignParentTop="true"/>
 

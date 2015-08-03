@@ -16,6 +16,7 @@ import android.widget.Toast;
 
 import com.geospatialcorporation.android.geomobile.R;
 import com.geospatialcorporation.android.geomobile.application;
+import com.geospatialcorporation.android.geomobile.library.DI.Analytics.Models.GoogleAnalyticEvent;
 import com.geospatialcorporation.android.geomobile.library.helpers.MediaHelper;
 import com.geospatialcorporation.android.geomobile.ui.MainActivity;
 
@@ -60,7 +61,7 @@ public class UploadImageDialogFragment extends GeoUploadDialogFragmentBase {
     public Dialog onCreateDialog(Bundle savedInstanceState){
         AlertDialog.Builder builder = getDialogBuilder();
 
-        final View v = getDialogView(R.layout.dialog_image_upload);
+        final View v = getDialogView(R.layout.dialog_action_image_upload);
         ButterKnife.inject(this, v);
 
         TextView takeTV = (TextView)v.findViewById(R.id.takeTV);
@@ -103,6 +104,7 @@ public class UploadImageDialogFragment extends GeoUploadDialogFragmentBase {
                                     Toast.LENGTH_LONG).show();
                         }
                         else {
+                            mAnalytics.trackClick(new GoogleAnalyticEvent().UploadImage());
                             takePhotoIntent.putExtra(MediaStore.EXTRA_OUTPUT, application.mMediaUri);
                             getActivity().startActivityForResult(takePhotoIntent, MainActivity.MediaConstants.TAKE_IMAGE_REQUEST);
                         }
@@ -119,9 +121,13 @@ public class UploadImageDialogFragment extends GeoUploadDialogFragmentBase {
     }
 
     private boolean isHighlighted(LinearLayout d) {
-        Integer b = ((ColorDrawable)d.getBackground()).getColor();
+        if(d != null && d.getBackground() != null){
+            Integer b = ((ColorDrawable)d.getBackground()).getColor();
 
-        return (b == Color.WHITE);
+            return (b == Color.WHITE);
+        }
+
+        return false;
     }
 
 }

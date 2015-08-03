@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              android:orientation="horizontal"
+              android:layout_width="match_parent"
+              android:layout_height="match_parent"
+              android:paddingLeft="10dp"
+              android:paddingRight="10dp"
+              android:paddingTop="20dp"
+              android:paddingBottom="20dp">
+
+    <LinearLayout
+        android:orientation="vertical"
+        style="@style/actionDialog_linearLayout"
+        android:id="@+id/takeSection">
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/takeIV"
+            android:layout_gravity="center_horizontal"
+            android:src="@drawable/ic_camera_black_36dp"
+            android:contentDescription="@string/take_photo"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            style="@style/actionDialog_textView"
+            android:text="@string/take_photo"
+            android:id="@+id/takeTV"
+            android:layout_gravity="center_horizontal"/>
+    </LinearLayout>
+
+    <LinearLayout
+        android:orientation="vertical"
+        style="@style/actionDialog_linearLayout"
+        android:id="@+id/selectSection">
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/uploadIV"
+            android:layout_gravity="center_horizontal"
+            android:src="@drawable/ic_upload_black_36dp"
+            android:contentDescription="@string/upload_photo"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            style="@style/actionDialog_textView"
+            android:text="@string/upload_existing"
+            android:id="@+id/uploadTV"
+            android:layout_gravity="center_horizontal"/>
+    </LinearLayout>
+</LinearLayout>

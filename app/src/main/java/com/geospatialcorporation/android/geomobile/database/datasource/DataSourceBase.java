@@ -112,11 +112,7 @@ public abstract class DataSourceBase {
 
         Integer value = cursor.getInt(columnIndex);
 
-        if(value == 1) {
-            return true;
-        } else {
-            return false;
-        }
+        return value == 1;
     }
 
     protected Date getDateFromColumnName(Cursor cursor, String columnName){

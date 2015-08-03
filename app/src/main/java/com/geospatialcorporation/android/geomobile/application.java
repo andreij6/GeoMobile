@@ -1,6 +1,5 @@
 package com.geospatialcorporation.android.geomobile;
 
-import android.app.Application;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.net.Uri;
@@ -9,14 +8,28 @@ import android.util.Log;
 
 import com.facebook.stetho.Stetho;
 import com.facebook.stetho.okhttp.StethoInterceptor;
+import com.geospatialcorporation.android.geomobile.library.DI.Analytics.Interfaces.IGeoAnalytics;
+import com.geospatialcorporation.android.geomobile.library.DI.Analytics.Models.GoogleAnalyticEvent;
+import com.geospatialcorporation.android.geomobile.library.DI.SharedPreferences.DaggerGeoSharedPrefsComponent;
+import com.geospatialcorporation.android.geomobile.library.DI.SharedPreferences.GeoSharedPrefsComponent;
+import com.geospatialcorporation.android.geomobile.library.DI.SharedPreferences.IGeoSharedPrefs;
+import com.geospatialcorporation.android.geomobile.library.DI.SharedPreferences.Implementations.GeoSharedPrefs;
 import com.geospatialcorporation.android.geomobile.library.constants.Domains;
+import com.geospatialcorporation.android.geomobile.library.constants.GeoPanel;
+import com.geospatialcorporation.android.geomobile.library.map.layerManager.ILayerManager;
+import com.geospatialcorporation.android.geomobile.library.map.layerManager.LayerManager;
 import com.geospatialcorporation.android.geomobile.models.Bookmarks.Bookmark;
 import com.geospatialcorporation.android.geomobile.models.Client;
 import com.geospatialcorporation.android.geomobile.models.Folders.Folder;
 import com.geospatialcorporation.android.geomobile.models.Layers.Layer;
 import com.geospatialcorporation.android.geomobile.models.Document.Document;
+import com.geospatialcorporation.android.geomobile.models.MapLayerState;
+import com.geospatialcorporation.android.geomobile.ui.MainActivity;
 import com.geospatialcorporation.android.geomobile.ui.fragments.GoogleMapFragment;
+import com.google.android.gms.analytics.GoogleAnalytics;
+import com.google.android.gms.analytics.Tracker;
 import com.google.android.gms.common.api.GoogleApiClient;
+import com.google.android.gms.maps.GoogleMap;
 import com.sothree.slidinguppanel.SlidingUpPanelLayout;
 import com.squareup.okhttp.Interceptor;
 import com.squareup.okhttp.OkHttpClient;
@@ -30,7 +43,8 @@ import retrofit.RequestInterceptor;
 import retrofit.RestAdapter;
 import retrofit.client.OkClient;
 
-public class application extends Application {
+public class application extends applicationDIBase {
+    //region Properties
     private final static String TAG = "application";
     private final static String prefsName = "AppState";
     private static final String geoAuthTokenName = "geoAuthToken";
@@ -53,6 +67,27 @@ public class application extends Application {
     private static HashMap<Integer, Bookmark> bookmarkHashMap;
     private static DrawerLayout layerDrawer;
     private static SlidingUpPanelLayout mapFragmentPanel;
+    private static SlidingUpPanelLayout sublayerFragmentPanel;
+    private static SlidingUpPanelLayout layerAttributePanel;
+    private static MainActivity mainActivity;
+    private static MapLayerState mapLayerState;
+
+    private static GoogleAnalytics analytics;
+
+    private static Tracker tracker;
+    private static GoogleMap googleMap;
+
+    private static LayerManager layerManager;
+    //endregion
+
+    //region stuff
+    public static GoogleAnalytics analytics() {
+        return analytics;
+    }
+
+    public static Tracker tracker() {
+        return tracker;
+    }
 
     //region Tree Entity Getters & Setters
     public static HashMap<Integer, Folder> getFolderHashMap() {
@@ -80,7 +115,15 @@ public class application extends Application {
     }
     //endregion
 
-    public static void setIsAdminUser(boolean isAdminUser) {
+    public static MapLayerState getMapLayerState() {
+        return mapLayerState;
+    }
+
+    public static void setMapLayerState(MapLayerState mapLayerState) {
+        application.mapLayerState = mapLayerState;
+    }
+
+    public static void setIsAdminUser(Boolean isAdminUser) {
         application.isAdminUser = isAdminUser;
     }
 
@@ -111,11 +154,52 @@ public class application extends Application {
         application.mapFragmentPanel = mapFragmentPanel;
     }
 
+    public static void setSublayerFragmentPanel(SlidingUpPanelLayout sublayerFragmentPanel){
+        application.sublayerFragmentPanel = sublayerFragmentPanel;
+    }
+
+    public static void setLayerAttributePanel(SlidingUpPanelLayout layerAttributePanel) {
+        application.layerAttributePanel = layerAttributePanel;
+    }
+
+    public static MainActivity getMainActivity() {
+        return mainActivity;
+    }
+
+    public static void setMainActivity(MainActivity mainActivity) {
+        application.mainActivity = mainActivity;
+    }
+
+    public static void setGoogleMap(GoogleMap googleMap) {
+        application.googleMap = googleMap;
+    }
+
+    public static GoogleMap getGoogleMap() {
+        return googleMap;
+    }
+
+    public static ILayerManager getLayerManager() {
+        return layerManager;
+    }
+
+    public static void setGeoAuthToken(String geoAuthToken) {
+        application.geoAuthToken = geoAuthToken;
+    }
+    //endregion
+
     public void onCreate() {
         super.onCreate();
 
         context = getApplicationContext();
         appState = getSharedPreferences(prefsName, 0);
+
+        analytics = GoogleAnalytics.getInstance(this);
+        analytics.setLocalDispatchPeriod(1800);
+
+        tracker = analytics.newTracker("UA-49521639-6");
+        tracker.enableExceptionReporting(true);
+        tracker.enableAdvertisingIdCollection(true);
+        tracker.enableAutoActivityTracking(true);
 
         if (BuildConfig.DEBUG) {
             domain = Domains.DEVELOPMENT;
@@ -163,6 +247,9 @@ public class application extends Application {
         }
 
         isAdminUser = false;
+
+        mapLayerState = new MapLayerState();
+        layerManager = new LayerManager();
 
         initializeApplication();
     }
@@ -221,6 +308,30 @@ public class application extends Application {
         return restAdapter;
     }
 
+    public static SlidingUpPanelLayout getSlidingPanel(int panelType) {
+        SlidingUpPanelLayout panel = null;
+
+        switch (panelType){
+            case GeoPanel.MAP:
+                panel = mapFragmentPanel;
+                break;
+            case GeoPanel.SUBLAYER:
+                panel = sublayerFragmentPanel;
+                break;
+            case GeoPanel.LAYER_ATTRIBUTE:
+                panel = layerAttributePanel;
+                break;
+            default:
+                break;
+        }
+
+        return panel;
+    }
+
+    public static void setMapFragment() {
+
+    }
+
     class TokenInterceptor implements Interceptor {
         @Override
         public Response intercept(Chain chain) throws IOException {
@@ -231,9 +342,21 @@ public class application extends Application {
             if (newToken != null) {
                 geoAuthToken = newToken;
                 Log.d(TAG, "Set GeoToken to: " + newToken);
+                addTokenToSharedPreferences(newToken);
             }
 
             return response;
+        }
+
+        private void addTokenToSharedPreferences(String token) {
+            Context context = application.this;
+            SharedPreferences preferences = context.getSharedPreferences("geoAuthToken", Context.MODE_PRIVATE);
+
+            SharedPreferences.Editor editor = preferences.edit();
+
+            editor.putString("GeoUndergroundAuthToken", token);
+
+            editor.apply();
         }
     }
 
@@ -264,6 +387,12 @@ public class application extends Application {
         documentHashMap = null;
         folderHashMap = null;
 
+        IGeoSharedPrefs prefs = getGeoSharedPrefsComponent().provideGeoSharedPrefs();
+        prefs.remove(GeoSharedPrefs.Items.GOOGLE_ACCOUNT_NAME);
+
+        IGeoAnalytics analytics = getAnalyticsComponent().provideGeoAnalytics();
+        analytics.trackClick(new GoogleAnalyticEvent().Logout());
+
         appState.getStringSet(geoAuthTokenName, null);
 
         initializeApplication();
@@ -276,4 +405,5 @@ public class application extends Application {
         //googleMap = new GoogleMapFragment();
         geoAuthToken = appState.getString(geoAuthTokenName, null);
     }
+
 }

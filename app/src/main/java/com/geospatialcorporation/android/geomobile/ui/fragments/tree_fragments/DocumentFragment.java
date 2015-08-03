@@ -1,5 +1,6 @@
 package com.geospatialcorporation.android.geomobile.ui.fragments.tree_fragments;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.os.Handler;
 import android.support.v4.app.FragmentManager;
@@ -20,6 +21,7 @@ import com.geospatialcorporation.android.geomobile.application;
 import com.geospatialcorporation.android.geomobile.database.DataRepository.IAddDataRepository;
 import com.geospatialcorporation.android.geomobile.database.DataRepository.Implementations.Documents.DocumentsAppSource;
 import com.geospatialcorporation.android.geomobile.database.DataRepository.Implementations.Folders.FolderAppSource;
+import com.geospatialcorporation.android.geomobile.library.DI.Analytics.Models.GoogleAnalyticEvent;
 import com.geospatialcorporation.android.geomobile.library.helpers.DataHelper;
 import com.geospatialcorporation.android.geomobile.library.sectionbuilders.implementations.LibraryTreeSectionBuilder;
 import com.geospatialcorporation.android.geomobile.library.services.DocumentTreeService;
@@ -44,11 +46,9 @@ public class DocumentFragment extends GeoViewFragmentBase {
     protected static final String TAG = DocumentFragment.class.getSimpleName();
 
     //region Properties
-    private List<Folder> mFolders;
     private TreeService mTreeService;
     private FolderTreeService mFolderTreeService;
     private DataHelper mHelper;
-    private List<Document> mDocuments;
     private Folder mCurrentFolder;
     private Context mContext;
     //endregion
@@ -63,6 +63,10 @@ public class DocumentFragment extends GeoViewFragmentBase {
 
     }
 
+    protected void sendScreenName() {
+        mAnalytics.trackScreen(new GoogleAnalyticEvent().LibraryTreeScreen());
+    }
+
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View mRootView;
@@ -72,6 +76,8 @@ public class DocumentFragment extends GeoViewFragmentBase {
 
         ButterKnife.inject(this, mRootView);
         mContext = getActivity();
+
+        sendScreenName();
 
         mSwipeRefreshLayout.setOnRefreshListener(new DocumentRefreshLayout());
         mSwipeRefreshLayout.setProgressBackgroundColorSchemeColor(mContext.getResources().getColor(R.color.accent));
@@ -95,7 +101,7 @@ public class DocumentFragment extends GeoViewFragmentBase {
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         // Check which request we're responding to
-        if (resultCode == getActivity().RESULT_OK) {
+        if (resultCode == Activity.RESULT_OK) {
             if (requestCode == MainActivity.MediaConstants.PICK_FILE_REQUEST) {
                 // Make sure the request was successful
 
@@ -122,7 +128,9 @@ public class DocumentFragment extends GeoViewFragmentBase {
 
     }
 
-
+    public void refresh() {
+        handleArguments();
+    }
 
     private class GetDocumentsTask extends AsyncTask<Integer, Void, Void> {
         @Override
@@ -153,9 +161,7 @@ public class DocumentFragment extends GeoViewFragmentBase {
                 List<Document> documents = mFolderTreeService.getDocumentsByFolder(mCurrentFolder.getId());
                 documentRepo.Add(documents);
 
-                mFolders = folders;
                 mCurrentFolder.setFolders(folders);
-                mDocuments = documents;
                 mCurrentFolder.setDocuments(documents);
             } catch (RetrofitError e) {
                 Log.d(TAG, "Messed up.");

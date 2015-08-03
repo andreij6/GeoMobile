@@ -8,6 +8,7 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.geospatialcorporation.android.geomobile.R;
+import com.geospatialcorporation.android.geomobile.library.DI.Analytics.Models.GoogleAnalyticEvent;
 import com.geospatialcorporation.android.geomobile.library.helpers.GeoDialogHelper;
 import com.geospatialcorporation.android.geomobile.library.services.LayerTreeService;
 import com.geospatialcorporation.android.geomobile.models.Layers.Layer;
@@ -24,6 +25,7 @@ import butterknife.OnClick;
  */
 public class DetailsTab extends GeoDetailsTabBase<Layer> {
 
+    //region Properties ButterKnife
     LayerDetailsVm mDetails;
 
     @InjectView(R.id.access_level) TextView mAccessLevel;
@@ -33,6 +35,8 @@ public class DetailsTab extends GeoDetailsTabBase<Layer> {
     @InjectView(R.id.userUpdateValue) TextView mUserUpdated;
     @InjectView(R.id.shapeTypeValue) TextView mShapeType;
     @InjectView(R.id.entityCountValue) TextView mFeatureCount;
+        mAnalytics.trackClick(new GoogleAnalyticEvent().ShowLayerActions());
+    //endregion
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState){
@@ -42,9 +46,16 @@ public class DetailsTab extends GeoDetailsTabBase<Layer> {
         setIntentString(Layer.LAYER_INTENT);
         handleArgs();
 
+        mAnalytics.trackScreen(new GoogleAnalyticEvent().LayerDetailScreen());
+
         new GetDetailsTask().execute();
 
         return v;
+    }
+
+    @Override
+    public void refresh() {
+        new GetDetailsTask().execute();
     }
 
     private class GetDetailsTask extends AsyncTask<Void, Void, LayerDetailsVm> {
@@ -72,8 +83,9 @@ public class DetailsTab extends GeoDetailsTabBase<Layer> {
             }else{
                 Toaster("details null");
             }
-        }
 
+            super.onPostExecute(details);
+        }
 
     }
 

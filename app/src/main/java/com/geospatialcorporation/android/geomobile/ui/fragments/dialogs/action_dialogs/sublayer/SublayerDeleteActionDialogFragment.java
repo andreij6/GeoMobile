@@ -3,10 +3,8 @@ package com.geospatialcorporation.android.geomobile.ui.fragments.dialogs.action_
 import android.app.Dialog;
 import android.content.DialogInterface;
 import android.os.Bundle;
-import android.widget.Toast;
 
 import com.geospatialcorporation.android.geomobile.R;
-import com.geospatialcorporation.android.geomobile.application;
 
 /**
  * Created by andre on 6/12/2015.
@@ -22,8 +20,6 @@ public class SublayerDeleteActionDialogFragment extends SublayerActionDialogFrag
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
                         mService.delete(mSublayer.getId());
-
-                        Toast.makeText(application.getAppContext(), "Delete Request Sent!", Toast.LENGTH_LONG).show();
                     }
                 }).setNegativeButton(android.R.string.cancel, new DialogInterface.OnClickListener() {
                     @Override

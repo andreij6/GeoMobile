@@ -14,7 +14,6 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.geospatialcorporation.android.geomobile.R;
 import com.geospatialcorporation.android.geomobile.library.helpers.GeoDialogHelper;
@@ -96,7 +95,7 @@ public class LibraryActionDialogFragment extends DialogFragment {
 
         LayoutInflater inflater = LayoutInflater.from(mContext);
 
-        final View v = inflater.inflate(R.layout.dialog_library, null);
+        final View v = inflater.inflate(R.layout.dialog_actions_library, null);
         ButterKnife.inject(this, v);
 
         builder.setTitle(R.string.library_dialog_title);
@@ -124,6 +123,8 @@ public class LibraryActionDialogFragment extends DialogFragment {
                     GeoDialogHelper.createFolder(mContext, mFolder, getFragmentManager());
                 }
 
+                dialog.cancel();
+
             }
 
 
@@ -140,8 +141,12 @@ public class LibraryActionDialogFragment extends DialogFragment {
     }
 
     private boolean isHighlighted(LinearLayout d) {
-        Integer b = ((ColorDrawable)d.getBackground()).getColor();
+        if(d != null && d.getBackground() != null){
+            Integer b = ((ColorDrawable)d.getBackground()).getColor();
 
-        return !(b == Color.WHITE);
+            return !(b == Color.WHITE);
+        }
+
+        return false;
     }
 }

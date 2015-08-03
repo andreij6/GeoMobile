@@ -8,6 +8,7 @@ import android.view.ViewGroup;
 import android.widget.TabHost;
 
 import com.geospatialcorporation.android.geomobile.R;
+import com.geospatialcorporation.android.geomobile.library.DI.Analytics.Models.GoogleAnalyticEvent;
 import com.geospatialcorporation.android.geomobile.models.Folders.Folder;
 import com.geospatialcorporation.android.geomobile.ui.fragments.detail_fragment.folder_tabs.FolderDetailsTab;
 import com.geospatialcorporation.android.geomobile.ui.fragments.detail_fragment.folder_tabs.PermissionsTab;
@@ -27,6 +28,8 @@ public class LayerFolderDetailFragment extends ItemDetailFragment<Folder> implem
         View view = inflater.inflate(R.layout.fragment_tree_detail, null);
 
         ButterKnife.inject(this, view);
+
+        sendScreenName();
 
         FragmentTabHost tabHost = (FragmentTabHost)view.findViewById(R.id.tabHost);
 
@@ -49,11 +52,15 @@ public class LayerFolderDetailFragment extends ItemDetailFragment<Folder> implem
     }
 
     @Override
-    protected void HandleArguments() {
+    protected void handleArguments() {
         Bundle args = getArguments();
 
         mEntity = args.getParcelable(Folder.FOLDER_INTENT);
 
         SetTitle(mEntity.getName());
+    }
+
+    protected void sendScreenName() {
+        mAnalytics.trackScreen(new GoogleAnalyticEvent().LayerFolderDetail());
     }
 }
