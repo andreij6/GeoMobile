@@ -20,8 +20,8 @@ public class PointResponseParser extends ResponseParserBase implements GeometryR
 
         AddBasicAttributes(result, features, "Point");
 
-        result.addEntry("Lat", converter.convert(features.getMapInfo().getPoint().getY(), DMSCoordinateConverter.LAT));
-        result.addEntry("Long", converter.convert(features.getMapInfo().getPoint().getX(), DMSCoordinateConverter.LONG));
+        result.addEntry("Lat", converter.convert(features.getMapInfo().getPoint().getY(), converter.getLatitiude_PosNeg()));
+        result.addEntry("Long", converter.convert(features.getMapInfo().getPoint().getX(), converter.getLongitude_PosNeg()));
 
         return result;
     }

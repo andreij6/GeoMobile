@@ -8,15 +8,12 @@ import android.widget.Toast;
 
 import com.geospatialcorporation.android.geomobile.R;
 import com.geospatialcorporation.android.geomobile.application;
-import com.geospatialcorporation.android.geomobile.library.DI.Analytics.Interfaces.IGeoAnalytics;
 import com.geospatialcorporation.android.geomobile.library.DI.Analytics.Models.GoogleAnalyticEvent;
-import com.geospatialcorporation.android.geomobile.library.services.FolderTreeService;
+import com.geospatialcorporation.android.geomobile.library.DI.TreeServices.Interfaces.IFolderTreeService;
 import com.geospatialcorporation.android.geomobile.models.Folders.Folder;
 import com.geospatialcorporation.android.geomobile.ui.fragments.dialogs.base.GeoDialogFragmentBase;
 
-/**
- * Created by andre on 6/2/2015.
- */
+
 public class DeleteFolderDialogFragment extends GeoDialogFragmentBase {
     public Folder getFolder() {
         return mFolder;
@@ -27,12 +24,12 @@ public class DeleteFolderDialogFragment extends GeoDialogFragmentBase {
     }
 
     Folder mFolder;
-    FolderTreeService mService;
+    IFolderTreeService mService;
 
     public void init(Context context, Folder folder){
         setContext(context);
         setFolder(folder);
-        mService = new FolderTreeService();
+        mService = application.getTreeServiceComponent().provideFolderTreeService();
         mAnalytics = application.getAnalyticsComponent().provideGeoAnalytics();
 
     }
@@ -47,7 +44,7 @@ public class DeleteFolderDialogFragment extends GeoDialogFragmentBase {
                 .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
-                        mService.deleteFolder(mFolder);
+                        mService.delete(mFolder.getId());
                         mAnalytics.trackClick(new GoogleAnalyticEvent().DeleteFolder());
                         Toast.makeText(application.getAppContext(), "Delete Request Sent!", Toast.LENGTH_LONG).show();
                     }

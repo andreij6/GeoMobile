@@ -10,6 +10,8 @@ import android.widget.Button;
 import android.widget.LinearLayout;
 
 import com.geospatialcorporation.android.geomobile.R;
+import com.geospatialcorporation.android.geomobile.application;
+import com.geospatialcorporation.android.geomobile.library.DI.UIHelpers.Interfaces.DialogHelpers.IDocumentDialog;
 import com.geospatialcorporation.android.geomobile.library.helpers.GeoDialogHelper;
 import com.geospatialcorporation.android.geomobile.models.Document.Document;
 import com.geospatialcorporation.android.geomobile.ui.fragments.dialogs.base.GeoDialogFragmentBase;
@@ -18,14 +20,13 @@ import butterknife.ButterKnife;
 import butterknife.InjectView;
 import butterknife.OnClick;
 
-/**
- * Created by andre on 6/11/2015.
- */
+
 public class DocumentActionsDialogFragment extends GeoDialogFragmentBase {
 
     private static final String TAG = DocumentActionsDialogFragment.class.getSimpleName();
 
     Document mDocument;
+    IDocumentDialog mDocumentDialog;
 
     public void init(Context context, Document document){
         setContext(context);
@@ -51,19 +52,19 @@ public class DocumentActionsDialogFragment extends GeoDialogFragmentBase {
 
     @OnClick(R.id.renameSection)
     public void rename(){
-        GeoDialogHelper.renameDocument(getContext(), mDocument, getFragmentManager());
+        mDocumentDialog.rename(mDocument, getContext(), getFragmentManager());
         DocumentActionsDialogFragment.this.getDialog().cancel();
     }
 
     @OnClick(R.id.deleteSection)
     public void delete(){
-        GeoDialogHelper.deleteDocument(getContext(), mDocument, getFragmentManager());
+        mDocumentDialog.delete(mDocument, getContext(), getFragmentManager());
         DocumentActionsDialogFragment.this.getDialog().cancel();
     }
 
     @OnClick(R.id.moveSection)
     public void move(){
-       GeoDialogHelper.moveDocument(getContext(), mDocument, getFragmentManager());
+       mDocumentDialog.move(mDocument, getContext(), getFragmentManager());
         DocumentActionsDialogFragment.this.getDialog().cancel();
 
     }
@@ -75,6 +76,8 @@ public class DocumentActionsDialogFragment extends GeoDialogFragmentBase {
 
         View v = getDialogView(R.layout.dialog_actions_document);
         ButterKnife.inject(this, v);
+
+        mDocumentDialog = application.getUIHelperComponent().provideDocumentDialog();
 
         builder.setTitle(R.string.document_actions).setView(v).setPositiveButton(R.string.close, new DialogInterface.OnClickListener() {
             @Override

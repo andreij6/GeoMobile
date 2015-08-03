@@ -10,7 +10,6 @@ import android.content.Loader;
 import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.net.Uri;
-import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
 import android.provider.ContactsContract;
@@ -29,7 +28,12 @@ import com.geospatialcorporation.android.geomobile.R;
 import com.geospatialcorporation.android.geomobile.application;
 import com.geospatialcorporation.android.geomobile.library.DI.Analytics.Models.GoogleAnalyticEvent;
 import com.geospatialcorporation.android.geomobile.library.DI.SharedPreferences.Implementations.GeoSharedPrefs;
+import com.geospatialcorporation.android.geomobile.library.DI.Tasks.Interfaces.IUserLoginTask;
+import com.geospatialcorporation.android.geomobile.library.DI.Tasks.models.LoginUIModel;
+import com.geospatialcorporation.android.geomobile.library.DI.Tasks.models.UserLoginModel;
 import com.geospatialcorporation.android.geomobile.library.util.LoginValidator;
+import com.geospatialcorporation.android.geomobile.ui.Interfaces.IFullExecuter;
+import com.geospatialcorporation.android.geomobile.ui.Interfaces.IPostExecuter;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GooglePlayServicesUtil;
 import com.google.android.gms.common.SignInButton;
@@ -50,10 +54,10 @@ import butterknife.OnClick;
  * https://developers.google.com/+/mobile/android/getting-started#step_1_enable_the_google_api
  * and follow the steps in "Step 1" to create an OAuth 2.0 client for your package.
  */
-public class LoginActivity extends GoogleApiActivity implements LoaderCallbacks<Cursor> {
+public class LoginActivity extends GoogleApiActivity implements LoaderCallbacks<Cursor>, IFullExecuter<Boolean> {
     private final static String TAG = LoginActivity.class.getSimpleName();
-    /*
-    *Login workflow:
+    /**
+    * Login workflow:
     * /API/Auth/Mobile/Start
     * /API/Auth/Mobile/Login
     *
@@ -66,15 +70,13 @@ public class LoginActivity extends GoogleApiActivity implements LoaderCallbacks<
      * TODO: remove after connecting to a real authentication system.
      */
 
-    private static final String[] DUMMY_CREDENTIALS = new String[]{
-            "foo@example.com:hello", "bar@example.com:world"
-    };
+
 
     private static final String TEST_CREDENTIALS = "jon.shaffer@geospatialcorp.com:secretDev1";
     /**
      * Keep track of the login task to ensure we can cancel it if requested.
      */
-    private UserLoginTask mAuthTask = null;
+    private IUserLoginTask mUserLoginTask;
 
     //region  UI references.
     @InjectView(R.id.email) AutoCompleteTextView mEmailView;
@@ -122,6 +124,8 @@ public class LoginActivity extends GoogleApiActivity implements LoaderCallbacks<
             return;
         }
 
+        mUserLoginTask = null;
+
         populateAutoComplete();
         
         AttemptAutomaticLogin();
@@ -142,7 +146,7 @@ public class LoginActivity extends GoogleApiActivity implements LoaderCallbacks<
     }
 
     private void AttemptAutomaticLogin() {
-        String accountName = mGeoSharedPrefs.get(GeoSharedPrefs.Items.GOOGLE_ACCOUNT_NAME);
+        String accountName = mGeoSharedPrefs.get(mGeoSharedPrefs.getGoogleAccountName());
 
         if(accountName != null){
             mGoogleAuthTokenService.GetAndUseAuthToken(getGoogleAuthParmaters(accountName, ProgressHelper));
@@ -160,11 +164,11 @@ public class LoginActivity extends GoogleApiActivity implements LoaderCallbacks<
      */
     public void attemptLogin() {
 
-        if (mAuthTask != null) {
+        if (mUserLoginTask != null) {
             return;
         }
 
-        Intent mainActivityIntent = new Intent(this, MainActivity.class);
+        //Intent mainActivityIntent = new Intent(this, MainActivity.class);
 
         // Reset errors.
         mEmailView.setError(null);
@@ -179,8 +183,8 @@ public class LoginActivity extends GoogleApiActivity implements LoaderCallbacks<
 
         // TODO: Remove this horrible testing code
         String authtoken = (application.getAuthToken() == null) ? "fakeAuthToken" : application.getAuthToken();
-        mainActivityIntent.putExtra("authToken", authtoken);
-        startActivity(mainActivityIntent);
+        //mainActivityIntent.putExtra("authToken", authtoken);
+        //startActivity(mainActivityIntent);
 
         // Check for a valid password, if the user entered one.
         if (!TextUtils.isEmpty(password) && !LoginValidator.isPasswordValid(password)) {
@@ -211,12 +215,11 @@ public class LoginActivity extends GoogleApiActivity implements LoaderCallbacks<
             mAnalytics.trackClick(new GoogleAnalyticEvent().LoginAttempt());
 
             showProgress(true);
-            mAuthTask = new UserLoginTask(email, password);
-            mAuthTask.execute((Void) null);
 
-            // TODO: add logic checking login
-            mainActivityIntent.putExtra("authToken", authtoken);
-            startActivity(mainActivityIntent);
+            mUserLoginTask = application.getTasksComponent().provideUserLoginTask();
+            mUserLoginTask.Login(new UserLoginModel(email, password, this));
+
+
         }
     }
 
@@ -291,6 +294,35 @@ public class LoginActivity extends GoogleApiActivity implements LoaderCallbacks<
 
     }
 
+    @Override
+    public void onPostExecute(Boolean success) {
+        mUserLoginTask = null;
+
+        showProgress(false);
+
+        if (success) {
+            Intent mainActivityIntent = new Intent(this, MainActivity.class);
+
+            String authtoken = (application.getAuthToken() == null) ? "fakeAuthToken" : application.getAuthToken();
+
+            // TODO: add logic checking login
+            mainActivityIntent.putExtra("authToken", authtoken);
+            startActivity(mainActivityIntent);
+
+            finish();
+        } else {
+            mPasswordView.setError(getString(R.string.error_incorrect_password));
+            mPasswordView.requestFocus();
+        }
+    }
+
+    @Override
+    public void onCancelled() {
+        mUserLoginTask = null;
+
+        showProgress(false);
+    }
+
     private interface ProfileQuery {
         String[] PROJECTION = {
                 ContactsContract.CommonDataKinds.Email.ADDRESS,
@@ -320,63 +352,6 @@ public class LoginActivity extends GoogleApiActivity implements LoaderCallbacks<
         return geoAuthToken == null;
     }
     //endregion
-
-    /**
-     * Represents an asynchronous login/registration task used to authenticate
-     * the user.
-     */
-    public class UserLoginTask extends AsyncTask<Void, Void, Boolean> {
-
-        private final String mEmail;
-        private final String mPassword;
-
-        UserLoginTask(String email, String password) {
-            mEmail = email;
-            mPassword = password;
-        }
-
-        @Override
-        protected Boolean doInBackground(Void... params) {
-            // TODO: attempt authentication against a network service.
-
-            try {
-                // Simulate network access.
-                Thread.sleep(2000);
-            } catch (InterruptedException e) {
-                return false;
-            }
-
-            for (String credential : DUMMY_CREDENTIALS) {
-                String[] pieces = credential.split(":");
-                if (pieces[0].equals(mEmail)) {
-                    // Account exists, return true if the password matches.
-                    return pieces[1].equals(mPassword);
-                }
-            }
-
-            // TODO: register the new account here.
-            return true;
-        }
-
-        @Override
-        protected void onPostExecute(final Boolean success) {
-            mAuthTask = null;
-            showProgress(false);
-
-            if (success) {
-                finish();
-            } else {
-                mPasswordView.setError(getString(R.string.error_incorrect_password));
-                mPasswordView.requestFocus();
-            }
-        }
-
-        @Override
-        protected void onCancelled() {
-            mAuthTask = null;
-            showProgress(false);
-        }
-    }
 }
 
 

@@ -1,45 +1,64 @@
 package com.geospatialcorporation.android.geomobile.ui.fragments.detail_fragment.layer_tabs;
 
-import android.os.AsyncTask;
 import android.os.Bundle;
-import android.os.Handler;
 import android.support.v4.widget.SwipeRefreshLayout;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.CheckBox;
+import android.widget.TableLayout;
+import android.widget.TableRow;
+import android.widget.TextView;
 
 import com.geospatialcorporation.android.geomobile.R;
+import com.geospatialcorporation.android.geomobile.application;
 import com.geospatialcorporation.android.geomobile.library.DI.Analytics.Models.GoogleAnalyticEvent;
-import com.geospatialcorporation.android.geomobile.library.services.LayerTreeService;
+import com.geospatialcorporation.android.geomobile.library.DI.Tasks.Interfaces.IGetLayerAttributeColumnsTask;
+import com.geospatialcorporation.android.geomobile.library.DI.Tasks.models.GetLayerAttributesTaskParams;
+import com.geospatialcorporation.android.geomobile.library.DI.UIHelpers.Interfaces.DialogHelpers.ILayerDialog;
+import com.geospatialcorporation.android.geomobile.library.DI.UIHelpers.Interfaces.ILayoutRefresher;
+import com.geospatialcorporation.android.geomobile.library.helpers.TableFactory;
+import com.geospatialcorporation.android.geomobile.ui.Interfaces.IContentRefresher;
 import com.geospatialcorporation.android.geomobile.models.Layers.Layer;
 import com.geospatialcorporation.android.geomobile.models.Layers.LayerAttributeColumn;
-import com.geospatialcorporation.android.geomobile.ui.adapters.recycler.AttributeAdapter;
+import com.geospatialcorporation.android.geomobile.ui.Interfaces.IPostExecuter;
 import com.geospatialcorporation.android.geomobile.ui.fragments.detail_fragment.GeoDetailsTabBase;
 
 import java.util.List;
 
 import butterknife.ButterKnife;
 import butterknife.InjectView;
+import butterknife.OnClick;
 
-public class AttributeLayoutTab extends GeoDetailsTabBase<Layer> {
+public class AttributeLayoutTab extends GeoDetailsTabBase<Layer> implements IContentRefresher, IPostExecuter<List<LayerAttributeColumn>> {
 
     private static final String TAG = AttributeLayoutTab.class.getSimpleName();
 
     List<LayerAttributeColumn> mAttributeColumns;
+    IGetLayerAttributeColumnsTask mTask;
+    ILayerDialog mLayerDialog;
+    ILayoutRefresher mRefresher;
 
-    @InjectView(R.id.attributeRecycler) RecyclerView mRecyclerView;
+    @InjectView(R.id.attributesTableLayout) TableLayout mTableLayout;
     @InjectView(R.id.swipe_refresh_layout) SwipeRefreshLayout mSwipeRefreshLayout;
+    LayoutInflater mInflater;
     //@InjectView(R.id.sliding_layout) SlidingUpPanelLayout mPanel;
+
+    @OnClick(R.id.addAttribute)
+    public void addAttribute(){
+        //mLayerDialog.
+    }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState){
         View v = inflater.inflate(R.layout.fragment_layer_attributes_tab, container, false);
         ButterKnife.inject(this, v);
+        mInflater = inflater;
 
-        mSwipeRefreshLayout.setOnRefreshListener(new AttributeRefreshListener());
+        mRefresher = application.getUIHelperComponent().provideLayoutRefresher();
+        mLayerDialog = application.getUIHelperComponent().provideLayerDialog();
+
+        mSwipeRefreshLayout.setOnRefreshListener(mRefresher.build(mSwipeRefreshLayout, this));
         mSwipeRefreshLayout.setProgressBackgroundColorSchemeColor(getActivity().getResources().getColor(R.color.accent));
 
         //application.setLayerAttributePanel(mPanel);
@@ -53,56 +72,49 @@ public class AttributeLayoutTab extends GeoDetailsTabBase<Layer> {
 
         refresh();
 
-        RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(container.getContext());
-
-        mRecyclerView.setLayoutManager(layoutManager);
-
         return v;
     }
 
     @Override
     public void refresh() {
-        new GetAttributeColumns().execute();
+        mTask = application.getTasksComponent().provideAttributeColumnsTask();
+
+        mTask.getColumns(new GetLayerAttributesTaskParams(mEntity, getActivity(), mAttributeColumns, this));
     }
 
-    private class GetAttributeColumns extends AsyncTask<Void, Void, List<LayerAttributeColumn>> {
+    @Override
+    public void onPostExecute(List<LayerAttributeColumn> model) {
+        mTableLayout.removeAllViews();
 
-        @Override
-        protected List<LayerAttributeColumn> doInBackground(Void... params) {
-            mService = new LayerTreeService();
+        TableFactory factory = new TableFactory(getActivity(), mTableLayout, mInflater);
 
-            if(mEntity != null){
-                Log.d(TAG, "LAYER not Null");
-                mAttributeColumns = ((LayerTreeService)mService).getLayerAttributeColumns(mEntity.getId());
+        factory.addHeaders(R.layout.template_table_header, "Name", "Type", "Default Value", "Hidden");
+
+        mTableLayout = factory.build();
+
+        if(model != null) {
+            for (LayerAttributeColumn layer : model) {
+                TableRow row = new TableRow(getActivity());
+
+                TextView name = (TextView) mInflater.inflate(R.layout.template_table_column, null);
+                name.setText(layer.getName());
+
+                TextView type = (TextView) mInflater.inflate(R.layout.template_table_column, null);
+                type.setText(layer.getDataTypeViewName());
+
+                TextView defaultValue = (TextView) mInflater.inflate(R.layout.template_table_column, null);
+                defaultValue.setText(layer.getDefaultValue());
+
+                CheckBox hidden = (CheckBox) mInflater.inflate(R.layout.template_table_checkbox, null);
+                hidden.setChecked(layer.getIsHidden());
+
+                row.addView(name);
+                row.addView(type);
+                row.addView(defaultValue);
+                row.addView(hidden);
+
+                mTableLayout.addView(row);
             }
-
-            Log.d(TAG, "Returning Attr Columns");
-            return mAttributeColumns;
-        }
-
-        @Override
-        protected void onPostExecute(List<LayerAttributeColumn> attributes){
-            AttributeAdapter adapter = new AttributeAdapter(getActivity(), attributes);
-
-            mRecyclerView.setAdapter(adapter);
-
-            super.onPostExecute(attributes);
-        }
-
-    }
-
-    private class AttributeRefreshListener implements SwipeRefreshLayout.OnRefreshListener {
-
-        @Override
-        public void onRefresh() {
-            new Handler().postDelayed(new Runnable() {
-                @Override
-                public void run() {
-                    refresh();
-                    mSwipeRefreshLayout.setRefreshing(false);
-                }
-            }, 2000);
         }
     }
-
 }

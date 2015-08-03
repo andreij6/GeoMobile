@@ -2,7 +2,8 @@ package com.geospatialcorporation.android.geomobile.ui.fragments.dialogs.action_
 
 import android.content.Context;
 
-import com.geospatialcorporation.android.geomobile.library.services.DocumentTreeService;
+import com.geospatialcorporation.android.geomobile.application;
+import com.geospatialcorporation.android.geomobile.library.DI.TreeServices.Interfaces.IDocumentTreeService;
 import com.geospatialcorporation.android.geomobile.models.Document.Document;
 import com.geospatialcorporation.android.geomobile.ui.fragments.dialogs.base.GeoDialogFragmentBase;
 
@@ -22,11 +23,11 @@ public class DocumentActionDialogBase extends GeoDialogFragmentBase {
     //endregion
 
     Document mDocument;
-    DocumentTreeService Service;
+    IDocumentTreeService Service;
 
     public void init(Context context, Document document){
         setContext(context);
         setDocument(document);
-        Service = new DocumentTreeService();
+        Service = application.getTreeServiceComponent().provideDocumentTreeService();
     }
 }

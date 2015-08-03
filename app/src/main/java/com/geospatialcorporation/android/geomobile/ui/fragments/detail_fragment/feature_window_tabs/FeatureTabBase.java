@@ -10,8 +10,6 @@ import android.widget.TableRow;
 import android.widget.TextView;
 
 import com.geospatialcorporation.android.geomobile.R;
-import com.geospatialcorporation.android.geomobile.library.DI.Analytics.AnalyticsComponent;
-import com.geospatialcorporation.android.geomobile.library.DI.Analytics.DaggerAnalyticsComponent;
 import com.geospatialcorporation.android.geomobile.library.DI.FeatureWindow.DaggerFeatureWindowComponent;
 import com.geospatialcorporation.android.geomobile.library.DI.FeatureWindow.FeatureWindowComponent;
 import com.geospatialcorporation.android.geomobile.library.DI.FeatureWindow.IFeatureWindowDataParser;
@@ -24,9 +22,7 @@ import java.util.List;
 
 import butterknife.ButterKnife;
 
-/**
- * Created by andre on 7/7/2015.
- */
+
 public abstract class FeatureTabBase extends GeoViewFragmentBase {
 
     FeatureQueryResponse mResponse;

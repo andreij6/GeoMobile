@@ -7,6 +7,8 @@ import android.widget.CheckBox;
 import android.widget.TextView;
 
 import com.geospatialcorporation.android.geomobile.R;
+import com.geospatialcorporation.android.geomobile.application;
+import com.geospatialcorporation.android.geomobile.library.DI.UIHelpers.Interfaces.DialogHelpers.ISublayerDialog;
 import com.geospatialcorporation.android.geomobile.library.helpers.GeoDialogHelper;
 import com.geospatialcorporation.android.geomobile.models.Layers.Layer;
 import com.geospatialcorporation.android.geomobile.ui.MainActivity;
@@ -20,9 +22,7 @@ import java.util.List;
 import butterknife.InjectView;
 import butterknife.OnClick;
 
-/**
- * Created by andre on 6/8/2015.
- */
+
 public class SublayerAdapter extends GeoRecyclerAdapterBase<SublayerAdapter.Holder, Layer> {
 
     public SublayerAdapter(Context context, List<Layer> sublayers){
@@ -49,6 +49,7 @@ public class SublayerAdapter extends GeoRecyclerAdapterBase<SublayerAdapter.Hold
 
     protected class Holder extends GeoHolderBase<Layer> {
         Layer mSublayer;
+        ISublayerDialog mSublayerDialog;
 
         @InjectView(R.id.sublayerLabel) TextView mSublayerName;
         @InjectView(R.id.fab_edit)FloatingActionButton mEdit;
@@ -56,11 +57,12 @@ public class SublayerAdapter extends GeoRecyclerAdapterBase<SublayerAdapter.Hold
 
         @OnClick(R.id.fab_edit)
         public void showEditDialog(){
-            GeoDialogHelper.modifySublayer(mContext, mSublayer, ((MainActivity)mContext).getSupportFragmentManager());
+            mSublayerDialog.modify(mSublayer, mContext, ((MainActivity) mContext).getSupportFragmentManager());
         }
 
         public Holder(View itemView) {
             super(itemView);
+            mSublayerDialog = application.getUIHelperComponent().provideSublayerDialog();
         }
 
         public void bindAllFeatures(Layer layer){

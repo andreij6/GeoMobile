@@ -8,4 +8,6 @@ public interface IGeoSharedPrefs {
     String get(List<String> googleAccountName);
 
     void remove(List<String> googleAccountName);
+
+    List<String> getGoogleAccountName();
 }

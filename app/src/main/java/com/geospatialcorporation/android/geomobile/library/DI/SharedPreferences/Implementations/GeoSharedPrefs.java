@@ -41,7 +41,8 @@ public class GeoSharedPrefs implements IGeoSharedPrefs {
         preferences.edit().remove(item_table.get(Key_Index)).commit();
     }
 
-    public static class Items {
-        public static List<String> GOOGLE_ACCOUNT_NAME = Arrays.asList("Google Account Name", "GeoAuthentication");
+    @Override
+    public List<String> getGoogleAccountName() {
+        return Arrays.asList("Google Account Name", "GeoAuthentication");
     }
 }

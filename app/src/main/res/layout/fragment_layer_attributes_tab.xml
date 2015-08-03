@@ -22,78 +22,39 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent">
 
-                <LinearLayout
-                    android:orientation="horizontal"
+
+                <Button
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_gravity="center_horizontal"
-                    android:background="#00ffc6ab"
-                    android:baselineAligned="false"
-                    android:paddingTop="5dp"
-                    android:paddingBottom="8dp"
-                    android:id="@+id/linearLayout">
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:textAppearance="?android:attr/textAppearanceMedium"
-                        android:text="@string/name"
-                        android:id="@+id/nameLabel"
-                        android:layout_weight="1"
-                        android:textColor="@color/primary_dark"
-                        android:gravity="center_horizontal"
-                        />
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:textAppearance="?android:attr/textAppearanceMedium"
-                        android:text="@string/type"
-                        android:id="@+id/typeLabel"
-                        android:layout_weight="1"
-                        android:textColor="@color/primary_dark"
-                        android:gravity="center_horizontal"
-                        />
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:textAppearance="?android:attr/textAppearanceMedium"
-                        android:text="@string/defaultValue"
-                        android:id="@+id/defaultValueLabel"
-                        android:layout_weight="1"
-                        android:textColor="@color/primary_dark"
-                        android:gravity="center_horizontal"
-                        />
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:textAppearance="?android:attr/textAppearanceMedium"
-                        android:text="@string/hidden"
-                        android:id="@+id/isHidden"
-                        android:layout_weight="1"
-                        android:textColor="@color/primary_dark"
-                        android:gravity="center_horizontal"
-                        />
-
-                </LinearLayout>
-
-                <View
-                    android:layout_width="match_parent"
-                    android:layout_height="2dp"
-                    android:background="@color/primary_dark"/>
+                    android:text="Add Attribute"
+                    android:id="@+id/addAttribute"
+                    android:layout_gravity="center_horizontal"/>
 
                 <android.support.v4.widget.SwipeRefreshLayout
+                    android:layout_below="@id/addAttribute"
                     android:id="@+id/swipe_refresh_layout"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    >
+                    android:layout_height="wrap_content">
 
-                    <android.support.v7.widget.RecyclerView
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:id="@+id/attributeRecycler" />
+                    <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+                                android:layout_width="match_parent"
+                                android:fadeScrollbars="false"
+                                android:layout_height="match_parent">
+
+                        <TableLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:stretchColumns="1"
+                            android:background="@color/white"
+                            android:layout_centerVertical="true"
+                            android:layout_centerHorizontal="true"
+                            android:paddingRight="10dp"
+                            android:paddingBottom="25dp"
+                            android:id="@+id/attributesTableLayout">
+
+                        </TableLayout>
+
+                    </ScrollView>
 
                 </android.support.v4.widget.SwipeRefreshLayout>
             </LinearLayout>

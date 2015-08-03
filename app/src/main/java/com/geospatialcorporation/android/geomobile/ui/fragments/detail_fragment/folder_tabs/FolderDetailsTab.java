@@ -1,6 +1,5 @@
 package com.geospatialcorporation.android.geomobile.ui.fragments.detail_fragment.folder_tabs;
 
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -8,24 +7,31 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.geospatialcorporation.android.geomobile.R;
+import com.geospatialcorporation.android.geomobile.application;
 import com.geospatialcorporation.android.geomobile.library.DI.Analytics.Models.GoogleAnalyticEvent;
-import com.geospatialcorporation.android.geomobile.library.helpers.GeoDialogHelper;
-import com.geospatialcorporation.android.geomobile.library.services.FolderTreeService;
+import com.geospatialcorporation.android.geomobile.library.DI.Tasks.Interfaces.IGetFolderDetailsTask;
+import com.geospatialcorporation.android.geomobile.library.DI.Tasks.models.GetFolderDetailsParams;
+import com.geospatialcorporation.android.geomobile.library.DI.UIHelpers.Interfaces.DialogHelpers.IFolderDialog;
 import com.geospatialcorporation.android.geomobile.models.Folders.Folder;
 import com.geospatialcorporation.android.geomobile.models.Folders.FolderDetailsResponse;
+import com.geospatialcorporation.android.geomobile.ui.Interfaces.IPostExecuter;
 import com.geospatialcorporation.android.geomobile.ui.fragments.detail_fragment.GeoDetailsTabBase;
 import com.melnykov.fab.FloatingActionButton;
 
 import butterknife.ButterKnife;
 import butterknife.InjectView;
 
-public class FolderDetailsTab extends GeoDetailsTabBase<Folder> {
+
+public class FolderDetailsTab extends GeoDetailsTabBase<Folder> implements IPostExecuter<FolderDetailsResponse> {
 
     private static final String TAG = FolderDetailsTab.class.getSimpleName();
 
     //region Properties & Butterknife
+    IGetFolderDetailsTask mTask;
+    IFolderDialog mFolderDialog;
     FolderDetailsResponse mDetails;
     String mFolderType;
+    @InjectView(R.id.fab) FloatingActionButton mFab;
     @InjectView(R.id.createdByValue) TextView mCreatedBy;
     @InjectView(R.id.createdValue) TextView mDateCreated;
     @InjectView(R.id.lastUpdatedValue) TextView mUpdated;
@@ -40,9 +46,14 @@ public class FolderDetailsTab extends GeoDetailsTabBase<Folder> {
         View v = inflater.inflate(R.layout.fragment_folder_details_tab, container, false);
         ButterKnife.inject(this, v);
 
+        mFab.setOnClickListener(showActions);
+
         setIntentString(Folder.FOLDER_INTENT);
 
         Bundle args = getArguments();
+
+        mTask = application.getTasksComponent().provideFolderDetailsTask();
+        mFolderDialog = application.getUIHelperComponent().provideFolderDialog();
 
         mAnalytics.trackScreen(new GoogleAnalyticEvent().FolderDetailTab());
 
@@ -50,7 +61,7 @@ public class FolderDetailsTab extends GeoDetailsTabBase<Folder> {
 
         mFolderType = args.getString("Folder Type");
 
-        new GetFolderDetailsTask().execute();
+        refresh();
 
         return v;
     }
@@ -59,59 +70,43 @@ public class FolderDetailsTab extends GeoDetailsTabBase<Folder> {
         @Override
         public void onClick(View v) {
             mAnalytics.trackClick(new GoogleAnalyticEvent().ShowFolderActions());
-            GeoDialogHelper.folderActions(getActivity(), mEntity, getActivity().getSupportFragmentManager());
+            mFolderDialog.actions(mEntity, getActivity(), getActivity().getSupportFragmentManager());
         }
     };
 
     @Override
     public void refresh() {
-        new GetFolderDetailsTask().execute();
+        mTask.getDetails(new GetFolderDetailsParams(mEntity, mDetails, this));
     }
 
+    @Override
+    public void onPostExecute(FolderDetailsResponse response){
+        mCreatedBy.setText(response.getCreateUser());
+        mDateCreated.setText(response.getCreateDateTime());
+        mUpdated.setText(response.getUpdateDateTime());
+        mUpdateUser.setText(response.getUpdateUser());
 
-    private class GetFolderDetailsTask extends AsyncTask<Void, Void, FolderDetailsResponse> {
-
-        @Override
-        protected FolderDetailsResponse doInBackground(Void... params) {
-            mService = new FolderTreeService();
-
-            if(mEntity != null){
-                mDetails = ((FolderTreeService)mService).details(mEntity.getId());
-            }
-
-            return mDetails;
+        if(mEntity.getFolders() != null) {
+            mFolderCount.setText(mEntity.getFolders().size() + "");
+        } else {
+            mFolderCount.setText("0");
         }
 
-        @Override
-        protected void onPostExecute(FolderDetailsResponse response){
-            mCreatedBy.setText(response.getCreateUser());
-            mDateCreated.setText(response.getCreateDateTime());
-            mUpdated.setText(response.getUpdateDateTime());
-            mUpdateUser.setText(response.getUpdateUser());
-
-            if(mEntity.getFolders() != null) {
-                mFolderCount.setText(mEntity.getFolders().size() + "");
+        if(mFolderType.equals("Layer")) {
+            mEntityCountLabel.setText("Layer Count");
+            if (mEntity.getLayers() != null) {
+                mEntityCount.setText(mEntity.getLayers().size() + "");
             } else {
-                mFolderCount.setText("0");
+                mEntityCount.setText("0");
             }
-
-            if(mFolderType.equals("Layer")) {
-                mEntityCountLabel.setText("Layer Count:");
-                if (mEntity.getLayers() != null) {
-                    mEntityCount.setText(mEntity.getLayers().size() + "");
-                } else {
-                    mEntityCount.setText("0");
-                }
+        } else {
+            mEntityCountLabel.setText("Document Count");
+            if (mEntity.getDocuments() != null) {
+                mEntityCount.setText(mEntity.getDocuments().size() + "");
             } else {
-                mEntityCountLabel.setText("Document Count:");
-                if (mEntity.getDocuments() != null) {
-                    mEntityCount.setText(mEntity.getDocuments().size() + "");
-                } else {
-                    mEntityCount.setText("0");
-                }
+                mEntityCount.setText("0");
             }
-
-            super.onPostExecute(response);
         }
     }
+
 }

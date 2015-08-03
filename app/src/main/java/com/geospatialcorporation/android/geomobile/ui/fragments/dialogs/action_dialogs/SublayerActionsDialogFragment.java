@@ -11,6 +11,8 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.geospatialcorporation.android.geomobile.R;
+import com.geospatialcorporation.android.geomobile.application;
+import com.geospatialcorporation.android.geomobile.library.DI.UIHelpers.Interfaces.DialogHelpers.ISublayerDialog;
 import com.geospatialcorporation.android.geomobile.library.constants.GeoPanel;
 import com.geospatialcorporation.android.geomobile.library.helpers.GeoDialogHelper;
 import com.geospatialcorporation.android.geomobile.library.panelmanager.ISlidingPanelManager;
@@ -21,19 +23,18 @@ import com.geospatialcorporation.android.geomobile.ui.fragments.dialogs.base.Geo
 import butterknife.ButterKnife;
 import butterknife.InjectView;
 
-/**
- * Created by andre on 6/8/2015.
- */
+
 public class SublayerActionsDialogFragment extends GeoDialogFragmentBase {
 
     Layer mSublayer;
-    ISlidingPanelManager mPanelManager;
+    //ISlidingPanelManager mPanelManager;
+    ISublayerDialog mSublayerDialog;
 
     public void init(Context context, Layer layer){
        setContext(context);
         mSublayer = layer;
-        mPanelManager = new PanelManager(GeoPanel.SUBLAYER);
-        mPanelManager.setup();
+        //mPanelManager = new PanelManager(GeoPanel.SUBLAYER);
+        //mPanelManager.setup();
     }
 
     //region ButterKnife
@@ -67,6 +68,8 @@ public class SublayerActionsDialogFragment extends GeoDialogFragmentBase {
 
         ButterKnife.inject(this, v);
 
+        mSublayerDialog = application.getUIHelperComponent().provideSublayerDialog();
+
         mStyleIV.setOnClickListener(ModifyStyle);
         mStyleTV.setOnClickListener(ModifyStyle);
 
@@ -91,12 +94,13 @@ public class SublayerActionsDialogFragment extends GeoDialogFragmentBase {
         return builder.create();
     }
 
+    //region OnClicks
     protected View.OnClickListener ModifyStyle = new View.OnClickListener(){
 
         @Override
         public void onClick(View v) {
 
-            mPanelManager.anchor();
+            //mPanelManager.anchor();
             SublayerActionsDialogFragment.this.getDialog().cancel();
         }
     };
@@ -106,7 +110,7 @@ public class SublayerActionsDialogFragment extends GeoDialogFragmentBase {
         @Override
         public void onClick(View v) {
 
-            mPanelManager.anchor();
+            //mPanelManager.anchor();
             SublayerActionsDialogFragment.this.getDialog().cancel();
         }
     };
@@ -115,7 +119,7 @@ public class SublayerActionsDialogFragment extends GeoDialogFragmentBase {
 
         @Override
         public void onClick(View v) {
-            GeoDialogHelper.renameSublayer(getContext(), mSublayer, getFragmentManager());
+            mSublayerDialog.rename(mSublayer, getContext(), getFragmentManager());
             SublayerActionsDialogFragment.this.getDialog().cancel();
         }
     };
@@ -124,8 +128,9 @@ public class SublayerActionsDialogFragment extends GeoDialogFragmentBase {
 
         @Override
         public void onClick(View v) {
-            GeoDialogHelper.deleteSublayer(getContext(), mSublayer, getFragmentManager());
+            mSublayerDialog.delete(mSublayer, getContext(), getFragmentManager());
             SublayerActionsDialogFragment.this.getDialog().cancel();
         }
     };
+    //endregion
 }

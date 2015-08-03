@@ -5,21 +5,40 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TableLayout;
+import android.widget.TableRow;
+import android.widget.TextView;
 
 import com.geospatialcorporation.android.geomobile.R;
+import com.geospatialcorporation.android.geomobile.application;
 import com.geospatialcorporation.android.geomobile.library.DI.Analytics.Models.GoogleAnalyticEvent;
 import com.geospatialcorporation.android.geomobile.library.DI.FeatureWindow.models.FeatureWindowData;
+import com.geospatialcorporation.android.geomobile.library.DI.UIHelpers.Interfaces.DialogHelpers.IAttributeDialog;
+import com.geospatialcorporation.android.geomobile.library.helpers.GeoDialogHelper;
+import com.geospatialcorporation.android.geomobile.models.AttributeValueVM;
+import com.geospatialcorporation.android.geomobile.models.Layers.AttributeValue;
 import com.geospatialcorporation.android.geomobile.models.Layers.Columns;
+import com.geospatialcorporation.android.geomobile.models.Query.map.response.featurewindow.WindowFeatures;
+import com.geospatialcorporation.android.geomobile.models.Query.map.response.mapquery.Feature;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import butterknife.InjectView;
+import butterknife.OnClick;
 
 
 public class FeatureAttributesTab extends FeatureTabBase {
 
     @InjectView(R.id.featureWindowAttributesTable) TableLayout mTableLayout;
+    AttributeValueVM mData;
+    IAttributeDialog mAttributeDialog;
+
+    @OnClick(R.id.edit_attributes)
+    public void editAttributes(){
+        mAttributeDialog = application.getUIHelperComponent().provideAttributeDialog();
+
+        mAttributeDialog.edit(mData, getActivity(), getFragmentManager());
+    }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -33,19 +52,49 @@ public class FeatureAttributesTab extends FeatureTabBase {
             return;
         }
 
-        List<FeatureWindowData.KeyValue> data = MatchColumnValues(mResponse.getColumns(), mResponse.getFeatures().get(0).getAttributes());
+        mData = MatchColumnValues();
 
-        setTable(data, mTableLayout, ":");
+        setAttributeTable();
     }
 
-    protected List<FeatureWindowData.KeyValue> MatchColumnValues(List<Columns> columns, List<String> attributes) {
-        List<FeatureWindowData.KeyValue> columnValues = new ArrayList<>(columns.size());
+    protected void setAttributeTable() {
+        List<AttributeValueVM.Columns> columnsList = mData.getColumns();
+
+        for(AttributeValueVM.Columns keyValue : columnsList) {
+            TableRow row = new TableRow(mContext);
+
+            TextView columnName = (TextView)mInflater.inflate(R.layout.template_feature_window_column_tv, null);
+            columnName.setText(keyValue.getKey() + ":");
+
+            TextView columnValue = (TextView)mInflater.inflate(R.layout.template_feature_window_column_tv, null);
+            columnValue.setText(keyValue.getValue());
+
+            row.addView(columnName);
+            row.addView(columnValue);
+
+            mTableLayout.addView(row);
+        }
+    }
+
+    protected AttributeValueVM MatchColumnValues() {
+
+        List<Columns> columns = mResponse.getColumns();
+        WindowFeatures feature = mResponse.getFeatures().get(0);
+
+        String FeatureId = feature.getId();
+        List<String> attributes = feature.getAttributes();
+
+        AttributeValueVM valueVM = new AttributeValueVM();
+
+        List<AttributeValueVM.Columns> columnValues = new ArrayList<>(columns.size());
 
         for(int c = 0; c < columns.size(); c++){
-            columnValues.add(new FeatureWindowData.KeyValue(columns.get(c).getName(), attributes.get(c)));
+            columnValues.add(new AttributeValueVM.Columns(columns.get(c).getName(), attributes.get(c), columns.get(c).getId(), FeatureId));
         }
 
-        return columnValues;
+        valueVM.setColumns(columnValues);
+
+        return valueVM;
     }
 
 }

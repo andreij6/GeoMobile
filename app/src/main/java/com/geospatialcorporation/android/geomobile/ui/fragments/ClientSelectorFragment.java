@@ -3,7 +3,6 @@ package com.geospatialcorporation.android.geomobile.ui.fragments;
 import android.content.Context;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.os.Handler;
 import android.support.v4.app.Fragment;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
@@ -15,8 +14,13 @@ import android.view.ViewGroup;
 
 import com.geospatialcorporation.android.geomobile.R;
 import com.geospatialcorporation.android.geomobile.application;
+import com.geospatialcorporation.android.geomobile.library.DI.Tasks.Interfaces.IGetClientsTask;
+import com.geospatialcorporation.android.geomobile.library.DI.Tasks.models.GetClientsTaskParams;
+import com.geospatialcorporation.android.geomobile.library.DI.UIHelpers.Interfaces.ILayoutRefresher;
+import com.geospatialcorporation.android.geomobile.ui.Interfaces.IContentRefresher;
 import com.geospatialcorporation.android.geomobile.library.rest.LoginService;
 import com.geospatialcorporation.android.geomobile.models.Client;
+import com.geospatialcorporation.android.geomobile.ui.Interfaces.IPostExecuter;
 import com.geospatialcorporation.android.geomobile.ui.adapters.recycler.ClientAdapter;
 
 import java.util.ArrayList;
@@ -26,10 +30,9 @@ import butterknife.ButterKnife;
 import butterknife.InjectView;
 import retrofit.RetrofitError;
 
-/**
- * Created by andre on 6/1/2015.
- */
-public class ClientSelectorFragment extends Fragment {
+public class ClientSelectorFragment extends Fragment
+        implements IContentRefresher, IPostExecuter<List<Client>>
+{
     private static final String TAG = ClientSelectorFragment.class.getName();
 
     int mClientTypeCode;
@@ -44,7 +47,7 @@ public class ClientSelectorFragment extends Fragment {
     @InjectView(R.id.clientitem_recyclerView) RecyclerView mRecyclerView;
     @InjectView(R.id.swipe_refresh_layout) SwipeRefreshLayout mSwipeRefreshLayout;
     private List<Client> mDataSet;
-    private LoginService service;
+    IGetClientsTask mTask;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -54,12 +57,13 @@ public class ClientSelectorFragment extends Fragment {
         mRootView = inflater.inflate(R.layout.fragment_clientitems, container, false);
         ButterKnife.inject(this, mRootView);
 
-        mSwipeRefreshLayout.setOnRefreshListener(new ClientRefreshLayout());
+        mDataSet = new ArrayList<>();
+        ILayoutRefresher refresher = application.getUIHelperComponent().provideLayoutRefresher();
+
+        mSwipeRefreshLayout.setOnRefreshListener(refresher.build(mSwipeRefreshLayout, this));
         mSwipeRefreshLayout.setProgressBackgroundColorSchemeColor(mContext.getResources().getColor(R.color.accent));
 
-        service = application.getRestAdapter().create(LoginService.class);
-
-        new GetClientsTask().execute();
+        refresh();
 
         RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(container.getContext());
 
@@ -68,52 +72,16 @@ public class ClientSelectorFragment extends Fragment {
         return mRootView;
     }
 
-    private class GetClientsTask extends AsyncTask<Void, Void, List<Client>> {
-        @Override
-        protected List<Client> doInBackground(Void... params) {
-            try {
-                mDataSet = filter(service.getClients(), mClientTypeCode);
-            } catch (RetrofitError e) {
-                if (e.getResponse() != null) {
-                    Log.d(TAG, e.getResponse().getStatus() + " : Line 112");
-                }
-            }
-
-            return mDataSet;
-        }
-
-        private List<Client> filter(List<Client> clients, int clientTypeCode) {
-            List<Client> filtered  = new ArrayList<>();
-
-            for(Client client : clients){
-                if(client.getType() == mClientTypeCode){
-                    filtered.add(client);
-                }
-            }
-
-            return filtered;
-        }
-
-        @Override
-        protected void onPostExecute(List<Client> clients){
-            ClientAdapter adapter = new ClientAdapter(getActivity(), mDataSet);
-
-            mRecyclerView.setAdapter(adapter);
-
-        }
+    @Override
+    public void refresh() {
+        mTask = application.getTasksComponent().provideGetClientsTask();
+        mTask.getClients(new GetClientsTaskParams(mDataSet, mClientTypeCode, getActivity(), this));
     }
 
-    private class ClientRefreshLayout implements SwipeRefreshLayout.OnRefreshListener {
+    @Override
+    public void onPostExecute(List<Client> model) {
+        ClientAdapter adapter = new ClientAdapter(mContext, model);
 
-        @Override
-        public void onRefresh() {
-            new Handler().postDelayed(new Runnable() {
-                @Override
-                public void run() {
-                    new GetClientsTask().execute();
-                    mSwipeRefreshLayout.setRefreshing(false);
-                }
-            }, 2000);
-        }
+        mRecyclerView.setAdapter(adapter);
     }
 }

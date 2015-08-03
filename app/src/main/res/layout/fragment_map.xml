@@ -31,7 +31,7 @@
                 fab:fab_colorNormal="@color/accent"
                 fab:fab_colorPressed="@color/primary_dark"
                 fab:fab_colorRipple="@color/primary_light"
-                android:layout_marginTop="65dp"
+                android:layout_marginTop="30dp"
                 android:layout_marginLeft="16dp"
                 android:layout_marginRight="16dp"
                 android:layout_marginBottom="16dp"/>

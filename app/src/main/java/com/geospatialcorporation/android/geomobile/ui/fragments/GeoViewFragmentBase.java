@@ -15,14 +15,12 @@ import com.geospatialcorporation.android.geomobile.library.DI.Analytics.DaggerAn
 import com.geospatialcorporation.android.geomobile.library.DI.Analytics.Interfaces.IGeoAnalytics;
 import com.geospatialcorporation.android.geomobile.library.panelmanager.ISlidingPanelManager;
 import com.geospatialcorporation.android.geomobile.library.panelmanager.PanelManager;
+import com.geospatialcorporation.android.geomobile.models.Folders.Folder;
 import com.geospatialcorporation.android.geomobile.ui.Interfaces.OnFragmentInteractionListener;
 
 import butterknife.ButterKnife;
 
-/**
- * Created by andre on 6/4/2015.
- */
-public class GeoViewFragmentBase extends Fragment {
+public abstract class GeoViewFragmentBase extends Fragment {
 
     OnFragmentInteractionListener mListener;
 
@@ -60,13 +58,13 @@ public class GeoViewFragmentBase extends Fragment {
         mListener = null;
     }
 
-    protected void SetTitle(int stringResource){
+    public void SetTitle(int stringResource){
         if (mListener != null) {
             mListener.onFragmentInteraction(getActivity().getString(stringResource));
         }
     }
 
-    protected void SetTitle(String string){
+    public void SetTitle(String string){
         if (mListener != null) {
             mListener.onFragmentInteraction(string);
         }
@@ -80,11 +78,11 @@ public class GeoViewFragmentBase extends Fragment {
         mPanelManager = new PanelManager(panelId);
     }
 
-    protected String getValue(EditText et){
+    public String getValue(EditText et){
         return et.getText().toString();
     }
 
-    protected String getValue(Spinner spinner){
+    public String getValue(Spinner spinner){
         return spinner.getSelectedItem().toString();
     }
 

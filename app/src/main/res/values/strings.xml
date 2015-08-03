@@ -255,5 +255,7 @@
     <string name="create_folder_event">The User Created a new Folder</string>
     <string name="delete_folder_event">The User is Deleting a Folder</string>
     <string name="map_feature_document_event">Adding Document to Map Feature Window</string>
+    <string name="edit">Edit</string>
+    <string name="edit_attributes">Edit Attributes</string>
 
 </resources>

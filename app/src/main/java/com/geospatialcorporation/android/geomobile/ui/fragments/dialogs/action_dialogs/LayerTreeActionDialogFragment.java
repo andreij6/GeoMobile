@@ -11,6 +11,10 @@ import android.view.View;
 import android.widget.LinearLayout;
 
 import com.geospatialcorporation.android.geomobile.R;
+import com.geospatialcorporation.android.geomobile.application;
+import com.geospatialcorporation.android.geomobile.library.DI.UIHelpers.Interfaces.DialogHelpers.IFolderDialog;
+import com.geospatialcorporation.android.geomobile.library.DI.UIHelpers.Interfaces.DialogHelpers.ILayerDialog;
+import com.geospatialcorporation.android.geomobile.library.DI.UIHelpers.UIHelperComponent;
 import com.geospatialcorporation.android.geomobile.library.helpers.GeoDialogHelper;
 import com.geospatialcorporation.android.geomobile.models.Folders.Folder;
 import com.geospatialcorporation.android.geomobile.ui.fragments.dialogs.base.GeoDialogFragmentBase;
@@ -33,6 +37,8 @@ public class LayerTreeActionDialogFragment extends GeoDialogFragmentBase {
 
     //region Properties
     Folder mFolder;
+    ILayerDialog mLayerDialog;
+    IFolderDialog mFolderDialog;
     @InjectView(R.id.addLayerFolderSection) LinearLayout mFolderSection;
     @InjectView(R.id.addLayerSection) LinearLayout mLayerSection;
     //endregion
@@ -65,6 +71,11 @@ public class LayerTreeActionDialogFragment extends GeoDialogFragmentBase {
 
         LayoutInflater inflater = LayoutInflater.from(mContext);
 
+        UIHelperComponent component = application.getUIHelperComponent();
+
+        mFolderDialog = component.provideFolderDialog();
+        mLayerDialog = component.provideLayerDialog();
+
         final View v = inflater.inflate(R.layout.dialog_layer, null);
         ButterKnife.inject(this, v);
 
@@ -79,11 +90,11 @@ public class LayerTreeActionDialogFragment extends GeoDialogFragmentBase {
                 LinearLayout l = (LinearLayout)v.findViewById(R.id.addLayerSection);
 
                 if (isHighlighted(f)) {
-                    GeoDialogHelper.createFolder(mContext, mFolder, getFragmentManager());
+                    mFolderDialog.create(mFolder, mContext, getFragmentManager());
                 }
 
                 if(isHighlighted(l)){
-                    GeoDialogHelper.createLayer(mContext, mFolder, getFragmentManager());
+                    mLayerDialog.create(mFolder, mContext, getFragmentManager());
                 }
 
             }

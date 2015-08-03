@@ -7,10 +7,11 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.geospatialcorporation.android.geomobile.library.services.DocumentTreeService;
-import com.geospatialcorporation.android.geomobile.library.services.FolderTreeService;
-import com.geospatialcorporation.android.geomobile.library.services.ITreeService;
-import com.geospatialcorporation.android.geomobile.library.services.LayerTreeService;
+import com.geospatialcorporation.android.geomobile.application;
+import com.geospatialcorporation.android.geomobile.library.DI.TreeServices.Interfaces.IDocumentTreeService;
+import com.geospatialcorporation.android.geomobile.library.DI.TreeServices.Interfaces.IFolderTreeService;
+import com.geospatialcorporation.android.geomobile.library.DI.TreeServices.Interfaces.ILayerTreeService;
+import com.geospatialcorporation.android.geomobile.library.DI.TreeServices.TreeServiceComponent;
 import com.geospatialcorporation.android.geomobile.models.Folders.Folder;
 import com.geospatialcorporation.android.geomobile.models.Interfaces.INamedEntity;
 import com.geospatialcorporation.android.geomobile.models.Interfaces.IdModel;
@@ -18,9 +19,6 @@ import com.geospatialcorporation.android.geomobile.models.Layers.Layer;
 import com.geospatialcorporation.android.geomobile.models.Document.Document;
 import com.geospatialcorporation.android.geomobile.ui.fragments.GeoViewFragmentBase;
 
-/**
- * Created by andre on 6/2/2015.
- */
 public class ItemDetailFragment<ITreeEntity> extends GeoViewFragmentBase {
 
     protected ITreeEntity mEntity;
@@ -36,8 +34,6 @@ public class ItemDetailFragment<ITreeEntity> extends GeoViewFragmentBase {
     //endregion
 
     EditText mEditText;
-
-
 
     protected void handleArguments(){
         Toast.makeText(getActivity(), "Override Me", Toast.LENGTH_LONG).show();
@@ -69,20 +65,22 @@ public class ItemDetailFragment<ITreeEntity> extends GeoViewFragmentBase {
             @Override
             public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
                 if (actionId == EditorInfo.IME_ACTION_DONE) {
-                    ITreeService service = null;
+                    TreeServiceComponent component = application.getTreeServiceComponent();
 
+                    int id = ((IdModel)mEntity).getId();
+                    String name = mEditText.getText().toString();
                     if (mEntity instanceof Document) {
-                        service = new DocumentTreeService();
+                        IDocumentTreeService  docService = component.provideDocumentTreeService();
+                        docService.rename(id, name );
                     } else if (mEntity instanceof Layer) {
-                        service = new LayerTreeService();
+                        ILayerTreeService layerService = component.provideLayerTreeService();
+                        layerService.rename(id, name);
                     } else if (mEntity instanceof Folder) {
-                        service = new FolderTreeService();
+                        IFolderTreeService folderService = component.provideFolderTreeService();
+                        folderService.rename(id, name);
                     } else {
                     }
 
-                    if (service != null) {
-                        service.rename(((IdModel) mEntity).getId(), mEditText.getText().toString());
-                    }
 
                     mEditText.setVisibility(View.GONE);
                 }

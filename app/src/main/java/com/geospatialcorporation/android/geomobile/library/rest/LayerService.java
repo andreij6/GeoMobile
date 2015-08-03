@@ -1,5 +1,6 @@
 package com.geospatialcorporation.android.geomobile.library.rest;
 
+import com.geospatialcorporation.android.geomobile.models.Layers.EditLayerAttributesRequest;
 import com.geospatialcorporation.android.geomobile.models.Layers.Layer;
 import com.geospatialcorporation.android.geomobile.models.Layers.LayerCreateRequest;
 import com.geospatialcorporation.android.geomobile.models.Layers.LayerDetailsVm;
@@ -38,6 +39,9 @@ public interface LayerService {
 
     @GET("/API/Layers/{id}/Style")
     Layer.StyleInfo getStyle(@Path("id") int id);
+
+    @POST("/API/Layers/{id}/Attributes/Values")
+    void editAttributes(@Path("id") int id, @Body EditLayerAttributesRequest request, Callback<Response> cb);
 
     @PUT("/API/Layers/{id}/Features/{featureId}/Documents/{documentId}")
     void addMapFeatureDocument(@Path("id") int id, @Path("featureId") String featureId, @Path("documentId") int documentId, Callback<Response> cb);

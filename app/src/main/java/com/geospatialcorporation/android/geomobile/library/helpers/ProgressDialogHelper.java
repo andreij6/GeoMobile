@@ -7,7 +7,6 @@ import android.content.Context;
  * Created by andre on 5/29/2015.
  */
 public class ProgressDialogHelper {
-    Context mContext;
     ProgressDialog mProgressDialog;
 
     //login is the only process that consistently takes time.  the other dialogs just flash by - either change styling, or set a minimum time to show dialog

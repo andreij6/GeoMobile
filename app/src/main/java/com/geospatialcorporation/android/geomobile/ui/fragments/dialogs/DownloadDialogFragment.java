@@ -10,12 +10,10 @@ import android.widget.TextView;
 
 import com.geospatialcorporation.android.geomobile.R;
 import com.geospatialcorporation.android.geomobile.application;
-import com.geospatialcorporation.android.geomobile.library.DI.Analytics.Interfaces.IGeoAnalytics;
 import com.geospatialcorporation.android.geomobile.library.DI.Analytics.Models.GoogleAnalyticEvent;
-import com.geospatialcorporation.android.geomobile.library.services.DocumentTreeService;
+import com.geospatialcorporation.android.geomobile.library.DI.TreeServices.Interfaces.IDocumentTreeService;
 import com.geospatialcorporation.android.geomobile.models.Document.Document;
 import com.geospatialcorporation.android.geomobile.ui.fragments.dialogs.base.GeoDialogFragmentBase;
-import com.geospatialcorporation.android.geomobile.ui.viewmodels.ListItem;
 
 public class DownloadDialogFragment extends GeoDialogFragmentBase {
     //region Getters & Setters
@@ -29,6 +27,7 @@ public class DownloadDialogFragment extends GeoDialogFragmentBase {
     //endregion
 
     Document mDocument;
+    IDocumentTreeService mDocumentTreeService;
 
 
     @Override
@@ -49,8 +48,8 @@ public class DownloadDialogFragment extends GeoDialogFragmentBase {
                 public void onClick(DialogInterface dialog, int id) {
                     mAnalytics.trackClick(new GoogleAnalyticEvent().DownloadDocument());
 
-                    DocumentTreeService Service = new DocumentTreeService();
-                    Service.download(mDocument.getId(), mDocument.getNameWithExt());
+                    mDocumentTreeService = application.getTreeServiceComponent().provideDocumentTreeService();
+                    mDocumentTreeService.download(mDocument.getId(), mDocument.getNameWithExt());
 
                 }
             })

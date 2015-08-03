@@ -36,6 +36,7 @@ public class QuickSearchPanelFragment extends GeoViewFragmentBase {
     private static final String TAG = QuickSearchPanelFragment.class.getSimpleName();
 
     QueryService mService;
+    DataHelper mDataHelper;
 
     //region Butterknife
     @InjectView(R.id.searchBox) EditText SearchBox;
@@ -54,6 +55,7 @@ public class QuickSearchPanelFragment extends GeoViewFragmentBase {
         SetTitle(R.string.quicksearch);
         setPanelManager(GeoPanel.MAP);
         RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(container.getContext());
+        mDataHelper = new DataHelper();
 
         mRecyclerView.setLayoutManager(layoutManager);
 
@@ -88,8 +90,7 @@ public class QuickSearchPanelFragment extends GeoViewFragmentBase {
             public void success(List<QuickSearchResponse> response, Response response2) {
 
                 if (response != null || response.size() == 0) {
-                    DataHelper dh = new DataHelper();
-                    List<QuickSearchResultVM> data = dh.normalizeQuickSearchResults(response);
+                    List<QuickSearchResultVM> data = mDataHelper.normalizeQuickSearchResults(response);
                     QuickSearchAdapter adapter = new QuickSearchAdapter(getActivity(), data);
                     mResultCount.setText("Result Count: " + data.size());
                     mRecyclerView.setAdapter(adapter);
@@ -104,11 +105,6 @@ public class QuickSearchPanelFragment extends GeoViewFragmentBase {
                 Log.d(TAG, error.getMessage());
             }
         });
-    }
-
-
-    protected void sendScreenName() {
-
     }
     //endregion
 }

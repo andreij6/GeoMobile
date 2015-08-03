@@ -3,6 +3,7 @@ package com.geospatialcorporation.android.geomobile.models.Layers;
 import android.graphics.drawable.Drawable;
 import android.widget.ImageView;
 
+import com.geospatialcorporation.android.geomobile.models.Folders.Folder;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.Polygon;
 import com.google.android.gms.maps.model.Polyline;
@@ -18,10 +19,15 @@ public class LegendLayer {
     Drawable mLegendIcon;
     List<Object> MapObjects;
     ImageView mImageView;
+    Folder mFolder;
 
-    public LegendLayer(Layer layer){
+    public LegendLayer(Layer layer) {
         mLayer = layer;
         MapObjects = new ArrayList<>();
+    }
+
+    public LegendLayer(Folder folder) {
+        mFolder = folder;
     }
 
     //region Gs & Ss
@@ -75,5 +81,9 @@ public class LegendLayer {
 
     public boolean isIconSet() {
         return mLayer.getIsShowing();
+    }
+
+    public Folder getFolder() {
+        return mFolder;
     }
 }

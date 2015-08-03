@@ -19,21 +19,28 @@ package com.geospatialcorporation.android.geomobile.ui.fragments;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.IntentSender;
 import android.graphics.drawable.shapes.Shape;
 import android.location.Location;
 import android.os.Bundle;
 import android.provider.Settings;
 import android.support.v4.app.Fragment;
+import android.support.v4.widget.DrawerLayout;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
 
 import com.geospatialcorporation.android.geomobile.R;
+import com.geospatialcorporation.android.geomobile.application;
 import com.geospatialcorporation.android.geomobile.library.DI.Analytics.Models.GoogleAnalyticEvent;
 import com.geospatialcorporation.android.geomobile.library.constants.GeoPanel;
+import com.geospatialcorporation.android.geomobile.library.constants.ViewModes;
+import com.geospatialcorporation.android.geomobile.library.helpers.GeoDialogHelper;
 import com.geospatialcorporation.android.geomobile.library.helpers.MapStateManager;
 import com.geospatialcorporation.android.geomobile.library.map.layerManager.ILayerManager;
 import com.geospatialcorporation.android.geomobile.library.map.layerManager.LayerManager;
@@ -41,13 +48,19 @@ import com.geospatialcorporation.android.geomobile.library.panelmanager.ISliding
 import com.geospatialcorporation.android.geomobile.library.panelmanager.PanelManager;
 import com.geospatialcorporation.android.geomobile.library.services.QueryRestService;
 import com.geospatialcorporation.android.geomobile.library.viewmode.IViewMode;
+import com.geospatialcorporation.android.geomobile.library.viewmode.implementations.FullScreenMode;
+import com.geospatialcorporation.android.geomobile.library.viewmode.implementations.QueryMode;
+import com.geospatialcorporation.android.geomobile.library.viewmode.implementations.SearchMode;
 import com.geospatialcorporation.android.geomobile.models.Layers.Layer;
 import com.geospatialcorporation.android.geomobile.models.Query.map.response.featurewindow.FeatureQueryResponse;
 import com.geospatialcorporation.android.geomobile.models.Query.map.response.featurewindow.ParcelableFeatureQueryResponse;
 import com.geospatialcorporation.android.geomobile.ui.Interfaces.IViewModeListener;
+import com.geospatialcorporation.android.geomobile.ui.MainActivity;
+import com.geospatialcorporation.android.geomobile.ui.fragments.dialogs.MapTypeSelectDialogFragment;
 import com.geospatialcorporation.android.geomobile.ui.fragments.panel_fragments.map_fragment_panels.FeatureWindowPanelFragment;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
+import com.google.android.gms.location.LocationListener;
 import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.maps.CameraUpdate;
 import com.google.android.gms.maps.CameraUpdateFactory;
@@ -59,9 +72,12 @@ import com.google.android.gms.maps.model.CameraPosition;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.LatLngBounds;
 import com.google.android.gms.maps.model.Marker;
+import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.maps.model.Polygon;
 import com.google.android.gms.maps.model.Polyline;
 import com.google.maps.android.PolyUtil;
+import com.melnykov.fab.FloatingActionButton;
+import com.sothree.slidinguppanel.SlidingUpPanelLayout;
 
 import java.util.Collection;
 import java.util.List;
@@ -76,67 +92,89 @@ import butterknife.OnClick;
 public class GoogleMapFragment extends GeoViewFragmentBase implements
         IViewModeListener,
         GoogleApiClient.ConnectionCallbacks,
-        GoogleApiClient.OnConnectionFailedListener {
+        GoogleApiClient.OnConnectionFailedListener,
+        LocationListener
+{
     private static final String TAG = GoogleMapFragment.class.getSimpleName();
+    private final static int CONNECTION_FAILURE_RESOLUTION_REQUEST = 9000;
 
     //region Properties
     public GoogleMap mMap;
+    Marker mCurrentLocationMaker;
     IViewMode mViewMode;
     GoogleApiClient mLocationClient;
-    @InjectView(R.id.map)
+    ISlidingPanelManager mPanelManager;
     ILayerManager mLayerManager;
-    //    ISlidingPanelManager mPanelManager;
-//    @InjectView(R.id.sliding_layout) SlidingUpPanelLayout mPanel;
-//    @InjectView(R.id.fab_box) FloatingActionButton mBoxQueryBtn;
-//    @InjectView(R.id.fab_point) FloatingActionButton mPointQueryBtn;
-//    @InjectView(R.id.fab_close) FloatingActionButton mCloseBtn;
-//    @InjectView(R.id.fab_save) FloatingActionButton mSaveBtn;
-//    @InjectView(R.id.fab_bm_close) FloatingActionButton mBmClose;
-//    @InjectView(R.id.fab_fullscreen_close) FloatingActionButton mFullScreenClose;
+    @InjectView(R.id.map) MapView mMapView;
+    @InjectView(R.id.sliding_layout) SlidingUpPanelLayout mPanel;
+    @InjectView(R.id.fab_box) FloatingActionButton mBoxQueryBtn;
+    @InjectView(R.id.fab_point) FloatingActionButton mPointQueryBtn;
+    @InjectView(R.id.fab_close) FloatingActionButton mCloseBtn;
+    @InjectView(R.id.fab_save) FloatingActionButton mSaveBtn;
+    @InjectView(R.id.fab_bm_close) FloatingActionButton mBmClose;
+    @InjectView(R.id.fab_fullscreen_close) FloatingActionButton mFullScreenClose;
     Menu mMenu;
     //endregion
 
     //region OnClicks
     @SuppressWarnings("unused")
-    @OnClick(R.id.fab_location)
-    public void getLocation() {
+    @OnClick(R.id.fab)
+    public void getLocation(){
+        Toaster(mLocationClient.isConnected() + "");
         Location currentLocation = LocationServices.FusedLocationApi.getLastLocation(mLocationClient);
 
         mAnalytics.trackClick(new GoogleAnalyticEvent().CurrentLocation());
 
-        if (currentLocation == null) {
+        if(currentLocation == null){
             AlertDialog.Builder builder1 = new AlertDialog.Builder(getActivity());
             builder1.setMessage(getString(R.string.location_not_found))
                     .setPositiveButton(getString(R.string.enable_gps),
-                            new DialogInterface.OnClickListener() {
-                                public void onClick(DialogInterface dialog, int id) {
-                                    Intent gpsOptions = new Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS);
+                    new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface dialog, int id) {
+                            Intent gpsOptions = new Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS);
 
-                                    startActivity(gpsOptions);
-                                }
-                            })
+                            startActivity(gpsOptions);
+                        }
+                    })
                     .setNegativeButton(getString(R.string.cancel),
                             new DialogInterface.OnClickListener() {
                                 public void onClick(DialogInterface dialog, int id) {
                                     dialog.cancel();
-                                }
-                            });
+                        }
+                    });
 
             AlertDialog alert11 = builder1.create();
             alert11.show();
         } else {
-            LatLng ll = new LatLng(currentLocation.getLatitude(), currentLocation.getLongitude());
-
-            CameraUpdate update = CameraUpdateFactory.newLatLngZoom(ll, 13);
-
-            mMap.animateCamera(update);
+            handleNewLocation(currentLocation);
         }
+    }
+
+    private void handleNewLocation(Location currentLocation) {
+
+        if(mCurrentLocationMaker != null){
+            mCurrentLocationMaker.remove();
+        }
+
+        LatLng ll = new LatLng(currentLocation.getLatitude(), currentLocation.getLongitude());
+
+        CameraUpdate update = CameraUpdateFactory.newLatLngZoom(ll, 16);
+
+        mMap.animateCamera(update);
+
+        MarkerOptions options = new MarkerOptions();
+        options.position(ll);
+
+        mCurrentLocationMaker = mMap.addMarker(options);
+
+
     }
 
     @SuppressWarnings("unused")
     @OnClick(R.id.fab_layers)
     public void showLayersDrawer(){
         mAnalytics.trackClick(new GoogleAnalyticEvent().OpenLayerDrawer());
+        DrawerLayout mDrawerLayout = ((MainActivity)getActivity()).getRightDrawer();
         View layerView = ((MainActivity)getActivity()).getLayerListView();
 
         mDrawerLayout.openDrawer(layerView);
@@ -161,10 +199,10 @@ public class GoogleMapFragment extends GeoViewFragmentBase implements
 
     //region Base Overrides
     @Override
-    public void onCreate(Bundle savedInstance) {
+    public void onCreate(Bundle savedInstance){
         super.onCreate(savedInstance);
 
-        if (mMapView != null) {
+        if(mMapView != null){
             mMapView.onCreate(savedInstance);
         }
 
@@ -175,7 +213,7 @@ public class GoogleMapFragment extends GeoViewFragmentBase implements
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        setHasOptionsMenu(false);
+        setHasOptionsMenu(true);
         View rootView = inflater.inflate(R.layout.fragment_map, container, false);
 
         ButterKnife.inject(this, rootView);
@@ -183,6 +221,11 @@ public class GoogleMapFragment extends GeoViewFragmentBase implements
 
         mAnalytics.trackScreen(new GoogleAnalyticEvent().MapScreen());
 
+        application.setMapFragmentPanel(mPanel);
+        mPanelManager = new PanelManager(GeoPanel.MAP);
+        mPanelManager.setup();
+        mPanelManager.touch(false);
+        mLayerManager = application.getLayerManager();
 
 
         initializeGoogleMap(savedInstanceState);
@@ -288,9 +331,9 @@ public class GoogleMapFragment extends GeoViewFragmentBase implements
 
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
-//        inflater.inflate(R.menu.map_menu, menu);
-//        mMenu = menu;
-//        super.onCreateOptionsMenu(menu, inflater);
+        inflater.inflate(R.menu.map_menu, menu);
+        mMenu = menu;
+        super.onCreateOptionsMenu(menu, inflater);
     }
 
     @Override
@@ -300,25 +343,27 @@ public class GoogleMapFragment extends GeoViewFragmentBase implements
         setMapState();
         mPanelManager.collapse();
         mLayerManager.showLayers();
+        mLocationClient.connect();
     }
 
-//    @Override
-//    public boolean onOptionsItemSelected(MenuItem item) {
-//        // Handle action buttons
-//        switch (item.getItemId()) {
-//            case R.id.action_map_settings:
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        // Handle action buttons
+        switch (item.getItemId()) {
+            case R.id.action_map_settings:
                 mAnalytics.trackClick(new GoogleAnalyticEvent().ChangeBaseMap());
-//                m.setContext(getActivity());
-//                m.setMap(mMap);
-//                m.show(getFragmentManager(), "styles");
-//                return true;
-//            case R.id.action_fullscreen:
+                MapTypeSelectDialogFragment m = new MapTypeSelectDialogFragment();
+                m.setContext(getActivity());
+                m.setMap(mMap);
+                m.show(getFragmentManager(), "styles");
+                return true;
             //case R.id.action_fullscreen:
             //    mPanelManager.hide();
             //    setViewMode(fullScreenSetup());
-//                return super.onOptionsItemSelected(item);
-//        }
-//    }
+            default:
+                return super.onOptionsItemSelected(item);
+        }
+    }
 
     @Override
     public void onDestroy() {
@@ -330,22 +375,22 @@ public class GoogleMapFragment extends GeoViewFragmentBase implements
     @Override
     public void onLowMemory() {
         super.onLowMemory();
-        if (mMapView != null) {
+        if(mMapView != null) {
             mMapView.onLowMemory();
         }
     }
 
     @Override
-    public void onStop() {
+    public void onStop(){
         super.onStop();
         saveMapState();
     }
 
     @Override
-    public void onDestroyView() {
+    public void onDestroyView(){
         super.onDestroyView();
         mLayerManager.clearVisibleLayers();
-        if (mViewMode != null) {
+        if(mViewMode != null){
             mViewMode.Disable(true);
             mViewMode = null;
         }
@@ -354,29 +399,34 @@ public class GoogleMapFragment extends GeoViewFragmentBase implements
     }
 
     @Override
-    public void onPause() {
+    public void onPause(){
         mLayerManager.clearVisibleLayers();
         mMapView.onPause();
+        mLocationClient.disconnect();
         super.onPause();
     }
 
     //endregion
 
     //region ViewModeSetups
-//    protected IViewMode querySetup() {
-//        mAnalytics.trackClick(new GoogleAnalyticEvent().QueryModeInit());
+    protected IViewMode querySetup() {
+        mAnalytics.trackClick(new GoogleAnalyticEvent().QueryModeInit());
 
-//                .setControls(mBoxQueryBtn, mPointQueryBtn, mCloseBtn, getActivity().getSupportFragmentManager())
-//                .setupUI()
-//                .create();
-//
-//    }
+        return new QueryMode.Builder()
+                .setDependents(mMap, mListener, getActivity())
+                .setControls(mBoxQueryBtn, mPointQueryBtn, mCloseBtn, getActivity().getSupportFragmentManager())
+                .setupUI()
+                .create();
 
-//    protected IViewMode searchSetup() {
-//        return new SearchMode.Builder()
-//                        .init(getActivity().getSupportFragmentManager(), mPanelManager)
-//        mAnalytics.trackClick(new GoogleAnalyticEvent().QuickSearchInit());
-//    }
+    }
+
+    protected IViewMode searchSetup() {
+        mAnalytics.trackClick(new GoogleAnalyticEvent().QuickSearchInit());
+
+        return new SearchMode.Builder()
+                        .init(getActivity().getSupportFragmentManager(), mPanelManager)
+                        .create();
+    }
 
     //protected IViewMode fullScreenSetup(){
     //    mAnalytics.sendClickEvent(R.string.full_screen_mode);
@@ -392,8 +442,8 @@ public class GoogleMapFragment extends GeoViewFragmentBase implements
     @Override
     public void setViewMode(IViewMode mode) {
 
-        if (mViewMode != null) {
-            if (mViewMode.isSame(mode)) {
+        if(mViewMode != null){
+            if(mViewMode.isSame(mode)){
                 mViewMode.Disable(true);
                 mViewMode = null;
             } else {
@@ -448,6 +498,7 @@ public class GoogleMapFragment extends GeoViewFragmentBase implements
         if(position != null){
             CameraUpdate update = CameraUpdateFactory.newCameraPosition(position);
             mMap.moveCamera(update);
+        }
     }
 
     //region GoogleAPI Client Interface
@@ -463,7 +514,16 @@ public class GoogleMapFragment extends GeoViewFragmentBase implements
 
     @Override
     public void onConnectionFailed(ConnectionResult connectionResult) {
-
+        if (connectionResult.hasResolution()) {
+            try {
+                // Start an Activity that tries to resolve the error
+                connectionResult.startResolutionForResult(getActivity(), CONNECTION_FAILURE_RESOLUTION_REQUEST);
+            } catch (IntentSender.SendIntentException e) {
+                e.printStackTrace();
+            }
+        } else {
+            Log.i(TAG, "Location services connection failed with code " + connectionResult.getErrorCode());
+        }
     }
     //endregion
 
@@ -482,4 +542,8 @@ public class GoogleMapFragment extends GeoViewFragmentBase implements
         mPanelManager.halfAnchor();
     }
 
+    @Override
+    public void onLocationChanged(Location location) {
+        handleNewLocation(location);
+    }
 }

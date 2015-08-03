@@ -8,6 +8,8 @@ import android.view.ViewGroup;
 import android.widget.TabHost;
 
 import com.geospatialcorporation.android.geomobile.R;
+import com.geospatialcorporation.android.geomobile.application;
+import com.geospatialcorporation.android.geomobile.library.DI.UIHelpers.Interfaces.DialogHelpers.IFolderDialog;
 import com.geospatialcorporation.android.geomobile.library.helpers.GeoDialogHelper;
 import com.geospatialcorporation.android.geomobile.models.Folders.Folder;
 import com.geospatialcorporation.android.geomobile.ui.fragments.detail_fragment.folder_tabs.FolderDetailsTab;
@@ -22,6 +24,8 @@ public class DocumentFolderDetailFragment extends ItemDetailFragment<Folder> imp
     private static final String DETAILS = "Details";
     private static final String PERMISSIONS = "Permissions";
 
+    IFolderDialog mFolderDialog;
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState){
         super.onCreate(savedInstanceState);
@@ -29,6 +33,8 @@ public class DocumentFolderDetailFragment extends ItemDetailFragment<Folder> imp
         View view = inflater.inflate(R.layout.fragment_tree_detail, null);
 
         ButterKnife.inject(this, view);
+
+        mFolderDialog = application.getUIHelperComponent().provideFolderDialog();
 
         handleArguments();
         Bundle args = getArguments();
@@ -58,7 +64,7 @@ public class DocumentFolderDetailFragment extends ItemDetailFragment<Folder> imp
     public View.OnClickListener DeleteonClickListner = new View.OnClickListener(){
         @Override
         public void onClick(View v){
-            GeoDialogHelper.deleteFolder(getActivity(), mEntity, getFragmentManager());
+            mFolderDialog.delete(mEntity, getActivity(), getFragmentManager());
         }
     };
 

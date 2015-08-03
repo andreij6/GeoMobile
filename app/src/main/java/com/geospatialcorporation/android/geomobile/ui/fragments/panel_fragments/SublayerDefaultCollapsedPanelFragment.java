@@ -8,8 +8,9 @@ import android.widget.Button;
 import android.widget.EditText;
 
 import com.geospatialcorporation.android.geomobile.R;
+import com.geospatialcorporation.android.geomobile.application;
+import com.geospatialcorporation.android.geomobile.library.DI.TreeServices.Interfaces.ISublayerTreeService;
 import com.geospatialcorporation.android.geomobile.library.constants.GeoPanel;
-import com.geospatialcorporation.android.geomobile.library.services.SublayerTreeService;
 import com.geospatialcorporation.android.geomobile.models.Layers.Layer;
 import com.geospatialcorporation.android.geomobile.models.Layers.SublayerCreateRequest;
 import com.geospatialcorporation.android.geomobile.ui.fragments.GeoViewFragmentBase;
@@ -18,13 +19,11 @@ import butterknife.ButterKnife;
 import butterknife.InjectView;
 import butterknife.OnClick;
 
-/**
- * Created by andre on 6/19/2015.
- */
+
 public class SublayerDefaultCollapsedPanelFragment extends GeoViewFragmentBase {
 
     Layer mLayer;
-    SublayerTreeService mService;
+    ISublayerTreeService mService;
 
     @InjectView(R.id.create) Button mCreateBtn;
     @InjectView(R.id.nameET) EditText mNameET;
@@ -58,7 +57,7 @@ public class SublayerDefaultCollapsedPanelFragment extends GeoViewFragmentBase {
 
         handleArgs();
 
-        mService = new SublayerTreeService();
+        mService = application.getTreeServiceComponent().provideSublayerTreeService();
 
         return mView;
     }

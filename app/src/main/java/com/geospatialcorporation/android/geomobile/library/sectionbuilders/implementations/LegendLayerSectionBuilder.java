@@ -18,9 +18,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
-/**
- * Created by andre on 6/5/2015.
- */
+
 public class LegendLayerSectionBuilder extends SectionBuilderBase<Folder> implements ISectionBuilder<Folder> {
 
     public LegendLayerSectionBuilder(Context context) {
@@ -42,30 +40,30 @@ public class LegendLayerSectionBuilder extends SectionBuilderBase<Folder> implem
             List<Folder> emptyFolders = new ArrayList<>();
 
             for(Folder folder : data){
-                if(folder.getLayers() != null && folder.getLayers().size() > 0) {
+                //if(folder.getLayers() != null && folder.getLayers().size() > 0) {
                     if(isRoot(folder)) {
                         sections.add(new SimpleSectionedRecyclerViewAdapter.Section(skip, "ROOT"));
                     } else {
                         sections.add(new SimpleSectionedRecyclerViewAdapter.Section(skip, folder.getName()));
                     }
                     skip = getSkipValue(folder, skip);
-                } else {
-                    emptyFolders.add(folder);
-                }
+                //} else {
+                //   emptyFolders.add(folder);
+                //}
             }
 
-            sections.add(new SimpleSectionedRecyclerViewAdapter.Section(skip, "- Empty Folders -"));
+            //sections.add(new SimpleSectionedRecyclerViewAdapter.Section(skip, "- Empty Folders -"));
 
             //skip++;
 
-            for(Folder folder : emptyFolders){
-                if(isRoot(folder)) {
-                    sections.add(new SimpleSectionedRecyclerViewAdapter.Section(skip, "ROOT"));
-                } else {
-                    sections.add(new SimpleSectionedRecyclerViewAdapter.Section(skip, folder.getName()));
-                }
-                skip = getSkipValue(folder, skip);
-            }
+            //for(Folder folder : emptyFolders){
+            //    if(isRoot(folder)) {
+            //        sections.add(new SimpleSectionedRecyclerViewAdapter.Section(skip, "ROOT"));
+            //    } else {
+            //        sections.add(new SimpleSectionedRecyclerViewAdapter.Section(skip, folder.getName()));
+            //    }
+            //    skip = getSkipValue(folder, skip);
+            //}
         }
 
         SimpleSectionedRecyclerViewAdapter.Section[] sectionArray = new SimpleSectionedRecyclerViewAdapter.Section[sections.size()];
@@ -78,21 +76,25 @@ public class LegendLayerSectionBuilder extends SectionBuilderBase<Folder> implem
     }
 
     private List<LegendLayer> getLayersFromFolders(List<Folder> layerFolders) {
-        List<Layer> layers = new ArrayList<>();
+        List<LegendLayer> result = new ArrayList<>();
+        HashMap<Integer, Layer> layerHashMap = new HashMap<>();
+
 
         for(Folder folder : layerFolders){
             if(folder.getLayers() != null && !folder.getLayers().isEmpty()){
+                List<Layer> layers = new ArrayList<>();
+
                 layers.addAll(folder.getLayers());
+
+                for(Layer layer : layers){
+                    layerHashMap.put(layer.getId(), layer);
+                    result.add(new LegendLayer(layer));
+                }
+
+                result.add(new LegendLayer(folder));
+            } else {
+                result.add(new LegendLayer(folder));
             }
-        }
-
-        List<LegendLayer> result = new ArrayList<>();
-
-        HashMap<Integer, Layer> layerHashMap = new HashMap<>();
-
-        for(Layer layer : layers){
-            layerHashMap.put(layer.getId(), layer);
-            result.add(new LegendLayer(layer));
         }
 
         application.setLayerHashMap(layerHashMap);
@@ -105,6 +107,8 @@ public class LegendLayerSectionBuilder extends SectionBuilderBase<Folder> implem
     }
 
     protected int getSkipValue(Folder folder, int skip) {
+        skip += 1;
+
         if(folder != null && folder.getLayers() != null){
             skip += folder.getLayers().size();
         }
