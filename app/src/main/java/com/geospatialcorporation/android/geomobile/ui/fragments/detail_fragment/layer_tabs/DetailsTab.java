@@ -37,13 +37,13 @@ public class DetailsTab extends GeoDetailsTabBase<Layer> implements IPostExecute
     @InjectView(R.id.userUpdateValue) TextView mUserUpdated;
     @InjectView(R.id.shapeTypeValue) TextView mShapeType;
     @InjectView(R.id.entityCountValue) TextView mFeatureCount;
-    @InjectView(R.id.fab) FloatingActionButton mEdit;
+    //@InjectView(R.id.fab) FloatingActionButton mEdit;
 
-    @OnClick(R.id.fab)
-    public void showLayerActions(){
-        mAnalytics.trackClick(new GoogleAnalyticEvent().ShowLayerActions());
-        mLayerDialog.actions(mEntity, getActivity(), getActivity().getSupportFragmentManager());
-    }
+    //@OnClick(R.id.fab)
+    //public void showLayerActions(){
+    //    mAnalytics.trackClick(new GoogleAnalyticEvent().ShowLayerActions());
+    //    mLayerDialog.actions(mEntity, getActivity(), getActivity().getSupportFragmentManager());
+    //}
     //endregion
 
     @Override

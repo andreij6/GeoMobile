@@ -3,7 +3,17 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent">
 
+    <com.sothree.slidinguppanel.SlidingUpPanelLayout
+        xmlns:sothree="http://schemas.android.com/apk/res-auto"
+        android:id="@+id/sliding_layout"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:gravity="bottom"
+        sothree:umanoPanelHeight="68dp"
+        sothree:umanoShadowHeight="4dp"
         android:layout_marginTop="?attr/actionBarSize"
+        android:background="@color/primary_light">
+
         <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
@@ -19,9 +29,9 @@
                 map:cameraTargetLng="-96.5878515"
                 map:cameraZoom="3" />
 
-<!-- Normal Map Mode Buttons -->
+            <!-- Normal Map Mode Buttons -->
             <com.melnykov.fab.FloatingActionButton
-                android:id="@+id/fab_location"
+                android:id="@+id/fab"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_alignParentTop="true"
@@ -44,14 +54,106 @@
                 fab:fab_colorNormal="@color/accent"
                 fab:fab_colorPressed="@color/primary_dark"
                 fab:fab_colorRipple="@color/primary_light"
-                android:layout_below="@+id/fab_location"
-                android:layout_alignEnd="@+id/fab_location"
+                android:layout_below="@+id/fab"
+                android:layout_alignEnd="@+id/fab"
                 />
 
-       <RelativeLayout
+            <!-- Query Mode Buttons -->
+            <com.melnykov.fab.FloatingActionButton
+                android:id="@+id/fab_point"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentTop="true"
+                android:layout_alignParentEnd="true"
+                android:layout_alignParentRight="true"
+                android:layout_marginTop="65dp"
+                android:layout_marginLeft="16dp"
+                android:layout_marginRight="16dp"
+                android:layout_marginBottom="16dp"
+                android:src="@drawable/ic_crosshairs_gps_white_24dp"
+                fab:fab_colorNormal="@color/accent_dark"
+                fab:fab_colorPressed="@color/primary_dark"
+                fab:fab_colorRipple="@color/primary_light"
+                android:visibility="gone"/>
+
+            <com.melnykov.fab.FloatingActionButton
+                android:id="@+id/fab_box"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/ic_vector_square_white_24dp"
+                fab:fab_colorNormal="@color/accent_dark"
+                fab:fab_colorPressed="@color/primary_dark"
+                fab:fab_colorRipple="@color/primary_light"
+                android:layout_below="@+id/fab"
+                android:layout_alignEnd="@+id/fab"
+                android:visibility="gone"/>
+
+            <com.melnykov.fab.FloatingActionButton
+                android:id="@+id/fab_close"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/ic_close_circle_white_24dp"
+                fab:fab_colorNormal="@color/accent_dark"
+                fab:fab_colorPressed="@color/primary_dark"
+                fab:fab_colorRipple="@color/primary_light"
+                android:layout_marginTop="18dp"
+                android:layout_below="@+id/fab_layers"
+                android:layout_alignStart="@+id/fab_layers"
+                android:visibility="gone"/>
+
+            <!-- Bookmark Mode Buttons -->
+            <com.melnykov.fab.FloatingActionButton
+                android:id="@+id/fab_save"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentTop="true"
+                android:layout_alignParentEnd="true"
+                android:layout_alignParentRight="true"
+                android:layout_marginTop="65dp"
+                android:layout_marginLeft="16dp"
+                android:layout_marginRight="16dp"
+                android:layout_marginBottom="16dp"
+                android:src="@drawable/ic_content_save_white_24dp"
+                fab:fab_colorNormal="@color/accent_dark"
+                fab:fab_colorPressed="@color/primary_dark"
+                fab:fab_colorRipple="@color/primary_light"
+                android:visibility="gone"/>
+
+            <com.melnykov.fab.FloatingActionButton
+                android:id="@+id/fab_bm_close"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/ic_close_circle_white_24dp"
+                fab:fab_colorNormal="@color/accent_dark"
+                fab:fab_colorPressed="@color/primary_dark"
+                fab:fab_colorRipple="@color/primary_light"
+                android:layout_below="@+id/fab"
+                android:layout_alignEnd="@+id/fab"
+                android:visibility="gone"/>
+
+            <com.melnykov.fab.FloatingActionButton
+                android:id="@+id/fab_fullscreen_close"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/ic_close_circle_white_24dp"
+                fab:fab_colorNormal="@color/accent"
+                fab:fab_colorPressed="@color/primary_dark"
+                fab:fab_colorRipple="@color/primary_light"
+                android:layout_marginTop="18dp"
+                android:layout_below="@+id/fab_layers"
+                android:layout_alignStart="@+id/fab_layers"
+                android:visibility="gone"/>
+
+
+        </RelativeLayout>
+
+
+        <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:id="@+id/slider_content">
         </RelativeLayout>
+
+    </com.sothree.slidinguppanel.SlidingUpPanelLayout>
 
 </RelativeLayout>
