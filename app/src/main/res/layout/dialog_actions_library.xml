@@ -37,9 +37,11 @@
 
         <LinearLayout
             android:orientation="vertical"
-            android:layout_width="match_parent"
+            android:layout_width="wrap_content"
             style="@style/actionDialog_linearLayout"
-            android:id="@+id/addDocumentSection">
+            android:id="@+id/addDocumentSection"
+            android:layout_height="wrap_content"
+            android:layout_weight="1">
 
             <ImageView
                 android:layout_width="wrap_content"

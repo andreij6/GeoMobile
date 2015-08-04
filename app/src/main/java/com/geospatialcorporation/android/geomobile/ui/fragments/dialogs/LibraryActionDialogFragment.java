@@ -63,34 +63,26 @@ public class LibraryActionDialogFragment extends DialogFragment {
     //region OnClicks
     @OnClick(R.id.addDocumentSection)
     public void documentClicked(){
-        highlight(mDocumentSection);
+        Intent chooseFileIntent = new Intent(Intent.ACTION_GET_CONTENT);
+        chooseFileIntent.setType("file/*");
+        getActivity().startActivityForResult(chooseFileIntent, MainActivity.MediaConstants.PICK_FILE_REQUEST);
 
-        unhighlight(mFolderSection);
-        unhighlight(mImageSection);
+        LibraryActionDialogFragment.this.getDialog().cancel();
     }
 
     @OnClick(R.id.addFolderSection)
     public void folderClicked(){
-        highlight(mFolderSection);
+        mFolderDialog.create(mFolder, mContext, getFragmentManager());
 
-        unhighlight(mImageSection);
-        unhighlight(mDocumentSection);
+        LibraryActionDialogFragment.this.getDialog().cancel();
+
     }
 
     @OnClick(R.id.addImageSection)
     public void imageClicked(){
-        highlight(mImageSection);
+        mDocumentDialog.uploadImage(mFolder, mContext, getFragmentManager());
 
-        unhighlight(mFolderSection);
-        unhighlight(mDocumentSection);
-    }
-
-    private void highlight(LinearLayout layout){
-        layout.setBackgroundColor(Color.LTGRAY);
-    }
-
-    private void unhighlight(LinearLayout layout){
-        layout.setBackgroundColor(Color.WHITE);
+        LibraryActionDialogFragment.this.getDialog().cancel();
     }
     //endregion
 
@@ -109,52 +101,14 @@ public class LibraryActionDialogFragment extends DialogFragment {
         builder.setTitle(R.string.library_dialog_title);
         builder.setView(v);
 
-        builder.setPositiveButton(R.string.OK, new DialogInterface.OnClickListener() {
+        builder.setPositiveButton(R.string.cancel, new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
-                LinearLayout d = (LinearLayout) v.findViewById(R.id.addDocumentSection);
-                LinearLayout i = (LinearLayout) v.findViewById(R.id.addImageSection);
-                LinearLayout f = (LinearLayout) v.findViewById(R.id.addFolderSection);
-
-
-                if (isHighlighted(d)) {
-                    Intent chooseFileIntent = new Intent(Intent.ACTION_GET_CONTENT);
-                    chooseFileIntent.setType("file/*");
-                    getActivity().startActivityForResult(chooseFileIntent, MainActivity.MediaConstants.PICK_FILE_REQUEST);
-                }
-
-                if (isHighlighted(i)) {
-                    mDocumentDialog.uploadImage(mFolder, mContext, getFragmentManager());
-                }
-
-                if (isHighlighted(f)) {
-                    mFolderDialog.create(mFolder, mContext, getFragmentManager());
-                }
-
                 dialog.cancel();
-
-            }
-
-
-        });
-        builder.setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                LibraryActionDialogFragment.this.getDialog().cancel();
             }
         });
 
         return builder.create();
 
-    }
-
-    private boolean isHighlighted(LinearLayout d) {
-        if(d != null && d.getBackground() != null){
-            Integer b = ((ColorDrawable)d.getBackground()).getColor();
-
-            return !(b == Color.WHITE);
-        }
-
-        return false;
     }
 }
