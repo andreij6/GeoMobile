@@ -145,7 +145,7 @@ public class Document implements Parcelable, ITreeEntity {
 
     //region Methods & Intent String
     public String getNameWithExt() {
-        return Name + Ext;
+        return Name + Ext.toLowerCase();
     }
 
     public static String INTENT = "Document Intent";

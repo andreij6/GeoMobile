@@ -98,8 +98,8 @@ public class MainActivity extends ActionBarActivity
 
         mMapFragment = application.getMapFragment();
 
-        mErrorHandler = application.getErrorsComponent().provideErrorHandler();
-        Thread.setDefaultUncaughtExceptionHandler(mErrorHandler.UncaughtExceptionHandler());
+        //mErrorHandler = application.getErrorsComponent().provideErrorHandler();
+        //Thread.setDefaultUncaughtExceptionHandler(mErrorHandler.UncaughtExceptionHandler());
 
         mIsAdmin = application.getIsAdminUser();
 

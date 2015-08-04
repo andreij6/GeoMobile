@@ -257,5 +257,7 @@
     <string name="map_feature_document_event">Adding Document to Map Feature Window</string>
     <string name="edit">Edit</string>
     <string name="edit_attributes">Edit Attributes</string>
+    <string name="edit_attributes_event">Edit Attributes Request Made</string>
+    <string name="remove">Remove</string>
 
 </resources>

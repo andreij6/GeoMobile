@@ -23,10 +23,6 @@ public class ClientSelectorActivity extends ActionBarActivity implements ActionB
     IGeoErrorHandler mErrorHandler;
 
     //region Getters & Setters
-    public boolean isBackButtonClickOnce() {
-        return mBackButtonClickOnce;
-    }
-
     public void setBackButtonClickOnce(boolean backButtonClickOnce) {
         mBackButtonClickOnce = backButtonClickOnce;
     }

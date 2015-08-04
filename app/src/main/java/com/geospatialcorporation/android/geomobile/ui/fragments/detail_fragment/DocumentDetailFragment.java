@@ -13,6 +13,7 @@ import com.geospatialcorporation.android.geomobile.application;
 import com.geospatialcorporation.android.geomobile.library.DI.Analytics.Models.GoogleAnalyticEvent;
 import com.geospatialcorporation.android.geomobile.library.DI.TreeServices.Interfaces.IDocumentTreeService;
 import com.geospatialcorporation.android.geomobile.library.DI.UIHelpers.Interfaces.DialogHelpers.IDocumentDialog;
+import com.geospatialcorporation.android.geomobile.library.helpers.FileSizeFormatter;
 import com.geospatialcorporation.android.geomobile.models.Document.Document;
 import com.geospatialcorporation.android.geomobile.ui.fragments.dialogs.ItemDetailFragment;
 import com.melnykov.fab.FloatingActionButton;
@@ -66,7 +67,7 @@ public class DocumentDetailFragment extends ItemDetailFragment<Document>  {
         mDocumentName.setText(mEntity.getNameWithExt());
         mFileTypeImage.setImageDrawable(getActivity().getResources().getDrawable(mEntity.getFileTypeDrawable(true)));
         mUploadValue.setText(mEntity.getUploadTime());
-        mFileSizeValue.setText(mEntity.getSize() + "");
+        mFileSizeValue.setText(FileSizeFormatter.format(mEntity.getSize() + ""));
         mBack.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

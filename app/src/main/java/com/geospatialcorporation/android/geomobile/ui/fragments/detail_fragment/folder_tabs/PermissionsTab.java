@@ -27,7 +27,7 @@ public class PermissionsTab extends GeoDetailsTabBase<Folder> implements IPostEx
     private static final String TAG = PermissionsTab.class.getSimpleName();
 
     List<FolderPermissionsResponse> mPermission;
-    @InjectView(R.id.fab) FloatingActionButton mFab;
+    //@InjectView(R.id.fab) FloatingActionButton mFab;
     IGetFolderPermissionTask mTask;
 
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState){
@@ -39,7 +39,7 @@ public class PermissionsTab extends GeoDetailsTabBase<Folder> implements IPostEx
 
         mAnalytics.trackScreen(new GoogleAnalyticEvent().FolderPermissionsScreen());
 
-        mFab.setOnClickListener(showActions);
+        //mFab.setOnClickListener(showActions);
 
         refresh();
 

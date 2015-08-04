@@ -194,15 +194,16 @@ public class LoginActivity extends GoogleApiActivity implements LoaderCallbacks<
         }
 
         // Check for a valid email address.
-        if (TextUtils.isEmpty(email)) {
+        if (email.isEmpty()) {
             mEmailView.setError(getString(R.string.error_field_required));
             focusView = mEmailView;
             cancel = true;
-        } else if (!LoginValidator.isEmailValid(email)) {
+        } else if (!android.util.Patterns.EMAIL_ADDRESS.matcher(email).matches()) {
             mEmailView.setError(getString(R.string.error_invalid_email));
             focusView = mEmailView;
             cancel = true;
         }
+
 
         if (cancel) {
             // There was an error; don't attempt login and focus the first
@@ -218,8 +219,6 @@ public class LoginActivity extends GoogleApiActivity implements LoaderCallbacks<
 
             mUserLoginTask = application.getTasksComponent().provideUserLoginTask();
             mUserLoginTask.Login(new UserLoginModel(email, password, this));
-
-
         }
     }
 

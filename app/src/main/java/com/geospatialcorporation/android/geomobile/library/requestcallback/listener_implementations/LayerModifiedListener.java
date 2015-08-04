@@ -6,9 +6,7 @@ import com.geospatialcorporation.android.geomobile.ui.fragments.tree_fragments.L
 
 import retrofit.client.Response;
 
-/**
- * Created by andre on 6/20/2015.
- */
+
 public class LayerModifiedListener extends RequestListenerBase<Response> implements RequestListener<Response> {
 
     public LayerModifiedListener(boolean shouldRefresh){
@@ -24,7 +22,7 @@ public class LayerModifiedListener extends RequestListenerBase<Response> impleme
         super.onSuccess(response);
 
         if(mShouldRefresh) {
-            ((LayerFragment) mContentFragment).refresh();
+           // ((LayerFragment) mContentFragment).refresh();
 
             LayerSelectorDrawerFragment drawerFragment = getMainActivity().getLayerDrawerFragment();
 

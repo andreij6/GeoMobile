@@ -65,7 +65,11 @@ public class FeatureWindowPanelFragment extends GeoViewFragmentBase {
     protected String getFeatureName() {
         String result = "Feature Info";
         try{
-            result = mResponse.getFeatures().get(0).getAttributes().get(0) + " - Feature Info";
+            String firstPropertyValue = mResponse.getFeatures().get(0).getAttributes().get(0);
+
+            if(firstPropertyValue != null && !firstPropertyValue.isEmpty()) {
+                result = firstPropertyValue + " - Feature Info";
+            }
         } catch (Exception e){
             Log.d(TAG, e.getMessage());
         }

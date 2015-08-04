@@ -12,8 +12,13 @@ import android.widget.TableRow;
 import android.widget.TextView;
 
 import com.geospatialcorporation.android.geomobile.R;
+import com.geospatialcorporation.android.geomobile.application;
+import com.geospatialcorporation.android.geomobile.library.DI.Analytics.Models.GoogleAnalyticEvent;
+import com.geospatialcorporation.android.geomobile.library.DI.TreeServices.Interfaces.ILayerTreeService;
 import com.geospatialcorporation.android.geomobile.models.AttributeValueVM;
+import com.geospatialcorporation.android.geomobile.models.Layers.EditLayerAttributesRequest;
 
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 
@@ -23,11 +28,15 @@ public class EditAttributesDialogFragment extends AttributesActionDialogBase {
     TableLayout mTableLayout;
     HashMap<Integer, PreviousCurrent> mStartingValues;
     HashMap<Integer, String> mRequestValues;
+    ILayerTreeService mService;
 
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState){
         AlertDialog.Builder builder = getDialogBuilder();
         View v = getDialogView(R.layout.dialog_edit_attributes);
+
+        mService = application.getTreeServiceComponent().provideLayerTreeService();
+        mAnalytics = application.getAnalyticsComponent().provideGeoAnalytics();
 
         mTableLayout = (TableLayout)v.findViewById(R.id.editAttributes);
 
@@ -39,18 +48,22 @@ public class EditAttributesDialogFragment extends AttributesActionDialogBase {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
                         //TODO: Validation
-                        //mAnalytics.trackClick(new GoogleAnalyticEvent().CreateFolder());
+                        mAnalytics.trackClick(new GoogleAnalyticEvent().EditAttributes());
                         mRequestValues = compareValues();
 
                         if (mRequestValues != null && !mRequestValues.isEmpty()) {
-                            SendAttributeValuesRequest request = new SendAttributeValuesRequest();
-                            request.setValues(mRequestValues);
-                            request.setId(mData.getColumns().get(0).getFeatureId());
+                            EditLayerAttributesRequest.RequestFeatures features =
+                                    new EditLayerAttributesRequest.RequestFeatures(mData.getColumns().get(0).getFeatureId(), mRequestValues);
 
-                            Toaster(request.toString());
+                            EditLayerAttributesRequest request = new EditLayerAttributesRequest(Arrays.asList(features));
+
+                            mService.editAttributeValue(mData.getLayerId(), request);
+
+                            Toaster("Request Sent");
+                        } else {
+
+                            Toaster("Invalid Request");
                         }
-
-                        Toaster(mRequestValues.isEmpty() + "");
 
                     }
                 }).setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
@@ -125,34 +138,11 @@ public class EditAttributesDialogFragment extends AttributesActionDialogBase {
         }
 
         public boolean areChanged() {
-            return !mValue.equals(mInput.getText().toString());
-        }
-    }
-
-    public static class SendAttributeValuesRequest{
-
-        private String mId;
-        private HashMap<Integer, String> mValues;
-
-        public void setId(String id) {
-            mId = id;
-        }
-
-        public void setValues(HashMap<Integer,String> values) {
-            mValues = values;
-        }
-
-        @Override
-        public String toString() {
-            String result = " Id: " + mId + " Values {";
-
-            for(Integer key : mValues.keySet()){
-                result += " " + key + " : " + mValues.get(key) + " ";
+            if(mValue != null) {
+                return !mValue.equals(mInput.getText().toString());
+            } else {
+                return !mInput.getText().toString().isEmpty();
             }
-
-            result += " } ";
-
-            return result;
         }
     }
 

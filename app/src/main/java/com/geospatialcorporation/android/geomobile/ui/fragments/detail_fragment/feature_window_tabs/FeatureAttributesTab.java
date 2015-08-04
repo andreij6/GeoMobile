@@ -84,7 +84,7 @@ public class FeatureAttributesTab extends FeatureTabBase {
         String FeatureId = feature.getId();
         List<String> attributes = feature.getAttributes();
 
-        AttributeValueVM valueVM = new AttributeValueVM();
+
 
         List<AttributeValueVM.Columns> columnValues = new ArrayList<>(columns.size());
 
@@ -92,9 +92,7 @@ public class FeatureAttributesTab extends FeatureTabBase {
             columnValues.add(new AttributeValueVM.Columns(columns.get(c).getName(), attributes.get(c), columns.get(c).getId(), FeatureId));
         }
 
-        valueVM.setColumns(columnValues);
-
-        return valueVM;
+        return new AttributeValueVM(mResponse.getId(), columnValues);
     }
 
 }

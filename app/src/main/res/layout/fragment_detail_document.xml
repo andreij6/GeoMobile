@@ -3,8 +3,7 @@
                 xmlns:fab="http://schemas.android.com/apk/res-auto"
                 android:orientation="vertical"
                 android:layout_width="fill_parent"
-                android:layout_height="match_parent"
-                >
+                android:layout_height="match_parent">
 
     <ImageView
         android:layout_width="match_parent"
@@ -31,6 +30,19 @@
         android:textColor="@color/white"
         />
 
+    <com.melnykov.fab.FloatingActionButton
+        android:id="@+id/fab"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@drawable/ic_action_add"
+        fab:fab_colorNormal="@color/accent"
+        fab:fab_colorPressed="@color/primary_dark"
+        fab:fab_colorRipple="@color/primary_light"
+        android:layout_marginLeft="16dp"
+        android:layout_marginRight="16dp"
+        android:layout_alignTop="@+id/documentNameTV"
+        android:layout_alignParentEnd="true"
+        android:layout_marginEnd="32dp"/>
 
     <ImageView
         android:layout_width="wrap_content"
@@ -39,7 +51,9 @@
         android:src="@drawable/ic_arrow_left_bold_white_24dp"
         android:contentDescription="@string/back_arrow"
         android:layout_alignTop="@+id/backgroundImageView"
-        android:layout_toEndOf="@+id/documentNameET"/>
+        android:layout_toEndOf="@+id/documentNameET"
+        android:paddingLeft="15dp"
+        android:paddingTop="15dp"/>
 
     <EditText
         android:layout_width="match_parent"
@@ -54,13 +68,12 @@
         android:visibility="gone"/>
 
     <TextView
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:textAppearance="?android:attr/textAppearanceLarge"
         android:id="@+id/fileSizeValue"
-        android:layout_marginTop="40dp"
-        android:layout_below="@+id/documentNameTV"
-        android:layout_alignStart="@+id/backImageView" />
+        android:layout_centerVertical="true"
+        android:layout_alignStart="@+id/fileSizeLabel"/>
 
     <TextView
         android:layout_width="wrap_content"

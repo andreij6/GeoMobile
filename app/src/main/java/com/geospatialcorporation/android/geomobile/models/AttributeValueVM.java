@@ -4,7 +4,13 @@ import java.util.List;
 
 public class AttributeValueVM {
 
+    Integer mLayerId;
     List<Columns> mColumns;
+
+    public AttributeValueVM(Integer layerId, List<Columns> columns){
+        mLayerId = layerId;
+        mColumns = columns;
+    }
 
     public void setColumns(List<Columns> columns) {
         mColumns = columns;
@@ -12,6 +18,10 @@ public class AttributeValueVM {
 
     public List<Columns> getColumns() {
         return mColumns;
+    }
+
+    public int getLayerId(){
+        return mLayerId;
     }
 
     public static class Columns {
