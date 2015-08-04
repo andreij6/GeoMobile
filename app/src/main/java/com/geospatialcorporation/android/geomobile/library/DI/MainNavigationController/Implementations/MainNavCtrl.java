@@ -10,7 +10,7 @@ import com.geospatialcorporation.android.geomobile.ui.LoginActivity;
 import com.geospatialcorporation.android.geomobile.ui.MainActivity;
 import com.geospatialcorporation.android.geomobile.ui.fragments.GoogleMapFragment;
 import com.geospatialcorporation.android.geomobile.ui.fragments.tree_fragments.AccountFragment;
-import com.geospatialcorporation.android.geomobile.ui.fragments.tree_fragments.DocumentFragment;
+import com.geospatialcorporation.android.geomobile.ui.fragments.tree_fragments.LibraryFragment;
 import com.google.android.gms.maps.GoogleMap;
 
 public class MainNavCtrl {
@@ -24,7 +24,7 @@ public class MainNavCtrl {
                 }
                 return mapFragment;
             case ViewConstants.LIBRARY:
-                return new DocumentFragment();
+                return new LibraryFragment();
             case ViewConstants.ACCOUNT:
                 return new AccountFragment();
             case ViewConstants.ADMIN_CLIENTS:
@@ -52,7 +52,7 @@ public class MainNavCtrl {
                 }
                 return mapFragment;
             case ViewConstants.LIBRARY:
-                return new DocumentFragment();
+                return new LibraryFragment();
             case ViewConstants.ACCOUNT:
                 return new AccountFragment();
             case ViewConstants.LOGOUT_REGULAR:

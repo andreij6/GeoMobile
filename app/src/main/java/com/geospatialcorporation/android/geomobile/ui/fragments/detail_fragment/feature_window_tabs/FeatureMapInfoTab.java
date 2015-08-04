@@ -33,4 +33,5 @@ public class FeatureMapInfoTab extends FeatureTabBase {
 
         setTable(data.getList(), mTableLayout, ":");
     }
+
 }

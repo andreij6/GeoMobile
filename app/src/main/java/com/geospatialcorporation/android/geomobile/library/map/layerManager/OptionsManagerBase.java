@@ -46,6 +46,11 @@ public abstract class OptionsManagerBase<T, S> implements IOptionsManager<T, S> 
     }
 
     @Override
+    public Iterable<Integer> getShowingLayerIds() {
+        return mLayerOptions.keySet();
+    }
+
+    @Override
     public List<HashMap<UUID, OptionFeature<T>>> getOption() {
         List<HashMap<UUID, OptionFeature<T>>> values = new ArrayList<>();
         Collection<HashMap<UUID, OptionFeature<T>>> um = mLayerOptions.values();

@@ -41,6 +41,7 @@ public class MarkerOptionsManager extends OptionsManagerBase<MarkerOptions, Mark
             }
         }
     }
+
     @Override
     public void removeMapObject(UUID key){
         mVisibleLayers.get(key).remove();

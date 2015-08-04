@@ -19,7 +19,6 @@ import com.geospatialcorporation.android.geomobile.database.DataRepository.IFull
 import com.geospatialcorporation.android.geomobile.database.DataRepository.Implementations.Documents.DocumentsAppSource;
 import com.geospatialcorporation.android.geomobile.database.DataRepository.Implementations.Folders.FolderAppSource;
 import com.geospatialcorporation.android.geomobile.library.DI.TreeServices.Interfaces.ILayerTreeService;
-import com.geospatialcorporation.android.geomobile.library.util.Dialogs;
 import com.geospatialcorporation.android.geomobile.models.Folders.Folder;
 import com.geospatialcorporation.android.geomobile.models.Layers.Layer;
 import com.geospatialcorporation.android.geomobile.models.Document.Document;
@@ -27,7 +26,7 @@ import com.geospatialcorporation.android.geomobile.ui.adapters.recycler.base.Geo
 import com.geospatialcorporation.android.geomobile.ui.adapters.recycler.base.GeoRecyclerAdapterBase;
 import com.geospatialcorporation.android.geomobile.ui.fragments.detail_fragment.DocumentDetailFragment;
 import com.geospatialcorporation.android.geomobile.ui.fragments.detail_fragment.LayerFolderDetailFragment;
-import com.geospatialcorporation.android.geomobile.ui.fragments.tree_fragments.DocumentFragment;
+import com.geospatialcorporation.android.geomobile.ui.fragments.tree_fragments.LibraryFragment;
 import com.geospatialcorporation.android.geomobile.ui.fragments.detail_fragment.DocumentFolderDetailFragment;
 import com.geospatialcorporation.android.geomobile.ui.fragments.detail_fragment.LayerDetailFragment;
 import com.geospatialcorporation.android.geomobile.ui.fragments.tree_fragments.LayerFragment;
@@ -182,7 +181,7 @@ public class ListItemAdapter extends GeoRecyclerAdapterBase<ListItemAdapter.Hold
             Bundle bundle = new Bundle();
             bundle.putInt(Folder.FOLDER_INTENT, mItem.getId());
 
-            fragment = mViewType.equals(ListItemAdapter.LAYER) ? new LayerFragment() : new DocumentFragment();
+            fragment = mViewType.equals(ListItemAdapter.LAYER) ? new LayerFragment() : new LibraryFragment();
 
             fragment.setArguments(bundle);
 

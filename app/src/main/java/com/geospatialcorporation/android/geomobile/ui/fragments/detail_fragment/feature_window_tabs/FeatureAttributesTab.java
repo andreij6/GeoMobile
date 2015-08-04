@@ -84,8 +84,6 @@ public class FeatureAttributesTab extends FeatureTabBase {
         String FeatureId = feature.getId();
         List<String> attributes = feature.getAttributes();
 
-
-
         List<AttributeValueVM.Columns> columnValues = new ArrayList<>(columns.size());
 
         for(int c = 0; c < columns.size(); c++){

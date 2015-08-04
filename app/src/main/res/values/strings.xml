@@ -259,5 +259,6 @@
     <string name="edit_attributes">Edit Attributes</string>
     <string name="edit_attributes_event">Edit Attributes Request Made</string>
     <string name="remove">Remove</string>
+    <string name="add_attribute">Add Attribute</string>
 
 </resources>

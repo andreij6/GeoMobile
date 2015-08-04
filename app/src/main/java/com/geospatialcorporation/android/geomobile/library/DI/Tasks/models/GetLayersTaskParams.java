@@ -11,7 +11,7 @@ public class GetLayersTaskParams {
     private IPostExecuter mExecuter;
 
     public GetLayersTaskParams(DrawerLayout drawer, IPostExecuter executer){
-        mDrawer =drawer;
+        mDrawer = drawer;
         mExecuter = executer;
     }
 

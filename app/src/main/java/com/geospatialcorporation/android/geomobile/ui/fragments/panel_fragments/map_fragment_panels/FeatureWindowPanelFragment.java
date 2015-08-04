@@ -85,4 +85,5 @@ public class FeatureWindowPanelFragment extends GeoViewFragmentBase {
         mResponse = data.getFeatureQueryResponse().get(0); //should only be one for a feature window
     }
 
+
 }

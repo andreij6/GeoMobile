@@ -48,7 +48,9 @@ public class LayerTreeService implements ILayerTreeService {
 
     @Override
     public void delete(int id) {
-        mLayerService.delete(id, new RequestCallback<>(new LayerModifiedListener(false)));
+        mLayerService.delete(id, new RequestCallback<>(new LayerModifiedListener()));
+
+        mLayerRepo.Remove(id);
     }
 
     @Override
@@ -71,7 +73,7 @@ public class LayerTreeService implements ILayerTreeService {
             layer.setName(name);
             mLayerRepo.update(layer, id);
         } else {
-            Toast.makeText(application.getAppContext(), "Not Authorized to Rename Folder", Toast.LENGTH_LONG).show();
+            Toast.makeText(application.getAppContext(), "Not Authorized to Rename Layer", Toast.LENGTH_LONG).show();
         }
     }
 

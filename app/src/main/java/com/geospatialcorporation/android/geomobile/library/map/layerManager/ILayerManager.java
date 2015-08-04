@@ -7,6 +7,8 @@ import com.google.android.gms.maps.model.PolygonOptions;
 import com.google.android.gms.maps.model.Polyline;
 import com.google.android.gms.maps.model.PolylineOptions;
 
+import java.util.List;
+
 
 /**
  * Created by andre on 6/29/2015.
@@ -24,4 +26,5 @@ public interface ILayerManager {
     String getFeatureId(String id, int shapeCode);
     void showLayers();
     void clearVisibleLayers();
+    List<Integer> getVisibleLayerIds();
 }

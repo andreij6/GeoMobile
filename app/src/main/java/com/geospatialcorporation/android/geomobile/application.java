@@ -109,7 +109,15 @@ public class application extends applicationDIBase {
     }
 
     public static void setLayerHashMap(HashMap<Integer, Layer> layerHashMap) {
-        application.layerHashMap = layerHashMap;
+        if(application.layerHashMap == null || application.layerHashMap.isEmpty()) {
+            application.layerHashMap = layerHashMap;
+        } else {
+            for(Integer key : layerHashMap.keySet()){
+                if(application.layerHashMap.get(key) == null){
+                    application.layerHashMap.put(key, layerHashMap.get(key));
+                }
+            }
+        }
     }
     //endregion
 

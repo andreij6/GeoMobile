@@ -14,6 +14,10 @@ import com.google.android.gms.maps.model.PolygonOptions;
 import com.google.android.gms.maps.model.Polyline;
 import com.google.android.gms.maps.model.PolylineOptions;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+
 /**
  * Created by andre on 6/29/2015.
  */
@@ -46,6 +50,29 @@ public class LayerManager implements ILayerManager {
         mMarkerManager.clearVisibleLayers();
         mPolygonOptionsManager.clearVisibleLayers();
         mPolylineOptionsManager.clearVisibleLayers();
+    }
+
+    @Override
+    public List<Integer> getVisibleLayerIds() {
+        List<Integer> result = new ArrayList<>();
+
+        Iterable<Integer> markerIds = mMarkerManager.getShowingLayerIds();
+        Iterable<Integer> lineIds = mPolylineOptionsManager.getShowingLayerIds();
+        Iterable<Integer> polygonIds = mPolygonOptionsManager.getShowingLayerIds();
+
+        for(Integer marker : markerIds){
+            result.add(marker);
+        }
+
+        for(Integer line : lineIds){
+            result.add(line);
+        }
+
+        for(Integer id : polygonIds){
+            result.add(id);
+        }
+
+        return result;
     }
 
     @Override

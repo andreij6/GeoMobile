@@ -25,4 +25,6 @@ public interface IOptionsManager<T, S> {
     Iterable<S> getShowingLayers();
 
     void clearVisibleLayers();
+
+    Iterable<Integer> getShowingLayerIds();
 }

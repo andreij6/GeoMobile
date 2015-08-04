@@ -15,8 +15,10 @@ import com.geospatialcorporation.android.geomobile.application;
 import com.geospatialcorporation.android.geomobile.library.DI.Analytics.Models.GoogleAnalyticEvent;
 import com.geospatialcorporation.android.geomobile.library.DI.Tasks.Interfaces.IGetLayerAttributeColumnsTask;
 import com.geospatialcorporation.android.geomobile.library.DI.Tasks.models.GetLayerAttributesTaskParams;
+import com.geospatialcorporation.android.geomobile.library.DI.UIHelpers.Interfaces.DialogHelpers.IAttributeDialog;
 import com.geospatialcorporation.android.geomobile.library.DI.UIHelpers.Interfaces.DialogHelpers.ILayerDialog;
 import com.geospatialcorporation.android.geomobile.library.DI.UIHelpers.Interfaces.ILayoutRefresher;
+import com.geospatialcorporation.android.geomobile.library.DI.UIHelpers.UIHelperComponent;
 import com.geospatialcorporation.android.geomobile.library.helpers.TableFactory;
 import com.geospatialcorporation.android.geomobile.ui.Interfaces.IContentRefresher;
 import com.geospatialcorporation.android.geomobile.models.Layers.Layer;
@@ -38,6 +40,7 @@ public class AttributeLayoutTab extends GeoDetailsTabBase<Layer> implements ICon
     IGetLayerAttributeColumnsTask mTask;
     ILayerDialog mLayerDialog;
     ILayoutRefresher mRefresher;
+    IAttributeDialog mAttributeDialog;
 
     @InjectView(R.id.attributesTableLayout) TableLayout mTableLayout;
     @InjectView(R.id.swipe_refresh_layout) SwipeRefreshLayout mSwipeRefreshLayout;
@@ -46,7 +49,7 @@ public class AttributeLayoutTab extends GeoDetailsTabBase<Layer> implements ICon
 
     @OnClick(R.id.addAttribute)
     public void addAttribute(){
-        //mLayerDialog.
+        mAttributeDialog.create(mEntity, getActivity(), getFragmentManager());
     }
 
     @Override
@@ -55,8 +58,10 @@ public class AttributeLayoutTab extends GeoDetailsTabBase<Layer> implements ICon
         ButterKnife.inject(this, v);
         mInflater = inflater;
 
-        mRefresher = application.getUIHelperComponent().provideLayoutRefresher();
-        mLayerDialog = application.getUIHelperComponent().provideLayerDialog();
+        UIHelperComponent component = application.getUIHelperComponent();
+        mRefresher = component.provideLayoutRefresher();
+        mLayerDialog = component.provideLayerDialog();
+        mAttributeDialog = component.provideAttributeDialog();
 
         mSwipeRefreshLayout.setOnRefreshListener(mRefresher.build(mSwipeRefreshLayout, this));
         mSwipeRefreshLayout.setProgressBackgroundColorSchemeColor(getActivity().getResources().getColor(R.color.accent));

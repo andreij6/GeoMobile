@@ -2,12 +2,11 @@ package com.geospatialcorporation.android.geomobile.models.Query.map.response.fe
 
 import com.geospatialcorporation.android.geomobile.models.Layers.Columns;
 
+import java.io.Serializable;
 import java.util.List;
 
-/**
- * Created by andre on 7/2/2015.
- */
-public class FeatureQueryResponse {
+
+public class FeatureQueryResponse implements Serializable {
     List<Columns> Columns;  //Id Name and DataType
     Integer Id;
     List<MapQueryFeatures> Sublayers;

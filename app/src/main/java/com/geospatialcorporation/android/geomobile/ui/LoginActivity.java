@@ -23,6 +23,7 @@ import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.geospatialcorporation.android.geomobile.R;
 import com.geospatialcorporation.android.geomobile.application;
@@ -215,10 +216,12 @@ public class LoginActivity extends GoogleApiActivity implements LoaderCallbacks<
 
             mAnalytics.trackClick(new GoogleAnalyticEvent().LoginAttempt());
 
-            showProgress(true);
+            Toast.makeText(this, "Not Implemented - Try Google Sign-in", Toast.LENGTH_LONG).show();
 
-            mUserLoginTask = application.getTasksComponent().provideUserLoginTask();
-            mUserLoginTask.Login(new UserLoginModel(email, password, this));
+            //showProgress(true);
+
+            //mUserLoginTask = application.getTasksComponent().provideUserLoginTask();
+            //mUserLoginTask.Login(new UserLoginModel(email, password, this));
         }
     }
 

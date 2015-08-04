@@ -18,6 +18,7 @@ import com.geospatialcorporation.android.geomobile.library.DI.Analytics.Models.G
 import com.geospatialcorporation.android.geomobile.library.DI.Tasks.Interfaces.IGetDocumentsTask;
 import com.geospatialcorporation.android.geomobile.library.DI.Tasks.models.GetDocumentsParam;
 import com.geospatialcorporation.android.geomobile.library.DI.TreeServices.Interfaces.IDocumentTreeService;
+import com.geospatialcorporation.android.geomobile.library.DI.UIHelpers.Interfaces.DialogHelpers.IGeneralDialog;
 import com.geospatialcorporation.android.geomobile.library.DI.UIHelpers.Interfaces.ILayoutRefresher;
 import com.geospatialcorporation.android.geomobile.library.helpers.DataHelper;
 import com.geospatialcorporation.android.geomobile.library.sectionbuilders.implementations.LibraryTreeSectionBuilder;
@@ -26,9 +27,7 @@ import com.geospatialcorporation.android.geomobile.models.Folders.Folder;
 import com.geospatialcorporation.android.geomobile.ui.Interfaces.IPostExecuter;
 import com.geospatialcorporation.android.geomobile.ui.MainActivity;
 import com.geospatialcorporation.android.geomobile.ui.fragments.GeoViewFragmentBase;
-import com.geospatialcorporation.android.geomobile.ui.fragments.dialogs.LibraryActionDialogFragment;
 import com.geospatialcorporation.android.geomobile.ui.viewmodels.ListItem;
-import com.melnykov.fab.FloatingActionButton;
 
 
 import java.util.List;
@@ -37,9 +36,9 @@ import butterknife.ButterKnife;
 import butterknife.InjectView;
 import butterknife.OnClick;
 
-public class DocumentFragment extends GeoViewFragmentBase
+public class LibraryFragment extends GeoViewFragmentBase
         implements IContentRefresher, IPostExecuter<Folder> {
-    protected static final String TAG = DocumentFragment.class.getSimpleName();
+    protected static final String TAG = LibraryFragment.class.getSimpleName();
 
     //region Properties
     private Folder mCurrentFolder;
@@ -47,10 +46,20 @@ public class DocumentFragment extends GeoViewFragmentBase
     IGetDocumentsTask mDocumentsTask;
     IDocumentTreeService mUploader;
     DataHelper mHelper;
+    IGeneralDialog mDialog;
     //endregion
 
     @InjectView(R.id.libraryitem_recyclerView) RecyclerView mRecyclerView;
     @InjectView(R.id.swipe_refresh_layout) SwipeRefreshLayout mSwipeRefreshLayout;
+
+    @OnClick(R.id.fab)
+    @SuppressWarnings("unused")
+    public void libraryActionOnClick(){
+
+        mDialog = application.getUIHelperComponent().provideGeneralDialog();
+
+        mDialog.libraryAction(mCurrentFolder, getActivity(), getFragmentManager());
+    }
 
     @Override
     public void onCreate(Bundle savedInstance){

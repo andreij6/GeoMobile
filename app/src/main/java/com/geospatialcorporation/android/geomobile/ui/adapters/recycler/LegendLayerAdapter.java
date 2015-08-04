@@ -16,6 +16,8 @@ import android.widget.Toast;
 
 import com.geospatialcorporation.android.geomobile.R;
 import com.geospatialcorporation.android.geomobile.application;
+import com.geospatialcorporation.android.geomobile.database.DataRepository.IFullDataRepository;
+import com.geospatialcorporation.android.geomobile.database.DataRepository.Implementations.Layers.LayersAppSource;
 import com.geospatialcorporation.android.geomobile.library.DI.Analytics.Models.GoogleAnalyticEvent;
 import com.geospatialcorporation.android.geomobile.library.constants.GeometryTypeCodes;
 import com.geospatialcorporation.android.geomobile.library.services.QueryRestService;
@@ -48,10 +50,12 @@ import butterknife.InjectView;
 public class LegendLayerAdapter extends GeoRecyclerAdapterBase<LegendLayerAdapter.Holder, LegendLayer> {
 
     QueryRestService mService;
+    IFullDataRepository<Layer> mLayerRepo;
 
     public LegendLayerAdapter(Context context, List<LegendLayer> layers) {
         super(context, layers, R.layout.recycler_legend_layers, Holder.class);
         mService = new QueryRestService();
+        mLayerRepo = new LayersAppSource();
     }
 
     @Override
@@ -72,12 +76,16 @@ public class LegendLayerAdapter extends GeoRecyclerAdapterBase<LegendLayerAdapte
         Layer mLayer;
         LegendLayer mLegendLayer;
         Folder mFolder;
+        List<Integer> mLayerIdsToShow;
 
         public Holder(View itemView) {
             super(itemView);
+            mLayerIdsToShow = application.getLayerManager().getVisibleLayerIds();
+
         }
 
         public void bind(LegendLayer llayer) {
+
             if(llayer.getLayer() != null) {
 
                 mLayer = llayer.getLayer();
@@ -95,9 +103,18 @@ public class LegendLayerAdapter extends GeoRecyclerAdapterBase<LegendLayerAdapte
 
                 mLayerName.setText(mLayer.getName());
                 mLayerName.setOnClickListener(ZoomToLayer);
+
+                if(mLayerIdsToShow.contains(mLayer.getId())){
+                    mLayer.setIsShowing(true);
+                }
+
                 isVisibleCB.setChecked(mLayer.getIsShowing());
                 isVisibleCB.setOnClickListener(ToggleShowLayers);
                 gotoSublayer.setOnClickListener(GoToSublayer);
+
+                if(mLayer.getIsShowing()){
+                    isVisibleCB.callOnClick();
+                }
 
                 mLegendLayer.setImageView(geomIV);
                 mLegendLayer.setImageSrc();
@@ -128,6 +145,8 @@ public class LegendLayerAdapter extends GeoRecyclerAdapterBase<LegendLayerAdapte
 
                     application.getMapLayerState().addLayer(mLayer);
 
+                    updateLayerDB(true);
+
                 } else {
                     //remove layer
                     mAnalytics.trackClick(new GoogleAnalyticEvent().HideLayer());
@@ -141,9 +160,17 @@ public class LegendLayerAdapter extends GeoRecyclerAdapterBase<LegendLayerAdapte
                     mLegendLayer.setImageSrc();
 
                     application.getMapLayerState().removeLayer(mLayer);
+
+                    updateLayerDB(false);
                 }
             }
         };
+
+        protected void updateLayerDB(Boolean isShowing) {
+            Layer layer = mLayerRepo.getById(mLayer.getId());
+            layer.setIsShowing(isShowing);
+            mLayerRepo.update(layer, mLayer.getId());
+        }
 
         protected View.OnClickListener GoToLayerFragment = new View.OnClickListener() {
             @Override

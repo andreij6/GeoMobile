@@ -34,6 +34,7 @@ public abstract class ResponseParserBase {
         result.addEntry("Feature Id", features.getId() + "");
         result.addEntry("Shape", shape);
         result.addEntry("Layer", getLayerName());
+        result.addEntry("Filter Layers", "All Features");
     }
 
     protected String getLatLngtString(Point point, ICoordinateConverter converter){

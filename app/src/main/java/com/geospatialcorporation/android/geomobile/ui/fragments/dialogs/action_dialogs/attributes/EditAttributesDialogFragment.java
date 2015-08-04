@@ -22,7 +22,7 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 
-public class EditAttributesDialogFragment extends AttributesActionDialogBase {
+public class EditAttributesDialogFragment extends AttributesActionDialogBase<AttributeValueVM> {
 
     LayoutInflater mInflater;
     TableLayout mTableLayout;

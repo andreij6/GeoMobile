@@ -1,7 +1,7 @@
 package com.geospatialcorporation.android.geomobile.library.requestcallback.listener_implementations;
 
 import com.geospatialcorporation.android.geomobile.library.requestcallback.RequestListener;
-import com.geospatialcorporation.android.geomobile.ui.fragments.tree_fragments.DocumentFragment;
+import com.geospatialcorporation.android.geomobile.ui.fragments.tree_fragments.LibraryFragment;
 
 import retrofit.client.Response;
 
@@ -20,7 +20,7 @@ public class DocumentModifiedListener extends RequestListenerBase<Response> impl
         super.onSuccess(response);
 
         if(mShouldRefresh) {
-            ((DocumentFragment) mContentFragment).refresh();
+            ((LibraryFragment) mContentFragment).refresh();
         }
     }
 }

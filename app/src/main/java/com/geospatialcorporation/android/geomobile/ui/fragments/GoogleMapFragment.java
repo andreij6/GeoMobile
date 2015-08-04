@@ -120,7 +120,6 @@ public class GoogleMapFragment extends GeoViewFragmentBase implements
     @SuppressWarnings("unused")
     @OnClick(R.id.fab)
     public void getLocation(){
-        Toaster(mLocationClient.isConnected() + "");
         Location currentLocation = LocationServices.FusedLocationApi.getLastLocation(mLocationClient);
 
         mAnalytics.trackClick(new GoogleAnalyticEvent().CurrentLocation());
@@ -341,7 +340,7 @@ public class GoogleMapFragment extends GeoViewFragmentBase implements
         super.onResume();
         mMapView.onResume();
         setMapState();
-        mPanelManager.collapse();
+        //mPanelManager.collapse();
         mLayerManager.showLayers();
         mLocationClient.connect();
     }
