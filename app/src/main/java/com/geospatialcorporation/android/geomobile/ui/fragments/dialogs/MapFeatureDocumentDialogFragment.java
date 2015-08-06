@@ -60,8 +60,10 @@ public class MapFeatureDocumentDialogFragment extends GeoDialogFragmentBase impl
                 .setPositiveButton(R.string.add, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
-                        mAnalytics.trackClick(new GoogleAnalyticEvent().MapfeatureDocument());
-                        mLayerTreeService.addMapFeatureDocument(mLayerId, mFeatureId, mSelected.getId());
+                        if (mSelected != null) {
+                            mAnalytics.trackClick(new GoogleAnalyticEvent().MapfeatureDocument());
+                            mLayerTreeService.addMapFeatureDocument(mLayerId, mFeatureId, mSelected.getId());
+                        }
                         dialog.cancel();
                     }
                 })

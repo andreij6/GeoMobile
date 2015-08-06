@@ -28,13 +28,10 @@ import android.widget.Toast;
 import com.geospatialcorporation.android.geomobile.R;
 import com.geospatialcorporation.android.geomobile.application;
 import com.geospatialcorporation.android.geomobile.library.DI.Analytics.Models.GoogleAnalyticEvent;
-import com.geospatialcorporation.android.geomobile.library.DI.SharedPreferences.Implementations.GeoSharedPrefs;
 import com.geospatialcorporation.android.geomobile.library.DI.Tasks.Interfaces.IUserLoginTask;
-import com.geospatialcorporation.android.geomobile.library.DI.Tasks.models.LoginUIModel;
-import com.geospatialcorporation.android.geomobile.library.DI.Tasks.models.UserLoginModel;
+import com.geospatialcorporation.android.geomobile.library.constants.GeoSharedPreferences;
 import com.geospatialcorporation.android.geomobile.library.util.LoginValidator;
 import com.geospatialcorporation.android.geomobile.ui.Interfaces.IFullExecuter;
-import com.geospatialcorporation.android.geomobile.ui.Interfaces.IPostExecuter;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GooglePlayServicesUtil;
 import com.google.android.gms.common.SignInButton;
@@ -147,7 +144,7 @@ public class LoginActivity extends GoogleApiActivity implements LoaderCallbacks<
     }
 
     private void AttemptAutomaticLogin() {
-        String accountName = mGeoSharedPrefs.get(mGeoSharedPrefs.getGoogleAccountName());
+        String accountName = mGeoSharedPrefs.getString(GeoSharedPreferences.GOOGLE_ACCOUNT, null);
 
         if(accountName != null){
             mGoogleAuthTokenService.GetAndUseAuthToken(getGoogleAuthParmaters(accountName, ProgressHelper));

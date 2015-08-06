@@ -10,9 +10,11 @@ import android.widget.EditText;
 import android.widget.TextView;
 
 import com.geospatialcorporation.android.geomobile.R;
+import com.geospatialcorporation.android.geomobile.application;
 import com.geospatialcorporation.android.geomobile.library.DI.Analytics.Models.GoogleAnalyticEvent;
+import com.geospatialcorporation.android.geomobile.library.DI.Map.Interfaces.IMapStateService;
+import com.geospatialcorporation.android.geomobile.library.DI.Map.Models.BookmarkMapStateSaveRequest;
 import com.geospatialcorporation.android.geomobile.library.constants.GeoPanel;
-import com.geospatialcorporation.android.geomobile.library.helpers.MapStateManager;
 import com.geospatialcorporation.android.geomobile.library.panelmanager.ISlidingPanelManager;
 import com.geospatialcorporation.android.geomobile.library.panelmanager.PanelManager;
 import com.geospatialcorporation.android.geomobile.ui.fragments.GeoViewFragmentBase;
@@ -28,6 +30,7 @@ import butterknife.OnClick;
 public class BookmarkPanelFragment extends GeoViewFragmentBase {
     View mView;
     @InjectView(R.id.bookMarkNameInput)EditText mName;
+    IMapStateService mMapStateService;
 
     //region Getters && Setters
     public GoogleMap getMap() {
@@ -63,15 +66,14 @@ public class BookmarkPanelFragment extends GeoViewFragmentBase {
 
         SetTitle(R.string.add_bookmark);
 
+        mMapStateService = application.getMapComponent().provideMapStateService();
         sendScreenName();
 
         mName.setOnEditorActionListener(new TextView.OnEditorActionListener() {
             @Override
             public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
                 if (actionId == EditorInfo.IME_ACTION_DONE) {
-                    MapStateManager msm = new MapStateManager(getActivity());
-
-                    msm.saveMapStateForBookMark(mMap, mName.getText().toString());
+                    mMapStateService.saveBookmarkState(new BookmarkMapStateSaveRequest(mMap, mName.getText().toString()));
 
                     mPanelManager.hide();
 

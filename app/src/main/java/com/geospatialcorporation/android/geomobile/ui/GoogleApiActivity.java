@@ -13,8 +13,8 @@ import com.geospatialcorporation.android.geomobile.library.DI.Analytics.Interfac
 import com.geospatialcorporation.android.geomobile.library.DI.Authentication.IGoogleAuthTokenService;
 import com.geospatialcorporation.android.geomobile.library.DI.Authentication.Implementations.GoogleAuthTokenService;
 import com.geospatialcorporation.android.geomobile.library.DI.ErrorHandler.Interfaces.IGeoErrorHandler;
-import com.geospatialcorporation.android.geomobile.library.DI.SharedPreferences.IGeoSharedPrefs;
-import com.geospatialcorporation.android.geomobile.library.DI.SharedPreferences.Implementations.GeoSharedPrefs;
+import com.geospatialcorporation.android.geomobile.library.DI.SharedPreferences.Interfaces.IGeoSharedPrefs;
+import com.geospatialcorporation.android.geomobile.library.constants.GeoSharedPreferences;
 import com.geospatialcorporation.android.geomobile.library.helpers.ProgressDialogHelper;
 import com.google.android.gms.common.AccountPicker;
 import com.google.android.gms.common.ConnectionResult;
@@ -134,7 +134,8 @@ public class GoogleApiActivity extends Activity implements
             if (responseCode == RESULT_OK) {
                 accountName = data.getStringExtra(AccountManager.KEY_ACCOUNT_NAME);
 
-                mGeoSharedPrefs.add(mGeoSharedPrefs.getGoogleAccountName(), accountName);
+                mGeoSharedPrefs.add(GeoSharedPreferences.GOOGLE_ACCOUNT, accountName);
+                mGeoSharedPrefs.apply();
 
                 ProgressHelper = new ProgressDialogHelper(this);
 

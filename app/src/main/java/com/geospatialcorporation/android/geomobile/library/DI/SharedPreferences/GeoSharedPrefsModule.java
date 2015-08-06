@@ -1,6 +1,7 @@
 package com.geospatialcorporation.android.geomobile.library.DI.SharedPreferences;
 
-import com.geospatialcorporation.android.geomobile.library.DI.SharedPreferences.Implementations.GeoSharedPrefs;
+import com.geospatialcorporation.android.geomobile.library.DI.SharedPreferences.Implementations.GeoUndergroundSharedPrefs;
+import com.geospatialcorporation.android.geomobile.library.DI.SharedPreferences.Interfaces.IGeoSharedPrefs;
 
 import javax.inject.Singleton;
 
@@ -11,6 +12,6 @@ import dagger.Provides;
 public class GeoSharedPrefsModule {
 
     @Provides @Singleton
-    IGeoSharedPrefs provideGeoSharedPrefs(){ return new GeoSharedPrefs(); }
+    GeoUndergroundSharedPrefs provideGeoSharedPrefs(){ return new GeoUndergroundSharedPrefs(); }
 
 }

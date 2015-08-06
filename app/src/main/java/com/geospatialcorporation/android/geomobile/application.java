@@ -10,10 +10,11 @@ import com.facebook.stetho.Stetho;
 import com.facebook.stetho.okhttp.StethoInterceptor;
 import com.geospatialcorporation.android.geomobile.library.DI.Analytics.Interfaces.IGeoAnalytics;
 import com.geospatialcorporation.android.geomobile.library.DI.Analytics.Models.GoogleAnalyticEvent;
-import com.geospatialcorporation.android.geomobile.library.DI.SharedPreferences.IGeoSharedPrefs;
-import com.geospatialcorporation.android.geomobile.library.DI.SharedPreferences.Implementations.GeoSharedPrefs;
+import com.geospatialcorporation.android.geomobile.library.DI.SharedPreferences.GeoSharedPrefsBase;
+import com.geospatialcorporation.android.geomobile.library.DI.SharedPreferences.Interfaces.IGeoSharedPrefs;
 import com.geospatialcorporation.android.geomobile.library.constants.Domains;
 import com.geospatialcorporation.android.geomobile.library.constants.GeoPanel;
+import com.geospatialcorporation.android.geomobile.library.constants.GeoSharedPreferences;
 import com.geospatialcorporation.android.geomobile.library.map.layerManager.ILayerManager;
 import com.geospatialcorporation.android.geomobile.library.map.layerManager.LayerManager;
 import com.geospatialcorporation.android.geomobile.models.Bookmarks.Bookmark;
@@ -394,7 +395,8 @@ public class application extends applicationDIBase {
         folderHashMap = null;
 
         IGeoSharedPrefs prefs = getGeoSharedPrefsComponent().provideGeoSharedPrefs();
-        prefs.remove(prefs.getGoogleAccountName());
+        prefs.remove(GeoSharedPreferences.GOOGLE_ACCOUNT);
+        prefs.commit();
 
         IGeoAnalytics analytics = getAnalyticsComponent().provideGeoAnalytics();
         analytics.trackClick(new GoogleAnalyticEvent().Logout());

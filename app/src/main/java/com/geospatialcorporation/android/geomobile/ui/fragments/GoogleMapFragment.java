@@ -20,7 +20,6 @@ import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentSender;
-import android.graphics.drawable.shapes.Shape;
 import android.location.Location;
 import android.os.Bundle;
 import android.provider.Settings;
@@ -33,26 +32,22 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Toast;
 
 import com.geospatialcorporation.android.geomobile.R;
 import com.geospatialcorporation.android.geomobile.application;
 import com.geospatialcorporation.android.geomobile.library.DI.Analytics.Models.GoogleAnalyticEvent;
+import com.geospatialcorporation.android.geomobile.library.DI.Map.Interfaces.IMapStateService;
+import com.geospatialcorporation.android.geomobile.library.DI.Map.Models.MapStateSaveRequest;
 import com.geospatialcorporation.android.geomobile.library.constants.GeoPanel;
-import com.geospatialcorporation.android.geomobile.library.constants.ViewModes;
-import com.geospatialcorporation.android.geomobile.library.helpers.GeoDialogHelper;
-import com.geospatialcorporation.android.geomobile.library.helpers.MapStateManager;
 import com.geospatialcorporation.android.geomobile.library.map.layerManager.ILayerManager;
 import com.geospatialcorporation.android.geomobile.library.map.layerManager.LayerManager;
 import com.geospatialcorporation.android.geomobile.library.panelmanager.ISlidingPanelManager;
 import com.geospatialcorporation.android.geomobile.library.panelmanager.PanelManager;
 import com.geospatialcorporation.android.geomobile.library.services.QueryRestService;
 import com.geospatialcorporation.android.geomobile.library.viewmode.IViewMode;
-import com.geospatialcorporation.android.geomobile.library.viewmode.implementations.FullScreenMode;
 import com.geospatialcorporation.android.geomobile.library.viewmode.implementations.QueryMode;
 import com.geospatialcorporation.android.geomobile.library.viewmode.implementations.SearchMode;
 import com.geospatialcorporation.android.geomobile.models.Layers.Layer;
-import com.geospatialcorporation.android.geomobile.models.Query.map.response.featurewindow.FeatureQueryResponse;
 import com.geospatialcorporation.android.geomobile.models.Query.map.response.featurewindow.ParcelableFeatureQueryResponse;
 import com.geospatialcorporation.android.geomobile.ui.Interfaces.IViewModeListener;
 import com.geospatialcorporation.android.geomobile.ui.MainActivity;
@@ -67,7 +62,6 @@ import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.MapView;
 import com.google.android.gms.maps.MapsInitializer;
-import com.google.android.gms.maps.Projection;
 import com.google.android.gms.maps.model.CameraPosition;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.LatLngBounds;
@@ -78,9 +72,6 @@ import com.google.android.gms.maps.model.Polyline;
 import com.google.maps.android.PolyUtil;
 import com.melnykov.fab.FloatingActionButton;
 import com.sothree.slidinguppanel.SlidingUpPanelLayout;
-
-import java.util.Collection;
-import java.util.List;
 
 import butterknife.ButterKnife;
 import butterknife.InjectView;
@@ -104,6 +95,7 @@ public class GoogleMapFragment extends GeoViewFragmentBase implements
     IViewMode mViewMode;
     GoogleApiClient mLocationClient;
     ISlidingPanelManager mPanelManager;
+    IMapStateService mMapStateService;
     ILayerManager mLayerManager;
     @InjectView(R.id.map) MapView mMapView;
     @InjectView(R.id.sliding_layout) SlidingUpPanelLayout mPanel;
@@ -165,8 +157,6 @@ public class GoogleMapFragment extends GeoViewFragmentBase implements
         options.position(ll);
 
         mCurrentLocationMaker = mMap.addMarker(options);
-
-
     }
 
     @SuppressWarnings("unused")
@@ -206,6 +196,7 @@ public class GoogleMapFragment extends GeoViewFragmentBase implements
         }
 
         application.setMapFragment();
+        mMapStateService = application.getMapComponent().provideMapStateService();
 
     }
 
@@ -234,7 +225,11 @@ public class GoogleMapFragment extends GeoViewFragmentBase implements
         mMap.setOnMarkerClickListener(new GoogleMap.OnMarkerClickListener() {
             @Override
             public boolean onMarkerClick(Marker marker) {
-                getFeatureWindow(marker.getId(), LayerManager.POINT);
+                if(mCurrentLocationMaker != null && marker.getId() == mCurrentLocationMaker.getId()) {
+                    //show the user their position info
+                } else {
+                    getFeatureWindow(marker.getId(), LayerManager.POINT);
+                }
                 return false;
             }
         });
@@ -482,15 +477,12 @@ public class GoogleMapFragment extends GeoViewFragmentBase implements
     //endregion
 
     protected void saveMapState() {
-        MapStateManager msm = new MapStateManager(getActivity());
-        msm.saveMapState(mMap);
+        mMapStateService.saveMapState(new MapStateSaveRequest(mMap));
     }
 
     protected void setMapState() {
-        MapStateManager msm = new MapStateManager(getActivity());
-
-        CameraPosition position = msm.getSavedCameraPosition();
-        Integer mapType = msm.getSavedMapType();
+        CameraPosition position = mMapStateService.getSavedCameraPosition();
+        Integer mapType = mMapStateService.getSavedMapType();
 
         mMap.setMapType(mapType);
 

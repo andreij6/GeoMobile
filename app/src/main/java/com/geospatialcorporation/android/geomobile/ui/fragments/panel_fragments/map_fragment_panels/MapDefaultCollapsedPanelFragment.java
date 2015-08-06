@@ -30,11 +30,11 @@ public class MapDefaultCollapsedPanelFragment extends GeoViewFragmentBase {
     View mView;
     ISlidingPanelManager mPanelManager;
 
-    @InjectView(R.id.title) TextView Title;
+    //@InjectView(R.id.title) TextView Title;
     //@InjectView(R.id.bookmarkBtn) Button mBookmark;
     //@InjectView(R.id.quickSearchBtn) Button mSearch;
     //@InjectView(R.id.queryBtn) Button mQuery;
-    @InjectView(R.id.panelAnchor) ImageView mAnchor;
+    //@InjectView(R.id.panelAnchor) ImageView mAnchor;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState){
@@ -74,19 +74,6 @@ public class MapDefaultCollapsedPanelFragment extends GeoViewFragmentBase {
     //    }
     //};
 
-    protected View.OnClickListener anchorPanel = new View.OnClickListener(){
-
-        @Override
-        public void onClick(View v) {
-            if(mPanelManager.getPanelState() == SlidingUpPanelLayout.PanelState.ANCHORED){
-                mPanelManager.collapse();
-                mAnchor.setImageDrawable(null);
-            } else {
-                mPanelManager.anchor();
-                mAnchor.setImageDrawable(getActivity().getResources().getDrawable(R.drawable.ic_close_circle_white_24dp));
-            }
-        }
-    };
     //endregion
 
     //private void setViewMode(String viewMode) {

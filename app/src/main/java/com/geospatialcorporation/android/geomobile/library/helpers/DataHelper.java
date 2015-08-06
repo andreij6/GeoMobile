@@ -18,10 +18,6 @@ import java.util.List;
 
 public class DataHelper {
 
-    private QuickSearchResult mDocumentResults;
-    private QuickSearchResult mLayerResults;
-    private QuickSearchResult mFolderResults;
-
     public ArrayList<Folder> getFoldersRecursively(Folder folder, Folder parentFolder) {
         ArrayList<Folder> result = new ArrayList<>();
 

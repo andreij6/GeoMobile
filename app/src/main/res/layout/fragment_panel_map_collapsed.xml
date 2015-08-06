@@ -4,22 +4,7 @@
                 android:layout_height="match_parent"
                 android:background="@color/primary_dark">
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:textAppearance="?android:attr/textAppearanceLarge"
-        android:text="@string/map_window_title"
-        android:id="@+id/title"
-        android:textColor="@color/white"
-        android:layout_marginTop="0dp"
-        android:layout_alignParentTop="true"
-        android:layout_alignParentStart="true"
-        android:paddingTop="8dp"
-        android:paddingBottom="8dp"
-        android:layout_toStartOf="@+id/panelAnchor"
-        android:paddingLeft="10dp"/>
-
-   <!-- <Button
+    <!-- <Button
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="@string/query"
@@ -45,13 +30,34 @@
         android:layout_below="@+id/quickSearchBtn"
         android:layout_centerHorizontal="true"/> -->
 
-    <ImageView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:id="@+id/panelAnchor"
-        android:layout_marginEnd="27dp"
-        android:layout_alignBottom="@+id/title"
-        android:layout_alignParentEnd="true"
-        android:layout_marginBottom="28dp"/>
+    <LinearLayout
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_alignParentTop="true"
+        android:layout_toEndOf="@+id/imageView2">
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/imageView3"
+            android:layout_alignParentTop="true"
+            android:layout_toEndOf="@+id/imageView2"
+            android:layout_weight="1"
+            android:src="@drawable/ic_map_marker_circle_white_48dp"
+            android:paddingTop="5dp"
+            android:paddingBottom="5dp"/>
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/imageView2"
+            android:layout_alignParentTop="true"
+            android:layout_alignParentStart="true"
+            android:layout_weight="1"
+            android:src="@drawable/ic_layers_white_48dp"
+            android:paddingTop="5dp"
+            android:paddingBottom="5dp"/>
+    </LinearLayout>
 
 </RelativeLayout>
