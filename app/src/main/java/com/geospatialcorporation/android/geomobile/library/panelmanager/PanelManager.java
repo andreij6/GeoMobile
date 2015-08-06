@@ -2,7 +2,6 @@ package com.geospatialcorporation.android.geomobile.library.panelmanager;
 
 import com.geospatialcorporation.android.geomobile.application;
 import com.geospatialcorporation.android.geomobile.library.constants.GeoPanel;
-import com.geospatialcorporation.android.geomobile.library.panelmanager.paneltype.AttributeSlidingPanel;
 import com.geospatialcorporation.android.geomobile.library.panelmanager.paneltype.GeoSlidingPanelBase;
 import com.geospatialcorporation.android.geomobile.library.panelmanager.paneltype.MapSlidingPanel;
 import com.geospatialcorporation.android.geomobile.library.panelmanager.paneltype.SublayerSlidingPanel;
@@ -25,9 +24,9 @@ public class PanelManager implements ISlidingPanelManager {
             case GeoPanel.SUBLAYER:
                 mGeoPanel = new SublayerSlidingPanel(panel);
                 break;
-            case GeoPanel.LAYER_ATTRIBUTE:
-                mGeoPanel = new AttributeSlidingPanel(panel);
-                break;
+            //case GeoPanel.LAYER_ATTRIBUTE:
+            //    mGeoPanel = new AttributeSlidingPanel(panel);
+            //    break;
             default:
                 break;
         }

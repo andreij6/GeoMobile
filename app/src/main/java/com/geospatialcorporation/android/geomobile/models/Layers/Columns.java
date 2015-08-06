@@ -1,5 +1,7 @@
 package com.geospatialcorporation.android.geomobile.models.Layers;
 
+import java.util.List;
+
 /**
  * Created by andre on 6/19/2015.
  */
@@ -80,5 +82,4 @@ public class Columns {
         IsHidden = lac.getIsHidden();
         DefaultValue = lac.getDefaultValue();
     }
-
 }

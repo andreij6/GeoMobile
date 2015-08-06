@@ -5,32 +5,31 @@ import android.widget.EditText;
 import android.widget.Spinner;
 
 import com.geospatialcorporation.android.geomobile.models.Layers.Layer;
-import com.geospatialcorporation.android.geomobile.ui.fragments.GeoViewFragmentBase;
-import com.geospatialcorporation.android.geomobile.ui.fragments.panel_fragments.AttributeDefaultCollapsedPanelFragment;
+import com.geospatialcorporation.android.geomobile.ui.Interfaces.IPostExecuter;
 
 public class GetOrderNumberParams {
     private Layer mLayer;
-    private GeoViewFragmentBase mViewFragment;
     private CheckBox mCheckBox;
     private Spinner mColumnTypes;
     private EditText mName;
     private EditText mDefault;
+    private IPostExecuter mExecuter;
 
-    public GetOrderNumberParams(Layer layer, AttributeDefaultCollapsedPanelFragment attributeDefaultCollapsedPanelFragment, CheckBox isHidden, Spinner columnTypes, EditText nameET, EditText defaultValueET) {
+    public GetOrderNumberParams(Layer layer, CheckBox isHidden, Spinner columnTypes, EditText nameET, EditText defaultValueET, IPostExecuter executer) {
         mLayer = layer;
-        mViewFragment = attributeDefaultCollapsedPanelFragment;
         mCheckBox = isHidden;
         mColumnTypes = columnTypes;
         mName = nameET;
         mDefault = defaultValueET;
+        mExecuter = executer;
     }
 
     public Layer getLayer() {
         return mLayer;
     }
 
-    public GeoViewFragmentBase getViewFragment() {
-        return mViewFragment;
+    public IPostExecuter getExecuter(){
+        return mExecuter;
     }
 
     public CheckBox getCheckBox() {

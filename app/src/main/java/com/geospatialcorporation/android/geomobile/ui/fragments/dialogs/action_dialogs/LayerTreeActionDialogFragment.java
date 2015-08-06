@@ -25,7 +25,6 @@ import butterknife.OnClick;
 
 public class LayerTreeActionDialogFragment extends GeoDialogFragmentBase {
     //region Getters & Setters
-
     public Folder getFolder() {
         return mFolder;
     }
@@ -46,23 +45,18 @@ public class LayerTreeActionDialogFragment extends GeoDialogFragmentBase {
     //region OnClick
     @OnClick(R.id.addLayerSection)
     public void layerSectionClicked(){
-        highlight(mLayerSection);
-        unhighlight(mFolderSection);
+        mLayerDialog.create(mFolder, mContext, getFragmentManager());
+
+        LayerTreeActionDialogFragment.this.getDialog().cancel();
     }
 
     @OnClick(R.id.addLayerFolderSection)
     public void folderSectionClicked(){
-        highlight(mFolderSection);
-        unhighlight(mLayerSection);
+        mFolderDialog.create(mFolder, mContext, getFragmentManager());
+
+        LayerTreeActionDialogFragment.this.getDialog().cancel();
     }
 
-    private void highlight(LinearLayout layout){
-        layout.setBackgroundColor(Color.LTGRAY);
-    }
-
-    private void unhighlight(LinearLayout layout){
-        layout.setBackgroundColor(Color.WHITE);
-    }
     //endregion
 
     @Override
@@ -82,36 +76,14 @@ public class LayerTreeActionDialogFragment extends GeoDialogFragmentBase {
         builder.setTitle(R.string.layer_dialog_title);
         builder.setView(v);
 
-        builder.setPositiveButton(R.string.OK, new DialogInterface.OnClickListener() {
+        builder.setPositiveButton(R.string.cancel, new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
-
-                LinearLayout f = (LinearLayout)v.findViewById(R.id.addLayerFolderSection);
-                LinearLayout l = (LinearLayout)v.findViewById(R.id.addLayerSection);
-
-                if (isHighlighted(f)) {
-                    mFolderDialog.create(mFolder, mContext, getFragmentManager());
-                }
-
-                if(isHighlighted(l)){
-                    mLayerDialog.create(mFolder, mContext, getFragmentManager());
-                }
-
-            }
-        }).setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                LayerTreeActionDialogFragment.this.getDialog().cancel();
+                dialog.cancel();
             }
         });
 
         return builder.create();
-    }
-
-    private boolean isHighlighted(LinearLayout d) {
-        Integer b = ((ColorDrawable)d.getBackground()).getColor();
-
-        return !(b == Color.WHITE);
     }
 
 }

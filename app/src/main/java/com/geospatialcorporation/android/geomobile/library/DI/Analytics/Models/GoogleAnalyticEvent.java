@@ -240,5 +240,10 @@ public class GoogleAnalyticEvent extends AnalyticEvent {
         this.setLabel(R.string.edit_attributes_event);
         return this;
     }
+
+    public GoogleAnalyticEvent CreateAttribute() {
+        this.setLabel(R.string.create_attribute);
+        return this;
+    }
     //endregion
 }

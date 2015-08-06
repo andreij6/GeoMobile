@@ -1,5 +1,6 @@
 package com.geospatialcorporation.android.geomobile.library.rest;
 
+import com.geospatialcorporation.android.geomobile.models.AddAttributeRequest;
 import com.geospatialcorporation.android.geomobile.models.Layers.LayerAttributeColumn;
 import com.geospatialcorporation.android.geomobile.models.Layers.Columns;
 
@@ -22,7 +23,7 @@ public interface AttributeService {
     List<LayerAttributeColumn> getLayerAttributeColumns(@Path("layerId") int layerId);
 
     @PUT("/API/Layers/{layerId}/Attributes/Columns")
-    void addLayerAttributeColumn(@Path("layerId") int layerId, @Body Columns data, Callback<Response> cb);
+    void addLayerAttributeColumn(@Path("layerId") int layerId, @Body AddAttributeRequest data, Callback<Response> cb);
 
     @DELETE("/API/Layers/{id}/Attributes/Columns/{columnId}")
     void deleteColumn(@Path("id") int layerId, @Path("columnId") int columnId);

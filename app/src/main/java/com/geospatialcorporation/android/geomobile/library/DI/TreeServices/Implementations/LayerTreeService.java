@@ -11,6 +11,7 @@ import com.geospatialcorporation.android.geomobile.library.requestcallback.liste
 import com.geospatialcorporation.android.geomobile.library.requestcallback.listener_implementations.LayerModifiedListener;
 import com.geospatialcorporation.android.geomobile.library.rest.AttributeService;
 import com.geospatialcorporation.android.geomobile.library.rest.LayerService;
+import com.geospatialcorporation.android.geomobile.models.AddAttributeRequest;
 import com.geospatialcorporation.android.geomobile.models.Layers.Columns;
 import com.geospatialcorporation.android.geomobile.models.Layers.EditLayerAttributesRequest;
 import com.geospatialcorporation.android.geomobile.models.Layers.Layer;
@@ -19,6 +20,7 @@ import com.geospatialcorporation.android.geomobile.models.Layers.LayerCreateRequ
 import com.geospatialcorporation.android.geomobile.models.Layers.LayerDetailsVm;
 import com.geospatialcorporation.android.geomobile.models.RenameRequest;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import retrofit.Callback;
@@ -36,7 +38,6 @@ public class LayerTreeService implements ILayerTreeService {
         mAttributeService = application.getRestAdapter().create(AttributeService.class);
         mLayerRepo = repository;
     }
-
 
     //region Layer
     @Override
@@ -91,7 +92,7 @@ public class LayerTreeService implements ILayerTreeService {
     }
 
     @Override
-    public void addColumn(int id, Columns data) {
+    public void addColumn(int id, AddAttributeRequest data) {
         mAttributeService.addLayerAttributeColumn(id, data, new RequestCallback<>(new AttributeColumnModifiedListener()));
     }
 

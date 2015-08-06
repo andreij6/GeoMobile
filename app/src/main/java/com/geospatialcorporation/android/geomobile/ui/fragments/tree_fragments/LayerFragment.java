@@ -41,6 +41,16 @@ public class LayerFragment extends GeoViewFragmentBase implements IContentRefres
     @InjectView(R.id.layer_recyclerView) RecyclerView mRecycler;
     @InjectView(R.id.swipe_refresh_layout) SwipeRefreshLayout mSwipeRefreshLayout;
 
+    @OnClick(R.id.fab)
+    @SuppressWarnings("unused")
+    public void layerActionClick(){
+        LayerTreeActionDialogFragment l = new LayerTreeActionDialogFragment();
+
+        l.setContext(getActivity());
+        l.setFolder(mCurrentFolder);
+        l.show(getFragmentManager(), "layer actions");
+    }
+
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
