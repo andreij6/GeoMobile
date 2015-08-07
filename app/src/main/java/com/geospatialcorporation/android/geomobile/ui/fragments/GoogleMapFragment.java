@@ -63,6 +63,7 @@ import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.MapView;
 import com.google.android.gms.maps.MapsInitializer;
+import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.CameraPosition;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.LatLngBounds;
@@ -319,7 +320,12 @@ public class GoogleMapFragment extends GeoViewFragmentBase implements
     }
 
     protected void highlight(Marker feature){
+        MarkerOptions options = new MarkerOptions();
+        options.anchor(0.5f, 0.5f);
+        options.position(feature.getPosition());
+        options.icon(BitmapDescriptorFactory.fromResource(R.drawable.ic_crosshairs_gps_white_24dp));
 
+        mHighlightedMarker = mMap.addMarker(options);
     }
 
     protected int invertColor(int color){

@@ -131,7 +131,6 @@ public class GeoMapper implements IGeoMapper  {
         @Override
         protected void onProgressUpdate(Integer... progress) {
             mProgressBar.setProgress(progress[0]);
-            Log.d(TAG, progress[0] + "");
         }
 
         @Override

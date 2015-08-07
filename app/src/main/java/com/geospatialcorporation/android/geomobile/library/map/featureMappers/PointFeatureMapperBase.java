@@ -27,6 +27,7 @@ public abstract class PointFeatureMapperBase extends SingleFeatureMapperBase<Mar
     @Override
     public void drawFeature(Geometry geometry, MarkerOptions options) {
         options.position(getLatLng(geometry));
+        options.anchor(0.5f, 0.5f);
         options.flat(true);
     }
 
