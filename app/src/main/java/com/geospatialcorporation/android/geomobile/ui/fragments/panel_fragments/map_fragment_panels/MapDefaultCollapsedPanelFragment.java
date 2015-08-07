@@ -9,6 +9,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.geospatialcorporation.android.geomobile.R;
+import com.geospatialcorporation.android.geomobile.application;
 import com.geospatialcorporation.android.geomobile.library.constants.GeoPanel;
 import com.geospatialcorporation.android.geomobile.library.constants.ViewModes;
 import com.geospatialcorporation.android.geomobile.library.panelmanager.ISlidingPanelManager;
@@ -20,6 +21,7 @@ import com.sothree.slidinguppanel.SlidingUpPanelLayout;
 
 import butterknife.ButterKnife;
 import butterknife.InjectView;
+import butterknife.OnClick;
 
 /**
  * Created by andre on 6/5/2015.
@@ -36,12 +38,27 @@ public class MapDefaultCollapsedPanelFragment extends GeoViewFragmentBase {
     //@InjectView(R.id.queryBtn) Button mQuery;
     //@InjectView(R.id.panelAnchor) ImageView mAnchor;
 
+    @OnClick(R.id.currentLocation)
+    public void currentLocation(){
+        GoogleMapFragment mapFragment = (GoogleMapFragment)application.getMainActivity().getContentFragment();
+
+        mapFragment.getLocation();
+    }
+
+    @OnClick(R.id.showLayers)
+    public void showLayers(){
+        GoogleMapFragment mapFragment = (GoogleMapFragment)application.getMainActivity().getContentFragment();
+
+        mapFragment.showLayersDrawer();
+    }
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState){
         mView = inflater.inflate(R.layout.fragment_panel_map_collapsed, container, false);
         ButterKnife.inject(this, mView);
 
         mPanelManager = new PanelManager(GeoPanel.MAP);
+        mPanelManager.touch(false);
 
         //mBookmark.setOnClickListener(setBookmarkMode);
         //mSearch.setOnClickListener(performQuickSearch);

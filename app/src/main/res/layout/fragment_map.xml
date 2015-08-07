@@ -30,7 +30,7 @@
                 map:cameraZoom="3" />
 
             <!-- Normal Map Mode Buttons -->
-            <com.melnykov.fab.FloatingActionButton
+            <!--<com.melnykov.fab.FloatingActionButton
                 android:id="@+id/fab"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -57,7 +57,7 @@
                 fab:fab_colorRipple="@color/primary_light"
                 android:layout_below="@+id/fab"
                 android:layout_alignEnd="@+id/fab"
-                />
+                />-->
 
             <!-- Query Mode Buttons -->
             <com.melnykov.fab.FloatingActionButton

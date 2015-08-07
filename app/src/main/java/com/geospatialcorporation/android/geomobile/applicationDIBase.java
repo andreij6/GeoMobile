@@ -9,7 +9,6 @@ import com.geospatialcorporation.android.geomobile.library.DI.Authentication.Dag
 import com.geospatialcorporation.android.geomobile.library.DI.ErrorHandler.DaggerErrorsComponent;
 import com.geospatialcorporation.android.geomobile.library.DI.ErrorHandler.ErrorsComponent;
 import com.geospatialcorporation.android.geomobile.library.DI.Map.DaggerMapComponent;
-import com.geospatialcorporation.android.geomobile.library.DI.Map.Interfaces.IMapStateService;
 import com.geospatialcorporation.android.geomobile.library.DI.Map.MapComponent;
 import com.geospatialcorporation.android.geomobile.library.DI.SharedPreferences.DaggerGeoSharedPrefsComponent;
 import com.geospatialcorporation.android.geomobile.library.DI.SharedPreferences.GeoSharedPrefsComponent;
@@ -19,7 +18,6 @@ import com.geospatialcorporation.android.geomobile.library.DI.TreeServices.Dagge
 import com.geospatialcorporation.android.geomobile.library.DI.TreeServices.TreeServiceComponent;
 import com.geospatialcorporation.android.geomobile.library.DI.UIHelpers.DaggerUIHelperComponent;
 import com.geospatialcorporation.android.geomobile.library.DI.UIHelpers.UIHelperComponent;
-import com.geospatialcorporation.android.geomobile.library.rest.TreeService;
 
 public abstract class applicationDIBase extends Application {
 

@@ -7,6 +7,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.geospatialcorporation.android.geomobile.R;
@@ -36,6 +37,11 @@ public class FeatureWindowPanelFragment extends GeoViewFragmentBase {
     protected FeatureQueryResponse mResponse;
     @InjectView(R.id.layerNameTV) TextView FeatureName;
 
+    @OnClick(R.id.close)
+    public void closeFeatureWindow(){
+        mPanelManager.collapse();
+    }
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstance){
         View view = inflater.inflate(R.layout.fragment_panel_featurewindow, container, false);
@@ -43,11 +49,12 @@ public class FeatureWindowPanelFragment extends GeoViewFragmentBase {
         ButterKnife.inject(this, view);
 
         mPanelManager = new PanelManager(GeoPanel.MAP);
-        mPanelManager.touch(true);
+        mPanelManager.touch(false);
 
         handleArgs();
 
         FeatureName.setText(getFeatureName());
+
 
         FragmentTabHost tabHost = (FragmentTabHost)view.findViewById(R.id.tabHost);
 

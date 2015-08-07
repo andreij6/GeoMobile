@@ -45,4 +45,7 @@ public interface LayerService {
 
     @PUT("/API/Layers/{id}/Features/{featureId}/Documents/{documentId}")
     void addMapFeatureDocument(@Path("id") int id, @Path("featureId") String featureId, @Path("documentId") int documentId, Callback<Response> cb);
+
+    @DELETE("/API/Layers/{layerId}/Features/{featureId}/Documents/{documentId}")
+    void removeMapFeatureDocument(@Path("layerId") int layerId, @Path("featureId") String featureId, @Path("documentId") int documentId, Callback<Response> cb);
 }

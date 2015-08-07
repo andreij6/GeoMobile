@@ -18,6 +18,7 @@ import com.geospatialcorporation.android.geomobile.models.Layers.Layer;
 import com.geospatialcorporation.android.geomobile.models.Layers.LayerAttributeColumn;
 import com.geospatialcorporation.android.geomobile.models.Layers.LayerCreateRequest;
 import com.geospatialcorporation.android.geomobile.models.Layers.LayerDetailsVm;
+import com.geospatialcorporation.android.geomobile.models.RemoveMapFeatureDocumentRequest;
 import com.geospatialcorporation.android.geomobile.models.RenameRequest;
 
 import java.util.ArrayList;
@@ -108,6 +109,21 @@ public class LayerTreeService implements ILayerTreeService {
             @Override
             public void success(Response response, Response response2) {
                 Toast.makeText(application.getAppContext(), "Request Successful", Toast.LENGTH_LONG).show();
+            }
+
+            @Override
+            public void failure(RetrofitError error) {
+
+            }
+        });
+    }
+
+    @Override
+    public void removeMapFeatureDocument(RemoveMapFeatureDocumentRequest request) {
+        mLayerService.removeMapFeatureDocument(request.getLayerId(), request.getFeatureId(), request.getDoc().getId(), new Callback<Response>() {
+            @Override
+            public void success(Response response, Response response2) {
+                Toast.makeText(application.getAppContext(), "Document Removed From Feature", Toast.LENGTH_LONG).show();
             }
 
             @Override

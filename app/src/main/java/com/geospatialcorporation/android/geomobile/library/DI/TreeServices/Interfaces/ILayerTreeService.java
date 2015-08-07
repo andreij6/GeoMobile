@@ -6,6 +6,7 @@ import com.geospatialcorporation.android.geomobile.models.Layers.EditLayerAttrib
 import com.geospatialcorporation.android.geomobile.models.Layers.Layer;
 import com.geospatialcorporation.android.geomobile.models.Layers.LayerAttributeColumn;
 import com.geospatialcorporation.android.geomobile.models.Layers.LayerDetailsVm;
+import com.geospatialcorporation.android.geomobile.models.RemoveMapFeatureDocumentRequest;
 
 import java.util.List;
 
@@ -27,6 +28,8 @@ public interface ILayerTreeService {
     void deleteColumn(int layerId, int columnId);
 
     void addMapFeatureDocument(int layerId, String featureId, int documentId);
+
+    void removeMapFeatureDocument(RemoveMapFeatureDocumentRequest request);
 
     void editAttributeValue(int layerId, EditLayerAttributesRequest request);
 }

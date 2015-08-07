@@ -261,5 +261,7 @@
     <string name="remove">Remove</string>
     <string name="add_attribute">Add Attribute</string>
     <string name="create_attribute">Create New Attribute</string>
+    <string name="are_you_sure_remove_map_feature_doc">Are you sure that you want to remove</string>
+    <string name="i_am_sure">Yes, I am sure</string>
 
 </resources>

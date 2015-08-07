@@ -5,6 +5,7 @@ import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
 
 import com.geospatialcorporation.android.geomobile.models.Folders.Folder;
+import com.geospatialcorporation.android.geomobile.models.RemoveMapFeatureDocumentRequest;
 
 public interface IGeneralDialog {
 
@@ -13,4 +14,6 @@ public interface IGeneralDialog {
     void editAttributes(Context context, FragmentManager manager);
 
     void libraryAction(Folder currentFolder, Context context, FragmentManager manager);
+
+    void removeMapFeatureDocument(RemoveMapFeatureDocumentRequest request);
 }

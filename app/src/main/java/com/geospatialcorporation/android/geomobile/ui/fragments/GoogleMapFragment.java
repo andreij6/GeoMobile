@@ -109,8 +109,8 @@ public class GoogleMapFragment extends GeoViewFragmentBase implements
     //endregion
 
     //region OnClicks
-    @SuppressWarnings("unused")
-    @OnClick(R.id.fab)
+    //@SuppressWarnings("unused")
+    //@OnClick(R.id.fab)
     public void getLocation(){
         Location currentLocation = LocationServices.FusedLocationApi.getLastLocation(mLocationClient);
 
@@ -159,8 +159,8 @@ public class GoogleMapFragment extends GeoViewFragmentBase implements
         mCurrentLocationMaker = mMap.addMarker(options);
     }
 
-    @SuppressWarnings("unused")
-    @OnClick(R.id.fab_layers)
+    //@SuppressWarnings("unused")
+    //@OnClick(R.id.fab_layers)
     public void showLayersDrawer(){
         mAnalytics.trackClick(new GoogleAnalyticEvent().OpenLayerDrawer());
         DrawerLayout mDrawerLayout = ((MainActivity)getActivity()).getRightDrawer();

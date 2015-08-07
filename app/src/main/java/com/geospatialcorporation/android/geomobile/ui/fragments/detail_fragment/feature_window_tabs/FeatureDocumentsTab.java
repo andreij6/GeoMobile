@@ -11,17 +11,16 @@ import android.widget.TextView;
 import com.geospatialcorporation.android.geomobile.R;
 import com.geospatialcorporation.android.geomobile.application;
 import com.geospatialcorporation.android.geomobile.library.DI.Analytics.Models.GoogleAnalyticEvent;
-import com.geospatialcorporation.android.geomobile.library.DI.FeatureWindow.models.FeatureWindowData;
+import com.geospatialcorporation.android.geomobile.library.DI.TreeServices.Interfaces.IDocumentTreeService;
+import com.geospatialcorporation.android.geomobile.library.DI.TreeServices.Interfaces.ILayerTreeService;
 import com.geospatialcorporation.android.geomobile.library.DI.UIHelpers.Interfaces.DialogHelpers.IGeneralDialog;
-import com.geospatialcorporation.android.geomobile.library.helpers.FileSizeFormatter;
-import com.geospatialcorporation.android.geomobile.library.helpers.GeoDialogHelper;
 import com.geospatialcorporation.android.geomobile.library.helpers.TableFactory;
+import com.geospatialcorporation.android.geomobile.models.MapFeatureDocumentVM;
 import com.geospatialcorporation.android.geomobile.models.Query.map.response.featurewindow.MapFeatureFiles;
+import com.geospatialcorporation.android.geomobile.models.RemoveMapFeatureDocumentRequest;
 
-import java.text.NumberFormat;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Locale;
 
 import butterknife.InjectView;
 import butterknife.OnClick;
@@ -31,7 +30,10 @@ public class FeatureDocumentsTab extends FeatureTabBase {
     int mLayerId;
     String mFeatureId;
     IGeneralDialog mDialog;
-    List<FeatureWindowData.KeyValue> mData;
+    List<MapFeatureDocumentVM> mData;
+
+    ILayerTreeService mLayerTreeService;
+    IDocumentTreeService mDocumentTreeService;
 
     @SuppressWarnings("unused")
     @OnClick(R.id.addDocument)
@@ -46,13 +48,14 @@ public class FeatureDocumentsTab extends FeatureTabBase {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         mLayout = R.layout.fragment_feature_window_documents_tab;
         mDialog = application.getUIHelperComponent().provideGeneralDialog();
+        mDocumentTreeService = application.getTreeServiceComponent().provideDocumentTreeService();
         mAnalytics.trackScreen(new GoogleAnalyticEvent().MapFeatureDocumentsTab());
         return super.onCreateView(inflater, container, savedInstanceState);
     }
 
     @Override
     protected void setDataView() {
-        List<FeatureWindowData.KeyValue> data = getDocumentVMList(mResponse.getFeatures().get(0).getFiles());
+        List<MapFeatureDocumentVM> data = getDocumentVMList(mResponse.getFeatures().get(0).getFiles());
 
         mLayerId = mResponse.getId();
         mFeatureId = mResponse.getFeatures().get(0).getId();
@@ -67,26 +70,42 @@ public class FeatureDocumentsTab extends FeatureTabBase {
 
         TableFactory factory = new TableFactory(getActivity(), mTableLayout, mInflater);
 
-        factory.addHeaders(R.layout.template_table_header, "Name", "Size", " ");
+        factory.addHeaders(R.layout.template_table_header, "Name", "Size", " ", " ");
 
         mTableLayout = factory.build();
 
-        for(FeatureWindowData.KeyValue keyValue : mData) {
+        for(final MapFeatureDocumentVM doc : mData) {
             TableRow row = new TableRow(mContext);
 
             TextView name = (TextView)mInflater.inflate(R.layout.template_feature_window_column_tv, null);
-            name.setText(keyValue.getKey());
+            name.setText(doc.getName());
 
             TextView fileSize = (TextView)mInflater.inflate(R.layout.template_feature_window_column_tv, null);
-            String fileSizeStr = FileSizeFormatter.format(keyValue.getValue());
-            fileSize.setText(fileSizeStr);
+            fileSize.setText(doc.getFormattedSize());
+
+            TextView download = (TextView)mInflater.inflate(R.layout.template_feature_window_column_tv, null);
+            download.setText(R.string.download);
+            download.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    mDocumentTreeService.download(doc.getId(), doc.getName());
+                }
+            });
 
             TextView remove = (TextView)mInflater.inflate(R.layout.template_feature_window_column_tv, null);
-            //remove.setText(R.string.remove);
-            remove.setText("");
+            remove.setText(R.string.remove);
+            remove.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    RemoveMapFeatureDocumentRequest request = new RemoveMapFeatureDocumentRequest(doc, mLayerId, mFeatureId, getActivity());
+
+                    mDialog.removeMapFeatureDocument(request);
+                }
+            });
 
             row.addView(name);
             row.addView(fileSize);
+            row.addView(download);
             row.addView(remove);
 
             mTableLayout.addView(row);
@@ -95,12 +114,12 @@ public class FeatureDocumentsTab extends FeatureTabBase {
 
 
 
-    protected List<FeatureWindowData.KeyValue> getDocumentVMList(List<MapFeatureFiles> files) {
-        List<FeatureWindowData.KeyValue> result = new ArrayList<>();
+    protected List<MapFeatureDocumentVM> getDocumentVMList(List<MapFeatureFiles> files) {
+        List<MapFeatureDocumentVM> result = new ArrayList<>();
 
         if(files != null) {
             for (MapFeatureFiles file : files) {
-                result.add(new FeatureWindowData.KeyValue(file.nameWithExt(), file.getSize() + ""));
+                result.add(new MapFeatureDocumentVM(file.nameWithExt(), file.getSize(), file.getId()));
             }
         }
 
