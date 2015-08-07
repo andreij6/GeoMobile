@@ -2,6 +2,9 @@ package com.geospatialcorporation.android.geomobile.library.map;
 
 import android.os.AsyncTask;
 import android.util.Log;
+import android.view.View;
+import android.widget.CheckBox;
+import android.widget.ProgressBar;
 import android.widget.Toast;
 
 import com.geospatialcorporation.android.geomobile.application;
@@ -57,7 +60,7 @@ public class GeoMapper implements IGeoMapper  {
 
     //region task attempt
 
-    protected class MapFeaturesTask extends AsyncTask<Void, Void, Integer>{
+    protected class MapFeaturesTask extends AsyncTask<Void, Integer, Integer>{
 
         public MapFeaturesTask(List<MapQueryResponse> responses, LegendLayer llayer){
             mResponses = responses;
@@ -65,35 +68,52 @@ public class GeoMapper implements IGeoMapper  {
         }
 
         //region properties
-        ProgressDialogHelper mProgressHelper;
         LegendLayer mLlayer;
         List<MapQueryResponse> mResponses;
         IFeatureMapper mMapper;
+        Integer mProgressStatus;
+        ProgressBar mProgressBar;
+        CheckBox mCheckBox;
         //endregion
+
 
         @Override
         protected void onPreExecute() {
-            mProgressHelper = new ProgressDialogHelper(application.getMainActivity());
-            mProgressHelper.toggleProgressDialog();
+            mProgressBar = mLlayer.getProgressBar();
+            mProgressStatus = 0;
+            mProgressBar.setProgress(mProgressStatus);
+            mCheckBox = mLlayer.getCheckBox();
         }
 
         @Override
         protected Integer doInBackground(Void... params) {
             int result = 1;
             try {
-                int geometryTypeCode = mResponses.get(0).getFeatures().get(0).getGeometry().getGeometryTypeCode();
+                if(mResponses != null){
+                    int geometryTypeCode = mResponses.get(0).getFeatures().get(0).getGeometry().getGeometryTypeCode();
 
-                mMapper = mStrategies.get(geometryTypeCode);
+                    mMapper = mStrategies.get(geometryTypeCode);
 
-                for (MapQueryResponse response : mResponses) {
 
-                    List<Feature> FeaturesList = response.getFeatures();
 
-                    for (Feature feature : FeaturesList) {
+                    for (MapQueryResponse response : mResponses) {
 
-                        mMapper.reset();
+                        List<Feature> FeaturesList = response.getFeatures();
 
-                        mMapper.draw(feature).addStyle(response.getStyle()).commit(mLlayer);
+                        Integer total = FeaturesList.size();
+                        Integer counter = 0;
+
+                        for (Feature feature : FeaturesList) {
+                            publishProgress((int)((counter / (float) total) * 100));
+
+                            mMapper.reset();
+
+                            mMapper.draw(feature).addStyle(response.getStyle()).commit(mLlayer);
+
+                            counter++;
+                        }
+
+
                     }
                 }
 
@@ -107,17 +127,27 @@ public class GeoMapper implements IGeoMapper  {
             return result;
         }
 
+
+        @Override
+        protected void onProgressUpdate(Integer... progress) {
+            mProgressBar.setProgress(progress[0]);
+            Log.d(TAG, progress[0] + "");
+        }
+
         @Override
         protected void onPostExecute(Integer integer) {
-            mProgressHelper.toggleProgressDialog();
-
             if(integer == 1) {
 
                 mLlayer.setLegendIcon(mMapper.getActiveDrawable());
                 mLlayer.setImageSrc();
+                mLlayer.getProgressBar().setVisibility(View.GONE);
 
                 application.getLayerManager().showLayers();
+            } else {
+                mProgressBar.setVisibility(View.GONE);
             }
+
+            mCheckBox.setEnabled(true);
         }
     }
 

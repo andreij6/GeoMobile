@@ -1,7 +1,9 @@
 package com.geospatialcorporation.android.geomobile.models.Layers;
 
 import android.graphics.drawable.Drawable;
+import android.widget.CheckBox;
 import android.widget.ImageView;
+import android.widget.ProgressBar;
 
 import com.geospatialcorporation.android.geomobile.models.Folders.Folder;
 import com.google.android.gms.maps.model.Marker;
@@ -20,6 +22,8 @@ public class LegendLayer {
     List<Object> MapObjects;
     ImageView mImageView;
     Folder mFolder;
+    private ProgressBar mProgressBar;
+    private CheckBox mCheckBox;
 
     public LegendLayer(Layer layer) {
         mLayer = layer;
@@ -85,5 +89,21 @@ public class LegendLayer {
 
     public Folder getFolder() {
         return mFolder;
+    }
+
+    public void setProgressBar(ProgressBar progressBar) {
+        mProgressBar = progressBar;
+    }
+
+    public ProgressBar getProgressBar() {
+        return mProgressBar;
+    }
+
+    public void setCheckBox(CheckBox checkBox) {
+        mCheckBox = checkBox;
+    }
+
+    public CheckBox getCheckBox() {
+        return mCheckBox;
     }
 }

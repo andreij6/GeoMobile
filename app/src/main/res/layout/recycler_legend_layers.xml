@@ -3,8 +3,7 @@
               android:orientation="vertical"
               android:layout_width="match_parent"
               android:layout_height="match_parent"
-              android:weightSum="1"
-    >
+              android:weightSum="1">
 
     <LinearLayout
         android:orientation="horizontal"
@@ -26,16 +25,32 @@
             android:contentDescription="@string/geometryIV"
             android:layout_gravity="center_vertical"/>
 
-        <TextView
-            android:layout_width="0dp"
+        <LinearLayout
+            android:orientation="vertical"
+            android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:textAppearance="?android:attr/textAppearanceMedium"
-            android:id="@+id/layerNameTV"
-            android:layout_weight="0.28"
-            android:textColor="@color/white"
-            android:singleLine="true"
-            android:paddingLeft="8sp"
-            android:gravity="center_vertical"/>
+            android:layout_weight=".28">
+            <ProgressBar
+                style="?android:attr/progressBarStyleHorizontal"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/showLayerProgressBar"
+                android:layout_gravity="center_horizontal"/>
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:textAppearance="?android:attr/textAppearanceMedium"
+                android:id="@+id/layerNameTV"
+                android:textColor="@color/white"
+                android:singleLine="true"
+                android:paddingLeft="8sp"
+                android:gravity="center_vertical"/>
+
+
+
+
+        </LinearLayout>
 
         <ImageView
             android:layout_width="35dp"
@@ -46,5 +61,7 @@
             android:paddingLeft="15dp"/>
 
     </LinearLayout>
+
+
 
 </LinearLayout>

@@ -24,6 +24,8 @@ public class MapSlidingPanel extends GeoSlidingPanelBase {
         Fragment collapsedFragment = new MapDefaultCollapsedPanelFragment();
 
         completeDefaultCollapsedUI(collapsedFragment);
+
+        mMapFragment.clearHighlights();
     }
 
     @Override

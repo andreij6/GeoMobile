@@ -23,9 +23,8 @@ public class GeoDialogFragmentBase extends DialogFragment {
     }
 
     //endregion
-
-
     protected Context mContext;
+
     protected IGeoAnalytics mAnalytics;
 
     protected AlertDialog.Builder getDialogBuilder(){

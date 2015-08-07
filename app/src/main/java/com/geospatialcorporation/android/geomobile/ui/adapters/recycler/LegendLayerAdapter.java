@@ -11,6 +11,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.CheckBox;
 import android.widget.ImageView;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -71,6 +72,7 @@ public class LegendLayerAdapter extends GeoRecyclerAdapterBase<LegendLayerAdapte
         @InjectView(R.id.isVisible) CheckBox isVisibleCB;
         @InjectView(R.id.sublayerExpander) ImageView gotoSublayer;
         @InjectView(R.id.geometryIV) ImageView geomIV;
+        @InjectView(R.id.showLayerProgressBar) ProgressBar mProgressBar;
         //endregionxxx
 
         Layer mLayer;
@@ -91,9 +93,11 @@ public class LegendLayerAdapter extends GeoRecyclerAdapterBase<LegendLayerAdapte
                 mLayer = llayer.getLayer();
                 mLegendLayer = llayer;
 
+                mProgressBar.setVisibility(View.GONE);
                 isVisibleCB.setVisibility(View.VISIBLE);
                 gotoSublayer.setVisibility(View.VISIBLE);
                 geomIV.setVisibility(View.VISIBLE);
+
                 mView.setBackgroundColor(mContext.getResources().getColor(R.color.primary));
 
 
@@ -118,16 +122,21 @@ public class LegendLayerAdapter extends GeoRecyclerAdapterBase<LegendLayerAdapte
 
                 mLegendLayer.setImageView(geomIV);
                 mLegendLayer.setImageSrc();
+                mLegendLayer.setProgressBar(mProgressBar);
+                mLegendLayer.setCheckBox(isVisibleCB);
             } else {
                 mFolder = llayer.getFolder();
 
                 mView.setBackgroundColor(mContext.getResources().getColor(R.color.primary_dark));
 
-                geomIV.setVisibility(View.INVISIBLE);
                 mLayerName.setText("Folder Actions");
                 mLayerName.setOnClickListener(GoToLayerFragment);
+
                 isVisibleCB.setVisibility(View.INVISIBLE);
                 gotoSublayer.setVisibility(View.INVISIBLE);
+                mProgressBar.setVisibility(View.GONE);
+                geomIV.setVisibility(View.INVISIBLE);
+
             }
 
         }
@@ -138,6 +147,8 @@ public class LegendLayerAdapter extends GeoRecyclerAdapterBase<LegendLayerAdapte
             public void onClick(View v) {
                 if (isVisibleCB.isChecked()) {
                     //Show Layer
+                    mProgressBar.setVisibility(View.VISIBLE);
+                    isVisibleCB.setEnabled(false);
 
                     mAnalytics.trackClick(new GoogleAnalyticEvent().ShowLayer());
 
@@ -146,7 +157,6 @@ public class LegendLayerAdapter extends GeoRecyclerAdapterBase<LegendLayerAdapte
                     application.getMapLayerState().addLayer(mLayer);
 
                     updateLayerDB(true);
-
                 } else {
                     //remove layer
                     mAnalytics.trackClick(new GoogleAnalyticEvent().HideLayer());
@@ -280,6 +290,7 @@ public class LegendLayerAdapter extends GeoRecyclerAdapterBase<LegendLayerAdapte
 
             MapDefaultQueryRequest request = new MapDefaultQueryRequest(layers, Options.MAP_QUERY);
             mLayer.setIsShowing(true);
+
 
             mService.mapQuery(request, mLegendLayer);
         }

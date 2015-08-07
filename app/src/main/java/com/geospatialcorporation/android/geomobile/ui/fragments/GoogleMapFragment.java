@@ -41,6 +41,7 @@ import com.geospatialcorporation.android.geomobile.library.DI.Map.Models.MapStat
 import com.geospatialcorporation.android.geomobile.library.constants.GeoPanel;
 import com.geospatialcorporation.android.geomobile.library.map.layerManager.ILayerManager;
 import com.geospatialcorporation.android.geomobile.library.map.layerManager.LayerManager;
+import com.geospatialcorporation.android.geomobile.library.map.layerManager.implementations.PolygonOptionsManager;
 import com.geospatialcorporation.android.geomobile.library.panelmanager.ISlidingPanelManager;
 import com.geospatialcorporation.android.geomobile.library.panelmanager.PanelManager;
 import com.geospatialcorporation.android.geomobile.library.services.QueryRestService;
@@ -68,7 +69,9 @@ import com.google.android.gms.maps.model.LatLngBounds;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.maps.model.Polygon;
+import com.google.android.gms.maps.model.PolygonOptions;
 import com.google.android.gms.maps.model.Polyline;
+import com.google.android.gms.maps.model.PolylineOptions;
 import com.google.maps.android.PolyUtil;
 import com.melnykov.fab.FloatingActionButton;
 import com.sothree.slidinguppanel.SlidingUpPanelLayout;
@@ -97,6 +100,11 @@ public class GoogleMapFragment extends GeoViewFragmentBase implements
     ISlidingPanelManager mPanelManager;
     IMapStateService mMapStateService;
     ILayerManager mLayerManager;
+
+    Polygon mHighlightedPolygon;
+    Polyline mHighlightedPolyline;
+    Marker mHighlightedMarker;
+
     @InjectView(R.id.map) MapView mMapView;
     @InjectView(R.id.sliding_layout) SlidingUpPanelLayout mPanel;
     @InjectView(R.id.fab_box) FloatingActionButton mBoxQueryBtn;
@@ -156,7 +164,8 @@ public class GoogleMapFragment extends GeoViewFragmentBase implements
         MarkerOptions options = new MarkerOptions();
         options.position(ll);
 
-        mCurrentLocationMaker = mMap.addMarker(options);
+        //mCurrentLocationMaker = mMap.addMarker(options);
+
     }
 
     //@SuppressWarnings("unused")
@@ -225,12 +234,19 @@ public class GoogleMapFragment extends GeoViewFragmentBase implements
         mMap.setOnMarkerClickListener(new GoogleMap.OnMarkerClickListener() {
             @Override
             public boolean onMarkerClick(Marker marker) {
+                clearHighlights();
+
                 if(mCurrentLocationMaker != null && marker.getId() == mCurrentLocationMaker.getId()) {
                     //show the user their position info
+                    return  true;
                 } else {
                     getFeatureWindow(marker.getId(), LayerManager.POINT);
+
+                    highlight(marker);
+
+                    return false;
                 }
-                return false;
+
             }
         });
 
@@ -238,11 +254,15 @@ public class GoogleMapFragment extends GeoViewFragmentBase implements
             @Override
             public void onMapClick(LatLng latLng) {
 
+                clearHighlights();
+
                 Iterable<Polyline> lines = mLayerManager.getVisiblePolylines();
 
                 for (Polyline line : lines) {
                     if (PolyUtil.isLocationOnPath(latLng, line.getPoints(), false, 200.0)) { //idea: reset tolerance by zoom level
                         getFeatureWindow(line.getId(), LayerManager.LINE);
+
+                        highlight(line);
 
                     }
                 }
@@ -252,6 +272,8 @@ public class GoogleMapFragment extends GeoViewFragmentBase implements
                 for (Polygon ss : polygons) {
                     if (PolyUtil.containsLocation(latLng, ss.getPoints(), true)) {
                         getFeatureWindow(ss.getId(), LayerManager.POLYGON);
+
+                        highlight(ss);
                     }
 
                 }
@@ -264,6 +286,58 @@ public class GoogleMapFragment extends GeoViewFragmentBase implements
 
         return rootView;
     }
+
+    //region HighLighters
+    protected void highlight(Polygon feature){
+        PolygonOptions options = new PolygonOptions();
+        options.strokeColor(invertColor(feature.getStrokeColor()));
+        options.fillColor(invertColor(feature.getFillColor()));
+        options.strokeWidth(feature.getStrokeWidth());
+
+        LatLng[] points = new LatLng[feature.getPoints().size()];
+
+        feature.getPoints().toArray(points);
+
+        options.zIndex(1000);
+        options.add(points);
+
+        mHighlightedPolygon = mMap.addPolygon(options);
+    }
+
+    protected void highlight(Polyline feature){
+        PolylineOptions options = new PolylineOptions();
+        options.color(invertColor(feature.getColor()));
+
+        LatLng[] points = new LatLng[feature.getPoints().size()];
+
+        feature.getPoints().toArray(points);
+
+        options.zIndex(1000);
+        options.add(points);
+
+        mHighlightedPolyline = mMap.addPolyline(options);
+    }
+
+    protected void highlight(Marker feature){
+
+    }
+
+    protected int invertColor(int color){
+        return (0xFFFFFF - color) | 0xFF000000;
+    }
+
+    public void clearHighlights() {
+        if(mHighlightedPolyline != null) {
+            mHighlightedPolyline.remove();
+        }
+        if(mHighlightedPolygon != null){
+            mHighlightedPolygon.remove();
+        }
+        if(mHighlightedMarker != null) {
+            mHighlightedMarker.remove();
+        }
+    }
+    //endregion
 
     protected void getFeatureWindow(String id, int shapeCode){
         String featureId = mLayerManager.getFeatureId(id, shapeCode);
@@ -537,4 +611,6 @@ public class GoogleMapFragment extends GeoViewFragmentBase implements
     public void onLocationChanged(Location location) {
         handleNewLocation(location);
     }
+
+
 }
