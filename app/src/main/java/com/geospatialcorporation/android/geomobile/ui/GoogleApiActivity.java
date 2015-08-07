@@ -79,14 +79,11 @@ public class GoogleApiActivity extends Activity implements
         Intent intent = AccountPicker.newChooseAccountIntent(null, null, new String[]{"com.google"},
                 false, null, null, null, null);
 
-
         startActivityForResult(intent, ACTIVITY_AUTH_REQUEST_CODE);
 
         if (!mGoogleApiClient.isConnected()) {
             mGoogleApiClient.connect();
         }
-
-        //updateConnectButtonState();
     }
 
     public void signOut() {
@@ -114,14 +111,12 @@ public class GoogleApiActivity extends Activity implements
     }
 
     public GoogleAuthTokenService.Parameters getGoogleAuthParmaters(String accountname, ProgressDialogHelper helper){
-
         return new GoogleAuthTokenService.Parameters(
                 ACTIVITY_AUTH_REQUEST_CODE,
                 accountname, this, helper);
     }
 
     protected void onActivityResult(final int requestCode, final int responseCode, final Intent data) {
-
         //region Commented code
         /*if (requestCode == MY_ACTIVITYS_AUTH_REQUEST_CODE) {
             if (responseCode == RESULT_OK) {

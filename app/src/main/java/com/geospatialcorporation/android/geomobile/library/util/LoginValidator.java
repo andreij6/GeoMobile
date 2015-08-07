@@ -1,14 +1,9 @@
 package com.geospatialcorporation.android.geomobile.library.util;
 
-import org.apache.commons.validator.routines.EmailValidator;
-
-/**
- * Created by andre on 6/23/2015.
- */
 public class LoginValidator {
 
     public static boolean isEmailValid(String email){
-        return EmailValidator.getInstance().isValid(email);
+        return (!email.isEmpty()) && android.util.Patterns.EMAIL_ADDRESS.matcher(email).matches();
     }
 
     public static boolean isPasswordValid(String password) {

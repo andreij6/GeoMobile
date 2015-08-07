@@ -278,6 +278,8 @@ public class application extends applicationDIBase {
         return googleClient;
     }
 
+    public static String getDomain() { return domain; }
+
     public static void setAuthToken(String token) {
         geoAuthToken = token;
 

@@ -15,6 +15,8 @@ import android.os.Bundle;
 import android.provider.ContactsContract;
 import android.text.TextUtils;
 import android.text.method.LinkMovementMethod;
+import android.util.Base64;
+import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.inputmethod.EditorInfo;
@@ -25,52 +27,68 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.geospatialcorporation.android.geomobile.BuildConfig;
 import com.geospatialcorporation.android.geomobile.R;
 import com.geospatialcorporation.android.geomobile.application;
 import com.geospatialcorporation.android.geomobile.library.DI.Analytics.Models.GoogleAnalyticEvent;
 import com.geospatialcorporation.android.geomobile.library.DI.Tasks.Interfaces.IUserLoginTask;
 import com.geospatialcorporation.android.geomobile.library.constants.GeoSharedPreferences;
+import com.geospatialcorporation.android.geomobile.library.rest.LoginService;
 import com.geospatialcorporation.android.geomobile.library.util.LoginValidator;
+import com.geospatialcorporation.android.geomobile.models.Login.LoginBody;
 import com.geospatialcorporation.android.geomobile.ui.Interfaces.IFullExecuter;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GooglePlayServicesUtil;
 import com.google.android.gms.common.SignInButton;
+import com.google.gson.Gson;
 
+import java.math.BigInteger;
+import java.security.KeyFactory;
+import java.security.PublicKey;
+import java.security.spec.RSAPublicKeySpec;
 import java.util.ArrayList;
 import java.util.List;
+
+import javax.crypto.Cipher;
+import javax.crypto.Mac;
+import javax.crypto.spec.SecretKeySpec;
 
 import butterknife.ButterKnife;
 import butterknife.InjectView;
 import butterknife.OnClick;
+import retrofit.Callback;
+import retrofit.RestAdapter;
+import retrofit.RetrofitError;
+import retrofit.client.Header;
+import retrofit.client.Response;
+import retrofit.mime.TypedByteArray;
 
-
-/**
- * A login screen that offers login via email/password and via Google+ sign in.
- * <p/>
- * ************ IMPORTANT SETUP NOTES: ************
- * In order for Google+ sign in to work with your app, you must first go to:
- * https://developers.google.com/+/mobile/android/getting-started#step_1_enable_the_google_api
- * and follow the steps in "Step 1" to create an OAuth 2.0 client for your package.
- */
 public class LoginActivity extends GoogleApiActivity implements LoaderCallbacks<Cursor>, IFullExecuter<Boolean> {
     private final static String TAG = LoginActivity.class.getSimpleName();
-    /**
-    * Login workflow:
-    * /API/Auth/Mobile/Start
-    * /API/Auth/Mobile/Login
-    *
-    * or
-    *
-    * /API/Auth/Google
-     */
-    /**
-     * A dummy authentication store containing known user names and passwords.
-     * TODO: remove after connecting to a real authentication system.
-     */
 
+    private RestAdapter loginRestAdapter;
+    private LoginService loginService;
 
+    /** These are constant forever. **/
+    private static String fixedKey = "oAbNi0ZTjacrnbY4kASQ2u3ZdSuWxBvebzelCvLo221Bc";
+    private static byte[] AESKey = {(byte)41, (byte)215, (byte)158, (byte)196, (byte)35, (byte)207, (byte)59, (byte)115, (byte)124, (byte)79, (byte)67, (byte)156, (byte)144, (byte)20, (byte)246, (byte)202, (byte)66, (byte)71, (byte)211, (byte)231, (byte)228, (byte)14, (byte)104, (byte)41, (byte)118, (byte)251, (byte)185, (byte)64, (byte)252, (byte)33, (byte)29, (byte)42};
+    private static byte[] AESIV = {(byte)37, (byte)28, (byte)238, (byte)138, (byte)84, (byte)112, (byte)161, (byte)12, (byte)159, (byte)115, (byte)52, (byte)63, (byte)240, (byte)14, (byte)82, (byte)171};
 
-    private static final String TEST_CREDENTIALS = "jon.shaffer@geospatialcorp.com:secretDev1";
+    /** These variables change per mobile version number. Accessible at: (?)geounderground.com/admin/mobile **/
+    public final static String version = "1.0.0";
+    public final static String versionId = "5AC2F6BD-AA2D-402F-B4E0-DFC3545602BC";
+    private static BigInteger keyOneModulus = new BigInteger(1, Base64.decode("leF2gRR62cjRujE0yRzTFThdXMcGmLkS4EBAowTmBqXsXUd01dYFKFnusTNf8Jm2irRzL/6viqKawWnCwbNYlC62Xezba4z9/0bpf+6Rugu19pez+LpwxMV9B6O1orw2LiwkHgamjC/vg9shXCzQ78B07AEpP5bdVqIDTTvPcMHm4xuYffMOgPhyfYKyRsEW".getBytes(), Base64.DEFAULT));
+    private static BigInteger keyOneExponent = new BigInteger(1, Base64.decode("gOfjk9sgx+xJ6xd0V5X80A==".getBytes(), Base64.DEFAULT));
+    private static String keyTwo = "FJvcDaSRQ5sOnd3bbCA9pYhTe4hEj5WuCxYsKgAUDfY=";
+
+    /** This changes (or can change) per user device **/
+    public final static String deviceId = "debugDeviceId";
+
+    /** These change with each login attempt. **/
+    private int loginAttemptId;
+    private String loginAttemptSalt;
+    private String body;
+
     /**
      * Keep track of the login task to ensure we can cancel it if requested.
      */
@@ -90,7 +108,6 @@ public class LoginActivity extends GoogleApiActivity implements LoaderCallbacks<
     //region OnclickListeners
     @OnClick(R.id.plus_sign_in_button)
     public void GooglePlusSignInClick(){
-
         mAnalytics.trackClick(new GoogleAnalyticEvent().GoogleSignIn());
 
         signIn();
@@ -98,10 +115,9 @@ public class LoginActivity extends GoogleApiActivity implements LoaderCallbacks<
 
     @OnClick(R.id.email_sign_in_button)
     public void EmailSignInClick(){
-
         mAnalytics.trackClick(new GoogleAnalyticEvent().SignInBtn());
 
-        attemptLogin();
+        emailLoginStart();
     }
     //endregion
 
@@ -128,19 +144,28 @@ public class LoginActivity extends GoogleApiActivity implements LoaderCallbacks<
         
         AttemptAutomaticLogin();
 
+        if (BuildConfig.DEBUG) {
+            mEmailView.setText("jon.shaffer@geospatialcorporation.com");
+            mPasswordView.setText("f5eHXqWEGp1W");
+        }
+
+        loginRestAdapter = new RestAdapter.Builder()
+                .setEndpoint(application.getDomain())
+                .build();
+        loginService = loginRestAdapter.create(LoginService.class);
+
         mPlusSignInButton.requestFocus();
 
         mPasswordView.setOnEditorActionListener(new TextView.OnEditorActionListener() {
             @Override
             public boolean onEditorAction(TextView textView, int id, KeyEvent keyEvent) {
                 if (id == R.id.password || id == EditorInfo.IME_NULL) {
-                    attemptLogin();
+                    emailLoginStart();
                     return true;
                 }
                 return false;
             }
         });
-
     }
 
     private void AttemptAutomaticLogin() {
@@ -155,22 +180,45 @@ public class LoginActivity extends GoogleApiActivity implements LoaderCallbacks<
         getLoaderManager().initLoader(0, null, this);
     }
 
+    private void emailLoginStart() {
+        Log.d(TAG, "Beginning emailLoginStart");
+        String[] loginAttemptStrings = null;
+
+        Callback<String> callback = new Callback<String>() {
+            @Override
+            public void success(String loginAttemptString, Response response) {
+                Log.d(TAG, "emailLoginStart success");
+                String[] loginAttemptStrings = loginAttemptString.split(".");
+
+                loginAttemptId = Integer.getInteger(loginAttemptStrings[0]);
+                loginAttemptSalt = loginAttemptStrings[1];
+
+                validateLogin();
+            }
+
+            @Override
+            public void failure(RetrofitError retrofitError) {
+                Log.d(TAG, "Mobile header: X-GeoUnderground: Version " + LoginActivity.version + ';' + LoginActivity.versionId + ';' + LoginActivity.deviceId);
+                Log.d(TAG, "Body: " + fixedKey);
+                Log.e(TAG, "emailLoginStart failure: " + new String(((TypedByteArray)retrofitError.getResponse().getBody()).getBytes()));
+                // TODO: Implement
+            }
+        };
+
+        // Returns {attemptId}.{base64Key}
+        loginService.start(fixedKey, callback);
+    }
+
     /**
      * Attempts to sign in or register the account specified by the login form.
      * If there are form errors (invalid email, missing fields, etc.), the
      * errors are presented and no actual login attempt is made.
      */
-    public void attemptLogin() {
-
+    private void validateLogin() {
+        Log.d(TAG, "Beginning validateLogin");
         if (mUserLoginTask != null) {
             return;
         }
-
-        //Intent mainActivityIntent = new Intent(this, MainActivity.class);
-
-        // Reset errors.
-        mEmailView.setError(null);
-        mPasswordView.setError(null);
 
         // Store values at the time of the login attempt.
         String email = mEmailView.getText().toString();
@@ -189,6 +237,8 @@ public class LoginActivity extends GoogleApiActivity implements LoaderCallbacks<
             mPasswordView.setError(getString(R.string.error_invalid_password));
             focusView = mPasswordView;
             cancel = true;
+        } else {
+            mPasswordView.setError(null);
         }
 
         // Check for a valid email address.
@@ -196,12 +246,13 @@ public class LoginActivity extends GoogleApiActivity implements LoaderCallbacks<
             mEmailView.setError(getString(R.string.error_field_required));
             focusView = mEmailView;
             cancel = true;
-        } else if (!android.util.Patterns.EMAIL_ADDRESS.matcher(email).matches()) {
+        } else if (!LoginValidator.isEmailValid(email)) {
             mEmailView.setError(getString(R.string.error_invalid_email));
             focusView = mEmailView;
             cancel = true;
+        } else {
+            mEmailView.setError(null);
         }
-
 
         if (cancel) {
             // There was an error; don't attempt login and focus the first
@@ -210,16 +261,43 @@ public class LoginActivity extends GoogleApiActivity implements LoaderCallbacks<
         } else {
             // Show a progress spinner, and kick off a background task to
             // perform the user login attempt.
-
             mAnalytics.trackClick(new GoogleAnalyticEvent().LoginAttempt());
 
             Toast.makeText(this, "Not Implemented - Try Google Sign-in", Toast.LENGTH_LONG).show();
 
-            //showProgress(true);
-
-            //mUserLoginTask = application.getTasksComponent().provideUserLoginTask();
-            //mUserLoginTask.Login(new UserLoginModel(email, password, this));
+            postEmailLogin(email, password);
         }
+    }
+
+    private void postEmailLogin(String email, String password) {
+        Log.d(TAG, "Beginning postEmailLogin");
+        LoginBody loginBody = new LoginBody(loginAttemptId, email, password);
+
+        body = new Gson().toJson(loginBody);
+        String encryptedJSONBody = encryptRSA(body);
+
+        Callback callback = new Callback() {
+            @Override
+            public void success(Object o, Response response) {
+                Log.d(TAG, "postEmailLogin success");
+                List<Header> headers = response.getHeaders();
+
+                for(Header header : headers) {
+                    if (header.getName().equals("X-WebToken")) {
+                        application.setAuthToken(header.getValue());
+                        break;
+                    }
+                }
+            }
+
+            @Override
+            public void failure(RetrofitError retrofitError) {
+                Log.e(TAG, "postEmailLogin failure: " + new String(((TypedByteArray) retrofitError.getResponse().getBody()).getBytes()));
+                // TODO: Implement
+            }
+        };
+
+        loginService.login(getLatestSignature(), encryptedJSONBody, callback);
     }
 
     /**
@@ -342,16 +420,90 @@ public class LoginActivity extends GoogleApiActivity implements LoaderCallbacks<
     }
 
     //region Helpers
-    protected Boolean hasAuthToken(){
-
+    protected Boolean hasAuthToken() {
         SharedPreferences appState = application.getAppState();
 
         String geoAuthToken = appState.getString(application.getAppContext().getString(R.string.auth_token), null);
 
         return geoAuthToken == null;
     }
+
+    private String getLatestSignature() {
+        Log.d(TAG, "Beginning getLatestSignature");
+        String returnString = null;
+        try {
+            Mac sha256Hmac = Mac.getInstance("HmacSHA256");
+            SecretKeySpec secretKey = new SecretKeySpec((loginAttemptSalt + keyTwo).getBytes(), "HmacSHA256");
+            sha256Hmac.init(secretKey);
+            byte[] hmacBytes = sha256Hmac.doFinal((versionId + "." + deviceId + "." + body + "|" + loginAttemptSalt + keyTwo).getBytes());
+
+            returnString = Base64.encodeToString(hmacBytes, Base64.DEFAULT);
+        } catch (Exception e) {
+            Log.e(TAG, "getLatestSignature error: " + e.getMessage());
+            Toast.makeText(this, "Error posting login. Try google login.", Toast.LENGTH_LONG).show();
+        }
+
+        return returnString;
+    }
+
+    private String encryptRSA(String content) {
+        Log.d(TAG, "Beginning encryptRSA");
+        String returnString = null;
+        try {
+            RSAPublicKeySpec keySpec = new RSAPublicKeySpec(keyOneModulus, keyOneExponent);
+            KeyFactory factory = KeyFactory.getInstance("RSA");
+            PublicKey publicKey = factory.generatePublic(keySpec);
+
+            Cipher cipher = Cipher.getInstance("RSA");
+            cipher.init(Cipher.ENCRYPT_MODE, publicKey);
+            byte[] encrypted = cipher.doFinal(content.getBytes());
+
+            returnString = Base64.encodeToString(encrypted, Base64.DEFAULT);
+        } catch (Exception e) {
+            Log.e(TAG, "encryptRSA error: " + e.getMessage());
+            Toast.makeText(this, "Error posting login. Try google login.", Toast.LENGTH_LONG).show();
+        }
+
+        return returnString;
+    }
+
+    private String decryptAES(String base64Content, boolean returnBase64) {
+        Log.d(TAG, "Beginning decryptAES");
+        String returnString = null;
+        try {
+            byte[] contentBytes = Base64.decode(base64Content, Base64.DEFAULT);
+
+            SecretKeySpec keySpec = new SecretKeySpec(AESKey, "AES");
+            Cipher cipher = Cipher.getInstance("AES/ECB/PKCS5Padding");
+            cipher.init(Cipher.DECRYPT_MODE, keySpec);
+            byte[] decrypted = cipher.doFinal(contentBytes);
+
+            returnString = (returnBase64) ? new String(decrypted, "UTF-8") : Base64.encodeToString(decrypted, Base64.DEFAULT);
+        } catch (Exception e) {
+            Log.e(TAG, "decryptAES error: " + e.getMessage());
+            Toast.makeText(this, "Error posting login. Try google login.", Toast.LENGTH_LONG).show();
+        }
+
+        return returnString;
+    }
+
+    private String encryptAES(String content) {
+        Log.d(TAG, "Beginning encryptAES");
+        String returnString = null;
+        try {
+            SecretKeySpec keySpec = new SecretKeySpec(AESKey, "AES");
+            Cipher cipher = Cipher.getInstance("AES/ECB/PKCS5Padding");
+            cipher.init(Cipher.ENCRYPT_MODE, keySpec);
+            byte[] encrypted = cipher.doFinal(content.getBytes());
+
+            returnString = Base64.encodeToString(encrypted, Base64.DEFAULT);
+        } catch (Exception e) {
+            Log.e(TAG, "encryptAES error: " + e.getMessage());
+            Toast.makeText(this, "Error posting login. Try google login.", Toast.LENGTH_LONG).show();
+        }
+
+        return returnString;
+    }
     //endregion
+
 }
-
-
-

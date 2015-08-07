@@ -26,6 +26,4 @@ public class LoginUIModel {
     }
 
     public IUserLoginTask getTask() { return mTask; }
-
-
 }
