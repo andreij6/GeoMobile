@@ -55,7 +55,6 @@ public class FeatureWindowPanelFragment extends GeoViewFragmentBase {
 
         FeatureName.setText(getFeatureName());
 
-
         FragmentTabHost tabHost = (FragmentTabHost)view.findViewById(R.id.tabHost);
 
         tabHost.setup(getActivity(), getChildFragmentManager(), android.R.id.tabcontent);
@@ -75,7 +74,11 @@ public class FeatureWindowPanelFragment extends GeoViewFragmentBase {
             String firstPropertyValue = mResponse.getFeatures().get(0).getAttributes().get(0);
 
             if(firstPropertyValue != null && !firstPropertyValue.isEmpty()) {
-                result = firstPropertyValue + " - Feature Info";
+                if(firstPropertyValue.length() < 16) {
+                    result = firstPropertyValue + " | Feature Info";
+                } else {
+                    result = firstPropertyValue;
+                }
             }
         } catch (Exception e){
             Log.d(TAG, e.getMessage());

@@ -30,12 +30,14 @@ public class AttributeValueVM {
         String mValue;
         Integer mColumnId;
         String mFeatureId;
+        Integer mDataType;
 
-        public Columns(String key, String value, Integer columnId, String featureId) {
+        public Columns(String key, String value, Integer columnId, String featureId, Integer dataType) {
             mKey = key;
             mValue = value;
             mColumnId = columnId;
             mFeatureId = featureId;
+            mDataType = dataType;
         }
 
         public String getKey() {
@@ -68,6 +70,14 @@ public class AttributeValueVM {
 
         public void setFeatureId(String featureId) {
             mFeatureId = featureId;
+        }
+
+        public void setFeature(int dataType){
+            mDataType = dataType;
+        }
+
+        public Integer getDataType(){
+            return mDataType;
         }
     }
 }

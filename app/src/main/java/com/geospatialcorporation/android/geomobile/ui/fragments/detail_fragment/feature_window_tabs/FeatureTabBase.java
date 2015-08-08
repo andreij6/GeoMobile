@@ -18,6 +18,8 @@ import com.geospatialcorporation.android.geomobile.models.Query.map.response.fea
 import com.geospatialcorporation.android.geomobile.models.Query.map.response.featurewindow.ParcelableFeatureQueryResponse;
 import com.geospatialcorporation.android.geomobile.ui.fragments.GeoViewFragmentBase;
 
+import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 
 import butterknife.ButterKnife;
@@ -57,22 +59,4 @@ public abstract class FeatureTabBase extends GeoViewFragmentBase {
     }
 
     protected abstract void setDataView();
-
-    protected void setTable(List<FeatureWindowData.KeyValue> data, TableLayout table, String seperator){
-
-        for(FeatureWindowData.KeyValue keyValue : data) {
-            TableRow row = new TableRow(mContext);
-
-            TextView columnName = (TextView)mInflater.inflate(R.layout.template_feature_window_column_tv, null);
-            columnName.setText(keyValue.getKey() + seperator);
-
-            TextView columnValue = (TextView)mInflater.inflate(R.layout.template_feature_window_column_tv, null);
-            columnValue.setText(keyValue.getValue());
-
-            row.addView(columnName);
-            row.addView(columnValue);
-
-            table.addView(row);
-        }
-    }
 }

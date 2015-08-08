@@ -2,6 +2,7 @@ package com.geospatialcorporation.android.geomobile.library.DI.FeatureWindow.Geo
 
 import com.geospatialcorporation.android.geomobile.library.DI.FeatureWindow.GeometryDataParsers.GeometryResponseParser;
 import com.geospatialcorporation.android.geomobile.library.DI.FeatureWindow.models.FeatureWindowData;
+import com.geospatialcorporation.android.geomobile.library.constants.MapInfoOrder;
 import com.geospatialcorporation.android.geomobile.library.helpers.converter.ICoordinateConverter;
 import com.geospatialcorporation.android.geomobile.models.Query.map.response.featurewindow.FeatureQueryResponse;
 import com.geospatialcorporation.android.geomobile.models.Query.map.response.featurewindow.MapInfo;
@@ -21,13 +22,13 @@ public class MultiPolygonResponseParser extends ResponseParserBase implements Ge
 
         AddBasicAttributes(result, features, "MultiPolygon");
 
-        result.addEntry("PointCount", mapInfo.getPointCount() + "");
-        result.addEntry("Polygons", mapInfo.getPolygonCount() + "");
+        result.addEntry("PointCount", mapInfo.getPointCount() + "", MapInfoOrder.POINTS);
+        result.addEntry("Polygons", mapInfo.getPolygonCount() + "", MapInfoOrder.POLYGONS);
 
         AddCenterMinMax(result, mapInfo, converter);
 
-        result.addEntry("Total Area", meterToFeet(mapInfo.getArea()));
-        result.addEntry("Total Diameter", meterToFeet(mapInfo.getLength()));
+        result.addEntry("Total Area", meterToFeet(mapInfo.getArea()), MapInfoOrder.TOTAL_AREA);
+        result.addEntry("Total Diameter", meterToFeet(mapInfo.getLength()), MapInfoOrder.TOTAL_DIAMETER);
 
         return result;
     }

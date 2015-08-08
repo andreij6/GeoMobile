@@ -4,6 +4,9 @@ import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.DialogInterface;
 import android.os.Bundle;
+import android.text.Editable;
+import android.text.InputType;
+import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.EditText;
@@ -15,6 +18,7 @@ import com.geospatialcorporation.android.geomobile.R;
 import com.geospatialcorporation.android.geomobile.application;
 import com.geospatialcorporation.android.geomobile.library.DI.Analytics.Models.GoogleAnalyticEvent;
 import com.geospatialcorporation.android.geomobile.library.DI.TreeServices.Interfaces.ILayerTreeService;
+import com.geospatialcorporation.android.geomobile.library.constants.ColumnDataTypes;
 import com.geospatialcorporation.android.geomobile.models.AttributeValueVM;
 import com.geospatialcorporation.android.geomobile.models.Layers.EditLayerAttributesRequest;
 
@@ -110,6 +114,8 @@ public class EditAttributesDialogFragment extends AttributesActionDialogBase<Att
             EditText columnValue = (EditText)mInflater.inflate(R.layout.template_feature_window_column_et, null);
             columnValue.setText(keyValue.getValue());
 
+            setEditTextType(keyValue, columnValue);
+
             mStartingValues.put(keyValue.getColumnId(), new PreviousCurrent(keyValue.getValue(), columnValue));
 
             row.addView(columnName);
@@ -117,6 +123,62 @@ public class EditAttributesDialogFragment extends AttributesActionDialogBase<Att
 
             mTableLayout.addView(row);
         }
+    }
+
+    protected void setEditTextType(AttributeValueVM.Columns keyValue, final EditText columnValue) {
+        Integer type = keyValue.getDataType();
+
+        if(type == ColumnDataTypes.INTEGER || type == ColumnDataTypes.DECIMAL){
+            columnValue.setInputType(InputType.TYPE_CLASS_NUMBER);
+        } else if(type == ColumnDataTypes.DATE){
+            columnValue.setInputType(InputType.TYPE_DATETIME_VARIATION_DATE);
+
+            columnValue.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+                @Override
+                public void onFocusChange(View v, boolean hasFocus) {
+                    if(hasFocus){
+                        Toaster("Open Date Picker");
+                    }
+                }
+            });
+        } else if(type == ColumnDataTypes.DATE_TIME){
+            columnValue.setInputType(InputType.TYPE_CLASS_DATETIME);
+
+            columnValue.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+                @Override
+                public void onFocusChange(View v, boolean hasFocus) {
+                    if (hasFocus) {
+                        Toaster("Open DateTime Picker");
+                    }
+                }
+            });
+        } else {
+            columnValue.setInputType(InputType.TYPE_CLASS_TEXT);
+        }
+
+        if(type == ColumnDataTypes.BOOLEAN){
+            columnValue.addTextChangedListener(new TextWatcher() {
+                @Override
+                public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+                }
+
+                @Override
+                public void onTextChanged(CharSequence s, int start, int before, int count) {
+
+                }
+
+                @Override
+                public void afterTextChanged(Editable s) {
+                    if (s.toString().toLowerCase().equals("true") || s.toString().toLowerCase().equals("false")) {
+                        columnValue.setError(null);
+                    } else {
+                        columnValue.setError("Value must be true or false");
+                    }
+                }
+            });
+        }
+
     }
 
     public static class PreviousCurrent{

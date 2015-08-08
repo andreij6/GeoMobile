@@ -60,21 +60,6 @@ public class LegendLayer {
     }
     //endregion
 
-    public void clearMapFeatures() {
-
-        for(Object mapObject : MapObjects){
-            if(mapObject instanceof Marker){
-                ((Marker) mapObject).remove();
-            }
-            if(mapObject instanceof Polyline){
-                ((Polyline) mapObject).remove();
-            }
-            if(mapObject instanceof Polygon){
-                ((Polygon) mapObject).remove();
-            }
-        }
-    }
-
     public void setImageView(ImageView imageView) {
         mImageView = imageView;
     }

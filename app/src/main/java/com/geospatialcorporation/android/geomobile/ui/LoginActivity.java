@@ -64,6 +64,7 @@ import retrofit.client.Response;
 import retrofit.mime.TypedByteArray;
 
 public class LoginActivity extends GoogleApiActivity implements LoaderCallbacks<Cursor>, IFullExecuter<Boolean> {
+
     private final static String TAG = LoginActivity.class.getSimpleName();
 
     private RestAdapter loginRestAdapter;
@@ -118,6 +119,11 @@ public class LoginActivity extends GoogleApiActivity implements LoaderCallbacks<
         mAnalytics.trackClick(new GoogleAnalyticEvent().SignInBtn());
 
         emailLoginStart();
+    }
+
+    @OnClick(R.id.signUpLink)
+    public void potientialSignup(){
+        mAnalytics.trackClick(new GoogleAnalyticEvent().SignUp());
     }
     //endregion
 
@@ -202,6 +208,7 @@ public class LoginActivity extends GoogleApiActivity implements LoaderCallbacks<
                 Log.d(TAG, "Body: " + fixedKey);
                 Log.e(TAG, "emailLoginStart failure: " + new String(((TypedByteArray)retrofitError.getResponse().getBody()).getBytes()));
                 // TODO: Implement
+                Toast.makeText(LoginActivity.this, "Login Failed", Toast.LENGTH_LONG).show();
             }
         };
 

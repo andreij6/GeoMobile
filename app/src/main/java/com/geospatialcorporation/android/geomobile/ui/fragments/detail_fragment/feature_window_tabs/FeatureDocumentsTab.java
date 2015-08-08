@@ -4,6 +4,7 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TableLayout;
 import android.widget.TableRow;
 import android.widget.TextView;
@@ -83,8 +84,9 @@ public class FeatureDocumentsTab extends FeatureTabBase {
             TextView fileSize = (TextView)mInflater.inflate(R.layout.template_feature_window_column_tv, null);
             fileSize.setText(doc.getFormattedSize());
 
-            TextView download = (TextView)mInflater.inflate(R.layout.template_feature_window_column_tv, null);
-            download.setText(R.string.download);
+            ImageView download = (ImageView)mInflater.inflate(R.layout.template_feature_window_column_iv, null);
+            download.setContentDescription(mContext.getString(R.string.download));
+            download.setImageDrawable(mContext.getDrawable(R.drawable.ic_file_download_black_24dp));
             download.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
@@ -92,8 +94,9 @@ public class FeatureDocumentsTab extends FeatureTabBase {
                 }
             });
 
-            TextView remove = (TextView)mInflater.inflate(R.layout.template_feature_window_column_tv, null);
-            remove.setText(R.string.remove);
+            ImageView remove = (ImageView)mInflater.inflate(R.layout.template_feature_window_column_iv, null);
+            remove.setContentDescription(mContext.getString(R.string.remove));
+            remove.setImageDrawable(mContext.getDrawable(R.drawable.ic_delete_black_24dp));
             remove.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
@@ -110,6 +113,8 @@ public class FeatureDocumentsTab extends FeatureTabBase {
 
             mTableLayout.addView(row);
         }
+
+        mTableLayout.setStretchAllColumns(true);
     }
 
 

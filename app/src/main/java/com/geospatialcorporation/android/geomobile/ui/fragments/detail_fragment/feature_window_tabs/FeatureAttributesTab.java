@@ -1,6 +1,7 @@
 package com.geospatialcorporation.android.geomobile.ui.fragments.detail_fragment.feature_window_tabs;
 
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -28,6 +29,8 @@ import butterknife.OnClick;
 
 
 public class FeatureAttributesTab extends FeatureTabBase {
+
+    private static final String TAG = FeatureAttributesTab.class.getSimpleName();
 
     @InjectView(R.id.featureWindowAttributesTable) TableLayout mTableLayout;
     AttributeValueVM mData;
@@ -74,6 +77,8 @@ public class FeatureAttributesTab extends FeatureTabBase {
 
             mTableLayout.addView(row);
         }
+
+        mTableLayout.setStretchAllColumns(true);
     }
 
     protected AttributeValueVM MatchColumnValues() {
@@ -87,7 +92,7 @@ public class FeatureAttributesTab extends FeatureTabBase {
         List<AttributeValueVM.Columns> columnValues = new ArrayList<>(columns.size());
 
         for(int c = 0; c < columns.size(); c++){
-            columnValues.add(new AttributeValueVM.Columns(columns.get(c).getName(), attributes.get(c), columns.get(c).getId(), FeatureId));
+            columnValues.add(new AttributeValueVM.Columns(columns.get(c).getName(), attributes.get(c), columns.get(c).getId(), FeatureId, columns.get(c).getDataType()));
         }
 
         return new AttributeValueVM(mResponse.getId(), columnValues);

@@ -2,6 +2,7 @@ package com.geospatialcorporation.android.geomobile.library.DI.FeatureWindow.Geo
 
 import com.geospatialcorporation.android.geomobile.library.DI.FeatureWindow.GeometryDataParsers.GeometryResponseParser;
 import com.geospatialcorporation.android.geomobile.library.DI.FeatureWindow.models.FeatureWindowData;
+import com.geospatialcorporation.android.geomobile.library.constants.MapInfoOrder;
 import com.geospatialcorporation.android.geomobile.library.helpers.converter.ICoordinateConverter;
 import com.geospatialcorporation.android.geomobile.models.Query.map.response.featurewindow.FeatureQueryResponse;
 import com.geospatialcorporation.android.geomobile.models.Query.map.response.featurewindow.MapInfo;
@@ -21,7 +22,7 @@ public class MultiPointResponseParser extends ResponseParserBase implements Geom
 
         AddBasicAttributes(result, features, "MultiPoint");
 
-        result.addEntry("Points", mapInfo.getPointCount() + "");
+        result.addEntry("Points", mapInfo.getPointCount() + "", MapInfoOrder.POINTS);
         AddCenterMinMax(result, mapInfo, converter);
 
         return result;

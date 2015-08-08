@@ -2,6 +2,7 @@ package com.geospatialcorporation.android.geomobile.library.DI.FeatureWindow.Geo
 
 import com.geospatialcorporation.android.geomobile.library.DI.FeatureWindow.GeometryDataParsers.GeometryResponseParser;
 import com.geospatialcorporation.android.geomobile.library.DI.FeatureWindow.models.FeatureWindowData;
+import com.geospatialcorporation.android.geomobile.library.constants.MapInfoOrder;
 import com.geospatialcorporation.android.geomobile.library.helpers.converter.ICoordinateConverter;
 import com.geospatialcorporation.android.geomobile.models.Query.map.response.featurewindow.FeatureQueryResponse;
 import com.geospatialcorporation.android.geomobile.models.Query.map.response.featurewindow.MapInfo;
@@ -20,9 +21,9 @@ public class MultiLineResponseParser extends ResponseParserBase implements Geome
         MapInfo mapInfo = features.getMapInfo();
 
         AddBasicAttributes(result, features, "MultiLine");
-        result.addEntry("Lines", mapInfo.getLineCount() + "");
+        result.addEntry("Lines", mapInfo.getLineCount() + "", MapInfoOrder.LINES);
         AddCenterMinMax(result, mapInfo, converter);
-        result.addEntry("Total Length", meterToFeet(mapInfo.getLength()));
+        result.addEntry("Total Length", meterToFeet(mapInfo.getLength()), MapInfoOrder.LENGTH);
 
         return result;
 

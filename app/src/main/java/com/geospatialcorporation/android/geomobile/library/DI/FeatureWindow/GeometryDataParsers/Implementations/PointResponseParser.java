@@ -2,6 +2,7 @@ package com.geospatialcorporation.android.geomobile.library.DI.FeatureWindow.Geo
 
 import com.geospatialcorporation.android.geomobile.library.DI.FeatureWindow.GeometryDataParsers.GeometryResponseParser;
 import com.geospatialcorporation.android.geomobile.library.DI.FeatureWindow.models.FeatureWindowData;
+import com.geospatialcorporation.android.geomobile.library.constants.MapInfoOrder;
 import com.geospatialcorporation.android.geomobile.library.helpers.converter.DMSCoordinateConverter;
 import com.geospatialcorporation.android.geomobile.library.helpers.converter.ICoordinateConverter;
 import com.geospatialcorporation.android.geomobile.models.Query.map.response.featurewindow.FeatureQueryResponse;
@@ -20,8 +21,8 @@ public class PointResponseParser extends ResponseParserBase implements GeometryR
 
         AddBasicAttributes(result, features, "Point");
 
-        result.addEntry("Lat", converter.convert(features.getMapInfo().getPoint().getY(), converter.getLatitiude_PosNeg()));
-        result.addEntry("Long", converter.convert(features.getMapInfo().getPoint().getX(), converter.getLongitude_PosNeg()));
+        result.addEntry("Lat", converter.convert(features.getMapInfo().getPoint().getY(), converter.getLatitiude_PosNeg()), MapInfoOrder.LAT);
+        result.addEntry("Long", converter.convert(features.getMapInfo().getPoint().getX(), converter.getLongitude_PosNeg()), MapInfoOrder.LONG);
 
         return result;
     }

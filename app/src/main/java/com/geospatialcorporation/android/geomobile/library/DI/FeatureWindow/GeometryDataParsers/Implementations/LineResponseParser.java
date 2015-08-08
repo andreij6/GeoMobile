@@ -2,6 +2,7 @@ package com.geospatialcorporation.android.geomobile.library.DI.FeatureWindow.Geo
 
 import com.geospatialcorporation.android.geomobile.library.DI.FeatureWindow.GeometryDataParsers.GeometryResponseParser;
 import com.geospatialcorporation.android.geomobile.library.DI.FeatureWindow.models.FeatureWindowData;
+import com.geospatialcorporation.android.geomobile.library.constants.MapInfoOrder;
 import com.geospatialcorporation.android.geomobile.library.helpers.converter.ICoordinateConverter;
 import com.geospatialcorporation.android.geomobile.models.Query.map.response.featurewindow.FeatureQueryResponse;
 import com.geospatialcorporation.android.geomobile.models.Query.map.response.featurewindow.MapInfo;
@@ -21,15 +22,15 @@ public class LineResponseParser extends ResponseParserBase implements GeometryRe
 
         AddBasicAttributes(result, features, "Line");
 
-        result.addEntry("Points", mapInfo.getPointCount() + "");
+        result.addEntry("Points", mapInfo.getPointCount() + "", MapInfoOrder.POINTS);
 
         //TODO: Add Z-Index to Start & EndPoint
-        result.addEntry("End Point", getLatLngtString(mapInfo.getEndPoint(), converter));
-        result.addEntry("Start Point", getLatLngtString(mapInfo.getStartPoint(), converter));
+        result.addEntry("End Point", getLatLngtString(mapInfo.getEndPoint(), converter), MapInfoOrder.END_POINT);
+        result.addEntry("Start Point", getLatLngtString(mapInfo.getStartPoint(), converter), MapInfoOrder.START_POINT);
 
         AddMinMax(result, mapInfo, converter);
 
-        result.addEntry("Length", meterToFeet(mapInfo.getLength()));
+        result.addEntry("Length", meterToFeet(mapInfo.getLength()), MapInfoOrder.LENGTH);
 
         return result;
     }

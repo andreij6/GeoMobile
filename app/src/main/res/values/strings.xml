@@ -263,5 +263,6 @@
     <string name="create_attribute">Create New Attribute</string>
     <string name="are_you_sure_remove_map_feature_doc">Are you sure that you want to remove</string>
     <string name="i_am_sure">Yes, I am sure</string>
+    <string name="signup_clicked">The User selected the sign up link</string>
 
 </resources>

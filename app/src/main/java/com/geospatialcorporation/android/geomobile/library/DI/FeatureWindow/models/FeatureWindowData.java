@@ -2,39 +2,35 @@ package com.geospatialcorporation.android.geomobile.library.DI.FeatureWindow.mod
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
 
 public class FeatureWindowData {
 
-    private HashMap<String, String> data;
     private List<KeyValue> mList;
 
     public FeatureWindowData(){
-        data = new HashMap<>();
         mList = new ArrayList<>();
     }
 
-    public void addEntry(String key, String value) {
-        data.put(key, value);
+    public void addEntry(String key, String value, Integer order) {
+        mList.add(new KeyValue(key, value, order));
     }
 
     public List<KeyValue> getList() {
-        for(String key : data.keySet()){
-            mList.add(new KeyValue(key, data.get(key)));
-        }
-        Collections.reverse(mList);
-
         return mList;
     }
 
-    public static class KeyValue{
+    public static class KeyValue implements Comparable<KeyValue> {
         public String mKey;
         public String mValue;
+        public Integer mOrder;
 
-        public KeyValue(String key, String value){
+        public KeyValue(String key, String value, int order){
             mKey = key;
             mValue = value;
+            mOrder = order;
         }
 
 
@@ -44,6 +40,13 @@ public class FeatureWindowData {
 
         public String getValue() {
             return mValue;
+        }
+
+        public Integer getOrder(){return mOrder; }
+
+        @Override
+        public int compareTo(KeyValue another) {
+            return this.mOrder - another.getOrder();
         }
     }
 }
