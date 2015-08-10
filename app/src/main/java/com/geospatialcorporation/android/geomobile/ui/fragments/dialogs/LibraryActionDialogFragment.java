@@ -3,6 +3,7 @@ package com.geospatialcorporation.android.geomobile.ui.fragments.dialogs;
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.Intent;
+import android.support.annotation.NonNull;
 import android.support.v4.app.DialogFragment;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -86,6 +87,7 @@ public class LibraryActionDialogFragment extends DialogFragment {
     }
     //endregion
 
+    @NonNull
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState){
         AlertDialog.Builder builder = new AlertDialog.Builder(mContext);

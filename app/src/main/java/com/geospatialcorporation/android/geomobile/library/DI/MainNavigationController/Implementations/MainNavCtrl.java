@@ -16,16 +16,28 @@ import com.google.android.gms.maps.GoogleMap;
 public class MainNavCtrl {
 
     public Fragment setAdminView(MainActivity mainActivity, GoogleMap map, GoogleMapFragment mapFragment, int position) {
+        Fragment currentFragment = application.getMainActivity().getContentFragment();
+
         switch (position) {
             case ViewConstants.HEADER:
             case ViewConstants.MAP:
-                if(map == null){
-                    mapFragment = application.getMapFragment();
+                if(currentFragment instanceof GoogleMapFragment){
+                    return null;
+                } else {
+                    if (map == null) {
+                        mapFragment = application.getMapFragment();
+                    }
+                    return mapFragment;
                 }
-                return mapFragment;
             case ViewConstants.LIBRARY:
+                if(currentFragment instanceof LibraryFragment){
+                    return null;
+                }
                 return new LibraryFragment();
             case ViewConstants.ACCOUNT:
+                if(currentFragment instanceof AccountFragment){
+                    return null;
+                }
                 return new AccountFragment();
             case ViewConstants.ADMIN_CLIENTS:
                 mainActivity.startActivity(new Intent(mainActivity, ClientSelectorActivity.class));

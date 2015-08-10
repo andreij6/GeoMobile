@@ -3,6 +3,7 @@ package com.geospatialcorporation.android.geomobile.ui.fragments.dialogs.action_
 import android.app.Dialog;
 import android.content.DialogInterface;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.view.View;
 import android.widget.EditText;
 
@@ -18,6 +19,7 @@ public class RenameDocumentDialogFragment extends DocumentActionDialogBase {
 
     @InjectView(R.id.renameInput) EditText mRenameInput;
 
+    @NonNull
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState){
 

@@ -18,6 +18,7 @@ public class ClientTypeCodes {
     public static final AbstractMap.SimpleEntry<Integer, String > TUTORIALCLONE = new AbstractMap.SimpleEntry<>(4, "Tutorial Clone");
     public static final AbstractMap.SimpleEntry<Integer, String> DEFAULT = new AbstractMap.SimpleEntry<>(5, "Default");
     public static final AbstractMap.SimpleEntry<Integer, String> SSP = new AbstractMap.SimpleEntry<>(6, "SSP");
+    public static final AbstractMap.SimpleEntry<Integer, String> PLUGINOWNERS = new AbstractMap.SimpleEntry<>(7, "Plugin Owners");
 
     private HashMap<Integer, String> clientTypeCodes = new HashMap<>();
 
@@ -28,6 +29,7 @@ public class ClientTypeCodes {
         clientTypeCodes.put(TUTORIALCLONE.getKey(), TUTORIALCLONE.getValue());
         clientTypeCodes.put(DEFAULT.getKey(), DEFAULT.getValue());
         clientTypeCodes.put(SSP.getKey(), SSP.getValue());
+        clientTypeCodes.put(PLUGINOWNERS.getKey(), PLUGINOWNERS.getValue());
 
         return clientTypeCodes.get(typeCode);
     }

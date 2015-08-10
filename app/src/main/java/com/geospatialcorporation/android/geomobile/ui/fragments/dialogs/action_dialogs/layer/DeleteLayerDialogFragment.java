@@ -3,6 +3,7 @@ package com.geospatialcorporation.android.geomobile.ui.fragments.dialogs.action_
 import android.app.Dialog;
 import android.content.DialogInterface;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.widget.Toast;
 
 import com.geospatialcorporation.android.geomobile.R;
@@ -11,6 +12,7 @@ import com.geospatialcorporation.android.geomobile.application;
 
 public class DeleteLayerDialogFragment extends LayerActionDialogBase {
 
+    @NonNull
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState){
         return getDialogBuilder()

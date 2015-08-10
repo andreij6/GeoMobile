@@ -4,8 +4,6 @@ import com.geospatialcorporation.android.geomobile.library.map.layerManager.Opti
 import com.geospatialcorporation.android.geomobile.library.map.layerManager.OptionsManagerBase;
 import com.geospatialcorporation.android.geomobile.models.Layers.FeatureInfo;
 import com.google.android.gms.maps.GoogleMap;
-import com.google.android.gms.maps.model.LatLng;
-import com.google.android.gms.maps.model.LatLngBounds;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 
@@ -33,7 +31,6 @@ public class MarkerOptionsManager extends OptionsManagerBase<MarkerOptions, Mark
                     Marker marker = map.addMarker(option);
 
                     mIdFeatureIdMap.put(marker.getId(), featureInfo);
-                    marker.setTitle("");
                     mVisibleLayers.put(key, marker);
                 }
 

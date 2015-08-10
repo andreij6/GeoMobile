@@ -8,7 +8,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textAppearance="?android:attr/textAppearanceLarge"
-        android:text="Add Attribute"
+        android:text="@string/add_attribute"
         android:id="@+id/textView3"
         android:layout_gravity="center_horizontal"
         android:layout_alignParentTop="true"

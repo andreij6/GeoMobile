@@ -41,7 +41,6 @@ import com.geospatialcorporation.android.geomobile.library.DI.Map.Models.MapStat
 import com.geospatialcorporation.android.geomobile.library.constants.GeoPanel;
 import com.geospatialcorporation.android.geomobile.library.map.layerManager.ILayerManager;
 import com.geospatialcorporation.android.geomobile.library.map.layerManager.LayerManager;
-import com.geospatialcorporation.android.geomobile.library.map.layerManager.implementations.PolygonOptionsManager;
 import com.geospatialcorporation.android.geomobile.library.panelmanager.ISlidingPanelManager;
 import com.geospatialcorporation.android.geomobile.library.panelmanager.PanelManager;
 import com.geospatialcorporation.android.geomobile.library.services.QueryRestService;
@@ -115,6 +114,7 @@ public class GoogleMapFragment extends GeoViewFragmentBase implements
     @InjectView(R.id.fab_bm_close) FloatingActionButton mBmClose;
     @InjectView(R.id.fab_fullscreen_close) FloatingActionButton mFullScreenClose;
     Menu mMenu;
+    private Layer mZoomToLayer;
     //endregion
 
     //region OnClicks
@@ -150,7 +150,7 @@ public class GoogleMapFragment extends GeoViewFragmentBase implements
         }
     }
 
-    private void handleNewLocation(Location currentLocation) {
+    protected void handleNewLocation(Location currentLocation) {
 
         if(mCurrentLocationMaker != null){
             mCurrentLocationMaker.remove();
@@ -200,24 +200,17 @@ public class GoogleMapFragment extends GeoViewFragmentBase implements
     @Override
     public void onCreate(Bundle savedInstance){
         super.onCreate(savedInstance);
-
-        if(mMapView != null){
-            mMapView.onCreate(savedInstance);
-        }
-
-        application.setMapFragment();
+        application.setMapFragment(this);
         mMapStateService = application.getMapComponent().provideMapStateService();
-
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         setHasOptionsMenu(true);
         View rootView = inflater.inflate(R.layout.fragment_map, container, false);
 
         ButterKnife.inject(this, rootView);
-        SetTitle(R.string.app_name);
+        SetTitle(R.string.geounderground);
 
         mAnalytics.trackScreen(new GoogleAnalyticEvent().MapScreen());
 
@@ -225,10 +218,11 @@ public class GoogleMapFragment extends GeoViewFragmentBase implements
         mPanelManager = new PanelManager(GeoPanel.MAP);
         mPanelManager.setup();
         mPanelManager.touch(false);
-        mLayerManager = application.getLayerManager();
-
 
         initializeGoogleMap(savedInstanceState);
+
+        mLayerManager = application.getLayerManager();
+        mLayerManager.showLayers();
 
         //region Show Feature Window Code
 
@@ -237,8 +231,8 @@ public class GoogleMapFragment extends GeoViewFragmentBase implements
             public boolean onMarkerClick(Marker marker) {
                 clearHighlights();
 
-                if(mCurrentLocationMaker != null && marker.getId() == mCurrentLocationMaker.getId()) {
-                    //show the user their position info
+                if(mCurrentLocationMaker != null && marker.getId().equals(mCurrentLocationMaker.getId())) {
+                    Toaster("Current Location");
                     return  true;
                 } else {
                     getFeatureWindow(marker.getId(), LayerManager.POINT);
@@ -352,41 +346,12 @@ public class GoogleMapFragment extends GeoViewFragmentBase implements
         QueryService.featureWindow(featureId, layerId);
     }
 
-    //region Args Handler -
-    //clicking the show layer button from another fragment should zoom to the extent on the map
-    //sometimes this runs thru before mMap is ready I tried placing the call after initializeGoogleMap but didnt work
-    protected void handleArgs() {
-        Bundle args = getArguments();
-
-        if(args != null && args.getParcelable(Layer.LAYER_INTENT) != null){
-            Layer layer = args.getParcelable(Layer.LAYER_INTENT);
-            zoomToLayer(layer);
-        }
-    }
-
-    protected void zoomToLayer(Layer layer){
-        if(layer.getExtent() != null) {
-            LatLng first = layer.getExtent().getMaxLatLng();
-            LatLng second = layer.getExtent().getMinLatLng();
-
-            LatLngBounds bounds = new LatLngBounds(second, first);
-
-            int padding = 50;
-            CameraUpdate u = CameraUpdateFactory.newLatLngBounds(bounds, padding);
-
-            mMap.animateCamera(u);
-        }
-    }
-    //endregion
-
     protected void initializeGoogleMap(Bundle savedInstanceState) {
         mMapView.onCreate(savedInstanceState);
 
         mMap = mMapView.getMap();
 
         application.setGoogleMap(mMap);
-
-        mLayerManager.showLayers();
 
         mLocationClient = new GoogleApiClient.Builder(getActivity())
                 .addApi(LocationServices.API)
@@ -401,6 +366,7 @@ public class GoogleMapFragment extends GeoViewFragmentBase implements
         } catch (Exception e) {
             e.printStackTrace();
         }
+
     }
 
     @Override
@@ -415,7 +381,6 @@ public class GoogleMapFragment extends GeoViewFragmentBase implements
         super.onResume();
         mMapView.onResume();
         setMapState();
-        //mPanelManager.collapse();
         mLayerManager.showLayers();
         mLocationClient.connect();
     }
@@ -441,9 +406,9 @@ public class GoogleMapFragment extends GeoViewFragmentBase implements
 
     @Override
     public void onDestroy() {
+        super.onDestroy();
         mLayerManager.clearVisibleLayers();
         mMapView.onDestroy();
-        super.onDestroy();
     }
 
     @Override
@@ -474,10 +439,11 @@ public class GoogleMapFragment extends GeoViewFragmentBase implements
 
     @Override
     public void onPause(){
+        super.onPause();
+
         mLayerManager.clearVisibleLayers();
         mMapView.onPause();
         mLocationClient.disconnect();
-        super.onPause();
     }
 
     //endregion
@@ -619,4 +585,24 @@ public class GoogleMapFragment extends GeoViewFragmentBase implements
     }
 
 
+    public void zoomToLayer() {
+        if(mZoomToLayer != null) {
+            if (mZoomToLayer.getExtent() != null) {
+                LatLng first = mZoomToLayer.getExtent().getMaxLatLng();
+                LatLng second = mZoomToLayer.getExtent().getMinLatLng();
+
+                LatLngBounds bounds = new LatLngBounds(second, first);
+
+                int padding = 50;
+                CameraUpdate u = CameraUpdateFactory.newLatLngBounds(bounds, padding);
+                mMap.animateCamera(u);
+            }
+
+            mZoomToLayer = null;
+        }
+    }
+
+    public void setZoomToLayer(Layer zoomToLayer) {
+        mZoomToLayer = zoomToLayer;
+    }
 }

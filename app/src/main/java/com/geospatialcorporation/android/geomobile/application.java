@@ -10,7 +10,6 @@ import com.facebook.stetho.Stetho;
 import com.facebook.stetho.okhttp.StethoInterceptor;
 import com.geospatialcorporation.android.geomobile.library.DI.Analytics.Interfaces.IGeoAnalytics;
 import com.geospatialcorporation.android.geomobile.library.DI.Analytics.Models.GoogleAnalyticEvent;
-import com.geospatialcorporation.android.geomobile.library.DI.SharedPreferences.GeoSharedPrefsBase;
 import com.geospatialcorporation.android.geomobile.library.DI.SharedPreferences.Interfaces.IGeoSharedPrefs;
 import com.geospatialcorporation.android.geomobile.library.constants.Domains;
 import com.geospatialcorporation.android.geomobile.library.constants.GeoPanel;
@@ -19,9 +18,9 @@ import com.geospatialcorporation.android.geomobile.library.map.layerManager.ILay
 import com.geospatialcorporation.android.geomobile.library.map.layerManager.LayerManager;
 import com.geospatialcorporation.android.geomobile.models.Bookmarks.Bookmark;
 import com.geospatialcorporation.android.geomobile.models.Client;
+import com.geospatialcorporation.android.geomobile.models.Document.Document;
 import com.geospatialcorporation.android.geomobile.models.Folders.Folder;
 import com.geospatialcorporation.android.geomobile.models.Layers.Layer;
-import com.geospatialcorporation.android.geomobile.models.Document.Document;
 import com.geospatialcorporation.android.geomobile.models.MapLayerState;
 import com.geospatialcorporation.android.geomobile.ui.MainActivity;
 import com.geospatialcorporation.android.geomobile.ui.fragments.GoogleMapFragment;
@@ -77,6 +76,8 @@ public class application extends applicationDIBase {
     private static GoogleMap googleMap;
 
     private static LayerManager layerManager;
+    private static GoogleMapFragment mGoogleMapFragment
+            ;
     //endregion
 
     //region stuff
@@ -261,11 +262,6 @@ public class application extends applicationDIBase {
         initializeApplication();
     }
 
-    public static GoogleMapFragment getMapFragment() {
-        return new GoogleMapFragment(); // returning the googlemap fragment from it init didnt work after the views were disposed
-        //return googleMap;
-    }
-
     public static Context getAppContext() {
         return context;
     }
@@ -337,8 +333,16 @@ public class application extends applicationDIBase {
         return panel;
     }
 
-    public static void setMapFragment() {
+    public static void setMapFragment(GoogleMapFragment googleMapFragment) {
+        mGoogleMapFragment = googleMapFragment;
+    }
 
+    public static GoogleMapFragment getMapFragment() {
+        if(mGoogleMapFragment == null){
+            mGoogleMapFragment = new GoogleMapFragment();
+        }
+
+        return mGoogleMapFragment;
     }
 
     class TokenInterceptor implements Interceptor {

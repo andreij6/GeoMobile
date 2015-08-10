@@ -46,7 +46,8 @@
             android:layout_weight="1"
             android:src="@drawable/ic_map_marker_circle_white_48dp"
             android:paddingTop="5dp"
-            android:paddingBottom="5dp"/>
+            android:paddingBottom="5dp"
+            android:contentDescription="@string/current_location"/>
 
         <ImageView
             android:layout_width="wrap_content"
@@ -57,7 +58,8 @@
             android:layout_weight="1"
             android:src="@drawable/ic_layers_white_48dp"
             android:paddingTop="5dp"
-            android:paddingBottom="5dp"/>
+            android:paddingBottom="5dp"
+            android:contentDescription="@string/show_layers"/>
     </LinearLayout>
 
 </RelativeLayout>

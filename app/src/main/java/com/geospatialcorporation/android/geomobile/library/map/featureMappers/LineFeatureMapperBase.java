@@ -65,7 +65,8 @@ public abstract class LineFeatureMapperBase extends SingleFeatureMapperBase<Poly
 
     @Override
     public void addMapObject(LegendLayer layer, PolylineOptions option) {
-        mLayerManager.addLine(layer.getLayer().getId(), option, new FeatureInfo(layer.getLayer().getId(), mFeatureId));
+        int layerId = layer.getLayer().getId();
+        mLayerManager.addLine(layerId, option, new FeatureInfo(layerId, mFeatureId));
     }
 
     @Override

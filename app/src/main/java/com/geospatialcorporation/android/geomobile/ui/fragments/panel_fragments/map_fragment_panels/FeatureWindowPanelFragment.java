@@ -92,7 +92,7 @@ public class FeatureWindowPanelFragment extends GeoViewFragmentBase {
 
         ParcelableFeatureQueryResponse data = args.getParcelable(ParcelableFeatureQueryResponse.FEATURE_QUERY_RESPONSE);
 
-        mResponse = data.getFeatureQueryResponse().get(0); //should only be one for a feature window
+        mResponse = data != null ? data.getFeatureQueryResponse().get(0) : null; //should only be one for a feature window
     }
 
 

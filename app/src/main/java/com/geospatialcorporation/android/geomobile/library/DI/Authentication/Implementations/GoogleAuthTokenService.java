@@ -77,6 +77,8 @@ public class GoogleAuthTokenService implements IGoogleAuthTokenService {
                         playEx.getConnectionStatusCode(),
                         mContext,
                         ACTIVITY_AUTH_REQUEST_CODE);
+
+                alert.show();
             } catch (UserRecoverableAuthException userAuthEx) {
                 // Start the user recoverable action using the intent returned by
                 // getIntent()

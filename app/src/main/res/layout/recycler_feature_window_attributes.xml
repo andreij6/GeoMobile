@@ -8,7 +8,6 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textAppearance="?android:attr/textAppearanceMedium"
-        android:text="Medium Text"
         android:id="@+id/columnName"
         android:layout_weight="1"
         android:gravity="center_horizontal"/>
@@ -17,7 +16,6 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textAppearance="?android:attr/textAppearanceMedium"
-        android:text="Medium Text"
         android:id="@+id/columnValue"
         android:layout_weight="1"
         android:gravity="center_horizontal"/>

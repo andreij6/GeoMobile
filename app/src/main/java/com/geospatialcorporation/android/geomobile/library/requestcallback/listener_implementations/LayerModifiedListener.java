@@ -23,6 +23,9 @@ public class LayerModifiedListener extends RequestListenerBase<Response> impleme
 
         if(mShouldRefresh) {
            // ((LayerFragment) mContentFragment).refresh();
+            if(mContentFragment instanceof LayerFragment){
+                ((LayerFragment) mContentFragment).refresh();
+            }
 
             LayerSelectorDrawerFragment drawerFragment = getMainActivity().getLayerDrawerFragment();
 

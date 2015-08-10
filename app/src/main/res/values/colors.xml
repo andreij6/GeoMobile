@@ -10,9 +10,10 @@
 
     <!-- Pallet -->
     <!-- Indigo -->
-    <color name="primary">#37474F</color>
+   <color name="primary">#37474F</color>
     <color name="primary_light">#90A4AE</color>
     <color name="primary_dark">#263238</color>
+
 
     <!-- Orange -->
     <color name="accent">#FF5722</color>

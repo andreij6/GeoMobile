@@ -3,6 +3,7 @@ package com.geospatialcorporation.android.geomobile.ui.fragments.dialogs.action_
 import android.app.Dialog;
 import android.content.DialogInterface;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.view.View;
 import android.widget.EditText;
 
@@ -16,6 +17,7 @@ public class SublayerCreateActionDialogFragment extends SublayerActionDialogFrag
 
     @InjectView(R.id.renameInput) EditText mName;
 
+    @NonNull
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState){
 

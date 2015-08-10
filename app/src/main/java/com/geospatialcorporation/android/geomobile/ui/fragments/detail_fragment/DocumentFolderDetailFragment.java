@@ -58,6 +58,8 @@ public class DocumentFolderDetailFragment extends ItemDetailFragment<Folder> imp
 
         mEntity = args.getParcelable(Folder.FOLDER_INTENT);
 
+        assert mEntity != null;
+        
         SetTitle(mEntity.getName());
     }
 

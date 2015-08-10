@@ -12,7 +12,6 @@ import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBarActivity;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.widget.Toolbar;
-import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -22,7 +21,6 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.geospatialcorporation.android.geomobile.R;
 import com.geospatialcorporation.android.geomobile.application;
@@ -62,6 +60,7 @@ public class MainNavigationDrawerFragment extends Fragment {
     private DrawerLayout mDrawerLayout;
     private ListView mDrawerListView;
     private View mFragmentContainerView;
+    private ActionBar mActionBar;
 
     private int mCurrentSelectedPosition = 0;
     private boolean mFromSavedInstanceState;
@@ -133,11 +132,11 @@ public class MainNavigationDrawerFragment extends Fragment {
 
     /**
      * Users of this fragment must call this method to set up the navigation drawer interactions.
-     *
-     * @param fragmentId   The android:id of this fragment in its activity's layout.
+     *  @param fragmentId   The android:id of this fragment in its activity's layout.
      * @param drawerLayout The DrawerLayout containing this fragment's UI.
+     * @param
      */
-    public void setUp(int fragmentId, DrawerLayout drawerLayout) {
+    public void setUp(int fragmentId, DrawerLayout drawerLayout, ActionBar actionBar) {
         mFragmentContainerView = getActivity().findViewById(fragmentId);
         mDrawerLayout = drawerLayout;
 
@@ -145,24 +144,25 @@ public class MainNavigationDrawerFragment extends Fragment {
         mDrawerLayout.setDrawerShadow(R.drawable.drawer_shadow, GravityCompat.START);
         // set up the drawer's list view with items and click listener
 
-        ActionBar actionBar = getActionBar();
-        actionBar.setDisplayHomeAsUpEnabled(true);
-        actionBar.setHomeButtonEnabled(true);
+        mActionBar = actionBar;
+        mActionBar.setHomeAsUpIndicator(R.drawable.ic_logo_g_orange);
+        mActionBar.setDisplayHomeAsUpEnabled(true);
 
         // ActionBarDrawerToggle ties together the the proper interactions
         // between the navigation drawer and the action bar app icon.
         Toolbar toolbar = new Toolbar(getActivity());
 
         mDrawerToggle = new ActionBarDrawerToggle(
-                getActivity(),                    /* host Activity */
-                mDrawerLayout,                    /* DrawerLayout object */
-                toolbar,             /* nav drawer image to replace 'Up' caret */
-                R.string.drawer_open,  /* "open drawer" description for accessibility */
-                R.string.drawer_close  /* "close drawer" description for accessibility */
+                getActivity(),                      /* host Activity */
+                mDrawerLayout,                      /* DrawerLayout object */
+                toolbar,                            /* nav drawer image to replace 'Up' caret */
+                R.string.drawer_open,           /* "open drawer" description for accessibility */
+                R.string.drawer_close           /* "close drawer" description for accessibility */
         ) {
             @Override
             public void onDrawerClosed(View drawerView) {
                 super.onDrawerClosed(drawerView);
+
                 if (!isAdded()) {
                     return;
                 }
@@ -173,6 +173,7 @@ public class MainNavigationDrawerFragment extends Fragment {
             @Override
             public void onDrawerOpened(View drawerView) {
                 super.onDrawerOpened(drawerView);
+
                 if (!isAdded()) {
                     return;
                 }

@@ -6,9 +6,6 @@ import android.widget.ImageView;
 import android.widget.ProgressBar;
 
 import com.geospatialcorporation.android.geomobile.models.Folders.Folder;
-import com.google.android.gms.maps.model.Marker;
-import com.google.android.gms.maps.model.Polygon;
-import com.google.android.gms.maps.model.Polyline;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -24,10 +21,12 @@ public class LegendLayer {
     Folder mFolder;
     private ProgressBar mProgressBar;
     private CheckBox mCheckBox;
+    private boolean mMapped;
 
     public LegendLayer(Layer layer) {
         mLayer = layer;
         MapObjects = new ArrayList<>();
+        mMapped = false;
     }
 
     public LegendLayer(Folder folder) {
@@ -90,5 +89,13 @@ public class LegendLayer {
 
     public CheckBox getCheckBox() {
         return mCheckBox;
+    }
+
+    public boolean isMapped() {
+        return mMapped;
+    }
+
+    public void setMapped(boolean mapped) {
+        mMapped = mapped;
     }
 }

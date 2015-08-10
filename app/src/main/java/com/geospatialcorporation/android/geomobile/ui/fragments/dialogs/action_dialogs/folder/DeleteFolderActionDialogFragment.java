@@ -3,6 +3,7 @@ package com.geospatialcorporation.android.geomobile.ui.fragments.dialogs.action_
 import android.app.Dialog;
 import android.content.DialogInterface;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 
 import com.geospatialcorporation.android.geomobile.R;
 
@@ -10,6 +11,7 @@ import com.geospatialcorporation.android.geomobile.R;
 public class DeleteFolderActionDialogFragment extends FolderActionDialogBase {
     private static final String TAG = DeleteFolderActionDialogFragment.class.getSimpleName();
 
+    @NonNull
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState){
         return getDialogBuilder()

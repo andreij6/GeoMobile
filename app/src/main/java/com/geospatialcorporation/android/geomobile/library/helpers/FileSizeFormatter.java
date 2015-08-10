@@ -8,7 +8,7 @@ public class FileSizeFormatter {
     public static String format(String sizeString){
         int size = Integer.parseInt(sizeString);
 
-        String strSize = "";
+        String strSize;
         long kb = 1024; // Kilobyte
         long mb = 1024 * kb; // Megabyte
         long gb = 1024 * mb; // Gigabyte

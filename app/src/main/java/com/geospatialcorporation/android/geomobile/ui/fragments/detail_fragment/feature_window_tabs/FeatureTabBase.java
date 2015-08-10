@@ -54,6 +54,8 @@ public abstract class FeatureTabBase extends GeoViewFragmentBase {
 
         ParcelableFeatureQueryResponse data = args.getParcelable(ParcelableFeatureQueryResponse.FEATURE_QUERY_RESPONSE);
 
+        assert data != null;
+
         mResponse = data.getFeatureQueryResponse().get(0); //should only be one for a feature window
 
     }

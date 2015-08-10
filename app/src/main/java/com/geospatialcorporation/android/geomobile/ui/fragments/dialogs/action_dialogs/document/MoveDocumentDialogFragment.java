@@ -4,6 +4,7 @@ import android.app.Dialog;
 import android.content.DialogInterface;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -32,6 +33,7 @@ public class MoveDocumentDialogFragment extends DocumentActionDialogBase impleme
 
     @InjectView(R.id.spinner) Spinner mFolderSpinner;
 
+    @NonNull
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState){
 

@@ -4,6 +4,7 @@ package com.geospatialcorporation.android.geomobile.models.Query.map.response.fe
 import android.os.Bundle;
 import android.os.Parcel;
 import android.os.Parcelable;
+import android.util.Log;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -12,6 +13,8 @@ import java.util.List;
  * Created by andre on 7/7/2015.
  */
 public class ParcelableFeatureQueryResponse implements Parcelable {
+
+    private static final String TAG = ParcelableFeatureQueryResponse.class.getSimpleName();
 
     //region Constructors
     public ParcelableFeatureQueryResponse(List<FeatureQueryResponse> response) {
@@ -35,7 +38,12 @@ public class ParcelableFeatureQueryResponse implements Parcelable {
 
     @Override
     public void writeToParcel(Parcel dest, int flags) {
-        dest.writeList(mResponse);
+        try {
+            dest.writeList(mResponse);
+        } catch (Exception e){
+            Log.d(TAG, e.getMessage());
+        }
+
     }
 
     public static final Creator<ParcelableFeatureQueryResponse> CREATOR = new Creator<ParcelableFeatureQueryResponse>(){

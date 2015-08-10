@@ -57,7 +57,7 @@ public class LayerFolderDetailFragment extends ItemDetailFragment<Folder> implem
 
         mEntity = args.getParcelable(Folder.FOLDER_INTENT);
 
-        SetTitle(mEntity.getName());
+        SetTitle(mEntity != null ? mEntity.getName() : null);
     }
 
     protected void sendScreenName() {

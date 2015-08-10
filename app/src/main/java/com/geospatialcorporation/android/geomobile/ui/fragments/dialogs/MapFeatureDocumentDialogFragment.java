@@ -5,6 +5,7 @@ import android.app.Dialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.Spinner;
@@ -46,6 +47,7 @@ public class MapFeatureDocumentDialogFragment extends GeoDialogFragmentBase impl
         mGetDocumentsTask = application.getTasksComponent().provideGetDocumentsTask();
     }
 
+    @NonNull
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {
         mGetDocumentsTask.getAllDocuments(new GetAllDocumentsParam(this, mDocuments));

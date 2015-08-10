@@ -3,6 +3,7 @@ package com.geospatialcorporation.android.geomobile.ui.fragments.dialogs.action_
 import android.app.Dialog;
 import android.content.DialogInterface;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.view.View;
 import android.widget.EditText;
 
@@ -19,6 +20,7 @@ public class RenameFolderActionDialogFragment extends FolderActionDialogBase {
     EditText mRenameInput;
 
 
+    @NonNull
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState){
 

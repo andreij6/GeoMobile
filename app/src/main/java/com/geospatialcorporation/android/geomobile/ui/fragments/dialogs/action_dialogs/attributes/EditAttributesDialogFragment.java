@@ -4,6 +4,7 @@ import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.DialogInterface;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.text.Editable;
 import android.text.InputType;
 import android.text.TextWatcher;
@@ -34,6 +35,7 @@ public class EditAttributesDialogFragment extends AttributesActionDialogBase<Att
     HashMap<Integer, String> mRequestValues;
     ILayerTreeService mService;
 
+    @NonNull
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState){
         AlertDialog.Builder builder = getDialogBuilder();
@@ -128,9 +130,12 @@ public class EditAttributesDialogFragment extends AttributesActionDialogBase<Att
     protected void setEditTextType(AttributeValueVM.Columns keyValue, final EditText columnValue) {
         Integer type = keyValue.getDataType();
 
-        if(type == ColumnDataTypes.INTEGER || type == ColumnDataTypes.DECIMAL){
+        if(type.equals(ColumnDataTypes.INTEGER) || type.equals(ColumnDataTypes.DECIMAL)){
+
             columnValue.setInputType(InputType.TYPE_CLASS_NUMBER);
-        } else if(type == ColumnDataTypes.DATE){
+
+        } else if(type.equals(ColumnDataTypes.DATE)){
+
             columnValue.setInputType(InputType.TYPE_DATETIME_VARIATION_DATE);
 
             columnValue.setOnFocusChangeListener(new View.OnFocusChangeListener() {
@@ -141,7 +146,7 @@ public class EditAttributesDialogFragment extends AttributesActionDialogBase<Att
                     }
                 }
             });
-        } else if(type == ColumnDataTypes.DATE_TIME){
+        } else if(type.equals(ColumnDataTypes.DATE_TIME)){
             columnValue.setInputType(InputType.TYPE_CLASS_DATETIME);
 
             columnValue.setOnFocusChangeListener(new View.OnFocusChangeListener() {
@@ -156,7 +161,7 @@ public class EditAttributesDialogFragment extends AttributesActionDialogBase<Att
             columnValue.setInputType(InputType.TYPE_CLASS_TEXT);
         }
 
-        if(type == ColumnDataTypes.BOOLEAN){
+        if(type.equals(ColumnDataTypes.BOOLEAN)){
             columnValue.addTextChangedListener(new TextWatcher() {
                 @Override
                 public void beforeTextChanged(CharSequence s, int start, int count, int after) {

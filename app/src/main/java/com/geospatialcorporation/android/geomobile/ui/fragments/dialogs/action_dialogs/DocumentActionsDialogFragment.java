@@ -5,6 +5,7 @@ import android.app.Dialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.view.View;
 import android.widget.Button;
 import android.widget.LinearLayout;
@@ -70,6 +71,7 @@ public class DocumentActionsDialogFragment extends GeoDialogFragmentBase {
     }
     //endregion
 
+    @NonNull
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState){
         AlertDialog.Builder builder = getDialogBuilder();

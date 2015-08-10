@@ -30,7 +30,8 @@
             android:id="@+id/close"
             android:src="@drawable/ic_close_circle_white_24dp"
             android:layout_weight="1.17"
-            android:paddingTop="8dp"/>
+            android:paddingTop="8dp"
+            android:contentDescription="@string/close"/>
     </LinearLayout>
 
 

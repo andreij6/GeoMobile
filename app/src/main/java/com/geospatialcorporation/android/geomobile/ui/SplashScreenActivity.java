@@ -22,7 +22,7 @@ public class SplashScreenActivity extends Activity {
         mErrorHandler = application.getErrorsComponent().provideErrorHandler();
         Thread.setDefaultUncaughtExceptionHandler(mErrorHandler.UncaughtExceptionHandler());
 
-        Object postDelay = new Handler().postDelayed(new Runnable() {
+        new Handler().postDelayed(new Runnable() {
  
             /*
              * Showing splash screen with a timer. This will be useful when you

@@ -4,6 +4,7 @@ import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.DialogInterface;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.view.View;
 import android.widget.EditText;
 
@@ -15,6 +16,7 @@ import com.geospatialcorporation.android.geomobile.library.DI.TreeServices.Inter
 
 public class CreateFolderDialogFragment extends CreateDialogFragmentBase {
 
+    @NonNull
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState){
         AlertDialog.Builder builder = getDialogBuilder();

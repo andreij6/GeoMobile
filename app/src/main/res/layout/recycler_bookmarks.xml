@@ -7,7 +7,6 @@
         android:layout_width="193dp"
         android:layout_height="wrap_content"
         android:textAppearance="?android:attr/textAppearanceMedium"
-        android:text="Large Text"
         android:id="@+id/bookmarkName"
         android:paddingLeft="12dp"
         android:paddingTop="5dp"

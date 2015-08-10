@@ -4,6 +4,7 @@ import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.DialogInterface;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.RadioButton;
@@ -18,6 +19,7 @@ import com.geospatialcorporation.android.geomobile.library.constants.GeometryTyp
 
 public class CreateLayerDialogFragment extends CreateDialogFragmentBase {
 
+    @NonNull
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState){
         AlertDialog.Builder builder = getDialogBuilder();

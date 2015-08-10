@@ -16,24 +16,23 @@
 
 package com.geospatialcorporation.android.geomobile.ui;
 
-import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentManager;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBarActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
-import android.view.MenuInflater;
 import android.view.View;
 
 import com.geospatialcorporation.android.geomobile.R;
 import com.geospatialcorporation.android.geomobile.application;
 import com.geospatialcorporation.android.geomobile.library.DI.ErrorHandler.Interfaces.IGeoErrorHandler;
 import com.geospatialcorporation.android.geomobile.library.DI.MainNavigationController.DaggerMainNavCtrlComponent;
-import com.geospatialcorporation.android.geomobile.library.DI.MainNavigationController.MainNavCtrlComponent;
 import com.geospatialcorporation.android.geomobile.library.DI.MainNavigationController.Implementations.MainNavCtrl;
+import com.geospatialcorporation.android.geomobile.library.DI.MainNavigationController.MainNavCtrlComponent;
 import com.geospatialcorporation.android.geomobile.ui.Interfaces.OnFragmentInteractionListener;
 import com.geospatialcorporation.android.geomobile.ui.fragments.GoogleMapFragment;
 import com.geospatialcorporation.android.geomobile.ui.fragments.drawer.LayerSelectorDrawerFragment;
@@ -92,10 +91,6 @@ public class MainActivity extends ActionBarActivity
         application.setMainActivity(this);
         getSupportActionBar().setElevation(0);
 
-        ActionBar ab = getSupportActionBar();
-        ab.setHomeAsUpIndicator(R.drawable.ic_menu_white_24dp);
-        ab.setDisplayHomeAsUpEnabled(true);
-
         mMapFragment = application.getMapFragment();
 
         //mErrorHandler = application.getErrorsComponent().provideErrorHandler();
@@ -104,7 +99,7 @@ public class MainActivity extends ActionBarActivity
         mIsAdmin = application.getIsAdminUser();
 
         mMainMainNavigationDrawerFragment = (MainNavigationDrawerFragment)getSupportFragmentManager().findFragmentById(R.id.navigation_left_drawer);
-        mMainMainNavigationDrawerFragment.setUp(R.id.navigation_left_drawer, (DrawerLayout) findViewById(R.id.drawer_layout));
+        mMainMainNavigationDrawerFragment.setUp(R.id.navigation_left_drawer, (DrawerLayout) findViewById(R.id.drawer_layout), getSupportActionBar());
 
         mLayerDrawerFragement = (LayerSelectorDrawerFragment)getSupportFragmentManager().findFragmentById(R.id.layer_drawer);
         mLayerDrawerFragement.setUp(R.id.layer_drawer, (DrawerLayout) findViewById(R.id.drawer_layout), (Toolbar) findViewById(R.id.my_toolbar));
@@ -161,6 +156,7 @@ public class MainActivity extends ActionBarActivity
 
     protected Fragment setPageFragment(int position) {
         mIsAdmin = application.getIsAdminUser();
+        application.setMainActivity(this);
 
         MainNavCtrlComponent component = DaggerMainNavCtrlComponent.builder().build();
         mMainNavCtrl = component.provideMainNavCtrl();

@@ -31,7 +31,8 @@
         android:layout_alignParentTop="true"
         android:layout_alignParentStart="true"
         android:layout_marginStart="30dp"
-        android:layout_alignBottom="@+id/itemNameTV"/>
+        android:layout_alignBottom="@+id/itemNameTV"
+        android:contentDescription="@string/folder_icon"/>
 
     <ImageButton
         android:layout_width="wrap_content"
@@ -41,7 +42,8 @@
         android:layout_alignParentTop="true"
         android:layout_alignBottom="@+id/itemNameTV"
         style="@style/information_img_btn"
-        android:layout_alignParentEnd="true"/>
+        android:layout_alignParentEnd="true"
+        android:contentDescription="@string/information"/>
 
     <View style="@style/Divider"/>
 

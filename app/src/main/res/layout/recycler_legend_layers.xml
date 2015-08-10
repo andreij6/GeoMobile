@@ -58,7 +58,8 @@
             android:id="@+id/sublayerExpander"
             android:src="@drawable/ic_arrow_right_bold_hexagon_outline_white_18dp"
             android:background="@color/accent"
-            android:paddingLeft="15dp"/>
+            android:paddingLeft="15dp"
+            android:contentDescription="@string/sublayers"/>
 
     </LinearLayout>
 

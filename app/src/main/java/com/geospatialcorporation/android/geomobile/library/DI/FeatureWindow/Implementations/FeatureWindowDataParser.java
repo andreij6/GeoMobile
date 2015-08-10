@@ -30,7 +30,7 @@ public class FeatureWindowDataParser implements IFeatureWindowDataParser {
 
         String shape = response.getFeatures().get(0).getMapInfo().getGeometryType().toLowerCase();
 
-        if(windowType == MAPINFO) {
+        if(windowType.equals(MAPINFO)) {
             switch (shape) {
                 case "point":
                     parse(new PointResponseParser(response));

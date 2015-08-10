@@ -15,6 +15,5 @@ tools:context="com.geospatialcorporation.android.geomobile.ui.SplashScreenActivi
     android:layout_gravity="right|top|bottom|center|left"
     android:layout_alignParentTop="true"
     android:layout_centerHorizontal="true"/>
-    android:textSize="12sp"
 
 </RelativeLayout>

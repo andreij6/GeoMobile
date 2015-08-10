@@ -59,7 +59,7 @@ public class LayerDetailFragment extends ItemDetailFragment<Layer> implements Ta
 
         mEntity = args.getParcelable(Layer.LAYER_INTENT);
 
-        SetTitle(mEntity.getName());
+        SetTitle(mEntity != null ? mEntity.getName() : null);
     }
 
     @Override

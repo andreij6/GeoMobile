@@ -25,8 +25,7 @@ public class LayerAttributeValidateRequest extends ValidateRequestBase implement
     public boolean isValid() {
         if(mColumnType == null){
             mMessage = getString(R.string.column_type_null);
-            mIsValid = false;
-            return mIsValid;
+            return false;
         }
 
         switch (mColumnType){

@@ -26,7 +26,7 @@
                 <Button
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="Add Attribute"
+                    android:text="@string/add_attribute"
                     android:id="@+id/addAttribute"
                     android:layout_gravity="center_horizontal"/>
 

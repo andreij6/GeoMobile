@@ -9,10 +9,6 @@ import com.google.android.gms.maps.model.PolylineOptions;
 
 import java.util.List;
 
-
-/**
- * Created by andre on 6/29/2015.
- */
 public interface ILayerManager {
 
     void addLine(int id, PolylineOptions option, FeatureInfo featureInfo);
