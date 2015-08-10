@@ -88,7 +88,7 @@ public abstract class PointFeatureMapperBase extends SingleFeatureMapperBase<Mar
                 d = application.getAppContext().getDrawable(R.drawable.ic_checkbox_blank_circle_black_18dp);
                 break;
             case PointStyleCodes.DIAMOND:
-                d = application.getAppContext().getDrawable(R.drawable.ic_checkbox_blank_black_18dp);  //TODO: find a Diamond
+                d = application.getAppContext().getDrawable(R.drawable.ic_diamond_fill);  //TODO: find a Diamond
                 break;
             case PointStyleCodes.SQUARE:
                 d = application.getAppContext().getDrawable(R.drawable.ic_checkbox_blank_black_18dp);
