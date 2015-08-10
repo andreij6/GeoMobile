@@ -67,4 +67,9 @@ public class Point {
     }
     //endregion
 
+
+    @Override
+    public String toString() {
+        return " Geometry: " + GeometryType + " X: " + X + " Y: " + Y + " Z: " + Z + " M: " + M;
+    }
 }

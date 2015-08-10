@@ -8,6 +8,16 @@ public class Extent {
     private Integer GeometryType;
     private Point Min;
     private Point Max;
+
+    public Extent(int geometry, Point min, Point max) {
+        GeometryType  = geometry;
+        Min = min;
+        Max = max;
+    }
+
+    public Extent(){
+
+    }
     //endregion
 
     //region Getters & Setters
@@ -44,4 +54,8 @@ public class Extent {
         return new LatLng(Max.getY(), Max.getX());
     }
 
+    @Override
+    public String toString() {
+        return "Geometry: " + GeometryType + " Min: " + Min.toString() + " Max: " + Max.toString();
+    }
 }

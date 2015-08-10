@@ -40,6 +40,8 @@ public class LayerDetailFragment extends ItemDetailFragment<Layer> implements Ta
 
         handleArguments();
 
+        mNavigationHelper.syncMenu(55);
+
         mTabHost = (FragmentTabHost)mView.findViewById(R.id.tabHost);
 
         mTabHost.setup(getActivity(), getChildFragmentManager(), android.R.id.tabcontent);

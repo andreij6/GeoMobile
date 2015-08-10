@@ -185,6 +185,11 @@ public class MainActivity extends ActionBarActivity
         return (LayerSelectorDrawerFragment)getSupportFragmentManager().findFragmentById(R.id.layer_drawer);
     }
 
+    public MainNavigationDrawerFragment getMainMenuFragment(){
+        return (MainNavigationDrawerFragment)getSupportFragmentManager().findFragmentById(R.id.navigation_left_drawer);
+
+    }
+
     public View getLayerListView() {
         return findViewById(R.id.layer_drawer);
     }

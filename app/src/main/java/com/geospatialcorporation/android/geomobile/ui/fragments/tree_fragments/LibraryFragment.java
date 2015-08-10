@@ -72,9 +72,7 @@ public class LibraryFragment extends GeoViewFragmentBase
     }
 
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        View mRootView = inflater.inflate(R.layout.fragment_libraryitems, container, false);
-
-        ButterKnife.inject(this, mRootView);
+        setView(inflater, container, R.layout.fragment_libraryitems);
         mContext = getActivity();
 
         sendScreenName();
@@ -87,7 +85,9 @@ public class LibraryFragment extends GeoViewFragmentBase
         mDocumentsTask = application.getTasksComponent().provideGetDocumentsTask();
         handleArguments();
 
-        return mRootView;
+        mNavigationHelper.syncMenu(2);
+
+        return mView;
     }
 
     @Override

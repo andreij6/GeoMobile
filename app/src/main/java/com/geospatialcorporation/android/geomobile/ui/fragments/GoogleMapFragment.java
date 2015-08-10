@@ -62,6 +62,7 @@ import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.MapView;
 import com.google.android.gms.maps.MapsInitializer;
+import com.google.android.gms.maps.UiSettings;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.CameraPosition;
 import com.google.android.gms.maps.model.LatLng;
@@ -100,6 +101,7 @@ public class GoogleMapFragment extends GeoViewFragmentBase implements
     ISlidingPanelManager mPanelManager;
     IMapStateService mMapStateService;
     ILayerManager mLayerManager;
+    UiSettings mUiSettings;
 
     Polygon mHighlightedPolygon;
     Polyline mHighlightedPolyline;
@@ -114,7 +116,6 @@ public class GoogleMapFragment extends GeoViewFragmentBase implements
     @InjectView(R.id.fab_bm_close) FloatingActionButton mBmClose;
     @InjectView(R.id.fab_fullscreen_close) FloatingActionButton mFullScreenClose;
     Menu mMenu;
-    private Layer mZoomToLayer;
     //endregion
 
     //region OnClicks
@@ -223,6 +224,8 @@ public class GoogleMapFragment extends GeoViewFragmentBase implements
 
         mLayerManager = application.getLayerManager();
         mLayerManager.showLayers();
+
+        mNavigationHelper.syncMenu(1);
 
         //region Show Feature Window Code
 
@@ -350,6 +353,12 @@ public class GoogleMapFragment extends GeoViewFragmentBase implements
         mMapView.onCreate(savedInstanceState);
 
         mMap = mMapView.getMap();
+
+        mMap.setMyLocationEnabled(true);
+
+        mUiSettings = mMap.getUiSettings();
+        mUiSettings.setMyLocationButtonEnabled(false);
+        mUiSettings.setZoomControlsEnabled(true);
 
         application.setGoogleMap(mMap);
 
@@ -584,25 +593,4 @@ public class GoogleMapFragment extends GeoViewFragmentBase implements
         handleNewLocation(location);
     }
 
-
-    public void zoomToLayer() {
-        if(mZoomToLayer != null) {
-            if (mZoomToLayer.getExtent() != null) {
-                LatLng first = mZoomToLayer.getExtent().getMaxLatLng();
-                LatLng second = mZoomToLayer.getExtent().getMinLatLng();
-
-                LatLngBounds bounds = new LatLngBounds(second, first);
-
-                int padding = 50;
-                CameraUpdate u = CameraUpdateFactory.newLatLngBounds(bounds, padding);
-                mMap.animateCamera(u);
-            }
-
-            mZoomToLayer = null;
-        }
-    }
-
-    public void setZoomToLayer(Layer zoomToLayer) {
-        mZoomToLayer = zoomToLayer;
-    }
 }

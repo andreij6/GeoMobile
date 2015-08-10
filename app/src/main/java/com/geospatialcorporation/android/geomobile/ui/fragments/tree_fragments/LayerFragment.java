@@ -54,9 +54,7 @@ public class LayerFragment extends GeoViewFragmentBase implements IContentRefres
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        View mRootView = inflater.inflate(R.layout.fragment_layeritems, container, false);
-
-        ButterKnife.inject(this, mRootView);
+        setView(inflater, container, R.layout.fragment_layeritems);
         mContext = getActivity();
 
         ILayoutRefresher refresher = application.getUIHelperComponent().provideLayoutRefresher();
@@ -66,7 +64,9 @@ public class LayerFragment extends GeoViewFragmentBase implements IContentRefres
 
         handleArguments();
 
-        return mRootView;
+        mNavigationHelper.syncMenu(55);
+
+        return mView;
     }
 
     public void refresh() {

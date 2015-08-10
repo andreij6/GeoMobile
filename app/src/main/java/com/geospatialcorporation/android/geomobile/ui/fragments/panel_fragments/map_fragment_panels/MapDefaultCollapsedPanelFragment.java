@@ -14,6 +14,7 @@ import com.geospatialcorporation.android.geomobile.library.constants.GeoPanel;
 import com.geospatialcorporation.android.geomobile.library.constants.ViewModes;
 import com.geospatialcorporation.android.geomobile.library.panelmanager.ISlidingPanelManager;
 import com.geospatialcorporation.android.geomobile.library.panelmanager.PanelManager;
+import com.geospatialcorporation.android.geomobile.models.Layers.Extent;
 import com.geospatialcorporation.android.geomobile.ui.MainActivity;
 import com.geospatialcorporation.android.geomobile.ui.fragments.GeoViewFragmentBase;
 import com.geospatialcorporation.android.geomobile.ui.fragments.GoogleMapFragment;
@@ -50,6 +51,12 @@ public class MapDefaultCollapsedPanelFragment extends GeoViewFragmentBase {
         GoogleMapFragment mapFragment = (GoogleMapFragment)application.getMainActivity().getContentFragment();
 
         mapFragment.showLayersDrawer();
+    }
+
+    @OnClick(R.id.extent)
+    public void zoomToExtent(){
+        Extent extent = application.getLayerManager().getFullExtent();
+        application.getLayerManager().zoomToExtent(extent);
     }
 
     @Override

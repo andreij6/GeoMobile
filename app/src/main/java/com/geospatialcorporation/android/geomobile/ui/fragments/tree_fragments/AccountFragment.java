@@ -35,15 +35,16 @@ public class AccountFragment extends GeoViewFragmentBase implements IPostExecute
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState){
-        View v = inflater.inflate(R.layout.fragment_account, container, false);
-        ButterKnife.inject(this, v);
-
+        setView(inflater, container, R.layout.fragment_account);
         SetTitle(R.string.account_title);
 
         mProfileTask = application.getTasksComponent().provideProfileTask();
         mProfileTask.run(new ProfileTaskParams(this));
 
-        return v;
+        mNavigationHelper.syncMenu(3);
+
+
+        return mView;
     }
 
     @Override
@@ -54,4 +55,7 @@ public class AccountFragment extends GeoViewFragmentBase implements IPostExecute
         CellPhone.setText(model.getCellPhone());
         OfficePhone.setText(model.getOfficePhone());
     }
+
+
+
 }

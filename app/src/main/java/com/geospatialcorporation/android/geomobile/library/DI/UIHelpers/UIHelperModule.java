@@ -7,6 +7,7 @@ import com.geospatialcorporation.android.geomobile.library.DI.UIHelpers.Implemen
 import com.geospatialcorporation.android.geomobile.library.DI.UIHelpers.Implementations.DialogHelpers.LayerDialog;
 import com.geospatialcorporation.android.geomobile.library.DI.UIHelpers.Implementations.DialogHelpers.SublayerDialog;
 import com.geospatialcorporation.android.geomobile.library.DI.UIHelpers.Implementations.GeoRefreshLayout;
+import com.geospatialcorporation.android.geomobile.library.DI.UIHelpers.Implementations.MainMenuHelper;
 import com.geospatialcorporation.android.geomobile.library.DI.UIHelpers.Interfaces.DialogHelpers.IAttributeDialog;
 import com.geospatialcorporation.android.geomobile.library.DI.UIHelpers.Interfaces.DialogHelpers.IDocumentDialog;
 import com.geospatialcorporation.android.geomobile.library.DI.UIHelpers.Interfaces.DialogHelpers.IFolderDialog;
@@ -14,6 +15,7 @@ import com.geospatialcorporation.android.geomobile.library.DI.UIHelpers.Interfac
 import com.geospatialcorporation.android.geomobile.library.DI.UIHelpers.Interfaces.DialogHelpers.ILayerDialog;
 import com.geospatialcorporation.android.geomobile.library.DI.UIHelpers.Interfaces.DialogHelpers.ISublayerDialog;
 import com.geospatialcorporation.android.geomobile.library.DI.UIHelpers.Interfaces.ILayoutRefresher;
+import com.geospatialcorporation.android.geomobile.library.DI.UIHelpers.Interfaces.IMainMenuHelper;
 
 import dagger.Module;
 import dagger.Provides;
@@ -41,4 +43,8 @@ public class UIHelperModule {
 
     @Provides
     IAttributeDialog provideAttributeDialog(){ return new AttributeDialog(); }
+
+    @Provides
+    IMainMenuHelper provideMainMenuHelper(){ return new MainMenuHelper(); }
+
 }

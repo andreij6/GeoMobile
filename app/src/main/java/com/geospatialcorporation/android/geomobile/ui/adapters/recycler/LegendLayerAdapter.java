@@ -53,8 +53,6 @@ public class LegendLayerAdapter extends GeoRecyclerAdapterBase<LegendLayerAdapte
     List<Integer> mLayerIdsToShow;
     AppStateSharedPrefs mStateSharedPrefs;
 
-
-
     public LegendLayerAdapter(Context context, List<LegendLayer> layers) {
         super(context, layers, R.layout.recycler_legend_layers, Holder.class);
         mService = new QueryRestService();
@@ -163,6 +161,8 @@ public class LegendLayerAdapter extends GeoRecyclerAdapterBase<LegendLayerAdapte
 
                     updateLayerDB(true);
 
+                    application.getLayerManager().addExtent(mLayer.getId(), mLayer.getExtent());
+
                     mLegendLayer.setMapped(true);
                 } else {
                     //remove layer
@@ -180,6 +180,8 @@ public class LegendLayerAdapter extends GeoRecyclerAdapterBase<LegendLayerAdapte
 
                     updateLayerDB(false);
 
+                    application.getLayerManager().removeExtent(mLayer.getId());
+
                     mLegendLayer.setMapped(false);
                 }
             }
@@ -191,6 +193,7 @@ public class LegendLayerAdapter extends GeoRecyclerAdapterBase<LegendLayerAdapte
                 mStateSharedPrefs.apply();
             } else {
                 mStateSharedPrefs.remove(mLayer.getName() + mLayer.getId());
+                mStateSharedPrefs.apply();
             }
         }
 
@@ -243,8 +246,7 @@ public class LegendLayerAdapter extends GeoRecyclerAdapterBase<LegendLayerAdapte
                 if (!(currentFragment instanceof GoogleMapFragment)) {
                     goToMap(activity);
                 } else {
-                    ((GoogleMapFragment)currentFragment).setZoomToLayer(mLayer);
-                    ((GoogleMapFragment)currentFragment).zoomToLayer();
+                    application.getLayerManager().zoomToExtent(mLayer.getExtent());
                 }
 
                 closeDrawer(activity);

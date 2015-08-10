@@ -1,5 +1,6 @@
 package com.geospatialcorporation.android.geomobile.library.map.layerManager;
 
+import com.geospatialcorporation.android.geomobile.models.Layers.Extent;
 import com.geospatialcorporation.android.geomobile.models.Layers.FeatureInfo;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.maps.model.Polygon;
@@ -23,4 +24,10 @@ public interface ILayerManager {
     void showLayers();
     void clearVisibleLayers();
     List<Integer> getVisibleLayerIds();
+
+    void removeExtent(int id);
+    void addExtent(int id, Extent extent);
+
+    Extent getFullExtent();
+    void zoomToExtent(Extent extent);
 }

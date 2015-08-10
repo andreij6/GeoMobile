@@ -48,8 +48,7 @@ public class MainNavCtrl {
                 mainActivity.startActivity(new Intent(mainActivity, LoginActivity.class));
                 break;
             default:
-                Toast.makeText(application.getAppContext(), "Drawer view not yet implemented.", Toast.LENGTH_LONG).show();
-                break;
+                return null;
         }
 
         return mapFragment;
@@ -72,8 +71,7 @@ public class MainNavCtrl {
                 mainActivity.startActivity(new Intent(mainActivity, LoginActivity.class));
                 break;
             default:
-                Toast.makeText(application.getAppContext(), "Drawer view not yet implemented.", Toast.LENGTH_LONG).show();
-                break;
+                return null;
         }
         return mapFragment;
     }

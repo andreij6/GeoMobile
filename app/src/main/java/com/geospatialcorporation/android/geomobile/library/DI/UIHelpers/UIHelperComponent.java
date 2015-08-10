@@ -7,6 +7,7 @@ import com.geospatialcorporation.android.geomobile.library.DI.UIHelpers.Interfac
 import com.geospatialcorporation.android.geomobile.library.DI.UIHelpers.Interfaces.DialogHelpers.ILayerDialog;
 import com.geospatialcorporation.android.geomobile.library.DI.UIHelpers.Interfaces.DialogHelpers.ISublayerDialog;
 import com.geospatialcorporation.android.geomobile.library.DI.UIHelpers.Interfaces.ILayoutRefresher;
+import com.geospatialcorporation.android.geomobile.library.DI.UIHelpers.Interfaces.IMainMenuHelper;
 
 import javax.inject.Singleton;
 
@@ -29,4 +30,6 @@ public interface UIHelperComponent {
     IGeneralDialog provideGeneralDialog();
 
     IAttributeDialog provideAttributeDialog();
+
+    IMainMenuHelper provideMainMenuHelper();
 }
