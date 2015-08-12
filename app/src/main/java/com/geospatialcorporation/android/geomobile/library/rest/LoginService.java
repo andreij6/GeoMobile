@@ -12,18 +12,16 @@ import retrofit.http.GET;
 import retrofit.http.Header;
 import retrofit.http.Headers;
 import retrofit.http.POST;
+import retrofit.mime.TypedString;
 
 public interface LoginService {
-    @Headers({
-        "Content-Type: application/json",
-        "X-GeoUnderground: Version " + LoginActivity.version + ';' + LoginActivity.versionId + ';' + LoginActivity.deviceId
-    })
+    @Headers("X-GeoUnderground: Version " + LoginActivity.version + ';' + LoginActivity.versionId + ';' + LoginActivity.deviceId)
     @POST("/API/Auth/Mobile/Start")
-    void start(@Body String body, Callback<String> callback);
+    void start(@Body TypedString body, Callback<Response> callback);
 
     @Headers("X-GeoUnderground: Version " + LoginActivity.version + ';' + LoginActivity.versionId + ';' + LoginActivity.deviceId)
     @POST("/API/Auth/Mobile/Login")
-    void login(@Header("X-Signature") String signature, @Body String content, Callback callback);
+    void login(@Header("X-Signature") String signature, @Body TypedString content, Callback<Response> callback);
 
     @POST("/API/Auth/Google")
     Response google(@Body String authToken);

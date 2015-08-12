@@ -45,8 +45,10 @@ import com.google.gson.Gson;
 import java.math.BigInteger;
 import java.security.KeyFactory;
 import java.security.PublicKey;
+import java.security.interfaces.RSAPublicKey;
 import java.security.spec.RSAPublicKeySpec;
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 
 import javax.crypto.Cipher;
@@ -62,6 +64,7 @@ import retrofit.RetrofitError;
 import retrofit.client.Header;
 import retrofit.client.Response;
 import retrofit.mime.TypedByteArray;
+import retrofit.mime.TypedString;
 
 public class LoginActivity extends GoogleApiActivity implements LoaderCallbacks<Cursor>, IFullExecuter<Boolean> {
 
@@ -78,16 +81,16 @@ public class LoginActivity extends GoogleApiActivity implements LoaderCallbacks<
     /** These variables change per mobile version number. Accessible at: (?)geounderground.com/admin/mobile **/
     public final static String version = "1.0.0";
     public final static String versionId = "5AC2F6BD-AA2D-402F-B4E0-DFC3545602BC";
-    private static BigInteger keyOneModulus = new BigInteger(1, Base64.decode("leF2gRR62cjRujE0yRzTFThdXMcGmLkS4EBAowTmBqXsXUd01dYFKFnusTNf8Jm2irRzL/6viqKawWnCwbNYlC62Xezba4z9/0bpf+6Rugu19pez+LpwxMV9B6O1orw2LiwkHgamjC/vg9shXCzQ78B07AEpP5bdVqIDTTvPcMHm4xuYffMOgPhyfYKyRsEW".getBytes(), Base64.DEFAULT));
-    private static BigInteger keyOneExponent = new BigInteger(1, Base64.decode("gOfjk9sgx+xJ6xd0V5X80A==".getBytes(), Base64.DEFAULT));
-    private static String keyTwo = "FJvcDaSRQ5sOnd3bbCA9pYhTe4hEj5WuCxYsKgAUDfY=";
+    private static BigInteger keyOneModulus = new BigInteger(1, Base64.decode("4UTjXI3IEnFyF5pfSUrImOl6R3OAUzzwtC/emrR/A+2k4qKqnfPlQy7fmIPeYhDAvuhZlbSudmMU+hEm7lMhyIpTBIDJeyHG0TnSx0/ODsBwXEM4NBLAXaQKj2mRmJ2PNM/FKjOYWjGOZZBHKO4EkRC1yPYU9AOR+qYy9eC1iHE=", Base64.DEFAULT));
+    private static BigInteger keyOneExponent = new BigInteger(1, Base64.decode("AQAB", Base64.DEFAULT));
+    private static byte[] keyTwo = decryptAES("FJvcDaSRQ5sOnd3bbCA9pYhTe4hEj5WuCxYsKgAUDfY=", true).getBytes();
 
     /** This changes (or can change) per user device **/
     public final static String deviceId = "debugDeviceId";
 
     /** These change with each login attempt. **/
     private int loginAttemptId;
-    private String loginAttemptSalt;
+    private byte[] loginAttemptSalt;
     private String body;
 
     /**
@@ -157,6 +160,7 @@ public class LoginActivity extends GoogleApiActivity implements LoaderCallbacks<
 
         loginRestAdapter = new RestAdapter.Builder()
                 .setEndpoint(application.getDomain())
+                .setLogLevel(RestAdapter.LogLevel.FULL)
                 .build();
         loginService = loginRestAdapter.create(LoginService.class);
 
@@ -186,34 +190,54 @@ public class LoginActivity extends GoogleApiActivity implements LoaderCallbacks<
         getLoaderManager().initLoader(0, null, this);
     }
 
+    // Get login attempt information
     private void emailLoginStart() {
         Log.d(TAG, "Beginning emailLoginStart");
         String[] loginAttemptStrings = null;
 
-        Callback<String> callback = new Callback<String>() {
+        Callback<Response> callback = new Callback<Response>() {
             @Override
-            public void success(String loginAttemptString, Response response) {
-                Log.d(TAG, "emailLoginStart success");
-                String[] loginAttemptStrings = loginAttemptString.split(".");
+            public void success(Response result, Response response) {
+                String responseBody = new String(((TypedByteArray) result.getBody()).getBytes());
 
-                loginAttemptId = Integer.getInteger(loginAttemptStrings[0]);
-                loginAttemptSalt = loginAttemptStrings[1];
+                Log.d(TAG, "emailLoginStart success. Response body: " + responseBody);
+
+                String[] loginAttemptStrings = responseBody.split("\\.");
+
+                if (loginAttemptStrings.length != 2) {
+                    Log.d(TAG, "emailLoginStart error: Too many strings after split.");
+                }
+
+                try {
+                    String loginAttemptIdString = loginAttemptStrings[0];
+                    Log.d(TAG, "emailLoginStart setting loginAttemptId to: " + loginAttemptIdString);
+                    loginAttemptId = Integer.parseInt(loginAttemptIdString);
+                } catch (Exception e) {
+                    Log.d(TAG, "emailLoginStart error: " + e.getMessage());
+                }
+
+                Log.d(TAG, "emailLoginStart setting loginAttemptSalt to: " + loginAttemptStrings[1]);
+                loginAttemptSalt = loginAttemptStrings[1].getBytes();
 
                 validateLogin();
             }
 
             @Override
             public void failure(RetrofitError retrofitError) {
-                Log.d(TAG, "Mobile header: X-GeoUnderground: Version " + LoginActivity.version + ';' + LoginActivity.versionId + ';' + LoginActivity.deviceId);
-                Log.d(TAG, "Body: " + fixedKey);
-                Log.e(TAG, "emailLoginStart failure: " + new String(((TypedByteArray)retrofitError.getResponse().getBody()).getBytes()));
+                Log.d(TAG, "emailLoginStart failure");
+                Log.d(TAG, "Message: " + retrofitError.getMessage());
+                Log.e(TAG, "Error calling: " + retrofitError.getUrl());
+
+                if (retrofitError.getResponse().getBody() != null) {
+                    Log.e(TAG, "emailLoginStart failure: " + new String(((TypedByteArray) retrofitError.getResponse().getBody()).getBytes()));
+                }
                 // TODO: Implement
                 Toast.makeText(LoginActivity.this, "Login Failed", Toast.LENGTH_LONG).show();
             }
         };
 
         // Returns {attemptId}.{base64Key}
-        loginService.start(fixedKey, callback);
+        loginService.start(new TypedString(fixedKey), callback);
     }
 
     /**
@@ -274,6 +298,8 @@ public class LoginActivity extends GoogleApiActivity implements LoaderCallbacks<
 
             postEmailLogin(email, password);
         }
+
+        Log.d(TAG, "Completed validateLogin");
     }
 
     private void postEmailLogin(String email, String password) {
@@ -283,9 +309,9 @@ public class LoginActivity extends GoogleApiActivity implements LoaderCallbacks<
         body = new Gson().toJson(loginBody);
         String encryptedJSONBody = encryptRSA(body);
 
-        Callback callback = new Callback() {
+        Callback<Response> callback = new Callback<Response>() {
             @Override
-            public void success(Object o, Response response) {
+            public void success(Response result, Response response) {
                 Log.d(TAG, "postEmailLogin success");
                 List<Header> headers = response.getHeaders();
 
@@ -304,7 +330,13 @@ public class LoginActivity extends GoogleApiActivity implements LoaderCallbacks<
             }
         };
 
-        loginService.login(getLatestSignature(), encryptedJSONBody, callback);
+        Log.d(TAG, "Login Attempt, Email, Password: " + loginAttemptId + " | " + email + " | " + password);
+        try { Log.d(TAG, "Login Attempt Salt: " + new String(loginAttemptSalt, "UTF8")); } catch (Exception e) { Log.d(TAG, "Couldn't convert loginAttemptSalt to string."); }
+        Log.d(TAG, "JSON Body: " + body);
+        Log.d(TAG, "Encrypted JSON Body: " + encryptedJSONBody);
+        Log.d(TAG, "Signature: " + getLatestSignature());
+
+        loginService.login(getLatestSignature(), new TypedString(encryptedJSONBody), callback);
     }
 
     /**
@@ -440,11 +472,22 @@ public class LoginActivity extends GoogleApiActivity implements LoaderCallbacks<
         String returnString = null;
         try {
             Mac sha256Hmac = Mac.getInstance("HmacSHA256");
-            SecretKeySpec secretKey = new SecretKeySpec((loginAttemptSalt + keyTwo).getBytes(), "HmacSHA256");
-            sha256Hmac.init(secretKey);
-            byte[] hmacBytes = sha256Hmac.doFinal((versionId + "." + deviceId + "." + body + "|" + loginAttemptSalt + keyTwo).getBytes());
 
+            byte[] saltKeyTwo = new byte[loginAttemptSalt.length + keyTwo.length];
+            System.arraycopy(loginAttemptSalt, 0, saltKeyTwo, 0, loginAttemptSalt.length);
+            System.arraycopy(keyTwo, 0, saltKeyTwo, loginAttemptSalt.length, keyTwo.length);
+
+            SecretKeySpec secretKey = new SecretKeySpec(saltKeyTwo, "HmacSHA256");
+            sha256Hmac.init(secretKey);
+
+            String preHash = versionId + "." + deviceId + "." + body + "|" + Base64.encodeToString(saltKeyTwo, Base64.DEFAULT);
+
+            Log.d(TAG, "HmacSHA256 on: " + preHash);
+
+            byte[] hmacBytes = sha256Hmac.doFinal((preHash).getBytes());
             returnString = Base64.encodeToString(hmacBytes, Base64.DEFAULT);
+
+            Log.d(TAG, "HmacSHA256 final: " + returnString);
         } catch (Exception e) {
             Log.e(TAG, "getLatestSignature error: " + e.getMessage());
             Toast.makeText(this, "Error posting login. Try google login.", Toast.LENGTH_LONG).show();
@@ -457,59 +500,69 @@ public class LoginActivity extends GoogleApiActivity implements LoaderCallbacks<
         Log.d(TAG, "Beginning encryptRSA");
         String returnString = null;
         try {
-            RSAPublicKeySpec keySpec = new RSAPublicKeySpec(keyOneModulus, keyOneExponent);
             KeyFactory factory = KeyFactory.getInstance("RSA");
+
+            RSAPublicKeySpec keySpec = new RSAPublicKeySpec(keyOneModulus, keyOneExponent);
+
             PublicKey publicKey = factory.generatePublic(keySpec);
 
             Cipher cipher = Cipher.getInstance("RSA");
             cipher.init(Cipher.ENCRYPT_MODE, publicKey);
+            Log.d(TAG, "RSA size: " + cipher.getBlockSize());
+
             byte[] encrypted = cipher.doFinal(content.getBytes());
 
-            returnString = Base64.encodeToString(encrypted, Base64.DEFAULT);
+            Log.d(TAG, "RSA encrypted string: " + bytesToHex(encrypted));
+            returnString = Base64.encodeToString(encrypted, Base64.NO_WRAP);
         } catch (Exception e) {
             Log.e(TAG, "encryptRSA error: " + e.getMessage());
             Toast.makeText(this, "Error posting login. Try google login.", Toast.LENGTH_LONG).show();
         }
 
+        Log.d(TAG, "Completed encryptRSA");
         return returnString;
     }
 
-    private String decryptAES(String base64Content, boolean returnBase64) {
+    private static String decryptAES(String base64Content, boolean returnBase64) {
         Log.d(TAG, "Beginning decryptAES");
         String returnString = null;
         try {
             byte[] contentBytes = Base64.decode(base64Content, Base64.DEFAULT);
 
             SecretKeySpec keySpec = new SecretKeySpec(AESKey, "AES");
-            Cipher cipher = Cipher.getInstance("AES/ECB/PKCS5Padding");
+            Cipher cipher = Cipher.getInstance("AES/CBC/PKCS5Padding");
             cipher.init(Cipher.DECRYPT_MODE, keySpec);
             byte[] decrypted = cipher.doFinal(contentBytes);
 
-            returnString = (returnBase64) ? new String(decrypted, "UTF-8") : Base64.encodeToString(decrypted, Base64.DEFAULT);
+            returnString = (returnBase64) ? new String(decrypted, "Latin1") : Base64.encodeToString(decrypted, Base64.DEFAULT);
         } catch (Exception e) {
             Log.e(TAG, "decryptAES error: " + e.getMessage());
-            Toast.makeText(this, "Error posting login. Try google login.", Toast.LENGTH_LONG).show();
         }
 
+        Log.d(TAG, "Completed decryptAES");
         return returnString;
     }
 
-    private String encryptAES(String content) {
-        Log.d(TAG, "Beginning encryptAES");
-        String returnString = null;
-        try {
-            SecretKeySpec keySpec = new SecretKeySpec(AESKey, "AES");
-            Cipher cipher = Cipher.getInstance("AES/ECB/PKCS5Padding");
-            cipher.init(Cipher.ENCRYPT_MODE, keySpec);
-            byte[] encrypted = cipher.doFinal(content.getBytes());
+    public static byte[] hexStringToByteArray(String s) {
+        int len = s.length();
+        byte[] data = new byte[len/2];
 
-            returnString = Base64.encodeToString(encrypted, Base64.DEFAULT);
-        } catch (Exception e) {
-            Log.e(TAG, "encryptAES error: " + e.getMessage());
-            Toast.makeText(this, "Error posting login. Try google login.", Toast.LENGTH_LONG).show();
+        for(int i = 0; i < len; i+=2){
+            data[i/2] = (byte) ((Character.digit(s.charAt(i), 16) << 4) + Character.digit(s.charAt(i+1), 16));
         }
 
-        return returnString;
+        return data;
+    }
+
+    final protected static char[] hexArray = "0123456789ABCDEF".toCharArray();
+    public static String bytesToHex(byte[] bytes) {
+        char[] hexChars = new char[bytes.length * 2];
+        for ( int j = 0; j < bytes.length; j++ ) {
+            int v = bytes[j] & 0xFF;
+            hexChars[j * 2] = hexArray[v >>> 4];
+            hexChars[j * 2 + 1] = hexArray[v & 0x0F];
+        }
+        return new String(hexChars);
     }
     //endregion
 
