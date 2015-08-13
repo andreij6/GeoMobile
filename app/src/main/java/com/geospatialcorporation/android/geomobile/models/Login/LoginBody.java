@@ -5,19 +5,19 @@ import android.os.Parcelable;
 
 public class LoginBody implements Parcelable {
     //region Getters & Setters
-    public int getLoginAttemptId() { return LoginAttemptId; }
-    public void setLoginAttemptId(int loginAttemptId) { LoginAttemptId = loginAttemptId; }
+    public String getLoginAttemptId() { return LoginAttemptId; }
+    public void setLoginAttemptId(String loginAttemptId) { LoginAttemptId = loginAttemptId; }
 
-    public String getEmail() { return Email; }
-    public void setEmail(String email) { Email = email; }
+    public String getUsername() { return Username; }
+    public void setUsername(String username) { Username = username; }
 
-    public String setPassword() { return Password; }
+    public String getPassword() { return Password; }
     public void setPassword(String password) { Password = password; }
     //endregion
 
     //region properties
-    public int LoginAttemptId;
-    public String Email;
+    public String LoginAttemptId;
+    public String Username;
     public String Password;
     //endregion
 
@@ -28,20 +28,20 @@ public class LoginBody implements Parcelable {
 
     @Override
     public void writeToParcel(Parcel dest, int flags) {
-        dest.writeInt(LoginAttemptId);
-        dest.writeString(Email);
+        dest.writeString(LoginAttemptId);
+        dest.writeString(Username);
         dest.writeString(Password);
     }
 
     private LoginBody(Parcel in) {
-        LoginAttemptId = in.readInt();
-        Email = in.readString();
+        LoginAttemptId = in.readString();
+        Username = in.readString();
         Password = in.readString();
     }
 
-    public LoginBody(int loginAttemptId, String email, String password) {
+    public LoginBody(String loginAttemptId, String email, String password) {
         LoginAttemptId = loginAttemptId;
-        Email = email;
+        Username = email;
         Password = password;
     }
 
