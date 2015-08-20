@@ -29,36 +29,6 @@
                 map:cameraTargetLng="-96.5878515"
                 map:cameraZoom="3" />
 
-            <!-- Normal Map Mode Buttons -->
-            <!--<com.melnykov.fab.FloatingActionButton
-                android:id="@+id/fab"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignParentTop="true"
-                android:layout_alignParentEnd="true"
-                android:layout_alignParentRight="true"
-                android:src="@drawable/ic_map_marker_radius_white_24dp"
-                fab:fab_colorNormal="@color/accent"
-                fab:fab_colorPressed="@color/primary_dark"
-                fab:fab_colorRipple="@color/primary_light"
-                android:layout_marginTop="30dp"
-                android:layout_marginLeft="16dp"
-                android:layout_marginRight="16dp"
-                android:layout_marginBottom="16dp"
-                />
-
-            <com.melnykov.fab.FloatingActionButton
-                android:id="@+id/fab_layers"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:src="@drawable/ic_layers_white_24dp"
-                fab:fab_colorNormal="@color/accent"
-                fab:fab_colorPressed="@color/primary_dark"
-                fab:fab_colorRipple="@color/primary_light"
-                android:layout_below="@+id/fab"
-                android:layout_alignEnd="@+id/fab"
-                />-->
-
             <!-- Query Mode Buttons -->
             <com.melnykov.fab.FloatingActionButton
                 android:id="@+id/fab_point"
@@ -98,8 +68,6 @@
                 fab:fab_colorPressed="@color/primary_dark"
                 fab:fab_colorRipple="@color/primary_light"
                 android:layout_marginTop="18dp"
-                android:layout_below="@+id/fab_layers"
-                android:layout_alignStart="@+id/fab_layers"
                 android:visibility="gone"/>
 
             <!-- Bookmark Mode Buttons -->
@@ -141,10 +109,7 @@
                 fab:fab_colorPressed="@color/primary_dark"
                 fab:fab_colorRipple="@color/primary_light"
                 android:layout_marginTop="18dp"
-                android:layout_below="@+id/fab_layers"
-                android:layout_alignStart="@+id/fab_layers"
                 android:visibility="gone"/>
-
 
         </RelativeLayout>
 
