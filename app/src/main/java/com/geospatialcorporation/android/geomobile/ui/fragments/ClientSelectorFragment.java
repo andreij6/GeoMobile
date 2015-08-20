@@ -1,13 +1,11 @@
 package com.geospatialcorporation.android.geomobile.ui.fragments;
 
 import android.content.Context;
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -18,8 +16,7 @@ import com.geospatialcorporation.android.geomobile.library.DI.Tasks.Interfaces.I
 import com.geospatialcorporation.android.geomobile.library.DI.Tasks.models.GetClientsTaskParams;
 import com.geospatialcorporation.android.geomobile.library.DI.UIHelpers.Interfaces.ILayoutRefresher;
 import com.geospatialcorporation.android.geomobile.ui.Interfaces.IContentRefresher;
-import com.geospatialcorporation.android.geomobile.library.rest.LoginService;
-import com.geospatialcorporation.android.geomobile.models.Client;
+import com.geospatialcorporation.android.geomobile.models.Subscription;
 import com.geospatialcorporation.android.geomobile.ui.Interfaces.IPostExecuter;
 import com.geospatialcorporation.android.geomobile.ui.adapters.recycler.ClientAdapter;
 
@@ -28,10 +25,9 @@ import java.util.List;
 
 import butterknife.ButterKnife;
 import butterknife.InjectView;
-import retrofit.RetrofitError;
 
 public class ClientSelectorFragment extends Fragment
-        implements IContentRefresher, IPostExecuter<List<Client>>
+        implements IContentRefresher, IPostExecuter<List<Subscription>>
 {
     private static final String TAG = ClientSelectorFragment.class.getName();
 
@@ -46,7 +42,7 @@ public class ClientSelectorFragment extends Fragment
 
     @InjectView(R.id.clientitem_recyclerView) RecyclerView mRecyclerView;
     @InjectView(R.id.swipe_refresh_layout) SwipeRefreshLayout mSwipeRefreshLayout;
-    private List<Client> mDataSet;
+    private List<Subscription> mDataSet;
     IGetClientsTask mTask;
 
     @Override
@@ -79,7 +75,7 @@ public class ClientSelectorFragment extends Fragment
     }
 
     @Override
-    public void onPostExecute(List<Client> model) {
+    public void onPostExecute(List<Subscription> model) {
         ClientAdapter adapter = new ClientAdapter(mContext, model);
 
         mRecyclerView.setAdapter(adapter);

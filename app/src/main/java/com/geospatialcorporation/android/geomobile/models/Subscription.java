@@ -1,6 +1,6 @@
 package com.geospatialcorporation.android.geomobile.models;
 
-public class Client {
+public class Subscription {
     //region Getters & Setters
     public String getName() {
         return Name;
@@ -31,7 +31,7 @@ public class Client {
     int Id;
     int Type;
 
-    public Client(String name, int id, int type) {
+    public Subscription(String name, int id, int type) {
         Name = name;
         Id = id;
         Type = type;

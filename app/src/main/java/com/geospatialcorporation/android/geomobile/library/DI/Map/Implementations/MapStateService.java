@@ -9,7 +9,7 @@ import com.geospatialcorporation.android.geomobile.library.DI.Map.Models.MapStat
 import com.geospatialcorporation.android.geomobile.library.DI.SharedPreferences.Interfaces.IGeoSharedPrefs;
 import com.geospatialcorporation.android.geomobile.models.Bookmarks.Bookmark;
 import com.geospatialcorporation.android.geomobile.models.Bookmarks.BookmarkPosition;
-import com.geospatialcorporation.android.geomobile.models.Client;
+import com.geospatialcorporation.android.geomobile.models.Subscription;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.model.CameraPosition;
 import com.google.android.gms.maps.model.LatLng;
@@ -18,11 +18,11 @@ import com.google.android.gms.maps.model.LatLng;
 public class MapStateService implements IMapStateService {
 
     IGeoSharedPrefs mSharedPrefs;
-    Client mClient;
+    Subscription mSubscription;
 
     public MapStateService(IGeoSharedPrefs sharedPrefs){
         mSharedPrefs = sharedPrefs;
-        mClient = application.getGeoClient();
+        mSubscription = application.getGeoSubscription();
     }
 
     //region Constants
@@ -100,7 +100,7 @@ public class MapStateService implements IMapStateService {
 
     //region Helpers
     protected String makeKey(String key){
-        return key + mClient.getName();
+        return key + mSubscription.getName();
     }
     //endregion
 }

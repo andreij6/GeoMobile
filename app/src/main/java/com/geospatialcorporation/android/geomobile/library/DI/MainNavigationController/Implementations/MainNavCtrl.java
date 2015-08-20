@@ -2,10 +2,9 @@ package com.geospatialcorporation.android.geomobile.library.DI.MainNavigationCon
 
 import android.content.Intent;
 import android.support.v4.app.Fragment;
-import android.widget.Toast;
 
 import com.geospatialcorporation.android.geomobile.application;
-import com.geospatialcorporation.android.geomobile.ui.ClientSelectorActivity;
+import com.geospatialcorporation.android.geomobile.ui.SubscriptionSelectorActivity;
 import com.geospatialcorporation.android.geomobile.ui.LoginActivity;
 import com.geospatialcorporation.android.geomobile.ui.MainActivity;
 import com.geospatialcorporation.android.geomobile.ui.fragments.GoogleMapFragment;
@@ -40,7 +39,7 @@ public class MainNavCtrl {
                 }
                 return new AccountFragment();
             case ViewConstants.ADMIN_CLIENTS:
-                mainActivity.startActivity(new Intent(mainActivity, ClientSelectorActivity.class));
+                mainActivity.startActivity(new Intent(mainActivity, SubscriptionSelectorActivity.class));
                 mainActivity.finish();
                 break;
             case ViewConstants.LOGOUT_ADMIN:

@@ -3,9 +3,6 @@ package com.geospatialcorporation.android.geomobile.library.helpers;
 import android.app.ProgressDialog;
 import android.content.Context;
 
-/**
- * Created by andre on 5/29/2015.
- */
 public class ProgressDialogHelper {
     ProgressDialog mProgressDialog;
 
@@ -23,6 +20,18 @@ public class ProgressDialogHelper {
             mProgressDialog.dismiss();
         } else {
             mProgressDialog.show();
+        }
+    }
+
+    public void showProgressDialog() {
+        if (!mProgressDialog.isShowing()) {
+            mProgressDialog.show();
+        }
+    }
+
+    public void hideProgressDialog() {
+        if (mProgressDialog.isShowing()) {
+            mProgressDialog.dismiss();
         }
     }
 

@@ -59,13 +59,13 @@ public class ClientSelectorSectionsPagerAdapter extends FragmentPagerAdapter {
         Locale l = Locale.getDefault();
         switch (position) {
             case 0:
-                return mContext.getString(R.string.standard_client_section).toUpperCase(l);
+                return mContext.getString(R.string.standard_subscription_section).toUpperCase(l);
             case 1:
-                return mContext.getString(R.string.tutorial_clone_client_section).toUpperCase(l);
+                return mContext.getString(R.string.tutorial_clone_subscription_section).toUpperCase(l);
             case 2:
-                return mContext.getString(R.string.default_client_section).toUpperCase(l);
+                return mContext.getString(R.string.default_subscription_section).toUpperCase(l);
             case 3:
-                return mContext.getString(R.string.ssp_client_section).toUpperCase(l);
+                return mContext.getString(R.string.ssp_subscription_section).toUpperCase(l);
             case 4:
                 return mContext.getString(R.string.plugin_owners_section).toUpperCase(l);
         }

@@ -75,7 +75,6 @@ public class GoogleApiActivity extends Activity implements
      * Try to sign in the user.
      */
     public void signIn() {
-
         Intent intent = AccountPicker.newChooseAccountIntent(null, null, new String[]{"com.google"},
                 false, null, null, null, null);
 
@@ -117,14 +116,6 @@ public class GoogleApiActivity extends Activity implements
     }
 
     protected void onActivityResult(final int requestCode, final int responseCode, final Intent data) {
-        //region Commented code
-        /*if (requestCode == MY_ACTIVITYS_AUTH_REQUEST_CODE) {
-            if (responseCode == RESULT_OK) {
-                new RetrieveTokenTask().execute(accountName);
-            }
-        }*/
-        //endregion
-
         if (requestCode == ACTIVITY_AUTH_REQUEST_CODE) {
             if (responseCode == RESULT_OK) {
                 accountName = data.getStringExtra(AccountManager.KEY_ACCOUNT_NAME);
@@ -136,20 +127,7 @@ public class GoogleApiActivity extends Activity implements
 
                 mGoogleAuthTokenService.GetAndUseAuthToken(getGoogleAuthParmaters(accountName, ProgressHelper));
             }
-
-            //if (responseCode == RESULT_CANCELED) {
-            //    //dialog.message("Result cancelled.");
-            //}
         }
-
-        //region Commented Code
-        //else {
-            //dialog.message("No auth request code.");
-        //}
-
-
-        //dialog.message(accountName, this);
-        //endregion
 
         if (requestCode == RC_SIGN_IN) {
             mIntentInProgress = false;
@@ -158,17 +136,6 @@ public class GoogleApiActivity extends Activity implements
                 mGoogleApiClient.connect();
             }
         }
-
-        //dialog.message(application.getAuthToken());
-
-        Intent mainActivityIntent = new Intent(this, MainActivity.class);
-
-        // TODO: Remove this horrible testing code
-        mainActivityIntent.putExtra("authToken", "ya29.TwEnwvsNEaINP6fGQvox11OrWHWJj1IKHxOi-oMi0hp8HpMywTwos9qW");
-
-        // TODO: Client request - select client?
-        //startActivity(mainActivityIntent);
-
     }
 
     @Override

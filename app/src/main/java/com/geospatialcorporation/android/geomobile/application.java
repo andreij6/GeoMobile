@@ -17,7 +17,7 @@ import com.geospatialcorporation.android.geomobile.library.constants.GeoSharedPr
 import com.geospatialcorporation.android.geomobile.library.map.layerManager.ILayerManager;
 import com.geospatialcorporation.android.geomobile.library.map.layerManager.LayerManager;
 import com.geospatialcorporation.android.geomobile.models.Bookmarks.Bookmark;
-import com.geospatialcorporation.android.geomobile.models.Client;
+import com.geospatialcorporation.android.geomobile.models.Subscription;
 import com.geospatialcorporation.android.geomobile.models.Document.Document;
 import com.geospatialcorporation.android.geomobile.models.Folders.Folder;
 import com.geospatialcorporation.android.geomobile.models.Layers.Layer;
@@ -51,7 +51,7 @@ public class application extends applicationDIBase {
     private static String domain;
     private static Context context;
     private static GoogleApiClient googleClient;
-    private static Client geoClient;
+    private static Subscription geoSubscription;
     private static String geoAuthToken;
     private static String googleAuthToken;
     private static OkHttpClient client;
@@ -381,12 +381,12 @@ public class application extends applicationDIBase {
         googleAuthToken = token;
     }
 
-    public static Client getGeoClient() {
-        return geoClient;
+    public static Subscription getGeoSubscription() {
+        return geoSubscription;
     }
 
-    public static void setGeoClient(Client client) {
-        geoClient = client;
+    public static void setGeoSubscription(Subscription subscription) {
+        geoSubscription = subscription;
     }
 
     public static SharedPreferences getAppState() {

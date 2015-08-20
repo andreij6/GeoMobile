@@ -111,13 +111,13 @@ public class MainNavigationDrawerFragment extends Fragment {
         });
 
         if(mIsAdmin){
-            mViewTitles = Arrays.asList(MenuConstants.MAP, MenuConstants.LIBRARY, MenuConstants.ACCOUNTS, MenuConstants.ADMINCLITENTS, MenuConstants.LOGOUT);
+            mViewTitles = Arrays.asList(MenuConstants.MAP, MenuConstants.LIBRARY, MenuConstants.ACCOUNTS, MenuConstants.ALL_SUBSCRIPTIONS, MenuConstants.LOGOUT);
         } else {
             mViewTitles = Arrays.asList(MenuConstants.MAP, MenuConstants.LIBRARY, MenuConstants.ACCOUNTS, MenuConstants.LOGOUT);
         }
         View header = inflater.inflate(R.layout.header_main_navigation, container, false);
-        TextView clientName = (TextView)header.findViewById(R.id.clientName);
-        clientName.setText(application.getGeoClient().getName());
+        TextView clientName = (TextView)header.findViewById(R.id.subscriptionName);
+        clientName.setText(application.getGeoSubscription().getName());
 
         mDrawerListView.addHeaderView(header);
         mDrawerListView.setAdapter(new MainNavigationAdapter(getActivity(), mViewTitles));
@@ -302,7 +302,7 @@ public class MainNavigationDrawerFragment extends Fragment {
         public static final String MAP = "Map";
         public static final String LAYERS = "Layers";
         public static final String LIBRARY = "Library";
-        public static final String ADMINCLITENTS = "Admin Clients";
+        public static final String ALL_SUBSCRIPTIONS = "All Subscriptions";
         public static final String ACCOUNTS = "Account";
         public static final String LOGOUT = "Logout";
     }

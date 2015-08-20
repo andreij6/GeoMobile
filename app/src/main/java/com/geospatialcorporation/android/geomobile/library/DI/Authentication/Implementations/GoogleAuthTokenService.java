@@ -32,7 +32,7 @@ public class GoogleAuthTokenService implements IGoogleAuthTokenService {
     public void GetAndUseAuthToken(AuthTokenParams parameters) {
         ACTIVITY_AUTH_REQUEST_CODE = parameters.activity_auth_request_code;
         AccountName = parameters.account_name;
-        ProgressHelper = parameters.mProgess_helper;
+        ProgressHelper = parameters.mProgress_helper;
         mContext = parameters.google_context;
 
         new GetAndUseAuthTokenInAsyncTask().execute();
@@ -43,7 +43,7 @@ public class GoogleAuthTokenService implements IGoogleAuthTokenService {
         @Override
         protected void onPreExecute(){
             if(ProgressHelper != null) {
-                ProgressHelper.toggleProgressDialog();
+                ProgressHelper.showProgressDialog();
             }
         }
 
@@ -100,7 +100,7 @@ public class GoogleAuthTokenService implements IGoogleAuthTokenService {
             activity_auth_request_code = requestCode;
             account_name = accountName;
             google_context = context;
-            mProgess_helper = progess_helper;
+            mProgress_helper = progess_helper;
         }
     }
 }

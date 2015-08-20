@@ -16,7 +16,7 @@
 
 <resources>
     <string name="app_name">GeoUnderground Mobile</string>
-    <string name="choose_client">Choose Client</string>
+    <string name="choose_subscription">Choose Subscription</string>
     <string name="drawer_open">Open navigation drawer</string>
     <string name="drawer_close">Close navigation drawer</string>
     <string name="action_websearch">Web search</string>
@@ -27,7 +27,7 @@
     <string name="dummy_content">DUMMY\nCONTENT</string>
 
     <string name="error">Error</string>
-    <string name="title_activity_choose_client">ChooseClientActivity</string>
+    <string name="title_activity_choose_subscription">ChooseSubscriptionActivity</string>
 
     <string name="hello_world">Hello world!</string>
     <string name="action_settings">Settings</string>
@@ -93,16 +93,16 @@
     <string name="add_layer">Layer</string>
     <string name="add_document">Document</string>
     <string name="add_image">Image</string>
-    <string name="title_activity_client_selector">ClientSelectorActivity</string>
+    <string name="title_activity_subscription_selector">SubscriptionSelectorActivity</string>
 
     <string name="title_section1">Section 1</string>
     <string name="title_section2">Section 2</string>
     <string name="title_section3">Section 3</string>
-    <string name="standard_client_section">Standard</string>
-    <string name="tutorial_clone_client_section">Tutorial Clone</string>
-    <string name="demo_clone_client_section">Demo Clone</string>
-    <string name="default_client_section">Default</string>
-    <string name="ssp_client_section">SSP</string>
+    <string name="standard_subscription_section">Standard</string>
+    <string name="tutorial_clone_subscription_section">Tutorial Clone</string>
+    <string name="demo_clone_subscription_section">Demo Clone</string>
+    <string name="default_subscription_section">Default</string>
+    <string name="ssp_subscription_section">SSP</string>
     <string name="plugin_owners_section">Plugin Owners</string>
     <string name="create_folder">Create Folder</string>
     <string name="create">Create</string>
@@ -114,7 +114,7 @@
     <string name="layer_name_hint">Layer Name</string>
     <string name="delete_layer">Delete Layer</string>
     <string name="delete">Delete</string>
-    <string name="title_activity_select_client">Select a Client</string>
+    <string name="title_activity_select_subscription">Select a Subscription</string>
     <string name="location_not_found">Location Not Found</string>
     <string name="enable_gps">Enable GPS</string>
     <string name="are_you_sure">Are you sure that you want to delete</string>
@@ -143,7 +143,7 @@
     <string name="add_bookmark">Add a Bookmark</string>
     <string name="close">Close</string>
     <string name="bookmarkname">Bookmark Name</string>
-    <string name="geoundergroundClient">Client</string>
+    <string name="geoundergroundSubscription">Subscription</string>
     <string name="depictionstyle">Style</string>
     <string name="attribute_layout">Attribute Layout</string>
     <string name="details">Details</string>

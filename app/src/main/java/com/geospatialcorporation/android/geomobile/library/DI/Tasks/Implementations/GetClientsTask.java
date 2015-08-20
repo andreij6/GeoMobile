@@ -1,17 +1,14 @@
 package com.geospatialcorporation.android.geomobile.library.DI.Tasks.Implementations;
 
-import android.os.AsyncTask;
 import android.support.v4.app.FragmentActivity;
-import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 
 import com.geospatialcorporation.android.geomobile.application;
 import com.geospatialcorporation.android.geomobile.library.DI.Tasks.Interfaces.IGetClientsTask;
 import com.geospatialcorporation.android.geomobile.library.DI.Tasks.models.GetClientsTaskParams;
 import com.geospatialcorporation.android.geomobile.library.rest.LoginService;
-import com.geospatialcorporation.android.geomobile.models.Client;
+import com.geospatialcorporation.android.geomobile.models.Subscription;
 import com.geospatialcorporation.android.geomobile.models.GeoAsyncTask;
-import com.geospatialcorporation.android.geomobile.ui.adapters.recycler.ClientAdapter;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -26,9 +23,9 @@ public class GetClientsTask implements IGetClientsTask {
         new GetClientsAsync(params).execute();
     }
 
-    protected class GetClientsAsync extends GeoAsyncTask<Void, Void, List<Client>> {
+    protected class GetClientsAsync extends GeoAsyncTask<Void, Void, List<Subscription>> {
 
-        List<Client> mDataSet;
+        List<Subscription> mDataSet;
         int mClientTypeCode;
         FragmentActivity mContext;
         LoginService mLoginService;
@@ -42,7 +39,7 @@ public class GetClientsTask implements IGetClientsTask {
         }
 
         @Override
-        protected List<Client> doInBackground(Void... params) {
+        protected List<Subscription> doInBackground(Void... params) {
             try {
                 mDataSet = filter(mLoginService.getClients(), mClientTypeCode);
             } catch (RetrofitError e) {
@@ -54,12 +51,12 @@ public class GetClientsTask implements IGetClientsTask {
             return mDataSet;
         }
 
-        private List<Client> filter(List<Client> clients, int clientTypeCode) {
-            List<Client> filtered  = new ArrayList<>();
+        private List<Subscription> filter(List<Subscription> subscriptions, int clientTypeCode) {
+            List<Subscription> filtered  = new ArrayList<>();
 
-            for(Client client : clients){
-                if(client.getType() == mClientTypeCode){
-                    filtered.add(client);
+            for(Subscription subscription : subscriptions){
+                if(subscription.getType() == mClientTypeCode){
+                    filtered.add(subscription);
                 }
             }
 

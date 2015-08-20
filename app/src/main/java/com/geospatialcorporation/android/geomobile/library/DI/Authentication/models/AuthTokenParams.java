@@ -7,5 +7,5 @@ public abstract class AuthTokenParams {
     public int activity_auth_request_code;
     public String account_name;
     public GoogleApiActivity google_context;
-    public ProgressDialogHelper mProgess_helper;
+    public ProgressDialogHelper mProgress_helper;
 }

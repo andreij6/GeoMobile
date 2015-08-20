@@ -1,4 +1,4 @@
 <menu xmlns:tools="http://schemas.android.com/tools"
-      tools:context="com.geospatialcorporation.android.geomobile.ui.ClientSelectorActivity">
+      tools:context="com.geospatialcorporation.android.geomobile.ui.SubscriptionSelectorActivity">
 
 </menu>

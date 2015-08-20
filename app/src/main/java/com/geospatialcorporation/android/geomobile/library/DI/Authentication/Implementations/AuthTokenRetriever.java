@@ -7,7 +7,8 @@ import android.util.Log;
 import com.geospatialcorporation.android.geomobile.application;
 import com.geospatialcorporation.android.geomobile.library.helpers.ProgressDialogHelper;
 import com.geospatialcorporation.android.geomobile.library.rest.LoginService;
-import com.geospatialcorporation.android.geomobile.ui.ClientSelectorActivity;
+import com.geospatialcorporation.android.geomobile.ui.LoginActivity;
+import com.geospatialcorporation.android.geomobile.ui.SubscriptionSelectorActivity;
 import com.geospatialcorporation.android.geomobile.ui.GoogleApiActivity;
 import com.geospatialcorporation.android.geomobile.ui.MainActivity;
 
@@ -59,34 +60,77 @@ public class AuthTokenRetriever {
                 getCurrentClient();
             }
         }
+    }
 
-        void getCurrentClient() {
-            AsyncTask task = new AsyncTask() {
-                @Override
-                protected Object doInBackground(Object[] params) {
-                    try {
-                        mLoginService.getCurrentClient();
+    private void getCurrentClient() {
+        AsyncTask task = new AsyncTask() {
+            @Override
+            protected Object doInBackground(Object[] params) {
+                try {
+                    mLoginService.getCurrentClient();
 
-                        mContext.startActivity(new Intent(mContext, MainActivity.class));
-                    } catch (RetrofitError e) {
-                        if (e.getResponse() != null) {
-                            Log.d(TAG, Integer.toString(e.getResponse().getStatus()));
+                    mContext.startActivity(new Intent(mContext, MainActivity.class));
+                } catch (RetrofitError e) {
+                    if (e.getResponse() != null) {
+                        Log.d(TAG, Integer.toString(e.getResponse().getStatus()));
 
-                            if (e.getResponse().getStatus() == 401) {
-                                Log.d(TAG, "Unauthorized.");
-                            } else {
-                                application.setIsAdminUser(true);
+                        if (e.getResponse().getStatus() == 401) {
+                            Log.d(TAG, "Unauthorized.");
+                        } else {
+                            Log.d(TAG, e.getResponse().getBody().toString());
+                            application.setIsAdminUser(true);
 
-                                mContext.startActivity(new Intent(mContext, ClientSelectorActivity.class));
+                            mContext.startActivity(new Intent(mContext, SubscriptionSelectorActivity.class));
+                        }
+                    }
+                }
+
+                return new Object();
+            }
+        };
+
+        task.execute();
+    }
+
+    public void getCurrentClient(LoginActivity context, ProgressDialogHelper progressHelper) {
+        mLoginService = application.getRestAdapter().create(LoginService.class);
+        mContext = context;
+        ProgressHelper = progressHelper;
+
+        AsyncTask task = new AsyncTask() {
+            @Override
+            protected Object doInBackground(Object[] params) {
+                try {
+                    mLoginService.getCurrentClient();
+
+                    mContext.startActivity(new Intent(mContext, MainActivity.class));
+
+                    if (ProgressHelper != null) {
+                        ProgressHelper.hideProgressDialog();
+                    }
+                } catch (RetrofitError e) {
+                    if (e.getResponse() != null) {
+                        Log.d(TAG, Integer.toString(e.getResponse().getStatus()));
+
+                        if (e.getResponse().getStatus() == 401) {
+                            Log.d(TAG, "Unauthorized.");
+                        } else {
+                            Log.d(TAG, e.getResponse().getBody().toString());
+                            application.setIsAdminUser(true);
+
+                            mContext.startActivity(new Intent(mContext, SubscriptionSelectorActivity.class));
+
+                            if (ProgressHelper != null) {
+                                ProgressHelper.hideProgressDialog();
                             }
                         }
                     }
-
-                    return new Object();
                 }
-            };
 
-            task.execute();
-        }
+                return new Object();
+            }
+        };
+
+        task.execute();
     }
 }

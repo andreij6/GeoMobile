@@ -15,7 +15,7 @@ import com.geospatialcorporation.android.geomobile.application;
 import com.geospatialcorporation.android.geomobile.library.DI.ErrorHandler.Interfaces.IGeoErrorHandler;
 import com.geospatialcorporation.android.geomobile.ui.adapters.ClientSelectorSectionsPagerAdapter;
 
-public class ClientSelectorActivity extends ActionBarActivity implements ActionBar.TabListener {
+public class SubscriptionSelectorActivity extends ActionBarActivity implements ActionBar.TabListener {
 
     ClientSelectorSectionsPagerAdapter mSectionsPagerAdapter;
 
@@ -33,11 +33,11 @@ public class ClientSelectorActivity extends ActionBarActivity implements ActionB
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setTitle(R.string.title_activity_select_client);
+        setTitle(R.string.title_activity_select_subscription);
         setBackButtonClickOnce(false);
         getSupportActionBar().setElevation(0);
         application.getLayerManager().reset();
-        setContentView(R.layout.activity_client_selector);
+        setContentView(R.layout.activity_subscription_selector);
         final ActionBar actionBar = getSupportActionBar();
         actionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_TABS);
 

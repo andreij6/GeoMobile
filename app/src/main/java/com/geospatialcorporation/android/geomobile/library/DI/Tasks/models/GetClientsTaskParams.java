@@ -1,19 +1,18 @@
 package com.geospatialcorporation.android.geomobile.library.DI.Tasks.models;
 
 import android.support.v4.app.FragmentActivity;
-import android.support.v7.widget.RecyclerView;
 
-import com.geospatialcorporation.android.geomobile.models.Client;
+import com.geospatialcorporation.android.geomobile.models.Subscription;
 import com.geospatialcorporation.android.geomobile.ui.Interfaces.IPostExecuter;
 
 import java.util.List;
 
 public class GetClientsTaskParams extends ExecuterParamsBase {
-    List<Client> mDataSet;
+    List<Subscription> mDataSet;
     int mClientTypeCode;
     FragmentActivity mContext;
 
-    public GetClientsTaskParams(List<Client> dataSet, int clientTypeCode, FragmentActivity activity, IPostExecuter executer) {
+    public GetClientsTaskParams(List<Subscription> dataSet, int clientTypeCode, FragmentActivity activity, IPostExecuter executer) {
         super(executer);
         mDataSet = dataSet;
         mClientTypeCode = clientTypeCode;
@@ -25,7 +24,7 @@ public class GetClientsTaskParams extends ExecuterParamsBase {
         return mClientTypeCode;
     }
 
-    public List<Client> getDataSet() {
+    public List<Subscription> getDataSet() {
         return mDataSet;
     }
 
