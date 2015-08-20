@@ -11,8 +11,10 @@
         android:gravity="bottom"
         sothree:umanoPanelHeight="68dp"
         sothree:umanoShadowHeight="4dp"
-        android:layout_marginTop="?attr/actionBarSize"
         android:background="@color/primary_light">
+
+        <!--android:layout_marginTop="?attr/actionBarSize"-->
+
 
         <RelativeLayout
             android:layout_width="match_parent"
@@ -28,6 +30,36 @@
                 map:cameraTargetLat="38.3448001"
                 map:cameraTargetLng="-96.5878515"
                 map:cameraZoom="3" />
+
+            <!-- Normal Map Mode Buttons -->
+            <!--<com.melnykov.fab.FloatingActionButton
+                android:id="@+id/fab"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentTop="true"
+                android:layout_alignParentEnd="true"
+                android:layout_alignParentRight="true"
+                android:src="@drawable/ic_map_marker_radius_white_24dp"
+                fab:fab_colorNormal="@color/accent"
+                fab:fab_colorPressed="@color/primary_dark"
+                fab:fab_colorRipple="@color/primary_light"
+                android:layout_marginTop="30dp"
+                android:layout_marginLeft="16dp"
+                android:layout_marginRight="16dp"
+                android:layout_marginBottom="16dp"
+                />
+
+            <com.melnykov.fab.FloatingActionButton
+                android:id="@+id/fab_layers"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/ic_layers_white_24dp"
+                fab:fab_colorNormal="@color/accent"
+                fab:fab_colorPressed="@color/primary_dark"
+                fab:fab_colorRipple="@color/primary_light"
+                android:layout_below="@+id/fab"
+                android:layout_alignEnd="@+id/fab"
+                />-->
 
             <!-- Query Mode Buttons -->
             <com.melnykov.fab.FloatingActionButton
@@ -68,6 +100,8 @@
                 fab:fab_colorPressed="@color/primary_dark"
                 fab:fab_colorRipple="@color/primary_light"
                 android:layout_marginTop="18dp"
+                android:layout_below="@+id/fab_layers"
+                android:layout_alignStart="@+id/fab_layers"
                 android:visibility="gone"/>
 
             <!-- Bookmark Mode Buttons -->
@@ -109,7 +143,73 @@
                 fab:fab_colorPressed="@color/primary_dark"
                 fab:fab_colorRipple="@color/primary_light"
                 android:layout_marginTop="18dp"
+                android:layout_below="@+id/fab_layers"
+                android:layout_alignStart="@+id/fab_layers"
                 android:visibility="gone"/>
+
+            <LinearLayout
+                android:orientation="horizontal"
+                android:layout_width="match_parent"
+                android:layout_height="48dp"
+                android:layout_below="@+id/fab_point"
+                android:layout_toEndOf="@+id/fab_point"
+                android:background="@color/primary_dark_transparency"
+                android:layout_gravity="center_horizontal"
+                android:layout_centerHorizontal="true"
+                android:id="@+id/linearLayout">
+
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="32dp"
+                    android:id="@+id/showNavIV1"
+                    android:layout_gravity="center_vertical"
+                    android:src="@drawable/ic_nav_orange"
+                    android:paddingLeft="-16dp"
+                    android:paddingRight="-10dp"/>
+
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:id="@+id/showNavIV2"
+                    android:src="@drawable/ic_logo_g_orange"
+                    android:layout_gravity="center_vertical"
+                    android:layout_weight="1"
+                    android:paddingLeft="-18dp"/>
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:text="@string/geounderground"
+                    android:gravity="center"
+                    android:id="@+id/editText2"
+                    android:textSize="18sp"
+                    android:layout_weight="4"
+                    android:textColor="@color/white"
+                    android:textStyle="bold"
+                    />
+
+                <ImageView
+                    android:layout_width="36dp"
+                    android:layout_height="36dp"
+                    android:id="@+id/showLayersIV"
+                    android:src="@drawable/ic_layers_white_36dp"
+                    android:layout_gravity="center_vertical"
+                    android:layout_weight="1"/>
+            </LinearLayout>
+
+            <ImageButton
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/getLocationIB"
+                android:src="@drawable/ic_crosshairs_gps_grey600_36dp"
+                android:layout_marginBottom="25dp"
+                android:layout_marginRight="25dp"
+                android:padding="5dp"
+                android:background="@color/white_transparency"
+                android:layout_alignParentBottom="true"
+                android:layout_alignParentEnd="true"
+                android:layout_marginEnd="25dp"/>
+
 
         </RelativeLayout>
 

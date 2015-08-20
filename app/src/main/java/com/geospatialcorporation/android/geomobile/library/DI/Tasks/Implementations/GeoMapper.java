@@ -1,15 +1,17 @@
-package com.geospatialcorporation.android.geomobile.library.map;
+package com.geospatialcorporation.android.geomobile.library.DI.Tasks.Implementations;
 
+import android.graphics.drawable.Drawable;
 import android.os.AsyncTask;
 import android.util.Log;
 import android.view.View;
 import android.widget.CheckBox;
 import android.widget.ProgressBar;
-import android.widget.Toast;
 
 import com.geospatialcorporation.android.geomobile.application;
+import com.geospatialcorporation.android.geomobile.library.DI.Map.Interfaces.ILayerManager;
+import com.geospatialcorporation.android.geomobile.library.DI.Tasks.Interfaces.ILayerStyleTask;
+import com.geospatialcorporation.android.geomobile.library.DI.Tasks.Interfaces.IMapFeaturesTask;
 import com.geospatialcorporation.android.geomobile.library.constants.GeometryTypeCodes;
-import com.geospatialcorporation.android.geomobile.library.helpers.ProgressDialogHelper;
 import com.geospatialcorporation.android.geomobile.library.map.featureMappers.CollectionFeatureMapper;
 import com.geospatialcorporation.android.geomobile.library.map.featureMappers.ExtentFeatureMapper;
 import com.geospatialcorporation.android.geomobile.library.map.featureMappers.IFeatureMapper;
@@ -20,26 +22,34 @@ import com.geospatialcorporation.android.geomobile.library.map.featureMappers.Mu
 import com.geospatialcorporation.android.geomobile.library.map.featureMappers.PointFeatureMapper;
 import com.geospatialcorporation.android.geomobile.library.map.featureMappers.PolygonFeatureMapper;
 import com.geospatialcorporation.android.geomobile.library.map.featureMappers.RasterFeatureMapper;
+import com.geospatialcorporation.android.geomobile.models.GeoAsyncTask;
 import com.geospatialcorporation.android.geomobile.models.Layers.LegendLayer;
 import com.geospatialcorporation.android.geomobile.models.Query.map.response.mapquery.Feature;
 import com.geospatialcorporation.android.geomobile.models.Query.map.response.mapquery.MapQueryResponse;
+import com.geospatialcorporation.android.geomobile.ui.Interfaces.IPostExecuter;
 
 import java.util.HashMap;
 import java.util.List;
 
-/**
- * Created by andre on 6/24/2015.
- */
-public class GeoMapper implements IGeoMapper  {
-    private static final String TAG = GeoMapper.class.getSimpleName();
+public class GeoMapper implements IMapFeaturesTask, IPostExecuter<Integer> {
+
+    private static final String TAG = MapFeaturesTask.class.getSimpleName();
 
     HashMap<Integer, IFeatureMapper> mStrategies;
+    ILayerManager mLayerManager;
+    LegendLayer mLlayer;
+    IFeatureMapper mMapper;
+    ILayerStyleTask mLayerStyleTask;
+
 
     public GeoMapper(){
-        setStrategies();
+        setupStrategies();
+        mLayerManager = application.getMapComponent().provideLayerManager();
+        mLayerStyleTask = application.getTasksComponent().provideLayerStyleTask();
+
     }
 
-    protected void setStrategies() {
+    protected void setupStrategies(){
         mStrategies = new HashMap<>();
 
         mStrategies.put(GeometryTypeCodes.Point, new PointFeatureMapper());
@@ -54,28 +64,40 @@ public class GeoMapper implements IGeoMapper  {
     }
 
     @Override
-    public void map(List<MapQueryResponse> responses, LegendLayer llayer) {
-        new MapFeaturesTask(responses, llayer).execute();
+    public void mapFeatures(List<MapQueryResponse> responses, LegendLayer legendLayer) {
+        mLlayer = legendLayer;
+        mMapper = mStrategies.get(legendLayer.getLayer().getGeometryTypeCodeId());
+        new MapFeaturesTask(responses, legendLayer).execute();
     }
 
-    //region task attempt
+    @Override
+    public void onPostExecute(Integer integer) {
+        //
 
-    protected class MapFeaturesTask extends AsyncTask<Void, Integer, Integer>{
+        mLlayer.setLegendIcon(mMapper.getActiveDrawable());
+        mLlayer.setImageSrc();
+
+        mLayerManager.showLayer(mLlayer);
+
+        mLlayer.getProgressBar().setVisibility(View.GONE);
+        mLlayer.getCheckBox().setEnabled(true);
+    }
+
+
+    protected class MapFeaturesTask extends GeoAsyncTask<Void, Integer, Integer> {
 
         public MapFeaturesTask(List<MapQueryResponse> responses, LegendLayer llayer){
+            super(GeoMapper.this);
             mResponses = responses;
             mLlayer = llayer;
         }
 
         //region properties
-        LegendLayer mLlayer;
         List<MapQueryResponse> mResponses;
-        IFeatureMapper mMapper;
         Integer mProgressStatus;
         ProgressBar mProgressBar;
         CheckBox mCheckBox;
         //endregion
-
 
         @Override
         protected void onPreExecute() {
@@ -90,11 +112,8 @@ public class GeoMapper implements IGeoMapper  {
             int result = 1;
             try {
                 if(mResponses != null){
-                    int geometryTypeCode = mResponses.get(0).getFeatures().get(0).getGeometry().getGeometryTypeCode();
 
-                    mMapper = mStrategies.get(geometryTypeCode);
-
-
+                    mMapper.setLegendLayer(mLlayer);
 
                     for (MapQueryResponse response : mResponses) {
 
@@ -108,7 +127,9 @@ public class GeoMapper implements IGeoMapper  {
 
                             mMapper.reset();
 
-                            mMapper.draw(feature).addStyle(response.getStyle()).commit(mLlayer);
+                            mMapper.draw(feature)
+                                    .addStyle(response.getStyle())
+                                    .commit(mLlayer);
 
                             counter++;
                         }
@@ -127,28 +148,9 @@ public class GeoMapper implements IGeoMapper  {
             return result;
         }
 
-
         @Override
         protected void onProgressUpdate(Integer... progress) {
             mProgressBar.setProgress(progress[0]);
         }
-
-        @Override
-        protected void onPostExecute(Integer integer) {
-            if(integer == 1) {
-
-                mLlayer.setLegendIcon(mMapper.getActiveDrawable());
-                mLlayer.setImageSrc();
-                mLlayer.getProgressBar().setVisibility(View.GONE);
-
-                application.getLayerManager().showLayers();
-            } else {
-                mProgressBar.setVisibility(View.GONE);
-            }
-
-            mCheckBox.setEnabled(true);
-        }
     }
-
-    //endregion
 }

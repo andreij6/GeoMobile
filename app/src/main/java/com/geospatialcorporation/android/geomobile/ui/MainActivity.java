@@ -17,6 +17,8 @@
 package com.geospatialcorporation.android.geomobile.ui;
 
 import android.content.Intent;
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
@@ -24,11 +26,16 @@ import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBarActivity;
 import android.support.v7.widget.Toolbar;
+import android.view.Gravity;
 import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
+import android.widget.Toast;
 
 import com.geospatialcorporation.android.geomobile.R;
 import com.geospatialcorporation.android.geomobile.application;
+import com.geospatialcorporation.android.geomobile.library.DI.Analytics.Interfaces.IGeoAnalytics;
+import com.geospatialcorporation.android.geomobile.library.DI.Analytics.Models.GoogleAnalyticEvent;
 import com.geospatialcorporation.android.geomobile.library.DI.ErrorHandler.Interfaces.IGeoErrorHandler;
 import com.geospatialcorporation.android.geomobile.library.DI.MainNavigationController.DaggerMainNavCtrlComponent;
 import com.geospatialcorporation.android.geomobile.library.DI.MainNavigationController.Implementations.MainNavCtrl;
@@ -80,30 +87,43 @@ public class MainActivity extends ActionBarActivity
     MainNavigationDrawerFragment mMainMainNavigationDrawerFragment;
     LayerSelectorDrawerFragment mLayerDrawerFragement;
     MainNavCtrl mMainNavCtrl;
+    DrawerLayout mDrawerLayout;
     IGeoErrorHandler mErrorHandler;
+    IGeoAnalytics mAnalytics;
     //endregion
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        //getWindow().requestFeature(Window.FEATURE_ACTION_BAR_OVERLAY);
         setContentView(R.layout.activity_main);
         ButterKnife.inject(this);
         application.setMainActivity(this);
         getSupportActionBar().setElevation(0);
 
         mMapFragment = application.getMapFragment();
+        mAnalytics = application.getAnalyticsComponent().provideGeoAnalytics();
+
+
+        ActionBar actionBar = getSupportActionBar();
+
+        actionBar.setDisplayShowCustomEnabled(true);
+        actionBar.setCustomView(R.layout.abs_layout_map);
+        actionBar.setDisplayHomeAsUpEnabled(true);
+        actionBar.setHomeButtonEnabled(true);
 
         //mErrorHandler = application.getErrorsComponent().provideErrorHandler();
         //Thread.setDefaultUncaughtExceptionHandler(mErrorHandler.UncaughtExceptionHandler());
 
         mIsAdmin = application.getIsAdminUser();
 
-        mMainMainNavigationDrawerFragment = (MainNavigationDrawerFragment)getSupportFragmentManager().findFragmentById(R.id.navigation_left_drawer);
-        mMainMainNavigationDrawerFragment.setUp(R.id.navigation_left_drawer, (DrawerLayout) findViewById(R.id.drawer_layout), getSupportActionBar());
+        mDrawerLayout = (DrawerLayout)findViewById(R.id.drawer_layout);
+
+        mMainMainNavigationDrawerFragment = (MainNavigationDrawerFragment)getSupportFragmentManager().findFragmentById(R.id.navigation_drawer);
+        mMainMainNavigationDrawerFragment.setUp(R.id.navigation_drawer, mDrawerLayout, getSupportActionBar());
 
         mLayerDrawerFragement = (LayerSelectorDrawerFragment)getSupportFragmentManager().findFragmentById(R.id.layer_drawer);
-        mLayerDrawerFragement.setUp(R.id.layer_drawer, (DrawerLayout) findViewById(R.id.drawer_layout), (Toolbar) findViewById(R.id.my_toolbar));
-
+        mLayerDrawerFragement.setUp(R.id.layer_drawer, mDrawerLayout, new Toolbar(this));
 
     }
 
@@ -124,6 +144,21 @@ public class MainActivity extends ActionBarActivity
 //        MenuInflater inflater = getMenuInflater();
 //        inflater.inflate(R.menu.main, menu);
 //        return super.onCreateOptionsMenu(menu);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        int id = item.getItemId();
+
+        if (id == android.R.id.home) {
+            View layerView = getLayerListView();
+
+            if(mDrawerLayout.isDrawerOpen(layerView)){
+                mDrawerLayout.closeDrawer(layerView);
+            }
+        }
+
+        return super.onOptionsItemSelected(item);
     }
 
     /* Called whenever we call invalidateOptionsMenu() */
@@ -172,12 +207,46 @@ public class MainActivity extends ActionBarActivity
         return getSupportFragmentManager().findFragmentById(R.id.content_frame);
     }
 
+    public void openLayersDrawer(){
+        mAnalytics.trackClick(new GoogleAnalyticEvent().OpenLayerDrawer());
+
+        View layerView = getLayerListView();
+        View mainView = getMainNavView();
+
+        showDrawer(layerView, mainView);
+    }
+
+    public void openNavigationDrawer(){
+
+        View layerView = getLayerListView();
+        View mainView = getMainNavView();
+
+        mAnalytics.trackClick(new GoogleAnalyticEvent().OpenMainNav());
+
+        showDrawer(mainView, layerView);
+    }
+
+    protected void showDrawer(View toShow, View toClose){
+        DrawerLayout drawerLayout = getDrawerLayout();
+
+        if(drawerLayout.isDrawerOpen(toShow)){
+            drawerLayout.closeDrawer(toShow);
+        } else {
+            drawerLayout.openDrawer(toShow);
+        }
+
+        if(drawerLayout.isDrawerOpen(toClose)){
+            drawerLayout.closeDrawer(toClose);
+        }
+
+    }
+
     @Override
     public void onFragmentInteraction(String title) {
         getSupportActionBar().setTitle(title);
     }
 
-    public DrawerLayout getRightDrawer() {
+    public DrawerLayout getDrawerLayout() {
         return (DrawerLayout)findViewById(R.id.drawer_layout);
     }
 
@@ -186,12 +255,24 @@ public class MainActivity extends ActionBarActivity
     }
 
     public MainNavigationDrawerFragment getMainMenuFragment(){
-        return (MainNavigationDrawerFragment)getSupportFragmentManager().findFragmentById(R.id.navigation_left_drawer);
+        return (MainNavigationDrawerFragment)getSupportFragmentManager().findFragmentById(R.id.navigation_drawer);
 
+    }
+
+    public void closeLayerDrawer() {
+        getDrawerLayout().closeDrawer(Gravity.END);
+    }
+
+    public void closeNavDrawer() {
+        getDrawerLayout().closeDrawer(Gravity.START);
     }
 
     public View getLayerListView() {
         return findViewById(R.id.layer_drawer);
+    }
+
+    public View getMainNavView(){
+        return findViewById(R.id.navigation_drawer);
     }
 
     public static class MediaConstants {

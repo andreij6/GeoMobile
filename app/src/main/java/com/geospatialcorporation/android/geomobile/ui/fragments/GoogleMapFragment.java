@@ -40,19 +40,18 @@ import com.geospatialcorporation.android.geomobile.library.DI.Analytics.Models.G
 import com.geospatialcorporation.android.geomobile.library.DI.Map.Interfaces.IMapStateService;
 import com.geospatialcorporation.android.geomobile.library.DI.Map.Models.MapStateSaveRequest;
 import com.geospatialcorporation.android.geomobile.library.constants.GeoPanel;
-import com.geospatialcorporation.android.geomobile.library.map.layerManager.ILayerManager;
-import com.geospatialcorporation.android.geomobile.library.map.layerManager.LayerManager;
+import com.geospatialcorporation.android.geomobile.library.map.Models.GeoClusterMarker;
+import com.geospatialcorporation.android.geomobile.library.DI.Map.Interfaces.ILayerManager;
+import com.geospatialcorporation.android.geomobile.library.DI.Map.Implementations.LayerManager;
 import com.geospatialcorporation.android.geomobile.library.panelmanager.ISlidingPanelManager;
 import com.geospatialcorporation.android.geomobile.library.panelmanager.PanelManager;
 import com.geospatialcorporation.android.geomobile.library.services.QueryRestService;
 import com.geospatialcorporation.android.geomobile.library.viewmode.IViewMode;
 import com.geospatialcorporation.android.geomobile.library.viewmode.implementations.QueryMode;
 import com.geospatialcorporation.android.geomobile.library.viewmode.implementations.SearchMode;
-import com.geospatialcorporation.android.geomobile.models.Layers.Layer;
 import com.geospatialcorporation.android.geomobile.models.Query.map.response.featurewindow.ParcelableFeatureQueryResponse;
 import com.geospatialcorporation.android.geomobile.ui.Interfaces.IViewModeListener;
 import com.geospatialcorporation.android.geomobile.ui.MainActivity;
-import com.geospatialcorporation.android.geomobile.ui.fragments.dialogs.MapTypeSelectDialogFragment;
 import com.geospatialcorporation.android.geomobile.ui.fragments.panel_fragments.map_fragment_panels.FeatureWindowPanelFragment;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
@@ -68,7 +67,6 @@ import com.google.android.gms.maps.UiSettings;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.CameraPosition;
 import com.google.android.gms.maps.model.LatLng;
-import com.google.android.gms.maps.model.LatLngBounds;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.maps.model.Polygon;
@@ -78,6 +76,7 @@ import com.google.android.gms.maps.model.PolylineOptions;
 import com.google.maps.android.PolyUtil;
 import com.melnykov.fab.FloatingActionButton;
 import com.sothree.slidinguppanel.SlidingUpPanelLayout;
+import com.google.maps.android.clustering.*;
 
 import butterknife.ButterKnife;
 import butterknife.InjectView;
@@ -104,6 +103,7 @@ public class GoogleMapFragment extends GeoViewFragmentBase implements
     IMapStateService mMapStateService;
     ILayerManager mLayerManager;
     UiSettings mUiSettings;
+    ClusterManager<GeoClusterMarker> mClusterManager;
 
     Polygon mHighlightedPolygon;
     Polyline mHighlightedPolyline;
@@ -121,8 +121,8 @@ public class GoogleMapFragment extends GeoViewFragmentBase implements
     //endregion
 
     //region OnClicks
-    //@SuppressWarnings("unused")
-    //@OnClick(R.id.fab)
+    @SuppressWarnings("unused")
+    @OnClick(R.id.getLocationIB)
     public void getLocation(){
         Location currentLocation = LocationServices.FusedLocationApi.getLastLocation(mLocationClient);
 
@@ -165,21 +165,22 @@ public class GoogleMapFragment extends GeoViewFragmentBase implements
 
         mMap.animateCamera(update);
 
-        MarkerOptions options = new MarkerOptions();
-        options.position(ll);
-
-        //mCurrentLocationMaker = mMap.addMarker(options);
-
     }
 
     //@SuppressWarnings("unused")
-    //@OnClick(R.id.fab_layers)
+    @OnClick(R.id.showLayersIV)
     public void showLayersDrawer(){
-        mAnalytics.trackClick(new GoogleAnalyticEvent().OpenLayerDrawer());
-        DrawerLayout mDrawerLayout = ((MainActivity)getActivity()).getRightDrawer();
-        View layerView = ((MainActivity)getActivity()).getLayerListView();
+        ((MainActivity)getActivity()).openLayersDrawer();
+    }
 
-        mDrawerLayout.openDrawer(layerView);
+    @OnClick(R.id.showNavIV1)
+    public void showNavigation(){
+        ((MainActivity)getActivity()).openNavigationDrawer();
+    }
+    @OnClick(R.id.showNavIV2)
+    public void showNavigation1(){
+
+        ((MainActivity)getActivity()).openNavigationDrawer();
     }
 
     @SuppressWarnings("unused")
@@ -213,19 +214,22 @@ public class GoogleMapFragment extends GeoViewFragmentBase implements
         View rootView = inflater.inflate(R.layout.fragment_map, container, false);
 
         ButterKnife.inject(this, rootView);
-        SetTitle(R.string.geounderground);
+        ((MainActivity)getActivity()).getSupportActionBar().hide();
 
         mAnalytics.trackScreen(new GoogleAnalyticEvent().MapScreen());
 
         application.setMapFragmentPanel(mPanel);
         mPanelManager = new PanelManager(GeoPanel.MAP);
         mPanelManager.setup();
-        mPanelManager.touch(false);
+        mPanelManager.hide();
+
+        mLayerManager = application.getMapComponent().provideLayerManager();
 
         initializeGoogleMap(savedInstanceState);
 
-        mLayerManager = application.getLayerManager();
-        mLayerManager.showLayers();
+        //setUpClusterer();
+        //application.setClusterManager(mClusterManager);
+        //mLayerManager.showLayers();
 
         mNavigationHelper.syncMenu(1);
 
@@ -236,18 +240,21 @@ public class GoogleMapFragment extends GeoViewFragmentBase implements
             public boolean onMarkerClick(Marker marker) {
                 clearHighlights();
 
-                if(mCurrentLocationMaker != null && marker.getId().equals(mCurrentLocationMaker.getId())) {
-                    Toaster("Current Location");
-                    return  true;
-                } else {
+                try {
                     getFeatureWindow(marker.getId(), LayerManager.POINT);
+                    //getFeatureWindow(marker.getTitle(), LayerManager.POINT);  //For Clusterer
 
                     highlight(marker);
 
-                    return false;
+                } catch (Exception e) {
+                    //mClusterManager.onMarkerClick(marker);
+                    Log.e(TAG, e.getMessage());
                 }
 
+                return true;
+
             }
+
         });
 
         mMap.setOnMapClickListener(new GoogleMap.OnMapClickListener() {
@@ -256,35 +263,34 @@ public class GoogleMapFragment extends GeoViewFragmentBase implements
 
                 clearHighlights();
 
-                Iterable<Polyline> lines = mLayerManager.getVisiblePolylines();
+                Boolean highlightFound = false;
 
-                for (Polyline line : lines) {
-                    if (PolyUtil.isLocationOnPath(latLng, line.getPoints(), false, 200.0)) { //idea: reset tolerance by zoom level
-                        getFeatureWindow(line.getId(), LayerManager.LINE);
+                highlightFound = highlightLine(latLng);
 
-                        highlight(line);
-
-                    }
+                if(highlightFound == false) {
+                    highlightPolygon(latLng);
                 }
-
-                Iterable<Polygon> polygons = mLayerManager.getVisiblePolygons();
-
-                for (Polygon ss : polygons) {
-                    if (PolyUtil.containsLocation(latLng, ss.getPoints(), true)) {
-                        getFeatureWindow(ss.getId(), LayerManager.POLYGON);
-
-                        highlight(ss);
-                    }
-
-                }
-
-
             }
         });
 
         //endregion
 
         return rootView;
+    }
+
+
+
+    protected void setUpClusterer() {
+        // Initialize the manager with the context and the map.
+        // (Activity extends context, so we can pass 'this' in the constructor.)
+        mClusterManager = new ClusterManager<>(getActivity(), mMap);
+
+        // Point the map's listeners at the listeners implemented by the cluster
+        // manager.
+        mMap.setOnCameraChangeListener(mClusterManager);
+        mMap.setOnMarkerClickListener(mClusterManager);
+
+
     }
 
     //region HighLighters
@@ -342,6 +348,38 @@ public class GoogleMapFragment extends GeoViewFragmentBase implements
             mHighlightedMarker.remove();
         }
     }
+
+    protected Boolean highlightLine(LatLng position){
+        Boolean foundMatch = false;
+
+        Iterable<Polyline> lines = mLayerManager.getVisiblePolylines();
+
+        for (Polyline line : lines) {
+            if (PolyUtil.isLocationOnPath(position, line.getPoints(), false, 200.0)) { //idea: reset tolerance by zoom level
+                getFeatureWindow(line.getId(), LayerManager.LINE);
+
+                highlight(line);
+                foundMatch = true;
+                break;
+            }
+        }
+
+        return foundMatch;
+    }
+
+    protected void  highlightPolygon(LatLng position){
+        Iterable<Polygon> polygons = mLayerManager.getVisiblePolygons();
+
+        for (Polygon ss : polygons) {
+            if (PolyUtil.containsLocation(position, ss.getPoints(), true)) {
+                getFeatureWindow(ss.getId(), LayerManager.POLYGON);
+
+                highlight(ss);
+                break;
+            }
+
+        }
+    }
     //endregion
 
     protected void getFeatureWindow(String id, int shapeCode){
@@ -360,9 +398,9 @@ public class GoogleMapFragment extends GeoViewFragmentBase implements
 
         mUiSettings = mMap.getUiSettings();
         mUiSettings.setMyLocationButtonEnabled(false);
-        mUiSettings.setZoomControlsEnabled(true);
 
         application.setGoogleMap(mMap);
+        mLayerManager.setMap(mMap);
 
         mLocationClient = new GoogleApiClient.Builder(getActivity())
                 .addApi(LocationServices.API)
@@ -370,6 +408,7 @@ public class GoogleMapFragment extends GeoViewFragmentBase implements
                 .addOnConnectionFailedListener(this)
                 .build();
         try {
+
             MapsInitializer.initialize(this.getActivity());
 
             mLocationClient.connect();
@@ -400,16 +439,9 @@ public class GoogleMapFragment extends GeoViewFragmentBase implements
     public boolean onOptionsItemSelected(MenuItem item) {
         // Handle action buttons
         switch (item.getItemId()) {
-            case R.id.action_map_settings:
-                mAnalytics.trackClick(new GoogleAnalyticEvent().ChangeBaseMap());
-                MapTypeSelectDialogFragment m = new MapTypeSelectDialogFragment();
-                m.setContext(getActivity());
-                m.setMap(mMap);
-                m.show(getFragmentManager(), "styles");
+            case R.id.action_show_layers:
+                showLayersDrawer();
                 return true;
-            //case R.id.action_fullscreen:
-            //    mPanelManager.hide();
-            //    setViewMode(fullScreenSetup());
             default:
                 return super.onOptionsItemSelected(item);
         }
@@ -484,7 +516,7 @@ public class GoogleMapFragment extends GeoViewFragmentBase implements
     //    MainActivity activity = (MainActivity)getActivity();
     //    return new FullScreenMode.Builder()
     //                    .create(activity.getSupportActionBar(),
-    //                            activity.getRightDrawer(),
+    //                            activity.getDrawerLayout(),
     //                            mPanel, mFullScreenClose);
     //}
     //endregion

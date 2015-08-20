@@ -2,20 +2,25 @@ package com.geospatialcorporation.android.geomobile.ui.fragments.detail_fragment
 
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTabHost;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TabHost;
+import android.widget.TextView;
 
 import com.geospatialcorporation.android.geomobile.R;
 import com.geospatialcorporation.android.geomobile.models.Layers.Layer;
+import com.geospatialcorporation.android.geomobile.ui.MainActivity;
+import com.geospatialcorporation.android.geomobile.ui.fragments.GoogleMapFragment;
 import com.geospatialcorporation.android.geomobile.ui.fragments.detail_fragment.layer_tabs.AttributeLayoutTab;
 import com.geospatialcorporation.android.geomobile.ui.fragments.detail_fragment.layer_tabs.DetailsTab;
 import com.geospatialcorporation.android.geomobile.ui.fragments.detail_fragment.layer_tabs.SublayersTab;
 import com.geospatialcorporation.android.geomobile.ui.fragments.dialogs.ItemDetailFragment;
 
 import butterknife.ButterKnife;
+import butterknife.OnClick;
 
 /**
  * Created by andre on 6/2/2015.
@@ -29,6 +34,27 @@ public class LayerDetailFragment extends ItemDetailFragment<Layer> implements Ta
 
     FragmentTabHost mTabHost;
     View mView;
+
+    @OnClick(R.id.showNavIV1)
+    public void showNavigation(){
+        ((MainActivity)getActivity()).openNavigationDrawer();
+    }
+
+    @OnClick(R.id.showNavIV2)
+    public void showNavigation2(){
+        ((MainActivity)getActivity()).openNavigationDrawer();
+    }
+
+    @OnClick(R.id.goToMapIV)
+    public void goToMapIV(){
+        Fragment pageFragment = new GoogleMapFragment();
+
+        FragmentManager fragmentManager = getFragmentManager();
+
+        fragmentManager.beginTransaction()
+                .replace(R.id.content_frame, pageFragment)
+                .addToBackStack(null).commit();
+    }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState){
@@ -51,6 +77,12 @@ public class LayerDetailFragment extends ItemDetailFragment<Layer> implements Ta
         mTabHost.addTab(mTabHost.newTabSpec(DETAILS).setIndicator(DETAILS), DetailsTab.class, getArguments());
 
         mTabHost.setCurrentTab(0);
+
+        for (int i = 0; i < mTabHost.getTabWidget().getTabCount(); i++) {
+            ViewGroup vg = (ViewGroup) mTabHost.getTabWidget().getChildAt(i);
+            TextView tv = (TextView) vg.getChildAt(1);
+            tv.setTextColor(getResources().getColor(R.color.white));
+        }
 
         return mView;
     }

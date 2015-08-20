@@ -8,7 +8,6 @@ import com.geospatialcorporation.android.geomobile.R;
 import com.geospatialcorporation.android.geomobile.application;
 import com.geospatialcorporation.android.geomobile.library.constants.PointStyleCodes;
 import com.geospatialcorporation.android.geomobile.models.Layers.FeatureInfo;
-import com.geospatialcorporation.android.geomobile.models.Layers.Layer;
 import com.geospatialcorporation.android.geomobile.models.Layers.LegendLayer;
 import com.geospatialcorporation.android.geomobile.models.Query.map.response.mapquery.Geometry;
 import com.geospatialcorporation.android.geomobile.models.Query.map.response.mapquery.Style;
@@ -40,6 +39,8 @@ public abstract class PointFeatureMapperBase extends SingleFeatureMapperBase<Mar
 
     @Override
     public int addStyles(MarkerOptions options, Style style) {
+        mIcon = mLegendLayer.getBitmap();
+
         if(mIcon == null) {
             Drawable d = setDrawable(style);
 
@@ -52,11 +53,9 @@ public abstract class PointFeatureMapperBase extends SingleFeatureMapperBase<Mar
             BitmapDescriptor icon = BitmapDescriptorFactory.fromBitmap(coloredBitmap);
 
             mIcon = icon;
-
-            options.icon(icon);
-        } else  {
-            options.icon(mIcon);
         }
+
+        options.icon(mIcon);
 
         return mColor;
     }

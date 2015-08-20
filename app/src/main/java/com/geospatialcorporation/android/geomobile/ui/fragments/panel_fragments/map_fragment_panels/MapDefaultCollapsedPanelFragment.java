@@ -10,6 +10,7 @@ import android.widget.TextView;
 
 import com.geospatialcorporation.android.geomobile.R;
 import com.geospatialcorporation.android.geomobile.application;
+import com.geospatialcorporation.android.geomobile.library.DI.Map.Interfaces.ILayerManager;
 import com.geospatialcorporation.android.geomobile.library.constants.GeoPanel;
 import com.geospatialcorporation.android.geomobile.library.constants.ViewModes;
 import com.geospatialcorporation.android.geomobile.library.panelmanager.ISlidingPanelManager;
@@ -32,6 +33,7 @@ public class MapDefaultCollapsedPanelFragment extends GeoViewFragmentBase {
 
     View mView;
     ISlidingPanelManager mPanelManager;
+    ILayerManager mLayerManager;
 
     //@InjectView(R.id.title) TextView Title;
     //@InjectView(R.id.bookmarkBtn) Button mBookmark;
@@ -55,8 +57,12 @@ public class MapDefaultCollapsedPanelFragment extends GeoViewFragmentBase {
 
     @OnClick(R.id.extent)
     public void zoomToExtent(){
-        Extent extent = application.getLayerManager().getFullExtent();
-        application.getLayerManager().zoomToExtent(extent);
+        if(mLayerManager == null) {
+            mLayerManager = application.getMapComponent().provideLayerManager();
+        }
+
+        Extent extent = mLayerManager.getFullExtent();
+        mLayerManager.zoomToExtent(extent);
     }
 
     @Override

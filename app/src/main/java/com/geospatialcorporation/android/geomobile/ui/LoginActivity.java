@@ -15,7 +15,6 @@ import android.os.Bundle;
 import android.provider.ContactsContract;
 import android.text.TextUtils;
 import android.text.method.LinkMovementMethod;
-import android.util.Base64;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
@@ -25,7 +24,6 @@ import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.geospatialcorporation.android.geomobile.BuildConfig;
 import com.geospatialcorporation.android.geomobile.R;
@@ -33,44 +31,19 @@ import com.geospatialcorporation.android.geomobile.application;
 import com.geospatialcorporation.android.geomobile.library.DI.Analytics.Models.GoogleAnalyticEvent;
 import com.geospatialcorporation.android.geomobile.library.DI.Tasks.Interfaces.IUserLoginTask;
 import com.geospatialcorporation.android.geomobile.library.constants.GeoSharedPreferences;
-import com.geospatialcorporation.android.geomobile.library.rest.LoginService;
 import com.geospatialcorporation.android.geomobile.library.util.Authentication;
 import com.geospatialcorporation.android.geomobile.library.util.LoginValidator;
-import com.geospatialcorporation.android.geomobile.models.Login.LoginBody;
-import com.geospatialcorporation.android.geomobile.models.Login.LoginBodyJsonSerializer;
 import com.geospatialcorporation.android.geomobile.ui.Interfaces.IFullExecuter;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GooglePlayServicesUtil;
 import com.google.android.gms.common.SignInButton;
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
 
-import org.apache.commons.io.Charsets;
-
-import java.math.BigInteger;
-import java.security.KeyFactory;
-import java.security.PublicKey;
-import java.security.interfaces.RSAPublicKey;
-import java.security.spec.RSAPublicKeySpec;
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
-
-import javax.crypto.Cipher;
-import javax.crypto.Mac;
-import javax.crypto.spec.IvParameterSpec;
-import javax.crypto.spec.SecretKeySpec;
 
 import butterknife.ButterKnife;
 import butterknife.InjectView;
 import butterknife.OnClick;
-import retrofit.Callback;
-import retrofit.RestAdapter;
-import retrofit.RetrofitError;
-import retrofit.client.Header;
-import retrofit.client.Response;
-import retrofit.mime.TypedByteArray;
-import retrofit.mime.TypedString;
 
 public class LoginActivity extends GoogleApiActivity implements LoaderCallbacks<Cursor>, IFullExecuter<Boolean> {
 
@@ -105,8 +78,8 @@ public class LoginActivity extends GoogleApiActivity implements LoaderCallbacks<
     @OnClick(R.id.email_sign_in_button)
     public void EmailSignInClick(){
         mAnalytics.trackClick(new GoogleAnalyticEvent().SignInBtn());
-
         validateLogin();
+
     }
 
     @OnClick(R.id.signUpLink)

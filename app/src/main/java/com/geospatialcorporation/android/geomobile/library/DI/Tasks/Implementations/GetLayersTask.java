@@ -61,6 +61,27 @@ public class GetLayersTask implements IGetLayersTask {
         new GetByLayersFolderTask(params).execute(folderId);
     }
 
+    protected void setPaths(List<Folder> folders) {
+        for (Folder folder : folders ) {
+            if(folder.getParent() != null){
+                folder.setPath(getParentPath(folder.getParent()));
+            }
+        }
+    }
+
+    protected List<String> getParentPath(Folder parent) {
+        List<String> paths = new ArrayList<>();
+
+        if(parent.getParent() != null){
+            paths.add(parent.getName());
+            paths.addAll(getParentPath(parent.getParent()));
+        } else {
+            paths.add("ROOT");
+        }
+
+        return paths;
+    }
+
     protected class GetAllLayersTask extends GeoAsyncTask<Integer, Void, List<Folder>> {
 
         DrawerLayout mDrawerLayout;
@@ -80,6 +101,8 @@ public class GetLayersTask implements IGetLayersTask {
 
                 folders = mDataHelper.getFoldersRecursively(root.get(0), null);
 
+                setPaths(folders);
+
                 int index = folders.indexOf(root.get(0));  //putting the root folder in front
                 folders.remove(index);
                 folders.add(0, root.get(0));
@@ -94,6 +117,8 @@ public class GetLayersTask implements IGetLayersTask {
 
             return folders;
         }
+
+
     }
 
     protected class GetByLayersFolderTask extends GeoAsyncTask<Integer, Void, Folder> {

@@ -6,7 +6,6 @@ import android.support.v4.app.FragmentManager;
 import com.geospatialcorporation.android.geomobile.library.DI.UIHelpers.Interfaces.DialogHelpers.IDocumentDialog;
 import com.geospatialcorporation.android.geomobile.models.Document.Document;
 import com.geospatialcorporation.android.geomobile.models.Folders.Folder;
-import com.geospatialcorporation.android.geomobile.ui.fragments.dialogs.UploadImageDialogFragment;
 import com.geospatialcorporation.android.geomobile.ui.fragments.dialogs.action_dialogs.DocumentActionsDialogFragment;
 import com.geospatialcorporation.android.geomobile.ui.fragments.dialogs.action_dialogs.document.DeleteDocumentDialogFragment;
 import com.geospatialcorporation.android.geomobile.ui.fragments.dialogs.action_dialogs.document.MoveDocumentDialogFragment;
@@ -19,13 +18,6 @@ public class DocumentDialog implements IDocumentDialog {
         MoveDocumentDialogFragment move = new MoveDocumentDialogFragment();
         move.init(context, document);
         move.show(manager, "Move Document");
-    }
-
-    @Override
-    public void uploadImage(Folder parent, Context context, FragmentManager manager) {
-        UploadImageDialogFragment u = new UploadImageDialogFragment();
-        u.init(context, parent);
-        u.show(manager, "Upload Image");
     }
 
     @Override

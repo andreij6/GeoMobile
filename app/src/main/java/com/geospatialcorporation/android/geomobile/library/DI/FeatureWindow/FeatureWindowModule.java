@@ -1,7 +1,7 @@
 package com.geospatialcorporation.android.geomobile.library.DI.FeatureWindow;
 
 import com.geospatialcorporation.android.geomobile.library.DI.FeatureWindow.Implementations.FeatureWindowDataParser;
-import com.geospatialcorporation.android.geomobile.library.helpers.converter.DMSCoordinateConverter;
+import com.geospatialcorporation.android.geomobile.library.helpers.converter.Implementations.DMSCoordinateConverter;
 
 import dagger.Module;
 import dagger.Provides;

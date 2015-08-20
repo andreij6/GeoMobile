@@ -1,6 +1,7 @@
 package com.geospatialcorporation.android.geomobile.library.DI.Tasks;
 
 import com.geospatialcorporation.android.geomobile.library.DI.Tasks.Implementations.DocumentsTask;
+import com.geospatialcorporation.android.geomobile.library.DI.Tasks.Implementations.GeoMapper;
 import com.geospatialcorporation.android.geomobile.library.DI.Tasks.Implementations.GeoUserLoginTask;
 import com.geospatialcorporation.android.geomobile.library.DI.Tasks.Implementations.GetClientsTask;
 import com.geospatialcorporation.android.geomobile.library.DI.Tasks.Implementations.GetFolderDetailsTask;
@@ -10,6 +11,7 @@ import com.geospatialcorporation.android.geomobile.library.DI.Tasks.Implementati
 import com.geospatialcorporation.android.geomobile.library.DI.Tasks.Implementations.GetLayersTask;
 import com.geospatialcorporation.android.geomobile.library.DI.Tasks.Implementations.GetOrderNumberTask;
 import com.geospatialcorporation.android.geomobile.library.DI.Tasks.Implementations.GetSublayersTask;
+import com.geospatialcorporation.android.geomobile.library.DI.Tasks.Implementations.LayerStyleTask;
 import com.geospatialcorporation.android.geomobile.library.DI.Tasks.Implementations.ProfileTask;
 import com.geospatialcorporation.android.geomobile.library.DI.Tasks.Interfaces.IGetClientsTask;
 import com.geospatialcorporation.android.geomobile.library.DI.Tasks.Interfaces.IGetDocumentsTask;
@@ -21,6 +23,8 @@ import com.geospatialcorporation.android.geomobile.library.DI.Tasks.Interfaces.I
 import com.geospatialcorporation.android.geomobile.library.DI.Tasks.Interfaces.IGetOrderNumberTask;
 import com.geospatialcorporation.android.geomobile.library.DI.Tasks.Interfaces.IGetProfileTask;
 import com.geospatialcorporation.android.geomobile.library.DI.Tasks.Interfaces.IGetSublayersTask;
+import com.geospatialcorporation.android.geomobile.library.DI.Tasks.Interfaces.ILayerStyleTask;
+import com.geospatialcorporation.android.geomobile.library.DI.Tasks.Interfaces.IMapFeaturesTask;
 import com.geospatialcorporation.android.geomobile.library.DI.Tasks.Interfaces.IUserLoginTask;
 
 import javax.inject.Singleton;
@@ -67,5 +71,9 @@ public class TasksModule {
     @Provides @Singleton
     IGetFolderPermissionTask provideGetFolderPermissions(){ return new GetFolderPermissionsTask(); }
 
+    @Provides @Singleton
+    IMapFeaturesTask provideMapFeaturesTask(){ return new GeoMapper();}
 
+    @Provides @Singleton
+    ILayerStyleTask provideLayerStyleTask(){ return new LayerStyleTask(); }
 }

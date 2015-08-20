@@ -23,4 +23,7 @@
     <color name="transparent">#00000000</color>
     <color name="primary_legend">#37474F</color>
 
+    <color name="primary_dark_transparency">#99263238</color>
+    <color name="white_transparency">#99FFFFFF</color>
+
 </resources>

@@ -1,4 +1,6 @@
-package com.geospatialcorporation.android.geomobile.library.helpers.converter;
+package com.geospatialcorporation.android.geomobile.library.helpers.converter.Implementations;
+
+import com.geospatialcorporation.android.geomobile.library.helpers.converter.ICoordinateConverter;
 
 import java.util.Arrays;
 import java.util.List;

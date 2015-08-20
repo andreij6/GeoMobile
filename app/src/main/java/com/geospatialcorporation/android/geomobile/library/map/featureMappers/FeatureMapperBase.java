@@ -17,6 +17,7 @@ public abstract class FeatureMapperBase<T> implements IFeatureMapper {
     T mMapFeature;
     GeoColor mGeoColor;
     int mColor;
+    protected  LegendLayer mLegendLayer;
 
 
     public Drawable getActiveDrawable() {
@@ -36,20 +37,23 @@ public abstract class FeatureMapperBase<T> implements IFeatureMapper {
         mColor = 0;
     }
 
-
-
     public abstract IFeatureMapper draw(Feature feature);
 
     public abstract IFeatureMapper addStyle(Style style);
 
     public void setLegendIcon(LegendLayer layer){
-        if(mActiveDrawable == null) {
-            Drawable newDrawable = mGeoColor.changeColor(layer.getLegendIcon(), mColor);
+        //if(mActiveDrawable == null) {
+        //    Drawable newDrawable = mGeoColor.changeColor(layer.getLegendIcon(), mColor);
+        //    setActiveDrawable(newDrawable);
+        //}
 
-            setActiveDrawable(newDrawable);
-        }
+        setActiveDrawable(layer.getLegendIcon());
 
     }
 
     public abstract void reset();
+
+    public void setLegendLayer(LegendLayer layer){
+        mLegendLayer = layer;
+    }
 }

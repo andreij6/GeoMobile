@@ -3,6 +3,7 @@ package com.geospatialcorporation.android.geomobile.ui.fragments.dialogs;
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.Intent;
+import android.provider.MediaStore;
 import android.support.annotation.NonNull;
 import android.support.v4.app.DialogFragment;
 import android.content.Context;
@@ -15,12 +16,16 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.geospatialcorporation.android.geomobile.R;
 import com.geospatialcorporation.android.geomobile.application;
+import com.geospatialcorporation.android.geomobile.library.DI.Analytics.Interfaces.IGeoAnalytics;
+import com.geospatialcorporation.android.geomobile.library.DI.Analytics.Models.GoogleAnalyticEvent;
 import com.geospatialcorporation.android.geomobile.library.DI.UIHelpers.Interfaces.DialogHelpers.IDocumentDialog;
 import com.geospatialcorporation.android.geomobile.library.DI.UIHelpers.Interfaces.DialogHelpers.IFolderDialog;
 import com.geospatialcorporation.android.geomobile.library.helpers.GeoDialogHelper;
+import com.geospatialcorporation.android.geomobile.library.helpers.MediaHelper;
 import com.geospatialcorporation.android.geomobile.models.Folders.Folder;
 import com.geospatialcorporation.android.geomobile.ui.MainActivity;
 
@@ -48,6 +53,7 @@ public class LibraryActionDialogFragment extends DialogFragment {
     //endregion
 
     //region Properties
+    IGeoAnalytics mAnalytics;
     Context mContext;
     Folder mFolder;
     IDocumentDialog mDocumentDialog;
@@ -56,13 +62,10 @@ public class LibraryActionDialogFragment extends DialogFragment {
     @InjectView(R.id.addLibraryFolderIcon) ImageView mFolderImageView;
     @InjectView(R.id.addDocumentIcon) ImageView mDocumentImageView;
     @InjectView(R.id.addDocumentTV) TextView mDocumentTextView;
-    @InjectView(R.id.addDocumentSection) LinearLayout mDocumentSection;
-    @InjectView(R.id.addFolderSection) LinearLayout mFolderSection;
-    @InjectView(R.id.addImageSection) LinearLayout mImageSection;
     //endregion
 
     //region OnClicks
-    @OnClick(R.id.addDocumentSection)
+    @OnClick(R.id.addLibraryFolderTV)
     public void documentClicked(){
         Intent chooseFileIntent = new Intent(Intent.ACTION_GET_CONTENT);
         chooseFileIntent.setType("file/*");
@@ -71,7 +74,7 @@ public class LibraryActionDialogFragment extends DialogFragment {
         LibraryActionDialogFragment.this.getDialog().cancel();
     }
 
-    @OnClick(R.id.addFolderSection)
+    @OnClick(R.id.addDocumentIcon)
     public void folderClicked(){
         mFolderDialog.create(mFolder, mContext, getFragmentManager());
 
@@ -79,9 +82,40 @@ public class LibraryActionDialogFragment extends DialogFragment {
 
     }
 
-    @OnClick(R.id.addImageSection)
-    public void imageClicked(){
-        mDocumentDialog.uploadImage(mFolder, mContext, getFragmentManager());
+    @OnClick(R.id.takePhotoIcon)
+    public void takePhoto(){
+        Intent takePhotoIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+        MediaHelper mediaHelper = new MediaHelper(mContext);
+
+        application.mMediaUri = mediaHelper.getOutputMediaFileUri(MainActivity.MediaConstants.MEDIA_TYPE_IMAGE);
+
+        if (application.mMediaUri == null) {
+            // display an error
+            Toast.makeText(mContext, R.string.error_external_storage, Toast.LENGTH_LONG).show();
+        }
+        else {
+            mAnalytics.trackClick(new GoogleAnalyticEvent().UploadImage());
+            takePhotoIntent.putExtra(MediaStore.EXTRA_OUTPUT, application.mMediaUri);
+            getActivity().startActivityForResult(takePhotoIntent, MainActivity.MediaConstants.TAKE_IMAGE_REQUEST);
+
+            LibraryActionDialogFragment.this.getDialog().cancel();
+        }
+
+
+    }
+
+    @OnClick(R.id.uploadIV)
+    public void uploadImage(){
+        Intent getIntent = new Intent(Intent.ACTION_GET_CONTENT);
+        getIntent.setType("image/*");
+
+        Intent pickIntent = new Intent(Intent.ACTION_PICK, android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+        pickIntent.setType("image/*");
+
+        Intent chooserIntent = Intent.createChooser(getIntent, "Select Image");
+        chooserIntent.putExtra(Intent.EXTRA_INITIAL_INTENTS, new Intent[]{pickIntent});
+
+        getActivity().startActivityForResult(chooserIntent, MainActivity.MediaConstants.PICK_IMAGE_REQUEST);
 
         LibraryActionDialogFragment.this.getDialog().cancel();
     }
@@ -94,6 +128,7 @@ public class LibraryActionDialogFragment extends DialogFragment {
 
         LayoutInflater inflater = LayoutInflater.from(mContext);
 
+        mAnalytics = application.getAnalyticsComponent().provideGeoAnalytics();
         mFolderDialog = application.getUIHelperComponent().provideFolderDialog();
         mDocumentDialog = application.getUIHelperComponent().provideDocumentDialog();
 

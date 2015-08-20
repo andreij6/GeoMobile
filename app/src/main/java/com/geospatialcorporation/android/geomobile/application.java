@@ -10,12 +10,12 @@ import com.facebook.stetho.Stetho;
 import com.facebook.stetho.okhttp.StethoInterceptor;
 import com.geospatialcorporation.android.geomobile.library.DI.Analytics.Interfaces.IGeoAnalytics;
 import com.geospatialcorporation.android.geomobile.library.DI.Analytics.Models.GoogleAnalyticEvent;
+import com.geospatialcorporation.android.geomobile.library.DI.Map.Implementations.LayerManager;
 import com.geospatialcorporation.android.geomobile.library.DI.SharedPreferences.Interfaces.IGeoSharedPrefs;
 import com.geospatialcorporation.android.geomobile.library.constants.Domains;
 import com.geospatialcorporation.android.geomobile.library.constants.GeoPanel;
 import com.geospatialcorporation.android.geomobile.library.constants.GeoSharedPreferences;
-import com.geospatialcorporation.android.geomobile.library.map.layerManager.ILayerManager;
-import com.geospatialcorporation.android.geomobile.library.map.layerManager.LayerManager;
+import com.geospatialcorporation.android.geomobile.library.DI.Map.Interfaces.ILayerManager;
 import com.geospatialcorporation.android.geomobile.models.Bookmarks.Bookmark;
 import com.geospatialcorporation.android.geomobile.models.Subscription;
 import com.geospatialcorporation.android.geomobile.models.Document.Document;
@@ -23,11 +23,13 @@ import com.geospatialcorporation.android.geomobile.models.Folders.Folder;
 import com.geospatialcorporation.android.geomobile.models.Layers.Layer;
 import com.geospatialcorporation.android.geomobile.models.MapLayerState;
 import com.geospatialcorporation.android.geomobile.ui.MainActivity;
+import com.geospatialcorporation.android.geomobile.library.map.Models.GeoClusterMarker;
 import com.geospatialcorporation.android.geomobile.ui.fragments.GoogleMapFragment;
 import com.google.android.gms.analytics.GoogleAnalytics;
 import com.google.android.gms.analytics.Tracker;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.maps.GoogleMap;
+import com.google.maps.android.clustering.ClusterManager;
 import com.sothree.slidinguppanel.SlidingUpPanelLayout;
 import com.squareup.okhttp.Interceptor;
 import com.squareup.okhttp.OkHttpClient;
@@ -75,9 +77,10 @@ public class application extends applicationDIBase {
     private static Tracker tracker;
     private static GoogleMap googleMap;
 
-    private static LayerManager layerManager;
-    private static GoogleMapFragment mGoogleMapFragment
-            ;
+    private static GoogleMapFragment mGoogleMapFragment;
+    private static ClusterManager<GeoClusterMarker> clusterManager;
+
+    private static ILayerManager layerManager;
     //endregion
 
     //region stuff
@@ -186,12 +189,20 @@ public class application extends applicationDIBase {
         return googleMap;
     }
 
-    public static ILayerManager getLayerManager() {
-        return layerManager;
-    }
-
     public static void setGeoAuthToken(String geoAuthToken) {
         application.geoAuthToken = geoAuthToken;
+    }
+
+    public static void setClusterManager(ClusterManager<GeoClusterMarker> clusterManager) {
+        application.clusterManager = clusterManager;
+    }
+
+    public static ClusterManager<GeoClusterMarker> getClusterManager() {
+        return clusterManager;
+    }
+
+    public static ILayerManager getLayerManager() {
+        return layerManager;
     }
     //endregion
 

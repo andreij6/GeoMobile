@@ -11,6 +11,7 @@ import com.geospatialcorporation.android.geomobile.models.Layers.Layer;
 import com.geospatialcorporation.android.geomobile.models.Document.Document;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 public class Folder implements Parcelable, ITreeEntity {
@@ -20,6 +21,7 @@ public class Folder implements Parcelable, ITreeEntity {
         Documents = new ArrayList<>();
         Layers = new ArrayList<>();
         Folders = new ArrayList<>();
+        mPath = new ArrayList<>();
         IsImportFolder = false;
         IsFixed = false;
         AccessLevel = AccessLevelCodes.FullControl;  //TODO: test - may want to start with readonly in production
@@ -37,30 +39,36 @@ public class Folder implements Parcelable, ITreeEntity {
     private Integer MobileId;
     private Integer Id;
     private String Name;
+    private List<String> mPath;
     //endregion
 
     //region Getters & Setters
     public Boolean getIsImportFolder() { return IsImportFolder; }
+
     public void setIsImportFolder(Boolean isImportFolder) { IsImportFolder = isImportFolder; }
 
     public Boolean getIsFixed() {
         return IsFixed;
     }
+
     public void setIsFixed(Boolean isFixed) {
         IsFixed = isFixed;
     }
 
     public List<Document> getDocuments() { return Documents; }
+
     public void setDocuments(List<Document> documents) { Documents = documents; }
 
     public List<Layer> getLayers() {
         return Layers;
     }
+
     public void setLayers(List<Layer> layers) {
         Layers = layers;
     }
 
     public List<Folder> getFolders() { return Folders; }
+
     public void setFolders(List<Folder> folders) {
         Folders = folders;
         for (Folder folder : folders) {
@@ -93,6 +101,10 @@ public class Folder implements Parcelable, ITreeEntity {
     }
     public void setName(String name) {
         Name = name;
+    }
+
+    public void setPathItem(String folderName){
+        mPath.add(folderName);
     }
     //endregion
 
@@ -129,7 +141,6 @@ public class Folder implements Parcelable, ITreeEntity {
         AccessLevel = in.readInt();
         Id = in.readInt();
         Name = in.readString();
-
     }
 
     public static final Creator<Folder> CREATOR = new Creator<Folder>(){
@@ -151,6 +162,42 @@ public class Folder implements Parcelable, ITreeEntity {
         Bundle b = new Bundle();
         b.putParcelable(FOLDER_INTENT, this);
         return b;
+    }
+
+    public String getPrettyPath() {
+
+        StringBuilder path = new StringBuilder();
+        int count = 1;
+        int depth = mPath.size();
+
+        List<String> reordered = new ArrayList<>();
+
+        for (String folder: mPath) {
+            reordered.add(folder.toUpperCase());
+        }
+
+        Collections.reverse(reordered);
+
+        for (String folderName: reordered) {
+
+            path.append(folderName);
+
+            if(count != depth){
+                path.append(" > ");
+            }
+
+            count++;
+        }
+
+        return path.toString();
+    }
+
+    public List<String> getPath() {
+        return mPath;
+    }
+
+    public void setPath(List<String> path) {
+        mPath = path;
     }
     //endregion
 }

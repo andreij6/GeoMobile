@@ -42,7 +42,9 @@ public class DataHelper {
     }
 
     protected void setParentFolder(Folder folder, Folder parentFolder){
-        if(parentFolder != null) folder.setParent(parentFolder);
+        if(parentFolder != null) {
+            folder.setParent(parentFolder);
+        }
     }
 
     public ArrayList<Layer> getLayersRecursively(Folder folder) {

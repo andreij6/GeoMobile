@@ -266,5 +266,6 @@
     <string name="signup_clicked">The User selected the sign up link</string>
     <string name="folder_icon">Folders</string>
     <string name="information">information</string>
+    <string name="open_main_navigation">Opening/Closing Main Navigation Drawer</string>
 
 </resources>

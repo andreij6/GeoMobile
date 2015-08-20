@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.widget.DrawerLayout;
+import android.util.TypedValue;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.CheckBox;
@@ -17,8 +18,11 @@ import android.widget.Toast;
 import com.geospatialcorporation.android.geomobile.R;
 import com.geospatialcorporation.android.geomobile.application;
 import com.geospatialcorporation.android.geomobile.library.DI.Analytics.Models.GoogleAnalyticEvent;
+import com.geospatialcorporation.android.geomobile.library.DI.Map.Interfaces.ILayerManager;
 import com.geospatialcorporation.android.geomobile.library.DI.SharedPreferences.Implementations.AppStateSharedPrefs;
+import com.geospatialcorporation.android.geomobile.library.DI.Tasks.Interfaces.ILayerStyleTask;
 import com.geospatialcorporation.android.geomobile.library.constants.GeometryTypeCodes;
+import com.geospatialcorporation.android.geomobile.library.map.SendMapQueryRequestCallback;
 import com.geospatialcorporation.android.geomobile.library.services.QueryRestService;
 import com.geospatialcorporation.android.geomobile.models.Folders.Folder;
 import com.geospatialcorporation.android.geomobile.models.Layers.Layer;
@@ -32,12 +36,8 @@ import com.geospatialcorporation.android.geomobile.ui.adapters.recycler.base.Geo
 import com.geospatialcorporation.android.geomobile.ui.fragments.GoogleMapFragment;
 import com.geospatialcorporation.android.geomobile.ui.fragments.detail_fragment.LayerDetailFragment;
 import com.geospatialcorporation.android.geomobile.ui.fragments.tree_fragments.LayerFragment;
-import com.google.android.gms.maps.CameraUpdate;
-import com.google.android.gms.maps.CameraUpdateFactory;
-import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
-import com.google.android.gms.maps.model.LatLngBounds;
 import com.google.android.gms.maps.model.MarkerOptions;
 
 import java.util.ArrayList;
@@ -48,16 +48,18 @@ import butterknife.InjectView;
 
 public class LegendLayerAdapter extends GeoRecyclerAdapterBase<LegendLayerAdapter.Holder, LegendLayer> {
 
-    QueryRestService mService;
     //IFullDataRepository<Layer> mLayerRepo;
     List<Integer> mLayerIdsToShow;
     AppStateSharedPrefs mStateSharedPrefs;
+    ILayerManager mLayerManager;
+    ILayerStyleTask mLayerStyleTask;
 
     public LegendLayerAdapter(Context context, List<LegendLayer> layers) {
         super(context, layers, R.layout.recycler_legend_layers, Holder.class);
-        mService = new QueryRestService();
         //mLayerRepo = new LayersAppSource();
         mStateSharedPrefs = application.getGeoSharedPrefsComponent().provideAppStateSharedPrefs();
+        mLayerManager = application.getMapComponent().provideLayerManager();
+        mLayerStyleTask = application.getTasksComponent().provideLayerStyleTask();
     }
 
     @Override
@@ -80,7 +82,6 @@ public class LegendLayerAdapter extends GeoRecyclerAdapterBase<LegendLayerAdapte
         LegendLayer mLegendLayer;
         Folder mFolder;
 
-
         public Holder(View itemView) {
             super(itemView);
         }
@@ -97,8 +98,10 @@ public class LegendLayerAdapter extends GeoRecyclerAdapterBase<LegendLayerAdapte
                 gotoSublayer.setVisibility(View.VISIBLE);
                 geomIV.setVisibility(View.VISIBLE);
 
-                mView.setBackgroundColor(mContext.getResources().getColor(R.color.primary));
+                mLayerName.setTextAppearance(mContext, android.R.style.TextAppearance_DeviceDefault_Medium);
+                mLayerName.setTextColor(mContext.getResources().getColor(R.color.white));
 
+                mView.setBackgroundColor(mContext.getResources().getColor(R.color.primary));
 
                 if (!mLegendLayer.isIconSet()) {
                     mLegendLayer.setLegendIcon(getDrawable(mLayer.getGeometryTypeCodeId()));
@@ -107,7 +110,7 @@ public class LegendLayerAdapter extends GeoRecyclerAdapterBase<LegendLayerAdapte
                 mLayerName.setText(mLayer.getName());
                 mLayerName.setOnClickListener(ZoomToLayer);
 
-                if(IsSetInAppState()){
+                if(IsSetInAppState()) {
                     mLayer.setIsShowing(true);
                 }
 
@@ -123,25 +126,31 @@ public class LegendLayerAdapter extends GeoRecyclerAdapterBase<LegendLayerAdapte
                 mLegendLayer.setImageSrc();
                 mLegendLayer.setProgressBar(mProgressBar);
                 mLegendLayer.setCheckBox(isVisibleCB);
+
+
             } else {
                 mFolder = llayer.getFolder();
 
-                mView.setBackgroundColor(mContext.getResources().getColor(R.color.primary_dark));
+                mView.setBackgroundColor(mContext.getResources().getColor(R.color.primary_light));
 
-                mLayerName.setText("Folder Actions");
+                mLayerName.setText("PATH : " + mFolder.getPrettyPath());
+
+                mLayerName.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 11);
+                mLayerName.setTextColor(mContext.getResources().getColor(R.color.primary_dark));
+
                 mLayerName.setOnClickListener(GoToLayerFragment);
 
                 isVisibleCB.setVisibility(View.INVISIBLE);
-                gotoSublayer.setVisibility(View.INVISIBLE);
+                gotoSublayer.setVisibility(View.GONE);
                 mProgressBar.setVisibility(View.GONE);
-                geomIV.setVisibility(View.INVISIBLE);
-
+                geomIV.setImageDrawable(mContext.getDrawable(R.drawable.ic_information_outline_black_18dp));
             }
 
         }
 
         protected boolean IsSetInAppState() {
-            return mStateSharedPrefs.getInt(mLayer.getName() + mLayer.getId(), 0) != 0;
+            return false;  //TODO: For some reason
+            //return mStateSharedPrefs.getInt(mLayer.getName() + mLayer.getId(), 0) != 0;
         }
 
         //region Click Listeners
@@ -161,14 +170,14 @@ public class LegendLayerAdapter extends GeoRecyclerAdapterBase<LegendLayerAdapte
 
                     updateLayerDB(true);
 
-                    application.getLayerManager().addExtent(mLayer.getId(), mLayer.getExtent());
+                    mLayerManager.addVisibleLayerExtent(mLayer.getId(), mLayer.getExtent());
 
                     mLegendLayer.setMapped(true);
                 } else {
                     //remove layer
                     mAnalytics.trackClick(new GoogleAnalyticEvent().HideLayer());
 
-                    application.getLayerManager().removeLayer(mLayer.getId(), mLayer.getGeometryTypeCodeId());
+                    mLayerManager.removeLayer(mLayer.getId(), mLayer.getGeometryTypeCodeId());
 
                     //probably move this the Layer manager removeLayer
                     mLayer.setIsShowing(false);
@@ -180,7 +189,7 @@ public class LegendLayerAdapter extends GeoRecyclerAdapterBase<LegendLayerAdapte
 
                     updateLayerDB(false);
 
-                    application.getLayerManager().removeExtent(mLayer.getId());
+                    mLayerManager.removeExtent(mLayer.getId());
 
                     mLegendLayer.setMapped(false);
                 }
@@ -246,7 +255,7 @@ public class LegendLayerAdapter extends GeoRecyclerAdapterBase<LegendLayerAdapte
                 if (!(currentFragment instanceof GoogleMapFragment)) {
                     goToMap(activity);
                 } else {
-                    application.getLayerManager().zoomToExtent(mLayer.getExtent());
+                    mLayerManager.zoomToExtent(mLayer.getExtent());
                 }
 
                 closeDrawer(activity);
@@ -262,10 +271,7 @@ public class LegendLayerAdapter extends GeoRecyclerAdapterBase<LegendLayerAdapte
         }
 
         protected void closeDrawer(MainActivity activity) {
-            DrawerLayout mDrawerLayout = activity.getRightDrawer();
-            View layerView = activity.getLayerListView();
-
-            mDrawerLayout.closeDrawer(layerView);
+            activity.closeLayerDrawer();
         }
 
         protected void goToMap(MainActivity activity) {
@@ -290,10 +296,9 @@ public class LegendLayerAdapter extends GeoRecyclerAdapterBase<LegendLayerAdapte
             layers.add(single);
 
             MapDefaultQueryRequest request = new MapDefaultQueryRequest(layers, Options.MAP_QUERY);
-            mLayer.setIsShowing(true);
 
 
-            mService.mapQuery(request, mLegendLayer);
+            mLayerStyleTask.getStyle(mLegendLayer, new SendMapQueryRequestCallback(request, mLegendLayer));
         }
 
         protected Drawable getDrawable(Integer geometryTypeCodeId) {

@@ -2,29 +2,20 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
               android:orientation="horizontal"
               android:layout_width="match_parent"
-              android:layout_height="match_parent">
-
-    <LinearLayout
-        android:orientation="horizontal"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:id="@+id/linearLayout3"
-        android:baselineAligned="false">
-
-        <LinearLayout
-            android:orientation="vertical"
-            android:layout_weight="1"
-            style="@style/actionDialog_linearLayout"
-            android:id="@+id/addFolderSection"
-            android:layout_width="0dp">
+              android:layout_height="match_parent"
+              android:paddingTop="25dp"
+                android:paddingLeft="50dp"
+                android:paddingRight="50dp">
 
             <ImageView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:id="@+id/addLibraryFolderIcon"
                 android:layout_gravity="center_horizontal"
-                android:src="@drawable/ic_folder_plus_black_24dp"
-                android:contentDescription="@string/add_folder"/>
+                android:src="@drawable/ic_folder_plus_black_36dp"
+                android:contentDescription="@string/add_folder"
+                android:layout_marginTop="25dp"
+                android:layout_marginLeft="25dp"/>
 
             <TextView
                 android:layout_width="wrap_content"
@@ -32,24 +23,20 @@
                 style="@style/actionDialog_textView"
                 android:text="@string/add_folder"
                 android:id="@+id/addLibraryFolderTV"
-                android:layout_gravity="center_horizontal"/>
-        </LinearLayout>
-
-        <LinearLayout
-            android:orientation="vertical"
-            android:layout_width="wrap_content"
-            style="@style/actionDialog_linearLayout"
-            android:id="@+id/addDocumentSection"
-            android:layout_height="wrap_content"
-            android:layout_weight="1">
+                android:layout_gravity="center_horizontal"
+                android:layout_below="@+id/addLibraryFolderIcon"
+                android:layout_alignStart="@+id/addLibraryFolderIcon"/>
 
             <ImageView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:id="@+id/addDocumentIcon"
                 android:layout_gravity="center_horizontal"
-                android:src="@drawable/ic_file_document_box_black_24dp"
-                android:contentDescription="@string/add_document"/>
+                android:src="@drawable/ic_file_document_box_black_36dp"
+                android:contentDescription="@string/add_document"
+                android:layout_marginTop="25dp"
+                android:layout_alignParentEnd="true"
+                android:layout_marginRight="25dp"/>
 
             <TextView
                 android:layout_width="wrap_content"
@@ -57,35 +44,55 @@
                 style="@style/actionDialog_textView"
                 android:text="@string/add_document"
                 android:id="@+id/addDocumentTV"
-                android:layout_gravity="center_horizontal"/>
-        </LinearLayout>
-    </LinearLayout>
+                android:layout_gravity="center_horizontal"
+                android:layout_below="@+id/addDocumentIcon"
+                android:layout_alignEnd="@+id/addDocumentIcon"
+                android:layout_alignParentEnd="true"
+                android:layout_marginRight="10dp"/>
 
-    <LinearLayout
-        android:orientation="vertical"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:paddingTop="20dp"
-        android:paddingBottom="20dp"
-        android:id="@+id/addImageSection"
-        android:layout_below="@+id/linearLayout3"
-        android:layout_alignParentStart="true">
 
         <ImageView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:id="@+id/addImageIcon"
+            android:id="@+id/takePhotoIcon"
             android:layout_gravity="center_horizontal"
-            android:src="@drawable/ic_file_image_black_24dp"
-            android:contentDescription="@string/add_image"/>
+            android:src="@drawable/ic_camera_black_36dp"
+            android:layout_below="@+id/addLibraryFolderIcon"
+            android:layout_alignStart="@+id/addLibraryFolderIcon"
+            android:contentDescription="@string/take_photo"
+            android:layout_marginTop="30dp"/>
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             style="@style/actionDialog_textView"
-            android:text="@string/add_image"
+            android:text="@string/take_photo"
             android:id="@+id/addImageTV"
-            android:layout_gravity="center_horizontal"/>
-    </LinearLayout>
+            android:layout_gravity="center_horizontal"
+            android:layout_below="@+id/takePhotoIcon"
+            android:layout_marginLeft="10dp"/>
+
+    <ImageView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/uploadIV"
+        android:focusableInTouchMode="false"
+        android:src="@drawable/ic_upload_black_36dp"
+        android:layout_above="@+id/uploadTV"
+        android:layout_alignStart="@+id/addDocumentIcon"/>
+
+    <TextView
+        style="@style/actionDialog_textView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/upload_existing"
+        android:id="@+id/uploadTV"
+        android:layout_gravity="center_horizontal"
+        android:layout_alignTop="@+id/addImageTV"
+        android:layout_alignStart="@+id/addDocumentTV"
+        android:textAlignment="center"
+        android:gravity="center"
+        android:layout_marginRight="10dp"/>
+
 
 </RelativeLayout>

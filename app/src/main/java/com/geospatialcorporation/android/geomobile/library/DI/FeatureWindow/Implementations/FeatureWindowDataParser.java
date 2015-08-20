@@ -9,11 +9,8 @@ import com.geospatialcorporation.android.geomobile.library.DI.FeatureWindow.Geom
 import com.geospatialcorporation.android.geomobile.library.DI.FeatureWindow.GeometryDataParsers.Implementations.PolygonResponseParser;
 import com.geospatialcorporation.android.geomobile.library.DI.FeatureWindow.IFeatureWindowDataParser;
 import com.geospatialcorporation.android.geomobile.library.DI.FeatureWindow.models.FeatureWindowData;
-import com.geospatialcorporation.android.geomobile.library.helpers.converter.DMSCoordinateConverter;
 import com.geospatialcorporation.android.geomobile.library.helpers.converter.ICoordinateConverter;
 import com.geospatialcorporation.android.geomobile.models.Query.map.response.featurewindow.FeatureQueryResponse;
-
-import org.apache.http.message.LineParser;
 
 public class FeatureWindowDataParser implements IFeatureWindowDataParser {
 

@@ -10,6 +10,8 @@ import com.geospatialcorporation.android.geomobile.library.DI.Tasks.Interfaces.I
 import com.geospatialcorporation.android.geomobile.library.DI.Tasks.Interfaces.IGetOrderNumberTask;
 import com.geospatialcorporation.android.geomobile.library.DI.Tasks.Interfaces.IGetProfileTask;
 import com.geospatialcorporation.android.geomobile.library.DI.Tasks.Interfaces.IGetSublayersTask;
+import com.geospatialcorporation.android.geomobile.library.DI.Tasks.Interfaces.ILayerStyleTask;
+import com.geospatialcorporation.android.geomobile.library.DI.Tasks.Interfaces.IMapFeaturesTask;
 import com.geospatialcorporation.android.geomobile.library.DI.Tasks.Interfaces.IUserLoginTask;
 
 import javax.inject.Singleton;
@@ -40,4 +42,8 @@ public interface TasksComponent {
     IGetFolderDetailsTask provideFolderDetailsTask();
 
     IGetFolderPermissionTask provideGetFolderPermissions();
+
+    IMapFeaturesTask provideMapFeaturesTask();
+
+    ILayerStyleTask provideLayerStyleTask();
 }

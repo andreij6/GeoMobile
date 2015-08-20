@@ -7,6 +7,9 @@
         <item name="colorAccent">@color/accent</item>
         <item name="android:textViewStyle">@style/RobotoTextViewStyle</item>
         <item name="android:buttonStyle">@style/RobotoButtonStyle</item>
+        <item name="android:actionBarStyle">@style/GeoActionBar</item>
+        <item name="actionBarSize">48dp</item>
+        <item name="android:actionBarSize">48dp</item>
     </style>
 
     <!-- Backward-compatible version of ?android:attr/buttonBarStyle -->
@@ -16,6 +19,10 @@
         <item name="android:paddingRight">2dp</item>
         <item name="android:paddingBottom">0dp</item>
         <item name="android:background">@android:drawable/bottom_bar</item>
+    </style>
+
+    <style name="GeoActionBar">
+        <item name="android:background">#00FFFFFF</item>
     </style>
 
     <!-- Backward-compatible version of ?android:attr/buttonBarButtonStyle -->

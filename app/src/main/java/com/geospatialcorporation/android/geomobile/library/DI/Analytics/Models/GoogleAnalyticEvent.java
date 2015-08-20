@@ -250,5 +250,10 @@ public class GoogleAnalyticEvent extends AnalyticEvent {
         this.setLabel(R.string.signup_clicked);
         return this;
     }
+
+    public GoogleAnalyticEvent OpenMainNav() {
+        this.setLabel(R.string.open_main_navigation);
+        return this;
+    }
     //endregion
 }

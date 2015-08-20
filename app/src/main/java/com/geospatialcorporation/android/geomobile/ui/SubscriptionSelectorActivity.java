@@ -36,6 +36,7 @@ public class SubscriptionSelectorActivity extends ActionBarActivity implements A
         setTitle(R.string.title_activity_select_subscription);
         setBackButtonClickOnce(false);
         getSupportActionBar().setElevation(0);
+
         application.getLayerManager().reset();
         setContentView(R.layout.activity_subscription_selector);
         final ActionBar actionBar = getSupportActionBar();

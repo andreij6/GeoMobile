@@ -4,6 +4,8 @@ import android.app.Activity;
 import android.content.Intent;
 import android.content.Context;
 import android.os.Bundle;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -27,6 +29,7 @@ import com.geospatialcorporation.android.geomobile.models.Folders.Folder;
 import com.geospatialcorporation.android.geomobile.ui.Interfaces.IPostExecuter;
 import com.geospatialcorporation.android.geomobile.ui.MainActivity;
 import com.geospatialcorporation.android.geomobile.ui.fragments.GeoViewFragmentBase;
+import com.geospatialcorporation.android.geomobile.ui.fragments.GoogleMapFragment;
 import com.geospatialcorporation.android.geomobile.ui.viewmodels.ListItem;
 
 
@@ -61,6 +64,27 @@ public class LibraryFragment extends GeoViewFragmentBase
         mDialog.libraryAction(mCurrentFolder, getActivity(), getFragmentManager());
     }
 
+    @OnClick(R.id.showNavIV1)
+    public void showNavigation(){
+        ((MainActivity)getActivity()).openNavigationDrawer();
+    }
+
+    @OnClick(R.id.showNavIV2)
+    public void showNavigation2(){
+        ((MainActivity)getActivity()).openNavigationDrawer();
+    }
+
+    @OnClick(R.id.goToMapIV)
+    public void goToMapIV(){
+        Fragment pageFragment = new GoogleMapFragment();
+
+        FragmentManager fragmentManager = getFragmentManager();
+
+        fragmentManager.beginTransaction()
+                .replace(R.id.content_frame, pageFragment)
+                .addToBackStack(null).commit();
+    }
+
     @Override
     public void onCreate(Bundle savedInstance){
         setHasOptionsMenu(false);
@@ -74,7 +98,6 @@ public class LibraryFragment extends GeoViewFragmentBase
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         setView(inflater, container, R.layout.fragment_libraryitems);
         mContext = getActivity();
-
         sendScreenName();
 
         ILayoutRefresher refresher = application.getUIHelperComponent().provideLayoutRefresher();

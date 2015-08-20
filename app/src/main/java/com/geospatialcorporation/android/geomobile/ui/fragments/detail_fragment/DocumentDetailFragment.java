@@ -1,6 +1,8 @@
 package com.geospatialcorporation.android.geomobile.ui.fragments.detail_fragment;
 
 import android.os.Bundle;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -15,6 +17,8 @@ import com.geospatialcorporation.android.geomobile.library.DI.TreeServices.Inter
 import com.geospatialcorporation.android.geomobile.library.DI.UIHelpers.Interfaces.DialogHelpers.IDocumentDialog;
 import com.geospatialcorporation.android.geomobile.library.helpers.FileSizeFormatter;
 import com.geospatialcorporation.android.geomobile.models.Document.Document;
+import com.geospatialcorporation.android.geomobile.ui.MainActivity;
+import com.geospatialcorporation.android.geomobile.ui.fragments.GoogleMapFragment;
 import com.geospatialcorporation.android.geomobile.ui.fragments.dialogs.ItemDetailFragment;
 import com.melnykov.fab.FloatingActionButton;
 
@@ -45,6 +49,27 @@ public class DocumentDetailFragment extends ItemDetailFragment<Document>  {
         mAnalytics.trackClick(new GoogleAnalyticEvent().ShowDocumentActions());
 
         mDocumentDialog.actions(mEntity, getActivity(), getActivity().getSupportFragmentManager());
+    }
+
+    @OnClick(R.id.showNavIV1)
+    public void showNavigation(){
+        ((MainActivity)getActivity()).openNavigationDrawer();
+    }
+
+    @OnClick(R.id.showNavIV2)
+    public void showNavigation2(){
+        ((MainActivity)getActivity()).openNavigationDrawer();
+    }
+
+    @OnClick(R.id.goToMapIV)
+    public void goToMapIV(){
+        Fragment pageFragment = new GoogleMapFragment();
+
+        FragmentManager fragmentManager = getFragmentManager();
+
+        fragmentManager.beginTransaction()
+                .replace(R.id.content_frame, pageFragment)
+                .addToBackStack(null).commit();
     }
 
     //endregion

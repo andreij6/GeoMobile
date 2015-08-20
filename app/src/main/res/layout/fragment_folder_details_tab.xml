@@ -5,47 +5,13 @@
               android:layout_width="match_parent"
               android:layout_height="match_parent">
 
-    <ImageView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:id="@+id/backgroundImageView"
-        android:layout_centerHorizontal="true"
-        android:layout_alignParentTop="true"
-        android:minHeight="100dp"
-        android:src="@drawable/ic_information_outline_grey600_24dp"
-        android:contentDescription="@string/folder_detail_icon"/>
 
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:textAppearance="?android:attr/textAppearanceLarge"
-        android:id="@+id/detailsTV"
-        android:layout_below="@+id/backgroundImageView"
-        android:layout_alignParentStart="true"
-        android:paddingLeft="40dp"
-        android:paddingBottom="10dp"
-        android:textColor="@color/primary_dark"
-        />
-
-    <com.melnykov.fab.FloatingActionButton
-        android:id="@+id/fab"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:src="@drawable/ic_action_add"
-        fab:fab_colorNormal="@color/accent"
-        fab:fab_colorPressed="@color/primary_dark"
-        fab:fab_colorRipple="@color/primary_light"
-        android:layout_marginLeft="16dp"
-        android:layout_marginRight="16dp"
-        android:layout_marginEnd="43dp"
-        android:layout_below="@+id/backgroundImageView"
-        android:layout_alignParentEnd="true"/>
 
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_below="@+id/detailsTV"
-        android:background="@color/primary_light">
+        android:background="@color/white">
 
         <LinearLayout
             android:orientation="vertical"
@@ -202,5 +168,18 @@
 
 
     </RelativeLayout>
+
+    <com.melnykov.fab.FloatingActionButton
+        android:id="@+id/fab"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@drawable/ic_action_add"
+        fab:fab_colorNormal="@color/accent"
+        fab:fab_colorPressed="@color/primary_dark"
+        fab:fab_colorRipple="@color/primary_light"
+        android:layout_marginRight="25dp"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentEnd="true"
+        android:layout_marginBottom="25dp"/>
 
 </RelativeLayout>

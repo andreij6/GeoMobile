@@ -1,6 +1,8 @@
 package com.geospatialcorporation.android.geomobile.ui.fragments.tree_fragments;
 
 import android.os.Bundle;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -12,10 +14,13 @@ import com.geospatialcorporation.android.geomobile.library.DI.Tasks.Interfaces.I
 import com.geospatialcorporation.android.geomobile.library.DI.Tasks.models.ProfileTaskParams;
 import com.geospatialcorporation.android.geomobile.models.UserAccount;
 import com.geospatialcorporation.android.geomobile.ui.Interfaces.IPostExecuter;
+import com.geospatialcorporation.android.geomobile.ui.MainActivity;
 import com.geospatialcorporation.android.geomobile.ui.fragments.GeoViewFragmentBase;
+import com.geospatialcorporation.android.geomobile.ui.fragments.GoogleMapFragment;
 
 import butterknife.ButterKnife;
 import butterknife.InjectView;
+import butterknife.OnClick;
 
 public class AccountFragment extends GeoViewFragmentBase implements IPostExecuter<UserAccount>{
 
@@ -31,6 +36,27 @@ public class AccountFragment extends GeoViewFragmentBase implements IPostExecute
     @InjectView(R.id.email) TextView Email;
     @InjectView(R.id.cellPhone) TextView CellPhone;
     @InjectView(R.id.officePhone) TextView OfficePhone;
+
+    @OnClick(R.id.showNavIV1)
+    public void showNavigation(){
+        ((MainActivity)getActivity()).openNavigationDrawer();
+    }
+
+    @OnClick(R.id.showNavIV2)
+    public void showNavigation2(){
+        ((MainActivity)getActivity()).openNavigationDrawer();
+    }
+
+    @OnClick(R.id.goToMapIV)
+    public void goToMapIV(){
+        Fragment pageFragment = new GoogleMapFragment();
+
+        FragmentManager fragmentManager = getFragmentManager();
+
+        fragmentManager.beginTransaction()
+                .replace(R.id.content_frame, pageFragment)
+                .addToBackStack(null).commit();
+    }
     //endregion
 
     @Override

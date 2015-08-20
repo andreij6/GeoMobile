@@ -3,6 +3,7 @@ package com.geospatialcorporation.android.geomobile.library.DI.Authentication.Im
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.util.Log;
+import android.widget.Toast;
 
 import com.geospatialcorporation.android.geomobile.application;
 import com.geospatialcorporation.android.geomobile.library.helpers.ProgressDialogHelper;
@@ -31,7 +32,7 @@ public class AuthTokenRetriever {
         new RetrieveAuthToken().execute(token);
     }
 
-    private class RetrieveAuthToken extends AsyncTask<String, Void, String> {
+    protected class RetrieveAuthToken extends AsyncTask<String, Void, String> {
 
         private Exception exception;
 
@@ -51,13 +52,15 @@ public class AuthTokenRetriever {
 
         @Override
         protected void onPostExecute(String authToken) {
+            if(ProgressHelper != null){
+                ProgressHelper.toggleProgressDialog();
+            }
+
             if (application.getAuthToken() != null) {
 
-                if(ProgressHelper != null){
-                    ProgressHelper.toggleProgressDialog();
-                }
-
                 getCurrentClient();
+            } else {
+                Toast.makeText(mContext, "Google Login Failed", Toast.LENGTH_LONG).show();
             }
         }
     }

@@ -6,6 +6,8 @@ import android.support.v7.widget.RecyclerView;
 
 import com.geospatialcorporation.android.geomobile.R;
 import com.geospatialcorporation.android.geomobile.application;
+import com.geospatialcorporation.android.geomobile.library.DI.Map.Interfaces.ILayerManager;
+import com.geospatialcorporation.android.geomobile.library.DI.Tasks.Interfaces.ILayerStyleTask;
 import com.geospatialcorporation.android.geomobile.library.sectionbuilders.ISectionBuilder;
 import com.geospatialcorporation.android.geomobile.library.sectionbuilders.SectionBuilderBase;
 import com.geospatialcorporation.android.geomobile.models.Folders.Folder;
@@ -21,6 +23,7 @@ import java.util.List;
 
 public class LegendLayerSectionBuilder extends SectionBuilderBase<Folder> implements ISectionBuilder<Folder> {
 
+
     public LegendLayerSectionBuilder(Context context) {
         super(context);
     }
@@ -30,6 +33,11 @@ public class LegendLayerSectionBuilder extends SectionBuilderBase<Folder> implem
         mData = data;
 
         List<LegendLayer> llayers = getLayersFromFolders(data);
+        ILayerManager layerManager = application.getMapComponent().provideLayerManager();
+
+        //-- Add All Layers Extent
+        getAllLayerExtents(llayers, layerManager);
+        //--
 
         LegendLayerAdapter adapter = new LegendLayerAdapter(mContext, llayers);
 
@@ -37,33 +45,15 @@ public class LegendLayerSectionBuilder extends SectionBuilderBase<Folder> implem
 
         if(data != null){
             int skip = 0;
-            List<Folder> emptyFolders = new ArrayList<>();
 
             for(Folder folder : data){
-                //if(folder.getLayers() != null && folder.getLayers().size() > 0) {
-                    if(isRoot(folder)) {
-                        sections.add(new SimpleSectionedRecyclerViewAdapter.Section(skip, "ROOT"));
-                    } else {
-                        sections.add(new SimpleSectionedRecyclerViewAdapter.Section(skip, folder.getName()));
-                    }
-                    skip = getSkipValue(folder, skip);
-                //} else {
-                //   emptyFolders.add(folder);
-                //}
+                if(isRoot(folder)) {
+                    sections.add(new SimpleSectionedRecyclerViewAdapter.Section(skip, "ROOT"));
+                } else {
+                    sections.add(new SimpleSectionedRecyclerViewAdapter.Section(skip, folder.getName()));
+                }
+                skip = getSkipValue(folder, skip);
             }
-
-            //sections.add(new SimpleSectionedRecyclerViewAdapter.Section(skip, "- Empty Folders -"));
-
-            //skip++;
-
-            //for(Folder folder : emptyFolders){
-            //    if(isRoot(folder)) {
-            //        sections.add(new SimpleSectionedRecyclerViewAdapter.Section(skip, "ROOT"));
-            //    } else {
-            //        sections.add(new SimpleSectionedRecyclerViewAdapter.Section(skip, folder.getName()));
-            //    }
-            //    skip = getSkipValue(folder, skip);
-            //}
         }
 
         SimpleSectionedRecyclerViewAdapter.Section[] sectionArray = new SimpleSectionedRecyclerViewAdapter.Section[sections.size()];
@@ -75,12 +65,26 @@ public class LegendLayerSectionBuilder extends SectionBuilderBase<Folder> implem
         return this;
     }
 
+    protected void getAllLayerExtents(List<LegendLayer> llayers, ILayerManager layerManager) {
+        for(LegendLayer llayer : llayers){
+            Layer toAdd = llayer.getLayer();
+
+            if (toAdd != null) {
+                layerManager.addAllLayersExtent(toAdd.getId(), toAdd.getExtent());
+            }
+
+        }
+    }
+
     private List<LegendLayer> getLayersFromFolders(List<Folder> layerFolders) {
         List<LegendLayer> result = new ArrayList<>();
         HashMap<Integer, Layer> layerHashMap = new HashMap<>();
 
 
         for(Folder folder : layerFolders){
+
+            result.add(new LegendLayer(folder));
+
             if(folder.getLayers() != null && !folder.getLayers().isEmpty()){
                 List<Layer> layers = new ArrayList<>();
 
@@ -90,10 +94,6 @@ public class LegendLayerSectionBuilder extends SectionBuilderBase<Folder> implem
                     layerHashMap.put(layer.getId(), layer);
                     result.add(new LegendLayer(layer));
                 }
-
-                result.add(new LegendLayer(folder));
-            } else {
-                result.add(new LegendLayer(folder));
             }
         }
 

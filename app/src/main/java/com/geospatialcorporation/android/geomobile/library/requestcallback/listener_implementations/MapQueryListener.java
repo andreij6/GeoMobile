@@ -1,6 +1,7 @@
 package com.geospatialcorporation.android.geomobile.library.requestcallback.listener_implementations;
 
-import com.geospatialcorporation.android.geomobile.library.map.GeoMapper;
+import com.geospatialcorporation.android.geomobile.application;
+import com.geospatialcorporation.android.geomobile.library.DI.Tasks.Interfaces.IMapFeaturesTask;
 import com.geospatialcorporation.android.geomobile.library.requestcallback.RequestListener;
 import com.geospatialcorporation.android.geomobile.models.Layers.LegendLayer;
 import com.geospatialcorporation.android.geomobile.models.Query.map.response.mapquery.MapQueryResponse;
@@ -14,17 +15,17 @@ public class MapQueryListener extends RequestListenerBase<List<MapQueryResponse>
 
     private static final String TAG = MapQueryListener.class.getSimpleName();
 
-    GeoMapper mGeoMapper;
+    IMapFeaturesTask mGeoMapper;
     LegendLayer mLLayer;
 
     public MapQueryListener(Boolean shouldRefresh) {
         super(shouldRefresh);
-        mGeoMapper = new GeoMapper();
+        mGeoMapper = application.getTasksComponent().provideMapFeaturesTask();
     }
 
     public MapQueryListener(LegendLayer llayer){
         super(false);
-        mGeoMapper = new GeoMapper();
+        mGeoMapper = application.getTasksComponent().provideMapFeaturesTask();
         mLLayer = llayer;
     }
 
@@ -32,7 +33,7 @@ public class MapQueryListener extends RequestListenerBase<List<MapQueryResponse>
     public void onSuccess(List<MapQueryResponse> response) {
         super.onSuccess(response);
 
-        mGeoMapper.map(response, mLLayer);
+        mGeoMapper.mapFeatures(response, mLLayer);
     }
 
 

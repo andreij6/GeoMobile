@@ -59,7 +59,6 @@ public abstract class LineFeatureMapperBase extends SingleFeatureMapperBase<Poly
     @Override
     public void commit(LegendLayer layer) {
         addMapObject(layer, mMapFeature);
-
         setLegendIcon(layer);
     }
 

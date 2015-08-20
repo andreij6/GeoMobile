@@ -1,22 +1,28 @@
 package com.geospatialcorporation.android.geomobile.ui.fragments.detail_fragment;
 
 import android.os.Bundle;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTabHost;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TabHost;
+import android.widget.TextView;
 
 import com.geospatialcorporation.android.geomobile.R;
 import com.geospatialcorporation.android.geomobile.application;
 import com.geospatialcorporation.android.geomobile.library.DI.UIHelpers.Interfaces.DialogHelpers.IFolderDialog;
 import com.geospatialcorporation.android.geomobile.library.helpers.GeoDialogHelper;
 import com.geospatialcorporation.android.geomobile.models.Folders.Folder;
+import com.geospatialcorporation.android.geomobile.ui.MainActivity;
+import com.geospatialcorporation.android.geomobile.ui.fragments.GoogleMapFragment;
 import com.geospatialcorporation.android.geomobile.ui.fragments.detail_fragment.folder_tabs.FolderDetailsTab;
 import com.geospatialcorporation.android.geomobile.ui.fragments.detail_fragment.folder_tabs.PermissionsTab;
 import com.geospatialcorporation.android.geomobile.ui.fragments.dialogs.ItemDetailFragment;
 
 import butterknife.ButterKnife;
+import butterknife.OnClick;
 
 public class DocumentFolderDetailFragment extends ItemDetailFragment<Folder> implements TabHost.OnTabChangeListener {
     private static final String TAG = DocumentFolderDetailFragment.class.getSimpleName();
@@ -25,6 +31,27 @@ public class DocumentFolderDetailFragment extends ItemDetailFragment<Folder> imp
     private static final String PERMISSIONS = "Permissions";
 
     IFolderDialog mFolderDialog;
+
+    @OnClick(R.id.showNavIV1)
+    public void showNavigation(){
+        ((MainActivity)getActivity()).openNavigationDrawer();
+    }
+
+    @OnClick(R.id.showNavIV2)
+    public void showNavigation2(){
+        ((MainActivity)getActivity()).openNavigationDrawer();
+    }
+
+    @OnClick(R.id.goToMapIV)
+    public void goToMapIV(){
+        Fragment pageFragment = new GoogleMapFragment();
+
+        FragmentManager fragmentManager = getFragmentManager();
+
+        fragmentManager.beginTransaction()
+                .replace(R.id.content_frame, pageFragment)
+                .addToBackStack(null).commit();
+    }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState){
@@ -48,6 +75,12 @@ public class DocumentFolderDetailFragment extends ItemDetailFragment<Folder> imp
         tabHost.addTab(tabHost.newTabSpec(PERMISSIONS).setIndicator(PERMISSIONS), PermissionsTab.class, args);
 
         tabHost.setCurrentTab(0);
+
+        for (int i = 0; i < tabHost.getTabWidget().getTabCount(); i++) {
+            ViewGroup vg = (ViewGroup) tabHost.getTabWidget().getChildAt(i);
+            TextView tv = (TextView) vg.getChildAt(1);
+            tv.setTextColor(getResources().getColor(R.color.white));
+        }
 
         return view;
     }

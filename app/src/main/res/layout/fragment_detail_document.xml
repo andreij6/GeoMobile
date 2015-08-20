@@ -5,6 +5,57 @@
                 android:layout_width="fill_parent"
                 android:layout_height="match_parent">
 
+    <LinearLayout
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="48dp"
+        android:layout_below="@+id/fab_point"
+        android:layout_toEndOf="@+id/fab_point"
+        android:background="@color/primary_dark"
+        android:layout_gravity="center_horizontal"
+        android:layout_centerHorizontal="true"
+        android:id="@+id/docdetail_actionbar">
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="32dp"
+            android:id="@+id/showNavIV1"
+            android:layout_gravity="center_vertical"
+            android:src="@drawable/ic_nav_orange"
+            android:paddingLeft="-16dp"
+            android:paddingRight="-10dp"/>
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:id="@+id/showNavIV2"
+            android:src="@drawable/ic_logo_g_orange"
+            android:layout_gravity="center_vertical"
+            android:layout_weight="1"
+            android:paddingLeft="-18dp"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:text="@string/geounderground"
+            android:gravity="center"
+            android:id="@+id/editText2"
+            android:textSize="18sp"
+            android:layout_weight="4"
+            android:textColor="@color/white"
+            android:textStyle="bold"
+            />
+
+        <ImageView
+            android:layout_width="36dp"
+            android:layout_height="36dp"
+            android:id="@+id/goToMapIV"
+            android:src="@drawable/ic_earth_white_36dp"
+            android:layout_gravity="center_vertical"
+            android:layout_weight="1"/>
+        <!--android:src="@drawable/ic_map_white_36dp"-->
+    </LinearLayout>
+
     <ImageView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -14,7 +65,7 @@
         android:background="@color/primary"
         android:minHeight="100dp"
         android:src="@drawable/ic_file_document_box_white_24dp"
-        android:layout_marginTop="?attr/actionBarSize"
+        android:layout_below="@id/docdetail_actionbar"
         android:contentDescription="@string/document_icon"/>
 
     <TextView

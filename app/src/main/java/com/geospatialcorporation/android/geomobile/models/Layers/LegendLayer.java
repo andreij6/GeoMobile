@@ -6,6 +6,7 @@ import android.widget.ImageView;
 import android.widget.ProgressBar;
 
 import com.geospatialcorporation.android.geomobile.models.Folders.Folder;
+import com.google.android.gms.maps.model.BitmapDescriptor;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -22,6 +23,7 @@ public class LegendLayer {
     private ProgressBar mProgressBar;
     private CheckBox mCheckBox;
     private boolean mMapped;
+    private BitmapDescriptor mBitmap;
 
     public LegendLayer(Layer layer) {
         mLayer = layer;
@@ -48,14 +50,6 @@ public class LegendLayer {
 
     public void setLegendIcon(Drawable legendIcon) {
         mLegendIcon = legendIcon;
-    }
-
-    public List<Object> getMapObject() {
-        return MapObjects;
-    }
-
-    public void setMapObject(Object mapObject) {
-        MapObjects.add(mapObject);
     }
     //endregion
 
@@ -97,5 +91,17 @@ public class LegendLayer {
 
     public void setMapped(boolean mapped) {
         mMapped = mapped;
+    }
+
+    public ImageView getImageView() {
+        return mImageView;
+    }
+
+    public BitmapDescriptor getBitmap() {
+        return mBitmap;
+    }
+
+    public void setBitmap(BitmapDescriptor bitmap) {
+        mBitmap = bitmap;
     }
 }

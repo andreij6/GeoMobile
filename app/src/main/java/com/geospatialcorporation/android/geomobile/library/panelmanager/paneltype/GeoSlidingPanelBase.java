@@ -24,7 +24,8 @@ public abstract class GeoSlidingPanelBase {
     }
 
     public void setup(){
-        setDefaultCollapsedUI();
+        //setDefaultCollapsedUI();
+        hide();
 
         mPanel.setPanelSlideListener(new SlidingUpPanelLayout.PanelSlideListener() {
             @Override
@@ -91,7 +92,10 @@ public abstract class GeoSlidingPanelBase {
     }
 
     public void hide() {
-        mPanel.setPanelState(SlidingUpPanelLayout.PanelState.HIDDEN);
+        if(getPanelState() != SlidingUpPanelLayout.PanelState.HIDDEN) {
+            mPanel.setPanelState(SlidingUpPanelLayout.PanelState.HIDDEN);
+            mPanel.setPanelHeight(0);
+        }
     }
 
     public void touch(Boolean enabled) {

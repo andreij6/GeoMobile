@@ -2,7 +2,6 @@ package com.geospatialcorporation.android.geomobile.ui.fragments.drawer;
 
 import android.content.SharedPreferences;
 import android.content.res.Configuration;
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.v4.app.Fragment;
@@ -13,7 +12,6 @@ import android.support.v7.app.ActionBarActivity;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -21,25 +19,20 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ListView;
+import android.widget.Toast;
 
 import com.geospatialcorporation.android.geomobile.R;
 import com.geospatialcorporation.android.geomobile.application;
 import com.geospatialcorporation.android.geomobile.library.DI.Tasks.Interfaces.IGetLayersTask;
 import com.geospatialcorporation.android.geomobile.library.DI.Tasks.models.GetLayersTaskParams;
-import com.geospatialcorporation.android.geomobile.library.helpers.DataHelper;
-import com.geospatialcorporation.android.geomobile.library.map.layerManager.ILayerManager;
-import com.geospatialcorporation.android.geomobile.library.map.layerManager.LayerManager;
-import com.geospatialcorporation.android.geomobile.library.rest.TreeService;
 import com.geospatialcorporation.android.geomobile.library.sectionbuilders.implementations.LegendLayerSectionBuilder;
 import com.geospatialcorporation.android.geomobile.models.Folders.Folder;
-import com.geospatialcorporation.android.geomobile.models.Layers.Layer;
 import com.geospatialcorporation.android.geomobile.ui.Interfaces.IPostExecuter;
+import com.geospatialcorporation.android.geomobile.ui.MainActivity;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import butterknife.InjectView;
-import retrofit.RetrofitError;
 
 /**
  * Fragment used for managing interactions for and presentation of a navigation drawer.
@@ -113,7 +106,6 @@ public class LayerSelectorDrawerFragment extends Fragment implements IPostExecut
                              Bundle savedInstanceState) {
         mRootView = inflater.inflate(R.layout.fragment_right_navigation_drawer, container, false);
 
-
         return mRootView;
     }
 
@@ -153,6 +145,9 @@ public class LayerSelectorDrawerFragment extends Fragment implements IPostExecut
             @Override
             public void onDrawerOpened(View drawerView) {
                 super.onDrawerOpened(drawerView);
+
+                MainActivity activity = (MainActivity)getActivity();
+
                 if (!isAdded()) {
                     return;
                 }
@@ -166,7 +161,8 @@ public class LayerSelectorDrawerFragment extends Fragment implements IPostExecut
                     sp.edit().putBoolean(PREF_USER_LEARNED_DRAWER, true).apply();
                 }
 
-                getActivity().supportInvalidateOptionsMenu(); // calls onPrepareOptionsMenu()
+                activity.supportInvalidateOptionsMenu(); // calls onPrepareOptionsMenu()
+
             }
         };
 

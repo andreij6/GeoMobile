@@ -19,4 +19,6 @@ public interface IFeatureMapper {
     void commit(LegendLayer llayer);
 
     void reset();
+
+    void setLegendLayer(LegendLayer llayer);
 }

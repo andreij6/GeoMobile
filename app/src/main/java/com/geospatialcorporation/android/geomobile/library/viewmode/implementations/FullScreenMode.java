@@ -26,7 +26,7 @@ public class FullScreenMode implements IViewMode {
 
         mBuilder.mFab.setVisibility(View.GONE);
 
-        View mainDrawer = mBuilder.mDrawerLayout.findViewById(R.id.navigation_left_drawer);
+        View mainDrawer = mBuilder.mDrawerLayout.findViewById(R.id.navigation_drawer);
         View layerDrawer = mBuilder.mDrawerLayout.findViewById(R.id.layer_drawer);
 
         ViewGroup.LayoutParams params1 = mainDrawer.getLayoutParams();
@@ -64,7 +64,7 @@ public class FullScreenMode implements IViewMode {
 
             mActionBar.hide();
 
-            View mainDrawer = mDrawerLayout.findViewById(R.id.navigation_left_drawer);
+            View mainDrawer = mDrawerLayout.findViewById(R.id.navigation_drawer);
             View layerDrawer = mDrawerLayout.findViewById(R.id.layer_drawer);
 
             ViewGroup.LayoutParams params1 = mainDrawer.getLayoutParams();

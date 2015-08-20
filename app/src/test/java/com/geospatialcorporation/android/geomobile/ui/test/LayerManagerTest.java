@@ -1,12 +1,10 @@
 package com.geospatialcorporation.android.geomobile.ui.test;
 
-import com.geospatialcorporation.android.geomobile.library.map.layerManager.LayerManager;
+import com.geospatialcorporation.android.geomobile.library.DI.Map.Implementations.LayerManager;
 import com.geospatialcorporation.android.geomobile.models.Layers.Extent;
 import com.geospatialcorporation.android.geomobile.models.Layers.Point;
 
 import junit.framework.Assert;
-
-import static org.junit.Assert.*;
 
 import org.junit.Test;
 
@@ -17,7 +15,7 @@ public class LayerManagerTest {
 
         Extent only = new Extent(8,new Point(1, 40.28895415740959, -79.37759399414062), new Point(1, 40.07912221750036, -80.47348022460938));
 
-        sut.addExtent(1, only) ;
+        sut.addVisibleLayerExtent(1, only) ;
 
         Extent extent = sut.getFullExtent();
 
@@ -34,8 +32,8 @@ public class LayerManagerTest {
         Extent first = new Extent(8,new Point(1, 40.28895415740959, -79.37759399414062), new Point(1, 40.07912221750036, -80.47348022460938));
         Extent second = new Extent(8, new Point(1, 36.49666668157884, -90.21166667383856), new Point(1, 33.02500004815358, -94.54416664983293));
 
-        sut.addExtent(1, first);
-        sut.addExtent(2, second);
+        sut.addVisibleLayerExtent(1, first);
+        sut.addVisibleLayerExtent(2, second);
 
         Extent extent = sut.getFullExtent();
 

@@ -21,9 +21,11 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.geospatialcorporation.android.geomobile.R;
 import com.geospatialcorporation.android.geomobile.application;
+import com.geospatialcorporation.android.geomobile.ui.MainActivity;
 import com.geospatialcorporation.android.geomobile.ui.adapters.MainNavigationAdapter;
 
 import java.util.Arrays;
@@ -136,7 +138,7 @@ public class MainNavigationDrawerFragment extends Fragment {
      * @param drawerLayout The DrawerLayout containing this fragment's UI.
      * @param
      */
-    public void setUp(int fragmentId, DrawerLayout drawerLayout, ActionBar actionBar) {
+    public void setUp(int fragmentId, DrawerLayout drawerLayout, final ActionBar actionBar) {
         mFragmentContainerView = getActivity().findViewById(fragmentId);
         mDrawerLayout = drawerLayout;
 
@@ -145,12 +147,12 @@ public class MainNavigationDrawerFragment extends Fragment {
         // set up the drawer's list view with items and click listener
 
         mActionBar = actionBar;
+        Toolbar toolbar = new Toolbar(getActivity());
         mActionBar.setHomeAsUpIndicator(R.drawable.ic_logo_g_orange);
         mActionBar.setDisplayHomeAsUpEnabled(true);
 
         // ActionBarDrawerToggle ties together the the proper interactions
         // between the navigation drawer and the action bar app icon.
-        Toolbar toolbar = new Toolbar(getActivity());
 
         mDrawerToggle = new ActionBarDrawerToggle(
                 getActivity(),                      /* host Activity */
@@ -174,6 +176,8 @@ public class MainNavigationDrawerFragment extends Fragment {
             public void onDrawerOpened(View drawerView) {
                 super.onDrawerOpened(drawerView);
 
+                MainActivity activity = (MainActivity)getActivity();
+
                 if (!isAdded()) {
                     return;
                 }
@@ -187,7 +191,7 @@ public class MainNavigationDrawerFragment extends Fragment {
                     sp.edit().putBoolean(PREF_USER_LEARNED_DRAWER, true).apply();
                 }
 
-                getActivity().supportInvalidateOptionsMenu(); // calls onPrepareOptionsMenu()
+                activity.supportInvalidateOptionsMenu(); // calls onPrepareOptionsMenu()
             }
         };
 
@@ -278,13 +282,8 @@ public class MainNavigationDrawerFragment extends Fragment {
      * 'context', rather than just what's in the current screen.
      */
     private void showGlobalContextActionBar() {
-        ActionBar actionBar = getActionBar();
-        actionBar.setDisplayShowTitleEnabled(true);
-        actionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_STANDARD);
-    }
-
-    private ActionBar getActionBar() {
-        return ((ActionBarActivity) getActivity()).getSupportActionBar();
+        mActionBar.setDisplayShowTitleEnabled(false);
+        mActionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_STANDARD);
     }
 
 
