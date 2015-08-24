@@ -43,7 +43,7 @@
                 android:layout_height="wrap_content"
                 style="@style/actionDialog_textView"
                 android:text="@string/add_document"
-                android:id="@+id/addDocumentTV"
+                android:id="@+id/takePhotoTV"
                 android:layout_gravity="center_horizontal"
                 android:layout_below="@+id/addDocumentIcon"
                 android:layout_alignEnd="@+id/addDocumentIcon"
@@ -89,7 +89,7 @@
         android:id="@+id/uploadTV"
         android:layout_gravity="center_horizontal"
         android:layout_alignTop="@+id/addImageTV"
-        android:layout_alignStart="@+id/addDocumentTV"
+        android:layout_alignStart="@+id/takePhotoTV"
         android:textAlignment="center"
         android:gravity="center"
         android:layout_marginRight="10dp"/>

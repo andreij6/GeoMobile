@@ -107,23 +107,28 @@ public class EditAttributesDialogFragment extends AttributesActionDialogBase<Att
 
         for(AttributeValueVM.Columns keyValue : columnsList) {
 
-
             TableRow row = new TableRow(mContext);
 
             TextView columnName = (TextView)mInflater.inflate(R.layout.template_feature_window_column_tv, null);
             columnName.setText(keyValue.getKey() + "  ");
 
+            row.addView(columnName);
+
+            mTableLayout.addView(row);
+
+            row = new TableRow(mContext);
+
             EditText columnValue = (EditText)mInflater.inflate(R.layout.template_feature_window_column_et, null);
             columnValue.setText(keyValue.getValue());
 
-            setEditTextType(keyValue, columnValue);
-
             mStartingValues.put(keyValue.getColumnId(), new PreviousCurrent(keyValue.getValue(), columnValue));
 
-            row.addView(columnName);
+            setEditTextType(keyValue, columnValue);
+
             row.addView(columnValue);
 
             mTableLayout.addView(row);
+
         }
     }
 

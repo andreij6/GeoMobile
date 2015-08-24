@@ -13,7 +13,5 @@ public interface IGeneralDialog {
 
     void editAttributes(Context context, FragmentManager manager);
 
-    void libraryAction(Folder currentFolder, Context context, FragmentManager manager);
-
     void removeMapFeatureDocument(RemoveMapFeatureDocumentRequest request);
 }

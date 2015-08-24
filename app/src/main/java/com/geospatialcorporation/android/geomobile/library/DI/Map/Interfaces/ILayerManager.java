@@ -26,7 +26,7 @@ public interface ILayerManager {
     Iterable<Polyline> getVisiblePolylines();
     String getFeatureId(String id, int shapeCode);
 
-    void showLayers();
+    void showLayers(GoogleMap map);
     void clearVisibleLayers();
     List<Integer> getVisibleLayerIds();
 

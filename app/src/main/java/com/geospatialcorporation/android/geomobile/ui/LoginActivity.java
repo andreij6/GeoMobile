@@ -114,8 +114,9 @@ public class LoginActivity extends GoogleApiActivity implements LoaderCallbacks<
         AttemptAutomaticLogin();
 
         if (BuildConfig.DEBUG) {
-            mEmailView.setText("jon.shaffer@geospatialcorporation.com");
-            mPasswordView.setText("f5eHXqWEGp1W");
+            //commented for Cintacs review
+            //mEmailView.setText("jon.shaffer@geospatialcorporation.com");
+            //mPasswordView.setText("f5eHXqWEGp1W");
         }
 
         mPlusSignInButton.requestFocus();

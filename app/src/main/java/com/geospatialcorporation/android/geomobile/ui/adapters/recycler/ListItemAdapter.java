@@ -31,7 +31,7 @@ import com.geospatialcorporation.android.geomobile.ui.fragments.detail_fragment.
 import com.geospatialcorporation.android.geomobile.ui.fragments.detail_fragment.LayerDetailFragment;
 import com.geospatialcorporation.android.geomobile.ui.fragments.tree_fragments.LayerFragment;
 import com.geospatialcorporation.android.geomobile.ui.fragments.dialogs.DownloadDialogFragment;
-import com.geospatialcorporation.android.geomobile.ui.viewmodels.ListItem;
+import com.geospatialcorporation.android.geomobile.models.ListItem;
 
 import java.util.List;
 

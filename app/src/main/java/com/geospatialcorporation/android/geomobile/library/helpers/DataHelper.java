@@ -5,12 +5,10 @@ import com.geospatialcorporation.android.geomobile.library.constants.NodeTypeCod
 import com.geospatialcorporation.android.geomobile.models.Folders.Folder;
 import com.geospatialcorporation.android.geomobile.models.Layers.Layer;
 import com.geospatialcorporation.android.geomobile.models.Document.Document;
-import com.geospatialcorporation.android.geomobile.models.Query.map.Layers;
-import com.geospatialcorporation.android.geomobile.models.Query.map.MapDefaultQueryRequest;
 import com.geospatialcorporation.android.geomobile.models.Query.quickSearch.QuickSearchResponse;
 import com.geospatialcorporation.android.geomobile.models.Query.quickSearch.QuickSearchResult;
 import com.geospatialcorporation.android.geomobile.models.Query.quickSearch.QuickSearchResultVM;
-import com.geospatialcorporation.android.geomobile.ui.viewmodels.ListItem;
+import com.geospatialcorporation.android.geomobile.models.ListItem;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -84,14 +82,6 @@ public class DataHelper {
 
         ArrayList<ListItem> results = new ArrayList<>();
 
-        if (parent != null) {
-            ListItem listItem = new ListItem(parent);
-            listItem.setIconId(R.drawable.ic_arrow_left_bold_black_24dp);
-            listItem.setName("");
-            listItem.setShowInfoIcon(false);
-            results.add(listItem);
-        }
-
         for (Folder folder : infolders) {
             ListItem listItem = new ListItem(folder);
             results.add(listItem);
@@ -121,15 +111,6 @@ public class DataHelper {
         List<Folder> infolders = folders != null ? folders : new ArrayList<Folder>();
 
         ArrayList<ListItem> results = new ArrayList<>();
-
-        if (parent != null) {
-            ListItem listItem = new ListItem(parent);
-            listItem.setIconId(R.drawable.ic_arrow_left_bold_black_24dp);
-            listItem.setName("");
-            listItem.setShowInfoIcon(false);
-            results.add(listItem);
-        }
-
 
         for (Folder folder : infolders) {
             ListItem listItem = new ListItem(folder);

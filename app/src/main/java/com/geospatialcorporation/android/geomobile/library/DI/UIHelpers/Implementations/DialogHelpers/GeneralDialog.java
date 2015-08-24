@@ -8,9 +8,7 @@ import com.geospatialcorporation.android.geomobile.R;
 import com.geospatialcorporation.android.geomobile.application;
 import com.geospatialcorporation.android.geomobile.library.DI.TreeServices.Interfaces.ILayerTreeService;
 import com.geospatialcorporation.android.geomobile.library.DI.UIHelpers.Interfaces.DialogHelpers.IGeneralDialog;
-import com.geospatialcorporation.android.geomobile.models.Folders.Folder;
 import com.geospatialcorporation.android.geomobile.models.RemoveMapFeatureDocumentRequest;
-import com.geospatialcorporation.android.geomobile.ui.fragments.dialogs.LibraryActionDialogFragment;
 import com.geospatialcorporation.android.geomobile.ui.fragments.dialogs.MapFeatureDocumentDialogFragment;
 
 public class GeneralDialog implements IGeneralDialog {
@@ -31,15 +29,6 @@ public class GeneralDialog implements IGeneralDialog {
     @Override
     public void editAttributes(Context context, FragmentManager manager) {
 
-    }
-
-    @Override
-    public void libraryAction(Folder folder, Context context, FragmentManager manager) {
-        LibraryActionDialogFragment l = new LibraryActionDialogFragment();
-
-        l.setContext(context);
-        l.setFolder(folder);
-        l.show(manager, "library actions");
     }
 
     @Override

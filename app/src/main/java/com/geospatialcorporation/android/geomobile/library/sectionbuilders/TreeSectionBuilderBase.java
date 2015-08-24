@@ -31,14 +31,12 @@ public abstract class TreeSectionBuilderBase<T> extends SectionBuilderBase<T>{
     protected void buildAdapter(ListItemAdapter adapter, int folderCount){
         List<SimpleSectionedRecyclerViewAdapter.Section> sections = new ArrayList<>();
 
-        if(mParent != null){
-            sections.add(new SimpleSectionedRecyclerViewAdapter.Section(0, setParentName()));
-            sections.add(new SimpleSectionedRecyclerViewAdapter.Section(1, mFolderSectionName));
-            CheckEmptyData(sections, folderCount);
-        } else {
-            sections.add(new SimpleSectionedRecyclerViewAdapter.Section(0, mFolderSectionName));
-            sections.add(new SimpleSectionedRecyclerViewAdapter.Section(folderCount, mTreeSectionName));
+        if(folderCount == 0){
+            folderCount += 1; //EmptyFolder
         }
+
+        sections.add(new SimpleSectionedRecyclerViewAdapter.Section(0, mFolderSectionName));
+        sections.add(new SimpleSectionedRecyclerViewAdapter.Section(folderCount, mTreeSectionName));
 
         SimpleSectionedRecyclerViewAdapter.Section[] sectionsArray = new SimpleSectionedRecyclerViewAdapter.Section[sections.size()];
 
@@ -55,18 +53,5 @@ public abstract class TreeSectionBuilderBase<T> extends SectionBuilderBase<T>{
         RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(mContext);
 
         r.setLayoutManager(layoutManager);
-    }
-
-    protected String setParentName() {
-        return mParent.getIsFixed() && !mParent.getIsImportFolder() && mParent.getName().trim().length() == 1
-                ? "Back to ROOT" : "Back to " + mParent.getName();
-    }
-
-    protected void CheckEmptyData(List<SimpleSectionedRecyclerViewAdapter.Section> sections, int folderCount) {
-        if(folderCount == 0) {
-            sections.add(new SimpleSectionedRecyclerViewAdapter.Section(folderCount + 2, mTreeSectionName));
-        } else {
-            sections.add(new SimpleSectionedRecyclerViewAdapter.Section(folderCount + 1, mTreeSectionName));
-        }
     }
 }

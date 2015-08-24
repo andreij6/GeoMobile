@@ -9,14 +9,18 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
+import android.widget.TextView;
 
 import com.geospatialcorporation.android.geomobile.R;
 import com.geospatialcorporation.android.geomobile.application;
 import com.geospatialcorporation.android.geomobile.library.DI.Tasks.Interfaces.IGetLayersTask;
 import com.geospatialcorporation.android.geomobile.library.DI.Tasks.models.GetLayersByFolderTaskParams;
 import com.geospatialcorporation.android.geomobile.library.DI.UIHelpers.Interfaces.ILayoutRefresher;
+import com.geospatialcorporation.android.geomobile.library.constants.GeoPanel;
 import com.geospatialcorporation.android.geomobile.library.helpers.DataHelper;
 import com.geospatialcorporation.android.geomobile.library.helpers.ProgressDialogHelper;
+import com.geospatialcorporation.android.geomobile.library.panelmanager.PanelManager;
 import com.geospatialcorporation.android.geomobile.library.sectionbuilders.implementations.LayerTreeSectionBuilder;
 import com.geospatialcorporation.android.geomobile.ui.Interfaces.IContentRefresher;
 import com.geospatialcorporation.android.geomobile.models.Folders.Folder;
@@ -24,13 +28,12 @@ import com.geospatialcorporation.android.geomobile.ui.Interfaces.IPostExecuter;
 import com.geospatialcorporation.android.geomobile.ui.MainActivity;
 import com.geospatialcorporation.android.geomobile.ui.fragments.GeoViewFragmentBase;
 import com.geospatialcorporation.android.geomobile.ui.fragments.GoogleMapFragment;
-import com.geospatialcorporation.android.geomobile.ui.fragments.dialogs.action_dialogs.LayerTreeActionDialogFragment;
-import com.geospatialcorporation.android.geomobile.ui.viewmodels.ListItem;
-import com.melnykov.fab.FloatingActionButton;
+import com.geospatialcorporation.android.geomobile.ui.fragments.panel_fragments.tree_fragment_panels.LayerFolderPanelFragment;
+import com.geospatialcorporation.android.geomobile.models.ListItem;
+import com.sothree.slidinguppanel.SlidingUpPanelLayout;
 
 import java.util.List;
 
-import butterknife.ButterKnife;
 import butterknife.InjectView;
 import butterknife.OnClick;
 
@@ -41,19 +44,15 @@ public class LayerFragment extends GeoViewFragmentBase implements IContentRefres
     Folder mCurrentFolder;
     DataHelper mDataHelper;
     ProgressDialogHelper mProgressDialogHelper;
+    Boolean mIsPanelOpen;
 
     @InjectView(R.id.layer_recyclerView) RecyclerView mRecycler;
     @InjectView(R.id.swipe_refresh_layout) SwipeRefreshLayout mSwipeRefreshLayout;
-
-    @OnClick(R.id.fab)
-    @SuppressWarnings("unused")
-    public void layerActionClick(){
-        LayerTreeActionDialogFragment l = new LayerTreeActionDialogFragment();
-
-        l.setContext(getActivity());
-        l.setFolder(mCurrentFolder);
-        l.show(getFragmentManager(), "layer actions");
-    }
+    @InjectView(R.id.sliding_layout) SlidingUpPanelLayout mPanel;
+    @InjectView(R.id.layerOptionsIV) ImageView mOptionsSlider;
+    @InjectView(R.id.showNavIV1) ImageView mNavBars;
+    @InjectView(R.id.showNavIV2) ImageView mNavLogo;
+    @InjectView(R.id.title) TextView mTitle;
 
     @OnClick(R.id.showNavIV1)
     public void showNavigation(){
@@ -76,20 +75,56 @@ public class LayerFragment extends GeoViewFragmentBase implements IContentRefres
                 .addToBackStack(null).commit();
     }
 
+    @OnClick(R.id.layerOptionsIV)
+    public void optionsDropDown(){
+
+        if(!mIsPanelOpen){
+
+            Fragment f = new LayerFolderPanelFragment();
+
+            f.setArguments(mCurrentFolder.toBundle());
+
+            getFragmentManager().beginTransaction()
+                    .replace(R.id.slider_content, f)
+                    .commit();
+
+            mPanelManager.halfAnchor();
+            mPanelManager.touch(false);
+            mIsPanelOpen = true;
+            mOptionsSlider.setImageDrawable(getActivity().getDrawable(R.drawable.ic_close_circle_white_36dp));
+        } else {
+            mPanelManager.hide();
+            mIsPanelOpen = false;
+            mOptionsSlider.setImageDrawable(getActivity().getDrawable(R.drawable.ic_dropdown));
+        }
+    }
+
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setView(inflater, container, R.layout.fragment_layeritems);
         mContext = getActivity();
 
+        mNavLogo.setVisibility(View.GONE);
+        mNavBars.setVisibility(View.GONE);
+        mTitle.setVisibility(View.INVISIBLE);
+
         ILayoutRefresher refresher = application.getUIHelperComponent().provideLayoutRefresher();
+
+        application.setLayerFragmentPanel(mPanel);
+
+        mPanelManager = new PanelManager(GeoPanel.LAYER_FRAGMENT);
+        mPanelManager.setup();
+        mPanelManager.hide();
+
+        mIsPanelOpen = false;
 
         mSwipeRefreshLayout.setOnRefreshListener(refresher.build(mSwipeRefreshLayout, this));
         mSwipeRefreshLayout.setProgressBackgroundColorSchemeColor(mContext.getResources().getColor(R.color.accent));
 
         handleArguments();
 
-        mNavigationHelper.syncMenu(55);
+        mNavigationHelper.syncMenu(55); //TODO: REMOVE magic numbers
 
         return mView;
     }
@@ -97,7 +132,6 @@ public class LayerFragment extends GeoViewFragmentBase implements IContentRefres
     public void refresh() {
         handleArguments();
     }
-
 
     public void handleArguments() {
         Bundle args = getArguments();
@@ -122,12 +156,28 @@ public class LayerFragment extends GeoViewFragmentBase implements IContentRefres
         if(currentFolder == null) { return; }
 
         if (currentFolder.getParent() != null) {
-            SetTitle(currentFolder.getName());
+            mNavLogo.setImageDrawable(mContext.getDrawable(R.drawable.ic_chevron_left_white_18dp));
+            mNavLogo.setPadding(-12, 0, 0, 0);
+
+            mNavBars.setOnClickListener(navigateUpTree);
+            mNavLogo.setOnClickListener(navigateUpTree);
+
+            mTitle.setText(mCurrentFolder.getName());
         } else {
-            SetTitle(R.string.layer_tree);
+            mNavBars.setImageDrawable(mContext.getDrawable(R.drawable.ic_nav_orange));
+
+            mNavBars.setOnClickListener(showNavigation);
+            mNavLogo.setOnClickListener(showNavigation);
+
+            mNavLogo.setImageDrawable(mContext.getDrawable(R.drawable.ic_logo_g_orange));
+            mNavBars.setVisibility(View.VISIBLE);
         }
 
+        mNavLogo.setVisibility(View.VISIBLE);
+        mTitle.setVisibility(View.VISIBLE);
+
         mDataHelper = new DataHelper();
+
         List<ListItem> data = mDataHelper.CombineLayerItems(currentFolder.getLayers(), currentFolder.getFolders(), currentFolder.getParent());
 
         mProgressDialogHelper.toggleProgressDialog();
@@ -136,4 +186,18 @@ public class LayerFragment extends GeoViewFragmentBase implements IContentRefres
                 .BuildAdapter(data, currentFolder.getFolders().size())
                 .setRecycler(mRecycler);
     }
+
+    protected View.OnClickListener showNavigation = new View.OnClickListener() {
+        @Override
+        public void onClick(View v) {
+            ((MainActivity)getActivity()).openNavigationDrawer();
+        }
+    };
+
+    protected View.OnClickListener navigateUpTree = new View.OnClickListener() {
+        @Override
+        public void onClick(View v) {
+            getFragmentManager().popBackStack();
+        }
+    };
 }

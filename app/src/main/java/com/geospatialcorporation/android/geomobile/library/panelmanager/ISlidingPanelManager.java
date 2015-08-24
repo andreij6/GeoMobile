@@ -24,4 +24,5 @@ public interface ISlidingPanelManager {
     void toggle();
 
     void halfAnchor();
+
 }

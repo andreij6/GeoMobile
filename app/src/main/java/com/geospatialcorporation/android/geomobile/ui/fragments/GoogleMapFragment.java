@@ -24,7 +24,6 @@ import android.location.Location;
 import android.os.Bundle;
 import android.provider.Settings;
 import android.support.v4.app.Fragment;
-import android.support.v4.widget.DrawerLayout;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -32,7 +31,8 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.RelativeLayout;
+import android.widget.LinearLayout;
+import android.widget.TextView;
 
 import com.geospatialcorporation.android.geomobile.R;
 import com.geospatialcorporation.android.geomobile.application;
@@ -49,6 +49,7 @@ import com.geospatialcorporation.android.geomobile.library.services.QueryRestSer
 import com.geospatialcorporation.android.geomobile.library.viewmode.IViewMode;
 import com.geospatialcorporation.android.geomobile.library.viewmode.implementations.QueryMode;
 import com.geospatialcorporation.android.geomobile.library.viewmode.implementations.SearchMode;
+import com.geospatialcorporation.android.geomobile.models.Layers.Extent;
 import com.geospatialcorporation.android.geomobile.models.Query.map.response.featurewindow.ParcelableFeatureQueryResponse;
 import com.geospatialcorporation.android.geomobile.ui.Interfaces.IViewModeListener;
 import com.geospatialcorporation.android.geomobile.ui.MainActivity;
@@ -60,13 +61,14 @@ import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.maps.CameraUpdate;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
-import com.google.android.gms.maps.MapFragment;
 import com.google.android.gms.maps.MapView;
 import com.google.android.gms.maps.MapsInitializer;
+import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.UiSettings;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.CameraPosition;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.LatLngBounds;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.maps.model.Polygon;
@@ -77,6 +79,8 @@ import com.google.maps.android.PolyUtil;
 import com.melnykov.fab.FloatingActionButton;
 import com.sothree.slidinguppanel.SlidingUpPanelLayout;
 import com.google.maps.android.clustering.*;
+
+import java.util.List;
 
 import butterknife.ButterKnife;
 import butterknife.InjectView;
@@ -117,6 +121,8 @@ public class GoogleMapFragment extends GeoViewFragmentBase implements
     @InjectView(R.id.fab_save) FloatingActionButton mSaveBtn;
     @InjectView(R.id.fab_bm_close) FloatingActionButton mBmClose;
     @InjectView(R.id.fab_fullscreen_close) FloatingActionButton mFullScreenClose;
+    @InjectView(R.id.loadingBar) LinearLayout mLoadingBar;
+    @InjectView(R.id.loadingMessage) TextView mLoadingMessage;
     Menu mMenu;
     //endregion
 
@@ -167,7 +173,6 @@ public class GoogleMapFragment extends GeoViewFragmentBase implements
 
     }
 
-    //@SuppressWarnings("unused")
     @OnClick(R.id.showLayersIV)
     public void showLayersDrawer(){
         ((MainActivity)getActivity()).openLayersDrawer();
@@ -177,13 +182,13 @@ public class GoogleMapFragment extends GeoViewFragmentBase implements
     public void showNavigation(){
         ((MainActivity)getActivity()).openNavigationDrawer();
     }
+
     @OnClick(R.id.showNavIV2)
     public void showNavigation1(){
 
         ((MainActivity)getActivity()).openNavigationDrawer();
     }
 
-    @SuppressWarnings("unused")
     @OnClick(R.id.fab_fullscreen_close)
     public void closeFullScreenMode(){
         //probably an expensive way to reset after fullscreen mode but I havent found a good solution yet to disable fullscreen mode
@@ -192,6 +197,11 @@ public class GoogleMapFragment extends GeoViewFragmentBase implements
         startActivity(getActivity().getIntent());
     }
 
+    @OnClick(R.id.extentIB)
+    public void zoomToExtent(){
+        Extent extent = mLayerManager.getFullExtent();
+        mLayerManager.zoomToExtent(extent);
+    }
     //endregion
 
     //region Constructors
@@ -219,6 +229,7 @@ public class GoogleMapFragment extends GeoViewFragmentBase implements
         mAnalytics.trackScreen(new GoogleAnalyticEvent().MapScreen());
 
         application.setMapFragmentPanel(mPanel);
+
         mPanelManager = new PanelManager(GeoPanel.MAP);
         mPanelManager.setup();
         mPanelManager.hide();
@@ -227,58 +238,12 @@ public class GoogleMapFragment extends GeoViewFragmentBase implements
 
         initializeGoogleMap(savedInstanceState);
 
-        //setUpClusterer();
-        //application.setClusterManager(mClusterManager);
         //mLayerManager.showLayers();
 
         mNavigationHelper.syncMenu(1);
 
-        //region Show Feature Window Code
-
-        mMap.setOnMarkerClickListener(new GoogleMap.OnMarkerClickListener() {
-            @Override
-            public boolean onMarkerClick(Marker marker) {
-                clearHighlights();
-
-                try {
-                    getFeatureWindow(marker.getId(), LayerManager.POINT);
-                    //getFeatureWindow(marker.getTitle(), LayerManager.POINT);  //For Clusterer
-
-                    highlight(marker);
-
-                } catch (Exception e) {
-                    //mClusterManager.onMarkerClick(marker);
-                    Log.e(TAG, e.getMessage());
-                }
-
-                return true;
-
-            }
-
-        });
-
-        mMap.setOnMapClickListener(new GoogleMap.OnMapClickListener() {
-            @Override
-            public void onMapClick(LatLng latLng) {
-
-                clearHighlights();
-
-                Boolean highlightFound = false;
-
-                highlightFound = highlightLine(latLng);
-
-                if(highlightFound == false) {
-                    highlightPolygon(latLng);
-                }
-            }
-        });
-
-        //endregion
-
         return rootView;
     }
-
-
 
     protected void setUpClusterer() {
         // Initialize the manager with the context and the map.
@@ -287,7 +252,16 @@ public class GoogleMapFragment extends GeoViewFragmentBase implements
 
         // Point the map's listeners at the listeners implemented by the cluster
         // manager.
-        mMap.setOnCameraChangeListener(mClusterManager);
+
+        mMap.setOnCameraChangeListener(new GoogleMap.OnCameraChangeListener() {
+            @Override
+            public void onCameraChange(CameraPosition cameraPosition) {
+
+                mLayerManager.showLayers(mMap);
+
+                mClusterManager.onCameraChange(cameraPosition);
+            }
+        });
         mMap.setOnMarkerClickListener(mClusterManager);
 
 
@@ -308,6 +282,8 @@ public class GoogleMapFragment extends GeoViewFragmentBase implements
         options.add(points);
 
         mHighlightedPolygon = mMap.addPolygon(options);
+
+        zoomToFeature(mHighlightedPolygon);
     }
 
     protected void highlight(Polyline feature){
@@ -322,6 +298,8 @@ public class GoogleMapFragment extends GeoViewFragmentBase implements
         options.add(points);
 
         mHighlightedPolyline = mMap.addPolyline(options);
+
+        zoomToFeature(mHighlightedPolyline);
     }
 
     protected void highlight(Marker feature){
@@ -331,6 +309,41 @@ public class GoogleMapFragment extends GeoViewFragmentBase implements
         options.icon(BitmapDescriptorFactory.fromResource(R.drawable.ic_crosshairs_gps_white_24dp));
 
         mHighlightedMarker = mMap.addMarker(options);
+
+        zoomToFeature(mHighlightedMarker);
+    }
+
+    protected void zoomToFeature(Marker highlightedMarker){
+        LatLng position = highlightedMarker.getPosition();
+
+        LatLng ll = new LatLng(position.latitude, position.longitude);
+
+        CameraUpdate update = CameraUpdateFactory.newLatLng(ll);
+
+        mMap.animateCamera(update);
+    }
+
+    protected void zoomToFeature(Polyline polyline){
+        polyZoomToFeature(polyline.getPoints());
+    }
+
+    protected void zoomToFeature(Polygon polygon){
+        polyZoomToFeature(polygon.getPoints());
+
+    }
+
+    public void polyZoomToFeature(List<LatLng> points){
+        LatLngBounds.Builder builder = new LatLngBounds.Builder();
+
+        for (LatLng point : points) {
+            builder.include(point);
+        }
+
+        LatLngBounds bounds = builder.build();
+
+        CameraUpdate update = CameraUpdateFactory.newLatLngBounds(bounds, 20);
+
+        mMap.animateCamera(update);
     }
 
     protected int invertColor(int color){
@@ -383,6 +396,8 @@ public class GoogleMapFragment extends GeoViewFragmentBase implements
     //endregion
 
     protected void getFeatureWindow(String id, int shapeCode){
+        showLoadingMessage("Loading Feature Window");
+
         String featureId = mLayerManager.getFeatureId(id, shapeCode);
         int layerId = mLayerManager.getLayerId(id, shapeCode);
         QueryRestService QueryService = new QueryRestService();
@@ -392,30 +407,86 @@ public class GoogleMapFragment extends GeoViewFragmentBase implements
     protected void initializeGoogleMap(Bundle savedInstanceState) {
         mMapView.onCreate(savedInstanceState);
 
-        mMap = mMapView.getMap();
+        mMapView.getMapAsync(new OnMapReadyCallback() {
+            @Override
+            public void onMapReady(GoogleMap googleMap) {
+                mMap = googleMap;
 
-        mMap.setMyLocationEnabled(true);
+                mMap.setMyLocationEnabled(true);
 
-        mUiSettings = mMap.getUiSettings();
-        mUiSettings.setMyLocationButtonEnabled(false);
+                mUiSettings = mMap.getUiSettings();
+                mUiSettings.setMyLocationButtonEnabled(false);
 
-        application.setGoogleMap(mMap);
-        mLayerManager.setMap(mMap);
+                application.setGoogleMap(mMap);
+                mLayerManager.setMap(mMap);
 
-        mLocationClient = new GoogleApiClient.Builder(getActivity())
-                .addApi(LocationServices.API)
-                .addConnectionCallbacks(this)
-                .addOnConnectionFailedListener(this)
-                .build();
-        try {
+                mLocationClient = new GoogleApiClient.Builder(getActivity())
+                        .addApi(LocationServices.API)
+                        .addConnectionCallbacks(GoogleMapFragment.this)
+                        .addOnConnectionFailedListener(GoogleMapFragment.this)
+                        .build();
+                try {
 
-            MapsInitializer.initialize(this.getActivity());
+                    MapsInitializer.initialize(GoogleMapFragment.this.getActivity());
 
-            mLocationClient.connect();
+                    mLocationClient.connect();
 
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+
+                setUpClusterer();
+                application.setClusterManager(mClusterManager);
+
+                //region Show Feature Window Code
+
+                mMap.setOnMarkerClickListener(new GoogleMap.OnMarkerClickListener() {
+                    @Override
+                    public boolean onMarkerClick(Marker marker) {
+                        clearHighlights();
+
+                        try {
+                            //getFeatureWindow(marker.getId(), LayerManager.POINT);
+                            getFeatureWindow(marker.getTitle(), LayerManager.POINT);  //For Clusterer
+
+                            highlight(marker);
+
+                        } catch (Exception e) {
+                            mClusterManager.onMarkerClick(marker);
+                            Log.e(TAG, e.getMessage());
+                        }
+
+                        return true;
+
+                    }
+
+                });
+
+                mMap.setOnMapClickListener(new GoogleMap.OnMapClickListener() {
+                    @Override
+                    public void onMapClick(LatLng latLng) {
+
+                        clearHighlights();
+
+                        Boolean highlightFound = false;
+
+                        highlightFound = highlightLine(latLng);
+
+                        if(highlightFound == false) {
+                            highlightPolygon(latLng);
+                        }
+                    }
+                });
+
+                //endregion
+
+                setMapState();
+
+                mLayerManager.showLayers(mMap);
+            }
+        });
+
+
 
     }
 
@@ -430,9 +501,6 @@ public class GoogleMapFragment extends GeoViewFragmentBase implements
     public void onResume() {
         super.onResume();
         mMapView.onResume();
-        setMapState();
-        mLayerManager.showLayers();
-        mLocationClient.connect();
     }
 
     @Override
@@ -620,11 +688,23 @@ public class GoogleMapFragment extends GeoViewFragmentBase implements
                 .commit();
 
         mPanelManager.halfAnchor();
+
+        hideLoadingBar();
     }
 
     @Override
     public void onLocationChanged(Location location) {
         handleNewLocation(location);
+    }
+
+    public void showLoadingMessage(String message){
+        mLoadingBar.setVisibility(View.VISIBLE);
+        mLoadingMessage.setText(message);
+    }
+
+    public void hideLoadingBar(){
+        mLoadingMessage.setText("");
+        mLoadingBar.setVisibility(View.GONE);
     }
 
 }

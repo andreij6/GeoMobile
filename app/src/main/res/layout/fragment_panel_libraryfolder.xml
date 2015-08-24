@@ -1,0 +1,164 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              android:layout_width="match_parent"
+              android:layout_height="match_parent"
+              android:background="@color/white">
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceMedium"
+        android:text="Parent Folder"
+        android:textStyle="bold"
+        android:id="@+id/pathTV"
+        android:layout_marginTop="20dp"
+        android:layout_marginLeft="20dp"
+        android:layout_marginRight="5dp"/>
+
+    <ImageView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/chevron"
+        android:layout_alignBottom="@+id/pathTV"
+        android:layout_toEndOf="@+id/pathTV"
+        android:src="@drawable/ic_chevron_right_grey600_18dp"/>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceLarge"
+        android:textStyle="bold"
+        android:text="Folder"
+        android:id="@+id/folderNameTV"
+        android:layout_alignBottom="@+id/pathTV"
+        android:layout_toEndOf="@+id/chevron"/>
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="200dp"
+        android:id="@+id/scrollView2"
+        android:layout_marginTop="15dp"
+        android:layout_below="@+id/pathTV">
+
+        <LinearLayout
+            android:orientation="vertical"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <LinearLayout
+                android:orientation="horizontal"
+                android:layout_width="match_parent"
+                style="@style/TreePanelSectionStyle"
+                android:id="@+id/folderInfoSection">
+
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:id="@+id/informationIB"
+                    android:src="@drawable/ic_information_outline_black_36dp"
+                    style="TreePanelImageViewStyle"
+                    android:layout_marginLeft="16dp"/>
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:text="Folder Information"
+                    android:id="@+id/informationTV"
+                    style="@style/TreePanelTextViewStyle"/>
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:orientation="horizontal"
+                android:layout_width="match_parent"
+                style="@style/TreePanelSectionStyle"
+                android:id="@+id/addDocumentSection">
+
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:id="@+id/addDocumentIV"
+                    android:src="@drawable/ic_file_document_box_black_36dp"
+                    style="TreePanelImageViewStyle"
+                    android:layout_marginLeft="16dp"/>
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:text="Add Document"
+                    android:id="@+id/addDocumentTV"
+                    style="@style/TreePanelTextViewStyle"/>
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:orientation="horizontal"
+                android:layout_width="match_parent"
+                style="@style/TreePanelSectionStyle"
+                android:id="@+id/takePhotoSection">
+
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:id="@+id/takePhotoIV"
+                    style="TreePanelImageViewStyle"
+                    android:layout_marginLeft="16dp"
+                    android:contentDescription="take a photo"
+                    android:src="@drawable/ic_camera_black_36dp"/>
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:text="Take Photo"
+                    android:id="@+id/takePhotoTV"
+                    style="@style/TreePanelTextViewStyle"/>
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:orientation="horizontal"
+                android:layout_width="match_parent"
+                style="@style/TreePanelSectionStyle"
+                android:id="@+id/choosePhotoSection">
+
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:id="@+id/uploadIV"
+                    android:src="@drawable/ic_upload_black_36dp"
+                    style="TreePanelImageViewStyle"
+                    android:layout_marginLeft="16dp"/>
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:text="Choose Photo"
+                    android:id="@+id/uploadTV"
+                    style="@style/TreePanelTextViewStyle"/>
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:orientation="horizontal"
+                android:layout_width="match_parent"
+                style="@style/TreePanelSectionStyle"
+                android:id="@+id/addFolderSection">
+
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:id="@+id/addFolderIB"
+                    android:src="@drawable/ic_folder_plus_black_36dp"
+                    style="TreePanelImageViewStyle"
+                    android:layout_marginLeft="16dp"/>
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:text="Add Folder"
+                    android:id="@+id/addFolderTV"
+                    style="@style/TreePanelTextViewStyle"/>
+
+            </LinearLayout>
+
+        </LinearLayout>
+    </ScrollView>
+
+
+
+</RelativeLayout>

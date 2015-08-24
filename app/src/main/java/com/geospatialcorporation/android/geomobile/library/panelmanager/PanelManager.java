@@ -3,6 +3,8 @@ package com.geospatialcorporation.android.geomobile.library.panelmanager;
 import com.geospatialcorporation.android.geomobile.application;
 import com.geospatialcorporation.android.geomobile.library.constants.GeoPanel;
 import com.geospatialcorporation.android.geomobile.library.panelmanager.paneltype.GeoSlidingPanelBase;
+import com.geospatialcorporation.android.geomobile.library.panelmanager.paneltype.LayerFragmentSlidingPanel;
+import com.geospatialcorporation.android.geomobile.library.panelmanager.paneltype.LibraryFragmentSlidingPanel;
 import com.geospatialcorporation.android.geomobile.library.panelmanager.paneltype.MapSlidingPanel;
 import com.geospatialcorporation.android.geomobile.library.panelmanager.paneltype.SublayerSlidingPanel;
 import com.sothree.slidinguppanel.SlidingUpPanelLayout;
@@ -23,6 +25,12 @@ public class PanelManager implements ISlidingPanelManager {
                 break;
             case GeoPanel.SUBLAYER:
                 mGeoPanel = new SublayerSlidingPanel(panel);
+                break;
+            case GeoPanel.LAYER_FRAGMENT:
+                mGeoPanel = new LayerFragmentSlidingPanel(panel);
+                break;
+            case GeoPanel.LIBRARY_FRAGMENT:
+                mGeoPanel = new LibraryFragmentSlidingPanel(panel);
                 break;
             //case GeoPanel.LAYER_ATTRIBUTE:
             //    mGeoPanel = new AttributeSlidingPanel(panel);

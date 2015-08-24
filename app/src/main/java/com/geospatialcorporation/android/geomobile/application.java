@@ -81,6 +81,8 @@ public class application extends applicationDIBase {
     private static ClusterManager<GeoClusterMarker> clusterManager;
 
     private static ILayerManager layerManager;
+    private static SlidingUpPanelLayout libraryFragmentPanel;
+    private static SlidingUpPanelLayout layerFragmentPanel;
     //endregion
 
     //region stuff
@@ -203,6 +205,14 @@ public class application extends applicationDIBase {
 
     public static ILayerManager getLayerManager() {
         return layerManager;
+    }
+
+    public static void setLibraryFragmentPanel(SlidingUpPanelLayout libraryFragmentPanel) {
+        application.libraryFragmentPanel = libraryFragmentPanel;
+    }
+
+    public static void setLayerFragmentPanel(SlidingUpPanelLayout layerFragmentPanel) {
+        application.layerFragmentPanel = layerFragmentPanel;
     }
     //endregion
 
@@ -336,6 +346,12 @@ public class application extends applicationDIBase {
                 break;
             case GeoPanel.LAYER_ATTRIBUTE:
                 panel = layerAttributePanel;
+                break;
+            case GeoPanel.LAYER_FRAGMENT:
+                panel = layerFragmentPanel;
+                break;
+            case GeoPanel.LIBRARY_FRAGMENT:
+                panel = libraryFragmentPanel;
                 break;
             default:
                 break;

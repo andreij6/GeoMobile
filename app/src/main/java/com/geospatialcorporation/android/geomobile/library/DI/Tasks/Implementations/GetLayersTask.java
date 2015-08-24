@@ -1,13 +1,8 @@
 package com.geospatialcorporation.android.geomobile.library.DI.Tasks.Implementations;
 
-import android.content.Context;
-import android.os.AsyncTask;
-import android.support.v4.app.FragmentManager;
 import android.support.v4.widget.DrawerLayout;
-import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 
-import com.geospatialcorporation.android.geomobile.R;
 import com.geospatialcorporation.android.geomobile.application;
 import com.geospatialcorporation.android.geomobile.database.DataRepository.IAddDataRepository;
 import com.geospatialcorporation.android.geomobile.database.DataRepository.Implementations.Folders.FolderAppSource;
@@ -19,13 +14,9 @@ import com.geospatialcorporation.android.geomobile.library.DI.TreeServices.Inter
 import com.geospatialcorporation.android.geomobile.library.helpers.DataHelper;
 import com.geospatialcorporation.android.geomobile.library.rest.LayerService;
 import com.geospatialcorporation.android.geomobile.library.rest.TreeService;
-import com.geospatialcorporation.android.geomobile.library.sectionbuilders.implementations.LayerTreeSectionBuilder;
-import com.geospatialcorporation.android.geomobile.library.sectionbuilders.implementations.LegendLayerSectionBuilder;
 import com.geospatialcorporation.android.geomobile.models.Folders.Folder;
 import com.geospatialcorporation.android.geomobile.models.GeoAsyncTask;
 import com.geospatialcorporation.android.geomobile.models.Layers.Layer;
-import com.geospatialcorporation.android.geomobile.ui.fragments.GeoViewFragmentBase;
-import com.geospatialcorporation.android.geomobile.ui.viewmodels.ListItem;
 
 import java.util.ArrayList;
 import java.util.List;

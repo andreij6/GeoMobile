@@ -52,7 +52,6 @@ public class LayerStyleTask implements ILayerStyleTask {
 
                             mLegendLayer.setBitmap(icon);
 
-                            application.getLayerManager().showLayer(mLegendLayer);
                             Log.d(TAG, "onBitmapLoaded");
                             callback.invokeCallback();
                         }

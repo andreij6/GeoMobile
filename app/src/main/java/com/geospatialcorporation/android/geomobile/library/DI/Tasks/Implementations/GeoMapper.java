@@ -29,7 +29,9 @@ import com.geospatialcorporation.android.geomobile.models.Query.map.response.map
 import com.geospatialcorporation.android.geomobile.ui.Interfaces.IPostExecuter;
 
 import java.util.HashMap;
+import java.util.LinkedList;
 import java.util.List;
+import java.util.Queue;
 
 public class GeoMapper implements IMapFeaturesTask, IPostExecuter<Integer> {
 
@@ -79,7 +81,7 @@ public class GeoMapper implements IMapFeaturesTask, IPostExecuter<Integer> {
 
         mLayerManager.showLayer(mLlayer);
 
-        mLlayer.getProgressBar().setVisibility(View.GONE);
+        //mLlayer.getProgressBar().setVisibility(View.GONE);
         mLlayer.getCheckBox().setEnabled(true);
     }
 
@@ -95,15 +97,15 @@ public class GeoMapper implements IMapFeaturesTask, IPostExecuter<Integer> {
         //region properties
         List<MapQueryResponse> mResponses;
         Integer mProgressStatus;
-        ProgressBar mProgressBar;
+        //ProgressBar mProgressBar;
         CheckBox mCheckBox;
         //endregion
 
         @Override
         protected void onPreExecute() {
-            mProgressBar = mLlayer.getProgressBar();
+            //mProgressBar = mLlayer.getProgressBar();
             mProgressStatus = 0;
-            mProgressBar.setProgress(mProgressStatus);
+            //mProgressBar.setProgress(mProgressStatus);
             mCheckBox = mLlayer.getCheckBox();
         }
 
@@ -123,6 +125,7 @@ public class GeoMapper implements IMapFeaturesTask, IPostExecuter<Integer> {
                         Integer counter = 0;
 
                         for (Feature feature : FeaturesList) {
+
                             publishProgress((int)((counter / (float) total) * 100));
 
                             mMapper.reset();
@@ -150,7 +153,7 @@ public class GeoMapper implements IMapFeaturesTask, IPostExecuter<Integer> {
 
         @Override
         protected void onProgressUpdate(Integer... progress) {
-            mProgressBar.setProgress(progress[0]);
+            //mProgressBar.setProgress(progress[0]);
         }
     }
 }

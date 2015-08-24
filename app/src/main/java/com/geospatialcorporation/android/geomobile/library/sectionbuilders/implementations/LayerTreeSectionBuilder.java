@@ -9,7 +9,7 @@ import com.geospatialcorporation.android.geomobile.library.sectionbuilders.ISect
 import com.geospatialcorporation.android.geomobile.library.sectionbuilders.TreeSectionBuilderBase;
 import com.geospatialcorporation.android.geomobile.models.Folders.Folder;
 import com.geospatialcorporation.android.geomobile.ui.adapters.recycler.ListItemAdapter;
-import com.geospatialcorporation.android.geomobile.ui.viewmodels.ListItem;
+import com.geospatialcorporation.android.geomobile.models.ListItem;
 
 import java.util.List;
 

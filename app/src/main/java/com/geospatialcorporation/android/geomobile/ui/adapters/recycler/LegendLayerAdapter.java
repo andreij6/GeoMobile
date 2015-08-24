@@ -75,7 +75,7 @@ public class LegendLayerAdapter extends GeoRecyclerAdapterBase<LegendLayerAdapte
         @InjectView(R.id.isVisible) CheckBox isVisibleCB;
         @InjectView(R.id.sublayerExpander) ImageView gotoSublayer;
         @InjectView(R.id.geometryIV) ImageView geomIV;
-        @InjectView(R.id.showLayerProgressBar) ProgressBar mProgressBar;
+        //@InjectView(R.id.showLayerProgressBar) ProgressBar mProgressBar;
         //endregionxxx
 
         Layer mLayer;
@@ -93,7 +93,7 @@ public class LegendLayerAdapter extends GeoRecyclerAdapterBase<LegendLayerAdapte
                 mLayer = llayer.getLayer();
                 mLegendLayer = llayer;
 
-                mProgressBar.setVisibility(View.GONE);
+                //mProgressBar.setVisibility(View.GONE);
                 isVisibleCB.setVisibility(View.VISIBLE);
                 gotoSublayer.setVisibility(View.VISIBLE);
                 geomIV.setVisibility(View.VISIBLE);
@@ -124,7 +124,7 @@ public class LegendLayerAdapter extends GeoRecyclerAdapterBase<LegendLayerAdapte
 
                 mLegendLayer.setImageView(geomIV);
                 mLegendLayer.setImageSrc();
-                mLegendLayer.setProgressBar(mProgressBar);
+                //mLegendLayer.setProgressBar(mProgressBar);
                 mLegendLayer.setCheckBox(isVisibleCB);
 
 
@@ -142,7 +142,7 @@ public class LegendLayerAdapter extends GeoRecyclerAdapterBase<LegendLayerAdapte
 
                 isVisibleCB.setVisibility(View.INVISIBLE);
                 gotoSublayer.setVisibility(View.GONE);
-                mProgressBar.setVisibility(View.GONE);
+                //mProgressBar.setVisibility(View.GONE);
                 geomIV.setImageDrawable(mContext.getDrawable(R.drawable.ic_information_outline_black_18dp));
             }
 
@@ -159,10 +159,17 @@ public class LegendLayerAdapter extends GeoRecyclerAdapterBase<LegendLayerAdapte
             public void onClick(View v) {
                 if (isVisibleCB.isChecked()) {
                     //Show Layer
-                    mProgressBar.setVisibility(View.VISIBLE);
+                    //mProgressBar.setVisibility(View.VISIBLE);
                     isVisibleCB.setEnabled(false);
 
                     mAnalytics.trackClick(new GoogleAnalyticEvent().ShowLayer());
+
+                    //set Layer Loading
+                    Fragment contentFrag = application.getMainActivity().getContentFragment();
+
+                    if(contentFrag instanceof GoogleMapFragment){
+                        ((GoogleMapFragment) contentFrag).showLoadingMessage("Loading " + mLayer.getName());
+                    }
 
                     addLayerToMap();
 

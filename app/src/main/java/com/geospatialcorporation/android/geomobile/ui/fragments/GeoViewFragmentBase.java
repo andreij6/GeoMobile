@@ -8,8 +8,10 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.Spinner;
+import android.widget.TextView;
 import android.widget.Toast;
 
+import com.geospatialcorporation.android.geomobile.R;
 import com.geospatialcorporation.android.geomobile.application;
 import com.geospatialcorporation.android.geomobile.library.DI.Analytics.AnalyticsComponent;
 import com.geospatialcorporation.android.geomobile.library.DI.Analytics.DaggerAnalyticsComponent;
@@ -20,7 +22,10 @@ import com.geospatialcorporation.android.geomobile.library.panelmanager.PanelMan
 import com.geospatialcorporation.android.geomobile.models.Folders.Folder;
 import com.geospatialcorporation.android.geomobile.ui.Interfaces.OnFragmentInteractionListener;
 
+import org.w3c.dom.Text;
+
 import butterknife.ButterKnife;
+import butterknife.InjectView;
 
 public abstract class GeoViewFragmentBase extends Fragment {
 
@@ -31,6 +36,7 @@ public abstract class GeoViewFragmentBase extends Fragment {
     protected IGeoAnalytics mAnalytics;
     private AnalyticsComponent mAnalyticsComponent;
     protected IMainMenuHelper mNavigationHelper;
+
 
     protected void setView(LayoutInflater inflater, ViewGroup container, int layout) {
         mView = inflater.inflate(layout, container, false);
@@ -64,15 +70,18 @@ public abstract class GeoViewFragmentBase extends Fragment {
     }
 
     public void SetTitle(int stringResource){
-        if (mListener != null) {
-            mListener.onFragmentInteraction(getActivity().getString(stringResource));
-        }
+        //if (mListener != null) {
+        //    mListener.onFragmentInteraction(getActivity().getString(stringResource));
+        //}
     }
 
-    public void SetTitle(String string){
-        if (mListener != null) {
-            mListener.onFragmentInteraction(string);
-        }
+    public void SetTitle(String title){
+        //if (mListener != null) {
+        //    mListener.onFragmentInteraction(string);
+        //}
+
+
+
     }
 
     protected void Toaster(String message){

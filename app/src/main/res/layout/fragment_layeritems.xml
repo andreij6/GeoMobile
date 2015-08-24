@@ -38,13 +38,12 @@
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:text="@string/geounderground"
-            android:gravity="center"
-            android:id="@+id/editText2"
+            android:id="@+id/title"
             android:textSize="18sp"
-            android:layout_weight="4"
+            android:layout_weight="2.34"
             android:textColor="@color/white"
             android:textStyle="bold"
-            />
+            android:gravity="center_vertical"/>
 
         <ImageView
             android:layout_width="36dp"
@@ -53,35 +52,56 @@
             android:src="@drawable/ic_earth_white_36dp"
             android:layout_gravity="center_vertical"
             android:layout_weight="1"/>
+
+        <ImageView
+            android:layout_width="36dp"
+            android:layout_height="36dp"
+            android:id="@+id/layerOptionsIV"
+            android:src="@drawable/ic_dropdown"
+            android:layout_gravity="center_vertical"
+            android:layout_marginRight="10dp"
+            android:padding="2dp"/>
         <!--android:src="@drawable/ic_map_white_36dp"-->
     </LinearLayout>
 
-    <android.support.v4.widget.SwipeRefreshLayout
-        android:id="@+id/swipe_refresh_layout"
+    <com.sothree.slidinguppanel.SlidingUpPanelLayout
+        xmlns:sothree="http://schemas.android.com/apk/res-auto"
+        android:id="@+id/sliding_layout"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="match_parent"
+        android:gravity="bottom"
+        sothree:umanoPanelHeight="68dp"
+        sothree:umanoShadowHeight="4dp"
+        android:background="@color/primary_dark"
         android:layout_below="@+id/layertree_actionbar">
 
-        <android.support.v7.widget.RecyclerView
+        <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:id="@+id/layer_recyclerView"
-            android:layout_alignParentStart="true"
-            />
+            >
 
-    </android.support.v4.widget.SwipeRefreshLayout>
+            <android.support.v4.widget.SwipeRefreshLayout
+                android:id="@+id/swipe_refresh_layout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
 
-    <com.melnykov.fab.FloatingActionButton
-        android:id="@+id/fab"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
-        android:layout_alignParentEnd="true"
-        android:layout_alignParentRight="true"
-        android:layout_margin="16dp"
-        android:src="@drawable/ic_action_add"
-        fab:fab_colorNormal="@color/accent"
-        fab:fab_colorPressed="@color/primary_dark"
-        fab:fab_colorRipple="@color/primary_light" />
+                <android.support.v7.widget.RecyclerView
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:id="@+id/layer_recyclerView"
+                    android:layout_alignParentStart="true"
+                    />
+
+            </android.support.v4.widget.SwipeRefreshLayout>
+
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:id="@+id/slider_content">
+        </RelativeLayout>
+
+    </com.sothree.slidinguppanel.SlidingUpPanelLayout>
 
 </RelativeLayout>

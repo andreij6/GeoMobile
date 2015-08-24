@@ -151,8 +151,6 @@
                 android:orientation="horizontal"
                 android:layout_width="match_parent"
                 android:layout_height="48dp"
-                android:layout_below="@+id/fab_point"
-                android:layout_toEndOf="@+id/fab_point"
                 android:background="@color/primary_dark_transparency"
                 android:layout_gravity="center_horizontal"
                 android:layout_centerHorizontal="true"
@@ -195,6 +193,32 @@
                     android:src="@drawable/ic_layers_white_36dp"
                     android:layout_gravity="center_vertical"
                     android:layout_weight="1"/>
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:orientation="horizontal"
+                android:layout_width="match_parent"
+                android:layout_height="18dp"
+                android:background="@color/primary_dark"
+                android:layout_gravity="center_horizontal"
+                android:layout_centerHorizontal="true"
+                android:id="@+id/loadingBar"
+                android:layout_below="@+id/linearLayout"
+                android:visibility="gone">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:text="Loading..."
+                    android:gravity="center"
+                    android:id="@+id/loadingMessage"
+                    android:textSize="12sp"
+                    android:layout_weight="4"
+                    android:textColor="@color/white"
+                    android:textStyle="bold"
+                    />
+
             </LinearLayout>
 
             <ImageButton
@@ -202,6 +226,19 @@
                 android:layout_height="wrap_content"
                 android:id="@+id/getLocationIB"
                 android:src="@drawable/ic_crosshairs_gps_grey600_36dp"
+                android:layout_marginBottom="82dp"
+                android:layout_marginRight="25dp"
+                android:padding="5dp"
+                android:background="@color/white_transparency"
+                android:layout_alignParentBottom="true"
+                android:layout_alignParentEnd="true"
+                android:layout_marginEnd="25dp"/>
+
+            <ImageButton
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/extentIB"
+                android:src="@drawable/ic_arrow_expand_grey600_36dp"
                 android:layout_marginBottom="25dp"
                 android:layout_marginRight="25dp"
                 android:padding="5dp"

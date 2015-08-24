@@ -65,6 +65,12 @@ public class FeatureWindowPanelFragment extends GeoViewFragmentBase {
 
         tabHost.setCurrentTab(0);
 
+        for (int i = 0; i < tabHost.getTabWidget().getTabCount(); i++) {
+            ViewGroup vg = (ViewGroup) tabHost.getTabWidget().getChildAt(i);
+            TextView tv = (TextView) vg.getChildAt(1);
+            tv.setTextColor(getResources().getColor(R.color.white));
+        }
+
         return view;
     }
 

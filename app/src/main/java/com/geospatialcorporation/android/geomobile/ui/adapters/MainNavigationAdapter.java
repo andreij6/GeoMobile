@@ -45,7 +45,7 @@ public class MainNavigationAdapter extends ArrayAdapter<String> {
             case MenuConstants.LIBRARY:
                 icon.setImageDrawable(mContext.getDrawable(R.drawable.ic_book_white_18dp));
                 break;
-            case MenuConstants.ADMIN_SUBSCRIPTIONS:
+            case MenuConstants.ALL_SUBSCRIPTIONS:
                 icon.setImageDrawable(mContext.getDrawable(R.drawable.ic_account_search_white_18dp));
                 break;
             case MenuConstants.ACCOUNT:
@@ -65,7 +65,7 @@ public class MainNavigationAdapter extends ArrayAdapter<String> {
         public static final String MAP = "Map";
         public static final String LAYERS = "Layers";
         public static final String LIBRARY = "Library";
-        public static final String ADMIN_SUBSCRIPTIONS = "Admin Subscriptions";
+        public static final String ALL_SUBSCRIPTIONS = "All Subscriptions";
         public static final String ACCOUNT = "Account";
         public static final String LOGOUT = "Logout";
     }

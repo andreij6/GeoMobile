@@ -56,7 +56,7 @@
             android:layout_height="wrap_content"
             android:textAppearance="?android:attr/textAppearanceSmall"
             android:text="@string/add_layer"
-            android:id="@+id/addLayerTV"
+            android:id="@+id/takePhotoTV"
             android:layout_gravity="center_horizontal"
             android:typeface="normal"/>
 

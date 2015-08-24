@@ -1,13 +1,10 @@
 package com.geospatialcorporation.android.geomobile.library.DI.Map.Implementations;
 
-import android.view.View;
-
 import com.geospatialcorporation.android.geomobile.application;
 import com.geospatialcorporation.android.geomobile.library.DI.Map.Interfaces.ILayerManager;
-import com.geospatialcorporation.android.geomobile.library.DI.Tasks.Interfaces.ILayerStyleTask;
 import com.geospatialcorporation.android.geomobile.library.constants.GeometryTypeCodes;
 import com.geospatialcorporation.android.geomobile.library.map.layerManager.IOptionsManager;
-import com.geospatialcorporation.android.geomobile.library.map.layerManager.implementations.MarkerOptionsManager;
+import com.geospatialcorporation.android.geomobile.library.map.layerManager.implementations.ClusterExtentMarkerOptionsManager;
 import com.geospatialcorporation.android.geomobile.library.map.layerManager.implementations.PolygonOptionsManager;
 import com.geospatialcorporation.android.geomobile.library.map.layerManager.implementations.PolylineOptionsManager;
 import com.geospatialcorporation.android.geomobile.models.Layers.Extent;
@@ -54,7 +51,9 @@ public class LayerManager implements ILayerManager {
 
     //region Interface
     @Override
-    public void showLayers(){
+    public void showLayers(GoogleMap map){
+        mMap = map;
+
         mMarkerManager.showLayers(mMap);
         mPolygonOptionsManager.showLayers(mMap);
         mPolylineOptionsManager.showLayers(mMap);
@@ -261,7 +260,9 @@ public class LayerManager implements ILayerManager {
     //region Helpers
     protected IOptionsManager getMarkerManger(){
 
-        return new MarkerOptionsManager(); //Option: ClusterMakerOptionsManager();
+        return new ClusterExtentMarkerOptionsManager(application.getClusterManager());
+        //return new ClusterMakerOptionsManager(application.getClusterManager());
+        //return new MarkerOptionsManager();
     }
 
     protected Extent setExtentFromMap(HashMap<Integer, Extent> extentMap){
