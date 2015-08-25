@@ -10,7 +10,9 @@ import android.text.InputType;
 import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.EditText;
+import android.widget.LinearLayout;
 import android.widget.TableLayout;
 import android.widget.TableRow;
 import android.widget.TextView;
@@ -64,8 +66,6 @@ public class EditAttributesDialogFragment extends AttributesActionDialogBase<Att
                             EditLayerAttributesRequest request = new EditLayerAttributesRequest(Arrays.asList(features));
 
                             mService.editAttributeValue(mData.getLayerId(), request);
-
-                            Toaster("Request Sent");
                         } else {
 
                             Toaster("Invalid Request");
@@ -120,7 +120,6 @@ public class EditAttributesDialogFragment extends AttributesActionDialogBase<Att
 
             EditText columnValue = (EditText)mInflater.inflate(R.layout.template_feature_window_column_et, null);
             columnValue.setText(keyValue.getValue());
-
             mStartingValues.put(keyValue.getColumnId(), new PreviousCurrent(keyValue.getValue(), columnValue));
 
             setEditTextType(keyValue, columnValue);
@@ -128,6 +127,7 @@ public class EditAttributesDialogFragment extends AttributesActionDialogBase<Att
             row.addView(columnValue);
 
             mTableLayout.addView(row);
+            mTableLayout.setStretchAllColumns(true);
 
         }
     }

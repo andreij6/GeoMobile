@@ -8,20 +8,14 @@ import com.geospatialcorporation.android.geomobile.ui.Interfaces.IPostExecuter;
 import com.geospatialcorporation.android.geomobile.ui.fragments.GeoViewFragmentBase;
 
 public class GetLayersByFolderTaskParams {
-    private RecyclerView mRecycler;
     private FragmentManager mManager;
     private Context mContext;
     private IPostExecuter mExecuter;
 
-    public GetLayersByFolderTaskParams(RecyclerView recycler, FragmentManager manager, Context context, IPostExecuter fragment){
-        mRecycler = recycler;
+    public GetLayersByFolderTaskParams(FragmentManager manager, Context context, IPostExecuter fragment){
         mManager = manager;
         mContext = context;
         mExecuter = fragment;
-    }
-
-    public RecyclerView getRecycler() {
-        return mRecycler;
     }
 
     public FragmentManager getManager() {

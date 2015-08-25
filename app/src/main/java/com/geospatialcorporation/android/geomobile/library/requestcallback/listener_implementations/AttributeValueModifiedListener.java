@@ -1,6 +1,7 @@
 package com.geospatialcorporation.android.geomobile.library.requestcallback.listener_implementations;
 
 import com.geospatialcorporation.android.geomobile.library.requestcallback.RequestListener;
+import com.geospatialcorporation.android.geomobile.ui.fragments.GoogleMapFragment;
 
 import retrofit.client.Response;
 
@@ -17,7 +18,7 @@ public class AttributeValueModifiedListener extends RequestListenerBase<Response
         super.onSuccess(response);
 
         if(mShouldRefresh){
-            Toaster("Should Refresh this Fragment");
+            ((GoogleMapFragment)mContentFragment).refreshFeatureWindow(1);
         }
     }
 }

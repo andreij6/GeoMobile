@@ -93,7 +93,7 @@ public class AttributeLayoutTab extends GeoDetailsTabBase<Layer> implements ICon
 
         TableFactory factory = new TableFactory(getActivity(), mTableLayout, mInflater);
 
-        factory.addHeaders(R.layout.template_table_header, "Name", "Type", "Default Value", "Hidden");
+        factory.addHeaders(R.layout.template_table_header, "Name", "Type", "Default", "Hidden");
 
         mTableLayout = factory.build();
 
@@ -112,6 +112,7 @@ public class AttributeLayoutTab extends GeoDetailsTabBase<Layer> implements ICon
 
                 CheckBox hidden = (CheckBox) mInflater.inflate(R.layout.template_table_checkbox, null);
                 hidden.setChecked(layer.getIsHidden());
+                hidden.setEnabled(false);
 
                 row.addView(name);
                 row.addView(type);

@@ -33,23 +33,23 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.geospatialcorporation.android.geomobile.R;
 import com.geospatialcorporation.android.geomobile.application;
 import com.geospatialcorporation.android.geomobile.library.DI.Analytics.Models.GoogleAnalyticEvent;
+import com.geospatialcorporation.android.geomobile.library.DI.Map.Implementations.LayerManager;
+import com.geospatialcorporation.android.geomobile.library.DI.Map.Interfaces.ILayerManager;
 import com.geospatialcorporation.android.geomobile.library.DI.Map.Interfaces.IMapStateService;
 import com.geospatialcorporation.android.geomobile.library.DI.Map.Models.MapStateSaveRequest;
 import com.geospatialcorporation.android.geomobile.library.DI.TreeServices.Interfaces.IDocumentTreeService;
-import com.geospatialcorporation.android.geomobile.library.DI.TreeServices.Interfaces.IFolderTreeService;
 import com.geospatialcorporation.android.geomobile.library.DocumentSentCallback;
 import com.geospatialcorporation.android.geomobile.library.ISendFileCallback;
 import com.geospatialcorporation.android.geomobile.library.constants.GeoPanel;
 import com.geospatialcorporation.android.geomobile.library.helpers.DataHelper;
 import com.geospatialcorporation.android.geomobile.library.map.Models.GeoClusterMarker;
-import com.geospatialcorporation.android.geomobile.library.DI.Map.Interfaces.ILayerManager;
-import com.geospatialcorporation.android.geomobile.library.DI.Map.Implementations.LayerManager;
 import com.geospatialcorporation.android.geomobile.library.panelmanager.ISlidingPanelManager;
 import com.geospatialcorporation.android.geomobile.library.panelmanager.PanelManager;
 import com.geospatialcorporation.android.geomobile.library.rest.TreeService;
@@ -85,14 +85,11 @@ import com.google.android.gms.maps.model.PolygonOptions;
 import com.google.android.gms.maps.model.Polyline;
 import com.google.android.gms.maps.model.PolylineOptions;
 import com.google.maps.android.PolyUtil;
+import com.google.maps.android.clustering.ClusterManager;
 import com.melnykov.fab.FloatingActionButton;
 import com.sothree.slidinguppanel.SlidingUpPanelLayout;
-import com.google.maps.android.clustering.*;
 
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
-import java.util.Set;
 
 import butterknife.ButterKnife;
 import butterknife.InjectView;
@@ -120,6 +117,7 @@ public class GoogleMapFragment extends GeoViewFragmentBase implements
     ILayerManager mLayerManager;
     UiSettings mUiSettings;
     ClusterManager<GeoClusterMarker> mClusterManager;
+    QueryRestService mQueryService;
 
     Polygon mHighlightedPolygon;
     Polyline mHighlightedPolyline;
@@ -259,6 +257,8 @@ public class GoogleMapFragment extends GeoViewFragmentBase implements
         mPanelManager.hide();
 
         mLayerManager = application.getMapComponent().provideLayerManager();
+
+        mQueryService = new QueryRestService();
 
         initializeGoogleMap(savedInstanceState);
 
@@ -445,13 +445,34 @@ public class GoogleMapFragment extends GeoViewFragmentBase implements
     }
     //endregion
 
+    String mSelectedFeatureId;
+    int mSelectedLayerId;
+    int mFeatureWindowTabToShow;
+
     protected void getFeatureWindow(String id, int shapeCode){
         showLoadingMessage("Loading Feature Window");
 
-        String featureId = mLayerManager.getFeatureId(id, shapeCode);
-        int layerId = mLayerManager.getLayerId(id, shapeCode);
-        QueryRestService QueryService = new QueryRestService();
-        QueryService.featureWindow(featureId, layerId);
+        mSelectedFeatureId = mLayerManager.getFeatureId(id, shapeCode);
+        mSelectedLayerId = mLayerManager.getLayerId(id, shapeCode);
+
+        mQueryService.featureWindow(mSelectedFeatureId, mSelectedLayerId);
+    }
+
+    public void refreshFeatureWindow(int tab){
+        showLoadingMessage("Refreshing Feature Window");
+
+        setFeatureWindowTab(tab);
+
+        mQueryService.featureWindow(mSelectedFeatureId, mSelectedLayerId);
+
+    }
+
+    public void setFeatureWindowTab(int tab){
+        mFeatureWindowTabToShow = tab;
+    }
+
+    public int getFeatureWindowTab(){
+        return mFeatureWindowTabToShow;
     }
 
     protected void initializeGoogleMap(Bundle savedInstanceState) {

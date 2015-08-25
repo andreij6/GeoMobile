@@ -134,8 +134,6 @@ public class GetLayersTask implements IGetLayersTask {
                     currentFolder = mFolderTreeService.getById(params[0]);
                 }
 
-
-
                 currentFolder.setFolders(mFolderTreeService.getFoldersByFolder(currentFolder.getId(), false));
                 currentFolder.setLayers(mFolderTreeService.getLayersByFolder(currentFolder.getId(), false));
             } catch (RetrofitError e) {

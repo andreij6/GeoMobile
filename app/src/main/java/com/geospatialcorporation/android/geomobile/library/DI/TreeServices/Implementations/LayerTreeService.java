@@ -20,6 +20,7 @@ import com.geospatialcorporation.android.geomobile.models.Layers.LayerCreateRequ
 import com.geospatialcorporation.android.geomobile.models.Layers.LayerDetailsVm;
 import com.geospatialcorporation.android.geomobile.models.RemoveMapFeatureDocumentRequest;
 import com.geospatialcorporation.android.geomobile.models.RenameRequest;
+import com.geospatialcorporation.android.geomobile.ui.fragments.GoogleMapFragment;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -108,7 +109,9 @@ public class LayerTreeService implements ILayerTreeService {
         mLayerService.addMapFeatureDocument(layerId, featureId, documentId, new Callback<Response>() {
             @Override
             public void success(Response response, Response response2) {
-                Toast.makeText(application.getAppContext(), "Request Successful", Toast.LENGTH_LONG).show();
+                GoogleMapFragment contentFrag = (GoogleMapFragment)application.getMainActivity().getContentFragment();
+
+                contentFrag.refreshFeatureWindow(2);
             }
 
             @Override
@@ -123,7 +126,9 @@ public class LayerTreeService implements ILayerTreeService {
         mLayerService.removeMapFeatureDocument(request.getLayerId(), request.getFeatureId(), request.getDoc().getId(), new Callback<Response>() {
             @Override
             public void success(Response response, Response response2) {
-                Toast.makeText(application.getAppContext(), "Document Removed From Feature", Toast.LENGTH_LONG).show();
+                GoogleMapFragment contentFrag = (GoogleMapFragment)application.getMainActivity().getContentFragment();
+
+                contentFrag.refreshFeatureWindow(2);
             }
 
             @Override

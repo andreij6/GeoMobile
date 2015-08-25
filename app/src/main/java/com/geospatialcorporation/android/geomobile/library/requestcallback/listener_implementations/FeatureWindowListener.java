@@ -16,12 +16,12 @@ public class FeatureWindowListener extends RequestListenerBase<List<FeatureQuery
     private static final String TAG = FeatureWindowListener.class.getSimpleName();
 
     //region Constructors
-    public FeatureWindowListener(Boolean shouldRefresh) {
-        super(shouldRefresh);
+    public FeatureWindowListener() {
+        super(true);
     }
 
-    public FeatureWindowListener() {
-        super(false);
+    public FeatureWindowListener(Boolean shouldRefresh) {
+        super(shouldRefresh);
     }
     //endregion
 

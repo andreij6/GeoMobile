@@ -5,6 +5,7 @@ import android.support.v4.widget.SwipeRefreshLayout;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.ImageView;
 import android.widget.TableLayout;
@@ -40,6 +41,7 @@ public class SublayersTab extends GeoDetailsTabBase<Layer> implements IContentRe
     ILayoutRefresher mRefresher;
     @InjectView(R.id.sublayerTableLayout) TableLayout mSublayerDataView;
     @InjectView(R.id.swipe_refresh_layout) SwipeRefreshLayout mSwipeRefreshLayout;
+    @InjectView(R.id.addSublayers) Button mAddSublayerBtn;
     LayoutInflater mInflater;
     ISublayerDialog mDialog;
     //@InjectView(R.id.sliding_layout) SlidingUpPanelLayout mPanel;
@@ -62,6 +64,8 @@ public class SublayersTab extends GeoDetailsTabBase<Layer> implements IContentRe
         mSwipeRefreshLayout.setProgressBackgroundColorSchemeColor(getActivity().getResources().getColor(R.color.accent));
 
         mAnalytics.trackScreen(new GoogleAnalyticEvent().SublayersTab());
+
+        mAddSublayerBtn.setVisibility(View.GONE);
 
         //application.setSublayerFragmentPanel(mPanel);
         //mPanel.setBackgroundColor(getActivity().getResources().getColor(R.color.primary_light));
@@ -110,6 +114,7 @@ public class SublayersTab extends GeoDetailsTabBase<Layer> implements IContentRe
 
                 CheckBox visible = (CheckBox) mInflater.inflate(R.layout.template_table_checkbox, null);
                 visible.setChecked(layer.getIsShowing());
+                visible.setEnabled(false);
 
                 TextView columnName = (TextView) mInflater.inflate(R.layout.template_table_column, null);
                 columnName.setText(layer.getName());
@@ -138,6 +143,7 @@ public class SublayersTab extends GeoDetailsTabBase<Layer> implements IContentRe
 
         CheckBox visible = (CheckBox)mInflater.inflate(R.layout.template_table_checkbox, null);
         visible.setChecked(true);
+        visible.setEnabled(false);
 
         TextView columnName = (TextView)mInflater.inflate(R.layout.template_table_column, null);
         columnName.setText("All Features");
