@@ -7,10 +7,17 @@ import com.geospatialcorporation.android.geomobile.application;
 import com.geospatialcorporation.android.geomobile.library.DI.UIHelpers.Interfaces.DialogHelpers.IFolderDialog;
 import com.geospatialcorporation.android.geomobile.library.DI.UIHelpers.Interfaces.DialogHelpers.ILayerDialog;
 import com.geospatialcorporation.android.geomobile.ui.fragments.detail_fragment.LayerFolderDetailFragment;
+import com.geospatialcorporation.android.geomobile.ui.fragments.tree_fragments.LayerFragment;
 
 import butterknife.OnClick;
 
 public class LayerFolderPanelFragment extends TreeFolderPanelFragmentBase {
+
+    LayerFragment mContentFragment;
+
+    public LayerFolderPanelFragment(){
+        mContentFragment = (LayerFragment)application.getMainActivity().getContentFragment();
+    }
 
     @Override
     protected int getViewResource() {
@@ -43,5 +50,10 @@ public class LayerFolderPanelFragment extends TreeFolderPanelFragmentBase {
         IFolderDialog folderDialog = application.getUIHelperComponent().provideFolderDialog();
 
         folderDialog.create(mFolder, getActivity(), getFragmentManager());
+    }
+
+    @OnClick(R.id.closeIV)
+    public void close(){
+        mContentFragment.closePanel();
     }
 }

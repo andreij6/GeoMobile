@@ -255,5 +255,10 @@ public class GoogleAnalyticEvent extends AnalyticEvent {
         this.setLabel(R.string.open_main_navigation);
         return this;
     }
+
+    public GoogleAnalyticEvent ForgotPassword() {
+        this.setLabel(R.string.forgot_password_click);
+        return this;
+    }
     //endregion
 }

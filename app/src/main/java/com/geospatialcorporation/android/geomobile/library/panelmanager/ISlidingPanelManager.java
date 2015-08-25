@@ -25,4 +25,7 @@ public interface ISlidingPanelManager {
 
     void halfAnchor();
 
+    void setIsOpen(boolean open);
+
+    Boolean getIsOpen();
 }

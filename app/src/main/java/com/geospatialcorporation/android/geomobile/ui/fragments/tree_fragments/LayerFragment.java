@@ -44,7 +44,6 @@ public class LayerFragment extends GeoViewFragmentBase implements IContentRefres
     Folder mCurrentFolder;
     DataHelper mDataHelper;
     ProgressDialogHelper mProgressDialogHelper;
-    Boolean mIsPanelOpen;
 
     @InjectView(R.id.layer_recyclerView) RecyclerView mRecycler;
     @InjectView(R.id.swipe_refresh_layout) SwipeRefreshLayout mSwipeRefreshLayout;
@@ -78,7 +77,7 @@ public class LayerFragment extends GeoViewFragmentBase implements IContentRefres
     @OnClick(R.id.layerOptionsIV)
     public void optionsDropDown(){
 
-        if(!mIsPanelOpen){
+        if(!mPanelManager.getIsOpen()){
 
             Fragment f = new LayerFolderPanelFragment();
 
@@ -90,12 +89,8 @@ public class LayerFragment extends GeoViewFragmentBase implements IContentRefres
 
             mPanelManager.halfAnchor();
             mPanelManager.touch(false);
-            mIsPanelOpen = true;
-            mOptionsSlider.setImageDrawable(getActivity().getDrawable(R.drawable.ic_close_circle_white_36dp));
         } else {
-            mPanelManager.hide();
-            mIsPanelOpen = false;
-            mOptionsSlider.setImageDrawable(getActivity().getDrawable(R.drawable.ic_dropdown));
+            closePanel();
         }
     }
 
@@ -116,8 +111,6 @@ public class LayerFragment extends GeoViewFragmentBase implements IContentRefres
         mPanelManager = new PanelManager(GeoPanel.LAYER_FRAGMENT);
         mPanelManager.setup();
         mPanelManager.hide();
-
-        mIsPanelOpen = false;
 
         mSwipeRefreshLayout.setOnRefreshListener(refresher.build(mSwipeRefreshLayout, this));
         mSwipeRefreshLayout.setProgressBackgroundColorSchemeColor(mContext.getResources().getColor(R.color.accent));
@@ -164,12 +157,12 @@ public class LayerFragment extends GeoViewFragmentBase implements IContentRefres
 
             mTitle.setText(mCurrentFolder.getName());
         } else {
-            mNavBars.setImageDrawable(mContext.getDrawable(R.drawable.ic_nav_orange));
+            mNavBars.setImageDrawable(mContext.getDrawable(R.drawable.ic_nav_white));
 
             mNavBars.setOnClickListener(showNavigation);
             mNavLogo.setOnClickListener(showNavigation);
 
-            mNavLogo.setImageDrawable(mContext.getDrawable(R.drawable.ic_logo_g_orange));
+            mNavLogo.setImageDrawable(mContext.getDrawable(R.drawable.ic_logo_g_white));
             mNavBars.setVisibility(View.VISIBLE);
         }
 
@@ -182,7 +175,7 @@ public class LayerFragment extends GeoViewFragmentBase implements IContentRefres
 
         mProgressDialogHelper.toggleProgressDialog();
 
-        new LayerTreeSectionBuilder(mContext, getFragmentManager(), currentFolder.getParent())
+        new LayerTreeSectionBuilder(mContext, getFragmentManager(), currentFolder.getParent(), mPanelManager)
                 .BuildAdapter(data, currentFolder.getFolders().size())
                 .setRecycler(mRecycler);
     }
@@ -190,14 +183,26 @@ public class LayerFragment extends GeoViewFragmentBase implements IContentRefres
     protected View.OnClickListener showNavigation = new View.OnClickListener() {
         @Override
         public void onClick(View v) {
-            ((MainActivity)getActivity()).openNavigationDrawer();
+            if(mPanelManager.getIsOpen()){
+                closePanel();
+            } else {
+                ((MainActivity) getActivity()).openNavigationDrawer();
+            }
         }
     };
 
     protected View.OnClickListener navigateUpTree = new View.OnClickListener() {
         @Override
         public void onClick(View v) {
-            getFragmentManager().popBackStack();
+            if(mPanelManager.getIsOpen()){
+                closePanel();
+            } else {
+                getFragmentManager().popBackStack();
+            }
         }
     };
+
+    public void closePanel() {
+        mPanelManager.hide();
+    }
 }

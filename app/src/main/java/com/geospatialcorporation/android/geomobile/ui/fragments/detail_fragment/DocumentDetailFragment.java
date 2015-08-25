@@ -41,7 +41,6 @@ public class DocumentDetailFragment extends ItemDetailFragment<Document>  {
     @InjectView(R.id.fileSizeLabel) TextView mFileSizeLabel;
     @InjectView(R.id.fileSizeValue) TextView mFileSizeValue;
     @InjectView(R.id.fab) FloatingActionButton mFab;
-    @InjectView(R.id.backImageView) ImageView mBack;
     @InjectView(R.id.downloadBtn) Button mDownload;
 
     @OnClick(R.id.fab)
@@ -49,16 +48,6 @@ public class DocumentDetailFragment extends ItemDetailFragment<Document>  {
         mAnalytics.trackClick(new GoogleAnalyticEvent().ShowDocumentActions());
 
         mDocumentDialog.actions(mEntity, getActivity(), getActivity().getSupportFragmentManager());
-    }
-
-    @OnClick(R.id.showNavIV1)
-    public void showNavigation(){
-        ((MainActivity)getActivity()).openNavigationDrawer();
-    }
-
-    @OnClick(R.id.showNavIV2)
-    public void showNavigation2(){
-        ((MainActivity)getActivity()).openNavigationDrawer();
     }
 
     @OnClick(R.id.goToMapIV)
@@ -70,6 +59,11 @@ public class DocumentDetailFragment extends ItemDetailFragment<Document>  {
         fragmentManager.beginTransaction()
                 .replace(R.id.content_frame, pageFragment)
                 .addToBackStack(null).commit();
+    }
+
+    @OnClick(R.id.navigateBackIV)
+    public void previousView(){
+        getFragmentManager().popBackStack();
     }
 
     //endregion
@@ -93,12 +87,7 @@ public class DocumentDetailFragment extends ItemDetailFragment<Document>  {
         mFileTypeImage.setImageDrawable(getActivity().getResources().getDrawable(mEntity.getFileTypeDrawable(true)));
         mUploadValue.setText(mEntity.getUploadTime());
         mFileSizeValue.setText(FileSizeFormatter.format(mEntity.getSize() + ""));
-        mBack.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                getActivity().getSupportFragmentManager().popBackStack();
-            }
-        });
+
 
         mDownload.setOnClickListener(new View.OnClickListener() {
             @Override

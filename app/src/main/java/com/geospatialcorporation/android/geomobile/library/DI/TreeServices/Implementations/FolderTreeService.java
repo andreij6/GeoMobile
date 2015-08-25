@@ -5,6 +5,7 @@ import android.widget.Toast;
 import com.geospatialcorporation.android.geomobile.application;
 import com.geospatialcorporation.android.geomobile.database.DataRepository.IFullDataRepository;
 import com.geospatialcorporation.android.geomobile.database.DataRepository.Implementations.Folders.FolderAppSource;
+import com.geospatialcorporation.android.geomobile.library.DI.Tasks.Interfaces.IGetDocumentsTask;
 import com.geospatialcorporation.android.geomobile.library.DI.TreeServices.Interfaces.IFolderTreeService;
 import com.geospatialcorporation.android.geomobile.library.requestcallback.RequestCallback;
 import com.geospatialcorporation.android.geomobile.library.requestcallback.listener_implementations.FolderModifiedListener;
@@ -103,6 +104,7 @@ public class FolderTreeService implements IFolderTreeService {
     public List<FolderPermissionsResponse> permissions(int folderId) {
         return mFolderService.getFolderPermission(folderId);
     }
+
 
     //region Helpers
     protected boolean AuthorizedToRename(int id) {

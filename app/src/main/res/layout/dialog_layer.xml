@@ -21,13 +21,13 @@
             android:id="@+id/addLayerFolderIcon"
             android:layout_gravity="center_horizontal"
             android:src="@drawable/ic_folder_plus_black_24dp"
-            android:contentDescription="@string/add_folder"/>
+            android:contentDescription="@string/folder"/>
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textAppearance="?android:attr/textAppearanceSmall"
-            android:text="@string/add_folder"
+            android:text="@string/folder"
             android:id="@+id/addLayerFolderTV"
             android:layout_gravity="center_horizontal"
             />

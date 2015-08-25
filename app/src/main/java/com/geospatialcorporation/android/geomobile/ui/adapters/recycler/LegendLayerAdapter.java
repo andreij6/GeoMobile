@@ -1,6 +1,7 @@
 package com.geospatialcorporation.android.geomobile.ui.adapters.recycler;
 
 import android.content.Context;
+import android.graphics.Color;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -97,6 +98,9 @@ public class LegendLayerAdapter extends GeoRecyclerAdapterBase<LegendLayerAdapte
                 isVisibleCB.setVisibility(View.VISIBLE);
                 gotoSublayer.setVisibility(View.VISIBLE);
                 geomIV.setVisibility(View.VISIBLE);
+                gotoSublayer.setBackgroundColor(mContext.getResources().getColor(R.color.accent));
+                gotoSublayer.setImageDrawable(mContext.getDrawable(R.drawable.ic_information_outline_white_18dp));
+
 
                 mLayerName.setTextAppearance(mContext, android.R.style.TextAppearance_DeviceDefault_Medium);
                 mLayerName.setTextColor(mContext.getResources().getColor(R.color.white));
@@ -133,7 +137,7 @@ public class LegendLayerAdapter extends GeoRecyclerAdapterBase<LegendLayerAdapte
 
                 mView.setBackgroundColor(mContext.getResources().getColor(R.color.primary_light));
 
-                mLayerName.setText("PATH : " + mFolder.getPrettyPath());
+                mLayerName.setText("> " + mFolder.getPrettyPath());
 
                 mLayerName.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 11);
                 mLayerName.setTextColor(mContext.getResources().getColor(R.color.primary_dark));
@@ -141,9 +145,10 @@ public class LegendLayerAdapter extends GeoRecyclerAdapterBase<LegendLayerAdapte
                 mLayerName.setOnClickListener(GoToLayerFragment);
 
                 isVisibleCB.setVisibility(View.INVISIBLE);
-                gotoSublayer.setVisibility(View.GONE);
+                geomIV.setVisibility(View.GONE);
                 //mProgressBar.setVisibility(View.GONE);
-                geomIV.setImageDrawable(mContext.getDrawable(R.drawable.ic_information_outline_black_18dp));
+                gotoSublayer.setImageDrawable(mContext.getDrawable(R.drawable.ic_information_outline_black_18dp));
+                gotoSublayer.setBackgroundColor(Color.TRANSPARENT);
             }
 
         }

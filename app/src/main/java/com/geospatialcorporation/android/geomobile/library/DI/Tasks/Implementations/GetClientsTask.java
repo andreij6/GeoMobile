@@ -7,6 +7,8 @@ import com.geospatialcorporation.android.geomobile.application;
 import com.geospatialcorporation.android.geomobile.library.DI.Tasks.Interfaces.IGetClientsTask;
 import com.geospatialcorporation.android.geomobile.library.DI.Tasks.models.GetClientsTaskParams;
 import com.geospatialcorporation.android.geomobile.library.rest.LoginService;
+import com.geospatialcorporation.android.geomobile.models.ClientSearchFilter;
+import com.geospatialcorporation.android.geomobile.models.ClientSearchResponse;
 import com.geospatialcorporation.android.geomobile.models.Subscription;
 import com.geospatialcorporation.android.geomobile.models.GeoAsyncTask;
 
@@ -41,7 +43,14 @@ public class GetClientsTask implements IGetClientsTask {
         @Override
         protected List<Subscription> doInBackground(Void... params) {
             try {
-                mDataSet = filter(mLoginService.getClients(), mClientTypeCode);
+                //ClientSearchResponse response = mLoginService.searchClients(new ClientSearchFilter(mClientTypeCode));
+                //List<Subscription> Items = response.getItems();
+                //for (Subscription item: Items) {
+                //    mDataSet.add(item);
+                //}
+
+                mDataSet = mLoginService.getClients();
+
             } catch (RetrofitError e) {
                 if (e.getResponse() != null) {
                     Log.d(TAG, e.getResponse().getStatus() + " : Line 112");
@@ -49,18 +58,6 @@ public class GetClientsTask implements IGetClientsTask {
             }
 
             return mDataSet;
-        }
-
-        private List<Subscription> filter(List<Subscription> subscriptions, int clientTypeCode) {
-            List<Subscription> filtered  = new ArrayList<>();
-
-            for(Subscription subscription : subscriptions){
-                if(subscription.getType() == mClientTypeCode){
-                    filtered.add(subscription);
-                }
-            }
-
-            return filtered;
         }
 
     }

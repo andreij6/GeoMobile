@@ -34,6 +34,7 @@ import com.geospatialcorporation.android.geomobile.ui.Interfaces.IPostExecuter;
 import com.geospatialcorporation.android.geomobile.ui.MainActivity;
 import com.geospatialcorporation.android.geomobile.ui.fragments.GeoViewFragmentBase;
 import com.geospatialcorporation.android.geomobile.ui.fragments.GoogleMapFragment;
+import com.geospatialcorporation.android.geomobile.ui.fragments.detail_fragment.DocumentFolderDetailFragment;
 import com.geospatialcorporation.android.geomobile.ui.fragments.panel_fragments.tree_fragment_panels.LibraryFolderPanelFragment;
 import com.geospatialcorporation.android.geomobile.models.ListItem;
 import com.sothree.slidinguppanel.SlidingUpPanelLayout;
@@ -51,7 +52,6 @@ public class LibraryFragment extends GeoViewFragmentBase
     //region Properties
     private Folder mCurrentFolder;
     private Context mContext;
-    Boolean mIsPanelOpen;
     IGetDocumentsTask mDocumentsTask;
     IDocumentTreeService mUploader;
     DataHelper mHelper;
@@ -68,18 +68,24 @@ public class LibraryFragment extends GeoViewFragmentBase
 
     @OnClick(R.id.goToMapIV)
     public void goToMapIV(){
-        Fragment pageFragment = new GoogleMapFragment();
+        if(mPanelManager.getIsOpen()){
+            closePanel();
+        } else {
+            Fragment pageFragment = new GoogleMapFragment();
 
-        FragmentManager fragmentManager = getFragmentManager();
+            FragmentManager fragmentManager = getFragmentManager();
 
-        fragmentManager.beginTransaction()
-                .replace(R.id.content_frame, pageFragment)
-                .addToBackStack(null).commit();
+            fragmentManager.beginTransaction()
+                    .replace(R.id.content_frame, pageFragment)
+                    .addToBackStack(null).commit();
+        }
     }
 
     @OnClick(R.id.libraryOptionsIV)
     public void optionsDropDown(){
-        if(!mIsPanelOpen){
+        if(mPanelManager.getIsOpen()){
+            closePanel();
+        } else {
             Fragment f = new LibraryFolderPanelFragment();
 
             f.setArguments(mCurrentFolder.toBundle());
@@ -90,19 +96,22 @@ public class LibraryFragment extends GeoViewFragmentBase
 
             mPanelManager.halfAnchor();
             mPanelManager.touch(false);
-
-            mIsPanelOpen = true;
-
-            mOptionsSlider.setImageDrawable(getActivity().getDrawable(R.drawable.ic_close_circle_white_36dp));
-        } else {
-            mPanelManager.hide();
-            mIsPanelOpen = false;
-            mOptionsSlider.setImageDrawable(getActivity().getDrawable(R.drawable.ic_dropdown));
         }
     }
 
+    @OnClick(R.id.title)
+    public void titleClicked(){
+        if(mPanelManager.getIsOpen()) {
+            closePanel();
+        }
+    }
+
+    public void closePanel() {
+        mPanelManager.hide();
+    }
+
     @Override
-    public void onCreate(Bundle savedInstance){
+    public void onCreate(Bundle savedInstance) {
         setHasOptionsMenu(false);
         super.onCreate(savedInstance);
     }
@@ -115,9 +124,7 @@ public class LibraryFragment extends GeoViewFragmentBase
         setView(inflater, container, R.layout.fragment_libraryitems);
         mContext = getActivity();
 
-        mNavLogo.setVisibility(View.GONE);
-        mNavBars.setVisibility(View.GONE);
-        mTitle.setVisibility(View.INVISIBLE);
+        mTitle.setText(R.string.geounderground);
 
         sendScreenName();
 
@@ -129,8 +136,6 @@ public class LibraryFragment extends GeoViewFragmentBase
         mPanelManager.setup();
         mPanelManager.hide();
 
-        mIsPanelOpen = false;
-
         mSwipeRefreshLayout.setOnRefreshListener(refresher.build(mSwipeRefreshLayout, this));
         mSwipeRefreshLayout.setProgressBackgroundColorSchemeColor(mContext.getResources().getColor(R.color.accent));
 
@@ -138,6 +143,14 @@ public class LibraryFragment extends GeoViewFragmentBase
         handleArguments();
 
         mNavigationHelper.syncMenu(2);
+
+        mRecyclerView.setOnClickListener(new View.OnClickListener(){
+
+            @Override
+            public void onClick(View v) {
+                Toaster("Clicked Recycler");
+            }
+        });
 
         return mView;
     }
@@ -159,19 +172,19 @@ public class LibraryFragment extends GeoViewFragmentBase
             if (requestCode == MainActivity.MediaConstants.PICK_FILE_REQUEST) {
                 // Make sure the request was successful
 
-                mUploader.sendDocument(mCurrentFolder, data.getData());
+                mUploader.sendDocument(mCurrentFolder, data.getData(), null);
 
             }
 
             if(requestCode == MainActivity.MediaConstants.PICK_IMAGE_REQUEST){
 
-                mUploader.sendPickedImage(mCurrentFolder, data.getData());
+                mUploader.sendPickedImage(mCurrentFolder, data.getData(), null);
 
             }
 
             if(requestCode == MainActivity.MediaConstants.TAKE_IMAGE_REQUEST) {
 
-                mUploader.sendTakenImage(mCurrentFolder, application.mMediaUri);
+                mUploader.sendTakenImage(mCurrentFolder, application.mMediaUri, null);
 
             }
         }
@@ -186,7 +199,7 @@ public class LibraryFragment extends GeoViewFragmentBase
     protected void handleArguments() {
         Bundle args = getArguments();
 
-        GetDocumentsParam params = new GetDocumentsParam(getFragmentManager(), mCurrentFolder, mRecyclerView, mContext, this);
+        GetDocumentsParam params = new GetDocumentsParam(getFragmentManager(), mCurrentFolder, mContext, this);
 
         if(args != null) {
             int folderId = args.getInt(Folder.FOLDER_INTENT, 0);
@@ -203,6 +216,7 @@ public class LibraryFragment extends GeoViewFragmentBase
         mCurrentFolder = model;
 
         if(mCurrentFolder.getParent() != null){
+            mNavBars.setVisibility(View.GONE);
             mNavLogo.setImageDrawable(mContext.getDrawable(R.drawable.ic_chevron_left_white_18dp));
             mNavLogo.setPadding(-12, 0, 0, 0);
 
@@ -212,12 +226,12 @@ public class LibraryFragment extends GeoViewFragmentBase
             mTitle.setText(mCurrentFolder.getName());
 
         } else {
-            mNavBars.setImageDrawable(mContext.getDrawable(R.drawable.ic_nav_orange));
+            mNavBars.setImageDrawable(mContext.getDrawable(R.drawable.ic_nav_white));
 
             mNavBars.setOnClickListener(showNavigation);
             mNavLogo.setOnClickListener(showNavigation);
 
-            mNavLogo.setImageDrawable(mContext.getDrawable(R.drawable.ic_logo_g_orange));
+            mNavLogo.setImageDrawable(mContext.getDrawable(R.drawable.ic_logo_g_white));
             mNavBars.setVisibility(View.VISIBLE);
         }
 
@@ -228,26 +242,42 @@ public class LibraryFragment extends GeoViewFragmentBase
 
         List<ListItem> data = mHelper.CombineLibraryItems(mCurrentFolder.getDocuments(), mCurrentFolder.getFolders(), mCurrentFolder.getParent());
 
-        new LibraryTreeSectionBuilder(mContext, getFragmentManager(), mCurrentFolder.getParent())
+        new LibraryTreeSectionBuilder(mContext, getFragmentManager(), mCurrentFolder.getParent(), mPanelManager)
                 .BuildAdapter(data,  mCurrentFolder.getFolders().size())
                 .setRecycler(mRecyclerView);
     }
 
-
-
     protected View.OnClickListener showNavigation = new View.OnClickListener() {
         @Override
         public void onClick(View v) {
-            ((MainActivity)getActivity()).openNavigationDrawer();
+            if(mPanelManager.getIsOpen()) {
+                closePanel();
+            } else {
+                ((MainActivity) getActivity()).openNavigationDrawer();
+
+            }
         }
     };
 
     protected View.OnClickListener navigateUpTree = new View.OnClickListener() {
         @Override
         public void onClick(View v) {
-            getFragmentManager().popBackStack();
+            if(mPanelManager.getIsOpen()){
+                closePanel();
+            } else {
+                getFragmentManager().popBackStack();
+            }
         }
     };
 
+    public void goToFolderInfo() {
+        Fragment f = new DocumentFolderDetailFragment();
 
+        f.setArguments(mCurrentFolder.toBundle());
+
+        getFragmentManager().beginTransaction()
+                .addToBackStack(null)
+                .replace(R.id.content_frame, f)
+                .commit();
+    }
 }

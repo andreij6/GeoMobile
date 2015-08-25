@@ -58,6 +58,7 @@ public class PanelManager implements ISlidingPanelManager {
     @Override
     public void hide() {
         mGeoPanel.hide();
+        mGeoPanel.setIsOpen(false);
     }
 
     @Override
@@ -86,6 +87,17 @@ public class PanelManager implements ISlidingPanelManager {
 
     @Override
     public void halfAnchor() {
+        mGeoPanel.setIsOpen(true);
         mGeoPanel.halfAnchor();
+    }
+
+    @Override
+    public void setIsOpen(boolean open) {
+        mGeoPanel.setIsOpen(open);
+    }
+
+    @Override
+    public Boolean getIsOpen() {
+        return mGeoPanel.getIsOpen();
     }
 }

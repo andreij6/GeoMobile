@@ -26,4 +26,5 @@ public interface IFolderTreeService {
     FolderDetailsResponse details(int folderId);
 
     List<FolderPermissionsResponse> permissions(int folderId);
+
 }

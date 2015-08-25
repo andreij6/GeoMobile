@@ -21,7 +21,7 @@
             android:layout_height="32dp"
             android:id="@+id/showNavIV1"
             android:layout_gravity="center_vertical"
-            android:src="@drawable/ic_nav_orange"
+            android:src="@drawable/ic_nav_white"
             android:paddingLeft="-16dp"
             android:paddingRight="-10dp"/>
 
@@ -29,7 +29,7 @@
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:id="@+id/showNavIV2"
-            android:src="@drawable/ic_logo_g_orange"
+            android:src="@drawable/ic_logo_g_white"
             android:layout_gravity="center_vertical"
             android:layout_weight="1"
             android:paddingLeft="-18dp"/>
@@ -61,7 +61,7 @@
             android:layout_gravity="center_vertical"
             android:layout_marginRight="10dp"
             android:padding="2dp"/>
-        <!--android:src="@drawable/ic_map_white_36dp"-->
+
     </LinearLayout>
 
     <com.sothree.slidinguppanel.SlidingUpPanelLayout

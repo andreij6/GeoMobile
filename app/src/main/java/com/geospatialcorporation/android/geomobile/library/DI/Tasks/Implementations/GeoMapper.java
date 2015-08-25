@@ -76,8 +76,8 @@ public class GeoMapper implements IMapFeaturesTask, IPostExecuter<Integer> {
     public void onPostExecute(Integer integer) {
         //
 
-        mLlayer.setLegendIcon(mMapper.getActiveDrawable());
-        mLlayer.setImageSrc();
+        //mLlayer.setLegendIcon(mMapper.getActiveDrawable());
+        //mLlayer.setImageSrc();
 
         mLayerManager.showLayer(mLlayer);
 
@@ -113,7 +113,7 @@ public class GeoMapper implements IMapFeaturesTask, IPostExecuter<Integer> {
         protected Integer doInBackground(Void... params) {
             int result = 1;
             try {
-                if(mResponses != null){
+                if(mResponses != null && mResponses.size() > 0){
 
                     mMapper.setLegendLayer(mLlayer);
 

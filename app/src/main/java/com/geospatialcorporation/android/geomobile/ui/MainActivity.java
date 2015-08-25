@@ -90,6 +90,7 @@ public class MainActivity extends ActionBarActivity
     DrawerLayout mDrawerLayout;
     IGeoErrorHandler mErrorHandler;
     IGeoAnalytics mAnalytics;
+    int mBackPressedFromGoogleMapFragmentCount;
     //endregion
 
     @Override
@@ -99,21 +100,15 @@ public class MainActivity extends ActionBarActivity
         setContentView(R.layout.activity_main);
         ButterKnife.inject(this);
         application.setMainActivity(this);
-        getSupportActionBar().setElevation(0);
+        getSupportActionBar().hide();
+
+        mBackPressedFromGoogleMapFragmentCount = 0;
 
         mMapFragment = application.getMapFragment();
         mAnalytics = application.getAnalyticsComponent().provideGeoAnalytics();
 
-
-        ActionBar actionBar = getSupportActionBar();
-
-        actionBar.setDisplayShowCustomEnabled(true);
-        actionBar.setCustomView(R.layout.abs_layout_map);
-        actionBar.setDisplayHomeAsUpEnabled(true);
-        actionBar.setHomeButtonEnabled(true);
-
-        //mErrorHandler = application.getErrorsComponent().provideErrorHandler();
-        //Thread.setDefaultUncaughtExceptionHandler(mErrorHandler.UncaughtExceptionHandler());
+        mErrorHandler = application.getErrorsComponent().provideErrorHandler();
+        Thread.setDefaultUncaughtExceptionHandler(mErrorHandler.UncaughtExceptionHandler());
 
         mIsAdmin = application.getIsAdminUser();
 
@@ -173,9 +168,22 @@ public class MainActivity extends ActionBarActivity
     public void onBackPressed() {
         super.onBackPressed();
 
-        if(getContentFragment() == null){
-            onNavigationDrawerItemSelected(0);
+        mBackPressedFromGoogleMapFragmentCount += 1;
+
+        if(!getContentFragment().getClass().getSimpleName().equals(GoogleMapFragment.class.getSimpleName())){
+            mBackPressedFromGoogleMapFragmentCount = 0;
+        } else {
+
+            if (getContentFragment().getClass().getSimpleName().equals(GoogleMapFragment.class.getSimpleName()) && mBackPressedFromGoogleMapFragmentCount < 2) {
+
+                onNavigationDrawerItemSelected(0);
+            }
+
+            if (mBackPressedFromGoogleMapFragmentCount >= 2) {
+                finish();
+            }
         }
+
     }
 
     @Override
@@ -283,5 +291,9 @@ public class MainActivity extends ActionBarActivity
         public static final int TAKE_IMAGE_REQUEST = 2;
         public static final int MEDIA_TYPE_IMAGE = 4;
         public static final int MEDIA_TYPE_VIDEO = 5;
+
+        public static final int PICK_FILE_REQUEST_FEATUREWINDOW = 7;
+        public static final int TAKE_IMAGE_REQUEST_FEATUREWINDOW = 8;
+        public static final int PICK_IMAGE_REQUEST_FEATUREWINDOW = 9;
     }
 }

@@ -148,7 +148,7 @@ public class ClusterExtentMarkerOptionsManager extends OptionsManagerBase<Marker
             mClusterManager.cluster();
 
             if(mShowZoomMessage){
-                Toast.makeText(application.getAppContext(), "Zoom in to see more features", Toast.LENGTH_LONG).show();
+                Toast.makeText(application.getAppContext(), "Zoom in to see more features", Toast.LENGTH_SHORT).show();
             }
 
             mVisibleLayers.putAll(tempVisibleLayers);

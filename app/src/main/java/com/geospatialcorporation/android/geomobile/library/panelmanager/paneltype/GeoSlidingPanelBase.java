@@ -17,10 +17,20 @@ public abstract class GeoSlidingPanelBase {
 
     protected  SlidingUpPanelLayout mPanel;
     protected Context mContext;
+    protected Boolean mIsOpen;
+
+    public Boolean getIsOpen(){
+        return mIsOpen;
+    }
+
+    public void setIsOpen(Boolean open){
+        mIsOpen = open;
+    }
 
     public GeoSlidingPanelBase(SlidingUpPanelLayout panel){
         mPanel = panel;
         mContext = panel.getContext();
+        mIsOpen = false;
     }
 
     public void setup(){
@@ -111,9 +121,7 @@ public abstract class GeoSlidingPanelBase {
     }
 
     protected void anchorPanel(float anchorPoint) {
-        if (getPanelState() != SlidingUpPanelLayout.PanelState.ANCHORED) {
-            mPanel.setAnchorPoint(anchorPoint);
-            mPanel.setPanelState(SlidingUpPanelLayout.PanelState.ANCHORED);
-        }
+        mPanel.setAnchorPoint(anchorPoint);
+        mPanel.setPanelState(SlidingUpPanelLayout.PanelState.ANCHORED);
     }
 }

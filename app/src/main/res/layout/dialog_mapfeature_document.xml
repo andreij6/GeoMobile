@@ -2,17 +2,103 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
               android:orientation="vertical"
               android:layout_width="match_parent"
-              android:layout_height="match_parent">
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="match_parent">
+              android:layout_height="300dp">
 
         <Spinner
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:id="@+id/document_spinner"
             android:layout_gravity="center_horizontal"
-            android:gravity="center_vertical|center_horizontal"/>
+            android:gravity="center_vertical|center_horizontal"
+            android:layout_marginTop="15dp"
+            android:layout_marginRight="10dp"
+            android:layout_marginLeft="10dp"/>
+
+
+    <View
+        android:layout_width="fill_parent"
+        android:layout_height="1dp"
+        android:background="@android:color/darker_gray"
+        android:layout_margin="10dp"/>
+
+    <LinearLayout
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <LinearLayout
+            android:orientation="horizontal"
+            android:layout_width="match_parent"
+            style="@style/TreePanelSectionStyle"
+            android:id="@+id/addDocumentSection">
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:id="@+id/addDocumentIV"
+                android:src="@drawable/ic_file_document_box_black_36dp"
+                style="TreePanelImageViewStyle"
+                android:layout_marginLeft="16dp"/>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:text="@string/add_document"
+                android:id="@+id/addDocumentTV"
+                style="@style/TreePanelTextViewStyle"/>
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:orientation="horizontal"
+            android:layout_width="match_parent"
+            style="@style/TreePanelSectionStyle"
+            android:id="@+id/takePhotoSection">
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:id="@+id/takePhotoIV"
+                style="TreePanelImageViewStyle"
+                android:layout_marginLeft="16dp"
+                android:contentDescription="take a photo"
+                android:src="@drawable/ic_camera_black_36dp"/>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:text="@string/take_photo"
+                android:id="@+id/takePhotoTV"
+                style="@style/TreePanelTextViewStyle"/>
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:orientation="horizontal"
+            android:layout_width="match_parent"
+            style="@style/TreePanelSectionStyle"
+            android:id="@+id/choosePhotoSection">
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:id="@+id/uploadIV"
+                android:src="@drawable/ic_upload_black_36dp"
+                style="TreePanelImageViewStyle"
+                android:layout_marginLeft="16dp"/>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:text="@string/choose_photo"
+                android:id="@+id/uploadTV"
+                style="@style/TreePanelTextViewStyle"/>
+
+        </LinearLayout>
+
     </LinearLayout>
+
+    <View
+        android:layout_width="fill_parent"
+        android:layout_height="1dp"
+        android:background="@android:color/darker_gray"
+        android:layout_margin="10dp"/>
+
 </LinearLayout>

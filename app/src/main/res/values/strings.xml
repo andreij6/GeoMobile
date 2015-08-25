@@ -89,9 +89,11 @@
     <string name="title_activity_layer_detail">LayerDetailActivity</string>
     <string name="library_dialog_title">Library Actions</string>
     <string name="layer_dialog_title">Layer Actions</string>
-    <string name="add_folder">Folder</string>
+    <string name="folder">Folder</string>
+    <string name="add_folder">Add Folder</string>
     <string name="add_layer">Layer</string>
-    <string name="add_document">Document</string>
+    <string name="document">Document</string>
+    <string name="add_document">Add Document</string>
     <string name="add_image">Image</string>
     <string name="title_activity_subscription_selector">SubscriptionSelectorActivity</string>
 
@@ -267,5 +269,13 @@
     <string name="folder_icon">Folders</string>
     <string name="information">information</string>
     <string name="open_main_navigation">Opening/Closing Main Navigation Drawer</string>
+    <string name="forgotPassword"><a href="https://www.geounderground.com/ForgotPassword">Forgot Password?</a></string>
+    <string name="forgot_password_click">User Clicked Forgot Password Link</string>
+    <string name="choose_photo">Choose Photo</string>
+    <string name="boolean_hint">True/False</string>
+    <string name="boolean_validation">Value must be true or false</string>
+    <string name="date_hint">ex. 01/14/2014</string>
+    <string name="datetime_hint">ex. 01/31/2017 10:00PM</string>
+    <string name="all_subscriptions_section">All Subscriptions</string>
 
 </resources>

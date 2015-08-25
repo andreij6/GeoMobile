@@ -1,6 +1,8 @@
 package com.geospatialcorporation.android.geomobile.library.rest;
 
 import com.geospatialcorporation.android.geomobile.library.util.Authentication;
+import com.geospatialcorporation.android.geomobile.models.ClientSearchFilter;
+import com.geospatialcorporation.android.geomobile.models.ClientSearchResponse;
 import com.geospatialcorporation.android.geomobile.models.Subscription;
 import com.geospatialcorporation.android.geomobile.ui.LoginActivity;
 
@@ -29,6 +31,9 @@ public interface LoginService {
 
     @GET("/API/Clients")
     List<Subscription> getClients();
+
+    @POST("/Admin/Clients/Search")
+    ClientSearchResponse searchClients(@Body ClientSearchFilter filter);
 
     @GET("/API/Clients/Current")
     Subscription getCurrentClient();

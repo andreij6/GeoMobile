@@ -15,6 +15,7 @@ import com.geospatialcorporation.android.geomobile.library.DI.Tasks.models.GetAl
 import com.geospatialcorporation.android.geomobile.library.DI.Tasks.models.GetDocumentsParam;
 import com.geospatialcorporation.android.geomobile.library.DI.TreeServices.Interfaces.IFolderTreeService;
 import com.geospatialcorporation.android.geomobile.library.helpers.DataHelper;
+import com.geospatialcorporation.android.geomobile.library.panelmanager.ISlidingPanelManager;
 import com.geospatialcorporation.android.geomobile.library.rest.TreeService;
 import com.geospatialcorporation.android.geomobile.models.Document.Document;
 import com.geospatialcorporation.android.geomobile.models.Folders.Folder;
@@ -65,14 +66,13 @@ public class DocumentsTask implements IGetDocumentsTask {
 
         FragmentManager mFragmentManager;
         Folder mCurrentFolder;
-        RecyclerView mRecyclerView;
         Context mContext;
+        ISlidingPanelManager mPanelManager;
 
         public GetDocumentsByFolderIdTask(GetDocumentsParam param){
             super(param.getFragment());
-           mFragmentManager = param.getFragmentManager();
+            mFragmentManager = param.getFragmentManager();
             mCurrentFolder = param.getCurrentFolder();
-            mRecyclerView = param.getRecycler();
             mContext = param.getContext();
         }
 

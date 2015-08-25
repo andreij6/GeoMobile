@@ -12,6 +12,7 @@ import android.widget.TextView;
 
 import com.geospatialcorporation.android.geomobile.R;
 import com.geospatialcorporation.android.geomobile.models.Layers.Layer;
+import com.geospatialcorporation.android.geomobile.models.OptionSlideController.IOptionsSlideController;
 import com.geospatialcorporation.android.geomobile.ui.MainActivity;
 import com.geospatialcorporation.android.geomobile.ui.fragments.GoogleMapFragment;
 import com.geospatialcorporation.android.geomobile.ui.fragments.detail_fragment.layer_tabs.AttributeLayoutTab;
@@ -20,17 +21,23 @@ import com.geospatialcorporation.android.geomobile.ui.fragments.detail_fragment.
 import com.geospatialcorporation.android.geomobile.ui.fragments.dialogs.ItemDetailFragment;
 
 import butterknife.ButterKnife;
+import butterknife.InjectView;
 import butterknife.OnClick;
 
 /**
  * Created by andre on 6/2/2015.
  */
-public class LayerDetailFragment extends ItemDetailFragment<Layer> implements TabHost.OnTabChangeListener {
+public class LayerDetailFragment extends ItemDetailFragment<Layer>
+        implements TabHost.OnTabChangeListener,
+        IOptionsSlideController
+{
     private static final String TAG = LayerDetailFragment.class.getSimpleName();
 
     private static final String SUBLAYERS = "Sublayers";
     private static final String ATTRIBUTES = "Attributes";
     private static final String DETAILS = "Details";
+
+    @InjectView(R.id.title) TextView mTitle;
 
     FragmentTabHost mTabHost;
     View mView;
@@ -93,7 +100,9 @@ public class LayerDetailFragment extends ItemDetailFragment<Layer> implements Ta
 
         mEntity = args.getParcelable(Layer.LAYER_INTENT);
 
-        SetTitle(mEntity != null ? mEntity.getName() : null);
+        if(mEntity != null){
+            mTitle.setText(mEntity.getName());
+        }
     }
 
     @Override
@@ -110,5 +119,10 @@ public class LayerDetailFragment extends ItemDetailFragment<Layer> implements Ta
 
     public Fragment getCurrentTab() {
         return getChildFragmentManager().findFragmentById(android.R.id.tabcontent);
+    }
+
+    @Override
+    public void setSlideView() {
+
     }
 }

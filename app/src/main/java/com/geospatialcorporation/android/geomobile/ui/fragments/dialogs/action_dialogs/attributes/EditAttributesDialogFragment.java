@@ -140,28 +140,32 @@ public class EditAttributesDialogFragment extends AttributesActionDialogBase<Att
             columnValue.setInputType(InputType.TYPE_CLASS_NUMBER);
 
         } else if(type.equals(ColumnDataTypes.DATE)){
+            //columnValue.setInputType(InputType.TYPE_DATETIME_VARIATION_DATE);
+            columnValue.setInputType(InputType.TYPE_CLASS_TEXT);
 
-            columnValue.setInputType(InputType.TYPE_DATETIME_VARIATION_DATE);
+            columnValue.setHint(R.string.date_hint);
 
-            columnValue.setOnFocusChangeListener(new View.OnFocusChangeListener() {
-                @Override
-                public void onFocusChange(View v, boolean hasFocus) {
-                    if(hasFocus){
-                        Toaster("Open Date Picker");
-                    }
-                }
-            });
+            //columnValue.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+            //    @Override
+            //    public void onFocusChange(View v, boolean hasFocus) {
+            //        Toaster("DatePicker");
+            //    }
+            //});
+
         } else if(type.equals(ColumnDataTypes.DATE_TIME)){
-            columnValue.setInputType(InputType.TYPE_CLASS_DATETIME);
+            //columnValue.setInputType(InputType.TYPE_CLASS_DATETIME);
+            columnValue.setInputType(InputType.TYPE_CLASS_TEXT);
 
-            columnValue.setOnFocusChangeListener(new View.OnFocusChangeListener() {
-                @Override
-                public void onFocusChange(View v, boolean hasFocus) {
-                    if (hasFocus) {
-                        Toaster("Open DateTime Picker");
-                    }
-                }
-            });
+            columnValue.setHint(R.string.datetime_hint);
+
+            //columnValue.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+            //    @Override
+            //    public void onFocusChange(View v, boolean hasFocus) {
+            //        if (hasFocus) {
+            //            Toaster("Open DateTime Picker");
+            //        }
+            //    }
+            //});
         } else {
             columnValue.setInputType(InputType.TYPE_CLASS_TEXT);
         }
@@ -183,10 +187,12 @@ public class EditAttributesDialogFragment extends AttributesActionDialogBase<Att
                     if (s.toString().toLowerCase().equals("true") || s.toString().toLowerCase().equals("false")) {
                         columnValue.setError(null);
                     } else {
-                        columnValue.setError("Value must be true or false");
+                        columnValue.setError(mContext.getString(R.string.boolean_validation));
                     }
                 }
             });
+
+            columnValue.setHint(R.string.boolean_hint);
         }
 
     }

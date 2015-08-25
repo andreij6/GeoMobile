@@ -38,6 +38,7 @@ import com.squareup.okhttp.Response;
 
 import java.io.IOException;
 import java.util.HashMap;
+import java.util.Map;
 
 import retrofit.RequestInterceptor;
 import retrofit.RestAdapter;
@@ -83,6 +84,9 @@ public class application extends applicationDIBase {
     private static ILayerManager layerManager;
     private static SlidingUpPanelLayout libraryFragmentPanel;
     private static SlidingUpPanelLayout layerFragmentPanel;
+
+    private static int FeatureWindowDocument_LayerId;
+    private static String FeatureWindowDocument_FeatureId;
     //endregion
 
     //region stuff
@@ -370,6 +374,19 @@ public class application extends applicationDIBase {
         }
 
         return mGoogleMapFragment;
+    }
+
+    public static void setFeatureWindowDocumentIds(int layerId, String featureId) {
+        FeatureWindowDocument_LayerId = layerId;
+        FeatureWindowDocument_FeatureId = featureId;
+    }
+
+    public static int getFeatureWindowLayerId() {
+        return FeatureWindowDocument_LayerId;
+    }
+
+    public static String getFeatureWindowFeatureId() {
+        return FeatureWindowDocument_FeatureId;
     }
 
     class TokenInterceptor implements Interceptor {

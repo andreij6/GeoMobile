@@ -19,6 +19,7 @@ import com.geospatialcorporation.android.geomobile.database.DataRepository.IFull
 import com.geospatialcorporation.android.geomobile.database.DataRepository.Implementations.Documents.DocumentsAppSource;
 import com.geospatialcorporation.android.geomobile.database.DataRepository.Implementations.Folders.FolderAppSource;
 import com.geospatialcorporation.android.geomobile.library.DI.TreeServices.Interfaces.ILayerTreeService;
+import com.geospatialcorporation.android.geomobile.library.panelmanager.ISlidingPanelManager;
 import com.geospatialcorporation.android.geomobile.models.Folders.Folder;
 import com.geospatialcorporation.android.geomobile.models.Layers.Layer;
 import com.geospatialcorporation.android.geomobile.models.Document.Document;
@@ -45,11 +46,13 @@ public class ListItemAdapter extends GeoRecyclerAdapterBase<ListItemAdapter.Hold
 
     private String mViewType;
     private FragmentManager mFragmentManager;
+    private ISlidingPanelManager mPanelManager;
 
-    public ListItemAdapter(Context context, List<ListItem> data, String ViewType, FragmentManager fm) {
+    public ListItemAdapter(Context context, List<ListItem> data, String ViewType, FragmentManager fm, ISlidingPanelManager panelManager) {
         super(context, data, R.layout.recycler_list_library, Holder.class);
         mViewType = ViewType;
         mFragmentManager = fm;
+        mPanelManager = panelManager;
     }
 
     @Override
@@ -112,18 +115,23 @@ public class ListItemAdapter extends GeoRecyclerAdapterBase<ListItemAdapter.Hold
         protected View.OnClickListener ItemOnClickListener = new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                switch (mItem.getOrder()) {
-                    case ListItem.LAYER:
-                        LayerAction(mItem);
-                        break;
-                    case ListItem.FOLDER:
-                        FolderAction(mItem);
-                        break;
-                    case ListItem.DOCUMENT:
-                        DocumentAction(mItem);
-                        break;
-                    default:
-                        break;
+                if(mPanelManager.getIsOpen()){
+                    mPanelManager.hide();
+                } else {
+
+                    switch (mItem.getOrder()) {
+                        case ListItem.LAYER:
+                            LayerAction(mItem);
+                            break;
+                        case ListItem.FOLDER:
+                            FolderAction(mItem);
+                            break;
+                        case ListItem.DOCUMENT:
+                            DocumentAction(mItem);
+                            break;
+                        default:
+                            break;
+                    }
                 }
             }
         };
@@ -131,24 +139,30 @@ public class ListItemAdapter extends GeoRecyclerAdapterBase<ListItemAdapter.Hold
         protected View.OnClickListener ItemDetailOnClickListener = new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                switch (mItem.getOrder()) {
-                    case ListItem.LAYER:
-                        LayerDetailAction(mItem);
-                        break;
-                    case ListItem.FOLDER:
-                        FolderDetailAction(mItem);
-                        break;
-                    case ListItem.DOCUMENT:
-                        DocumentDetailAction(mItem);
-                        break;
-                    default:
-                        break;
+                if(mPanelManager.getIsOpen()){
+                    mPanelManager.hide();
+                } else {
+
+                    switch (mItem.getOrder()) {
+                        case ListItem.LAYER:
+                            LayerDetailAction(mItem);
+                            break;
+                        case ListItem.FOLDER:
+                            FolderDetailAction(mItem);
+                            break;
+                        case ListItem.DOCUMENT:
+                            DocumentDetailAction(mItem);
+                            break;
+                        default:
+                            break;
+                    }
                 }
             }
         };
 
         //region ListItem Actions by Type
         protected void DocumentAction(ListItem item) {
+
             Document document = DocumentRepo.getById(item.getId());
 
             DownloadDialogFragment d = new DownloadDialogFragment();

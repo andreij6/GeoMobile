@@ -181,9 +181,9 @@ public class Document implements Parcelable, ITreeEntity {
         }
 
         if(images.contains(lowerExt)){
-            //if(white){
-            //    return R.drawable.ic_file_image_white_24dp;
-            //}
+            if(white){
+                return R.drawable.ic_file_image_white_24dp;
+            }
             return R.drawable.ic_file_image_black_24dp;
         }
 

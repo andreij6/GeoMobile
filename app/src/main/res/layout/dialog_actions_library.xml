@@ -13,7 +13,7 @@
                 android:id="@+id/addLibraryFolderIcon"
                 android:layout_gravity="center_horizontal"
                 android:src="@drawable/ic_folder_plus_black_36dp"
-                android:contentDescription="@string/add_folder"
+                android:contentDescription="@string/folder"
                 android:layout_marginTop="25dp"
                 android:layout_marginLeft="25dp"/>
 
@@ -21,7 +21,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 style="@style/actionDialog_textView"
-                android:text="@string/add_folder"
+                android:text="@string/folder"
                 android:id="@+id/addLibraryFolderTV"
                 android:layout_gravity="center_horizontal"
                 android:layout_below="@+id/addLibraryFolderIcon"
@@ -33,7 +33,7 @@
                 android:id="@+id/addDocumentIcon"
                 android:layout_gravity="center_horizontal"
                 android:src="@drawable/ic_file_document_box_black_36dp"
-                android:contentDescription="@string/add_document"
+                android:contentDescription="@string/document"
                 android:layout_marginTop="25dp"
                 android:layout_alignParentEnd="true"
                 android:layout_marginRight="25dp"/>
@@ -42,7 +42,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 style="@style/actionDialog_textView"
-                android:text="@string/add_document"
+                android:text="@string/document"
                 android:id="@+id/takePhotoTV"
                 android:layout_gravity="center_horizontal"
                 android:layout_below="@+id/addDocumentIcon"

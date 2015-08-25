@@ -10,12 +10,20 @@ import com.geospatialcorporation.android.geomobile.application;
 import com.geospatialcorporation.android.geomobile.library.DI.Analytics.Models.GoogleAnalyticEvent;
 import com.geospatialcorporation.android.geomobile.library.DI.UIHelpers.Interfaces.DialogHelpers.IFolderDialog;
 import com.geospatialcorporation.android.geomobile.library.helpers.MediaHelper;
+import com.geospatialcorporation.android.geomobile.library.panelmanager.ISlidingPanelManager;
 import com.geospatialcorporation.android.geomobile.ui.MainActivity;
 import com.geospatialcorporation.android.geomobile.ui.fragments.detail_fragment.DocumentFolderDetailFragment;
+import com.geospatialcorporation.android.geomobile.ui.fragments.tree_fragments.LibraryFragment;
 
 import butterknife.OnClick;
 
 public class LibraryFolderPanelFragment extends TreeFolderPanelFragmentBase {
+
+    LibraryFragment mContentFragment;
+
+    public LibraryFolderPanelFragment(){
+        mContentFragment = (LibraryFragment)application.getMainActivity().getContentFragment();
+    }
 
     @Override
     protected int getViewResource() {
@@ -25,19 +33,15 @@ public class LibraryFolderPanelFragment extends TreeFolderPanelFragmentBase {
     //OnClicks
     @OnClick(R.id.folderInfoSection)
     public void folderInfo(){
-        Fragment f = new DocumentFolderDetailFragment();
+        mContentFragment.closePanel();
 
-        f.setArguments(mFolder.toBundle());
-
-        getFragmentManager()
-                .beginTransaction()
-                .addToBackStack(null)
-                .replace(R.id.content_frame, f)
-                .commit();
+        mContentFragment.goToFolderInfo();
     }
 
     @OnClick(R.id.addDocumentSection)
     public void documentClicked(){
+        mContentFragment.closePanel();
+
         Intent chooseFileIntent = new Intent(Intent.ACTION_GET_CONTENT);
         chooseFileIntent.setType("file/*");
         getActivity().startActivityForResult(chooseFileIntent, MainActivity.MediaConstants.PICK_FILE_REQUEST);
@@ -45,6 +49,8 @@ public class LibraryFolderPanelFragment extends TreeFolderPanelFragmentBase {
 
     @OnClick(R.id.addFolderSection)
     public void folderClicked(){
+        mContentFragment.closePanel();
+
         IFolderDialog folderDialog = application.getUIHelperComponent().provideFolderDialog();
 
         folderDialog.create(mFolder, getActivity(), getFragmentManager());
@@ -52,6 +58,8 @@ public class LibraryFolderPanelFragment extends TreeFolderPanelFragmentBase {
 
     @OnClick(R.id.takePhotoSection)
     public void takePhoto(){
+        mContentFragment.closePanel();
+
         Intent takePhotoIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
         MediaHelper mediaHelper = new MediaHelper(getActivity());
 
@@ -65,14 +73,13 @@ public class LibraryFolderPanelFragment extends TreeFolderPanelFragmentBase {
             mAnalytics.trackClick(new GoogleAnalyticEvent().UploadImage());
             takePhotoIntent.putExtra(MediaStore.EXTRA_OUTPUT, application.mMediaUri);
             getActivity().startActivityForResult(takePhotoIntent, MainActivity.MediaConstants.TAKE_IMAGE_REQUEST);
-
         }
-
-
     }
 
     @OnClick(R.id.choosePhotoSection)
     public void uploadImage(){
+        mContentFragment.closePanel();
+
         Intent getIntent = new Intent(Intent.ACTION_GET_CONTENT);
         getIntent.setType("image/*");
 
@@ -83,5 +90,10 @@ public class LibraryFolderPanelFragment extends TreeFolderPanelFragmentBase {
         chooserIntent.putExtra(Intent.EXTRA_INITIAL_INTENTS, new Intent[]{pickIntent});
 
         getActivity().startActivityForResult(chooserIntent, MainActivity.MediaConstants.PICK_IMAGE_REQUEST);
+    }
+
+    @OnClick(R.id.closeIV)
+    public void close(){
+        mContentFragment.closePanel();
     }
 }

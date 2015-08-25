@@ -9,8 +9,10 @@ import android.widget.Toast;
 import com.geospatialcorporation.android.geomobile.application;
 import com.geospatialcorporation.android.geomobile.database.DataRepository.IFullDataRepository;
 import com.geospatialcorporation.android.geomobile.library.DI.TreeServices.Interfaces.IDocumentTreeService;
+import com.geospatialcorporation.android.geomobile.library.ISendFileCallback;
 import com.geospatialcorporation.android.geomobile.library.requestcallback.RequestCallback;
 import com.geospatialcorporation.android.geomobile.library.requestcallback.listener_implementations.DocumentModifiedListener;
+import com.geospatialcorporation.android.geomobile.library.requestcallback.listener_implementations.DocumentSendListener;
 import com.geospatialcorporation.android.geomobile.library.rest.DocumentService;
 import com.geospatialcorporation.android.geomobile.library.rest.DownloadService;
 import com.geospatialcorporation.android.geomobile.models.Document.Document;
@@ -53,27 +55,27 @@ public class DocumentTreeService implements IDocumentTreeService {
     }
 
     @Override
-    public void sendDocument(Folder currentFolder, Uri data) {
+    public void sendDocument(Folder currentFolder, Uri data, ISendFileCallback callBack) {
         TypedFile typedFile = new TypedFile("multipart/form-data", new File(data.getPath()));
-        Service.create(currentFolder.getId(), typedFile, new RequestCallback<>(new DocumentModifiedListener()));
+        Service.create(currentFolder.getId(), typedFile, new RequestCallback<>(new DocumentSendListener(callBack)));
     }
 
     @Override
-    public void sendTakenImage(Folder currentFolder, Uri data) {
+    public void sendTakenImage(Folder currentFolder, Uri data, ISendFileCallback callback) {
         final TypedFile t = new TypedFile("image/jpg", new File(data.getPath()));
         final String path = data.getPath();
 
-        SendImage(currentFolder, t, path);
+        SendImage(currentFolder, t, path, callback);
     }
 
     @Override
-    public void sendPickedImage(Folder currentFolder, Uri data) {
+    public void sendPickedImage(Folder currentFolder, Uri data, ISendFileCallback callback) {
         String actualPath = getRealPathFromUri(data);
         String mimeType = getMimeTypeOfFile(actualPath);
 
         final TypedFile t = new TypedFile(mimeType, new File(actualPath));
 
-        SendImage(currentFolder, t, actualPath);
+        SendImage(currentFolder, t, actualPath, callback);
     }
 
     @Override
@@ -146,8 +148,8 @@ public class DocumentTreeService implements IDocumentTreeService {
         return true;
     }
 
-    protected void SendImage(Folder currentFolder, final TypedFile t, final String path) {
-        Service.create(currentFolder.getId(), t, new RequestCallback<>(new DocumentModifiedListener()));
+    protected void SendImage(Folder currentFolder, final TypedFile t, final String path, ISendFileCallback callback) {
+        Service.create(currentFolder.getId(), t, new RequestCallback<>(new DocumentSendListener(callback)));
     }
 
     protected String getMimeTypeOfFile(String pathName) {

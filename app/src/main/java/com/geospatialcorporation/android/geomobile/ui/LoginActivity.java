@@ -65,6 +65,7 @@ public class LoginActivity extends GoogleApiActivity implements LoaderCallbacks<
     @InjectView(R.id.plus_sign_out_buttons) View mSignOutButtons;
     @InjectView(R.id.email_sign_in_button) Button mEmailSignInButton;
     @InjectView(R.id.signUpLink) TextView mSignUpLink;
+    @InjectView(R.id.forgotPassword) TextView mForgotPassword;
     //endregion
 
     //region OnclickListeners
@@ -86,6 +87,11 @@ public class LoginActivity extends GoogleApiActivity implements LoaderCallbacks<
     public void potientialSignup(){
         mAnalytics.trackClick(new GoogleAnalyticEvent().SignUp());
     }
+
+    @OnClick(R.id.forgotPassword)
+    public void forgotPasswordLink(){
+        mAnalytics.trackClick(new GoogleAnalyticEvent().ForgotPassword());
+    }
     //endregion
 
     @Override
@@ -96,6 +102,8 @@ public class LoginActivity extends GoogleApiActivity implements LoaderCallbacks<
             setContentView(R.layout.activity_login);
             ButterKnife.inject(this);
             mSignUpLink.setMovementMethod(LinkMovementMethod.getInstance());
+            mForgotPassword.setMovementMethod(LinkMovementMethod.getInstance());
+
         }
 
         if (!supportsGooglePlayServices()) {

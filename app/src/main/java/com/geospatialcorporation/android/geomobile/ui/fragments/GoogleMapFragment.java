@@ -16,11 +16,13 @@
 
 package com.geospatialcorporation.android.geomobile.ui.fragments;
 
+import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentSender;
 import android.location.Location;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.provider.Settings;
 import android.support.v4.app.Fragment;
@@ -39,16 +41,23 @@ import com.geospatialcorporation.android.geomobile.application;
 import com.geospatialcorporation.android.geomobile.library.DI.Analytics.Models.GoogleAnalyticEvent;
 import com.geospatialcorporation.android.geomobile.library.DI.Map.Interfaces.IMapStateService;
 import com.geospatialcorporation.android.geomobile.library.DI.Map.Models.MapStateSaveRequest;
+import com.geospatialcorporation.android.geomobile.library.DI.TreeServices.Interfaces.IDocumentTreeService;
+import com.geospatialcorporation.android.geomobile.library.DI.TreeServices.Interfaces.IFolderTreeService;
+import com.geospatialcorporation.android.geomobile.library.DocumentSentCallback;
+import com.geospatialcorporation.android.geomobile.library.ISendFileCallback;
 import com.geospatialcorporation.android.geomobile.library.constants.GeoPanel;
+import com.geospatialcorporation.android.geomobile.library.helpers.DataHelper;
 import com.geospatialcorporation.android.geomobile.library.map.Models.GeoClusterMarker;
 import com.geospatialcorporation.android.geomobile.library.DI.Map.Interfaces.ILayerManager;
 import com.geospatialcorporation.android.geomobile.library.DI.Map.Implementations.LayerManager;
 import com.geospatialcorporation.android.geomobile.library.panelmanager.ISlidingPanelManager;
 import com.geospatialcorporation.android.geomobile.library.panelmanager.PanelManager;
+import com.geospatialcorporation.android.geomobile.library.rest.TreeService;
 import com.geospatialcorporation.android.geomobile.library.services.QueryRestService;
 import com.geospatialcorporation.android.geomobile.library.viewmode.IViewMode;
 import com.geospatialcorporation.android.geomobile.library.viewmode.implementations.QueryMode;
 import com.geospatialcorporation.android.geomobile.library.viewmode.implementations.SearchMode;
+import com.geospatialcorporation.android.geomobile.models.Folders.Folder;
 import com.geospatialcorporation.android.geomobile.models.Layers.Extent;
 import com.geospatialcorporation.android.geomobile.models.Query.map.response.featurewindow.ParcelableFeatureQueryResponse;
 import com.geospatialcorporation.android.geomobile.ui.Interfaces.IViewModeListener;
@@ -80,7 +89,10 @@ import com.melnykov.fab.FloatingActionButton;
 import com.sothree.slidinguppanel.SlidingUpPanelLayout;
 import com.google.maps.android.clustering.*;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.Set;
 
 import butterknife.ButterKnife;
 import butterknife.InjectView;
@@ -112,6 +124,7 @@ public class GoogleMapFragment extends GeoViewFragmentBase implements
     Polygon mHighlightedPolygon;
     Polyline mHighlightedPolyline;
     Marker mHighlightedMarker;
+
 
     @InjectView(R.id.map) MapView mMapView;
     @InjectView(R.id.sliding_layout) SlidingUpPanelLayout mPanel;
@@ -175,18 +188,29 @@ public class GoogleMapFragment extends GeoViewFragmentBase implements
 
     @OnClick(R.id.showLayersIV)
     public void showLayersDrawer(){
-        ((MainActivity)getActivity()).openLayersDrawer();
+        if(mPanelManager.getIsOpen()){
+            mPanelManager.hide();
+        } else {
+            ((MainActivity) getActivity()).openLayersDrawer();
+        }
     }
 
     @OnClick(R.id.showNavIV1)
     public void showNavigation(){
-        ((MainActivity)getActivity()).openNavigationDrawer();
+        if(mPanelManager.getIsOpen()){
+            mPanelManager.hide();
+        } else {
+            ((MainActivity) getActivity()).openNavigationDrawer();
+        }
     }
 
     @OnClick(R.id.showNavIV2)
     public void showNavigation1(){
-
-        ((MainActivity)getActivity()).openNavigationDrawer();
+        if(mPanelManager.getIsOpen()){
+            mPanelManager.hide();
+        } else {
+            ((MainActivity) getActivity()).openNavigationDrawer();
+        }
     }
 
     @OnClick(R.id.fab_fullscreen_close)
@@ -367,8 +391,10 @@ public class GoogleMapFragment extends GeoViewFragmentBase implements
 
         Iterable<Polyline> lines = mLayerManager.getVisiblePolylines();
 
+        double tolerance = calculateTolerance(mMap.getCameraPosition().zoom);
+
         for (Polyline line : lines) {
-            if (PolyUtil.isLocationOnPath(position, line.getPoints(), false, 200.0)) { //idea: reset tolerance by zoom level
+            if (PolyUtil.isLocationOnPath(position, line.getPoints(), false, tolerance)) { //idea: reset tolerance by zoom level
                 getFeatureWindow(line.getId(), LayerManager.LINE);
 
                 highlight(line);
@@ -378,6 +404,30 @@ public class GoogleMapFragment extends GeoViewFragmentBase implements
         }
 
         return foundMatch;
+    }
+
+    private double calculateTolerance(float zoom) {
+        //Log.d(TAG, "Current: " + zoom);
+        //Log.d(TAG, "Max: " + mMap.getMaxZoomLevel());
+        //Log.d(TAG, "Min: " + mMap.getMinZoomLevel());
+
+        if(zoom >= 12){
+            return 450.0;
+        }
+
+        if(zoom > 10 && zoom < 12){
+            return 750.0;
+        }
+
+        if(zoom > 8 && zoom <= 10){
+            return 1300.0;
+        }
+
+        if(zoom > 5 && zoom <= 8){
+            return 1800.0;
+        }
+
+        return 3300.0;
     }
 
     protected void  highlightPolygon(LatLng position){
@@ -468,11 +518,11 @@ public class GoogleMapFragment extends GeoViewFragmentBase implements
 
                         clearHighlights();
 
-                        Boolean highlightFound = false;
+                        Boolean highlightFound;
 
                         highlightFound = highlightLine(latLng);
 
-                        if(highlightFound == false) {
+                        if (highlightFound == false) {
                             highlightPolygon(latLng);
                         }
                     }
@@ -555,6 +605,13 @@ public class GoogleMapFragment extends GeoViewFragmentBase implements
         mLayerManager.clearVisibleLayers();
         mMapView.onPause();
         mLocationClient.disconnect();
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (resultCode == Activity.RESULT_OK) {
+            new GetLibraryImportFolderTask(requestCode, resultCode, data).execute();
+        }
     }
 
     //endregion
@@ -706,5 +763,71 @@ public class GoogleMapFragment extends GeoViewFragmentBase implements
         mLoadingMessage.setText("");
         mLoadingBar.setVisibility(View.GONE);
     }
+
+    protected class GetLibraryImportFolderTask extends AsyncTask<Void, Void, Folder> {
+
+        int RequestCode;
+        int ResultCode;
+        Intent Data;
+        TreeService mTreeService;
+        DataHelper mHelper;
+        IDocumentTreeService mUploader;
+
+        public GetLibraryImportFolderTask(int requestCode, int resultCode, Intent data){
+            RequestCode = requestCode;
+            ResultCode = resultCode;
+            Data = data;
+            mTreeService = application.getRestAdapter().create(TreeService.class);
+            mHelper = new DataHelper();
+        }
+
+        @Override
+        protected Folder doInBackground(Void... params) {
+            List<Folder> documentsTree = mTreeService.getDocuments();
+
+            Folder rootFolder = documentsTree.get(0);
+
+            List<Folder> allFolders = mHelper.getFoldersRecursively(rootFolder, rootFolder.getParent());
+
+            Folder result = null;
+
+            for(Folder folder : allFolders){
+                if(folder.getIsImportFolder()){
+                    result = folder;
+                }
+            }
+
+            return result;
+        }
+
+        @Override
+        protected void onPostExecute(Folder importFolder) {
+            mUploader = application.getTreeServiceComponent().provideDocumentTreeService();
+
+            int layerId = application.getFeatureWindowLayerId();
+            String featureId = application.getFeatureWindowFeatureId();
+
+            ISendFileCallback sendFileCallback = new DocumentSentCallback(layerId, featureId);
+
+            if (RequestCode == MainActivity.MediaConstants.PICK_FILE_REQUEST_FEATUREWINDOW) {
+
+                mUploader.sendDocument(importFolder, Data.getData(), sendFileCallback);
+
+            }
+
+            if(RequestCode == MainActivity.MediaConstants.PICK_IMAGE_REQUEST_FEATUREWINDOW){
+
+                mUploader.sendPickedImage(importFolder, Data.getData(), sendFileCallback);
+
+            }
+
+            if(RequestCode == MainActivity.MediaConstants.TAKE_IMAGE_REQUEST_FEATUREWINDOW) {
+
+                mUploader.sendTakenImage(importFolder, application.mMediaUri, sendFileCallback);
+
+            }
+        }
+    }
+
 
 }

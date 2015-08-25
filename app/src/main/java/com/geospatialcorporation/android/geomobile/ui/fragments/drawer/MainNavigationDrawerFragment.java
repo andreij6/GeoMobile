@@ -148,7 +148,7 @@ public class MainNavigationDrawerFragment extends Fragment {
 
         mActionBar = actionBar;
         Toolbar toolbar = new Toolbar(getActivity());
-        mActionBar.setHomeAsUpIndicator(R.drawable.ic_logo_g_orange);
+        mActionBar.setHomeAsUpIndicator(R.drawable.ic_logo_g_white);
         mActionBar.setDisplayHomeAsUpEnabled(true);
 
         // ActionBarDrawerToggle ties together the the proper interactions

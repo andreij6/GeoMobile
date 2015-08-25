@@ -25,16 +25,27 @@ public class Subscription {
     public void setType(int type) {
         Type = type;
     }
+
+    public String getCreated() {
+        return Created;
+    }
+
+    public void setCreated(String created) {
+        Created = created;
+    }
+
     //endregion
 
     String Name;
     int Id;
     int Type;
+    String Created;
 
-    public Subscription(String name, int id, int type) {
+    public Subscription(String name, int id, int type, String created) {
         Name = name;
         Id = id;
         Type = type;
+        Created = created;
     }
 
 }
