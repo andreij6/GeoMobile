@@ -209,8 +209,6 @@ public class LoginActivity extends GoogleApiActivity implements LoaderCallbacks<
         }
 
         mAuthentication.emailLoginAttempt(email, password);
-
-        Log.d(TAG, "Completed validateLogin");
     }
 
     /**

@@ -31,13 +31,15 @@ public class AttributeValueVM {
         Integer mColumnId;
         String mFeatureId;
         Integer mDataType;
+        Boolean mEditable;
 
-        public Columns(String key, String value, Integer columnId, String featureId, Integer dataType) {
+        public Columns(String key, String value, Integer columnId, String featureId, Integer dataType, Boolean editable) {
             mKey = key;
             mValue = value;
             mColumnId = columnId;
             mFeatureId = featureId;
             mDataType = dataType;
+            mEditable = editable;
         }
 
         public String getKey() {
@@ -78,6 +80,10 @@ public class AttributeValueVM {
 
         public Integer getDataType(){
             return mDataType;
+        }
+
+        public boolean isEditable() {
+            return mEditable;
         }
     }
 }

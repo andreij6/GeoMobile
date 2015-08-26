@@ -7,13 +7,18 @@ import com.geospatialcorporation.android.geomobile.ui.fragments.drawer.MainNavig
 public class MainMenuHelper implements IMainMenuHelper {
 
     MainNavigationDrawerFragment mNavigation;
+    Boolean isAdmin;
 
     public MainMenuHelper(){
+
         mNavigation = application.getMainActivity().getMainMenuFragment();
+        isAdmin = application.getIsAdminUser();
     }
 
     @Override
     public void syncMenu(Integer relatedMenuItem) {
-        mNavigation.selectItem(relatedMenuItem);
+        if(isAdmin) {
+            mNavigation.selectItem(relatedMenuItem);
+        }
     }
 }

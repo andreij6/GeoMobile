@@ -104,4 +104,12 @@ public class LegendLayer {
     public void setBitmap(BitmapDescriptor bitmap) {
         mBitmap = bitmap;
     }
+
+    public boolean isCheckBoxEnabled() {
+        if(mCheckBox != null){
+            return mCheckBox.isEnabled();
+        } else {
+            return true;
+        }
+    }
 }

@@ -44,7 +44,6 @@ public class SublayersTab extends GeoDetailsTabBase<Layer> implements IContentRe
     @InjectView(R.id.addSublayers) Button mAddSublayerBtn;
     LayoutInflater mInflater;
     ISublayerDialog mDialog;
-    //@InjectView(R.id.sliding_layout) SlidingUpPanelLayout mPanel;
 
     @OnClick(R.id.addSublayers)
     public void addSublayer(){
@@ -66,11 +65,6 @@ public class SublayersTab extends GeoDetailsTabBase<Layer> implements IContentRe
         mAnalytics.trackScreen(new GoogleAnalyticEvent().SublayersTab());
 
         mAddSublayerBtn.setVisibility(View.GONE);
-
-        //application.setSublayerFragmentPanel(mPanel);
-        //mPanel.setBackgroundColor(getActivity().getResources().getColor(R.color.primary_light));
-        //ISlidingPanelManager manager = new PanelManager(GeoPanel.SUBLAYER);
-        //manager.setup();
 
         setIntentString(Layer.LAYER_INTENT);
         handleArgs();
@@ -102,7 +96,8 @@ public class SublayersTab extends GeoDetailsTabBase<Layer> implements IContentRe
 
         TableFactory factory = new TableFactory(getActivity(), mSublayerDataView, mInflater);
 
-        factory.addHeaders(R.layout.template_table_header, "Visible", "Name", "Edit");
+        //factory.addHeaders(R.layout.template_table_header, "Visible", "Name", "Edit");
+        factory.addHeaders(R.layout.template_table_header, "Visible", "Name");
 
         mSublayerDataView = factory.build();
 
@@ -119,19 +114,19 @@ public class SublayersTab extends GeoDetailsTabBase<Layer> implements IContentRe
                 TextView columnName = (TextView) mInflater.inflate(R.layout.template_table_column, null);
                 columnName.setText(layer.getName());
 
-                ImageView edit = (ImageView) mInflater.inflate(R.layout.template_table_column_image, null);
-                edit.setImageDrawable(getActivity().getDrawable(R.drawable.ic_rename_box_black_18dp));
+                //ImageView edit = (ImageView) mInflater.inflate(R.layout.template_table_column_image, null);
+                //edit.setImageDrawable(getActivity().getDrawable(R.drawable.ic_rename_box_black_18dp));
 
-                edit.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        mDialog.modify(layer, getActivity(), getFragmentManager());
-                    }
-                });
+                //edit.setOnClickListener(new View.OnClickListener() {
+                //    @Override
+                //    public void onClick(View v) {
+                //        mDialog.modify(layer, getActivity(), getFragmentManager());
+                //    }
+                //});
 
                 row.addView(visible);
                 row.addView(columnName);
-                row.addView(edit);
+                //row.addView(edit);
 
                 mSublayerDataView.addView(row);
             }

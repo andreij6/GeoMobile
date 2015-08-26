@@ -39,6 +39,16 @@ public class DataHelper {
         return result;
     }
 
+    public static String trimString(String value, int maxCharacters){
+        if(value != null) {
+            if (value.length() > maxCharacters) {
+                return value.substring(0, (maxCharacters - 3)) + "...";
+            }
+        }
+
+        return value;
+    }
+
     protected void setParentFolder(Folder folder, Folder parentFolder){
         if(parentFolder != null) {
             folder.setParent(parentFolder);

@@ -11,6 +11,7 @@ import android.widget.TabHost;
 import android.widget.TextView;
 
 import com.geospatialcorporation.android.geomobile.R;
+import com.geospatialcorporation.android.geomobile.library.helpers.DataHelper;
 import com.geospatialcorporation.android.geomobile.models.Layers.Layer;
 import com.geospatialcorporation.android.geomobile.models.OptionSlideController.IOptionsSlideController;
 import com.geospatialcorporation.android.geomobile.ui.MainActivity;
@@ -101,7 +102,8 @@ public class LayerDetailFragment extends ItemDetailFragment<Layer>
         mEntity = args.getParcelable(Layer.LAYER_INTENT);
 
         if(mEntity != null){
-            mTitle.setText(mEntity.getName());
+
+            mTitle.setText(DataHelper.trimString(mEntity.getName(), 15));
         }
     }
 
@@ -125,4 +127,6 @@ public class LayerDetailFragment extends ItemDetailFragment<Layer>
     public void setSlideView() {
 
     }
+
+
 }

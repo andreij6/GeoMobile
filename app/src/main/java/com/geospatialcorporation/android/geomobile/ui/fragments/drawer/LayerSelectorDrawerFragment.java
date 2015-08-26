@@ -79,8 +79,6 @@ public class LayerSelectorDrawerFragment extends Fragment implements IPostExecut
         selectItem(mCurrentSelectedPosition);
     }
 
-
-
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
@@ -102,8 +100,7 @@ public class LayerSelectorDrawerFragment extends Fragment implements IPostExecut
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         mRootView = inflater.inflate(R.layout.fragment_right_navigation_drawer, container, false);
 
         return mRootView;
@@ -166,8 +163,6 @@ public class LayerSelectorDrawerFragment extends Fragment implements IPostExecut
             }
         };
 
-        // If the user hasn't 'learned' about the drawer, open it to introduce them to the drawer,
-        // per the navigation drawer design guidelines.
         if (!mUserLearnedDrawer && !mFromSavedInstanceState) {
             //mDrawerLayout.openDrawer(mFragmentContainerView);
         }

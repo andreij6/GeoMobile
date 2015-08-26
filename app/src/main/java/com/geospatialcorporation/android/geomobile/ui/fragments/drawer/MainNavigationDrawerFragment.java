@@ -119,6 +119,7 @@ public class MainNavigationDrawerFragment extends Fragment {
         }
         View header = inflater.inflate(R.layout.header_main_navigation, container, false);
         TextView clientName = (TextView)header.findViewById(R.id.subscriptionName);
+
         clientName.setText(application.getGeoSubscription().getName());
 
         mDrawerListView.addHeaderView(header);
@@ -217,6 +218,7 @@ public class MainNavigationDrawerFragment extends Fragment {
 
     public void selectItem(int position) {
         mCurrentSelectedPosition = position;
+
         if (mDrawerListView != null) {
             mDrawerListView.setItemChecked(position, true);
         }

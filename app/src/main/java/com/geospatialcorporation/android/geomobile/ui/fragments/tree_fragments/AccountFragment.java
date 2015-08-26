@@ -12,6 +12,7 @@ import com.geospatialcorporation.android.geomobile.R;
 import com.geospatialcorporation.android.geomobile.application;
 import com.geospatialcorporation.android.geomobile.library.DI.Tasks.Interfaces.IGetProfileTask;
 import com.geospatialcorporation.android.geomobile.library.DI.Tasks.models.ProfileTaskParams;
+import com.geospatialcorporation.android.geomobile.library.helpers.ProgressDialogHelper;
 import com.geospatialcorporation.android.geomobile.models.UserAccount;
 import com.geospatialcorporation.android.geomobile.ui.Interfaces.IPostExecuter;
 import com.geospatialcorporation.android.geomobile.ui.MainActivity;
@@ -28,6 +29,7 @@ public class AccountFragment extends GeoViewFragmentBase implements IPostExecute
 
     //region Properties
     IGetProfileTask mProfileTask;
+    ProgressDialogHelper mProgressDialogHelper;
     //endregion
 
     //region View Setup
@@ -65,16 +67,19 @@ public class AccountFragment extends GeoViewFragmentBase implements IPostExecute
         SetTitle(R.string.account_title);
 
         mProfileTask = application.getTasksComponent().provideProfileTask();
+        mProgressDialogHelper = new ProgressDialogHelper(getActivity());
+
+        mProgressDialogHelper.showProgressDialog();
         mProfileTask.run(new ProfileTaskParams(this));
 
         mNavigationHelper.syncMenu(3);
-
 
         return mView;
     }
 
     @Override
     public void onPostExecute(UserAccount model) {
+        mProgressDialogHelper.hideProgressDialog();
         FirstName.setText(model.getFirstName());
         LastName.setText(model.getLastName());
         Email.setText(model.getEmail());

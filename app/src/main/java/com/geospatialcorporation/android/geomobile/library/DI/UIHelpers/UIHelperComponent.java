@@ -8,6 +8,7 @@ import com.geospatialcorporation.android.geomobile.library.DI.UIHelpers.Interfac
 import com.geospatialcorporation.android.geomobile.library.DI.UIHelpers.Interfaces.DialogHelpers.ISublayerDialog;
 import com.geospatialcorporation.android.geomobile.library.DI.UIHelpers.Interfaces.ILayoutRefresher;
 import com.geospatialcorporation.android.geomobile.library.DI.UIHelpers.Interfaces.IMainMenuHelper;
+import com.geospatialcorporation.android.geomobile.library.DI.UIHelpers.Interfaces.IMapStatusBarManager;
 
 import javax.inject.Singleton;
 
@@ -32,4 +33,6 @@ public interface UIHelperComponent {
     IAttributeDialog provideAttributeDialog();
 
     IMainMenuHelper provideMainMenuHelper();
+
+    IMapStatusBarManager provideMapStatusBarManager();
 }

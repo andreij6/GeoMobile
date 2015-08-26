@@ -8,6 +8,7 @@ import android.widget.Toast;
 import com.geospatialcorporation.android.geomobile.application;
 import com.geospatialcorporation.android.geomobile.library.helpers.ProgressDialogHelper;
 import com.geospatialcorporation.android.geomobile.library.rest.LoginService;
+import com.geospatialcorporation.android.geomobile.models.Subscription;
 import com.geospatialcorporation.android.geomobile.ui.LoginActivity;
 import com.geospatialcorporation.android.geomobile.ui.SubscriptionSelectorActivity;
 import com.geospatialcorporation.android.geomobile.ui.GoogleApiActivity;
@@ -104,7 +105,9 @@ public class AuthTokenRetriever {
             @Override
             protected Object doInBackground(Object[] params) {
                 try {
-                    mLoginService.getCurrentClient();
+                    Subscription subscription = mLoginService.getCurrentClient();
+
+                    application.setGeoSubscription(subscription);
 
                     mContext.startActivity(new Intent(mContext, MainActivity.class));
 

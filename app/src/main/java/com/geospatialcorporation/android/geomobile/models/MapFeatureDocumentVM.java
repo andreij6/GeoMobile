@@ -29,6 +29,14 @@ public class MapFeatureDocumentVM {
         return mName;
     }
 
+    public String getTrimmedName(){
+        if(mName.length() >= 15){
+            return mName.substring(0, 11) + "...";
+        }
+
+        return mName;
+    }
+
     public String getFormattedSize() {
         return FileSizeFormatter.format(getSize() + "");
     }

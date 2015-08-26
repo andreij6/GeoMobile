@@ -14,6 +14,7 @@ import com.geospatialcorporation.android.geomobile.application;
 import com.geospatialcorporation.android.geomobile.library.DI.Analytics.Models.GoogleAnalyticEvent;
 import com.geospatialcorporation.android.geomobile.library.DI.FeatureWindow.models.FeatureWindowData;
 import com.geospatialcorporation.android.geomobile.library.DI.UIHelpers.Interfaces.DialogHelpers.IAttributeDialog;
+import com.geospatialcorporation.android.geomobile.library.helpers.DataHelper;
 import com.geospatialcorporation.android.geomobile.library.helpers.GeoDialogHelper;
 import com.geospatialcorporation.android.geomobile.models.AttributeValueVM;
 import com.geospatialcorporation.android.geomobile.models.Layers.AttributeValue;
@@ -67,10 +68,13 @@ public class FeatureAttributesTab extends FeatureTabBase {
             TableRow row = new TableRow(mContext);
 
             TextView columnName = (TextView)mInflater.inflate(R.layout.template_feature_window_column_tv, null);
-            columnName.setText(keyValue.getKey() + ":");
+            String cName = DataHelper.trimString(keyValue.getKey(), 20);
+            columnName.setText(cName + " :");
 
             TextView columnValue = (TextView)mInflater.inflate(R.layout.template_feature_window_column_tv, null);
-            columnValue.setText(keyValue.getValue());
+            String valueString = DataHelper.trimString(keyValue.getValue(), 20);
+
+            columnValue.setText(valueString);
 
             row.addView(columnName);
             row.addView(columnValue);
@@ -92,7 +96,11 @@ public class FeatureAttributesTab extends FeatureTabBase {
         List<AttributeValueVM.Columns> columnValues = new ArrayList<>(columns.size());
 
         for(int c = 0; c < columns.size(); c++){
-            columnValues.add(new AttributeValueVM.Columns(columns.get(c).getName(), attributes.get(c), columns.get(c).getId(), FeatureId, columns.get(c).getDataType()));
+            if(columns.get(c).getName().equals("Id")) {
+                columnValues.add(new AttributeValueVM.Columns(columns.get(c).getName(), attributes.get(c), columns.get(c).getId(), FeatureId, columns.get(c).getDataType(), false));
+            } else {
+                columnValues.add(new AttributeValueVM.Columns(columns.get(c).getName(), attributes.get(c), columns.get(c).getId(), FeatureId, columns.get(c).getDataType(), true));
+            }
         }
 
         return new AttributeValueVM(mResponse.getId(), columnValues);

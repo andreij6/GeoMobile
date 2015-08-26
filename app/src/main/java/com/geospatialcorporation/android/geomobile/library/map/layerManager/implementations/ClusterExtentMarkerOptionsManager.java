@@ -5,6 +5,7 @@ import android.util.Log;
 import android.widget.Toast;
 
 import com.geospatialcorporation.android.geomobile.application;
+import com.geospatialcorporation.android.geomobile.library.DI.UIHelpers.Interfaces.IMapStatusBarManager;
 import com.geospatialcorporation.android.geomobile.library.map.Models.GeoClusterMarker;
 import com.geospatialcorporation.android.geomobile.library.map.Models.GeoNonHierarchicalDistanceBasedAlgorithm;
 import com.geospatialcorporation.android.geomobile.library.map.Models.IconRenderer;
@@ -105,6 +106,7 @@ public class ClusterExtentMarkerOptionsManager extends OptionsManagerBase<Marker
 
                 if(entriesWithinExtent.size() > max){
                     mShowZoomMessage = true;
+
                 }
 
                 int count = 0;

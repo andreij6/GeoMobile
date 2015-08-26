@@ -277,5 +277,10 @@
     <string name="date_hint">ex. 01/14/2014</string>
     <string name="datetime_hint">ex. 01/31/2017 10:00PM</string>
     <string name="all_subscriptions_section">All Subscriptions</string>
+    <string name="refreshing_feature_window">Refreshing Feature Window</string>
+    <string name="loading_feature_window">Loading Feature Window</string>
+    <string name="add_existing">Add Existing</string>
+    <string name="add_new">Add New</string>
+    <string name="saving_attribute_updates">Saving Attribute Updates</string>
 
 </resources>

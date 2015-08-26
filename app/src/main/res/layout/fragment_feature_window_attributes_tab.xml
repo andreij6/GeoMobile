@@ -15,7 +15,8 @@
     <ScrollView android:layout_width="match_parent"
                 android:fadeScrollbars="false"
                 android:layout_height="150dp"
-                android:layout_below="@id/edit_attributes">
+                android:layout_below="@id/edit_attributes"
+                android:id="@+id/scrollView3">
 
         <TableLayout
             android:layout_width="match_parent"
@@ -25,6 +26,5 @@
             android:id="@+id/featureWindowAttributesTable">
         </TableLayout>
     </ScrollView>
-
 
 </RelativeLayout>

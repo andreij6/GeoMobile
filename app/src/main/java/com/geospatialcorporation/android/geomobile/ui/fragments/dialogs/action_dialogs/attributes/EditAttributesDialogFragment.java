@@ -21,6 +21,7 @@ import com.geospatialcorporation.android.geomobile.R;
 import com.geospatialcorporation.android.geomobile.application;
 import com.geospatialcorporation.android.geomobile.library.DI.Analytics.Models.GoogleAnalyticEvent;
 import com.geospatialcorporation.android.geomobile.library.DI.TreeServices.Interfaces.ILayerTreeService;
+import com.geospatialcorporation.android.geomobile.library.DI.UIHelpers.Interfaces.IMapStatusBarManager;
 import com.geospatialcorporation.android.geomobile.library.constants.ColumnDataTypes;
 import com.geospatialcorporation.android.geomobile.models.AttributeValueVM;
 import com.geospatialcorporation.android.geomobile.models.Layers.EditLayerAttributesRequest;
@@ -36,6 +37,7 @@ public class EditAttributesDialogFragment extends AttributesActionDialogBase<Att
     HashMap<Integer, PreviousCurrent> mStartingValues;
     HashMap<Integer, String> mRequestValues;
     ILayerTreeService mService;
+    IMapStatusBarManager mStatusBarManager;
 
     @NonNull
     @Override
@@ -45,6 +47,7 @@ public class EditAttributesDialogFragment extends AttributesActionDialogBase<Att
 
         mService = application.getTreeServiceComponent().provideLayerTreeService();
         mAnalytics = application.getAnalyticsComponent().provideGeoAnalytics();
+        mStatusBarManager = application.getUIHelperComponent().provideMapStatusBarManager();
 
         mTableLayout = (TableLayout)v.findViewById(R.id.editAttributes);
 
@@ -64,6 +67,8 @@ public class EditAttributesDialogFragment extends AttributesActionDialogBase<Att
                                     new EditLayerAttributesRequest.RequestFeatures(mData.getColumns().get(0).getFeatureId(), mRequestValues);
 
                             EditLayerAttributesRequest request = new EditLayerAttributesRequest(Arrays.asList(features));
+
+                            mStatusBarManager.setMessage(mContext.getString(R.string.saving_attribute_updates));
 
                             mService.editAttributeValue(mData.getLayerId(), request);
                         } else {
@@ -121,6 +126,8 @@ public class EditAttributesDialogFragment extends AttributesActionDialogBase<Att
             EditText columnValue = (EditText)mInflater.inflate(R.layout.template_feature_window_column_et, null);
             columnValue.setText(keyValue.getValue());
             mStartingValues.put(keyValue.getColumnId(), new PreviousCurrent(keyValue.getValue(), columnValue));
+            columnValue.setEnabled(keyValue.isEditable());
+
 
             setEditTextType(keyValue, columnValue);
 

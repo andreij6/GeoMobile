@@ -124,9 +124,10 @@ public class MapFeatureDocumentDialogFragment extends GeoDialogFragmentBase impl
         mGetDocumentsTask.getAllDocuments(new GetAllDocumentsParam(this, mDocuments));
 
         AlertDialog.Builder builder = getDialogBuilder();
-
         View v = getDialogView(R.layout.dialog_mapfeature_document);
         ButterKnife.inject(this, v);
+
+        preloadSpinner();
 
         builder.setTitle(R.string.add_mapfeature_document)
                 .setView(v)
@@ -142,6 +143,17 @@ public class MapFeatureDocumentDialogFragment extends GeoDialogFragmentBase impl
                 });
 
         return builder.create();
+    }
+
+    private void preloadSpinner() {
+        ArrayList<String> list = new ArrayList<>();
+        list.add("Loading Documents");
+
+        ArrayAdapter<String> dataAdapter = new ArrayAdapter<>(mContext, android.R.layout.simple_spinner_item, list);
+
+        dataAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+
+        mDocumentSpinner.setAdapter(dataAdapter);
     }
 
     public void addListenerOnSpinnerItemSelection() {
@@ -168,8 +180,6 @@ public class MapFeatureDocumentDialogFragment extends GeoDialogFragmentBase impl
 
         mDocumentSpinner.setAdapter(dataAdapter);
     }
-
-
 
     @Override
     public void setSelected(Document selected) {

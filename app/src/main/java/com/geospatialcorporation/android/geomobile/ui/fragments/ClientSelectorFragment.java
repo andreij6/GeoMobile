@@ -15,6 +15,7 @@ import com.geospatialcorporation.android.geomobile.application;
 import com.geospatialcorporation.android.geomobile.library.DI.Tasks.Interfaces.IGetClientsTask;
 import com.geospatialcorporation.android.geomobile.library.DI.Tasks.models.GetClientsTaskParams;
 import com.geospatialcorporation.android.geomobile.library.DI.UIHelpers.Interfaces.ILayoutRefresher;
+import com.geospatialcorporation.android.geomobile.library.helpers.ProgressDialogHelper;
 import com.geospatialcorporation.android.geomobile.ui.Interfaces.IContentRefresher;
 import com.geospatialcorporation.android.geomobile.models.Subscription;
 import com.geospatialcorporation.android.geomobile.ui.Interfaces.IPostExecuter;
@@ -33,6 +34,7 @@ public class ClientSelectorFragment extends Fragment
 
     int mClientTypeCode;
     Context mContext;
+    ProgressDialogHelper mProgressHelper;
 
     public ClientSelectorFragment initialize(int clientTypeCode, Context context){
         this.mClientTypeCode = clientTypeCode;
@@ -55,6 +57,7 @@ public class ClientSelectorFragment extends Fragment
 
         mDataSet = new ArrayList<>();
         ILayoutRefresher refresher = application.getUIHelperComponent().provideLayoutRefresher();
+        mProgressHelper = new ProgressDialogHelper(getActivity());
 
         mSwipeRefreshLayout.setOnRefreshListener(refresher.build(mSwipeRefreshLayout, this));
         mSwipeRefreshLayout.setProgressBackgroundColorSchemeColor(mContext.getResources().getColor(R.color.accent));
@@ -70,6 +73,7 @@ public class ClientSelectorFragment extends Fragment
 
     @Override
     public void refresh() {
+        mProgressHelper.showProgressDialog();
         mTask = application.getTasksComponent().provideGetClientsTask();
         mTask.getClients(new GetClientsTaskParams(mDataSet, mClientTypeCode, getActivity(), this));
     }
@@ -79,5 +83,7 @@ public class ClientSelectorFragment extends Fragment
         ClientAdapter adapter = new ClientAdapter(mContext, model);
 
         mRecyclerView.setAdapter(adapter);
+
+        mProgressHelper.hideProgressDialog();
     }
 }

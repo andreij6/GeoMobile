@@ -79,7 +79,7 @@ public class FeatureDocumentsTab extends FeatureTabBase {
             TableRow row = new TableRow(mContext);
 
             TextView name = (TextView)mInflater.inflate(R.layout.template_feature_window_column_tv, null);
-            name.setText(doc.getName());
+            name.setText(doc.getTrimmedName());
 
             TextView fileSize = (TextView)mInflater.inflate(R.layout.template_feature_window_column_tv, null);
             fileSize.setText(doc.getFormattedSize());
@@ -112,6 +112,7 @@ public class FeatureDocumentsTab extends FeatureTabBase {
             row.addView(remove);
 
             mTableLayout.addView(row);
+            mTableLayout.setStretchAllColumns(true);
         }
 
         mTableLayout.setStretchAllColumns(true);

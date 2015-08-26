@@ -74,14 +74,7 @@ public class GeoMapper implements IMapFeaturesTask, IPostExecuter<Integer> {
 
     @Override
     public void onPostExecute(Integer integer) {
-        //
-
-        //mLlayer.setLegendIcon(mMapper.getActiveDrawable());
-        //mLlayer.setImageSrc();
-
         mLayerManager.showLayer(mLlayer);
-
-        //mLlayer.getProgressBar().setVisibility(View.GONE);
         mLlayer.getCheckBox().setEnabled(true);
     }
 
@@ -96,22 +89,12 @@ public class GeoMapper implements IMapFeaturesTask, IPostExecuter<Integer> {
 
         //region properties
         List<MapQueryResponse> mResponses;
-        Integer mProgressStatus;
-        //ProgressBar mProgressBar;
-        CheckBox mCheckBox;
         //endregion
 
         @Override
-        protected void onPreExecute() {
-            //mProgressBar = mLlayer.getProgressBar();
-            mProgressStatus = 0;
-            //mProgressBar.setProgress(mProgressStatus);
-            mCheckBox = mLlayer.getCheckBox();
-        }
-
-        @Override
         protected Integer doInBackground(Void... params) {
-            int result = 1;
+            int result;
+
             try {
                 if(mResponses != null && mResponses.size() > 0){
 
@@ -149,11 +132,6 @@ public class GeoMapper implements IMapFeaturesTask, IPostExecuter<Integer> {
             }
 
             return result;
-        }
-
-        @Override
-        protected void onProgressUpdate(Integer... progress) {
-            //mProgressBar.setProgress(progress[0]);
         }
     }
 }

@@ -26,6 +26,7 @@ import com.geospatialcorporation.android.geomobile.library.DI.UIHelpers.Interfac
 import com.geospatialcorporation.android.geomobile.library.DI.UIHelpers.Interfaces.ILayoutRefresher;
 import com.geospatialcorporation.android.geomobile.library.constants.GeoPanel;
 import com.geospatialcorporation.android.geomobile.library.helpers.DataHelper;
+import com.geospatialcorporation.android.geomobile.library.helpers.ProgressDialogHelper;
 import com.geospatialcorporation.android.geomobile.library.panelmanager.PanelManager;
 import com.geospatialcorporation.android.geomobile.library.sectionbuilders.implementations.LibraryTreeSectionBuilder;
 import com.geospatialcorporation.android.geomobile.ui.Interfaces.IContentRefresher;
@@ -56,6 +57,7 @@ public class LibraryFragment extends GeoViewFragmentBase
     IDocumentTreeService mUploader;
     DataHelper mHelper;
     IGeneralDialog mDialog;
+    ProgressDialogHelper mProgressHelper;
     //endregion
 
     @InjectView(R.id.libraryitem_recyclerView) RecyclerView mRecyclerView;
@@ -129,6 +131,7 @@ public class LibraryFragment extends GeoViewFragmentBase
         sendScreenName();
 
         ILayoutRefresher refresher = application.getUIHelperComponent().provideLayoutRefresher();
+        mProgressHelper = new ProgressDialogHelper(getActivity());
 
         application.setLibraryFragmentPanel(mPanel);
 
@@ -139,6 +142,7 @@ public class LibraryFragment extends GeoViewFragmentBase
         mSwipeRefreshLayout.setOnRefreshListener(refresher.build(mSwipeRefreshLayout, this));
         mSwipeRefreshLayout.setProgressBackgroundColorSchemeColor(mContext.getResources().getColor(R.color.accent));
 
+        mProgressHelper.showProgressDialog();
         mDocumentsTask = application.getTasksComponent().provideGetDocumentsTask();
         handleArguments();
 
@@ -245,6 +249,8 @@ public class LibraryFragment extends GeoViewFragmentBase
         new LibraryTreeSectionBuilder(mContext, getFragmentManager(), mCurrentFolder.getParent(), mPanelManager)
                 .BuildAdapter(data,  mCurrentFolder.getFolders().size())
                 .setRecycler(mRecyclerView);
+
+        mProgressHelper.hideProgressDialog();
     }
 
     protected View.OnClickListener showNavigation = new View.OnClickListener() {

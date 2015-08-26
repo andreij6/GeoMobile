@@ -6,13 +6,11 @@ import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
-import android.support.v4.widget.DrawerLayout;
 import android.util.TypedValue;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.CheckBox;
 import android.widget.ImageView;
-import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -22,9 +20,9 @@ import com.geospatialcorporation.android.geomobile.library.DI.Analytics.Models.G
 import com.geospatialcorporation.android.geomobile.library.DI.Map.Interfaces.ILayerManager;
 import com.geospatialcorporation.android.geomobile.library.DI.SharedPreferences.Implementations.AppStateSharedPrefs;
 import com.geospatialcorporation.android.geomobile.library.DI.Tasks.Interfaces.ILayerStyleTask;
+import com.geospatialcorporation.android.geomobile.library.DI.UIHelpers.Interfaces.IMapStatusBarManager;
 import com.geospatialcorporation.android.geomobile.library.constants.GeometryTypeCodes;
 import com.geospatialcorporation.android.geomobile.library.map.SendMapQueryRequestCallback;
-import com.geospatialcorporation.android.geomobile.library.services.QueryRestService;
 import com.geospatialcorporation.android.geomobile.models.Folders.Folder;
 import com.geospatialcorporation.android.geomobile.models.Layers.Layer;
 import com.geospatialcorporation.android.geomobile.models.Layers.LegendLayer;
@@ -54,6 +52,7 @@ public class LegendLayerAdapter extends GeoRecyclerAdapterBase<LegendLayerAdapte
     AppStateSharedPrefs mStateSharedPrefs;
     ILayerManager mLayerManager;
     ILayerStyleTask mLayerStyleTask;
+    IMapStatusBarManager mMapStatusBarManager;
 
     public LegendLayerAdapter(Context context, List<LegendLayer> layers) {
         super(context, layers, R.layout.recycler_legend_layers, Holder.class);
@@ -61,6 +60,7 @@ public class LegendLayerAdapter extends GeoRecyclerAdapterBase<LegendLayerAdapte
         mStateSharedPrefs = application.getGeoSharedPrefsComponent().provideAppStateSharedPrefs();
         mLayerManager = application.getMapComponent().provideLayerManager();
         mLayerStyleTask = application.getTasksComponent().provideLayerStyleTask();
+        mMapStatusBarManager = application.getUIHelperComponent().provideMapStatusBarManager();
     }
 
     @Override
@@ -94,13 +94,11 @@ public class LegendLayerAdapter extends GeoRecyclerAdapterBase<LegendLayerAdapte
                 mLayer = llayer.getLayer();
                 mLegendLayer = llayer;
 
-                //mProgressBar.setVisibility(View.GONE);
                 isVisibleCB.setVisibility(View.VISIBLE);
                 gotoSublayer.setVisibility(View.VISIBLE);
                 geomIV.setVisibility(View.VISIBLE);
                 gotoSublayer.setBackgroundColor(mContext.getResources().getColor(R.color.accent));
                 gotoSublayer.setImageDrawable(mContext.getDrawable(R.drawable.ic_information_outline_white_18dp));
-
 
                 mLayerName.setTextAppearance(mContext, android.R.style.TextAppearance_DeviceDefault_Medium);
                 mLayerName.setTextColor(mContext.getResources().getColor(R.color.white));
@@ -119,6 +117,8 @@ public class LegendLayerAdapter extends GeoRecyclerAdapterBase<LegendLayerAdapte
                 }
 
                 isVisibleCB.setChecked(mLayer.getIsShowing());
+                isVisibleCB.setEnabled(true);
+
                 isVisibleCB.setOnClickListener(ToggleShowLayers);
                 gotoSublayer.setOnClickListener(GoToSublayer);
 
@@ -172,9 +172,7 @@ public class LegendLayerAdapter extends GeoRecyclerAdapterBase<LegendLayerAdapte
                     //set Layer Loading
                     Fragment contentFrag = application.getMainActivity().getContentFragment();
 
-                    if(contentFrag instanceof GoogleMapFragment){
-                        ((GoogleMapFragment) contentFrag).showLoadingMessage("Loading " + mLayer.getName());
-                    }
+                    mMapStatusBarManager.setMessage("Loading " +  mLayer.getName());
 
                     addLayerToMap();
 
@@ -308,7 +306,6 @@ public class LegendLayerAdapter extends GeoRecyclerAdapterBase<LegendLayerAdapte
             layers.add(single);
 
             MapDefaultQueryRequest request = new MapDefaultQueryRequest(layers, Options.MAP_QUERY);
-
 
             mLayerStyleTask.getStyle(mLegendLayer, new SendMapQueryRequestCallback(request, mLegendLayer));
         }

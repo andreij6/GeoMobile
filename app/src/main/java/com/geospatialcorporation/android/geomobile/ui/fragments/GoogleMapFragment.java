@@ -45,6 +45,7 @@ import com.geospatialcorporation.android.geomobile.library.DI.Map.Interfaces.ILa
 import com.geospatialcorporation.android.geomobile.library.DI.Map.Interfaces.IMapStateService;
 import com.geospatialcorporation.android.geomobile.library.DI.Map.Models.MapStateSaveRequest;
 import com.geospatialcorporation.android.geomobile.library.DI.TreeServices.Interfaces.IDocumentTreeService;
+import com.geospatialcorporation.android.geomobile.library.DI.UIHelpers.Interfaces.IMapStatusBarManager;
 import com.geospatialcorporation.android.geomobile.library.DocumentSentCallback;
 import com.geospatialcorporation.android.geomobile.library.ISendFileCallback;
 import com.geospatialcorporation.android.geomobile.library.constants.GeoPanel;
@@ -115,6 +116,7 @@ public class GoogleMapFragment extends GeoViewFragmentBase implements
     ISlidingPanelManager mPanelManager;
     IMapStateService mMapStateService;
     ILayerManager mLayerManager;
+    IMapStatusBarManager mStatusBarManager;
     UiSettings mUiSettings;
     ClusterManager<GeoClusterMarker> mClusterManager;
     QueryRestService mQueryService;
@@ -238,6 +240,8 @@ public class GoogleMapFragment extends GeoViewFragmentBase implements
         super.onCreate(savedInstance);
         application.setMapFragment(this);
         mMapStateService = application.getMapComponent().provideMapStateService();
+        mStatusBarManager = application.getUIHelperComponent().provideMapStatusBarManager();
+
     }
 
     @Override
@@ -450,7 +454,7 @@ public class GoogleMapFragment extends GeoViewFragmentBase implements
     int mFeatureWindowTabToShow;
 
     protected void getFeatureWindow(String id, int shapeCode){
-        showLoadingMessage("Loading Feature Window");
+        mStatusBarManager.setMessage(getString(R.string.loading_feature_window));
 
         mSelectedFeatureId = mLayerManager.getFeatureId(id, shapeCode);
         mSelectedLayerId = mLayerManager.getLayerId(id, shapeCode);
@@ -459,7 +463,7 @@ public class GoogleMapFragment extends GeoViewFragmentBase implements
     }
 
     public void refreshFeatureWindow(int tab){
-        showLoadingMessage("Refreshing Feature Window");
+        mStatusBarManager.setMessage(getString(R.string.refreshing_feature_window));
 
         setFeatureWindowTab(tab);
 
@@ -767,7 +771,7 @@ public class GoogleMapFragment extends GeoViewFragmentBase implements
 
         mPanelManager.halfAnchor();
 
-        hideLoadingBar();
+        mStatusBarManager.reset();
     }
 
     @Override
@@ -775,14 +779,17 @@ public class GoogleMapFragment extends GeoViewFragmentBase implements
         handleNewLocation(location);
     }
 
-    public void showLoadingMessage(String message){
-        mLoadingBar.setVisibility(View.VISIBLE);
-        mLoadingMessage.setText(message);
-    }
-
     public void hideLoadingBar(){
         mLoadingMessage.setText("");
         mLoadingBar.setVisibility(View.GONE);
+    }
+
+    public LinearLayout getLoadingBar() {
+        return mLoadingBar;
+    }
+
+    public TextView getStatusBarMessage() {
+        return mLoadingMessage;
     }
 
     protected class GetLibraryImportFolderTask extends AsyncTask<Void, Void, Folder> {

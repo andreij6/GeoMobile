@@ -91,8 +91,6 @@ public class Authentication {
 
     // Get login attempt information
     public void emailLoginAttempt(String username, String password) {
-        Log.d(TAG, "Beginning emailLoginStart");
-
         if (mProgressHelper != null) {
             mProgressHelper.showProgressDialog();
         }
