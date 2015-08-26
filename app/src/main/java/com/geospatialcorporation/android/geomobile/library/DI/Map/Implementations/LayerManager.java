@@ -1,5 +1,7 @@
 package com.geospatialcorporation.android.geomobile.library.DI.Map.Implementations;
 
+import android.util.Log;
+
 import com.geospatialcorporation.android.geomobile.application;
 import com.geospatialcorporation.android.geomobile.library.DI.Map.Interfaces.ILayerManager;
 import com.geospatialcorporation.android.geomobile.library.constants.GeometryTypeCodes;
@@ -9,6 +11,7 @@ import com.geospatialcorporation.android.geomobile.library.map.layerManager.impl
 import com.geospatialcorporation.android.geomobile.library.map.layerManager.implementations.PolylineOptionsManager;
 import com.geospatialcorporation.android.geomobile.models.Layers.Extent;
 import com.geospatialcorporation.android.geomobile.models.Layers.FeatureInfo;
+import com.geospatialcorporation.android.geomobile.models.Layers.Layer;
 import com.geospatialcorporation.android.geomobile.models.Layers.LegendLayer;
 import com.geospatialcorporation.android.geomobile.models.Layers.Point;
 import com.google.android.gms.maps.CameraUpdate;
@@ -30,6 +33,8 @@ import java.util.List;
  * Created by andre on 6/29/2015.
  */
 public class LayerManager implements ILayerManager {
+
+    private static final String TAG = LayerManager.class.getSimpleName();
 
     IOptionsManager mMarkerManager;
     IOptionsManager mPolygonOptionsManager;
@@ -81,6 +86,25 @@ public class LayerManager implements ILayerManager {
                 break;
         }
 
+    }
+
+    @Override
+    public boolean isLayerCached(Layer layer) {
+        int code = layer.getGeometryTypeCodeId();
+
+        switch (code){
+            case GeometryTypeCodes.Point:
+            case GeometryTypeCodes.MultiPoint:
+                return mMarkerManager.isLayerCached(layer.getId());
+            case GeometryTypeCodes.Line:
+            case GeometryTypeCodes.MultiLine:
+                return mPolylineOptionsManager.isLayerCached(layer.getId());
+            case GeometryTypeCodes.Polygon:
+            case GeometryTypeCodes.MultiPolygon:
+                return mPolygonOptionsManager.isLayerCached(layer.getId());
+            default:
+                return false;
+        }
     }
 
     @Override

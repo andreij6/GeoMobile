@@ -144,7 +144,6 @@ public class ClusterExtentMarkerOptionsManager extends OptionsManagerBase<Marker
 
         @Override
         protected void onPostExecute(List<GeoClusterMarker> geoClusterMarkers) {
-            Log.d(TAG, "Markers: " + geoClusterMarkers.size());
             mClusterManager.addItems(geoClusterMarkers);
 
             mClusterManager.cluster();

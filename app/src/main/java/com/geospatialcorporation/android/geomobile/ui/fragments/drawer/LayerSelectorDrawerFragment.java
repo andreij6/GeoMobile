@@ -12,6 +12,7 @@ import android.support.v7.app.ActionBarActivity;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -30,6 +31,7 @@ import com.geospatialcorporation.android.geomobile.models.Folders.Folder;
 import com.geospatialcorporation.android.geomobile.ui.Interfaces.IPostExecuter;
 import com.geospatialcorporation.android.geomobile.ui.MainActivity;
 
+import java.lang.reflect.Field;
 import java.util.List;
 
 import butterknife.InjectView;
@@ -110,7 +112,7 @@ public class LayerSelectorDrawerFragment extends Fragment implements IPostExecut
         return mDrawerLayout != null && mDrawerLayout.isDrawerOpen(mFragmentContainerView);
     }
 
-    public void setUp(int fragmentId, DrawerLayout drawerLayout, Toolbar toolbar) {
+    public void setUp(int fragmentId, final DrawerLayout drawerLayout, Toolbar toolbar) {
         mFragmentContainerView = getActivity().findViewById(fragmentId);
         mDrawerLayout = drawerLayout;
 
@@ -160,6 +162,20 @@ public class LayerSelectorDrawerFragment extends Fragment implements IPostExecut
 
                 activity.supportInvalidateOptionsMenu(); // calls onPrepareOptionsMenu()
 
+                try {
+                    String name = getIDName(drawerView, R.id.class);
+
+                    MainActivity mainActivity = (MainActivity)getActivity();
+
+                    if(name.equals("layer_drawer")){
+                        mainActivity.closeNavDrawer();
+                    } else {
+                        mainActivity.closeLayerDrawer();
+                    }
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+
             }
         };
 
@@ -176,6 +192,22 @@ public class LayerSelectorDrawerFragment extends Fragment implements IPostExecut
         });
 
         mDrawerLayout.setDrawerListener(mDrawerToggle);
+    }
+
+    public static String getIDName(View view, Class<?> clazz) throws Exception {
+
+        Integer id = view.getId();
+        Field[] ids = clazz.getFields();
+        for (int i = 0; i < ids.length; i++) {
+            Object val = ids[i].get(null);
+            if (val != null && val instanceof Integer
+                    && ((Integer) val).intValue() == id.intValue()) {
+                return ids[i].getName();
+            }
+        }
+
+        return "";
+
     }
 
     private void selectItem(int position) {

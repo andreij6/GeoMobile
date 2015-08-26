@@ -58,7 +58,6 @@ public class LibraryFragment extends GeoViewFragmentBase
     DataHelper mHelper;
     IGeneralDialog mDialog;
     ProgressDialogHelper mProgressHelper;
-    //endregion
 
     @InjectView(R.id.libraryitem_recyclerView) RecyclerView mRecyclerView;
     @InjectView(R.id.swipe_refresh_layout) SwipeRefreshLayout mSwipeRefreshLayout;
@@ -67,7 +66,9 @@ public class LibraryFragment extends GeoViewFragmentBase
     @InjectView(R.id.showNavIV1) ImageView mNavBars;
     @InjectView(R.id.showNavIV2) ImageView mNavLogo;
     @InjectView(R.id.title) TextView mTitle;
+    //endregion
 
+    //region OnClicks
     @OnClick(R.id.goToMapIV)
     public void goToMapIV(){
         if(mPanelManager.getIsOpen()){
@@ -107,21 +108,16 @@ public class LibraryFragment extends GeoViewFragmentBase
             closePanel();
         }
     }
+    //endregion
 
-    public void closePanel() {
-        mPanelManager.hide();
-    }
-
+    //region Fragment Overrides
     @Override
     public void onCreate(Bundle savedInstance) {
         setHasOptionsMenu(false);
         super.onCreate(savedInstance);
     }
 
-    protected void sendScreenName() {
-        mAnalytics.trackScreen(new GoogleAnalyticEvent().LibraryTreeScreen());
-    }
-
+    @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         setView(inflater, container, R.layout.fragment_libraryitems);
         mContext = getActivity();
@@ -195,25 +191,32 @@ public class LibraryFragment extends GeoViewFragmentBase
 
 
     }
+    //endregion
 
-    public void refresh() {
-        handleArguments();
-    }
+    //region View.OnClicks
+    protected View.OnClickListener showNavigation = new View.OnClickListener() {
+        @Override
+        public void onClick(View v) {
+            if(mPanelManager.getIsOpen()) {
+                closePanel();
+            } else {
+                ((MainActivity) getActivity()).openNavigationDrawer();
 
-    protected void handleArguments() {
-        Bundle args = getArguments();
-
-        GetDocumentsParam params = new GetDocumentsParam(getFragmentManager(), mCurrentFolder, mContext, this);
-
-        if(args != null) {
-            int folderId = args.getInt(Folder.FOLDER_INTENT, 0);
-
-            mDocumentsTask.getDocumentsByFolderId(params, folderId);
-        } else {
-            mDocumentsTask.getDocumentsByFolderId(params, 0);
+            }
         }
+    };
 
-    }
+    protected View.OnClickListener navigateUpTree = new View.OnClickListener() {
+        @Override
+        public void onClick(View v) {
+            if(mPanelManager.getIsOpen()){
+                closePanel();
+            } else {
+                getFragmentManager().popBackStack();
+            }
+        }
+    };
+    //endregion
 
     @Override
     public void onPostExecute(Folder model) {
@@ -253,28 +256,9 @@ public class LibraryFragment extends GeoViewFragmentBase
         mProgressHelper.hideProgressDialog();
     }
 
-    protected View.OnClickListener showNavigation = new View.OnClickListener() {
-        @Override
-        public void onClick(View v) {
-            if(mPanelManager.getIsOpen()) {
-                closePanel();
-            } else {
-                ((MainActivity) getActivity()).openNavigationDrawer();
-
-            }
-        }
-    };
-
-    protected View.OnClickListener navigateUpTree = new View.OnClickListener() {
-        @Override
-        public void onClick(View v) {
-            if(mPanelManager.getIsOpen()){
-                closePanel();
-            } else {
-                getFragmentManager().popBackStack();
-            }
-        }
-    };
+    public void closePanel() {
+        mPanelManager.hide();
+    }
 
     public void goToFolderInfo() {
         Fragment f = new DocumentFolderDetailFragment();
@@ -285,5 +269,29 @@ public class LibraryFragment extends GeoViewFragmentBase
                 .addToBackStack(null)
                 .replace(R.id.content_frame, f)
                 .commit();
+    }
+
+    protected void sendScreenName() {
+        mAnalytics.trackScreen(new GoogleAnalyticEvent().LibraryTreeScreen());
+    }
+
+    @Override
+    public void refresh() {
+        handleArguments();
+    }
+
+    protected void handleArguments() {
+        Bundle args = getArguments();
+
+        GetDocumentsParam params = new GetDocumentsParam(getFragmentManager(), mCurrentFolder, mContext, this);
+
+        if(args != null) {
+            int folderId = args.getInt(Folder.FOLDER_INTENT, 0);
+
+            mDocumentsTask.getDocumentsByFolderId(params, folderId);
+        } else {
+            mDocumentsTask.getDocumentsByFolderId(params, 0);
+        }
+
     }
 }

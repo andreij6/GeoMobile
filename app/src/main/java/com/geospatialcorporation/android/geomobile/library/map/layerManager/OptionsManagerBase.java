@@ -19,6 +19,7 @@ import static java.util.UUID.randomUUID;
 public abstract class OptionsManagerBase<T, S> implements IOptionsManager<T, S> {
 
     protected HashMap<Integer, HashMap<UUID, OptionFeature<T>>> mLayerOptions;
+    protected HashMap<Integer, HashMap<UUID, OptionFeature<T>>> mRemovedLayerOptions;
     protected HashMap<UUID, S> mVisibleLayers;
     protected HashMap<String, FeatureInfo> mIdFeatureIdMap;
 
@@ -26,6 +27,7 @@ public abstract class OptionsManagerBase<T, S> implements IOptionsManager<T, S> 
         mLayerOptions = new HashMap<>();
         mVisibleLayers = new HashMap<>();
         mIdFeatureIdMap = new HashMap<>();
+        mRemovedLayerOptions = new HashMap<>();
     }
 
     //region Interface Methods
@@ -88,7 +90,7 @@ public abstract class OptionsManagerBase<T, S> implements IOptionsManager<T, S> 
             }
         }
 
-
+        mRemovedLayerOptions.put(layerId, mLayerOptions.get(layerId));
         mLayerOptions.remove(layerId);
     }
 
@@ -100,6 +102,16 @@ public abstract class OptionsManagerBase<T, S> implements IOptionsManager<T, S> 
         }
 
         mVisibleLayers.clear();
+    }
+
+    @Override
+    public boolean isLayerCached(int layerId){
+        if(mRemovedLayerOptions.containsKey(layerId)){
+            mLayerOptions.put(layerId, mRemovedLayerOptions.get(layerId));
+            return true;
+        }
+
+        return false;
     }
 
     //endregion

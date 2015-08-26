@@ -48,20 +48,18 @@
         <ImageView
             android:layout_width="36dp"
             android:layout_height="36dp"
-            android:id="@+id/goToMapIV"
-            android:src="@drawable/ic_earth_white_36dp"
+            android:id="@+id/layerOptionsIV"
+            android:src="@drawable/ic_dropdown"
             android:layout_gravity="center_vertical"
-            android:layout_weight="1"/>
+            android:padding="2dp"/>
 
         <ImageView
             android:layout_width="36dp"
             android:layout_height="36dp"
-            android:id="@+id/layerOptionsIV"
-            android:src="@drawable/ic_dropdown"
+            android:id="@+id/goToMapIV"
+            android:src="@drawable/ic_earth_white_36dp"
             android:layout_gravity="center_vertical"
-            android:layout_marginRight="10dp"
-            android:padding="2dp"/>
-        <!--android:src="@drawable/ic_map_white_36dp"-->
+            android:layout_weight="1"/>
     </LinearLayout>
 
     <com.sothree.slidinguppanel.SlidingUpPanelLayout

@@ -28,4 +28,5 @@ public interface IOptionsManager<T, S> {
 
     Iterable<Integer> getShowingLayerIds();
 
+    boolean isLayerCached(int layerId);
 }

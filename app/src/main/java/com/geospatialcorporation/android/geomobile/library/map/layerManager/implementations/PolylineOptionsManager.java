@@ -1,10 +1,13 @@
 package com.geospatialcorporation.android.geomobile.library.map.layerManager.implementations;
 
 import android.os.AsyncTask;
+import android.util.Log;
 
+import com.geospatialcorporation.android.geomobile.application;
 import com.geospatialcorporation.android.geomobile.library.map.layerManager.OptionFeature;
 import com.geospatialcorporation.android.geomobile.library.map.layerManager.OptionsManagerBase;
 import com.geospatialcorporation.android.geomobile.models.Layers.FeatureInfo;
+import com.geospatialcorporation.android.geomobile.ui.fragments.GoogleMapFragment;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.model.Polyline;
 import com.google.android.gms.maps.model.PolylineOptions;
@@ -20,11 +23,10 @@ import java.util.UUID;
  */
 public class PolylineOptionsManager extends OptionsManagerBase<PolylineOptions, Polyline> {
 
-    @Override
+    private static final String TAG = Polyline.class.getSimpleName();
+
     public void showLayers(GoogleMap map) {
-
         new ShowLayersAsync(map).execute();
-
     }
 
     @Override
@@ -49,7 +51,6 @@ public class PolylineOptionsManager extends OptionsManagerBase<PolylineOptions, 
             for (HashMap<UUID, OptionFeature<PolylineOptions>> cachedOptions : CachedOptions) {
                 for (Map.Entry<UUID, OptionFeature<PolylineOptions>> entry : cachedOptions.entrySet()) {
 
-
                     UUID key = entry.getKey();
 
                     if (!mVisibleLayers.containsKey(key)) {
@@ -68,13 +69,19 @@ public class PolylineOptionsManager extends OptionsManagerBase<PolylineOptions, 
 
         @Override
         protected void onPostExecute(List<PostParameters> options) {
-            for (PostParameters pparams: options) {
+            if(contentFragmentIsGoogleMapFragment()) {
+                for (PostParameters pparams: options) {
 
-                Polyline polyline = mGoogleMap.addPolyline(pparams.getOptions());
-                mIdFeatureIdMap.put(polyline.getId(), pparams.getFeatureInfo());
-                mVisibleLayers.put(pparams.getKey(), polyline);
+                    Polyline polyline = mGoogleMap.addPolyline(pparams.getOptions());
+                    mIdFeatureIdMap.put(polyline.getId(), pparams.getFeatureInfo());
+                    mVisibleLayers.put(pparams.getKey(), polyline);
+                }
             }
         }
+    }
+
+    protected boolean contentFragmentIsGoogleMapFragment() {
+        return application.getMainActivity().getContentFragment() instanceof GoogleMapFragment;
     }
 
     protected class PostParameters {

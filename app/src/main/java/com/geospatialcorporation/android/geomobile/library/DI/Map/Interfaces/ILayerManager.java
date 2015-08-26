@@ -2,6 +2,7 @@ package com.geospatialcorporation.android.geomobile.library.DI.Map.Interfaces;
 
 import com.geospatialcorporation.android.geomobile.models.Layers.Extent;
 import com.geospatialcorporation.android.geomobile.models.Layers.FeatureInfo;
+import com.geospatialcorporation.android.geomobile.models.Layers.Layer;
 import com.geospatialcorporation.android.geomobile.models.Layers.LegendLayer;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.model.MarkerOptions;
@@ -40,4 +41,6 @@ public interface ILayerManager {
     void setMap(GoogleMap map);
 
     void showLayer(LegendLayer llayer);
+
+    boolean isLayerCached(Layer layer);
 }

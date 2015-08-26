@@ -103,7 +103,8 @@ public class GoogleMapFragment extends GeoViewFragmentBase implements
         IViewModeListener,
         GoogleApiClient.ConnectionCallbacks,
         GoogleApiClient.OnConnectionFailedListener,
-        LocationListener
+        LocationListener,
+        GoogleMap.OnMapLoadedCallback
 {
     private static final String TAG = GoogleMapFragment.class.getSimpleName();
     private final static int CONNECTION_FAILURE_RESOLUTION_REQUEST = 9000;
@@ -290,6 +291,7 @@ public class GoogleMapFragment extends GeoViewFragmentBase implements
                 mClusterManager.onCameraChange(cameraPosition);
             }
         });
+
         mMap.setOnMarkerClickListener(mClusterManager);
 
 
@@ -347,6 +349,18 @@ public class GoogleMapFragment extends GeoViewFragmentBase implements
         LatLng ll = new LatLng(position.latitude, position.longitude);
 
         CameraUpdate update = CameraUpdateFactory.newLatLng(ll);
+
+        mMap.animateCamera(update);
+    }
+
+    protected void zoomToCluster(Marker clusterMarker){
+        LatLng position = clusterMarker.getPosition();
+
+        LatLng ll = new LatLng(position.latitude, position.longitude);
+
+        float zoom = mMap.getCameraPosition().zoom + 2;
+
+        CameraUpdate update = CameraUpdateFactory.newLatLngZoom(ll, zoom);
 
         mMap.animateCamera(update);
     }
@@ -514,11 +528,11 @@ public class GoogleMapFragment extends GeoViewFragmentBase implements
                 application.setClusterManager(mClusterManager);
 
                 //region Show Feature Window Code
-
                 mMap.setOnMarkerClickListener(new GoogleMap.OnMarkerClickListener() {
                     @Override
                     public boolean onMarkerClick(Marker marker) {
                         clearHighlights();
+
 
                         try {
                             //getFeatureWindow(marker.getId(), LayerManager.POINT);
@@ -527,7 +541,12 @@ public class GoogleMapFragment extends GeoViewFragmentBase implements
                             highlight(marker);
 
                         } catch (Exception e) {
+                            mStatusBarManager.reset();
+
+                            zoomToCluster(marker);
+
                             mClusterManager.onMarkerClick(marker);
+
                             Log.e(TAG, e.getMessage());
                         }
 
@@ -556,8 +575,6 @@ public class GoogleMapFragment extends GeoViewFragmentBase implements
                 //endregion
 
                 setMapState();
-
-                mLayerManager.showLayers(mMap);
             }
         });
 
@@ -790,6 +807,11 @@ public class GoogleMapFragment extends GeoViewFragmentBase implements
 
     public TextView getStatusBarMessage() {
         return mLoadingMessage;
+    }
+
+    @Override
+    public void onMapLoaded() {
+        mLayerManager.showLayers(mMap);
     }
 
     protected class GetLibraryImportFolderTask extends AsyncTask<Void, Void, Folder> {

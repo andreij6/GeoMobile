@@ -17,24 +17,29 @@ public class MapStatusBarManager implements IMapStatusBarManager {
     //int mExtentTotal;
     GoogleMapFragment mMapFragment;
 
-    public MapStatusBarManager(){
-        mMapFragment = (GoogleMapFragment)application.getMainActivity().getContentFragment();
-    }
-
     @Override
     public void setMessage(String message) {
-        setProperties();
-
-        mLoadingBar.setVisibility(View.VISIBLE);
-        mMessage.setText(message);
+        try {
+            setProperties();
+            mLoadingBar.setVisibility(View.VISIBLE);
+            mMessage.setText(message);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     @Override
     public void reset() {
-        setProperties();
+        try {
+            setProperties();
 
-        mLoadingBar.setVisibility(View.GONE);
-        mMessage.setText("");
+            mLoadingBar.setVisibility(View.GONE);
+            mMessage.setText("");
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+
 
         //if(mExtentTotal == 0){
         //    mLoadingBar.setVisibility(View.GONE);
@@ -45,7 +50,8 @@ public class MapStatusBarManager implements IMapStatusBarManager {
         //}
     }
 
-    protected void setProperties(){
+    protected void setProperties() throws Exception{
+        mMapFragment = (GoogleMapFragment)application.getMainActivity().getContentFragment();
         mLoadingBar = mMapFragment.getLoadingBar();
         mMessage = mMapFragment.getStatusBarMessage();
     }

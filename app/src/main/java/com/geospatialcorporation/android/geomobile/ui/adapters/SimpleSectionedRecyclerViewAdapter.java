@@ -63,8 +63,6 @@ public class SimpleSectionedRecyclerViewAdapter extends RecyclerView.Adapter<Rec
     }
 
 
-
-
     public static class SectionViewHolder extends RecyclerView.ViewHolder {
         public TextView title;
 
@@ -114,7 +112,6 @@ public class SimpleSectionedRecyclerViewAdapter extends RecyclerView.Adapter<Rec
                 : mBaseAdapter.getItemViewType(sectionedPositionToPosition(position)) + 1;
     }
 
-
     public static class Section {
         int firstPosition;
         int sectionedPosition;
@@ -129,7 +126,6 @@ public class SimpleSectionedRecyclerViewAdapter extends RecyclerView.Adapter<Rec
             return title;
         }
     }
-
 
     public void setSections(Section[] sections) {
         mSections.clear();

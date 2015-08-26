@@ -120,7 +120,7 @@ public class MainActivity extends ActionBarActivity
         mLayerDrawerFragement = (LayerSelectorDrawerFragment)getSupportFragmentManager().findFragmentById(R.id.layer_drawer);
         mLayerDrawerFragement.setUp(R.id.layer_drawer, mDrawerLayout, new Toolbar(this));
 
-        mDrawerLayout.setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED); //prevents drawer from being slide open.  Can slide close and use buttons to open
+        //mDrawerLayout.setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED); //prevents drawer from being slide open.  Can slide close and use buttons to open
 
     }
 
