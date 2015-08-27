@@ -38,6 +38,7 @@ import com.squareup.okhttp.Response;
 
 import java.io.IOException;
 import java.util.HashMap;
+import java.util.Locale;
 import java.util.Map;
 
 import retrofit.RequestInterceptor;
@@ -50,6 +51,7 @@ public class application extends applicationDIBase {
     private final static String prefsName = "AppState";
     private static final String geoAuthTokenName = "geoAuthToken";
     //private static GoogleMapFragment googleMap;
+    private static Locale locale;
     private static SharedPreferences appState;
     private static String domain;
     private static Context context;
@@ -225,6 +227,7 @@ public class application extends applicationDIBase {
 
         context = getApplicationContext();
         appState = getSharedPreferences(prefsName, 0);
+        locale = Locale.US;
 
         analytics = GoogleAnalytics.getInstance(this);
         analytics.setLocalDispatchPeriod(1800);
@@ -329,6 +332,8 @@ public class application extends applicationDIBase {
         Log.d(TAG, "Set GeoToken to: " + token);
         appState.getString(geoAuthTokenName, token);
     }
+
+    public static Locale getLocale() { return locale; }
 
     public static String getAuthToken() {
         return geoAuthToken;

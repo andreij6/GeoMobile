@@ -12,6 +12,7 @@ import com.geospatialcorporation.android.geomobile.library.DI.Analytics.Models.G
 import com.geospatialcorporation.android.geomobile.library.DI.Tasks.Interfaces.IGetFolderDetailsTask;
 import com.geospatialcorporation.android.geomobile.library.DI.Tasks.models.GetFolderDetailsParams;
 import com.geospatialcorporation.android.geomobile.library.DI.UIHelpers.Interfaces.DialogHelpers.IFolderDialog;
+import com.geospatialcorporation.android.geomobile.library.helpers.DateTimeFormatter;
 import com.geospatialcorporation.android.geomobile.models.Folders.Folder;
 import com.geospatialcorporation.android.geomobile.models.Folders.FolderDetailsResponse;
 import com.geospatialcorporation.android.geomobile.ui.Interfaces.IPostExecuter;
@@ -82,8 +83,8 @@ public class FolderDetailsTab extends GeoDetailsTabBase<Folder> implements IPost
     @Override
     public void onPostExecute(FolderDetailsResponse response){
         mCreatedBy.setText(response.getCreateUser());
-        mDateCreated.setText(response.getCreateDateTime());
-        mUpdated.setText(response.getUpdateDateTime());
+        mDateCreated.setText(DateTimeFormatter.format(response.getCreateDateTime()));
+        mUpdated.setText(DateTimeFormatter.format(response.getUpdateDateTime()));
         mUpdateUser.setText(response.getUpdateUser());
 
         if(mEntity.getFolders() != null) {

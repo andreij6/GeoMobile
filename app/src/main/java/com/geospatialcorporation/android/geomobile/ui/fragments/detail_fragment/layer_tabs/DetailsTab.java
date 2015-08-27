@@ -12,6 +12,7 @@ import com.geospatialcorporation.android.geomobile.library.DI.Analytics.Models.G
 import com.geospatialcorporation.android.geomobile.library.DI.Tasks.Interfaces.IGetLayerDetailsTask;
 import com.geospatialcorporation.android.geomobile.library.DI.Tasks.models.GetLayerDetailParams;
 import com.geospatialcorporation.android.geomobile.library.DI.UIHelpers.Interfaces.DialogHelpers.ILayerDialog;
+import com.geospatialcorporation.android.geomobile.library.helpers.DateTimeFormatter;
 import com.geospatialcorporation.android.geomobile.models.Layers.Layer;
 import com.geospatialcorporation.android.geomobile.models.Layers.LayerDetailsVm;
 import com.geospatialcorporation.android.geomobile.ui.Interfaces.IPostExecuter;
@@ -73,10 +74,10 @@ public class DetailsTab extends GeoDetailsTabBase<Layer> implements IPostExecute
     public void onPostExecute(LayerDetailsVm details) {
         if(details != null){
             mFeatureCount.setText(details.getFeatureCount() + "");
-            mCreateDate.setText(details.getCreateDateTime());
+            mCreateDate.setText(DateTimeFormatter.format(details.getCreateDateTime()));
             mCreatedBy.setText(details.getCreateUser());
             mUserUpdated.setText(details.getUpdateUser());
-            mLastUpdatedValue.setText(details.getUpdateDateTime());
+            mLastUpdatedValue.setText(DateTimeFormatter.format(details.getUpdateDateTime()));
             mShapeType.setText(mEntity.getReadableGeometryType());
         }
     }

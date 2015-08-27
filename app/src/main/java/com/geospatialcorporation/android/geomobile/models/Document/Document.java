@@ -88,21 +88,6 @@ public class Document implements Parcelable, ITreeEntity {
 
     }
 
-    public Date getFormattedDate() {
-        SimpleDateFormat formatter = new SimpleDateFormat("dd/mm/yyyy h:mm a");
-
-        Date date = null;
-
-        try {
-            date = formatter.parse(UploadTime);
-
-        } catch (ParseException e) {
-            e.printStackTrace();
-        }
-
-        return date;
-    }
-
     //region Parcelable Contract
     @Override
     public int describeContents() {

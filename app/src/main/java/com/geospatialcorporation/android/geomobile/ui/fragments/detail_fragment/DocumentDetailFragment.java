@@ -15,6 +15,7 @@ import com.geospatialcorporation.android.geomobile.application;
 import com.geospatialcorporation.android.geomobile.library.DI.Analytics.Models.GoogleAnalyticEvent;
 import com.geospatialcorporation.android.geomobile.library.DI.TreeServices.Interfaces.IDocumentTreeService;
 import com.geospatialcorporation.android.geomobile.library.DI.UIHelpers.Interfaces.DialogHelpers.IDocumentDialog;
+import com.geospatialcorporation.android.geomobile.library.helpers.DateTimeFormatter;
 import com.geospatialcorporation.android.geomobile.library.helpers.FileSizeFormatter;
 import com.geospatialcorporation.android.geomobile.models.Document.Document;
 import com.geospatialcorporation.android.geomobile.ui.MainActivity;
@@ -85,7 +86,7 @@ public class DocumentDetailFragment extends ItemDetailFragment<Document>  {
 
         mDocumentName.setText(mEntity.getNameWithExt());
         mFileTypeImage.setImageDrawable(getActivity().getResources().getDrawable(mEntity.getFileTypeDrawable(true)));
-        mUploadValue.setText(mEntity.getUploadTime());
+        mUploadValue.setText(DateTimeFormatter.format(mEntity.getUploadTime()));
         mFileSizeValue.setText(FileSizeFormatter.format(mEntity.getSize() + ""));
 
 

@@ -1,8 +1,5 @@
 package com.geospatialcorporation.android.geomobile.models;
 
-/**
- * Created by andre on 6/8/2015.
- */
 public class NodeDetailsVm {
 
     //region Getters & Setters
@@ -43,5 +40,4 @@ public class NodeDetailsVm {
     String CreateDateTime;
     String UpdateUser;
     String UpdateDateTime;
-
 }

@@ -1,8 +1,5 @@
 package com.geospatialcorporation.android.geomobile.models.Folders;
 
-/**
- * Created by andre on 6/9/2015.
- */
 public class FolderDetailsResponse {
     Integer FileCount;
     Integer FileSize;
