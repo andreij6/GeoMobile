@@ -16,7 +16,7 @@ public class DateTimeFormatter {
         // from the server
         SimpleDateFormat parser = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS", application.getLocale());
         // to the user
-        SimpleDateFormat formatter = new SimpleDateFormat("MM-dd-yyyy h:mm a", application.getLocale());
+        SimpleDateFormat formatter = new SimpleDateFormat("MMM dd, yyyy h:mm a", application.getLocale());
 
         String date = "";
 
