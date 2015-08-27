@@ -1,6 +1,8 @@
 package com.geospatialcorporation.android.geomobile.library.requestcallback.listener_implementations;
 
 import com.geospatialcorporation.android.geomobile.library.requestcallback.RequestListener;
+import com.geospatialcorporation.android.geomobile.ui.fragments.GoogleMapFragment;
+import com.geospatialcorporation.android.geomobile.ui.fragments.detail_fragment.LayerDetailFragment;
 
 import retrofit.client.Response;
 
@@ -19,7 +21,7 @@ public class AttributeColumnModifiedListener extends RequestListenerBase<Respons
         super.onSuccess(response);
 
         if(mShouldRefresh){
-            Toaster("Should Refresh this Fragment");
+            Toaster("Pull Down to Refresh Attributes");
         }
     }
 }

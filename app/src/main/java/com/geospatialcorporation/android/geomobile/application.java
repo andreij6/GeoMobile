@@ -89,6 +89,9 @@ public class application extends applicationDIBase {
 
     private static int FeatureWindowDocument_LayerId;
     private static String FeatureWindowDocument_FeatureId;
+    private static SlidingUpPanelLayout layerDetailFragmentPanel;
+    private static SlidingUpPanelLayout documentFolderFragmentPanel;
+    private static SlidingUpPanelLayout documentDetailFragmentPanel;
     //endregion
 
     //region stuff
@@ -219,6 +222,18 @@ public class application extends applicationDIBase {
 
     public static void setLayerFragmentPanel(SlidingUpPanelLayout layerFragmentPanel) {
         application.layerFragmentPanel = layerFragmentPanel;
+    }
+
+    public static void setLayerDetailFragmentPanel(SlidingUpPanelLayout layerDetailFragmentPanel) {
+        application.layerDetailFragmentPanel = layerDetailFragmentPanel;
+    }
+
+    public static void setDocumentFolderFragmentPanel(SlidingUpPanelLayout documentFolderFragmentPanel) {
+        application.documentFolderFragmentPanel = documentFolderFragmentPanel;
+    }
+
+    public static void setDocumentDetailFragmentPanel(SlidingUpPanelLayout documentDetailFragmentPanel) {
+        application.documentDetailFragmentPanel = documentDetailFragmentPanel;
     }
     //endregion
 
@@ -361,6 +376,15 @@ public class application extends applicationDIBase {
                 break;
             case GeoPanel.LIBRARY_FRAGMENT:
                 panel = libraryFragmentPanel;
+                break;
+            case GeoPanel.LAYER_DETAIL:
+                panel = layerDetailFragmentPanel;
+                break;
+            case GeoPanel.DOCUMENT_DETAIL:
+                panel = documentDetailFragmentPanel;
+                break;
+            case GeoPanel.DOCUMENT_FOLDER_DETAIL:
+                panel = documentFolderFragmentPanel;
                 break;
             default:
                 break;

@@ -5,8 +5,6 @@ import android.support.v4.app.FragmentManager;
 
 import com.geospatialcorporation.android.geomobile.library.DI.UIHelpers.Interfaces.DialogHelpers.IDocumentDialog;
 import com.geospatialcorporation.android.geomobile.models.Document.Document;
-import com.geospatialcorporation.android.geomobile.models.Folders.Folder;
-import com.geospatialcorporation.android.geomobile.ui.fragments.dialogs.action_dialogs.DocumentActionsDialogFragment;
 import com.geospatialcorporation.android.geomobile.ui.fragments.dialogs.action_dialogs.document.DeleteDocumentDialogFragment;
 import com.geospatialcorporation.android.geomobile.ui.fragments.dialogs.action_dialogs.document.MoveDocumentDialogFragment;
 import com.geospatialcorporation.android.geomobile.ui.fragments.dialogs.action_dialogs.document.RenameDocumentDialogFragment;
@@ -29,9 +27,6 @@ public class DocumentDialog implements IDocumentDialog {
 
     @Override
     public void actions(Document entity, Context context, FragmentManager manager) {
-        DocumentActionsDialogFragment dadf = new DocumentActionsDialogFragment();
-        dadf.init(context, entity);
-        dadf.show(manager, "Document Actions");
     }
 
     @Override

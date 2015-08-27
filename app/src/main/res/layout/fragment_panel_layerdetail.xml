@@ -1,0 +1,110 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="@color/white">
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceLarge"
+        android:text="Layer"
+        android:textStyle="bold"
+        android:id="@+id/nameTV"
+        android:layout_marginTop="20dp"
+        android:layout_marginLeft="20dp"
+        android:layout_marginRight="5dp"/>
+
+    <ImageView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/closeIV"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentEnd="true"
+        android:src="@drawable/ic_close_black_24dp"
+        android:layout_marginTop="15dp"
+        android:layout_marginRight="20dp"/>
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="200dp"
+        android:id="@+id/scrollView2"
+        android:layout_marginTop="15dp"
+        android:layout_below="@+id/nameTV">
+
+        <LinearLayout
+            android:orientation="vertical"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <LinearLayout
+                android:orientation="horizontal"
+                android:layout_width="match_parent"
+                style="@style/TreePanelSectionStyle"
+                android:id="@+id/addAttributeSection">
+
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:id="@+id/informationIB"
+                    android:src="@drawable/ic_clipboard_text_black_36dp"
+                    style="TreePanelImageViewStyle"
+                    android:layout_marginLeft="16dp"/>
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:text="Add Attribute"
+                    android:id="@+id/informationTV"
+                    style="@style/TreePanelTextViewStyle"/>
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:orientation="horizontal"
+                android:layout_width="match_parent"
+                style="@style/TreePanelSectionStyle"
+                android:id="@+id/renameSection"
+                android:focusableInTouchMode="false">
+
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:id="@+id/addLayerIV"
+                    android:src="@drawable/ic_rename_box_black_36dp"
+                    style="TreePanelImageViewStyle"
+                    android:layout_marginLeft="16dp"/>
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:text="Rename"
+                    android:id="@+id/addLayerTV"
+                    style="@style/TreePanelTextViewStyle"/>
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:orientation="horizontal"
+                android:layout_width="match_parent"
+                style="@style/TreePanelSectionStyle"
+                android:id="@+id/deleteSection">
+
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:id="@+id/addFolderIV"
+                    android:src="@drawable/ic_delete_black_36dp"
+                    style="TreePanelImageViewStyle"
+                    android:layout_marginLeft="16dp"/>
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:text="Delete"
+                    android:id="@+id/addFolderTV"
+                    style="@style/TreePanelTextViewStyle"/>
+
+            </LinearLayout>
+
+        </LinearLayout>
+    </ScrollView>
+
+</RelativeLayout>

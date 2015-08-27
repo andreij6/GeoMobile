@@ -8,6 +8,7 @@ import android.view.View;
 
 import com.geospatialcorporation.android.geomobile.R;
 import com.geospatialcorporation.android.geomobile.ui.MainActivity;
+import com.geospatialcorporation.android.geomobile.ui.fragments.panel_fragments.tree_fragment_panels.DefaultCollapsedPanelFragment;
 import com.sothree.slidinguppanel.SlidingUpPanelLayout;
 
 /**
@@ -68,7 +69,11 @@ public abstract class GeoSlidingPanelBase {
 
     }
 
-    protected abstract void setDefaultCollapsedUI();
+    protected void setDefaultCollapsedUI(){
+        Fragment collapsedFragment = new DefaultCollapsedPanelFragment();
+
+        completeDefaultCollapsedUI(collapsedFragment);
+    };
 
     protected void completeDefaultCollapsedUI(Fragment collapsedFragment){
         Bundle args = getArguments();

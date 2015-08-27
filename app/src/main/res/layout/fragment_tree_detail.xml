@@ -49,39 +49,72 @@
         <ImageView
             android:layout_width="36dp"
             android:layout_height="36dp"
+            android:id="@+id/optionsIV"
+            android:src="@drawable/ic_dropdown"
+            android:layout_gravity="center_vertical"
+            android:padding="2dp"/>
+
+        <ImageView
+            android:layout_width="36dp"
+            android:layout_height="36dp"
             android:id="@+id/goToMapIV"
             android:src="@drawable/ic_earth_white_36dp"
             android:layout_gravity="center_vertical"
             android:layout_weight="1"/>
     </LinearLayout>
 
-    <android.support.v4.app.FragmentTabHost
+    <com.sothree.slidinguppanel.SlidingUpPanelLayout
+        xmlns:sothree="http://schemas.android.com/apk/res-auto"
+        android:id="@+id/sliding_layout"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:id="@+id/tabHost"
-        android:layout_alignParentTop="true"
-        android:layout_centerHorizontal="true"
-        android:layout_marginTop="48dp">
+        android:gravity="bottom"
+        sothree:umanoPanelHeight="68dp"
+        sothree:umanoShadowHeight="4dp"
+        android:background="@color/white"
+        android:layout_below="@+id/tree_actionbar">
 
-        <LinearLayout
+        <RelativeLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:orientation="vertical">
+            android:layout_height="match_parent">
 
-            <TabWidget
-                android:id="@android:id/tabs"
+            <android.support.v4.app.FragmentTabHost
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:background="@color/primary_dark"
-                >
-            </TabWidget>
+                android:layout_height="match_parent"
+                android:id="@+id/tabHost"
+                android:layout_alignParentTop="true"
+                android:layout_centerHorizontal="true">
 
-            <FrameLayout
-                android:id="@android:id/tabcontent"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent">
-            </FrameLayout>
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:orientation="vertical">
 
-        </LinearLayout>
-    </android.support.v4.app.FragmentTabHost>
+                    <TabWidget
+                        android:id="@android:id/tabs"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:background="@color/primary_dark"
+                        >
+                    </TabWidget>
+
+                    <FrameLayout
+                        android:id="@android:id/tabcontent"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent">
+                    </FrameLayout>
+
+                </LinearLayout>
+            </android.support.v4.app.FragmentTabHost>
+
+        </RelativeLayout>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:id="@+id/slider_content">
+    </RelativeLayout>
+
+    </com.sothree.slidinguppanel.SlidingUpPanelLayout>
+
 </RelativeLayout>
