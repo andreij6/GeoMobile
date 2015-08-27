@@ -51,9 +51,6 @@ public class LoginActivity extends GoogleApiActivity implements LoaderCallbacks<
 
     private Authentication mAuthentication;
 
-    /**
-     * Keep track of the login task to ensure we can cancel it if requested.
-     */
     private IUserLoginTask mUserLoginTask;
 
     //region  UI references.
@@ -113,7 +110,7 @@ public class LoginActivity extends GoogleApiActivity implements LoaderCallbacks<
             return;
         }
 
-        mAuthentication = new Authentication(this, ProgressHelper);
+        mAuthentication = new Authentication(this, ProgressHelper, FailureHelper);
 
         mUserLoginTask = null;
 
@@ -171,11 +168,6 @@ public class LoginActivity extends GoogleApiActivity implements LoaderCallbacks<
         boolean cancel = false;
         View focusView = null;
 
-        // TODO: Remove this horrible testing code
-        String authtoken = (application.getAuthToken() == null) ? "fakeAuthToken" : application.getAuthToken();
-        //mainActivityIntent.putExtra("authToken", authtoken);
-        //startActivity(mainActivityIntent);
-
         // Check for a valid password, if the user entered one.
         if (!TextUtils.isEmpty(password) && !LoginValidator.isPasswordValid(password)) {
             mPasswordView.setError(getString(R.string.error_invalid_password));
@@ -203,12 +195,11 @@ public class LoginActivity extends GoogleApiActivity implements LoaderCallbacks<
             // form field with an error.
             focusView.requestFocus();
         } else {
+            mAuthentication.emailLoginAttempt(email, password);
             // Show a progress spinner, and kick off a background task to
             // perform the user login attempt.
             mAnalytics.trackClick(new GoogleAnalyticEvent().LoginAttempt());
         }
-
-        mAuthentication.emailLoginAttempt(email, password);
     }
 
     /**

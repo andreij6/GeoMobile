@@ -76,7 +76,6 @@ public class LegendLayerAdapter extends GeoRecyclerAdapterBase<LegendLayerAdapte
         @InjectView(R.id.isVisible) CheckBox isVisibleCB;
         @InjectView(R.id.sublayerExpander) ImageView gotoSublayer;
         @InjectView(R.id.geometryIV) ImageView geomIV;
-        //@InjectView(R.id.showLayerProgressBar) ProgressBar mProgressBar;
         //endregionxxx
 
         Layer mLayer;
@@ -164,7 +163,6 @@ public class LegendLayerAdapter extends GeoRecyclerAdapterBase<LegendLayerAdapte
             public void onClick(View v) {
                 if (isVisibleCB.isChecked()) {
                     //Show Layer
-                    //mProgressBar.setVisibility(View.VISIBLE);
                     isVisibleCB.setEnabled(false);
 
                     mAnalytics.trackClick(new GoogleAnalyticEvent().ShowLayer());

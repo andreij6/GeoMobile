@@ -5,6 +5,7 @@ import android.os.AsyncTask;
 import android.util.Log;
 import android.widget.Toast;
 
+import com.afollestad.materialdialogs.MaterialDialog;
 import com.geospatialcorporation.android.geomobile.application;
 import com.geospatialcorporation.android.geomobile.library.helpers.ProgressDialogHelper;
 import com.geospatialcorporation.android.geomobile.library.rest.LoginService;
@@ -23,9 +24,9 @@ public class AuthTokenRetriever {
     GoogleApiActivity mContext;
     String Token;
     LoginService mLoginService;
-    ProgressDialogHelper ProgressHelper;
+    MaterialDialog ProgressHelper;
 
-    public void retrieve(String token, GoogleApiActivity context, ProgressDialogHelper helper) {
+    public void retrieve(String token, GoogleApiActivity context, MaterialDialog helper) {
         Token = token;
         mContext = context;
         ProgressHelper = helper;
@@ -54,7 +55,7 @@ public class AuthTokenRetriever {
         @Override
         protected void onPostExecute(String authToken) {
             if(ProgressHelper != null){
-                ProgressHelper.toggleProgressDialog();
+                ProgressHelper.hide();
             }
 
             if (application.getAuthToken() != null) {
@@ -96,7 +97,7 @@ public class AuthTokenRetriever {
         task.execute();
     }
 
-    public void getCurrentClient(LoginActivity context, ProgressDialogHelper progressHelper) {
+    public void getCurrentClient(LoginActivity context, MaterialDialog progressHelper) {
         mLoginService = application.getRestAdapter().create(LoginService.class);
         mContext = context;
         ProgressHelper = progressHelper;
@@ -112,7 +113,7 @@ public class AuthTokenRetriever {
                     mContext.startActivity(new Intent(mContext, MainActivity.class));
 
                     if (ProgressHelper != null) {
-                        ProgressHelper.hideProgressDialog();
+                        ProgressHelper.hide();
                     }
                 } catch (RetrofitError e) {
                     if (e.getResponse() != null) {
@@ -127,7 +128,7 @@ public class AuthTokenRetriever {
                             mContext.startActivity(new Intent(mContext, SubscriptionSelectorActivity.class));
 
                             if (ProgressHelper != null) {
-                                ProgressHelper.hideProgressDialog();
+                                ProgressHelper.hide();
                             }
                         }
                     }

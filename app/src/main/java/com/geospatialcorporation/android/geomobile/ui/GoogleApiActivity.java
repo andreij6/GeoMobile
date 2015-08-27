@@ -8,6 +8,8 @@ import android.content.IntentSender;
 import android.os.Bundle;
 import android.util.Log;
 
+import com.afollestad.materialdialogs.MaterialDialog;
+import com.geospatialcorporation.android.geomobile.R;
 import com.geospatialcorporation.android.geomobile.application;
 import com.geospatialcorporation.android.geomobile.library.DI.Analytics.Interfaces.IGeoAnalytics;
 import com.geospatialcorporation.android.geomobile.library.DI.Authentication.IGoogleAuthTokenService;
@@ -36,7 +38,8 @@ public class GoogleApiActivity extends Activity implements
     private GoogleApiClient mGoogleApiClient;
     private String accountName;
     private Context context;
-    protected ProgressDialogHelper ProgressHelper;
+    protected MaterialDialog ProgressHelper;
+    protected MaterialDialog FailureHelper;
 
     protected IGoogleAuthTokenService mGoogleAuthTokenService;
     protected IGeoSharedPrefs mGeoSharedPrefs;
@@ -50,7 +53,17 @@ public class GoogleApiActivity extends Activity implements
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         context = this;
-        ProgressHelper = new ProgressDialogHelper(context);
+        ProgressHelper = new MaterialDialog.Builder(this)
+                .title(R.string.progress_dialog)
+                .content(R.string.please_wait)
+                .progress(true, 0)
+                .build();
+
+        FailureHelper = new MaterialDialog.Builder(this)
+                .title(R.string.error)
+                .content("Check your email and password.")
+                .neutralText(R.string.accept)
+                .build();
 
         mGoogleAuthTokenService = application.getGoogleAuthComponent().provideGoogleAuthTokenService();
         mGeoSharedPrefs = application.getGeoSharedPrefsComponent().provideGeoSharedPrefs();
@@ -109,7 +122,7 @@ public class GoogleApiActivity extends Activity implements
         }
     }
 
-    public GoogleAuthTokenService.Parameters getGoogleAuthParmaters(String accountname, ProgressDialogHelper helper){
+    public GoogleAuthTokenService.Parameters getGoogleAuthParmaters(String accountname, MaterialDialog helper){
         return new GoogleAuthTokenService.Parameters(
                 ACTIVITY_AUTH_REQUEST_CODE,
                 accountname, this, helper);
@@ -123,7 +136,11 @@ public class GoogleApiActivity extends Activity implements
                 mGeoSharedPrefs.add(GeoSharedPreferences.GOOGLE_ACCOUNT, accountName);
                 mGeoSharedPrefs.apply();
 
-                ProgressHelper = new ProgressDialogHelper(this);
+                ProgressHelper = new MaterialDialog.Builder(this)
+                        .title(R.string.progress_dialog)
+                        .content(R.string.please_wait)
+                        .progress(true, 0)
+                        .build();
 
                 mGoogleAuthTokenService.GetAndUseAuthToken(getGoogleAuthParmaters(accountName, ProgressHelper));
             }

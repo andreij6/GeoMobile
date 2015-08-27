@@ -43,6 +43,7 @@ public class DetailsTab extends GeoDetailsTabBase<Layer> implements IPostExecute
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState){
         View v = inflater.inflate(R.layout.fragment_layer_details_tab, container, false);
+
         ButterKnife.inject(this, v);
 
         mLayerDialog = application.getUIHelperComponent().provideLayerDialog();
@@ -69,8 +70,13 @@ public class DetailsTab extends GeoDetailsTabBase<Layer> implements IPostExecute
             mFeatureCount.setText(details.getFeatureCount() + "");
             mCreateDate.setText(DateTimeFormatter.format(details.getCreateDateTime()));
             mCreatedBy.setText(details.getCreateUser());
-            mUserUpdated.setText(details.getUpdateUser());
-            mLastUpdatedValue.setText(DateTimeFormatter.format(details.getUpdateDateTime()));
+            if (details.getUpdateUser().length() > 0) {
+                mUserUpdated.setText(details.getUpdateUser());
+                mLastUpdatedValue.setText(DateTimeFormatter.format(details.getUpdateDateTime()));
+            } else {
+                mUserUpdated.setVisibility(View.GONE);
+                mLastUpdatedValue.setVisibility(View.GONE);
+            }
             mShapeType.setText(mEntity.getReadableGeometryType());
         }
     }

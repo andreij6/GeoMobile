@@ -45,7 +45,6 @@ public class LayerStyleTask implements ILayerStyleTask {
                             mLegendLayer.setLegendIcon(drawImage);
 
                             mLegendLayer.setImageSrc();
-                            // mLegendLayer.getProgressBar().setVisibility(View.GONE);
 
                             Bitmap iconBitmap = ((BitmapDrawable) drawImage).getBitmap();
                             BitmapDescriptor icon = BitmapDescriptorFactory.fromBitmap(iconBitmap);

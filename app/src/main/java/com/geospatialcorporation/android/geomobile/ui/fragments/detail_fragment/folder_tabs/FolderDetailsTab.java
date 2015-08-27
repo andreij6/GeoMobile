@@ -73,8 +73,14 @@ public class FolderDetailsTab extends GeoDetailsTabBase<Folder> implements IPost
     public void onPostExecute(FolderDetailsResponse response){
         mCreatedBy.setText(response.getCreateUser());
         mDateCreated.setText(DateTimeFormatter.format(response.getCreateDateTime()));
-        mUpdated.setText(DateTimeFormatter.format(response.getUpdateDateTime()));
-        mUpdateUser.setText(response.getUpdateUser());
+
+        if (response.getUpdateUser().length() > 0) {
+            mUpdateUser.setText(response.getUpdateUser());
+            mUpdated.setText(DateTimeFormatter.format(response.getUpdateDateTime()));
+        } else {
+            mUpdateUser.setVisibility(View.GONE);
+            mUpdated.setVisibility(View.GONE);
+        }
 
         if(mEntity.getFolders() != null) {
             mFolderCount.setText(mEntity.getFolders().size() + "");

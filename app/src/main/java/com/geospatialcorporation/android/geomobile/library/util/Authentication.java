@@ -4,12 +4,15 @@ import android.content.Context;
 import android.util.Base64;
 import android.util.Log;
 
+import com.afollestad.materialdialogs.MaterialDialog;
+import com.geospatialcorporation.android.geomobile.R;
 import com.geospatialcorporation.android.geomobile.application;
 import com.geospatialcorporation.android.geomobile.library.DI.Analytics.Interfaces.IGeoAnalytics;
 import com.geospatialcorporation.android.geomobile.library.DI.Authentication.Implementations.AuthTokenRetriever;
 import com.geospatialcorporation.android.geomobile.library.DI.ErrorHandler.Interfaces.IGeoErrorHandler;
 import com.geospatialcorporation.android.geomobile.library.helpers.ProgressDialogHelper;
 import com.geospatialcorporation.android.geomobile.library.rest.LoginService;
+import com.geospatialcorporation.android.geomobile.models.Login.ErrorResponse;
 import com.geospatialcorporation.android.geomobile.models.Login.LoginBody;
 import com.geospatialcorporation.android.geomobile.models.Login.LoginBodyJsonSerializer;
 import com.geospatialcorporation.android.geomobile.ui.LoginActivity;
@@ -42,7 +45,8 @@ public class Authentication {
 
     private RestAdapter mRestAdapter;
     private LoginService mService;
-    private ProgressDialogHelper mProgressHelper;
+    private MaterialDialog mProgressHelper;
+    private MaterialDialog mFailureHelper;
     private LoginActivity mContext;
 
     protected IGeoAnalytics mAnalytics;
@@ -71,9 +75,10 @@ public class Authentication {
     private String mBody;
     //endregion
 
-    public Authentication (LoginActivity context, ProgressDialogHelper progressHelper) {
+    public Authentication (LoginActivity context, MaterialDialog progressHelper, MaterialDialog failureHelper) {
         mContext = context;
         mProgressHelper = progressHelper;
+        mFailureHelper = failureHelper;
 
         try {
             keyTwo = "Bj+nS+pODStVVi8nODOLAA==".getBytes("UTF-8");
@@ -92,7 +97,7 @@ public class Authentication {
     // Get login attempt information
     public void emailLoginAttempt(String username, String password) {
         if (mProgressHelper != null) {
-            mProgressHelper.showProgressDialog();
+            mProgressHelper.show();
         }
 
         mUsername = username;
@@ -121,7 +126,16 @@ public class Authentication {
                 }
 
                 if (mProgressHelper != null) {
-                    mProgressHelper.hideProgressDialog();
+                    mProgressHelper.hide();
+
+                    try {
+                        Gson gson = new Gson();
+                        ErrorResponse errorResponse = gson.fromJson(new String(((TypedByteArray) retrofitError.getResponse().getBody()).getBytes()), ErrorResponse.class);
+                        mFailureHelper.setContent(errorResponse.getMessage());
+                        mFailureHelper.show();
+                    } catch (Exception e) {
+                        Log.e(TAG, "emailLoginStart failure failure: error showing error message");
+                    }
                 }
             }
         };
@@ -163,10 +177,18 @@ public class Authentication {
             @Override
             public void failure(RetrofitError retrofitError) {
                 Log.e(TAG, "postEmailLogin failure: " + new String(((TypedByteArray) retrofitError.getResponse().getBody()).getBytes()));
-                // TODO: Implement
 
                 if (mProgressHelper != null) {
-                    mProgressHelper.hideProgressDialog();
+                    mProgressHelper.hide();
+                }
+
+                try {
+                    Gson gson = new Gson();
+                    ErrorResponse errorResponse = gson.fromJson(new String(((TypedByteArray) retrofitError.getResponse().getBody()).getBytes()), ErrorResponse.class);
+                    mFailureHelper.setContent(errorResponse.getMessage());
+                    mFailureHelper.show();
+                } catch (Exception e) {
+                    Log.e(TAG, "postEmailLogin failure failure: error showing error message");
                 }
             }
         };

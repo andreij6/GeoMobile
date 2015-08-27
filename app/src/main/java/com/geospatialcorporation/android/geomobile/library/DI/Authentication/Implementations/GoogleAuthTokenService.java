@@ -3,6 +3,7 @@ package com.geospatialcorporation.android.geomobile.library.DI.Authentication.Im
 import android.app.Dialog;
 import android.os.AsyncTask;
 
+import com.afollestad.materialdialogs.MaterialDialog;
 import com.geospatialcorporation.android.geomobile.application;
 import com.geospatialcorporation.android.geomobile.library.DI.Authentication.IGoogleAuthTokenService;
 import com.geospatialcorporation.android.geomobile.library.DI.Authentication.models.AuthTokenParams;
@@ -22,7 +23,7 @@ public class GoogleAuthTokenService implements IGoogleAuthTokenService {
     protected int ACTIVITY_AUTH_REQUEST_CODE;
     protected String AccountName;
     private static final String SCOPES = "oauth2:https://www.googleapis.com/auth/userinfo.email https://www.googleapis.com/auth/plus.me https://www.googleapis.com/auth/userinfo.profile https://www.googleapis.com/auth/mapsengine";
-    protected ProgressDialogHelper ProgressHelper;
+    protected MaterialDialog ProgressHelper;
     protected GoogleApiActivity mContext;
 
     public GoogleAuthTokenService(AuthTokenRetriever retriever){
@@ -43,7 +44,7 @@ public class GoogleAuthTokenService implements IGoogleAuthTokenService {
         @Override
         protected void onPreExecute(){
             if(ProgressHelper != null) {
-                ProgressHelper.showProgressDialog();
+                ProgressHelper.show();
             }
         }
 
@@ -96,7 +97,7 @@ public class GoogleAuthTokenService implements IGoogleAuthTokenService {
 
     public static class Parameters extends AuthTokenParams{
 
-        public Parameters(int requestCode, String accountName, GoogleApiActivity context, ProgressDialogHelper progess_helper){
+        public Parameters(int requestCode, String accountName, GoogleApiActivity context, MaterialDialog progess_helper){
             activity_auth_request_code = requestCode;
             account_name = accountName;
             google_context = context;
