@@ -13,10 +13,4 @@ public class LibraryFragmentSlidingPanel extends GeoSlidingPanelBase {
         super(panel);
     }
 
-    @Override
-    protected void setDefaultCollapsedUI() {
-        Fragment collapsedFragment = new DefaultCollapsedPanelFragment();
-
-        completeDefaultCollapsedUI(collapsedFragment);
-    }
 }

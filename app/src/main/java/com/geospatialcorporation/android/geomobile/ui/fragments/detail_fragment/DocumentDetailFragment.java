@@ -15,12 +15,17 @@ import com.geospatialcorporation.android.geomobile.application;
 import com.geospatialcorporation.android.geomobile.library.DI.Analytics.Models.GoogleAnalyticEvent;
 import com.geospatialcorporation.android.geomobile.library.DI.TreeServices.Interfaces.IDocumentTreeService;
 import com.geospatialcorporation.android.geomobile.library.DI.UIHelpers.Interfaces.DialogHelpers.IDocumentDialog;
+import com.geospatialcorporation.android.geomobile.library.constants.GeoPanel;
+import com.geospatialcorporation.android.geomobile.library.helpers.DataHelper;
 import com.geospatialcorporation.android.geomobile.library.helpers.FileSizeFormatter;
+import com.geospatialcorporation.android.geomobile.library.panelmanager.PanelManager;
 import com.geospatialcorporation.android.geomobile.models.Document.Document;
 import com.geospatialcorporation.android.geomobile.ui.MainActivity;
 import com.geospatialcorporation.android.geomobile.ui.fragments.GoogleMapFragment;
 import com.geospatialcorporation.android.geomobile.ui.fragments.dialogs.ItemDetailFragment;
+import com.geospatialcorporation.android.geomobile.ui.fragments.panel_fragments.tree_fragment_panels.DocumentDetailPanelFragment;
 import com.melnykov.fab.FloatingActionButton;
+import com.sothree.slidinguppanel.SlidingUpPanelLayout;
 
 import butterknife.ButterKnife;
 import butterknife.InjectView;
@@ -29,10 +34,6 @@ import butterknife.OnClick;
 public class DocumentDetailFragment extends ItemDetailFragment<Document>  {
     private static final String TAG = DocumentDetailFragment.class.getSimpleName();
 
-
-    IDocumentTreeService mService;
-    IDocumentDialog mDocumentDialog;
-
     //region Butterknife
     @InjectView(R.id.backgroundImageView) ImageView mFileTypeImage;
     @InjectView(R.id.documentNameTV) TextView mDocumentName;
@@ -40,15 +41,9 @@ public class DocumentDetailFragment extends ItemDetailFragment<Document>  {
     @InjectView(R.id.uploadTimeValue) TextView mUploadValue;
     @InjectView(R.id.fileSizeLabel) TextView mFileSizeLabel;
     @InjectView(R.id.fileSizeValue) TextView mFileSizeValue;
-    @InjectView(R.id.fab) FloatingActionButton mFab;
-    @InjectView(R.id.downloadBtn) Button mDownload;
+    @InjectView(R.id.title) TextView mTitle;
+    @InjectView(R.id.sliding_layout) SlidingUpPanelLayout mPanel;
 
-    @OnClick(R.id.fab)
-    public void showDocumentActions(){
-        mAnalytics.trackClick(new GoogleAnalyticEvent().ShowDocumentActions());
-
-        mDocumentDialog.actions(mEntity, getActivity(), getActivity().getSupportFragmentManager());
-    }
 
     @OnClick(R.id.goToMapIV)
     public void goToMapIV(){
@@ -66,6 +61,22 @@ public class DocumentDetailFragment extends ItemDetailFragment<Document>  {
         getFragmentManager().popBackStack();
     }
 
+    @OnClick(R.id.optionsIV)
+    public void bringUpOptions(){
+        if(mPanelManager.getIsOpen()){
+            closePanel();
+        } else {
+            Fragment f = new DocumentDetailPanelFragment();
+
+            f.setArguments(mEntity.toBundle());
+            getFragmentManager().beginTransaction()
+                    .replace(R.id.slider_content, f)
+                    .commit();
+            mPanelManager.halfAnchor();
+            mPanelManager.touch(false);
+        }
+    }
+
     //endregion
 
     @Override
@@ -73,11 +84,10 @@ public class DocumentDetailFragment extends ItemDetailFragment<Document>  {
         super.onCreate(savedInstanceState);
 
         View view = inflater.inflate(R.layout.fragment_detail_document, null);
-
         ButterKnife.inject(this, view);
 
-        mService = application.getTreeServiceComponent().provideDocumentTreeService();
-        mDocumentDialog = application.getUIHelperComponent().provideDocumentDialog();
+        application.setDocumentDetailFragmentPanel(mPanel);
+        mPanelManager = new PanelManager.Builder().type(GeoPanel.DOCUMENT_DETAIL).hide().build();
 
         mAnalytics.trackScreen(new GoogleAnalyticEvent().DocumentDetailScreen());
 
@@ -86,17 +96,8 @@ public class DocumentDetailFragment extends ItemDetailFragment<Document>  {
         mDocumentName.setText(mEntity.getNameWithExt());
         mFileTypeImage.setImageDrawable(getActivity().getResources().getDrawable(mEntity.getFileTypeDrawable(true)));
         mUploadValue.setText(mEntity.getUploadTime());
+
         mFileSizeValue.setText(FileSizeFormatter.format(mEntity.getSize() + ""));
-
-
-        mDownload.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-            mAnalytics.trackClick(new GoogleAnalyticEvent().DownloadDocument());
-
-            mService.download(mEntity.getId(), mEntity.getNameWithExt());
-            }
-        });
 
         return view;
     }
@@ -110,13 +111,7 @@ public class DocumentDetailFragment extends ItemDetailFragment<Document>  {
         SetTitle(R.string.file_details);
     }
 
-    public View.OnClickListener DeleteonClickListner = new View.OnClickListener(){
-        @Override
-        public void onClick(View v){
-            mAnalytics.trackClick(new GoogleAnalyticEvent().DeleteDocument());
-
-            mDocumentDialog.delete(mEntity, getActivity(), getFragmentManager());
-        }
-    };
-
+    public void closePanel() {
+        mPanelManager.hide();
+    }
 }

@@ -40,17 +40,11 @@ public class AttributeLayoutTab extends GeoDetailsTabBase<Layer> implements ICon
     IGetLayerAttributeColumnsTask mTask;
     ILayerDialog mLayerDialog;
     ILayoutRefresher mRefresher;
-    IAttributeDialog mAttributeDialog;
 
     @InjectView(R.id.attributesTableLayout) TableLayout mTableLayout;
     @InjectView(R.id.swipe_refresh_layout) SwipeRefreshLayout mSwipeRefreshLayout;
     LayoutInflater mInflater;
     //@InjectView(R.id.sliding_layout) SlidingUpPanelLayout mPanel;
-
-    @OnClick(R.id.addAttribute)
-    public void addAttribute(){
-        mAttributeDialog.create(mEntity, getActivity(), getFragmentManager());
-    }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState){
@@ -61,7 +55,6 @@ public class AttributeLayoutTab extends GeoDetailsTabBase<Layer> implements ICon
         UIHelperComponent component = application.getUIHelperComponent();
         mRefresher = component.provideLayoutRefresher();
         mLayerDialog = component.provideLayerDialog();
-        mAttributeDialog = component.provideAttributeDialog();
 
         mSwipeRefreshLayout.setOnRefreshListener(mRefresher.build(mSwipeRefreshLayout, this));
         mSwipeRefreshLayout.setProgressBackgroundColorSchemeColor(getActivity().getResources().getColor(R.color.accent));

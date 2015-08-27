@@ -7,17 +7,23 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.geospatialcorporation.android.geomobile.R;
+import com.geospatialcorporation.android.geomobile.application;
 import com.geospatialcorporation.android.geomobile.models.Folders.Folder;
 import com.geospatialcorporation.android.geomobile.ui.fragments.GeoViewFragmentBase;
 
 import butterknife.ButterKnife;
 import butterknife.InjectView;
 
-public abstract class TreeFolderPanelFragmentBase extends GeoViewFragmentBase {
+public abstract class TreeFolderPanelFragmentBase<T> extends GeoViewFragmentBase {
 
     protected Folder mFolder;
-    @InjectView(R.id.pathTV) TextView mPath;
+    T mContentFragment;
+    @InjectView(R.id.nameTV) TextView mPath;
     @InjectView(R.id.folderNameTV) TextView mFolderName;
+
+    public TreeFolderPanelFragmentBase(){
+        mContentFragment = (T) application.getMainActivity().getContentFragment();
+    }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstance) {

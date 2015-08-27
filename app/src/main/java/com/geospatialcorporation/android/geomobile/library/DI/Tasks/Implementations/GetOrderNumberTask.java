@@ -32,7 +32,6 @@ public class GetOrderNumberTask implements IGetOrderNumberTask {
         new GetOrderNumberAsync(params).execute();
     }
 
-    //TODO: gEOaSYNC
     protected class GetOrderNumberAsync extends GeoAsyncTask<Void, Void, Integer> {
 
         Layer mLayer;

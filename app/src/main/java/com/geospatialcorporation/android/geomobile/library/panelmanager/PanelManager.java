@@ -7,6 +7,9 @@ import com.geospatialcorporation.android.geomobile.library.panelmanager.paneltyp
 import com.geospatialcorporation.android.geomobile.library.panelmanager.paneltype.LibraryFragmentSlidingPanel;
 import com.geospatialcorporation.android.geomobile.library.panelmanager.paneltype.MapSlidingPanel;
 import com.geospatialcorporation.android.geomobile.library.panelmanager.paneltype.SublayerSlidingPanel;
+import com.geospatialcorporation.android.geomobile.library.panelmanager.paneltype.DocumentDetailSlidingPanel;
+import com.geospatialcorporation.android.geomobile.library.panelmanager.paneltype.DocumentFolderSlidingPanel;
+import com.geospatialcorporation.android.geomobile.library.panelmanager.paneltype.LayerDetailSlidingPanel;
 import com.sothree.slidinguppanel.SlidingUpPanelLayout;
 
 /**
@@ -32,9 +35,15 @@ public class PanelManager implements ISlidingPanelManager {
             case GeoPanel.LIBRARY_FRAGMENT:
                 mGeoPanel = new LibraryFragmentSlidingPanel(panel);
                 break;
-            //case GeoPanel.LAYER_ATTRIBUTE:
-            //    mGeoPanel = new AttributeSlidingPanel(panel);
-            //    break;
+            case GeoPanel.DOCUMENT_DETAIL:
+                mGeoPanel = new DocumentDetailSlidingPanel(panel);
+                break;
+            case GeoPanel.DOCUMENT_FOLDER_DETAIL:
+                mGeoPanel = new DocumentFolderSlidingPanel(panel);
+                break;
+            case GeoPanel.LAYER_DETAIL:
+                mGeoPanel = new LayerDetailSlidingPanel(panel);
+                break;
             default:
                 break;
         }
@@ -99,5 +108,36 @@ public class PanelManager implements ISlidingPanelManager {
     @Override
     public Boolean getIsOpen() {
         return mGeoPanel.getIsOpen();
+    }
+
+    public static class Builder {
+
+        Boolean mHide;
+        int mPanelType;
+
+        public Builder(){
+            mHide = false;
+        }
+
+
+        public Builder type(int panelType) {
+            mPanelType = panelType;
+            return this;
+        }
+
+        public Builder hide() {
+            mHide = true;
+            return this;
+        }
+
+        public ISlidingPanelManager build() {
+            PanelManager manager = new PanelManager(mPanelType);
+            manager.setup();
+
+            if(mHide) {
+                manager.hide();
+            }
+            return manager;
+        }
     }
 }

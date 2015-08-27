@@ -31,7 +31,6 @@ public class FolderDetailsTab extends GeoDetailsTabBase<Folder> implements IPost
     IFolderDialog mFolderDialog;
     FolderDetailsResponse mDetails;
     String mFolderType;
-    @InjectView(R.id.fab) FloatingActionButton mFab;
     @InjectView(R.id.createdByValue) TextView mCreatedBy;
     @InjectView(R.id.createdValue) TextView mDateCreated;
     @InjectView(R.id.lastUpdatedValue) TextView mUpdated;
@@ -45,8 +44,6 @@ public class FolderDetailsTab extends GeoDetailsTabBase<Folder> implements IPost
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState){
         View v = inflater.inflate(R.layout.fragment_folder_details_tab, container, false);
         ButterKnife.inject(this, v);
-
-        mFab.setOnClickListener(showActions);
 
         setIntentString(Folder.FOLDER_INTENT);
 
@@ -65,14 +62,6 @@ public class FolderDetailsTab extends GeoDetailsTabBase<Folder> implements IPost
 
         return v;
     }
-
-    protected View.OnClickListener showActions = new View.OnClickListener() {
-        @Override
-        public void onClick(View v) {
-            mAnalytics.trackClick(new GoogleAnalyticEvent().ShowFolderActions());
-            mFolderDialog.actions(mEntity, getActivity(), getActivity().getSupportFragmentManager());
-        }
-    };
 
     @Override
     public void refresh() {

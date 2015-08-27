@@ -48,7 +48,9 @@ public class DeleteFolderDialogFragment extends GeoDialogFragmentBase {
                     public void onClick(DialogInterface dialog, int which) {
                         mService.delete(mFolder.getId());
                         mAnalytics.trackClick(new GoogleAnalyticEvent().DeleteFolder());
+
                         Toast.makeText(application.getAppContext(), "Delete Request Sent!", Toast.LENGTH_LONG).show();
+
                     }
                 }).setNegativeButton(android.R.string.cancel, new DialogInterface.OnClickListener() {
                     @Override

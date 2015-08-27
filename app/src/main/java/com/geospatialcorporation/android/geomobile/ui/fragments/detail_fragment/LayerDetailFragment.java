@@ -11,7 +11,10 @@ import android.widget.TabHost;
 import android.widget.TextView;
 
 import com.geospatialcorporation.android.geomobile.R;
+import com.geospatialcorporation.android.geomobile.application;
+import com.geospatialcorporation.android.geomobile.library.constants.GeoPanel;
 import com.geospatialcorporation.android.geomobile.library.helpers.DataHelper;
+import com.geospatialcorporation.android.geomobile.library.panelmanager.PanelManager;
 import com.geospatialcorporation.android.geomobile.models.Layers.Layer;
 import com.geospatialcorporation.android.geomobile.models.OptionSlideController.IOptionsSlideController;
 import com.geospatialcorporation.android.geomobile.ui.MainActivity;
@@ -20,6 +23,10 @@ import com.geospatialcorporation.android.geomobile.ui.fragments.detail_fragment.
 import com.geospatialcorporation.android.geomobile.ui.fragments.detail_fragment.layer_tabs.DetailsTab;
 import com.geospatialcorporation.android.geomobile.ui.fragments.detail_fragment.layer_tabs.SublayersTab;
 import com.geospatialcorporation.android.geomobile.ui.fragments.dialogs.ItemDetailFragment;
+import com.geospatialcorporation.android.geomobile.ui.fragments.panel_fragments.tree_fragment_panels.DocumentFolderPanelFragment;
+import com.geospatialcorporation.android.geomobile.ui.fragments.panel_fragments.tree_fragment_panels.LayerDetailPanelFragment;
+import com.geospatialcorporation.android.geomobile.ui.fragments.panel_fragments.tree_fragment_panels.LibraryFolderPanelFragment;
+import com.sothree.slidinguppanel.SlidingUpPanelLayout;
 
 import butterknife.ButterKnife;
 import butterknife.InjectView;
@@ -39,6 +46,7 @@ public class LayerDetailFragment extends ItemDetailFragment<Layer>
     private static final String DETAILS = "Details";
 
     @InjectView(R.id.title) TextView mTitle;
+    @InjectView(R.id.sliding_layout) SlidingUpPanelLayout mPanel;
 
     FragmentTabHost mTabHost;
     View mView;
@@ -64,6 +72,25 @@ public class LayerDetailFragment extends ItemDetailFragment<Layer>
                 .addToBackStack(null).commit();
     }
 
+    @OnClick(R.id.optionsIV)
+    public void bringUpOptions(){
+        if(mPanelManager.getIsOpen()){
+            closePanel();
+        } else {
+            Fragment f = new LayerDetailPanelFragment();
+
+            f.setArguments(mEntity.toBundle());
+
+            getFragmentManager().beginTransaction()
+                    .replace(R.id.slider_content, f)
+                    .commit();
+
+            mPanelManager.halfAnchor();
+            mPanelManager.touch(false);
+        }
+    }
+
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState){
         super.onCreate(savedInstanceState);
@@ -73,6 +100,9 @@ public class LayerDetailFragment extends ItemDetailFragment<Layer>
         ButterKnife.inject(this, mView);
 
         handleArguments();
+
+        application.setLayerDetailFragmentPanel(mPanel);
+        mPanelManager = new PanelManager.Builder().type(GeoPanel.LAYER_DETAIL).hide().build();
 
         mNavigationHelper.syncMenu(55);
 
@@ -112,13 +142,6 @@ public class LayerDetailFragment extends ItemDetailFragment<Layer>
 
     }
 
-    public View.OnClickListener DeleteonClickListner = new View.OnClickListener(){
-        @Override
-        public void onClick(View v){
-           //GeoDialogHelper.deleteLayer(getActivity(), mEntity, getFragmentManager());
-        }
-    };
-
     public Fragment getCurrentTab() {
         return getChildFragmentManager().findFragmentById(android.R.id.tabcontent);
     }
@@ -128,5 +151,8 @@ public class LayerDetailFragment extends ItemDetailFragment<Layer>
 
     }
 
+    public void closePanel(){
+        mPanelManager.hide();
+    }
 
 }

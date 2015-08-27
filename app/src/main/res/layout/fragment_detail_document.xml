@@ -23,14 +23,14 @@
             android:src="@drawable/ic_chevron_left_white_24dp"
             android:layout_gravity="center_vertical"
             android:layout_weight="1"
-            android:paddingLeft="-18dp"/>
+            android:paddingLeft="-10dp"/>
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:text="@string/geounderground"
             android:gravity="center"
-            android:id="@+id/editText2"
+            android:id="@+id/title"
             android:textSize="18sp"
             android:layout_weight="4"
             android:textColor="@color/white"
@@ -40,104 +40,115 @@
         <ImageView
             android:layout_width="36dp"
             android:layout_height="36dp"
+            android:id="@+id/optionsIV"
+            android:src="@drawable/ic_dropdown"
+            android:layout_gravity="center_vertical"
+            android:padding="2dp"/>
+
+        <ImageView
+            android:layout_width="36dp"
+            android:layout_height="36dp"
             android:id="@+id/goToMapIV"
             android:src="@drawable/ic_earth_white_36dp"
             android:layout_gravity="center_vertical"
             android:layout_weight="1"/>
-        <!--android:src="@drawable/ic_map_white_36dp"-->
     </LinearLayout>
 
-    <ImageView
+    <com.sothree.slidinguppanel.SlidingUpPanelLayout
+        xmlns:sothree="http://schemas.android.com/apk/res-auto"
+        android:id="@+id/sliding_layout"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:id="@+id/backgroundImageView"
-        android:layout_centerHorizontal="true"
-        android:background="@color/primary"
-        android:minHeight="100dp"
-        android:src="@drawable/ic_file_document_box_white_24dp"
-        android:layout_below="@id/docdetail_actionbar"
-        android:contentDescription="@string/document_icon"/>
+        android:layout_height="match_parent"
+        android:gravity="bottom"
+        sothree:umanoPanelHeight="68dp"
+        sothree:umanoShadowHeight="4dp"
+        android:background="@color/white"
+        android:layout_below="@+id/docdetail_actionbar">
 
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:textAppearance="?android:attr/textAppearanceLarge"
-        android:id="@+id/documentNameTV"
-        android:layout_below="@+id/backgroundImageView"
-        android:layout_alignParentStart="true"
-        android:paddingLeft="40dp"
-        android:background="@color/primary"
-        android:paddingBottom="10dp"
-        android:textColor="@color/white"
-        />
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
 
-    <com.melnykov.fab.FloatingActionButton
-        android:id="@+id/fab"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:src="@drawable/ic_action_add"
-        fab:fab_colorNormal="@color/accent"
-        fab:fab_colorPressed="@color/primary_dark"
-        fab:fab_colorRipple="@color/primary_light"
-        android:layout_marginLeft="16dp"
-        android:layout_marginRight="16dp"
-        android:layout_alignTop="@+id/documentNameTV"
-        android:layout_alignParentEnd="true"
-        android:layout_marginEnd="32dp"/>
+            <ImageView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/backgroundImageView"
+                android:layout_centerHorizontal="true"
+                android:background="@color/primary"
+                android:minHeight="100dp"
+                android:src="@drawable/ic_file_document_box_white_24dp"
+                android:layout_below="@id/docdetail_actionbar"
+                android:contentDescription="@string/document_icon"/>
 
-    <EditText
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:inputType="textPersonName"
-        android:ems="10"
-        android:id="@+id/documentNameET"
-        android:layout_below="@+id/documentNameTV"
-        android:layout_centerHorizontal="true"
-        android:paddingLeft="25dp"
-        android:paddingRight="25dp"
-        android:visibility="gone"/>
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textAppearance="?android:attr/textAppearanceLarge"
+                android:id="@+id/documentNameTV"
+                android:layout_below="@+id/backgroundImageView"
+                android:layout_alignParentStart="true"
+                android:paddingLeft="40dp"
+                android:background="@color/primary"
+                android:paddingBottom="10dp"
+                android:textColor="@color/white"
+                />
 
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:textAppearance="?android:attr/textAppearanceLarge"
-        android:id="@+id/fileSizeValue"
-        android:layout_centerVertical="true"
-        android:layout_alignStart="@+id/fileSizeLabel"/>
+            <EditText
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:inputType="textPersonName"
+                android:ems="10"
+                android:id="@+id/documentNameET"
+                android:layout_below="@+id/documentNameTV"
+                android:layout_centerHorizontal="true"
+                android:paddingLeft="25dp"
+                android:paddingRight="25dp"
+                android:visibility="gone"/>
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:textAppearance="?android:attr/textAppearanceMedium"
-        android:text="@string/file_size"
-        android:id="@+id/fileSizeLabel"
-        android:layout_below="@+id/fileSizeValue"
-        android:layout_marginLeft="15dp"/>
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textAppearance="?android:attr/textAppearanceLarge"
+                android:id="@+id/fileSizeValue"
+                android:layout_centerVertical="true"
+                android:layout_alignStart="@+id/fileSizeLabel"/>
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:textAppearance="?android:attr/textAppearanceLarge"
-        android:id="@+id/uploadTimeValue"
-        android:layout_marginTop="34dp"
-        android:layout_below="@+id/fileSizeLabel"
-        android:layout_alignStart="@+id/fileSizeValue"/>
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textAppearance="?android:attr/textAppearanceMedium"
+                android:text="@string/file_size"
+                android:id="@+id/fileSizeLabel"
+                android:layout_below="@+id/fileSizeValue"
+                android:layout_marginLeft="15dp"/>
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:textAppearance="?android:attr/textAppearanceMedium"
-        android:text="@string/upload_time"
-        android:id="@+id/uploadTimeLabel"
-        android:layout_below="@+id/uploadTimeValue"
-        android:layout_alignStart="@+id/fileSizeLabel"/>
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textAppearance="?android:attr/textAppearanceLarge"
+                android:id="@+id/uploadTimeValue"
+                android:layout_marginTop="34dp"
+                android:layout_below="@+id/fileSizeLabel"
+                android:layout_alignStart="@+id/fileSizeValue"/>
 
-    <Button
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="@string/download"
-        android:id="@+id/downloadBtn"
-        android:layout_alignParentBottom="true"
-        android:layout_centerHorizontal="true"/>
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textAppearance="?android:attr/textAppearanceMedium"
+                android:text="@string/upload_time"
+                android:id="@+id/uploadTimeLabel"
+                android:layout_below="@+id/uploadTimeValue"
+                android:layout_alignStart="@+id/fileSizeLabel"/>
+
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:id="@+id/slider_content">
+        </RelativeLayout>
+
+    </com.sothree.slidinguppanel.SlidingUpPanelLayout>
+
 
 </RelativeLayout>
