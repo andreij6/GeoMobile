@@ -11,9 +11,6 @@ import com.geospatialcorporation.android.geomobile.ui.MainActivity;
 import com.geospatialcorporation.android.geomobile.ui.fragments.panel_fragments.tree_fragment_panels.DefaultCollapsedPanelFragment;
 import com.sothree.slidinguppanel.SlidingUpPanelLayout;
 
-/**
- * Created by andre on 6/19/2015.
- */
 public abstract class GeoSlidingPanelBase {
 
     protected  SlidingUpPanelLayout mPanel;
@@ -73,7 +70,7 @@ public abstract class GeoSlidingPanelBase {
         Fragment collapsedFragment = new DefaultCollapsedPanelFragment();
 
         completeDefaultCollapsedUI(collapsedFragment);
-    };
+    }
 
     protected void completeDefaultCollapsedUI(Fragment collapsedFragment){
         Bundle args = getArguments();
@@ -128,5 +125,11 @@ public abstract class GeoSlidingPanelBase {
     protected void anchorPanel(float anchorPoint) {
         mPanel.setAnchorPoint(anchorPoint);
         mPanel.setPanelState(SlidingUpPanelLayout.PanelState.ANCHORED);
+    }
+
+    public void halfAnchor(float plus) {
+        float half = 0.5f;
+
+        anchorPanel(half + plus);
     }
 }

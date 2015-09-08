@@ -1,6 +1,5 @@
 package com.geospatialcorporation.android.geomobile.ui.fragments.detail_fragment;
 
-import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
@@ -12,17 +11,21 @@ import android.widget.TabHost;
 import android.widget.TextView;
 
 import com.geospatialcorporation.android.geomobile.R;
+import com.geospatialcorporation.android.geomobile.application;
 import com.geospatialcorporation.android.geomobile.library.DI.Analytics.Models.GoogleAnalyticEvent;
+import com.geospatialcorporation.android.geomobile.library.constants.GeoPanel;
+import com.geospatialcorporation.android.geomobile.library.panelmanager.PanelManager;
 import com.geospatialcorporation.android.geomobile.models.Folders.Folder;
-import com.geospatialcorporation.android.geomobile.ui.MainActivity;
 import com.geospatialcorporation.android.geomobile.ui.fragments.GoogleMapFragment;
 import com.geospatialcorporation.android.geomobile.ui.fragments.detail_fragment.folder_tabs.FolderDetailsTab;
 import com.geospatialcorporation.android.geomobile.ui.fragments.detail_fragment.folder_tabs.PermissionsTab;
 import com.geospatialcorporation.android.geomobile.ui.fragments.dialogs.ItemDetailFragment;
-
-import org.w3c.dom.Text;
+import com.geospatialcorporation.android.geomobile.ui.fragments.tree_fragments.LayerFragment;
+import com.geospatialcorporation.android.geomobile.ui.fragments.tree_fragments.LibraryFragment;
+import com.sothree.slidinguppanel.SlidingUpPanelLayout;
 
 import butterknife.ButterKnife;
+import butterknife.InjectView;
 import butterknife.OnClick;
 
 public class LayerFolderDetailFragment extends ItemDetailFragment<Folder> implements TabHost.OnTabChangeListener {
@@ -30,14 +33,12 @@ public class LayerFolderDetailFragment extends ItemDetailFragment<Folder> implem
     private static final String DETAILS = "Details";
     private static final String PERMISSIONS = "Permissions";
 
-    @OnClick(R.id.showNavIV1)
-    public void showNavigation(){
-        ((MainActivity)getActivity()).openNavigationDrawer();
-    }
+    @InjectView(R.id.sliding_layout) SlidingUpPanelLayout mPanel;
 
-    @OnClick(R.id.showNavIV2)
-    public void showNavigation2(){
-        ((MainActivity)getActivity()).openNavigationDrawer();
+
+    @OnClick(R.id.goBackIV)
+    public void goBack(){
+        getFragmentManager().popBackStack();
     }
 
     @OnClick(R.id.goToMapIV)
@@ -59,6 +60,9 @@ public class LayerFolderDetailFragment extends ItemDetailFragment<Folder> implem
 
         ButterKnife.inject(this, view);
 
+        application.setLayerDetailFragmentPanel(mPanel);
+        mPanelManager = new PanelManager.Builder().type(GeoPanel.LAYER_DETAIL).hide().build();
+
         sendScreenName();
 
         FragmentTabHost tabHost = (FragmentTabHost)view.findViewById(R.id.tabHost);
@@ -67,17 +71,6 @@ public class LayerFolderDetailFragment extends ItemDetailFragment<Folder> implem
 
         Bundle args = getArguments();
         args.putString("Folder Type", "Layer");
-
-        /*
-        View detailsTab = inflater.inflate(R.layout.tab_view, null);
-        View permissionsTab = inflater.inflate(R.layout.tab_view, null);
-
-        TextView detailsTV = (TextView)detailsTab.findViewById(R.id.title);
-        TextView permissionsTV = (TextView)permissionsTab.findViewById(R.id.title);
-
-        detailsTV.setText(DETAILS);
-        permissionsTV.setText(PERMISSIONS);
-        */
 
         tabHost.addTab(tabHost.newTabSpec(DETAILS).setIndicator(DETAILS), FolderDetailsTab.class, args);
         tabHost.addTab(tabHost.newTabSpec(PERMISSIONS).setIndicator(PERMISSIONS), PermissionsTab.class, getArguments());

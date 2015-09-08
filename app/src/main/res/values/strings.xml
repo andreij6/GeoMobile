@@ -281,6 +281,8 @@
     <string name="add_existing">Add Existing</string>
     <string name="add_new">Add New</string>
     <string name="saving_attribute_updates">Saving Attribute Updates</string>
+    <string name="map_options">Map Options</string>
+    <string name="create_new_feature">Create New Features</string>
 
     <string name="please_wait">Please Wait</string>
     <string name="progress_dialog">Progress</string>

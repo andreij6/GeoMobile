@@ -13,6 +13,7 @@ import com.geospatialcorporation.android.geomobile.library.helpers.MediaHelper;
 import com.geospatialcorporation.android.geomobile.library.panelmanager.ISlidingPanelManager;
 import com.geospatialcorporation.android.geomobile.ui.MainActivity;
 import com.geospatialcorporation.android.geomobile.ui.fragments.detail_fragment.DocumentFolderDetailFragment;
+import com.geospatialcorporation.android.geomobile.ui.fragments.detail_fragment.LayerFolderDetailFragment;
 import com.geospatialcorporation.android.geomobile.ui.fragments.tree_fragments.LibraryFragment;
 
 import butterknife.OnClick;
@@ -27,9 +28,15 @@ public class LibraryFolderPanelFragment extends TreeFolderPanelFragmentBase<Libr
     //OnClicks
     @OnClick(R.id.folderInfoSection)
     public void folderInfo(){
-        mContentFragment.closePanel();
+        Fragment f = new DocumentFolderDetailFragment();
 
-        mContentFragment.goToFolderInfo();
+        f.setArguments(mFolder.toBundle());
+
+        getFragmentManager()
+            .beginTransaction()
+            .addToBackStack(null)
+            .replace(R.id.content_frame, f)
+            .commit();
     }
 
     @OnClick(R.id.addDocumentSection)

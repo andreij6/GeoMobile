@@ -18,21 +18,12 @@
 
         <ImageView
             android:layout_width="wrap_content"
-            android:layout_height="32dp"
-            android:id="@+id/showNavIV1"
-            android:layout_gravity="center_vertical"
-            android:src="@drawable/ic_nav_white"
-            android:paddingLeft="-16dp"
-            android:paddingRight="-10dp"/>
-
-        <ImageView
-            android:layout_width="wrap_content"
             android:layout_height="match_parent"
-            android:id="@+id/showNavIV2"
-            android:src="@drawable/ic_logo_g_white"
+            android:id="@+id/goBackIV"
+            android:src="@drawable/ic_chevron_left_white_36dp"
             android:layout_gravity="center_vertical"
             android:layout_weight="1"
-            android:paddingLeft="-18dp"/>
+            android:paddingLeft="-12dp"/>
 
         <TextView
             android:layout_width="wrap_content"

@@ -2,9 +2,6 @@ package com.geospatialcorporation.android.geomobile.library.panelmanager;
 
 import com.sothree.slidinguppanel.SlidingUpPanelLayout;
 
-/**
- * Created by andre on 6/7/2015.
- */
 public interface ISlidingPanelManager {
 
     void setup();
@@ -28,4 +25,6 @@ public interface ISlidingPanelManager {
     void setIsOpen(boolean open);
 
     Boolean getIsOpen();
+
+    void halfAnchor(float plus);
 }

@@ -17,6 +17,8 @@
 package com.geospatialcorporation.android.geomobile.ui;
 
 import android.content.Intent;
+import android.content.pm.ActivityInfo;
+import android.content.res.Configuration;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
@@ -26,6 +28,7 @@ import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBarActivity;
 import android.support.v7.widget.Toolbar;
+import android.telephony.TelephonyManager;
 import android.view.Gravity;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -96,8 +99,15 @@ public class MainActivity extends ActionBarActivity
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        //getWindow().requestFeature(Window.FEATURE_ACTION_BAR_OVERLAY);
         setContentView(R.layout.activity_main);
+
+        if(isTablet()){
+            //setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
+            Toast.makeText(this, "tablet", Toast.LENGTH_LONG).show();
+        }else{
+            setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
+        }
+
         ButterKnife.inject(this);
         application.setMainActivity(this);
         getSupportActionBar().hide();
@@ -122,6 +132,12 @@ public class MainActivity extends ActionBarActivity
 
         //mDrawerLayout.setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED); //prevents drawer from being slide open.  Can slide close and use buttons to open
 
+    }
+
+    public boolean isTablet() {
+        return (getResources().getConfiguration().screenLayout
+                & Configuration.SCREENLAYOUT_SIZE_MASK)
+                >= Configuration.SCREENLAYOUT_SIZE_LARGE;
     }
 
     @Override
@@ -270,11 +286,11 @@ public class MainActivity extends ActionBarActivity
     }
 
     public void closeLayerDrawer() {
-        getDrawerLayout().closeDrawer(Gravity.END);
+        getDrawerLayout().closeDrawer(Gravity.RIGHT);
     }
 
     public void closeNavDrawer() {
-        getDrawerLayout().closeDrawer(Gravity.START);
+        getDrawerLayout().closeDrawer(Gravity.LEFT);
     }
 
     public View getLayerListView() {

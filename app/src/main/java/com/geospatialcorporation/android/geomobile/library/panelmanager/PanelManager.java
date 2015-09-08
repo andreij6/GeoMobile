@@ -12,9 +12,6 @@ import com.geospatialcorporation.android.geomobile.library.panelmanager.paneltyp
 import com.geospatialcorporation.android.geomobile.library.panelmanager.paneltype.LayerDetailSlidingPanel;
 import com.sothree.slidinguppanel.SlidingUpPanelLayout;
 
-/**
- * Created by andre on 6/19/2015.
- */
 public class PanelManager implements ISlidingPanelManager {
 
     GeoSlidingPanelBase mGeoPanel;
@@ -108,6 +105,12 @@ public class PanelManager implements ISlidingPanelManager {
     @Override
     public Boolean getIsOpen() {
         return mGeoPanel.getIsOpen();
+    }
+
+    @Override
+    public void halfAnchor(float plus) {
+        mGeoPanel.setIsOpen(true);
+        mGeoPanel.halfAnchor(plus);
     }
 
     public static class Builder {

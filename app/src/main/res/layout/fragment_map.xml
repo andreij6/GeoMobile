@@ -87,8 +87,6 @@
                 fab:fab_colorNormal="@color/accent_dark"
                 fab:fab_colorPressed="@color/primary_dark"
                 fab:fab_colorRipple="@color/primary_light"
-                android:layout_below="@+id/fab"
-                android:layout_alignEnd="@+id/fab"
                 android:visibility="gone"/>
 
             <com.melnykov.fab.FloatingActionButton
@@ -100,8 +98,6 @@
                 fab:fab_colorPressed="@color/primary_dark"
                 fab:fab_colorRipple="@color/primary_light"
                 android:layout_marginTop="18dp"
-                android:layout_below="@+id/fab_layers"
-                android:layout_alignStart="@+id/fab_layers"
                 android:visibility="gone"/>
 
             <!-- Bookmark Mode Buttons -->
@@ -130,8 +126,6 @@
                 fab:fab_colorNormal="@color/accent_dark"
                 fab:fab_colorPressed="@color/primary_dark"
                 fab:fab_colorRipple="@color/primary_light"
-                android:layout_below="@+id/fab"
-                android:layout_alignEnd="@+id/fab"
                 android:visibility="gone"/>
 
             <com.melnykov.fab.FloatingActionButton
@@ -143,8 +137,6 @@
                 fab:fab_colorPressed="@color/primary_dark"
                 fab:fab_colorRipple="@color/primary_light"
                 android:layout_marginTop="18dp"
-                android:layout_below="@+id/fab_layers"
-                android:layout_alignStart="@+id/fab_layers"
                 android:visibility="gone"/>
 
             <LinearLayout
@@ -185,6 +177,15 @@
                     android:textColor="@color/white"
                     android:textStyle="bold"
                     />
+
+                <!-- Control for the create new features panel -->
+                <!--<ImageView
+                    android:layout_width="36dp"
+                    android:layout_height="36dp"
+                    android:id="@+id/mapOptionsIV"
+                    android:src="@drawable/ic_dropdown"
+                    android:layout_gravity="center_vertical"
+                    android:padding="2dp"/>-->
 
                 <ImageView
                     android:layout_width="36dp"

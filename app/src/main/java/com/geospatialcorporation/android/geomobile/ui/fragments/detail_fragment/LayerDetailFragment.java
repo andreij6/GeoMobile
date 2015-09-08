@@ -32,9 +32,6 @@ import butterknife.ButterKnife;
 import butterknife.InjectView;
 import butterknife.OnClick;
 
-/**
- * Created by andre on 6/2/2015.
- */
 public class LayerDetailFragment extends ItemDetailFragment<Layer>
         implements TabHost.OnTabChangeListener,
         IOptionsSlideController
@@ -51,14 +48,9 @@ public class LayerDetailFragment extends ItemDetailFragment<Layer>
     FragmentTabHost mTabHost;
     View mView;
 
-    @OnClick(R.id.showNavIV1)
+    @OnClick(R.id.goBackIV)
     public void showNavigation(){
-        ((MainActivity)getActivity()).openNavigationDrawer();
-    }
-
-    @OnClick(R.id.showNavIV2)
-    public void showNavigation2(){
-        ((MainActivity)getActivity()).openNavigationDrawer();
+        getFragmentManager().popBackStack();
     }
 
     @OnClick(R.id.goToMapIV)

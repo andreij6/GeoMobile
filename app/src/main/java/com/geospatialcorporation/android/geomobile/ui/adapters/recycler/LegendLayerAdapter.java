@@ -142,6 +142,7 @@ public class LegendLayerAdapter extends GeoRecyclerAdapterBase<LegendLayerAdapte
                 mLayerName.setTextColor(mContext.getResources().getColor(R.color.primary_dark));
 
                 mLayerName.setOnClickListener(GoToLayerFragment);
+                gotoSublayer.setOnClickListener(GoToLayerFragment);
 
                 isVisibleCB.setVisibility(View.INVISIBLE);
                 geomIV.setVisibility(View.GONE);

@@ -107,10 +107,7 @@ public class LayerFragment extends GeoViewFragmentBase implements IContentRefres
         ILayoutRefresher refresher = application.getUIHelperComponent().provideLayoutRefresher();
 
         application.setLayerFragmentPanel(mPanel);
-
-        mPanelManager = new PanelManager(GeoPanel.LAYER_FRAGMENT);
-        mPanelManager.setup();
-        mPanelManager.hide();
+        mPanelManager = new PanelManager.Builder().type(GeoPanel.LAYER_FRAGMENT).hide().build();
 
         mSwipeRefreshLayout.setOnRefreshListener(refresher.build(mSwipeRefreshLayout, this));
         mSwipeRefreshLayout.setProgressBackgroundColorSchemeColor(mContext.getResources().getColor(R.color.accent));
@@ -145,6 +142,8 @@ public class LayerFragment extends GeoViewFragmentBase implements IContentRefres
     @Override
     public void onPostExecute(Folder currentFolder) {
         mCurrentFolder = currentFolder;
+
+        mPanelManager.hide();
 
         if(currentFolder == null) { return; }
 

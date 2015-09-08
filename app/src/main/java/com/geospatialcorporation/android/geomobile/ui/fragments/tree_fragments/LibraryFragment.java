@@ -36,6 +36,7 @@ import com.geospatialcorporation.android.geomobile.ui.MainActivity;
 import com.geospatialcorporation.android.geomobile.ui.fragments.GeoViewFragmentBase;
 import com.geospatialcorporation.android.geomobile.ui.fragments.GoogleMapFragment;
 import com.geospatialcorporation.android.geomobile.ui.fragments.detail_fragment.DocumentFolderDetailFragment;
+import com.geospatialcorporation.android.geomobile.ui.fragments.panel_fragments.tree_fragment_panels.LayerFolderPanelFragment;
 import com.geospatialcorporation.android.geomobile.ui.fragments.panel_fragments.tree_fragment_panels.LibraryFolderPanelFragment;
 import com.geospatialcorporation.android.geomobile.models.ListItem;
 import com.sothree.slidinguppanel.SlidingUpPanelLayout;
@@ -86,19 +87,21 @@ public class LibraryFragment extends GeoViewFragmentBase
 
     @OnClick(R.id.libraryOptionsIV)
     public void optionsDropDown(){
-        if(mPanelManager.getIsOpen()){
-            closePanel();
-        } else {
+        if(!mPanelManager.getIsOpen()){
+
             Fragment f = new LibraryFolderPanelFragment();
 
             f.setArguments(mCurrentFolder.toBundle());
 
-            getFragmentManager().beginTransaction()
+            getFragmentManager()
+                    .beginTransaction()
                     .replace(R.id.slider_content, f)
                     .commit();
 
-            mPanelManager.halfAnchor();
+            mPanelManager.halfAnchor(0.1f);
             mPanelManager.touch(false);
+        } else {
+            closePanel();
         }
     }
 
@@ -130,10 +133,7 @@ public class LibraryFragment extends GeoViewFragmentBase
         mProgressHelper = new ProgressDialogHelper(getActivity());
 
         application.setLibraryFragmentPanel(mPanel);
-
-        mPanelManager = new PanelManager(GeoPanel.LIBRARY_FRAGMENT);
-        mPanelManager.setup();
-        mPanelManager.hide();
+        mPanelManager = new PanelManager.Builder().type(GeoPanel.LIBRARY_FRAGMENT).hide().build();
 
         mSwipeRefreshLayout.setOnRefreshListener(refresher.build(mSwipeRefreshLayout, this));
         mSwipeRefreshLayout.setProgressBackgroundColorSchemeColor(mContext.getResources().getColor(R.color.accent));
@@ -222,6 +222,8 @@ public class LibraryFragment extends GeoViewFragmentBase
     public void onPostExecute(Folder model) {
         mCurrentFolder = model;
 
+        mPanelManager.hide();
+
         if(mCurrentFolder.getParent() != null){
             mNavBars.setVisibility(View.GONE);
             mNavLogo.setImageDrawable(mContext.getDrawable(R.drawable.ic_chevron_left_white_18dp));
@@ -289,6 +291,8 @@ public class LibraryFragment extends GeoViewFragmentBase
             int folderId = args.getInt(Folder.FOLDER_INTENT, 0);
 
             mDocumentsTask.getDocumentsByFolderId(params, folderId);
+
+
         } else {
             mDocumentsTask.getDocumentsByFolderId(params, 0);
         }

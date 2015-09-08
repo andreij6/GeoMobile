@@ -38,17 +38,11 @@ public class DocumentFolderDetailFragment extends ItemDetailFragment<Folder> imp
 
     @InjectView(R.id.sliding_layout) SlidingUpPanelLayout mPanel;
 
-
     IFolderDialog mFolderDialog;
 
-    @OnClick(R.id.showNavIV1)
-    public void showNavigation(){
-        ((MainActivity)getActivity()).openNavigationDrawer();
-    }
-
-    @OnClick(R.id.showNavIV2)
-    public void showNavigation2(){
-        ((MainActivity)getActivity()).openNavigationDrawer();
+    @OnClick(R.id.goBackIV)
+    public void goBack(){
+        getFragmentManager().popBackStack();
     }
 
     @OnClick(R.id.goToMapIV)
