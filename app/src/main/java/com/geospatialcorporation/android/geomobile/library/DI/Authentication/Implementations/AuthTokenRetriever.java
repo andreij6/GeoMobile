@@ -111,10 +111,6 @@ public class AuthTokenRetriever {
                     application.setGeoSubscription(subscription);
 
                     mContext.startActivity(new Intent(mContext, MainActivity.class));
-
-                    if (ProgressHelper != null) {
-                        ProgressHelper.hide();
-                    }
                 } catch (RetrofitError e) {
                     if (e.getResponse() != null) {
                         Log.d(TAG, Integer.toString(e.getResponse().getStatus()));
@@ -126,15 +122,20 @@ public class AuthTokenRetriever {
                             application.setIsAdminUser(true);
 
                             mContext.startActivity(new Intent(mContext, SubscriptionSelectorActivity.class));
-
-                            if (ProgressHelper != null) {
-                                ProgressHelper.hide();
-                            }
                         }
                     }
                 }
 
                 return new Object();
+            }
+
+            @Override
+            protected void onPostExecute(Object o) {
+                super.onPostExecute(o);
+
+                if (ProgressHelper != null) {
+                    ProgressHelper.hide();
+                }
             }
         };
 

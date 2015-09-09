@@ -1,6 +1,7 @@
 package com.geospatialcorporation.android.geomobile.library.map.featureMappers;
 
 import android.graphics.drawable.Drawable;
+import android.util.Log;
 
 import com.geospatialcorporation.android.geomobile.application;
 import com.geospatialcorporation.android.geomobile.library.helpers.GeoColor;
@@ -13,6 +14,8 @@ import com.google.android.gms.maps.GoogleMap;
  * Created by andre on 6/24/2015.
  */
 public abstract class FeatureMapperBase<T> implements IFeatureMapper {
+    private static final String TAG = FeatureMapperBase.class.getSimpleName();
+
     GoogleMap mMap;
     T mMapFeature;
     GeoColor mGeoColor;
@@ -47,6 +50,7 @@ public abstract class FeatureMapperBase<T> implements IFeatureMapper {
         //    setActiveDrawable(newDrawable);
         //}
 
+        Log.d(TAG, "get Legend Icon" + layer.getLayer().getName());
         setActiveDrawable(layer.getLegendIcon());
 
     }

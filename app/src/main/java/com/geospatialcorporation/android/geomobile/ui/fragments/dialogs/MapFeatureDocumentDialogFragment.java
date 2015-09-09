@@ -131,13 +131,9 @@ public class MapFeatureDocumentDialogFragment extends GeoDialogFragmentBase impl
 
         builder.setTitle(R.string.add_mapfeature_document)
                 .setView(v)
-                .setPositiveButton(R.string.done, new DialogInterface.OnClickListener() {
+                .setPositiveButton(R.string.cancel, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
-                        if (mSelected != null) {
-                            mAnalytics.trackClick(new GoogleAnalyticEvent().MapfeatureDocument());
-                            mLayerTreeService.addMapFeatureDocument(mLayerId, mFeatureId, mSelected.getId());
-                        }
                         dialog.cancel();
                     }
                 });
@@ -183,13 +179,24 @@ public class MapFeatureDocumentDialogFragment extends GeoDialogFragmentBase impl
 
     @Override
     public void setSelected(Document selected) {
+
         mSelected = selected;
+
+        if (mSelected != null) {
+            mAnalytics.trackClick(new GoogleAnalyticEvent().MapfeatureDocument());
+            mLayerTreeService.addMapFeatureDocument(mLayerId, mFeatureId, mSelected.getId());
+        }
+
+        getDialog().cancel();
+
     }
 
     @Override
     public List<Document> getData() {
         return mDocuments;
     }
+
+
 
 
 }

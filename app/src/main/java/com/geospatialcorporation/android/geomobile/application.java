@@ -489,7 +489,7 @@ public class application extends applicationDIBase {
         folderHashMap = new HashMap<>();
         layerHashMap = new HashMap<>();
         documentHashMap = new HashMap<>();
-        //googleMap = new GoogleMapFragment();
+        mGoogleMapFragment = new GoogleMapFragment();
         geoAuthToken = appState.getString(geoAuthTokenName, null);
     }
 

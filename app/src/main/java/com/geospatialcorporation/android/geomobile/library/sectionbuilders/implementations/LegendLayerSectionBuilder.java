@@ -1,18 +1,26 @@
 package com.geospatialcorporation.android.geomobile.library.sectionbuilders.implementations;
 
 import android.content.Context;
+import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 
 import com.geospatialcorporation.android.geomobile.R;
 import com.geospatialcorporation.android.geomobile.application;
 import com.geospatialcorporation.android.geomobile.library.DI.Map.Interfaces.ILayerManager;
+import com.geospatialcorporation.android.geomobile.library.DI.SharedPreferences.Implementations.AppStateSharedPrefs;
 import com.geospatialcorporation.android.geomobile.library.DI.Tasks.Interfaces.ILayerStyleTask;
+import com.geospatialcorporation.android.geomobile.library.DI.UIHelpers.Interfaces.IMapStatusBarManager;
+import com.geospatialcorporation.android.geomobile.library.map.AppStateMapQueryRequestCallback;
+import com.geospatialcorporation.android.geomobile.library.map.SendMapQueryRequestCallback;
 import com.geospatialcorporation.android.geomobile.library.sectionbuilders.ISectionBuilder;
 import com.geospatialcorporation.android.geomobile.library.sectionbuilders.SectionBuilderBase;
 import com.geospatialcorporation.android.geomobile.models.Folders.Folder;
 import com.geospatialcorporation.android.geomobile.models.Layers.Layer;
 import com.geospatialcorporation.android.geomobile.models.Layers.LegendLayer;
+import com.geospatialcorporation.android.geomobile.models.Query.map.Layers;
+import com.geospatialcorporation.android.geomobile.models.Query.map.MapDefaultQueryRequest;
+import com.geospatialcorporation.android.geomobile.models.Query.map.Options;
 import com.geospatialcorporation.android.geomobile.ui.adapters.recycler.LegendLayerAdapter;
 import com.geospatialcorporation.android.geomobile.ui.adapters.SimpleSectionedRecyclerViewAdapter;
 
@@ -26,7 +34,17 @@ public class LegendLayerSectionBuilder extends SectionBuilderBase<Folder> implem
 
     public LegendLayerSectionBuilder(Context context) {
         super(context);
+        mAppStateLayers = new ArrayList<>();
+        mStateSharedPrefs = application.getGeoSharedPrefsComponent().provideAppStateSharedPrefs();
+        mMapStatusBarManager = application.getUIHelperComponent().provideMapStatusBarManager();
+        mLayerManager = application.getMapComponent().provideLayerManager();
     }
+
+    ArrayList<LegendLayer> mAppStateLayers;
+    AppStateSharedPrefs mStateSharedPrefs;
+    IMapStatusBarManager mMapStatusBarManager;
+    ILayerManager mLayerManager;
+
 
     @Override
     public ISectionBuilder<Folder> BuildAdapter(List<Folder> data, int folderCount) {
@@ -37,6 +55,10 @@ public class LegendLayerSectionBuilder extends SectionBuilderBase<Folder> implem
 
         //-- Add All Layers Extent
         getAllLayerExtents(llayers, layerManager);
+        //--
+
+        //-- Show AppState Layers
+        showAppStateLayers();
         //--
 
         LegendLayerAdapter adapter = new LegendLayerAdapter(mContext, llayers);
@@ -65,15 +87,59 @@ public class LegendLayerSectionBuilder extends SectionBuilderBase<Folder> implem
         return this;
     }
 
+    protected void showAppStateLayers(){
+        if(mAppStateLayers.size() > 0) {
+            mMapStatusBarManager.setMessage("Loading Previous Map State");
+        }
+
+        for(LegendLayer llayer : mAppStateLayers){
+            Layer layer = llayer.getLayer();
+            layer.setIsShowing(true);
+
+            addLayerToMap(llayer);
+
+            application.getMapLayerState().addLayer(layer);
+
+            mLayerManager.addVisibleLayerExtent(layer.getId(), layer.getExtent());
+
+            llayer.setMapped(true);
+        }
+
+
+
+
+    }
+
     protected void getAllLayerExtents(List<LegendLayer> llayers, ILayerManager layerManager) {
         for(LegendLayer llayer : llayers){
-            Layer toAdd = llayer.getLayer();
+            Layer toLayerAdd = llayer.getLayer();
 
-            if (toAdd != null) {
-                layerManager.addAllLayersExtent(toAdd.getId(), toAdd.getExtent());
+            if (toLayerAdd != null) {
+                layerManager.addAllLayersExtent(toLayerAdd.getId(), toLayerAdd.getExtent());
+
+                if(IsSetInAppState(toLayerAdd)){
+                    mAppStateLayers.add(llayer);
+                }
             }
 
         }
+    }
+
+    protected void addLayerToMap(LegendLayer llayer) {
+        Layers single = new Layers(llayer.getLayer());
+        List<Layers> layers = new ArrayList<>();
+        layers.add(single);
+
+        MapDefaultQueryRequest request = new MapDefaultQueryRequest(layers, Options.MAP_QUERY);
+
+        ILayerStyleTask layerStyleTask = application.getTasksComponent().provideLayerStyleTask();
+
+        layerStyleTask.getStyle(llayer, new AppStateMapQueryRequestCallback(request, llayer));
+
+    }
+
+    protected boolean IsSetInAppState(Layer layer) {
+        return mStateSharedPrefs.getInt(layer.getName() + layer.getId(), 0) != 0;
     }
 
     private List<LegendLayer> getLayersFromFolders(List<Folder> layerFolders) {

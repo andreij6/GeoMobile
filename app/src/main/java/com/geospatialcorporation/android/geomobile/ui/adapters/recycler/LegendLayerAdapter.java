@@ -111,23 +111,14 @@ public class LegendLayerAdapter extends GeoRecyclerAdapterBase<LegendLayerAdapte
                 mLayerName.setText(mLayer.getName());
                 mLayerName.setOnClickListener(ZoomToLayer);
 
-                if(IsSetInAppState()) {
-                    mLayer.setIsShowing(true);
-                }
-
                 isVisibleCB.setChecked(mLayer.getIsShowing());
                 isVisibleCB.setEnabled(true);
 
                 isVisibleCB.setOnClickListener(ToggleShowLayers);
                 gotoSublayer.setOnClickListener(GoToSublayer);
 
-                if(mLayer.getIsShowing()  && !mLegendLayer.isMapped()){
-                    isVisibleCB.callOnClick();
-                }
-
                 mLegendLayer.setImageView(geomIV);
-                mLegendLayer.setImageSrc();
-                //mLegendLayer.setProgressBar(mProgressBar);
+                mLegendLayer.setImageSrc(mContext);
                 mLegendLayer.setCheckBox(isVisibleCB);
 
 
@@ -153,15 +144,24 @@ public class LegendLayerAdapter extends GeoRecyclerAdapterBase<LegendLayerAdapte
 
         }
 
-        protected boolean IsSetInAppState() {
-            return false;  //TODO: For some reason
-            //return mStateSharedPrefs.getInt(mLayer.getName() + mLayer.getId(), 0) != 0;
-        }
-
         //region Click Listeners
         protected View.OnClickListener ToggleShowLayers = new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                toggleLayers(false);
+            }
+        };
+
+        protected void toggleLayers(Boolean alwaysShowLayers){
+
+            Boolean alreadyShowing = false;
+
+            if(alwaysShowLayers){
+                alreadyShowing = isVisibleCB.isChecked();
+                isVisibleCB.setChecked(true);
+            }
+
+            if(!alreadyShowing) {
                 if (isVisibleCB.isChecked()) {
                     //Show Layer
                     isVisibleCB.setEnabled(false);
@@ -169,9 +169,7 @@ public class LegendLayerAdapter extends GeoRecyclerAdapterBase<LegendLayerAdapte
                     mAnalytics.trackClick(new GoogleAnalyticEvent().ShowLayer());
 
                     //set Layer Loading
-                    Fragment contentFrag = application.getMainActivity().getContentFragment();
-
-                    mMapStatusBarManager.setMessage("Loading " +  mLayer.getName());
+                    mMapStatusBarManager.setMessage("Loading " + mLayer.getName());
 
                     addLayerToMap();
 
@@ -192,7 +190,7 @@ public class LegendLayerAdapter extends GeoRecyclerAdapterBase<LegendLayerAdapte
                     mLayer.setIsShowing(false);
 
                     mLegendLayer.setLegendIcon(getDrawable(mLayer.getGeometryTypeCodeId()));
-                    mLegendLayer.setImageSrc();
+                    mLegendLayer.setImageSrc(mContext);
 
                     application.getMapLayerState().removeLayer(mLayer);
 
@@ -203,7 +201,7 @@ public class LegendLayerAdapter extends GeoRecyclerAdapterBase<LegendLayerAdapte
                     mLegendLayer.setMapped(false);
                 }
             }
-        };
+        }
 
         protected void updateLayerDB(Boolean isShowing) {
             if(isShowing) {
@@ -230,11 +228,9 @@ public class LegendLayerAdapter extends GeoRecyclerAdapterBase<LegendLayerAdapte
                         .replace(R.id.content_frame, layerFragment)
                         .addToBackStack(null).commit();
 
-                closeDrawer((MainActivity)mContext);
+                ((MainActivity)mContext).closeLayerDrawer();
             }
         };
-
-
 
         private View.OnClickListener GoToSublayer = new View.OnClickListener() {
             @Override
@@ -250,7 +246,7 @@ public class LegendLayerAdapter extends GeoRecyclerAdapterBase<LegendLayerAdapte
                         .addToBackStack(null)
                         .commit();
 
-                closeDrawer(activity);
+                activity.closeLayerDrawer();
             }
         };
 
@@ -267,7 +263,9 @@ public class LegendLayerAdapter extends GeoRecyclerAdapterBase<LegendLayerAdapte
                     mLayerManager.zoomToExtent(mLayer.getExtent());
                 }
 
-                closeDrawer(activity);
+                activity.closeLayerDrawer();
+
+                toggleLayers(true);
             }
         };
 
@@ -277,10 +275,6 @@ public class LegendLayerAdapter extends GeoRecyclerAdapterBase<LegendLayerAdapte
                     .position(new LatLng(latitude, longitude))
                     .icon(BitmapDescriptorFactory.fromResource(R.drawable.ic_map_marker_circle_black_24dp))
                     .anchor(.5f, .5f);
-        }
-
-        protected void closeDrawer(MainActivity activity) {
-            activity.closeLayerDrawer();
         }
 
         protected void goToMap(MainActivity activity) {

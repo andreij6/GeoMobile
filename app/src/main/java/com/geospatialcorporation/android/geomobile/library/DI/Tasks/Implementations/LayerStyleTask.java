@@ -6,6 +6,7 @@ import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.util.Log;
 import android.view.View;
+import android.widget.ImageView;
 
 import com.geospatialcorporation.android.geomobile.application;
 import com.geospatialcorporation.android.geomobile.library.DI.Tasks.Interfaces.ILayerStyleTask;
@@ -44,21 +45,18 @@ public class LayerStyleTask implements ILayerStyleTask {
 
                             mLegendLayer.setLegendIcon(drawImage);
 
-                            mLegendLayer.setImageSrc();
+                            mLegendLayer.setImageSrc(mContext);
 
                             Bitmap iconBitmap = ((BitmapDrawable) drawImage).getBitmap();
                             BitmapDescriptor icon = BitmapDescriptorFactory.fromBitmap(iconBitmap);
 
                             mLegendLayer.setBitmap(icon);
 
-                            Log.d(TAG, "onBitmapLoaded");
                             callback.invokeCallback();
                         }
 
                         @Override
                         public void onBitmapFailed(Drawable errorDrawable) {
-                            //callback.invokeCallback();
-                            Log.d(TAG, "onBitmapFailed");
                         }
 
                         @Override

@@ -1,6 +1,8 @@
 package com.geospatialcorporation.android.geomobile.models.Layers;
 
+import android.content.Context;
 import android.graphics.drawable.Drawable;
+import android.util.Log;
 import android.widget.CheckBox;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
@@ -24,6 +26,7 @@ public class LegendLayer {
     private CheckBox mCheckBox;
     private boolean mMapped;
     private BitmapDescriptor mBitmap;
+    ImageView mAppStateImageView;
 
     public LegendLayer(Layer layer) {
         mLayer = layer;
@@ -45,6 +48,7 @@ public class LegendLayer {
     }
 
     public Drawable getLegendIcon() {
+
         return mLegendIcon;
     }
 
@@ -55,10 +59,23 @@ public class LegendLayer {
 
     public void setImageView(ImageView imageView) {
         mImageView = imageView;
+
+        if(mAppStateImageView != null){
+            mImageView.setImageDrawable(mAppStateImageView.getDrawable());
+        }
+
+        mAppStateImageView = null;
     }
 
-    public void setImageSrc(){
-        mImageView.setImageDrawable(mLegendIcon);
+    public void setImageSrc(Context context){
+        if(mImageView != null) {
+            mImageView.setImageDrawable(mLegendIcon);
+        } else {
+            mAppStateImageView = new ImageView(context);
+
+            mAppStateImageView.setImageDrawable(mLegendIcon);
+        }
+
     }
 
     public boolean isIconSet() {

@@ -65,11 +65,13 @@ public class ClusterExtentMarkerOptionsManager extends OptionsManagerBase<Marker
     public List<Map.Entry<UUID, OptionFeature<MarkerOptions>>> getOptionsWithinExtent(HashMap<UUID, OptionFeature<MarkerOptions>> cachedOptions, LatLngBounds bounds){
         List<Map.Entry<UUID, OptionFeature<MarkerOptions>>> result = new ArrayList<>();
 
-        for (Map.Entry<UUID, OptionFeature<MarkerOptions>> entry : cachedOptions.entrySet()) {
-            MarkerOptions option = entry.getValue().getOption();
+        if(cachedOptions != null) {
+            for (Map.Entry<UUID, OptionFeature<MarkerOptions>> entry : cachedOptions.entrySet()) {
+                MarkerOptions option = entry.getValue().getOption();
 
-            if (bounds.contains(option.getPosition())) {
-                result.add(entry);
+                if (bounds.contains(option.getPosition())) {
+                    result.add(entry);
+                }
             }
         }
 
