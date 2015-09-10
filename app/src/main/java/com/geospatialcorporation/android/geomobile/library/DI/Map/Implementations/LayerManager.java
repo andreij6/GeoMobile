@@ -46,12 +46,7 @@ public class LayerManager implements ILayerManager {
     HashMap<Integer, Extent> mAllLayersExtentMap;
 
     public LayerManager(){
-        mMarkerManager = getMarkerManger();
-        mPolygonOptionsManager = new PolygonOptionsManager();
-        mPolylineOptionsManager = new PolylineOptionsManager();
-
-        mVisibleLayersExtentMap = new HashMap<>();
-        mAllLayersExtentMap = new HashMap<>();
+        reset();
     }
 
     //region Interface
@@ -264,10 +259,12 @@ public class LayerManager implements ILayerManager {
 
     @Override
     public void reset() {
-        //mMarkerManager = new ClusterMarkerOptionsManager(application.getClusterManager());
         mMarkerManager = getMarkerManger();
         mPolygonOptionsManager = new PolygonOptionsManager();
         mPolylineOptionsManager = new PolylineOptionsManager();
+
+        mVisibleLayersExtentMap = new HashMap<>();
+        mAllLayersExtentMap = new HashMap<>();
     }
 
     @Override

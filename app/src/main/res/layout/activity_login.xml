@@ -117,11 +117,19 @@
                     android:layout_height="wrap_content"
                     android:layout_marginTop="16dp"
                     android:background="@color/primary_light"
-                    android:text="@string/action_sign_in"
+                    android:text="@string/action_sign_in_short"
                     android:textColor="@color/white"
                     android:textStyle="bold"/>
 
             </LinearLayout>
+
+            <CheckBox
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/remember_me"
+                android:id="@+id/rememberCB"
+                android:layout_gravity="center_horizontal"
+                android:textColor="@android:color/white"/>
 
             <TextView
                 android:id="@+id/textView4"

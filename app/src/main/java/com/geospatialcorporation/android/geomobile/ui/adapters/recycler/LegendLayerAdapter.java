@@ -30,6 +30,7 @@ import com.geospatialcorporation.android.geomobile.models.Layers.LegendLayer;
 import com.geospatialcorporation.android.geomobile.models.Query.map.Layers;
 import com.geospatialcorporation.android.geomobile.models.Query.map.MapDefaultQueryRequest;
 import com.geospatialcorporation.android.geomobile.models.Query.map.Options;
+import com.geospatialcorporation.android.geomobile.models.Subscription;
 import com.geospatialcorporation.android.geomobile.ui.MainActivity;
 import com.geospatialcorporation.android.geomobile.ui.adapters.recycler.base.GeoHolderBase;
 import com.geospatialcorporation.android.geomobile.ui.adapters.recycler.base.GeoRecyclerAdapterBase;
@@ -54,6 +55,7 @@ public class LegendLayerAdapter extends GeoRecyclerAdapterBase<LegendLayerAdapte
     ILayerManager mLayerManager;
     ILayerStyleTask mLayerStyleTask;
     IMapStatusBarManager mMapStatusBarManager;
+    Subscription mSubscription;
 
     public LegendLayerAdapter(Context context, List<LegendLayer> layers) {
         super(context, layers, R.layout.recycler_legend_layers, Holder.class);
@@ -62,6 +64,7 @@ public class LegendLayerAdapter extends GeoRecyclerAdapterBase<LegendLayerAdapte
         mLayerManager = application.getMapComponent().provideLayerManager();
         mLayerStyleTask = application.getTasksComponent().provideLayerStyleTask();
         mMapStatusBarManager = application.getUIHelperComponent().provideMapStatusBarManager();
+        mSubscription = application.getGeoSubscription();
     }
 
     @Override
@@ -213,12 +216,14 @@ public class LegendLayerAdapter extends GeoRecyclerAdapterBase<LegendLayerAdapte
         }
 
         protected void updateLayerDB(Boolean isShowing) {
+            String layerKey = mLayer.getName() + mLayer.getId() + "_"+ mSubscription.getId();
+
             if(isShowing) {
-                mStateSharedPrefs.add(mLayer.getName() + mLayer.getId(), mLayer.getId());
+                mStateSharedPrefs.add(layerKey, mLayer.getId());
                 mStateSharedPrefs.apply();
             } else {
-                mStateSharedPrefs.remove(mLayer.getName() + mLayer.getId());
-                mStateSharedPrefs.apply();
+                mStateSharedPrefs.remove(layerKey);
+                mStateSharedPrefs.commit();
             }
         }
 

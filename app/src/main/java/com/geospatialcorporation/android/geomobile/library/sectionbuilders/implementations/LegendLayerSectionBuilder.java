@@ -19,6 +19,7 @@ import com.geospatialcorporation.android.geomobile.models.Layers.LegendLayer;
 import com.geospatialcorporation.android.geomobile.models.Query.map.Layers;
 import com.geospatialcorporation.android.geomobile.models.Query.map.MapDefaultQueryRequest;
 import com.geospatialcorporation.android.geomobile.models.Query.map.Options;
+import com.geospatialcorporation.android.geomobile.models.Subscription;
 import com.geospatialcorporation.android.geomobile.ui.adapters.recycler.LegendLayerAdapter;
 import com.geospatialcorporation.android.geomobile.ui.adapters.SimpleSectionedRecyclerViewAdapter;
 
@@ -36,12 +37,14 @@ public class LegendLayerSectionBuilder extends SectionBuilderBase<Folder> implem
         mStateSharedPrefs = application.getGeoSharedPrefsComponent().provideAppStateSharedPrefs();
         mMapStatusBarManager = application.getUIHelperComponent().provideMapStatusBarManager();
         mLayerManager = application.getMapComponent().provideLayerManager();
+        mSubscription = application.getGeoSubscription();
     }
 
     ArrayList<LegendLayer> mAppStateLayers;
     AppStateSharedPrefs mStateSharedPrefs;
     IMapStatusBarManager mMapStatusBarManager;
     ILayerManager mLayerManager;
+    Subscription mSubscription;
 
 
     @Override
@@ -137,7 +140,8 @@ public class LegendLayerSectionBuilder extends SectionBuilderBase<Folder> implem
     }
 
     protected boolean IsSetInAppState(Layer layer) {
-        return mStateSharedPrefs.getInt(layer.getName() + layer.getId(), 0) != 0;
+
+        return mStateSharedPrefs.getInt(layer.getName() + layer.getId() + "_" + mSubscription.getId(), 0) != 0;
     }
 
     private List<LegendLayer> getLayersFromFolders(List<Folder> layerFolders) {

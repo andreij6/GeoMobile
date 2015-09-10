@@ -12,4 +12,6 @@ public interface IGeoSharedPrefs extends SharedPreferences {
     void apply();
 
     void commit();
+
+    void add(String loginRemember, boolean value);
 }

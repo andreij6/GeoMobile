@@ -29,6 +29,9 @@ public class GeoSharedPrefsBase implements SharedPreferences, IGeoSharedPrefs {
         mEditor.putFloat(key, entity);
     }
 
+    @Override
+    public void add(String key, boolean value){ mEditor.putBoolean(key, value); }
+
 
     public void add(String key, int entity){
         mEditor.putInt(key, entity);

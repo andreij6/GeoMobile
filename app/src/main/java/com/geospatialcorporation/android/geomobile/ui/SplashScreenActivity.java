@@ -8,11 +8,13 @@ import android.os.Handler;
 import com.geospatialcorporation.android.geomobile.R;
 import com.geospatialcorporation.android.geomobile.application;
 import com.geospatialcorporation.android.geomobile.library.DI.ErrorHandler.Interfaces.IGeoErrorHandler;
+import com.geospatialcorporation.android.geomobile.library.DI.Map.Interfaces.ILayerManager;
 
 public class SplashScreenActivity extends Activity {
     // Splash screen timer
     private static int SPLASH_TIME_OUT = 3000;
     IGeoErrorHandler mErrorHandler;
+    ILayerManager mLayerManager;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -20,6 +22,8 @@ public class SplashScreenActivity extends Activity {
         setContentView(R.layout.activity_splash_screen);
 
         mErrorHandler = application.getErrorsComponent().provideErrorHandler();
+        mLayerManager = application.getLayerManager();
+
         Thread.setDefaultUncaughtExceptionHandler(mErrorHandler.UncaughtExceptionHandler());
 
         new Handler().postDelayed(new Runnable() {
@@ -34,6 +38,8 @@ public class SplashScreenActivity extends Activity {
                 startActivity(new Intent(SplashScreenActivity.this, LoginActivity.class));
             }
         }, SPLASH_TIME_OUT);
+
+        mLayerManager.reset();
     }
 
 

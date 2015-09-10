@@ -45,6 +45,7 @@ public class MainNavCtrl {
             case ViewConstants.LOGOUT_ADMIN:
                 application.Logout();
                 mainActivity.startActivity(new Intent(mainActivity, LoginActivity.class));
+                mainActivity.finish();
                 break;
             default:
                 return null;
@@ -68,6 +69,7 @@ public class MainNavCtrl {
             case ViewConstants.LOGOUT_REGULAR:
                 application.Logout();
                 mainActivity.startActivity(new Intent(mainActivity, LoginActivity.class));
+                mainActivity.finish();
                 break;
             default:
                 return null;

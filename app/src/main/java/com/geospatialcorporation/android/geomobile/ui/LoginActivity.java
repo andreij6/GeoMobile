@@ -22,13 +22,16 @@ import android.view.inputmethod.EditorInfo;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
 import android.widget.Button;
+import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.geospatialcorporation.android.geomobile.BuildConfig;
 import com.geospatialcorporation.android.geomobile.R;
 import com.geospatialcorporation.android.geomobile.application;
 import com.geospatialcorporation.android.geomobile.library.DI.Analytics.Models.GoogleAnalyticEvent;
+import com.geospatialcorporation.android.geomobile.library.DI.Map.Interfaces.ILayerManager;
 import com.geospatialcorporation.android.geomobile.library.DI.Tasks.Interfaces.IUserLoginTask;
 import com.geospatialcorporation.android.geomobile.library.constants.GeoSharedPreferences;
 import com.geospatialcorporation.android.geomobile.library.util.Authentication;
@@ -50,7 +53,7 @@ public class LoginActivity extends GoogleApiActivity implements LoaderCallbacks<
     private final static String TAG = LoginActivity.class.getSimpleName();
 
     private Authentication mAuthentication;
-
+    private ILayerManager mLayerManager;
     private IUserLoginTask mUserLoginTask;
 
     //region  UI references.
@@ -63,6 +66,7 @@ public class LoginActivity extends GoogleApiActivity implements LoaderCallbacks<
     @InjectView(R.id.email_sign_in_button) Button mEmailSignInButton;
     @InjectView(R.id.signUpLink) TextView mSignUpLink;
     @InjectView(R.id.forgotPassword) TextView mForgotPassword;
+    @InjectView(R.id.rememberCB) CheckBox mRememberMe;
     //endregion
 
     //region OnclickListeners
@@ -76,6 +80,7 @@ public class LoginActivity extends GoogleApiActivity implements LoaderCallbacks<
     @OnClick(R.id.email_sign_in_button)
     public void EmailSignInClick(){
         mAnalytics.trackClick(new GoogleAnalyticEvent().SignInBtn());
+
         validateLogin();
 
     }
@@ -102,6 +107,18 @@ public class LoginActivity extends GoogleApiActivity implements LoaderCallbacks<
             mForgotPassword.setMovementMethod(LinkMovementMethod.getInstance());
 
         }
+
+        application.setIsAdminUser(false);
+        application.setAuthToken(null);
+
+        Toast.makeText(this, "OnCreate Login Activity", Toast.LENGTH_LONG).show();
+        mLayerManager = application.getLayerManager();
+        mLayerManager.reset();
+
+        //set email & password if saved
+        mEmailView.setText(mGeoSharedPrefs.getString(GeoSharedPreferences.LOGIN_EMAIL, ""));
+        mPasswordView.setText(mGeoSharedPrefs.getString(GeoSharedPreferences.LOGIN_PASSWORD, ""));
+        mRememberMe.setChecked(mGeoSharedPrefs.getBoolean(GeoSharedPreferences.LOGIN_REMEMBER, false));
 
         if (!supportsGooglePlayServices()) {
             // Don't offer G+ sign in if the app's version is too low to support Google Play
@@ -195,6 +212,21 @@ public class LoginActivity extends GoogleApiActivity implements LoaderCallbacks<
             // form field with an error.
             focusView.requestFocus();
         } else {
+
+            if(mRememberMe.isChecked()){
+                mGeoSharedPrefs.add(GeoSharedPreferences.LOGIN_EMAIL, email);
+                mGeoSharedPrefs.add(GeoSharedPreferences.LOGIN_PASSWORD, password);
+                mGeoSharedPrefs.add(GeoSharedPreferences.LOGIN_REMEMBER, true);
+
+                mGeoSharedPrefs.apply();
+            } else {
+                mGeoSharedPrefs.remove(GeoSharedPreferences.LOGIN_EMAIL);
+                mGeoSharedPrefs.remove(GeoSharedPreferences.LOGIN_PASSWORD);
+                mGeoSharedPrefs.remove(GeoSharedPreferences.LOGIN_REMEMBER);
+
+                mGeoSharedPrefs.commit();
+            }
+
             mAuthentication.emailLoginAttempt(email, password);
             // Show a progress spinner, and kick off a background task to
             // perform the user login attempt.

@@ -22,15 +22,16 @@ public class AuthTokenRetriever {
     private static final String TAG = AuthTokenRetriever.class.getSimpleName();
 
     GoogleApiActivity mContext;
-    String Token;
     LoginService mLoginService;
     MaterialDialog ProgressHelper;
 
     public void retrieve(String token, GoogleApiActivity context, MaterialDialog helper) {
-        Token = token;
         mContext = context;
         ProgressHelper = helper;
         mLoginService = application.getRestAdapter().create(LoginService.class);
+
+        Log.d(TAG, token);
+
         new RetrieveAuthToken().execute(token);
     }
 
@@ -46,6 +47,7 @@ public class AuthTokenRetriever {
 
             } catch (Exception e) {
                 Log.e(TAG, "Login by GoogleAuthToken failed.");
+                Log.d(TAG, e.getMessage());
                 this.exception = e;
             }
 
@@ -54,14 +56,13 @@ public class AuthTokenRetriever {
 
         @Override
         protected void onPostExecute(String authToken) {
-            if(ProgressHelper != null){
-                ProgressHelper.hide();
-            }
-
             if (application.getAuthToken() != null) {
 
                 getCurrentClient();
             } else {
+                if(ProgressHelper != null){
+                    ProgressHelper.hide();
+                }
                 Toast.makeText(mContext, "Google Login Failed", Toast.LENGTH_LONG).show();
             }
         }
@@ -92,6 +93,13 @@ public class AuthTokenRetriever {
 
                 return new Object();
             }
+
+            @Override
+            protected void onPostExecute(Object o) {
+                if(ProgressHelper != null){
+                    ProgressHelper.hide();
+                }
+            }
         };
 
         task.execute();
@@ -111,6 +119,7 @@ public class AuthTokenRetriever {
                     application.setGeoSubscription(subscription);
 
                     mContext.startActivity(new Intent(mContext, MainActivity.class));
+                    mContext.finish();
                 } catch (RetrofitError e) {
                     if (e.getResponse() != null) {
                         Log.d(TAG, Integer.toString(e.getResponse().getStatus()));
@@ -122,6 +131,7 @@ public class AuthTokenRetriever {
                             application.setIsAdminUser(true);
 
                             mContext.startActivity(new Intent(mContext, SubscriptionSelectorActivity.class));
+                            mContext.finish();
                         }
                     }
                 }

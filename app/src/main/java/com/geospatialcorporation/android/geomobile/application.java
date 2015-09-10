@@ -39,7 +39,6 @@ import com.squareup.okhttp.Response;
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.Locale;
-import java.util.Map;
 
 import retrofit.RequestInterceptor;
 import retrofit.RestAdapter;
@@ -267,35 +266,13 @@ public class application extends applicationDIBase {
                                 Stetho.defaultInspectorModulesProvider(this))
                         .build());
 
-        RequestInterceptor requestInterceptor = new RequestInterceptor() {
-            @Override
-            public void intercept(RequestInterceptor.RequestFacade request) {
-                request.addHeader("User-Agent", "GeoUnderground-Mobile");
-
-                if (geoAuthToken != null) {
-                    request.addHeader("Authorization", "WebToken " + geoAuthToken);
-                }
-            }
-        };
+        RequestInterceptor requestInterceptor = setupInterceptor();
 
         client = new OkHttpClient();
         client.networkInterceptors().add(new StethoInterceptor());
         client.interceptors().add(new TokenInterceptor());
 
-        if (BuildConfig.DEBUG) {
-            restAdapter = new RestAdapter.Builder()
-                    .setLogLevel(RestAdapter.LogLevel.FULL)
-                    .setClient(new OkClient(client))
-                    .setEndpoint(domain)
-                    .setRequestInterceptor(requestInterceptor)
-                    .build();
-        } else {
-            restAdapter = new RestAdapter.Builder()
-                    .setClient(new OkClient(client))
-                    .setEndpoint(domain)
-                    .setRequestInterceptor(requestInterceptor)
-                    .build();
-        }
+        configRestAdapter(requestInterceptor);
 
         isAdminUser = false;
 
@@ -322,13 +299,16 @@ public class application extends applicationDIBase {
     public static void setAuthToken(String token) {
         geoAuthToken = token;
 
-        RequestInterceptor requestInterceptor = new RequestInterceptor() {
-            @Override
-            public void intercept(RequestInterceptor.RequestFacade request) {
-                request.addHeader("Authorization", "WebToken " + geoAuthToken);
-            }
-        };
+        RequestInterceptor requestInterceptor = setupInterceptor();
 
+        configRestAdapter(requestInterceptor);
+
+        Log.d(TAG, "Set GeoToken to: " + token);
+        appState.getString(geoAuthTokenName, token);
+
+    }
+
+    protected static void configRestAdapter(RequestInterceptor requestInterceptor) {
         if (BuildConfig.DEBUG) {
             restAdapter = new RestAdapter.Builder()
                     .setLogLevel(RestAdapter.LogLevel.FULL)
@@ -343,9 +323,19 @@ public class application extends applicationDIBase {
                     .setRequestInterceptor(requestInterceptor)
                     .build();
         }
+    }
 
-        Log.d(TAG, "Set GeoToken to: " + token);
-        appState.getString(geoAuthTokenName, token);
+    protected static RequestInterceptor setupInterceptor() {
+        return new RequestInterceptor() {
+            @Override
+            public void intercept(RequestInterceptor.RequestFacade request) {
+                request.addHeader("User-Agent", "GeoUnderground-Mobile");
+
+                if (geoAuthToken != null) {
+                    request.addHeader("Authorization", "WebToken " + geoAuthToken);
+                }
+            }
+        };
     }
 
     public static Locale getLocale() { return locale; }
