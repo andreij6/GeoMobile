@@ -1,7 +1,6 @@
 package com.geospatialcorporation.android.geomobile.library.sectionbuilders.implementations;
 
 import android.content.Context;
-import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 
@@ -12,7 +11,6 @@ import com.geospatialcorporation.android.geomobile.library.DI.SharedPreferences.
 import com.geospatialcorporation.android.geomobile.library.DI.Tasks.Interfaces.ILayerStyleTask;
 import com.geospatialcorporation.android.geomobile.library.DI.UIHelpers.Interfaces.IMapStatusBarManager;
 import com.geospatialcorporation.android.geomobile.library.map.AppStateMapQueryRequestCallback;
-import com.geospatialcorporation.android.geomobile.library.map.SendMapQueryRequestCallback;
 import com.geospatialcorporation.android.geomobile.library.sectionbuilders.ISectionBuilder;
 import com.geospatialcorporation.android.geomobile.library.sectionbuilders.SectionBuilderBase;
 import com.geospatialcorporation.android.geomobile.models.Folders.Folder;
@@ -69,7 +67,7 @@ public class LegendLayerSectionBuilder extends SectionBuilderBase<Folder> implem
             int skip = 0;
 
             for(Folder folder : data){
-                if(isRoot(folder)) {
+                if(folder.isRoot()) {
                     sections.add(new SimpleSectionedRecyclerViewAdapter.Section(skip, "ROOT"));
                 } else {
                     sections.add(new SimpleSectionedRecyclerViewAdapter.Section(skip, folder.getName()));
@@ -80,7 +78,7 @@ public class LegendLayerSectionBuilder extends SectionBuilderBase<Folder> implem
 
         SimpleSectionedRecyclerViewAdapter.Section[] sectionArray = new SimpleSectionedRecyclerViewAdapter.Section[sections.size()];
 
-        mSectionedAdapter = new SimpleSectionedRecyclerViewAdapter(mContext, R.layout.section_legend_layer, R.id.section_text, adapter);
+        mSectionedAdapter = new SimpleSectionedRecyclerViewAdapter(mContext, R.layout.section_legend_layer_v2, R.id.section_text, adapter);
 
         mSectionedAdapter.setSections(sections.toArray(sectionArray));
 
@@ -166,10 +164,6 @@ public class LegendLayerSectionBuilder extends SectionBuilderBase<Folder> implem
         application.setLayerHashMap(layerHashMap);
 
         return result;
-    }
-
-    private boolean isRoot(Folder folder) {
-        return folder.getName().equals("/");
     }
 
     protected int getSkipValue(Folder folder, int skip) {

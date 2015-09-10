@@ -164,6 +164,10 @@ public class Folder implements Parcelable, ITreeEntity {
         return b;
     }
 
+    public Boolean isRoot(){
+        return Name.equals("/");
+    }
+
     public String getPrettyPath() {
 
         StringBuilder path = new StringBuilder();

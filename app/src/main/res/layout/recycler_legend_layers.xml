@@ -10,11 +10,14 @@
         android:layout_width="match_parent"
         android:layout_height="43dp">
 
-        <CheckBox
-            android:layout_width="wrap_content"
+        <ImageView
+            android:layout_width="35dp"
             android:layout_height="match_parent"
-            android:id="@+id/isVisible"
-            />
+            android:id="@+id/sublayerExpander"
+            android:src="@drawable/ic_information_outline_white_18dp"
+            android:contentDescription="@string/sublayers"
+            android:paddingLeft="5dp"
+            android:paddingRight="5dp"/>
 
         <ImageView
             android:layout_width="wrap_content"
@@ -31,13 +34,6 @@
             android:layout_height="match_parent"
             android:layout_weight=".28">
 
-            <!--<ProgressBar
-                style="?android:attr/progressBarStyleHorizontal"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:id="@+id/showLayerProgressBar"
-                android:layout_gravity="center_horizontal"/>-->
-
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
@@ -50,15 +46,18 @@
 
         </LinearLayout>
 
-        <ImageView
-            android:layout_width="35dp"
+        <CheckBox
+            android:layout_width="wrap_content"
             android:layout_height="match_parent"
-            android:id="@+id/sublayerExpander"
-            android:src="@drawable/ic_information_outline_white_18dp"
-            android:background="@color/accent"
-            android:contentDescription="@string/sublayers"
-            android:paddingLeft="5dp"
-            android:paddingRight="5dp"/>
+            android:id="@+id/isVisible"
+            />
+
+        <ImageView
+            android:layout_width="24dp"
+            android:layout_height="match_parent"
+            android:id="@+id/folderImageView"
+            android:src="@drawable/ic_folder_black_18dp"
+            android:layout_marginRight="5dp"/>
 
     </LinearLayout>
 

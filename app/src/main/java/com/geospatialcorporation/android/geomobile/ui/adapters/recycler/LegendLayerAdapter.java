@@ -2,6 +2,7 @@ package com.geospatialcorporation.android.geomobile.ui.adapters.recycler;
 
 import android.content.Context;
 import android.graphics.Color;
+import android.graphics.Typeface;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -76,6 +77,7 @@ public class LegendLayerAdapter extends GeoRecyclerAdapterBase<LegendLayerAdapte
         @InjectView(R.id.isVisible) CheckBox isVisibleCB;
         @InjectView(R.id.sublayerExpander) ImageView gotoSublayer;
         @InjectView(R.id.geometryIV) ImageView geomIV;
+        @InjectView(R.id.folderImageView) ImageView mFolderIcon;
         //endregionxxx
 
         Layer mLayer;
@@ -96,7 +98,8 @@ public class LegendLayerAdapter extends GeoRecyclerAdapterBase<LegendLayerAdapte
                 isVisibleCB.setVisibility(View.VISIBLE);
                 gotoSublayer.setVisibility(View.VISIBLE);
                 geomIV.setVisibility(View.VISIBLE);
-                gotoSublayer.setBackgroundColor(mContext.getResources().getColor(R.color.accent));
+                mFolderIcon.setVisibility(View.GONE);
+                //gotoSublayer.setBackgroundColor(mContext.getResources().getColor(R.color.accent));
                 gotoSublayer.setImageDrawable(mContext.getDrawable(R.drawable.ic_information_outline_white_18dp));
 
                 mLayerName.setTextAppearance(mContext, android.R.style.TextAppearance_DeviceDefault_Medium);
@@ -127,19 +130,25 @@ public class LegendLayerAdapter extends GeoRecyclerAdapterBase<LegendLayerAdapte
 
                 mView.setBackgroundColor(mContext.getResources().getColor(R.color.primary_light));
 
-                mLayerName.setText("> " + mFolder.getPrettyPath());
+                if(mFolder.getName().equals("/")) {
+                    mLayerName.setText("ROOT");
+                } else {
+                    mLayerName.setText(mFolder.getName().toUpperCase());
+                }
 
                 mLayerName.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 11);
                 mLayerName.setTextColor(mContext.getResources().getColor(R.color.primary_dark));
+                mLayerName.setTypeface(null, Typeface.BOLD);
 
                 mLayerName.setOnClickListener(GoToLayerFragment);
                 gotoSublayer.setOnClickListener(GoToLayerFragment);
 
                 isVisibleCB.setVisibility(View.INVISIBLE);
-                geomIV.setVisibility(View.GONE);
+                geomIV.setVisibility(View.INVISIBLE);
                 //mProgressBar.setVisibility(View.GONE);
                 gotoSublayer.setImageDrawable(mContext.getDrawable(R.drawable.ic_information_outline_black_18dp));
                 gotoSublayer.setBackgroundColor(Color.TRANSPARENT);
+                mFolderIcon.setVisibility(View.VISIBLE);
             }
 
         }

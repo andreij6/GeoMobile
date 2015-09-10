@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              android:layout_width="match_parent"
+              android:layout_height="wrap_content"
+              android:background="@color/primary"
+            >
+
+    <ImageView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/folderImageView"
+        android:layout_weight="1"
+        android:layout_gravity="center"/>
+
+    <TextView android:layout_width="wrap_content"
+              android:layout_height="wrap_content"
+              android:gravity="center_vertical"
+              android:singleLine="true"
+              android:textAllCaps="true"
+              android:textAlignment="center"
+              android:textColor="@color/primary_dark"
+              android:textSize="1sp"
+              android:text="ROOT"
+              android:id="@+id/section_text"
+              android:textStyle="bold"
+              android:layout_weight="4"
+        />
+
+</LinearLayout>
