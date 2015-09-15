@@ -28,6 +28,7 @@ public class ClusterExtentMarkerOptionsManager extends OptionsManagerBase<Marker
 
     ClusterManager<GeoClusterMarker> mClusterManager;
     IconRenderer mIconRenderer;
+    GoogleMap mMap;
 
     public ClusterExtentMarkerOptionsManager(ClusterManager<GeoClusterMarker> clusterManager){
         mClusterManager = clusterManager;
@@ -49,11 +50,13 @@ public class ClusterExtentMarkerOptionsManager extends OptionsManagerBase<Marker
     public void showLayers(GoogleMap map) {
         mClusterManager = application.getClusterManager();
 
+        mMap = map;
+
         clearVisibleLayers();
         mIdFeatureIdMap.clear();
 
-        mIconRenderer = new IconRenderer(application.getAppContext(), map, mClusterManager);
-        LatLngBounds bounds = map.getProjection().getVisibleRegion().latLngBounds;
+        mIconRenderer = new IconRenderer(application.getAppContext(), mMap, mClusterManager);
+        LatLngBounds bounds = mMap.getProjection().getVisibleRegion().latLngBounds;
 
         mClusterManager.setRenderer(mIconRenderer);
 
@@ -153,6 +156,8 @@ public class ClusterExtentMarkerOptionsManager extends OptionsManagerBase<Marker
             if(mShowZoomMessage){
                 Toast.makeText(application.getAppContext(), "Zoom in to see more features", Toast.LENGTH_SHORT).show();
             }
+
+            Log.d(TAG, "Cluster Extent Post Execute");
 
             mVisibleLayers.putAll(tempVisibleLayers);
         }

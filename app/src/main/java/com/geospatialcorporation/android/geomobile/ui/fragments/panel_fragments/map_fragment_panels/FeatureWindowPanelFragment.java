@@ -60,7 +60,7 @@ public class FeatureWindowPanelFragment extends GeoViewFragmentBase {
 
         FeatureName.setText(getFeatureName());
 
-        FragmentTabHost tabHost = (FragmentTabHost)view.findViewById(R.id.tabHost);
+        FragmentTabHost tabHost = (FragmentTabHost) view.findViewById(R.id.tabHost);
 
         tabHost.setup(getActivity(), getChildFragmentManager(), android.R.id.tabcontent);
 
@@ -77,6 +77,7 @@ public class FeatureWindowPanelFragment extends GeoViewFragmentBase {
         }
 
         mContentFragment.setFeatureWindowTab(0);
+
 
         return view;
     }
@@ -105,7 +106,10 @@ public class FeatureWindowPanelFragment extends GeoViewFragmentBase {
 
         ParcelableFeatureQueryResponse data = args.getParcelable(ParcelableFeatureQueryResponse.FEATURE_QUERY_RESPONSE);
 
-        mResponse = data != null ? data.getFeatureQueryResponse().get(0) : null; //should only be one for a feature window
+        if (data != null && data.getFeatureQueryResponse().size() > 0) {
+            mResponse = data != null ? data.getFeatureQueryResponse().get(0) : null;
+        }
+
     }
 
 

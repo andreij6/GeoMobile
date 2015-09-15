@@ -27,19 +27,21 @@ public class MarkerOptionsManager extends OptionsManagerBase<MarkerOptions, Mark
         List<HashMap<UUID, OptionFeature<MarkerOptions>>> CachedOptions = getOption();
         for (HashMap<UUID, OptionFeature<MarkerOptions>> cachedOptions : CachedOptions) {
 
-            for(Map.Entry<UUID, OptionFeature<MarkerOptions>> entry : cachedOptions.entrySet()){
+            if(cachedOptions != null) {
+                for (Map.Entry<UUID, OptionFeature<MarkerOptions>> entry : cachedOptions.entrySet()) {
 
-                UUID key = entry.getKey();
+                    UUID key = entry.getKey();
 
-                if(!mVisibleLayers.containsKey(key)) {
+                    if (!mVisibleLayers.containsKey(key)) {
 
-                    MarkerOptions option = entry.getValue().getOption();
-                    FeatureInfo featureInfo = entry.getValue().getFeatureInfo();
+                        MarkerOptions option = entry.getValue().getOption();
+                        FeatureInfo featureInfo = entry.getValue().getFeatureInfo();
 
-                    Marker marker = map.addMarker(option);
+                        Marker marker = map.addMarker(option);
 
-                    mIdFeatureIdMap.put(marker.getId(), featureInfo);
-                    mVisibleLayers.put(key, marker);
+                        mIdFeatureIdMap.put(marker.getId(), featureInfo);
+                        mVisibleLayers.put(key, marker);
+                    }
                 }
             }
         }

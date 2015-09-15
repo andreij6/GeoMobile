@@ -7,6 +7,8 @@ import com.geospatialcorporation.android.geomobile.library.DI.Map.Interfaces.ILa
 import com.geospatialcorporation.android.geomobile.library.constants.GeometryTypeCodes;
 import com.geospatialcorporation.android.geomobile.library.map.layerManager.IOptionsManager;
 import com.geospatialcorporation.android.geomobile.library.map.layerManager.implementations.ClusterExtentMarkerOptionsManager;
+import com.geospatialcorporation.android.geomobile.library.map.layerManager.implementations.ExtentMarkerOptionsManager;
+import com.geospatialcorporation.android.geomobile.library.map.layerManager.implementations.MarkerOptionsManager;
 import com.geospatialcorporation.android.geomobile.library.map.layerManager.implementations.PolygonOptionsManager;
 import com.geospatialcorporation.android.geomobile.library.map.layerManager.implementations.PolylineOptionsManager;
 import com.geospatialcorporation.android.geomobile.models.Layers.Extent;
@@ -281,9 +283,10 @@ public class LayerManager implements ILayerManager {
     //region Helpers
     protected IOptionsManager getMarkerManger(){
 
-        return new ClusterExtentMarkerOptionsManager(application.getClusterManager());
+        //return new ClusterExtentMarkerOptionsManager(application.getClusterManager());
         //return new ClusterMakerOptionsManager(application.getClusterManager());
         //return new MarkerOptionsManager();
+        return new ExtentMarkerOptionsManager();
     }
 
     protected Extent setExtentFromMap(HashMap<Integer, Extent> extentMap){

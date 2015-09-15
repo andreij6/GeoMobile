@@ -111,7 +111,6 @@ public class LoginActivity extends GoogleApiActivity implements LoaderCallbacks<
         application.setIsAdminUser(false);
         application.setAuthToken(null);
 
-        Toast.makeText(this, "OnCreate Login Activity", Toast.LENGTH_LONG).show();
         mLayerManager = application.getLayerManager();
         mLayerManager.reset();
 

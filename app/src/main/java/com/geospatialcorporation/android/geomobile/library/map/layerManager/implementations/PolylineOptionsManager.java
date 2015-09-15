@@ -9,6 +9,9 @@ import com.geospatialcorporation.android.geomobile.library.map.layerManager.Opti
 import com.geospatialcorporation.android.geomobile.models.Layers.FeatureInfo;
 import com.geospatialcorporation.android.geomobile.ui.fragments.GoogleMapFragment;
 import com.google.android.gms.maps.GoogleMap;
+import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.LatLngBounds;
+import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.maps.model.Polyline;
 import com.google.android.gms.maps.model.PolylineOptions;
 
@@ -24,58 +27,76 @@ import java.util.UUID;
 public class PolylineOptionsManager extends OptionsManagerBase<PolylineOptions, Polyline> {
 
     private static final String TAG = Polyline.class.getSimpleName();
-
+    GoogleMap mMap;
     public void showLayers(GoogleMap map) {
-        new ShowLayersAsync(map).execute();
+        LatLngBounds bounds = map.getProjection().getVisibleRegion().latLngBounds;
+        mMap = map;
+        new ShowLayersAsync(map, bounds).execute();
     }
 
     @Override
     public void removeMapObject(UUID key){
-        mVisibleLayers.get(key).remove();
+        if(mVisibleLayers.get(key) != null) {
+            mVisibleLayers.get(key).remove();
+            mVisibleLayers.remove(key);
+        }
     }
 
-    protected class ShowLayersAsync extends AsyncTask<Void, Void, List<PostParameters>> {
+    protected class ShowLayersAsync extends AsyncTask<Void, Void, PostParameters> {
 
         GoogleMap mGoogleMap;
+        LatLngBounds mBounds;
 
-        public ShowLayersAsync(GoogleMap map){
+
+        public ShowLayersAsync(GoogleMap map, LatLngBounds bounds){
             mGoogleMap = map;
+            mBounds = bounds;
         }
 
         @Override
-        protected List<PostParameters> doInBackground(Void... params) {
-            List<PostParameters> result = new ArrayList<>();
+        protected PostParameters doInBackground(Void... params) {
+            PostParameters result = new PostParameters();
 
             List<HashMap<UUID, OptionFeature<PolylineOptions>>> CachedOptions = getOption();
 
             for (HashMap<UUID, OptionFeature<PolylineOptions>> cachedOptions : CachedOptions) {
-                for (Map.Entry<UUID, OptionFeature<PolylineOptions>> entry : cachedOptions.entrySet()) {
 
-                    UUID key = entry.getKey();
+                if(cachedOptions != null) {
+                    for (Map.Entry<UUID, OptionFeature<PolylineOptions>> entry : cachedOptions.entrySet()) {
 
-                    if (!mVisibleLayers.containsKey(key)) {
-
+                        UUID key = entry.getKey();
                         PolylineOptions option = entry.getValue().getOption();
-                        FeatureInfo featureInfo = entry.getValue().getFeatureInfo();
+                        Boolean pointInBounds = false;
 
-                        result.add(new PostParameters(option, featureInfo, key));
+                        for (LatLng point : option.getPoints()) {
+                            if (mBounds.contains(point)) {
+                                if (!mVisibleLayers.containsKey(key)) {
 
+                                    FeatureInfo featureInfo = entry.getValue().getFeatureInfo();
+
+                                    result.addPolyline(option, featureInfo, key);
+                                }
+
+                                pointInBounds = true;
+                                break;
+                            }
+                        }
+
+                        if (!pointInBounds) {
+                            result.remove(key);
+                        }
                     }
                 }
+
             }
 
             return result;
         }
 
         @Override
-        protected void onPostExecute(List<PostParameters> options) {
+        protected void onPostExecute(PostParameters options) {
             if(contentFragmentIsGoogleMapFragment()) {
-                for (PostParameters pparams: options) {
-
-                    Polyline polyline = mGoogleMap.addPolyline(pparams.getOptions());
-                    mIdFeatureIdMap.put(polyline.getId(), pparams.getFeatureInfo());
-                    mVisibleLayers.put(pparams.getKey(), polyline);
-                }
+                options.mapFeatures();
             }
         }
     }
@@ -86,11 +107,43 @@ public class PolylineOptionsManager extends OptionsManagerBase<PolylineOptions, 
 
     protected class PostParameters {
 
+        List<PolylineFeatures> mFeatures;
+        List<UUID> mLinesToRemove;
+
+        public PostParameters(){
+            mFeatures = new ArrayList<>();
+            mLinesToRemove = new ArrayList<>();
+        }
+
+        public void mapFeatures() {
+            for (PolylineFeatures pparams: mFeatures) {
+
+                Polyline polyline = mMap.addPolyline(pparams.getOptions());
+                mIdFeatureIdMap.put(polyline.getId(), pparams.getFeatureInfo());
+                mVisibleLayers.put(pparams.getKey(), polyline);
+            }
+
+            for(UUID key : mLinesToRemove){
+                removeMapObject(key);
+            }
+
+        }
+
+        public void addPolyline(PolylineOptions option, FeatureInfo featureInfo, UUID key) {
+            mFeatures.add(new PolylineFeatures(option, featureInfo, key));
+        }
+
+        public void remove(UUID key) {
+            mLinesToRemove.add(key);
+        }
+    }
+
+    protected class PolylineFeatures {
         PolylineOptions mOptions;
         FeatureInfo mFeatureInfo;
         UUID mKey;
 
-        public PostParameters(PolylineOptions option, FeatureInfo featureInfo, UUID key) {
+        public PolylineFeatures(PolylineOptions option, FeatureInfo featureInfo, UUID key){
             mOptions = option;
             mFeatureInfo = featureInfo;
             mKey = key;

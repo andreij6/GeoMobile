@@ -41,22 +41,27 @@ public class LayerStyleTask implements ILayerStyleTask {
                     .into(new Target() {
                         @Override
                         public void onBitmapLoaded(Bitmap bitmap, Picasso.LoadedFrom from) {
-                            Drawable drawImage = new BitmapDrawable(mContext.getResources(), bitmap);
+                            try {
+                                Drawable drawImage = new BitmapDrawable(mContext.getResources(), bitmap);
 
-                            mLegendLayer.setLegendIcon(drawImage);
+                                mLegendLayer.setLegendIcon(drawImage);
 
-                            mLegendLayer.setImageSrc(mContext);
+                                mLegendLayer.setImageSrc(mContext);
 
-                            Bitmap iconBitmap = ((BitmapDrawable) drawImage).getBitmap();
-                            BitmapDescriptor icon = BitmapDescriptorFactory.fromBitmap(iconBitmap);
+                                Bitmap iconBitmap = ((BitmapDrawable) drawImage).getBitmap();
+                                BitmapDescriptor icon = BitmapDescriptorFactory.fromBitmap(iconBitmap);
 
-                            mLegendLayer.setBitmap(icon);
+                                mLegendLayer.setBitmap(icon);
 
-                            callback.invokeCallback();
+                                callback.invokeCallback();
+                            } catch (Exception e){
+                                Log.d(TAG, e.getMessage());
+                            }
                         }
 
                         @Override
                         public void onBitmapFailed(Drawable errorDrawable) {
+                            Log.d(TAG, "Bitmap Failed");
                         }
 
                         @Override

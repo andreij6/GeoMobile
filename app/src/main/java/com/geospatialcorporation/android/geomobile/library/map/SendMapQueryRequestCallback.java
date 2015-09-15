@@ -31,11 +31,11 @@ public class SendMapQueryRequestCallback implements GeoCallback {
     public void invokeCallback() {
         mLegendLayer.getLayer().setIsShowing(true);
 
-        MapStatusBarManager.setMessage("Loading " + mLegendLayer.getLayer().getName());
+        MapStatusBarManager.setLayerMessage(mLegendLayer.getLayer().getName());
 
         if(mLayerManager.isLayerCached(mLegendLayer.getLayer())){
             mLegendLayer.getCheckBox().setEnabled(true);
-            MapStatusBarManager.reset();
+            MapStatusBarManager.removeLayer(mLegendLayer.getLayer().getName());
             mLayerManager.showLayer(mLegendLayer);
         } else {
             mService.mapQuery(mRequest, mLegendLayer);

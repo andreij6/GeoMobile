@@ -76,7 +76,7 @@ public class GeoMapper implements IMapFeaturesTask, IPostExecuter<Integer> {
     public void onPostExecute(Integer integer) {
         mLayerManager.showLayer(mLlayer);
 
-        if(mLlayer.getCheckBox() != null) {
+        if (mLlayer.getCheckBox() != null) {
             mLlayer.getCheckBox().setEnabled(true);
         }
     }
@@ -108,11 +108,11 @@ public class GeoMapper implements IMapFeaturesTask, IPostExecuter<Integer> {
                         List<Feature> FeaturesList = response.getFeatures();
 
                         Integer total = FeaturesList.size();
-                        Integer counter = 0;
+                        //Integer counter = 0;
 
                         for (Feature feature : FeaturesList) {
 
-                            publishProgress((int)((counter / (float) total) * 100));
+                            //publishProgress((int)((counter / (float) total) * 100));
 
                             mMapper.reset();
 
@@ -120,11 +120,11 @@ public class GeoMapper implements IMapFeaturesTask, IPostExecuter<Integer> {
                                     .addStyle(response.getStyle())
                                     .commit(mLlayer);
 
-                            counter++;
+                            //counter++;
                         }
-
-
                     }
+
+
                 }
 
                 result = 1;

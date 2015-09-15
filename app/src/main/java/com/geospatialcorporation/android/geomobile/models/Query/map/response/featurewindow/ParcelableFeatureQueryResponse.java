@@ -69,4 +69,5 @@ public class ParcelableFeatureQueryResponse implements Parcelable {
     public List<FeatureQueryResponse> getFeatureQueryResponse() {
         return mResponse;
     }
+
 }

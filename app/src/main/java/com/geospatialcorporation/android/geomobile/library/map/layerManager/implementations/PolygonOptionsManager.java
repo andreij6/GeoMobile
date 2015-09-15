@@ -9,10 +9,13 @@ import com.geospatialcorporation.android.geomobile.library.map.layerManager.Opti
 import com.geospatialcorporation.android.geomobile.models.Layers.FeatureInfo;
 import com.geospatialcorporation.android.geomobile.ui.fragments.GoogleMapFragment;
 import com.google.android.gms.maps.GoogleMap;
+import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.LatLngBounds;
 import com.google.android.gms.maps.model.Polygon;
 import com.google.android.gms.maps.model.PolygonOptions;
 import com.google.android.gms.maps.model.Polyline;
 import com.google.android.gms.maps.model.PolylineOptions;
+import com.google.maps.android.PolyUtil;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -27,43 +30,66 @@ import java.util.UUID;
 public class PolygonOptionsManager extends OptionsManagerBase<PolygonOptions, Polygon> {
     private static final String TAG = PolygonOptionsManager.class.getSimpleName();
 
+    GoogleMap mMap;
+
     public void showLayers(GoogleMap map) {
-        new ShowLayersAsync(map).execute();
+        mMap = map;
+        LatLngBounds bounds = map.getProjection().getVisibleRegion().latLngBounds;
+
+        new ShowLayersAsync(map, bounds).execute();
     }
 
     @Override
     protected void removeMapObject(UUID key) {
-        mVisibleLayers.get(key).remove();
+        if(mVisibleLayers.get(key) != null) {
+            mVisibleLayers.get(key).remove();
+            mVisibleLayers.remove(key);
+        }
     }
 
-    protected class ShowLayersAsync extends AsyncTask<Void, Void, List<PostParameters>>{
+    protected class ShowLayersAsync extends AsyncTask<Void, Void, PostParameters>{
 
         GoogleMap mGoogleMap;
+        LatLngBounds mBounds;
 
-        public ShowLayersAsync(GoogleMap map){
+        public ShowLayersAsync(GoogleMap map, LatLngBounds bounds){
             mGoogleMap = map;
+            mBounds = bounds;
         }
 
         @Override
-        protected List<PostParameters> doInBackground(Void... params) {
-            List<PostParameters> result = new ArrayList<>();
+        protected PostParameters doInBackground(Void... params) {
+            PostParameters result = new PostParameters();
 
             List<HashMap<UUID, OptionFeature<PolygonOptions>>> CachedOptions = getOption();
 
             for (HashMap<UUID, OptionFeature<PolygonOptions>> cachedOptions : CachedOptions) {
-                for (Map.Entry<UUID, OptionFeature<PolygonOptions>> entry : cachedOptions.entrySet()) {
+                if(cachedOptions != null) {
+                    for (Map.Entry<UUID, OptionFeature<PolygonOptions>> entry : cachedOptions.entrySet()) {
 
 
-                    UUID key = entry.getKey();
-
-                    if (!mVisibleLayers.containsKey(key)) {
-
+                        UUID key = entry.getKey();
                         PolygonOptions option = entry.getValue().getOption();
-                        FeatureInfo featureInfo = entry.getValue().getFeatureInfo();
+                        Boolean pointInBounds = false;
 
-                        result.add(new PostParameters(option, featureInfo, key));
+                        for(LatLng point : option.getPoints()) {
+                            if (mBounds.contains(point)) {
+                                if (!mVisibleLayers.containsKey(key)) {
+
+                                    FeatureInfo featureInfo = entry.getValue().getFeatureInfo();
+
+                                    result.addPolygon(option, featureInfo, key);
+                                }
+
+                                pointInBounds = true;
+                                break;
+                            }
+                        }
+
+                        if(!pointInBounds){
+                            result.remove(key);
+                        }
                     }
-
                 }
             }
 
@@ -71,15 +97,9 @@ public class PolygonOptionsManager extends OptionsManagerBase<PolygonOptions, Po
         }
 
         @Override
-        protected void onPostExecute(List<PostParameters> options) {
+        protected void onPostExecute(PostParameters options) {
             if(contentFragmentIsGoogleMapFragment()) {
-                for (PostParameters pparams: options) {
-
-                    Polygon polygon = mGoogleMap.addPolygon(pparams.getOptions());
-                    mIdFeatureIdMap.put(polygon.getId(), pparams.getFeatureInfo());
-                    mVisibleLayers.put(pparams.getKey(), polygon);
-
-                }
+                options.mapFeatures();
             }
         }
 
@@ -91,11 +111,42 @@ public class PolygonOptionsManager extends OptionsManagerBase<PolygonOptions, Po
 
     protected class PostParameters {
 
+        List<PolygonFeature> mPolygonFeatures;
+        List<UUID> mPolygonsToRemove;
+
+        public PostParameters(){
+            mPolygonFeatures = new ArrayList<>();
+            mPolygonsToRemove = new ArrayList<>();
+        }
+
+        public void mapFeatures(){
+            for (PolygonFeature pparams: mPolygonFeatures) {
+
+                Polygon polygon = mMap.addPolygon(pparams.getOptions());
+                mIdFeatureIdMap.put(polygon.getId(), pparams.getFeatureInfo());
+                mVisibleLayers.put(pparams.getKey(), polygon);
+            }
+
+            for(UUID key : mPolygonsToRemove){
+                removeMapObject(key);
+            }
+        }
+
+        public void addPolygon(PolygonOptions options, FeatureInfo info, UUID key){
+            mPolygonFeatures.add(new PolygonFeature(options, info, key));
+        }
+
+        public void remove(UUID key){
+            mPolygonsToRemove.add(key);
+        }
+    }
+
+    protected class PolygonFeature {
         PolygonOptions mOptions;
         FeatureInfo mFeatureInfo;
         UUID mKey;
 
-        public PostParameters(PolygonOptions option, FeatureInfo featureInfo, UUID key) {
+        public PolygonFeature(PolygonOptions option, FeatureInfo featureInfo, UUID key) {
             mOptions = option;
             mFeatureInfo = featureInfo;
             mKey = key;
@@ -113,4 +164,6 @@ public class PolygonOptionsManager extends OptionsManagerBase<PolygonOptions, Po
             return mFeatureInfo;
         }
     }
+
+
 }

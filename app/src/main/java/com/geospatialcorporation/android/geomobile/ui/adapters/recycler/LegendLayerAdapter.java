@@ -181,7 +181,7 @@ public class LegendLayerAdapter extends GeoRecyclerAdapterBase<LegendLayerAdapte
                     mAnalytics.trackClick(new GoogleAnalyticEvent().ShowLayer());
 
                     //set Layer Loading
-                    mMapStatusBarManager.setMessage("Loading " + mLayer.getName());
+                    mMapStatusBarManager.setLayerMessage(mLayer.getName());
 
                     addLayerToMap();
 

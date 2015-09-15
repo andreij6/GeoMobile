@@ -45,13 +45,9 @@ public abstract class FeatureMapperBase<T> implements IFeatureMapper {
     public abstract IFeatureMapper addStyle(Style style);
 
     public void setLegendIcon(LegendLayer layer){
-        //if(mActiveDrawable == null) {
-        //    Drawable newDrawable = mGeoColor.changeColor(layer.getLegendIcon(), mColor);
-        //    setActiveDrawable(newDrawable);
-        //}
-
-        Log.d(TAG, "get Legend Icon" + layer.getLayer().getName());
-        setActiveDrawable(layer.getLegendIcon());
+        if(mActiveDrawable == null) {
+            setActiveDrawable(layer.getLegendIcon());
+        }
 
     }
 
