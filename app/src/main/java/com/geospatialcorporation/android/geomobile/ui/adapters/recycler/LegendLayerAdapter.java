@@ -53,7 +53,6 @@ public class LegendLayerAdapter extends GeoRecyclerAdapterBase<LegendLayerAdapte
     List<Integer> mLayerIdsToShow;
     AppStateSharedPrefs mStateSharedPrefs;
     ILayerManager mLayerManager;
-    ILayerStyleTask mLayerStyleTask;
     IMapStatusBarManager mMapStatusBarManager;
     Subscription mSubscription;
 
@@ -62,8 +61,7 @@ public class LegendLayerAdapter extends GeoRecyclerAdapterBase<LegendLayerAdapte
         //mLayerRepo = new LayersAppSource();
         mStateSharedPrefs = application.getGeoSharedPrefsComponent().provideAppStateSharedPrefs();
         mLayerManager = application.getMapComponent().provideLayerManager();
-        mLayerStyleTask = application.getTasksComponent().provideLayerStyleTask();
-        mMapStatusBarManager = application.getUIHelperComponent().provideMapStatusBarManager();
+        mMapStatusBarManager = application.getStatusBarManager();
         mSubscription = application.getGeoSubscription();
     }
 
@@ -181,7 +179,7 @@ public class LegendLayerAdapter extends GeoRecyclerAdapterBase<LegendLayerAdapte
                     mAnalytics.trackClick(new GoogleAnalyticEvent().ShowLayer());
 
                     //set Layer Loading
-                    mMapStatusBarManager.setLayerMessage(mLayer.getName());
+                    //mMapStatusBarManager.setLayerMessage(mLayer.getName());
 
                     addLayerToMap();
 
@@ -282,28 +280,6 @@ public class LegendLayerAdapter extends GeoRecyclerAdapterBase<LegendLayerAdapte
                 toggleLayers(true);
             }
         };
-
-
-        protected MarkerOptions getMarkerOptions(double latitude, double longitude) {
-            return new MarkerOptions()
-                    .position(new LatLng(latitude, longitude))
-                    .icon(BitmapDescriptorFactory.fromResource(R.drawable.ic_map_marker_circle_black_24dp))
-                    .anchor(.5f, .5f);
-        }
-
-        protected void goToMap(MainActivity activity) {
-
-            FragmentManager fm = activity.getSupportFragmentManager();
-
-            GoogleMapFragment gFrag = application.getMapFragment();
-
-            fm.beginTransaction()
-                    .replace(R.id.content_frame, gFrag)
-                    .addToBackStack(null)
-                    .commit();
-
-            Toast.makeText(mContext, "Click " + mLayer.getName() + " to Zoom To Extent", Toast.LENGTH_LONG).show();
-        }
         //endregion
 
         //region Helpers
@@ -314,7 +290,9 @@ public class LegendLayerAdapter extends GeoRecyclerAdapterBase<LegendLayerAdapte
 
             MapDefaultQueryRequest request = new MapDefaultQueryRequest(layers, Options.MAP_QUERY);
 
-            mLayerStyleTask.getStyle(mLegendLayer, new SendMapQueryRequestCallback(request, mLegendLayer));
+            ILayerStyleTask layerStyleTask = application.getTasksComponent().provideLayerStyleTask();
+
+            layerStyleTask.getStyle(mLegendLayer, new SendMapQueryRequestCallback(request, mLegendLayer));
         }
 
         protected Drawable getDrawable(Integer geometryTypeCodeId) {
@@ -338,6 +316,27 @@ public class LegendLayerAdapter extends GeoRecyclerAdapterBase<LegendLayerAdapte
             }
 
             return d;
+        }
+
+        protected MarkerOptions getMarkerOptions(double latitude, double longitude) {
+            return new MarkerOptions()
+                    .position(new LatLng(latitude, longitude))
+                    .icon(BitmapDescriptorFactory.fromResource(R.drawable.ic_map_marker_circle_black_24dp))
+                    .anchor(.5f, .5f);
+        }
+
+        protected void goToMap(MainActivity activity) {
+
+            FragmentManager fm = activity.getSupportFragmentManager();
+
+            GoogleMapFragment gFrag = application.getMapFragment();
+
+            fm.beginTransaction()
+                    .replace(R.id.content_frame, gFrag)
+                    .addToBackStack(null)
+                    .commit();
+
+            Toast.makeText(mContext, "Click " + mLayer.getName() + " to Zoom To Extent", Toast.LENGTH_LONG).show();
         }
         //endregion
     }

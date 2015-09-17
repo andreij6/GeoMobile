@@ -136,7 +136,6 @@ public class LayerFragment extends GeoViewFragmentBase implements IContentRefres
         mProgressDialogHelper.toggleProgressDialog();
 
         task.getByFolder(new GetLayersByFolderTaskParams(getFragmentManager(), mContext, this), folderId);
-
     }
 
     @Override

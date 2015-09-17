@@ -40,4 +40,7 @@ public class ProgressDialogHelper {
         mProgressDialog.setProgressStyle(style);
     }
 
+    public boolean isShowing() {
+        return mProgressDialog.isShowing();
+    }
 }

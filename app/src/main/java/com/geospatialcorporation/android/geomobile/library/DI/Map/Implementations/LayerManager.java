@@ -4,6 +4,8 @@ import android.util.Log;
 
 import com.geospatialcorporation.android.geomobile.application;
 import com.geospatialcorporation.android.geomobile.library.DI.Map.Interfaces.ILayerManager;
+import com.geospatialcorporation.android.geomobile.library.DI.UIHelpers.Implementations.MapStatusBarManager;
+import com.geospatialcorporation.android.geomobile.library.DI.UIHelpers.Interfaces.IMapStatusBarManager;
 import com.geospatialcorporation.android.geomobile.library.constants.GeometryTypeCodes;
 import com.geospatialcorporation.android.geomobile.library.map.layerManager.IOptionsManager;
 import com.geospatialcorporation.android.geomobile.library.map.layerManager.implementations.ClusterExtentMarkerOptionsManager;
@@ -31,9 +33,6 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
-/**
- * Created by andre on 6/29/2015.
- */
 public class LayerManager implements ILayerManager {
 
     private static final String TAG = LayerManager.class.getSimpleName();
@@ -47,8 +46,12 @@ public class LayerManager implements ILayerManager {
     HashMap<Integer, Extent> mVisibleLayersExtentMap;
     HashMap<Integer, Extent> mAllLayersExtentMap;
 
+    IMapStatusBarManager mMapStatusBarManager;
+
     public LayerManager(){
+
         reset();
+        mMapStatusBarManager = application.getStatusBarManager();
     }
 
     //region Interface
@@ -65,6 +68,8 @@ public class LayerManager implements ILayerManager {
     public void showLayer(LegendLayer llayer) {
 
         int code = llayer.getLayer().getGeometryTypeCodeId();
+
+        Log.d(TAG, "SHOW LAYER " + code);
 
         switch (code){
             case GeometryTypeCodes.Point:
@@ -107,9 +112,14 @@ public class LayerManager implements ILayerManager {
     @Override
     public void clearVisibleLayers() {
 
+        Log.d(TAG, "about to clear");
         mMarkerManager.clearVisibleLayers();
+        Log.d(TAG, "markers cleared");
         mPolygonOptionsManager.clearVisibleLayers();
+        Log.d(TAG, "polygons cleared");
         mPolylineOptionsManager.clearVisibleLayers();
+        Log.d(TAG, "lines cleared");
+
     }
 
     @Override

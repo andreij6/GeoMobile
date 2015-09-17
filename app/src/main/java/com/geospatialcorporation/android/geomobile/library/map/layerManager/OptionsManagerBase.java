@@ -1,5 +1,10 @@
 package com.geospatialcorporation.android.geomobile.library.map.layerManager;
 
+import android.util.Log;
+
+import com.geospatialcorporation.android.geomobile.application;
+import com.geospatialcorporation.android.geomobile.library.DI.UIHelpers.Implementations.MapStatusBarManager;
+import com.geospatialcorporation.android.geomobile.library.DI.UIHelpers.Interfaces.IMapStatusBarManager;
 import com.geospatialcorporation.android.geomobile.models.Layers.FeatureInfo;
 import com.google.android.gms.maps.model.PolylineOptions;
 
@@ -9,25 +14,26 @@ import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.UUID;
 
 import static java.util.UUID.randomUUID;
 
-/**
- * Created by andre on 6/30/2015.
- */
 public abstract class OptionsManagerBase<T, S> implements IOptionsManager<T, S> {
 
     protected HashMap<Integer, HashMap<UUID, OptionFeature<T>>> mLayerOptions;
     protected HashMap<Integer, HashMap<UUID, OptionFeature<T>>> mRemovedLayerOptions;
     protected HashMap<UUID, S> mVisibleLayers;
     protected HashMap<String, FeatureInfo> mIdFeatureIdMap;
+    protected IMapStatusBarManager mStatusBarManager;
 
     public OptionsManagerBase(){
         mLayerOptions = new HashMap<>();
         mVisibleLayers = new HashMap<>();
         mIdFeatureIdMap = new HashMap<>();
         mRemovedLayerOptions = new HashMap<>();
+        mStatusBarManager = application.getStatusBarManager();
+
     }
 
     //region Interface Methods
@@ -97,11 +103,15 @@ public abstract class OptionsManagerBase<T, S> implements IOptionsManager<T, S> 
     @Override
     public void clearVisibleLayers() {
 
-        for(UUID key : mVisibleLayers.keySet()) {
-            removeMapObject(key);
+        try {
+            for (UUID key : mVisibleLayers.keySet()) {
+                removeMapObject(key);
+            }
+            mVisibleLayers.clear();
+        } catch (Exception e) {
+            Log.e("Base", e.getMessage());
         }
 
-        mVisibleLayers.clear();
     }
 
     @Override

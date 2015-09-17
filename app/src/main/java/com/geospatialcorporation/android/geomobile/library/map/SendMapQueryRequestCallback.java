@@ -24,18 +24,17 @@ public class SendMapQueryRequestCallback implements GeoCallback {
         mLegendLayer = legendLayer;
         mService = new QueryRestService();
         mLayerManager = application.getLayerManager();
-        MapStatusBarManager = application.getUIHelperComponent().provideMapStatusBarManager();
+        MapStatusBarManager = application.getStatusBarManager();
     }
 
     @Override
     public void invokeCallback() {
         mLegendLayer.getLayer().setIsShowing(true);
 
-        MapStatusBarManager.setLayerMessage(mLegendLayer.getLayer().getName());
+        MapStatusBarManager.StartLoading(mLegendLayer.getLayer().getGeometryTypeCodeId());
 
         if(mLayerManager.isLayerCached(mLegendLayer.getLayer())){
             mLegendLayer.getCheckBox().setEnabled(true);
-            MapStatusBarManager.removeLayer(mLegendLayer.getLayer().getName());
             mLayerManager.showLayer(mLegendLayer);
         } else {
             mService.mapQuery(mRequest, mLegendLayer);

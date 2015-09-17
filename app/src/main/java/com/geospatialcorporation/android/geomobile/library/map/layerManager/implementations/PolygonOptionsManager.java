@@ -4,6 +4,8 @@ import android.os.AsyncTask;
 import android.util.Log;
 
 import com.geospatialcorporation.android.geomobile.application;
+import com.geospatialcorporation.android.geomobile.library.DI.UIHelpers.Implementations.MapStatusBarManager;
+import com.geospatialcorporation.android.geomobile.library.constants.GeometryTypeCodes;
 import com.geospatialcorporation.android.geomobile.library.map.layerManager.OptionFeature;
 import com.geospatialcorporation.android.geomobile.library.map.layerManager.OptionsManagerBase;
 import com.geospatialcorporation.android.geomobile.models.Layers.FeatureInfo;
@@ -23,10 +25,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
-
-/**
- * Created by andre on 6/30/2015.
- */
 public class PolygonOptionsManager extends OptionsManagerBase<PolygonOptions, Polygon> {
     private static final String TAG = PolygonOptionsManager.class.getSimpleName();
 
@@ -41,9 +39,12 @@ public class PolygonOptionsManager extends OptionsManagerBase<PolygonOptions, Po
 
     @Override
     protected void removeMapObject(UUID key) {
-        if(mVisibleLayers.get(key) != null) {
-            mVisibleLayers.get(key).remove();
-            mVisibleLayers.remove(key);
+        try {
+            if (mVisibleLayers.get(key) != null) {
+                mVisibleLayers.get(key).remove();
+            }
+        } catch (Exception e){
+            Log.e(TAG, e.getMessage());
         }
     }
 
@@ -121,14 +122,16 @@ public class PolygonOptionsManager extends OptionsManagerBase<PolygonOptions, Po
 
         public void mapFeatures(){
             for (PolygonFeature pparams: mPolygonFeatures) {
-
                 Polygon polygon = mMap.addPolygon(pparams.getOptions());
                 mIdFeatureIdMap.put(polygon.getId(), pparams.getFeatureInfo());
                 mVisibleLayers.put(pparams.getKey(), polygon);
             }
 
+            mStatusBarManager.FinishLoading(GeometryTypeCodes.Polygon);
+
             for(UUID key : mPolygonsToRemove){
                 removeMapObject(key);
+                mVisibleLayers.remove(key);
             }
         }
 

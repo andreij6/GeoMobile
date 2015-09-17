@@ -47,7 +47,7 @@ public class EditAttributesDialogFragment extends AttributesActionDialogBase<Att
 
         mService = application.getTreeServiceComponent().provideLayerTreeService();
         mAnalytics = application.getAnalyticsComponent().provideGeoAnalytics();
-        mStatusBarManager = application.getUIHelperComponent().provideMapStatusBarManager();
+        mStatusBarManager = application.getStatusBarManager();
 
         mTableLayout = (TableLayout)v.findViewById(R.id.editAttributes);
 
@@ -73,7 +73,7 @@ public class EditAttributesDialogFragment extends AttributesActionDialogBase<Att
                             mService.editAttributeValue(mData.getLayerId(), request);
                         } else {
 
-                            Toaster("Invalid Request");
+                            Toaster("No Changes Made");
                         }
 
                     }

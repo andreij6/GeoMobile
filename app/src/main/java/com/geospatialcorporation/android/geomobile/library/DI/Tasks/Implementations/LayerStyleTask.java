@@ -72,7 +72,7 @@ public class LayerStyleTask implements ILayerStyleTask {
 
             //mLegendLayer.getCheckBox().setEnabled(true);
         } catch (Exception e){
-            Log.e(TAG, e.getMessage());
+            Log.e(TAG, "Excpetion Message: " + e.getMessage());
         }
     }
 }

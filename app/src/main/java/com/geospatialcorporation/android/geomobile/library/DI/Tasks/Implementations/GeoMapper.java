@@ -107,7 +107,7 @@ public class GeoMapper implements IMapFeaturesTask, IPostExecuter<Integer> {
 
                         List<Feature> FeaturesList = response.getFeatures();
 
-                        Integer total = FeaturesList.size();
+                        //Integer total = FeaturesList.size();
                         //Integer counter = 0;
 
                         for (Feature feature : FeaturesList) {

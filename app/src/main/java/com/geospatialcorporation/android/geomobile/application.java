@@ -12,6 +12,7 @@ import com.geospatialcorporation.android.geomobile.library.DI.Analytics.Interfac
 import com.geospatialcorporation.android.geomobile.library.DI.Analytics.Models.GoogleAnalyticEvent;
 import com.geospatialcorporation.android.geomobile.library.DI.Map.Implementations.LayerManager;
 import com.geospatialcorporation.android.geomobile.library.DI.SharedPreferences.Interfaces.IGeoSharedPrefs;
+import com.geospatialcorporation.android.geomobile.library.DI.UIHelpers.Interfaces.IMapStatusBarManager;
 import com.geospatialcorporation.android.geomobile.library.constants.Domains;
 import com.geospatialcorporation.android.geomobile.library.constants.GeoPanel;
 import com.geospatialcorporation.android.geomobile.library.constants.GeoSharedPreferences;
@@ -91,6 +92,7 @@ public class application extends applicationDIBase {
     private static SlidingUpPanelLayout layerDetailFragmentPanel;
     private static SlidingUpPanelLayout documentFolderFragmentPanel;
     private static SlidingUpPanelLayout documentDetailFragmentPanel;
+    private static IMapStatusBarManager statusBarManager;
     //endregion
 
     //region stuff
@@ -233,6 +235,14 @@ public class application extends applicationDIBase {
 
     public static void setDocumentDetailFragmentPanel(SlidingUpPanelLayout documentDetailFragmentPanel) {
         application.documentDetailFragmentPanel = documentDetailFragmentPanel;
+    }
+
+    public static IMapStatusBarManager getStatusBarManager() {
+        if(statusBarManager == null){
+            statusBarManager = application.getUIHelperComponent().provideMapStatusBarManager();
+        }
+
+        return statusBarManager;
     }
     //endregion
 
@@ -462,6 +472,8 @@ public class application extends applicationDIBase {
         layerHashMap = null;
         documentHashMap = null;
         folderHashMap = null;
+
+        getStatusBarManager().reset();
 
         IGeoSharedPrefs prefs = getGeoSharedPrefsComponent().provideGeoSharedPrefs();
         prefs.remove(GeoSharedPreferences.GOOGLE_ACCOUNT);

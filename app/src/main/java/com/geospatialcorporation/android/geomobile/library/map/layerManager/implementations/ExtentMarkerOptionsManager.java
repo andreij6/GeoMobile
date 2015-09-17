@@ -3,6 +3,8 @@ package com.geospatialcorporation.android.geomobile.library.map.layerManager.imp
 import android.os.AsyncTask;
 import android.util.Log;
 
+import com.geospatialcorporation.android.geomobile.library.DI.UIHelpers.Implementations.MapStatusBarManager;
+import com.geospatialcorporation.android.geomobile.library.constants.GeometryTypeCodes;
 import com.geospatialcorporation.android.geomobile.library.map.layerManager.OptionFeature;
 import com.geospatialcorporation.android.geomobile.library.map.layerManager.OptionsManagerBase;
 import com.geospatialcorporation.android.geomobile.models.Layers.FeatureInfo;
@@ -24,12 +26,12 @@ public class ExtentMarkerOptionsManager extends OptionsManagerBase<MarkerOptions
 
     @Override
     protected void removeMapObject(UUID key) {
-        Marker marker = mVisibleLayers.get(key);
-
-        if(marker != null) {
-            marker.remove();
-
-            mVisibleLayers.remove(key);
+        try {
+            if (mVisibleLayers.get(key) != null) {
+                mVisibleLayers.get(key).remove();
+            }
+        } catch (Exception e){
+            Log.e(TAG, e.getMessage());
         }
     }
 
@@ -86,6 +88,9 @@ public class ExtentMarkerOptionsManager extends OptionsManagerBase<MarkerOptions
         @Override
         protected void onPostExecute(MarkerPostParamerters markerPostParamerters) {
             markerPostParamerters.mapMarkers();
+
+            Log.d(TAG, "done loading markers");
+
         }
     }
 
@@ -101,17 +106,18 @@ public class ExtentMarkerOptionsManager extends OptionsManagerBase<MarkerOptions
         }
 
         public void mapMarkers() {
-
             for (MarkerFeature markerFeature : mMarkerOptions) {
                 Marker marker = mMap.addMarker(markerFeature.getOption());
-
 
                 mIdFeatureIdMap.put(marker.getId(), markerFeature.getFeatureInfo());
                 mVisibleLayers.put(markerFeature.getKey(), marker);
             }
 
+            mStatusBarManager.FinishLoading(MapStatusBarManager.MARKERS);
+
             for(UUID key : mMarkersToRemove){
                 removeMapObject(key);
+                mVisibleLayers.remove(key);
             }
         }
 

@@ -256,14 +256,25 @@ public class GoogleMapFragment extends GeoViewFragmentBase implements
     }
     //endregion
 
+    private static final Boolean LOG_LIFE_CYCLE = true;
+
+    private void LifeCycleLogger(String message){
+        if(LOG_LIFE_CYCLE){
+            Log.d(TAG, message);
+        }
+    }
+
     //region Base Overrides
     @Override
     public void onCreate(Bundle savedInstance){
         super.onCreate(savedInstance);
         application.setMapFragment(this);
+
+        LifeCycleLogger("onCreate");
+
         UsingClustering = false;
         mMapStateService = application.getMapComponent().provideMapStateService();
-        mStatusBarManager = application.getUIHelperComponent().provideMapStatusBarManager();
+        mStatusBarManager = application.getStatusBarManager();
 
     }
 
@@ -271,6 +282,8 @@ public class GoogleMapFragment extends GeoViewFragmentBase implements
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         setHasOptionsMenu(true);
         View rootView = inflater.inflate(R.layout.fragment_map, container, false);
+
+        LifeCycleLogger("onCreateView");
 
         ButterKnife.inject(this, rootView);
 
@@ -296,6 +309,202 @@ public class GoogleMapFragment extends GeoViewFragmentBase implements
 
         return rootView;
     }
+
+    @Override
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+        inflater.inflate(R.menu.map_menu, menu);
+        mMenu = menu;
+        super.onCreateOptionsMenu(menu, inflater);
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        LifeCycleLogger("onResume");
+        mMapView.onResume();
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        // Handle action buttons
+        switch (item.getItemId()) {
+            case R.id.action_show_layers:
+                showLayersDrawer();
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
+        }
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        LifeCycleLogger("onDestroy");
+        mLayerManager.clearVisibleLayers();
+        mMapView.onDestroy();
+    }
+
+    @Override
+    public void onLowMemory() {
+        super.onLowMemory();
+        if(mMapView != null) {
+            mMapView.onLowMemory();
+        }
+    }
+
+    @Override
+    public void onStop(){
+        super.onStop();
+        LifeCycleLogger("onStop");
+        saveMapState();
+    }
+
+    @Override
+    public void onDestroyView(){
+        super.onDestroyView();
+        LifeCycleLogger("onDestroyView");
+        mLayerManager.clearVisibleLayers();
+        LifeCycleLogger("Done Clearing Layers");
+
+        if(mViewMode != null){
+            mViewMode.Disable(true);
+            mViewMode = null;
+        }
+        LifeCycleLogger("on Destroy View Complete");
+    }
+
+    @Override
+    public void onPause(){
+        super.onPause();
+        LifeCycleLogger("onPause");
+        mMapView.onPause();
+        mLocationClient.disconnect();
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (resultCode == Activity.RESULT_OK) {
+            new GetLibraryImportFolderTask(requestCode, resultCode, data).execute();
+        }
+    }
+
+    //endregion
+
+    //region ViewModeSetups
+    protected IViewMode querySetup() {
+        mAnalytics.trackClick(new GoogleAnalyticEvent().QueryModeInit());
+
+        return new QueryMode.Builder()
+                .setDependents(mMap, mListener, getActivity())
+                .setControls(mBoxQueryBtn, mPointQueryBtn, mCloseBtn, getActivity().getSupportFragmentManager())
+                .setupUI()
+                .create();
+
+    }
+
+    protected IViewMode searchSetup() {
+        mAnalytics.trackClick(new GoogleAnalyticEvent().QuickSearchInit());
+
+        return new SearchMode.Builder()
+                        .init(getActivity().getSupportFragmentManager(), mPanelManager)
+                        .create();
+    }
+
+    //protected IViewMode fullScreenSetup(){
+    //    mAnalytics.sendClickEvent(R.string.full_screen_mode);
+    //    MainActivity activity = (MainActivity)getActivity();
+    //    return new FullScreenMode.Builder()
+    //                    .create(activity.getSupportActionBar(),
+    //                            activity.getDrawerLayout(),
+    //                            mPanel, mFullScreenClose);
+    //}
+    //endregion
+
+    //region ViewMode Listener
+    @Override
+    public void setViewMode(IViewMode mode) {
+
+        if(mViewMode != null){
+            if(mViewMode.isSame(mode)){
+                mViewMode.Disable(true);
+                mViewMode = null;
+            } else {
+                mViewMode.Disable(false);
+                mViewMode = null;
+                mViewMode = mode;
+            }
+
+        } else {
+            mViewMode = mode;
+        }
+    }
+
+    //public void setViewMode(String mode){
+    //    switch(mode){
+    //        case ViewModes.BOOKMARK:
+    //            GeoDialogHelper.showBookmarks(getActivity(), getFragmentManager(), mSaveBtn, mBmClose, mPanel, mMap);
+    //            mPanelManager.collapse();
+    //            break;
+    //        case ViewModes.QUERY:
+    //            setViewMode(querySetup());
+    //            break;
+    //        case ViewModes.QUICKSEARCH:
+    //            setViewMode(searchSetup());
+    //            break;
+    //        default:
+    //            Toaster("Mode Not Set");
+    //            break;
+    //    }
+    //}
+
+
+
+    public void resetViewMode() {
+        mViewMode = null;
+    }
+    //endregion
+
+    protected void saveMapState() {
+        mMapStateService.saveMapState(new MapStateSaveRequest(mMap));
+    }
+
+    protected void setMapState() {
+        CameraPosition position = mMapStateService.getSavedCameraPosition();
+        Integer mapType = mMapStateService.getSavedMapType();
+
+        mMap.setMapType(mapType);
+
+        if(position != null){
+            CameraUpdate update = CameraUpdateFactory.newCameraPosition(position);
+            mMap.moveCamera(update);
+        }
+    }
+
+    //region GoogleAPI Client Interface
+    @Override
+    public void onConnected(Bundle bundle) {
+
+    }
+
+    @Override
+    public void onConnectionSuspended(int i) {
+
+    }
+
+    @Override
+    public void onConnectionFailed(ConnectionResult connectionResult) {
+        if (connectionResult.hasResolution()) {
+            try {
+                // Start an Activity that tries to resolve the error
+                connectionResult.startResolutionForResult(getActivity(), CONNECTION_FAILURE_RESOLUTION_REQUEST);
+            } catch (IntentSender.SendIntentException e) {
+                e.printStackTrace();
+            }
+        } else {
+            Log.i(TAG, "Location services connection failed with code " + connectionResult.getErrorCode());
+        }
+    }
+    //endregion
 
     //region HighLighters
     protected void highlight(Polygon feature){
@@ -534,194 +743,6 @@ public class GoogleMapFragment extends GeoViewFragmentBase implements
 
 
     }
-
-    @Override
-    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
-        inflater.inflate(R.menu.map_menu, menu);
-        mMenu = menu;
-        super.onCreateOptionsMenu(menu, inflater);
-    }
-
-    @Override
-    public void onResume() {
-        super.onResume();
-        mMapView.onResume();
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action buttons
-        switch (item.getItemId()) {
-            case R.id.action_show_layers:
-                showLayersDrawer();
-                return true;
-            default:
-                return super.onOptionsItemSelected(item);
-        }
-    }
-
-    @Override
-    public void onDestroy() {
-        super.onDestroy();
-        mLayerManager.clearVisibleLayers();
-        mMapView.onDestroy();
-    }
-
-    @Override
-    public void onLowMemory() {
-        super.onLowMemory();
-        if(mMapView != null) {
-            mMapView.onLowMemory();
-        }
-    }
-
-    @Override
-    public void onStop(){
-        super.onStop();
-        saveMapState();
-    }
-
-    @Override
-    public void onDestroyView(){
-        super.onDestroyView();
-        mLayerManager.clearVisibleLayers();
-        if(mViewMode != null){
-            mViewMode.Disable(true);
-            mViewMode = null;
-        }
-    }
-
-    @Override
-    public void onPause(){
-        super.onPause();
-        mMapView.onPause();
-        mLocationClient.disconnect();
-    }
-
-    @Override
-    public void onActivityResult(int requestCode, int resultCode, Intent data) {
-        if (resultCode == Activity.RESULT_OK) {
-            new GetLibraryImportFolderTask(requestCode, resultCode, data).execute();
-        }
-    }
-
-    //endregion
-
-    //region ViewModeSetups
-    protected IViewMode querySetup() {
-        mAnalytics.trackClick(new GoogleAnalyticEvent().QueryModeInit());
-
-        return new QueryMode.Builder()
-                .setDependents(mMap, mListener, getActivity())
-                .setControls(mBoxQueryBtn, mPointQueryBtn, mCloseBtn, getActivity().getSupportFragmentManager())
-                .setupUI()
-                .create();
-
-    }
-
-    protected IViewMode searchSetup() {
-        mAnalytics.trackClick(new GoogleAnalyticEvent().QuickSearchInit());
-
-        return new SearchMode.Builder()
-                        .init(getActivity().getSupportFragmentManager(), mPanelManager)
-                        .create();
-    }
-
-    //protected IViewMode fullScreenSetup(){
-    //    mAnalytics.sendClickEvent(R.string.full_screen_mode);
-    //    MainActivity activity = (MainActivity)getActivity();
-    //    return new FullScreenMode.Builder()
-    //                    .create(activity.getSupportActionBar(),
-    //                            activity.getDrawerLayout(),
-    //                            mPanel, mFullScreenClose);
-    //}
-    //endregion
-
-    //region ViewMode Listener
-    @Override
-    public void setViewMode(IViewMode mode) {
-
-        if(mViewMode != null){
-            if(mViewMode.isSame(mode)){
-                mViewMode.Disable(true);
-                mViewMode = null;
-            } else {
-                mViewMode.Disable(false);
-                mViewMode = null;
-                mViewMode = mode;
-            }
-
-        } else {
-            mViewMode = mode;
-        }
-    }
-
-    //public void setViewMode(String mode){
-    //    switch(mode){
-    //        case ViewModes.BOOKMARK:
-    //            GeoDialogHelper.showBookmarks(getActivity(), getFragmentManager(), mSaveBtn, mBmClose, mPanel, mMap);
-    //            mPanelManager.collapse();
-    //            break;
-    //        case ViewModes.QUERY:
-    //            setViewMode(querySetup());
-    //            break;
-    //        case ViewModes.QUICKSEARCH:
-    //            setViewMode(searchSetup());
-    //            break;
-    //        default:
-    //            Toaster("Mode Not Set");
-    //            break;
-    //    }
-    //}
-
-
-
-    public void resetViewMode() {
-        mViewMode = null;
-    }
-    //endregion
-
-    protected void saveMapState() {
-        mMapStateService.saveMapState(new MapStateSaveRequest(mMap));
-    }
-
-    protected void setMapState() {
-        CameraPosition position = mMapStateService.getSavedCameraPosition();
-        Integer mapType = mMapStateService.getSavedMapType();
-
-        mMap.setMapType(mapType);
-
-        if(position != null){
-            CameraUpdate update = CameraUpdateFactory.newCameraPosition(position);
-            mMap.moveCamera(update);
-        }
-    }
-
-    //region GoogleAPI Client Interface
-    @Override
-    public void onConnected(Bundle bundle) {
-
-    }
-
-    @Override
-    public void onConnectionSuspended(int i) {
-
-    }
-
-    @Override
-    public void onConnectionFailed(ConnectionResult connectionResult) {
-        if (connectionResult.hasResolution()) {
-            try {
-                // Start an Activity that tries to resolve the error
-                connectionResult.startResolutionForResult(getActivity(), CONNECTION_FAILURE_RESOLUTION_REQUEST);
-            } catch (IntentSender.SendIntentException e) {
-                e.printStackTrace();
-            }
-        } else {
-            Log.i(TAG, "Location services connection failed with code " + connectionResult.getErrorCode());
-        }
-    }
-    //endregion
 
     public void showFeatureWindow(ParcelableFeatureQueryResponse response) {
         if(validate(response)){

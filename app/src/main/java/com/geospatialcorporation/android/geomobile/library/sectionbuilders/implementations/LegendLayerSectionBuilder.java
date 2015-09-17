@@ -35,7 +35,7 @@ public class LegendLayerSectionBuilder extends SectionBuilderBase<Folder> implem
         super(context);
         mAppStateLayers = new ArrayList<>();
         mStateSharedPrefs = application.getGeoSharedPrefsComponent().provideAppStateSharedPrefs();
-        mMapStatusBarManager = application.getUIHelperComponent().provideMapStatusBarManager();
+        mMapStatusBarManager = application.getStatusBarManager();
         mLayerManager = application.getMapComponent().provideLayerManager();
         mSubscription = application.getGeoSubscription();
     }
@@ -89,13 +89,15 @@ public class LegendLayerSectionBuilder extends SectionBuilderBase<Folder> implem
     }
 
     protected void showAppStateLayers(){
-        if(mAppStateLayers.size() > 0) {
-            mMapStatusBarManager.setMessage("Loading Previous Map State");
+
+        for(LegendLayer legendLayer : mAppStateLayers){
+            mMapStatusBarManager.StartLoading(legendLayer.getLayer().getGeometryTypeCodeId());
         }
 
-        for(LegendLayer llayer : mAppStateLayers){
+        for(LegendLayer llayer : mAppStateLayers) {
             Layer layer = llayer.getLayer();
             layer.setIsShowing(true);
+
 
             addLayerToMap(llayer);
 
@@ -136,7 +138,6 @@ public class LegendLayerSectionBuilder extends SectionBuilderBase<Folder> implem
         ILayerStyleTask layerStyleTask = application.getTasksComponent().provideLayerStyleTask();
 
         layerStyleTask.getStyle(llayer, new AppStateMapQueryRequestCallback(request, llayer));
-
     }
 
     protected boolean IsSetInAppState(Layer layer) {

@@ -27,6 +27,7 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBarActivity;
+import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.telephony.TelephonyManager;
 import android.view.Gravity;
@@ -101,21 +102,28 @@ public class MainActivity extends ActionBarActivity
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        if(isTablet()){
-            //setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
-            Toast.makeText(this, "tablet", Toast.LENGTH_LONG).show();
-        }else{
-            setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
-        }
+        //if(isTablet()){
+        //    //setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
+        //    Toast.makeText(this, "tablet", Toast.LENGTH_LONG).show();
+        //}
+
+        setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
+
+
 
         ButterKnife.inject(this);
         application.setMainActivity(this);
-        getSupportActionBar().hide();
+        ActionBar ab = getSupportActionBar();
+
+        if(ab != null){
+            ab.hide();
+        }
 
         mBackPressedFromGoogleMapFragmentCount = 0;
 
         mMapFragment = application.getMapFragment();
         mAnalytics = application.getAnalyticsComponent().provideGeoAnalytics();
+        application.getStatusBarManager().reset();
 
         //mErrorHandler = application.getErrorsComponent().provideErrorHandler();
         //Thread.setDefaultUncaughtExceptionHandler(mErrorHandler.UncaughtExceptionHandler());
