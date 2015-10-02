@@ -112,6 +112,7 @@ public class application extends applicationDIBase {
     private static int currentFeatureWindowTab;
     private static List<Folder> layerFolders;
     private static List<LegendLayer> legendLayerQueue;
+    private static boolean shouldSetAppState;
     //endregion
 
     //region stuff
@@ -322,6 +323,14 @@ public class application extends applicationDIBase {
 
     public static List<LegendLayer> getLegendLayerQueue() {
         return legendLayerQueue;
+    }
+
+    public static void setShouldSetAppState(boolean shouldSetAppState) {
+        application.shouldSetAppState = shouldSetAppState;
+    }
+
+    public static boolean getShouldSetAppState() {
+        return shouldSetAppState;
     }
     //endregion
 

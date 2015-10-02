@@ -21,6 +21,7 @@ import com.geospatialcorporation.android.geomobile.library.DI.Analytics.Models.G
 import com.geospatialcorporation.android.geomobile.library.DI.Map.Interfaces.IGeoUndergroundMap;
 import com.geospatialcorporation.android.geomobile.library.DI.Map.Interfaces.ILayerManager;
 import com.geospatialcorporation.android.geomobile.library.DI.Map.Interfaces.IMapStateService;
+import com.geospatialcorporation.android.geomobile.library.DI.Map.Models.MapStateSaveRequest;
 import com.geospatialcorporation.android.geomobile.library.DI.Tasks.Implementations.LayerStyleTask;
 import com.geospatialcorporation.android.geomobile.library.DI.Tasks.Interfaces.IGetLayersTask;
 import com.geospatialcorporation.android.geomobile.library.DI.Tasks.Interfaces.ILayerStyleTask;
@@ -518,6 +519,11 @@ public class GeoUndergroundMap implements IGeoUndergroundMap, IPostExecuter<List
     @Override
     public void onResume() {
         mMapView.onResume();
+    }
+
+    @Override
+    public void onStop(){
+        mMapStateService.saveMapState(new MapStateSaveRequest(mMap));
     }
     //endregion
 

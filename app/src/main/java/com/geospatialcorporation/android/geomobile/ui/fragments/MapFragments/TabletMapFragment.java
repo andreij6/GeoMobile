@@ -102,6 +102,12 @@ public class TabletMapFragment extends Fragment
         mGeoMap.onPause();
 
     }
+
+    @Override
+    public void onStop() {
+        super.onStop();
+        mGeoMap.onStop();
+    }
     //endregion
 
     public void setMap(GoogleMap map) {

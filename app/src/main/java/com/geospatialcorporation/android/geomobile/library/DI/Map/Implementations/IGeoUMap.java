@@ -43,5 +43,7 @@ public interface IGeoUMap {
         void onLowMemory();
 
         void onResume();
+
+        void onStop();
     }
 }

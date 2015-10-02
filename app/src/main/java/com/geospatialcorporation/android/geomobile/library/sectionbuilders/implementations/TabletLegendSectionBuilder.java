@@ -7,11 +7,14 @@ import com.geospatialcorporation.android.geomobile.R;
 import com.geospatialcorporation.android.geomobile.application;
 import com.geospatialcorporation.android.geomobile.library.DI.Map.Interfaces.ILayerManager;
 import com.geospatialcorporation.android.geomobile.library.DI.SharedPreferences.Implementations.AppStateSharedPrefs;
+import com.geospatialcorporation.android.geomobile.library.DI.Tasks.Interfaces.ILayerStyleTask;
 import com.geospatialcorporation.android.geomobile.library.DI.UIHelpers.Interfaces.IMapStatusBarManager;
+import com.geospatialcorporation.android.geomobile.library.map.AppStateMapQueryRequestCallback;
 import com.geospatialcorporation.android.geomobile.library.panelmanager.ISlidingPanelManager;
 import com.geospatialcorporation.android.geomobile.library.sectionbuilders.ISectionBuilder;
 import com.geospatialcorporation.android.geomobile.library.sectionbuilders.SectionBuilderBase;
 import com.geospatialcorporation.android.geomobile.models.Folders.Folder;
+import com.geospatialcorporation.android.geomobile.models.Layers.Layer;
 import com.geospatialcorporation.android.geomobile.models.Layers.LegendLayer;
 import com.geospatialcorporation.android.geomobile.models.Subscription;
 import com.geospatialcorporation.android.geomobile.ui.adapters.SimpleSectionedRecyclerViewAdapter;
@@ -42,7 +45,12 @@ public class TabletLegendSectionBuilder extends LegendLayerSectionBuilder {
         //--
 
         //-- Show AppState Layers
-        showAppStateLayers();
+        if(application.getShouldSetAppState()) {
+            showAppStateLayers();
+            application.setShouldSetAppState(false);
+        } else {
+            getLayerIcons();
+        }
         //--
 
         TabletLegendAdapter adapter = new TabletLegendAdapter(mContext, llayers, mPanelManager);
@@ -67,4 +75,19 @@ public class TabletLegendSectionBuilder extends LegendLayerSectionBuilder {
 
         return this;
     }
+    
+    protected void getLayerIcons(){
+
+        for(LegendLayer llayer : mAppStateLayers) {
+
+            ILayerStyleTask layerStyleTask = application.getTasksComponent().provideLayerStyleTask();
+
+            layerStyleTask.getActiveStyle(llayer);
+
+        }
+
+
+
+    }
+
 }

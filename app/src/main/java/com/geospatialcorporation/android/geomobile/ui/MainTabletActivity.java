@@ -23,6 +23,7 @@ public class MainTabletActivity extends GeoUndergroundMainActivity implements IG
         super.onCreate(savedInstanceState);
         application.setIsTablet(true);
         application.setGeoMainActivity(this);
+        application.setShouldSetAppState(true);
 
         setMapFragment();
 

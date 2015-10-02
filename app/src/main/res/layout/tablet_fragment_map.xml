@@ -12,7 +12,7 @@
         android:layout_height="match_parent"
         map:cameraTargetLat="38.3448001"
         map:cameraTargetLng="-96.5878515"
-        map:cameraZoom="13" />
+        map:cameraZoom="3" />
 
     <ImageButton
         android:layout_width="wrap_content"
