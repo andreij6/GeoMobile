@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+
+
+    <com.google.android.gms.maps.MapView
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:map="http://schemas.android.com/apk/res-auto"
+        android:id="@+id/map"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        map:cameraTargetLat="38.3448001"
+        map:cameraTargetLng="-96.5878515"
+        map:cameraZoom="13" />
+
+    <ImageButton
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/getLocationIB"
+        android:src="@drawable/ic_crosshairs_gps_grey600_36dp"
+        android:layout_marginBottom="82dp"
+        android:layout_marginLeft="25dp"
+        android:padding="5dp"
+        android:background="@color/white_transparency"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentStart="true"
+        android:layout_marginEnd="25dp"/>
+
+    <ImageButton
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/extentIB"
+        android:src="@drawable/ic_arrow_expand_grey600_36dp"
+        android:layout_marginBottom="25dp"
+        android:layout_marginLeft="25dp"
+        android:padding="5dp"
+        android:background="@color/white_transparency"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentStart="true"
+        android:layout_marginEnd="25dp"/>
+
+</RelativeLayout>

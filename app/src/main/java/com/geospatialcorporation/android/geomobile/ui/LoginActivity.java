@@ -4,6 +4,7 @@ import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
 import android.annotation.TargetApi;
 import android.app.LoaderManager.LoaderCallbacks;
+import android.content.Context;
 import android.content.CursorLoader;
 import android.content.Intent;
 import android.content.Loader;
@@ -13,8 +14,10 @@ import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.provider.ContactsContract;
+import android.support.annotation.Nullable;
 import android.text.TextUtils;
 import android.text.method.LinkMovementMethod;
+import android.util.AttributeSet;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
@@ -35,6 +38,7 @@ import com.geospatialcorporation.android.geomobile.library.DI.Map.Interfaces.ILa
 import com.geospatialcorporation.android.geomobile.library.DI.Tasks.Interfaces.IUserLoginTask;
 import com.geospatialcorporation.android.geomobile.library.constants.GeoSharedPreferences;
 import com.geospatialcorporation.android.geomobile.library.util.Authentication;
+import com.geospatialcorporation.android.geomobile.library.util.DeviceTypeUtil;
 import com.geospatialcorporation.android.geomobile.library.util.LoginValidator;
 import com.geospatialcorporation.android.geomobile.ui.Interfaces.IFullExecuter;
 import com.google.android.gms.common.ConnectionResult;
@@ -44,8 +48,8 @@ import com.google.android.gms.common.SignInButton;
 import java.util.ArrayList;
 import java.util.List;
 
+import butterknife.Bind;
 import butterknife.ButterKnife;
-import butterknife.InjectView;
 import butterknife.OnClick;
 
 public class LoginActivity extends GoogleApiActivity implements LoaderCallbacks<Cursor>, IFullExecuter<Boolean> {
@@ -57,16 +61,16 @@ public class LoginActivity extends GoogleApiActivity implements LoaderCallbacks<
     private IUserLoginTask mUserLoginTask;
 
     //region  UI references.
-    @InjectView(R.id.email) AutoCompleteTextView mEmailView;
-    @InjectView(R.id.password) EditText mPasswordView;
-    @InjectView(R.id.plus_sign_in_button) SignInButton mPlusSignInButton;
-    @InjectView(R.id.login_form) View mLoginFormView;
-    @InjectView(R.id.email_login_form) View mEmailLoginFormView;
-    @InjectView(R.id.plus_sign_out_buttons) View mSignOutButtons;
-    @InjectView(R.id.email_sign_in_button) Button mEmailSignInButton;
-    @InjectView(R.id.signUpLink) TextView mSignUpLink;
-    @InjectView(R.id.forgotPassword) TextView mForgotPassword;
-    @InjectView(R.id.rememberCB) CheckBox mRememberMe;
+    @Bind(R.id.email) AutoCompleteTextView mEmailView;
+    @Bind(R.id.password) EditText mPasswordView;
+    @Bind(R.id.plus_sign_in_button) SignInButton mPlusSignInButton;
+    @Bind(R.id.login_form) View mLoginFormView;
+    @Bind(R.id.email_login_form) View mEmailLoginFormView;
+    @Bind(R.id.plus_sign_out_buttons) View mSignOutButtons;
+    @Bind(R.id.email_sign_in_button) Button mEmailSignInButton;
+    @Bind(R.id.signUpLink) TextView mSignUpLink;
+    @Bind(R.id.forgotPassword) TextView mForgotPassword;
+    @Bind(R.id.rememberCB) CheckBox mRememberMe;
     //endregion
 
     //region OnclickListeners
@@ -102,10 +106,14 @@ public class LoginActivity extends GoogleApiActivity implements LoaderCallbacks<
 
         if (hasAuthToken()) {
             setContentView(R.layout.activity_login);
-            ButterKnife.inject(this);
+            ButterKnife.bind(this);
             mSignUpLink.setMovementMethod(LinkMovementMethod.getInstance());
             mForgotPassword.setMovementMethod(LinkMovementMethod.getInstance());
 
+            //set email & password if saved
+            mEmailView.setText(mGeoSharedPrefs.getString(GeoSharedPreferences.LOGIN_EMAIL, ""));
+            mPasswordView.setText(mGeoSharedPrefs.getString(GeoSharedPreferences.LOGIN_PASSWORD, ""));
+            mRememberMe.setChecked(mGeoSharedPrefs.getBoolean(GeoSharedPreferences.LOGIN_REMEMBER, false));
         }
 
         application.setIsAdminUser(false);
@@ -114,10 +122,7 @@ public class LoginActivity extends GoogleApiActivity implements LoaderCallbacks<
         mLayerManager = application.getLayerManager();
         mLayerManager.reset();
 
-        //set email & password if saved
-        mEmailView.setText(mGeoSharedPrefs.getString(GeoSharedPreferences.LOGIN_EMAIL, ""));
-        mPasswordView.setText(mGeoSharedPrefs.getString(GeoSharedPreferences.LOGIN_PASSWORD, ""));
-        mRememberMe.setChecked(mGeoSharedPrefs.getBoolean(GeoSharedPreferences.LOGIN_REMEMBER, false));
+
 
         if (!supportsGooglePlayServices()) {
             // Don't offer G+ sign in if the app's version is too low to support Google Play
@@ -311,7 +316,13 @@ public class LoginActivity extends GoogleApiActivity implements LoaderCallbacks<
         showProgress(false);
 
         if (success) {
-            Intent mainActivityIntent = new Intent(this, MainActivity.class);
+            Intent mainActivityIntent = null;
+
+            if(DeviceTypeUtil.isTablet(getResources())) {
+                mainActivityIntent = new Intent(this, MainTabletActivity.class);
+            } else {
+                mainActivityIntent = new Intent(this, MainActivity.class);
+            }
 
             String authtoken = (application.getAuthToken() == null) ? "fakeAuthToken" : application.getAuthToken();
 

@@ -52,7 +52,7 @@ public class LayerFolderPanelFragment extends TreeFolderPanelFragmentBase {
         folderDialog.create(mFolder, getActivity(), getFragmentManager());
     }
 
-    @OnClick(R.id.closeIV)
+    @OnClick(R.id.close)
     public void close(){
         mContentFragment.closePanel();
     }

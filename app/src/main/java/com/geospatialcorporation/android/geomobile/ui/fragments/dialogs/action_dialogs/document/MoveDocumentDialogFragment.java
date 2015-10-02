@@ -13,7 +13,6 @@ import android.widget.Spinner;
 import com.geospatialcorporation.android.geomobile.R;
 import com.geospatialcorporation.android.geomobile.application;
 import com.geospatialcorporation.android.geomobile.library.DI.Tasks.Interfaces.IGetDocumentsTask;
-import com.geospatialcorporation.android.geomobile.library.helpers.DataHelper;
 import com.geospatialcorporation.android.geomobile.library.helpers.ItemSelectedListener;
 import com.geospatialcorporation.android.geomobile.library.rest.TreeService;
 import com.geospatialcorporation.android.geomobile.models.Document.Document;
@@ -23,15 +22,15 @@ import com.geospatialcorporation.android.geomobile.ui.Interfaces.ISpinnerListene
 import java.util.ArrayList;
 import java.util.List;
 
+import butterknife.Bind;
 import butterknife.ButterKnife;
-import butterknife.InjectView;
 
 public class MoveDocumentDialogFragment extends DocumentActionDialogBase implements ISpinnerListener<Folder> {
     TreeService mTreeService;
     List<Folder> mFolders;
     Folder mSelected;
 
-    @InjectView(R.id.spinner) Spinner mFolderSpinner;
+    @Bind(R.id.spinner) Spinner mFolderSpinner;
 
     @NonNull
     @Override
@@ -41,7 +40,7 @@ public class MoveDocumentDialogFragment extends DocumentActionDialogBase impleme
         task.getDocumentFolders(this);
 
         View v = getDialogView(R.layout.dialog_document_move);
-        ButterKnife.inject(this, v);
+        ButterKnife.bind(this, v);
 
         return getDialogBuilder()
                 .setMessage(R.string.move_document)

@@ -17,10 +17,9 @@ import com.geospatialcorporation.android.geomobile.models.Folders.Folder;
 import com.geospatialcorporation.android.geomobile.models.Folders.FolderDetailsResponse;
 import com.geospatialcorporation.android.geomobile.ui.Interfaces.IPostExecuter;
 import com.geospatialcorporation.android.geomobile.ui.fragments.detail_fragment.GeoDetailsTabBase;
-import com.melnykov.fab.FloatingActionButton;
 
+import butterknife.Bind;
 import butterknife.ButterKnife;
-import butterknife.InjectView;
 
 
 public class FolderDetailsTab extends GeoDetailsTabBase<Folder> implements IPostExecuter<FolderDetailsResponse> {
@@ -32,19 +31,19 @@ public class FolderDetailsTab extends GeoDetailsTabBase<Folder> implements IPost
     IFolderDialog mFolderDialog;
     FolderDetailsResponse mDetails;
     String mFolderType;
-    @InjectView(R.id.createdByValue) TextView mCreatedBy;
-    @InjectView(R.id.createdValue) TextView mDateCreated;
-    @InjectView(R.id.lastUpdatedValue) TextView mUpdated;
-    @InjectView(R.id.userUpdateValue) TextView mUpdateUser;
-    @InjectView(R.id.folderCountValue) TextView mFolderCount;
-    @InjectView(R.id.entityCountValue) TextView mEntityCount;
-    @InjectView(R.id.entityCountLabel) TextView mEntityCountLabel;
+    @Bind(R.id.createdByValue) TextView mCreatedBy;
+    @Bind(R.id.createdValue) TextView mDateCreated;
+    @Bind(R.id.lastUpdatedValue) TextView mUpdated;
+    @Bind(R.id.userUpdateValue) TextView mUpdateUser;
+    @Bind(R.id.folderCountValue) TextView mFolderCount;
+    @Bind(R.id.entityCountValue) TextView mEntityCount;
+    @Bind(R.id.entityCountLabel) TextView mEntityCountLabel;
     //endregion
 
 
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState){
         View v = inflater.inflate(R.layout.fragment_folder_details_tab, container, false);
-        ButterKnife.inject(this, v);
+        ButterKnife.bind(this, v);
 
         setIntentString(Folder.FOLDER_INTENT);
 
@@ -74,7 +73,7 @@ public class FolderDetailsTab extends GeoDetailsTabBase<Folder> implements IPost
         mCreatedBy.setText(response.getCreateUser());
         mDateCreated.setText(DateTimeFormatter.format(response.getCreateDateTime()));
 
-        if (response.getUpdateUser().length() > 0) {
+        if (response.getUpdateUser() != null && response.getUpdateUser().length() > 0) {
             mUpdateUser.setText(response.getUpdateUser());
             mUpdated.setText(DateTimeFormatter.format(response.getUpdateDateTime()));
         } else {

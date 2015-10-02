@@ -1,7 +1,5 @@
 package com.geospatialcorporation.android.geomobile.library.map;
 
-import android.util.Log;
-
 import com.geospatialcorporation.android.geomobile.application;
 import com.geospatialcorporation.android.geomobile.library.DI.Map.Interfaces.ILayerManager;
 import com.geospatialcorporation.android.geomobile.library.DI.UIHelpers.Interfaces.IMapStatusBarManager;
@@ -31,7 +29,9 @@ public class SendMapQueryRequestCallback implements GeoCallback {
     public void invokeCallback() {
         mLegendLayer.getLayer().setIsShowing(true);
 
-        MapStatusBarManager.StartLoading(mLegendLayer.getLayer().getGeometryTypeCodeId());
+        if (!application.getIsTablet()) {
+            MapStatusBarManager.StartLoading(mLegendLayer.getLayer().getGeometryTypeCodeId());
+        }
 
         if(mLayerManager.isLayerCached(mLegendLayer.getLayer())){
             mLegendLayer.getCheckBox().setEnabled(true);

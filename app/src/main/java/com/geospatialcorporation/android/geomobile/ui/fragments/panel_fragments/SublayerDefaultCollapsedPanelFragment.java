@@ -15,8 +15,8 @@ import com.geospatialcorporation.android.geomobile.models.Layers.Layer;
 import com.geospatialcorporation.android.geomobile.models.Layers.SublayerCreateRequest;
 import com.geospatialcorporation.android.geomobile.ui.fragments.GeoViewFragmentBase;
 
+import butterknife.Bind;
 import butterknife.ButterKnife;
-import butterknife.InjectView;
 import butterknife.OnClick;
 
 
@@ -25,9 +25,9 @@ public class SublayerDefaultCollapsedPanelFragment extends GeoViewFragmentBase {
     Layer mLayer;
     ISublayerTreeService mService;
 
-    @InjectView(R.id.create) Button mCreateBtn;
-    @InjectView(R.id.nameET) EditText mNameET;
-    @InjectView(R.id.toggle) Button mToggle;
+    @Bind(R.id.create) Button mCreateBtn;
+    @Bind(R.id.nameET) EditText mNameET;
+    @Bind(R.id.toggle) Button mToggle;
 
     @OnClick(R.id.create)
     public void createSublayer(){
@@ -51,7 +51,7 @@ public class SublayerDefaultCollapsedPanelFragment extends GeoViewFragmentBase {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         mView = inflater.inflate(R.layout.fragment_panel_sublayer_collapsed, container, false);
-        ButterKnife.inject(this, mView);
+        ButterKnife.bind(this, mView);
         setPanelManager(GeoPanel.SUBLAYER);
         mPanelManager.touch(false);
 

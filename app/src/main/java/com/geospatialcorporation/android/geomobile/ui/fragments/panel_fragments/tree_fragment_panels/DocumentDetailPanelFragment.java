@@ -8,7 +8,6 @@ import android.view.ViewGroup;
 
 import com.geospatialcorporation.android.geomobile.R;
 import com.geospatialcorporation.android.geomobile.application;
-import com.geospatialcorporation.android.geomobile.library.DI.TreeServices.Implementations.DocumentTreeService;
 import com.geospatialcorporation.android.geomobile.library.DI.TreeServices.Interfaces.IDocumentTreeService;
 import com.geospatialcorporation.android.geomobile.library.DI.UIHelpers.Interfaces.DialogHelpers.IDocumentDialog;
 import com.geospatialcorporation.android.geomobile.models.Document.Document;
@@ -29,13 +28,12 @@ public class DocumentDetailPanelFragment extends GeoViewFragmentBase {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstance) {
         View view = inflater.inflate(R.layout.fragment_panel_document_detail, container, false);
-        ButterKnife.inject(this, view);
+        ButterKnife.bind(this, view);
 
         mContext = getActivity();
         mContentFragment = (DocumentDetailFragment) application.getMainActivity().getContentFragment();
         mDocumentDialog = application.getUIHelperComponent().provideDocumentDialog();
         mService = application.getTreeServiceComponent().provideDocumentTreeService();
-
 
         handleArgs();
 
@@ -48,7 +46,7 @@ public class DocumentDetailPanelFragment extends GeoViewFragmentBase {
         mDocument = args.getParcelable(Document.INTENT);
     }
 
-    @OnClick(R.id.closeIV)
+    @OnClick(R.id.close)
     public void close(){
         mContentFragment.closePanel();
     }
@@ -80,4 +78,6 @@ public class DocumentDetailPanelFragment extends GeoViewFragmentBase {
 
         mContentFragment.closePanel();
     }
+
+
 }

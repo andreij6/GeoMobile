@@ -9,14 +9,11 @@ import android.widget.EditText;
 
 import com.geospatialcorporation.android.geomobile.R;
 
+import butterknife.Bind;
 import butterknife.ButterKnife;
-import butterknife.InjectView;
 
-/**
- * Created by andre on 6/12/2015.
- */
 public class RenameLayerActionDialogFragment extends LayerActionDialogBase {
-    @InjectView(R.id.renameInput)
+    @Bind(R.id.renameInput)
     EditText mRenameInput;
 
     @NonNull
@@ -24,7 +21,7 @@ public class RenameLayerActionDialogFragment extends LayerActionDialogBase {
     public Dialog onCreateDialog(Bundle savedInstanceState){
 
         View v = getDialogView(R.layout.dialog_shared_rename);
-        ButterKnife.inject(this, v);
+        ButterKnife.bind(this, v);
 
         mRenameInput.setText(mLayer.getName());
 

@@ -7,6 +7,7 @@ import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
+import android.support.v4.content.ContextCompat;
 import android.util.TypedValue;
 import android.view.View;
 import android.view.ViewGroup;
@@ -44,7 +45,7 @@ import com.google.android.gms.maps.model.MarkerOptions;
 import java.util.ArrayList;
 import java.util.List;
 
-import butterknife.InjectView;
+import butterknife.Bind;
 
 
 public class LegendLayerAdapter extends GeoRecyclerAdapterBase<LegendLayerAdapter.Holder, LegendLayer> {
@@ -74,11 +75,11 @@ public class LegendLayerAdapter extends GeoRecyclerAdapterBase<LegendLayerAdapte
     public class Holder extends GeoHolderBase<LegendLayer> {
 
         //region ButterKnife
-        @InjectView(R.id.layerNameTV) TextView mLayerName;
-        @InjectView(R.id.isVisible) CheckBox isVisibleCB;
-        @InjectView(R.id.sublayerExpander) ImageView gotoSublayer;
-        @InjectView(R.id.geometryIV) ImageView geomIV;
-        @InjectView(R.id.folderImageView) ImageView mFolderIcon;
+        @Bind(R.id.layerNameTV) TextView mLayerName;
+        @Bind(R.id.isVisible) CheckBox isVisibleCB;
+        @Bind(R.id.sublayerExpander) ImageView gotoSublayer;
+        @Bind(R.id.geometryIV) ImageView geomIV;
+        @Bind(R.id.folderImageView) ImageView mFolderIcon;
         //endregionxxx
 
         Layer mLayer;
@@ -101,7 +102,7 @@ public class LegendLayerAdapter extends GeoRecyclerAdapterBase<LegendLayerAdapte
                 geomIV.setVisibility(View.VISIBLE);
                 mFolderIcon.setVisibility(View.GONE);
                 //gotoSublayer.setBackgroundColor(mContext.getResources().getColor(R.color.accent));
-                gotoSublayer.setImageDrawable(mContext.getDrawable(R.drawable.ic_information_outline_white_18dp));
+                gotoSublayer.setImageDrawable(ContextCompat.getDrawable(mContext, R.drawable.ic_information_outline_white_18dp));
 
                 mLayerName.setTextAppearance(mContext, android.R.style.TextAppearance_DeviceDefault_Medium);
                 mLayerName.setTextColor(mContext.getResources().getColor(R.color.white));
@@ -131,11 +132,7 @@ public class LegendLayerAdapter extends GeoRecyclerAdapterBase<LegendLayerAdapte
 
                 mView.setBackgroundColor(mContext.getResources().getColor(R.color.primary_light));
 
-                if(mFolder.getName().equals("/")) {
-                    mLayerName.setText("ROOT");
-                } else {
-                    mLayerName.setText(mFolder.getName().toUpperCase());
-                }
+                mLayerName.setText(mFolder.getProperName().toUpperCase());
 
                 mLayerName.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 11);
                 mLayerName.setTextColor(mContext.getResources().getColor(R.color.primary_dark));
@@ -147,7 +144,7 @@ public class LegendLayerAdapter extends GeoRecyclerAdapterBase<LegendLayerAdapte
                 isVisibleCB.setVisibility(View.INVISIBLE);
                 geomIV.setVisibility(View.INVISIBLE);
                 //mProgressBar.setVisibility(View.GONE);
-                gotoSublayer.setImageDrawable(mContext.getDrawable(R.drawable.ic_information_outline_black_18dp));
+                gotoSublayer.setImageDrawable(ContextCompat.getDrawable(mContext, R.drawable.ic_information_outline_black_18dp));
                 gotoSublayer.setBackgroundColor(Color.TRANSPARENT);
                 mFolderIcon.setVisibility(View.VISIBLE);
             }
@@ -296,20 +293,20 @@ public class LegendLayerAdapter extends GeoRecyclerAdapterBase<LegendLayerAdapte
         }
 
         protected Drawable getDrawable(Integer geometryTypeCodeId) {
-            Drawable d = mContext.getDrawable(R.drawable.ic_window_minimize_white_18dp);
+            Drawable d = ContextCompat.getDrawable(mContext,R.drawable.ic_window_minimize_white_18dp);
 
             switch (geometryTypeCodeId) {
                 case GeometryTypeCodes.Line:
                 case GeometryTypeCodes.MultiLine:
-                    d = mContext.getDrawable(R.drawable.ic_window_minimize_white_18dp);
+                    d = ContextCompat.getDrawable(mContext,R.drawable.ic_window_minimize_white_18dp);
                     break;
                 case GeometryTypeCodes.Point:
                 case GeometryTypeCodes.MultiPoint:
-                    d = mContext.getDrawable(R.drawable.ic_checkbox_blank_circle_white_18dp);
+                    d = ContextCompat.getDrawable(mContext,R.drawable.ic_checkbox_blank_circle_white_18dp);
                     break;
                 case GeometryTypeCodes.Polygon:
                 case GeometryTypeCodes.MultiPolygon:
-                    d = mContext.getDrawable(R.drawable.ic_hexagon_outline_white_18dp);
+                    d = ContextCompat.getDrawable(mContext,R.drawable.ic_hexagon_outline_white_18dp);
                     break;
                 default:
                     break;

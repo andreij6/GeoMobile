@@ -20,12 +20,10 @@ import com.geospatialcorporation.android.geomobile.ui.fragments.GoogleMapFragmen
 import com.geospatialcorporation.android.geomobile.ui.fragments.detail_fragment.folder_tabs.FolderDetailsTab;
 import com.geospatialcorporation.android.geomobile.ui.fragments.detail_fragment.folder_tabs.PermissionsTab;
 import com.geospatialcorporation.android.geomobile.ui.fragments.dialogs.ItemDetailFragment;
-import com.geospatialcorporation.android.geomobile.ui.fragments.tree_fragments.LayerFragment;
-import com.geospatialcorporation.android.geomobile.ui.fragments.tree_fragments.LibraryFragment;
 import com.sothree.slidinguppanel.SlidingUpPanelLayout;
 
+import butterknife.Bind;
 import butterknife.ButterKnife;
-import butterknife.InjectView;
 import butterknife.OnClick;
 
 public class LayerFolderDetailFragment extends ItemDetailFragment<Folder> implements TabHost.OnTabChangeListener {
@@ -33,7 +31,7 @@ public class LayerFolderDetailFragment extends ItemDetailFragment<Folder> implem
     private static final String DETAILS = "Details";
     private static final String PERMISSIONS = "Permissions";
 
-    @InjectView(R.id.sliding_layout) SlidingUpPanelLayout mPanel;
+    @Bind(R.id.sliding_layout) SlidingUpPanelLayout mPanel;
 
 
     @OnClick(R.id.goBackIV)
@@ -58,7 +56,7 @@ public class LayerFolderDetailFragment extends ItemDetailFragment<Folder> implem
 
         View view = inflater.inflate(R.layout.fragment_tree_detail, null);
 
-        ButterKnife.inject(this, view);
+        ButterKnife.bind(this, view);
 
         application.setLayerDetailFragmentPanel(mPanel);
         mPanelManager = new PanelManager.Builder().type(GeoPanel.LAYER_DETAIL).hide().build();

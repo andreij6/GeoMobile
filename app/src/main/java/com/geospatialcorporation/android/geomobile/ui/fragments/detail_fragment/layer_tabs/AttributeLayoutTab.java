@@ -28,8 +28,8 @@ import com.geospatialcorporation.android.geomobile.ui.fragments.detail_fragment.
 
 import java.util.List;
 
+import butterknife.Bind;
 import butterknife.ButterKnife;
-import butterknife.InjectView;
 import butterknife.OnClick;
 
 public class AttributeLayoutTab extends GeoDetailsTabBase<Layer> implements IContentRefresher, IPostExecuter<List<LayerAttributeColumn>> {
@@ -41,15 +41,15 @@ public class AttributeLayoutTab extends GeoDetailsTabBase<Layer> implements ICon
     ILayerDialog mLayerDialog;
     ILayoutRefresher mRefresher;
 
-    @InjectView(R.id.attributesTableLayout) TableLayout mTableLayout;
-    @InjectView(R.id.swipe_refresh_layout) SwipeRefreshLayout mSwipeRefreshLayout;
+    @Bind(R.id.attributesTableLayout) TableLayout mTableLayout;
+    @Bind(R.id.swipe_refresh_layout) SwipeRefreshLayout mSwipeRefreshLayout;
     LayoutInflater mInflater;
     //@InjectView(R.id.sliding_layout) SlidingUpPanelLayout mPanel;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState){
         View v = inflater.inflate(R.layout.fragment_layer_attributes_tab, container, false);
-        ButterKnife.inject(this, v);
+        ButterKnife.bind(this, v);
         mInflater = inflater;
 
         UIHelperComponent component = application.getUIHelperComponent();

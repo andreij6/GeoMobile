@@ -41,10 +41,12 @@ public class MapQueryListener extends RequestListenerBase<List<MapQueryResponse>
         mGeoMapper.mapFeatures(response, mLLayer);
 
         //set Layer Loading
-        Fragment contentFrag = application.getMainActivity().getContentFragment();
+        if(!application.getIsTablet()) {
+            Fragment contentFrag = application.getMainActivity().getContentFragment();
 
-        if(contentFrag instanceof GoogleMapFragment){
-            ((GoogleMapFragment) contentFrag).hideLoadingBar();
+            if (contentFrag instanceof GoogleMapFragment) {
+                ((GoogleMapFragment) contentFrag).hideLoadingBar();
+            }
         }
     }
 

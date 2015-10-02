@@ -34,7 +34,7 @@ import com.geospatialcorporation.android.geomobile.ui.MainActivity;
 import java.lang.reflect.Field;
 import java.util.List;
 
-import butterknife.InjectView;
+import butterknife.Bind;
 
 /**
  * Fragment used for managing interactions for and presentation of a navigation drawer.
@@ -54,7 +54,7 @@ public class LayerSelectorDrawerFragment extends Fragment implements IPostExecut
     private ListView mDrawerListView;
     private View mFragmentContainerView;
     private View mRootView;
-    @InjectView(R.id.layerRecyclerView) RecyclerView mRecyclerView;
+    @Bind(R.id.layerRecyclerView) RecyclerView mRecyclerView;
     IGetLayersTask mGetLayersTask;
 
     private int mCurrentSelectedPosition = 0;
@@ -88,12 +88,12 @@ public class LayerSelectorDrawerFragment extends Fragment implements IPostExecut
         mRecyclerView = (RecyclerView)mRootView.findViewById(R.id.layerRecyclerView);
 
         mGetLayersTask = setTask();
-        mGetLayersTask.getAll(new GetLayersTaskParams(mDrawerLayout, this));
+        mGetLayersTask.getAll(new GetLayersTaskParams(this));
 
         setHasOptionsMenu(false);
     }
 
-    private IGetLayersTask setTask() {
+    protected IGetLayersTask setTask() {
         if(mGetLayersTask == null){
             return application.getTasksComponent().provideLayersTask();
         }
@@ -258,11 +258,13 @@ public class LayerSelectorDrawerFragment extends Fragment implements IPostExecut
 
     public void refresh() {
         mGetLayersTask = setTask();
-        mGetLayersTask.getAll(new GetLayersTaskParams(mDrawerLayout, this));
+        mGetLayersTask.getAll(new GetLayersTaskParams(this));
     }
 
     @Override
     public void onPostExecute(List<Folder> folders) {
+        application.setLayerDrawer(mDrawerLayout);
+
         new LegendLayerSectionBuilder(getActivity())
                 .BuildAdapter(folders, 0)
                 .setRecycler(mRecyclerView);

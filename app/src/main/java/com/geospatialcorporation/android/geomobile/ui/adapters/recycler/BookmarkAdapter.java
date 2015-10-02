@@ -19,7 +19,7 @@ import com.google.android.gms.maps.model.LatLng;
 
 import java.util.List;
 
-import butterknife.InjectView;
+import butterknife.Bind;
 
 public class BookmarkAdapter extends GeoRecyclerAdapterBase<BookmarkAdapter.Holder, Bookmark> {
 
@@ -39,7 +39,7 @@ public class BookmarkAdapter extends GeoRecyclerAdapterBase<BookmarkAdapter.Hold
 
     protected class Holder extends GeoHolderBase<Bookmark> {
 
-        @InjectView(R.id.bookmarkName) TextView mBookmarkName;
+        @Bind(R.id.bookmarkName) TextView mBookmarkName;
 
         public Holder(View itemView) {
             super(itemView);

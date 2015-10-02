@@ -29,6 +29,7 @@ public class FeatureWindowListener extends RequestListenerBase<List<FeatureQuery
     public void onSuccess(List<FeatureQueryResponse> response) {
         super.onSuccess(response);
 
-        application.getMapFragment().showFeatureWindow(new ParcelableFeatureQueryResponse(response));
+        application.getFeatureWindowCtrl().showFeatureWindow(new ParcelableFeatureQueryResponse(response));
+
     }
 }

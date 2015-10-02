@@ -6,7 +6,11 @@ import android.widget.Toast;
 
 import com.geospatialcorporation.android.geomobile.R;
 import com.geospatialcorporation.android.geomobile.application;
+import com.geospatialcorporation.android.geomobile.library.util.DeviceTypeUtil;
+import com.geospatialcorporation.android.geomobile.ui.Interfaces.IContentRefresher;
+import com.geospatialcorporation.android.geomobile.ui.Interfaces.IGeoMainActivity;
 import com.geospatialcorporation.android.geomobile.ui.MainActivity;
+import com.geospatialcorporation.android.geomobile.ui.fragments.tree_fragments.LibraryFragment;
 
 import retrofit.RetrofitError;
 import retrofit.client.Response;
@@ -25,9 +29,7 @@ public abstract class RequestListenerBase<T> {
     }
 
     public void onSuccess(T response) {
-        MainActivity activity = getMainActivity();
-
-        mContentFragment = activity.getContentFragment();
+        mContentFragment = getMainActivity().getContentFragment();
     }
 
     public void onFailure(RetrofitError error) {
@@ -36,16 +38,16 @@ public abstract class RequestListenerBase<T> {
         Toaster(getString(R.string.error));
     }
 
-    protected MainActivity getMainActivity(){
-        return application.getMainActivity();
+    protected IGeoMainActivity getMainActivity(){
+        return application.getGeoMainActivity();
     }
 
     protected void Toaster(String message){
-        Toast.makeText(getMainActivity(), message, Toast.LENGTH_LONG).show();
+        Toast.makeText(application.getMainActivity(), message, Toast.LENGTH_LONG).show();
     }
 
     protected String getString(int stringId){
-        return getMainActivity().getString(stringId);
+        return application.getMainActivity().getString(stringId);
     }
 
 }

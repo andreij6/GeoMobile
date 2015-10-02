@@ -16,7 +16,7 @@ public abstract class GeoHolderBase<T> extends RecyclerView.ViewHolder {
     public GeoHolderBase(View itemView) {
         super(itemView);
         mView = itemView;
-        ButterKnife.inject(this, itemView);
+        ButterKnife.bind(this, itemView);
     }
 
     public abstract void bind(T item);

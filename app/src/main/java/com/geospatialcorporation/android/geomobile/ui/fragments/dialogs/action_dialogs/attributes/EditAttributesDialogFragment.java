@@ -68,7 +68,11 @@ public class EditAttributesDialogFragment extends AttributesActionDialogBase<Att
 
                             EditLayerAttributesRequest request = new EditLayerAttributesRequest(Arrays.asList(features));
 
-                            mStatusBarManager.setMessage(mContext.getString(R.string.saving_attribute_updates));
+                            if(!application.getIsTablet()) {
+                                mStatusBarManager.setMessage(mContext.getString(R.string.saving_attribute_updates));
+                            }
+
+                            application.setFeatureWindowDocumentIds(mData.getLayerId(), mData.getColumns().get(0).getFeatureId());
 
                             mService.editAttributeValue(mData.getLayerId(), request);
                         } else {

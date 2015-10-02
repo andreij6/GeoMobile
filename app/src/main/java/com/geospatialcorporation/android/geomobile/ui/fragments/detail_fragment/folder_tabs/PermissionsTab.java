@@ -14,12 +14,10 @@ import com.geospatialcorporation.android.geomobile.models.Folders.Folder;
 import com.geospatialcorporation.android.geomobile.models.Folders.FolderPermissionsResponse;
 import com.geospatialcorporation.android.geomobile.ui.Interfaces.IPostExecuter;
 import com.geospatialcorporation.android.geomobile.ui.fragments.detail_fragment.GeoDetailsTabBase;
-import com.melnykov.fab.FloatingActionButton;
 
 import java.util.List;
 
 import butterknife.ButterKnife;
-import butterknife.InjectView;
 
 
 public class PermissionsTab extends GeoDetailsTabBase<Folder> implements IPostExecuter<List<FolderPermissionsResponse>> {
@@ -32,7 +30,7 @@ public class PermissionsTab extends GeoDetailsTabBase<Folder> implements IPostEx
 
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState){
         View v = inflater.inflate(R.layout.fragment_folder_permissions_tab, container, false);
-        ButterKnife.inject(this, v);
+        ButterKnife.bind(this, v);
 
         setIntentString(Folder.FOLDER_INTENT);
         handleArgs();

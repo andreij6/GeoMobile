@@ -26,6 +26,7 @@ import com.geospatialcorporation.android.geomobile.library.DI.TreeServices.Inter
 import com.geospatialcorporation.android.geomobile.library.DI.TreeServices.Interfaces.ILayerTreeService;
 import com.geospatialcorporation.android.geomobile.library.DocumentSentCallback;
 import com.geospatialcorporation.android.geomobile.library.ISendFileCallback;
+import com.geospatialcorporation.android.geomobile.library.constants.MediaConstants;
 import com.geospatialcorporation.android.geomobile.library.helpers.DataHelper;
 import com.geospatialcorporation.android.geomobile.library.helpers.ItemSelectedListener;
 import com.geospatialcorporation.android.geomobile.library.helpers.MediaHelper;
@@ -39,8 +40,8 @@ import com.geospatialcorporation.android.geomobile.ui.fragments.dialogs.base.Geo
 import java.util.ArrayList;
 import java.util.List;
 
+import butterknife.Bind;
 import butterknife.ButterKnife;
-import butterknife.InjectView;
 import butterknife.OnClick;
 
 public class MapFeatureDocumentDialogFragment extends GeoDialogFragmentBase implements ISpinnerListener<Document> {
@@ -52,7 +53,7 @@ public class MapFeatureDocumentDialogFragment extends GeoDialogFragmentBase impl
     Document mSelected;
     int mLayerId;
     String mFeatureId;
-    @InjectView(R.id.document_spinner) Spinner mDocumentSpinner;
+    @Bind(R.id.document_spinner) Spinner mDocumentSpinner;
 
     @OnClick(R.id.addDocumentSection)
     public void addDocument(){
@@ -71,7 +72,7 @@ public class MapFeatureDocumentDialogFragment extends GeoDialogFragmentBase impl
         Intent takePhotoIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
         MediaHelper mediaHelper = new MediaHelper(getActivity());
 
-        application.mMediaUri = mediaHelper.getOutputMediaFileUri(MainActivity.MediaConstants.MEDIA_TYPE_IMAGE);
+        application.mMediaUri = mediaHelper.getOutputMediaFileUri(MediaConstants.MEDIA_TYPE_IMAGE);
 
         if (application.mMediaUri == null) {
             // display an error
@@ -86,7 +87,7 @@ public class MapFeatureDocumentDialogFragment extends GeoDialogFragmentBase impl
 
             MapFeatureDocumentDialogFragment.this.getDialog().cancel();
 
-            getActivity().startActivityForResult(takePhotoIntent, MainActivity.MediaConstants.TAKE_IMAGE_REQUEST_FEATUREWINDOW);
+            getActivity().startActivityForResult(takePhotoIntent, MediaConstants.TAKE_IMAGE_REQUEST_FEATUREWINDOW);
         }
     }
 
@@ -106,7 +107,7 @@ public class MapFeatureDocumentDialogFragment extends GeoDialogFragmentBase impl
         application.setFeatureWindowDocumentIds(mLayerId, mFeatureId);
 
 
-        getActivity().startActivityForResult(chooserIntent, MainActivity.MediaConstants.PICK_IMAGE_REQUEST_FEATUREWINDOW);
+        getActivity().startActivityForResult(chooserIntent, MediaConstants.PICK_IMAGE_REQUEST_FEATUREWINDOW);
     }
 
     public void init(Context context, int layerId, String featureId) {
@@ -125,7 +126,7 @@ public class MapFeatureDocumentDialogFragment extends GeoDialogFragmentBase impl
 
         AlertDialog.Builder builder = getDialogBuilder();
         View v = getDialogView(R.layout.dialog_mapfeature_document);
-        ButterKnife.inject(this, v);
+        ButterKnife.bind(this, v);
 
         preloadSpinner();
 

@@ -15,17 +15,14 @@ import com.geospatialcorporation.android.geomobile.library.DI.Analytics.Models.G
 import com.geospatialcorporation.android.geomobile.library.DI.FeatureWindow.models.FeatureWindowData;
 import com.geospatialcorporation.android.geomobile.library.DI.UIHelpers.Interfaces.DialogHelpers.IAttributeDialog;
 import com.geospatialcorporation.android.geomobile.library.helpers.DataHelper;
-import com.geospatialcorporation.android.geomobile.library.helpers.GeoDialogHelper;
 import com.geospatialcorporation.android.geomobile.models.AttributeValueVM;
-import com.geospatialcorporation.android.geomobile.models.Layers.AttributeValue;
 import com.geospatialcorporation.android.geomobile.models.Layers.Columns;
 import com.geospatialcorporation.android.geomobile.models.Query.map.response.featurewindow.WindowFeatures;
-import com.geospatialcorporation.android.geomobile.models.Query.map.response.mapquery.Feature;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import butterknife.InjectView;
+import butterknife.Bind;
 import butterknife.OnClick;
 
 
@@ -33,7 +30,7 @@ public class FeatureAttributesTab extends FeatureTabBase {
 
     private static final String TAG = FeatureAttributesTab.class.getSimpleName();
 
-    @InjectView(R.id.featureWindowAttributesTable) TableLayout mTableLayout;
+    @Bind(R.id.featureWindowAttributesTable) TableLayout mTableLayout;
     AttributeValueVM mData;
     IAttributeDialog mAttributeDialog;
 

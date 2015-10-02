@@ -16,7 +16,8 @@ import com.geospatialcorporation.android.geomobile.library.DI.FeatureWindow.mode
 import java.util.Collections;
 import java.util.List;
 
-import butterknife.InjectView;
+import butterknife.Bind;
+import butterknife.OnClick;
 
 /**
  * Created by andre on 7/6/2015.
@@ -24,7 +25,7 @@ import butterknife.InjectView;
 public class FeatureMapInfoTab extends FeatureTabBase {
     private static final String TAG = FeatureMapInfoTab.class.getSimpleName();
 
-    @InjectView(R.id.mapInfoTable) TableLayout mTableLayout;
+    @Bind(R.id.mapInfoTable) TableLayout mTableLayout;
 
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         mLayout = R.layout.fragment_feature_window_mapinfo_tab;

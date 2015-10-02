@@ -1,5 +1,6 @@
 package com.geospatialcorporation.android.geomobile.library.DI.Map;
 
+import com.geospatialcorporation.android.geomobile.library.DI.Map.Interfaces.IGeoUndergroundMap;
 import com.geospatialcorporation.android.geomobile.library.DI.Map.Interfaces.ILayerManager;
 import com.geospatialcorporation.android.geomobile.library.DI.Map.Interfaces.IMapStateService;
 
@@ -13,4 +14,6 @@ public interface MapComponent {
     IMapStateService provideMapStateService();
 
     ILayerManager provideLayerManager();
+
+    IGeoUndergroundMap provideGeoUndergroundMap();
 }

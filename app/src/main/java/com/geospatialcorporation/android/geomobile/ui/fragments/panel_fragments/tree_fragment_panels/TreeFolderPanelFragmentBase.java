@@ -11,15 +11,15 @@ import com.geospatialcorporation.android.geomobile.application;
 import com.geospatialcorporation.android.geomobile.models.Folders.Folder;
 import com.geospatialcorporation.android.geomobile.ui.fragments.GeoViewFragmentBase;
 
+import butterknife.Bind;
 import butterknife.ButterKnife;
-import butterknife.InjectView;
 
 public abstract class TreeFolderPanelFragmentBase<T> extends GeoViewFragmentBase {
 
     protected Folder mFolder;
     T mContentFragment;
-    @InjectView(R.id.nameTV) TextView mPath;
-    @InjectView(R.id.folderNameTV) TextView mFolderName;
+    @Bind(R.id.nameTV) TextView mPath;
+    @Bind(R.id.folderNameTV) TextView mFolderName;
 
     public TreeFolderPanelFragmentBase(){
         mContentFragment = (T) application.getMainActivity().getContentFragment();
@@ -28,10 +28,11 @@ public abstract class TreeFolderPanelFragmentBase<T> extends GeoViewFragmentBase
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstance) {
         View view = inflater.inflate(getViewResource(), container, false);
-        ButterKnife.inject(this, view);
+        ButterKnife.bind(this, view);
 
         handleArgs();
 
+        //TODO: condense - same as TreeFolderPanelFragmentBase
         if(mFolder.getParent() != null) {
             if(mFolder.getParent().getName().equals("/")){
                 mPath.setText("ROOT");

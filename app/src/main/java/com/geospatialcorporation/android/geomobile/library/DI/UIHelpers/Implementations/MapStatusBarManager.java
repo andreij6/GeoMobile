@@ -88,27 +88,33 @@ public class MapStatusBarManager implements IMapStatusBarManager {
 
     protected void getProgressDialogHelper(){
         if(mProgressDialogHelper == null) {
-            mProgressDialogHelper = new ProgressDialogHelper(application.getMainActivity());
+            if(application.getIsTablet()){
+                mProgressDialogHelper = new ProgressDialogHelper(application.getMainTabletActivity());
+            } else {
+                mProgressDialogHelper = new ProgressDialogHelper(application.getMainActivity());
+            }
         }
     }
 
     protected void ToggleLoadingLayers() {
+        if(!application.getIsTablet()) {
+            getProgressDialogHelper();
 
-        getProgressDialogHelper();
+            Boolean isLoading = false;
 
-        Boolean isLoading = false;
+            for (Integer code : LoadedMap.keySet()) {
+                if (!LoadedMap.get(code).isEmpty()) {
+                    mProgressDialogHelper.showProgressDialog();
+                    isLoading = true;
+                    break;
+                }
+            }
 
-        for(Integer code : LoadedMap.keySet()){
-            if(!LoadedMap.get(code).isEmpty()){
-                mProgressDialogHelper.showProgressDialog();
-                isLoading = true;
-                break;
+            if (!isLoading) {
+                mProgressDialogHelper.hideProgressDialog();
             }
         }
 
-        if(!isLoading){
-            mProgressDialogHelper.hideProgressDialog();
-        }
     }
 
     @Override

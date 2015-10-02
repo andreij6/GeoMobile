@@ -1,6 +1,7 @@
 package com.geospatialcorporation.android.geomobile;
 
 import android.app.Application;
+import android.support.multidex.MultiDexApplication;
 
 import com.geospatialcorporation.android.geomobile.library.DI.Analytics.AnalyticsComponent;
 import com.geospatialcorporation.android.geomobile.library.DI.Analytics.DaggerAnalyticsComponent;
@@ -19,7 +20,7 @@ import com.geospatialcorporation.android.geomobile.library.DI.TreeServices.TreeS
 import com.geospatialcorporation.android.geomobile.library.DI.UIHelpers.DaggerUIHelperComponent;
 import com.geospatialcorporation.android.geomobile.library.DI.UIHelpers.UIHelperComponent;
 
-public abstract class applicationDIBase extends Application {
+public abstract class applicationDIBase extends MultiDexApplication {
 
 
     public static ErrorsComponent getErrorsComponent() {

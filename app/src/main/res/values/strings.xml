@@ -287,4 +287,8 @@
     <string name="please_wait">Please Wait</string>
     <string name="progress_dialog">Progress</string>
     <string name="remember_me">Remember Me</string>
+    <string name="title_activity_main_tablet">MainTabletActivity</string>
+    <string name="library">Library</string>
+    <string name="account">Account</string>
+    <string name="subscriptions">Subscriptions</string>
 </resources>

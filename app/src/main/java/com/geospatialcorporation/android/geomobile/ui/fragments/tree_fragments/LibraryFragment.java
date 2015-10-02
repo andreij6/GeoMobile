@@ -6,6 +6,7 @@ import android.content.Context;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
+import android.support.v4.content.ContextCompat;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -36,7 +37,6 @@ import com.geospatialcorporation.android.geomobile.ui.MainActivity;
 import com.geospatialcorporation.android.geomobile.ui.fragments.GeoViewFragmentBase;
 import com.geospatialcorporation.android.geomobile.ui.fragments.GoogleMapFragment;
 import com.geospatialcorporation.android.geomobile.ui.fragments.detail_fragment.DocumentFolderDetailFragment;
-import com.geospatialcorporation.android.geomobile.ui.fragments.panel_fragments.tree_fragment_panels.LayerFolderPanelFragment;
 import com.geospatialcorporation.android.geomobile.ui.fragments.panel_fragments.tree_fragment_panels.LibraryFolderPanelFragment;
 import com.geospatialcorporation.android.geomobile.models.ListItem;
 import com.sothree.slidinguppanel.SlidingUpPanelLayout;
@@ -44,7 +44,7 @@ import com.sothree.slidinguppanel.SlidingUpPanelLayout;
 
 import java.util.List;
 
-import butterknife.InjectView;
+import butterknife.Bind;
 import butterknife.OnClick;
 
 public class LibraryFragment extends GeoViewFragmentBase
@@ -57,16 +57,15 @@ public class LibraryFragment extends GeoViewFragmentBase
     IGetDocumentsTask mDocumentsTask;
     IDocumentTreeService mUploader;
     DataHelper mHelper;
-    IGeneralDialog mDialog;
     ProgressDialogHelper mProgressHelper;
 
-    @InjectView(R.id.libraryitem_recyclerView) RecyclerView mRecyclerView;
-    @InjectView(R.id.swipe_refresh_layout) SwipeRefreshLayout mSwipeRefreshLayout;
-    @InjectView(R.id.sliding_layout) SlidingUpPanelLayout mPanel;
-    @InjectView(R.id.libraryOptionsIV) ImageView mOptionsSlider;
-    @InjectView(R.id.showNavIV1) ImageView mNavBars;
-    @InjectView(R.id.showNavIV2) ImageView mNavLogo;
-    @InjectView(R.id.title) TextView mTitle;
+    @Bind(R.id.libraryitem_recyclerView) RecyclerView mRecyclerView;
+    @Bind(R.id.swipe_refresh_layout) SwipeRefreshLayout mSwipeRefreshLayout;
+    @Bind(R.id.sliding_layout) SlidingUpPanelLayout mPanel;
+    @Bind(R.id.libraryOptionsIV) ImageView mOptionsSlider;
+    @Bind(R.id.showNavIV1) ImageView mNavBars;
+    @Bind(R.id.showNavIV2) ImageView mNavLogo;
+    @Bind(R.id.title) TextView mTitle;
     //endregion
 
     //region OnClicks
@@ -144,14 +143,6 @@ public class LibraryFragment extends GeoViewFragmentBase
 
         mNavigationHelper.syncMenu(2);
 
-        mRecyclerView.setOnClickListener(new View.OnClickListener(){
-
-            @Override
-            public void onClick(View v) {
-                Toaster("Clicked Recycler");
-            }
-        });
-
         return mView;
     }
 
@@ -226,7 +217,7 @@ public class LibraryFragment extends GeoViewFragmentBase
 
         if(mCurrentFolder.getParent() != null){
             mNavBars.setVisibility(View.GONE);
-            mNavLogo.setImageDrawable(mContext.getDrawable(R.drawable.ic_chevron_left_white_18dp));
+            mNavLogo.setImageDrawable(ContextCompat.getDrawable(mContext, R.drawable.ic_chevron_left_white_18dp));
             mNavLogo.setPadding(-12, 0, 0, 0);
 
             mNavBars.setOnClickListener(navigateUpTree);
@@ -235,12 +226,12 @@ public class LibraryFragment extends GeoViewFragmentBase
             mTitle.setText(mCurrentFolder.getName());
 
         } else {
-            mNavBars.setImageDrawable(mContext.getDrawable(R.drawable.ic_nav_white));
+            mNavBars.setImageDrawable(ContextCompat.getDrawable(mContext,R.drawable.ic_nav_white));
 
             mNavBars.setOnClickListener(showNavigation);
             mNavLogo.setOnClickListener(showNavigation);
 
-            mNavLogo.setImageDrawable(mContext.getDrawable(R.drawable.ic_logo_g_white));
+            mNavLogo.setImageDrawable(ContextCompat.getDrawable(mContext,R.drawable.ic_logo_g_white));
             mNavBars.setVisibility(View.VISIBLE);
         }
 

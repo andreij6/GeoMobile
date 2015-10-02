@@ -9,14 +9,14 @@ import android.widget.EditText;
 
 import com.geospatialcorporation.android.geomobile.R;
 
+import butterknife.Bind;
 import butterknife.ButterKnife;
-import butterknife.InjectView;
 
 /**
  * Created by andre on 6/12/2015.
  */
 public class RenameFolderActionDialogFragment extends FolderActionDialogBase {
-    @InjectView(R.id.renameInput)
+    @Bind(R.id.renameInput)
     EditText mRenameInput;
 
 
@@ -25,7 +25,7 @@ public class RenameFolderActionDialogFragment extends FolderActionDialogBase {
     public Dialog onCreateDialog(Bundle savedInstanceState){
 
         View v = getDialogView(R.layout.dialog_shared_rename);
-        ButterKnife.inject(this, v);
+        ButterKnife.bind(this, v);
 
         mRenameInput.setText(mFolder.getName());
 

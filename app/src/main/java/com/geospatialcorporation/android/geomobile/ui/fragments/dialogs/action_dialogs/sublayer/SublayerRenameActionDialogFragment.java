@@ -9,19 +9,19 @@ import android.widget.EditText;
 
 import com.geospatialcorporation.android.geomobile.R;
 
+import butterknife.Bind;
 import butterknife.ButterKnife;
-import butterknife.InjectView;
 
 
 public class SublayerRenameActionDialogFragment extends SublayerActionDialogFragmentBase {
-    @InjectView(R.id.renameInput) EditText mRenameInput;
+    @Bind(R.id.renameInput) EditText mRenameInput;
 
     @NonNull
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState){
 
         View v = getDialogView(R.layout.dialog_shared_rename);
-        ButterKnife.inject(this, v);
+        ButterKnife.bind(this, v);
 
         mRenameInput.setText(mEntity.getName());
 

@@ -1,8 +1,10 @@
 package com.geospatialcorporation.android.geomobile.library.map.featureMappers;
 
+import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
+import android.support.v4.content.ContextCompat;
 
 import com.geospatialcorporation.android.geomobile.R;
 import com.geospatialcorporation.android.geomobile.application;
@@ -82,15 +84,17 @@ public abstract class PointFeatureMapperBase extends SingleFeatureMapperBase<Mar
     protected Drawable setDrawable(Style style) {
         Drawable d = null;
 
+        Context context = application.getAppContext();
+
         switch (style.getPointStyleCode()) {
             case PointStyleCodes.CIRCLE:
-                d = application.getAppContext().getDrawable(R.drawable.ic_checkbox_blank_circle_black_18dp);
+                d = ContextCompat.getDrawable(context, R.drawable.ic_checkbox_blank_circle_black_18dp);
                 break;
             case PointStyleCodes.DIAMOND:
-                d = application.getAppContext().getDrawable(R.drawable.ic_diamond_fill);  //TODO: find a Diamond
+                d = ContextCompat.getDrawable(context, R.drawable.ic_diamond_fill);  //TODO: find a Diamond
                 break;
             case PointStyleCodes.SQUARE:
-                d = application.getAppContext().getDrawable(R.drawable.ic_checkbox_blank_black_18dp);
+                d = ContextCompat.getDrawable(context, R.drawable.ic_checkbox_blank_black_18dp);
                 break;
             default:
                 break;

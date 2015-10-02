@@ -9,6 +9,8 @@ import android.widget.Toast;
 
 import com.geospatialcorporation.android.geomobile.R;
 import com.geospatialcorporation.android.geomobile.application;
+import com.geospatialcorporation.android.geomobile.library.util.DeviceTypeUtil;
+import com.geospatialcorporation.android.geomobile.ui.MainTabletActivity;
 import com.geospatialcorporation.android.geomobile.ui.fragments.GoogleMapFragment;
 
 
@@ -24,7 +26,7 @@ public class DeleteLayerDialogFragment extends LayerActionDialogBase {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
                         mService.delete(mLayer.getId());
-                        Toaster(mLayer.getName() + " Deleted");
+                        Toaster("Deleting " + mLayer.getName());
                         goToMapFragment();
                     }
                 }).setNegativeButton(android.R.string.cancel, new DialogInterface.OnClickListener() {
@@ -36,11 +38,15 @@ public class DeleteLayerDialogFragment extends LayerActionDialogBase {
     }
 
     private void goToMapFragment() {
-        Fragment googleMapFragment = new GoogleMapFragment();
+        if(!application.getIsTablet()) {
+            Fragment googleMapFragment = new GoogleMapFragment();
 
-        getFragmentManager().beginTransaction()
-                .replace(R.id.content_frame, googleMapFragment)
-                .addToBackStack(null)
-                .commit();
+            getFragmentManager().beginTransaction()
+                    .replace(R.id.content_frame, googleMapFragment)
+                    .addToBackStack(null)
+                    .commit();
+        } else {
+            ((MainTabletActivity)application.getGeoMainActivity()).closeInfoFragment();
+        }
     }
 }

@@ -1,6 +1,7 @@
 package com.geospatialcorporation.android.geomobile.ui.adapters;
 
 import android.content.Context;
+import android.support.v4.content.ContextCompat;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -38,22 +39,22 @@ public class MainNavigationAdapter extends ArrayAdapter<String> {
 
         switch (mMenuItems.get(position)){
             case MenuConstants.MAP:
-                icon.setImageDrawable(mContext.getDrawable(R.drawable.ic_map_marker_white_18dp));
+                icon.setImageDrawable(ContextCompat.getDrawable(mContext, R.drawable.ic_map_marker_white_18dp));
                 break;
             //case MenuConstants.LAYERS:
-                //icon.setImageDrawable(mContext.getDrawable(R.drawable.ic_layers_white_18dp));
+                //icon.setImageDrawable(ContextCompat.getDrawable(mContext, R.drawable.ic_layers_white_18dp));
                 //break;
             case MenuConstants.LIBRARY:
-                icon.setImageDrawable(mContext.getDrawable(R.drawable.ic_book_white_18dp));
+                icon.setImageDrawable(ContextCompat.getDrawable(mContext, R.drawable.ic_book_white_18dp));
                 break;
             case MenuConstants.ALL_SUBSCRIPTIONS:
-                icon.setImageDrawable(mContext.getDrawable(R.drawable.ic_account_search_white_18dp));
+                icon.setImageDrawable(ContextCompat.getDrawable(mContext, R.drawable.ic_account_search_white_18dp));
                 break;
             case MenuConstants.ACCOUNT:
-                icon.setImageDrawable(mContext.getDrawable(R.drawable.ic_account_circle_white_18dp));
+                icon.setImageDrawable(ContextCompat.getDrawable(mContext, R.drawable.ic_account_circle_white_18dp));
                 break;
             case MenuConstants.LOGOUT:
-                icon.setImageDrawable(mContext.getDrawable(R.drawable.ic_logout_white_18dp));
+                icon.setImageDrawable(ContextCompat.getDrawable(mContext, R.drawable.ic_logout_white_18dp));
             default:
                 break;
         }

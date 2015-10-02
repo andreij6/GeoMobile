@@ -5,4 +5,6 @@ import com.geospatialcorporation.android.geomobile.models.Layers.LegendLayer;
 
 public interface ILayerStyleTask {
     void getStyle(LegendLayer layer, GeoCallback callback);
+
+    void getActiveStyle(LegendLayer llayer);
 }

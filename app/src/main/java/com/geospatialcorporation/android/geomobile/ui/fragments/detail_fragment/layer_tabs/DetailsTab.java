@@ -17,11 +17,9 @@ import com.geospatialcorporation.android.geomobile.models.Layers.Layer;
 import com.geospatialcorporation.android.geomobile.models.Layers.LayerDetailsVm;
 import com.geospatialcorporation.android.geomobile.ui.Interfaces.IPostExecuter;
 import com.geospatialcorporation.android.geomobile.ui.fragments.detail_fragment.GeoDetailsTabBase;
-import com.melnykov.fab.FloatingActionButton;
 
+import butterknife.Bind;
 import butterknife.ButterKnife;
-import butterknife.InjectView;
-import butterknife.OnClick;
 
 
 public class DetailsTab extends GeoDetailsTabBase<Layer> implements IPostExecuter<LayerDetailsVm> {
@@ -31,20 +29,20 @@ public class DetailsTab extends GeoDetailsTabBase<Layer> implements IPostExecute
     IGetLayerDetailsTask mTask;
     ILayerDialog mLayerDialog;
 
-    @InjectView(R.id.access_level) TextView mAccessLevel;
-    @InjectView(R.id.createdValue) TextView mCreateDate;
-    @InjectView(R.id.createdByValue) TextView mCreatedBy;
-    @InjectView(R.id.lastUpdatedValue) TextView mLastUpdatedValue;
-    @InjectView(R.id.userUpdateValue) TextView mUserUpdated;
-    @InjectView(R.id.shapeTypeValue) TextView mShapeType;
-    @InjectView(R.id.entityCountValue) TextView mFeatureCount;
+    @Bind(R.id.access_level) TextView mAccessLevel;
+    @Bind(R.id.createdValue) TextView mCreateDate;
+    @Bind(R.id.createdByValue) TextView mCreatedBy;
+    @Bind(R.id.lastUpdatedValue) TextView mLastUpdatedValue;
+    @Bind(R.id.userUpdateValue) TextView mUserUpdated;
+    @Bind(R.id.shapeTypeValue) TextView mShapeType;
+    @Bind(R.id.entityCountValue) TextView mFeatureCount;
     //endregion
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState){
         View v = inflater.inflate(R.layout.fragment_layer_details_tab, container, false);
 
-        ButterKnife.inject(this, v);
+        ButterKnife.bind(this, v);
 
         mLayerDialog = application.getUIHelperComponent().provideLayerDialog();
 

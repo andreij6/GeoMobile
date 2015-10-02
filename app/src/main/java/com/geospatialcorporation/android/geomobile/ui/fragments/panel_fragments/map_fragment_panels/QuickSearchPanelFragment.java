@@ -25,7 +25,7 @@ import com.geospatialcorporation.android.geomobile.ui.fragments.GeoViewFragmentB
 
 import java.util.List;
 
-import butterknife.InjectView;
+import butterknife.Bind;
 import butterknife.OnClick;
 import retrofit.Callback;
 import retrofit.RetrofitError;
@@ -39,9 +39,9 @@ public class QuickSearchPanelFragment extends GeoViewFragmentBase {
     DataHelper mDataHelper;
 
     //region Butterknife
-    @InjectView(R.id.searchBox) EditText SearchBox;
-    @InjectView(R.id.searchRecyclerView) RecyclerView mRecyclerView;
-    @InjectView(R.id.resultCount) TextView mResultCount;
+    @Bind(R.id.searchBox) EditText SearchBox;
+    @Bind(R.id.searchRecyclerView) RecyclerView mRecyclerView;
+    @Bind(R.id.resultCount) TextView mResultCount;
 
     @OnClick(R.id.close)
     public void close(){

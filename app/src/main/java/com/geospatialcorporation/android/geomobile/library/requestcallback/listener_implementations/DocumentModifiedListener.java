@@ -4,13 +4,11 @@ import android.util.Log;
 
 import com.geospatialcorporation.android.geomobile.library.requestcallback.RequestListener;
 import com.geospatialcorporation.android.geomobile.models.Document.Document;
+import com.geospatialcorporation.android.geomobile.ui.Interfaces.IContentRefresher;
 import com.geospatialcorporation.android.geomobile.ui.fragments.tree_fragments.LibraryFragment;
 
 import retrofit.client.Response;
 
-/**
- * Created by andre on 6/20/2015.
- */
 public class DocumentModifiedListener extends RequestListenerBase<Response> implements RequestListener<Response> {
     private static final String TAG = DocumentModifiedListener.class.getSimpleName();
 
@@ -25,8 +23,8 @@ public class DocumentModifiedListener extends RequestListenerBase<Response> impl
 
         if(mShouldRefresh) {
             try {
-                if (mContentFragment instanceof LibraryFragment) {
-                    ((LibraryFragment) mContentFragment).refresh();
+                if (mContentFragment instanceof IContentRefresher) {
+                    ((IContentRefresher) mContentFragment).refresh();
                 }
             } catch (Exception e){
                 Log.d(TAG, e.getMessage()); //cannot cast content fragment to libraryfragment when adding doc to feature window

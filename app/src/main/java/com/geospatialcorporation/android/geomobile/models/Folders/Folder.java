@@ -203,5 +203,13 @@ public class Folder implements Parcelable, ITreeEntity {
     public void setPath(List<String> path) {
         mPath = path;
     }
+
+    public String getProperName() {
+        if(Name.equals("/")){
+            return "ROOT";
+        } else {
+            return Name;
+        }
+    }
     //endregion
 }

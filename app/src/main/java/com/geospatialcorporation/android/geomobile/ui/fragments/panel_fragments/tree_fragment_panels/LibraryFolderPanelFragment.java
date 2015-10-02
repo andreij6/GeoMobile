@@ -10,10 +10,8 @@ import com.geospatialcorporation.android.geomobile.application;
 import com.geospatialcorporation.android.geomobile.library.DI.Analytics.Models.GoogleAnalyticEvent;
 import com.geospatialcorporation.android.geomobile.library.DI.UIHelpers.Interfaces.DialogHelpers.IFolderDialog;
 import com.geospatialcorporation.android.geomobile.library.helpers.MediaHelper;
-import com.geospatialcorporation.android.geomobile.library.panelmanager.ISlidingPanelManager;
 import com.geospatialcorporation.android.geomobile.ui.MainActivity;
 import com.geospatialcorporation.android.geomobile.ui.fragments.detail_fragment.DocumentFolderDetailFragment;
-import com.geospatialcorporation.android.geomobile.ui.fragments.detail_fragment.LayerFolderDetailFragment;
 import com.geospatialcorporation.android.geomobile.ui.fragments.tree_fragments.LibraryFragment;
 
 import butterknife.OnClick;
@@ -93,7 +91,7 @@ public class LibraryFolderPanelFragment extends TreeFolderPanelFragmentBase<Libr
         getActivity().startActivityForResult(chooserIntent, MainActivity.MediaConstants.PICK_IMAGE_REQUEST);
     }
 
-    @OnClick(R.id.closeIV)
+    @OnClick(R.id.close)
     public void close(){
         mContentFragment.closePanel();
     }

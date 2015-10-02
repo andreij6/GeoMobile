@@ -27,6 +27,7 @@ public class LegendLayer {
     private boolean mMapped;
     private BitmapDescriptor mBitmap;
     ImageView mAppStateImageView;
+    private boolean mIsActiveBitmapLoaded;
 
     public LegendLayer(Layer layer) {
         mLayer = layer;
@@ -128,5 +129,13 @@ public class LegendLayer {
         } else {
             return true;
         }
+    }
+
+    public void setIsActiveBitmapLoaded(boolean isActiveBitmapLoaded) {
+        mIsActiveBitmapLoaded = isActiveBitmapLoaded;
+    }
+
+    public boolean getIsActiveBitmapLoaded() {
+        return mIsActiveBitmapLoaded;
     }
 }

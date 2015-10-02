@@ -29,8 +29,8 @@ import org.w3c.dom.Text;
 
 import java.util.List;
 
+import butterknife.Bind;
 import butterknife.ButterKnife;
-import butterknife.InjectView;
 import butterknife.OnClick;
 
 
@@ -39,9 +39,9 @@ public class SublayersTab extends GeoDetailsTabBase<Layer> implements IContentRe
     List<Layer> mData;
     IGetSublayersTask mTask;
     ILayoutRefresher mRefresher;
-    @InjectView(R.id.sublayerTableLayout) TableLayout mSublayerDataView;
-    @InjectView(R.id.swipe_refresh_layout) SwipeRefreshLayout mSwipeRefreshLayout;
-    @InjectView(R.id.addSublayers) Button mAddSublayerBtn;
+    @Bind(R.id.sublayerTableLayout) TableLayout mSublayerDataView;
+    @Bind(R.id.swipe_refresh_layout) SwipeRefreshLayout mSwipeRefreshLayout;
+    @Bind(R.id.addSublayers) Button mAddSublayerBtn;
     LayoutInflater mInflater;
     ISublayerDialog mDialog;
 
@@ -54,7 +54,7 @@ public class SublayersTab extends GeoDetailsTabBase<Layer> implements IContentRe
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState){
         View v = inflater.inflate(R.layout.fragment_layer_sublayers_tab, container, false);
         mInflater = inflater;
-        ButterKnife.inject(this, v);
+        ButterKnife.bind(this, v);
 
         mRefresher = application.getUIHelperComponent().provideLayoutRefresher();
         mDialog = application.getUIHelperComponent().provideSublayerDialog();
@@ -74,14 +74,6 @@ public class SublayersTab extends GeoDetailsTabBase<Layer> implements IContentRe
 
 
         return v;
-    }
-
-    @Override
-    public void onDetach() {
-        super.onDetach();
-        //if(mPanelManager != null) {
-        //    mPanelManager.collapse();
-        //}
     }
 
     @Override

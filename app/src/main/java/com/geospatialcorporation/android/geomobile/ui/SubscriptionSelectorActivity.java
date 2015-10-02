@@ -1,6 +1,7 @@
 package com.geospatialcorporation.android.geomobile.ui;
 
 import android.content.Intent;
+import android.content.pm.ActivityInfo;
 import android.os.Bundle;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.ViewPager;
@@ -13,6 +14,7 @@ import android.widget.Toast;
 import com.geospatialcorporation.android.geomobile.R;
 import com.geospatialcorporation.android.geomobile.application;
 import com.geospatialcorporation.android.geomobile.library.DI.ErrorHandler.Interfaces.IGeoErrorHandler;
+import com.geospatialcorporation.android.geomobile.library.util.DeviceTypeUtil;
 import com.geospatialcorporation.android.geomobile.ui.adapters.ClientSelectorSectionsPagerAdapter;
 
 public class SubscriptionSelectorActivity extends ActionBarActivity implements ActionBar.TabListener {
@@ -36,6 +38,12 @@ public class SubscriptionSelectorActivity extends ActionBarActivity implements A
         setTitle(R.string.title_activity_select_subscription);
         setBackButtonClickOnce(false);
         getSupportActionBar().setElevation(0);
+
+        if(DeviceTypeUtil.isTablet(getResources())){
+            setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
+        } else {
+            setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
+        }
 
         application.getLayerManager().reset();
         setContentView(R.layout.activity_subscription_selector);

@@ -27,7 +27,7 @@ public class LayerDetailPanelFragment extends GeoViewFragmentBase {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstance) {
         View view = inflater.inflate(R.layout.fragment_panel_layerdetail, container, false);
-        ButterKnife.inject(this, view);
+        ButterKnife.bind(this, view);
 
         mContentFragment = (LayerDetailFragment)application.getMainActivity().getContentFragment();
         mLayerDialog = application.getUIHelperComponent().provideLayerDialog();
@@ -45,7 +45,7 @@ public class LayerDetailPanelFragment extends GeoViewFragmentBase {
     }
 
 
-    @OnClick(R.id.closeIV)
+    @OnClick(R.id.close)
     public void close(){
         mContentFragment.closePanel();
     }

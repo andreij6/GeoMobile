@@ -61,7 +61,6 @@ public class DocumentsTask implements IGetDocumentsTask {
         new GetDocumentFoldersTask(fragment).execute();
     }
 
-    //TODO: use GeoAsyncTask
     protected class GetDocumentsByFolderIdTask extends GeoAsyncTask<Integer, Void, Folder> {
 
         FragmentManager mFragmentManager;

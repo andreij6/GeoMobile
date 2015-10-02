@@ -9,7 +9,6 @@ import android.widget.TextView;
 import com.geospatialcorporation.android.geomobile.R;
 import com.geospatialcorporation.android.geomobile.application;
 import com.geospatialcorporation.android.geomobile.library.DI.UIHelpers.Interfaces.DialogHelpers.ISublayerDialog;
-import com.geospatialcorporation.android.geomobile.library.helpers.GeoDialogHelper;
 import com.geospatialcorporation.android.geomobile.models.Layers.Layer;
 import com.geospatialcorporation.android.geomobile.ui.MainActivity;
 import com.geospatialcorporation.android.geomobile.ui.adapters.recycler.base.GeoHolderBase;
@@ -19,7 +18,7 @@ import com.melnykov.fab.FloatingActionButton;
 import java.util.ArrayList;
 import java.util.List;
 
-import butterknife.InjectView;
+import butterknife.Bind;
 import butterknife.OnClick;
 
 
@@ -51,8 +50,8 @@ public class SublayerAdapter extends GeoRecyclerAdapterBase<SublayerAdapter.Hold
         Layer mSublayer;
         ISublayerDialog mSublayerDialog;
 
-        @InjectView(R.id.sublayerLabel) TextView mSublayerName;
-        @InjectView(R.id.fab_edit)FloatingActionButton mEdit;
+        @Bind(R.id.sublayerLabel) TextView mSublayerName;
+        @Bind(R.id.fab_edit)FloatingActionButton mEdit;
         //@InjectView(R.id.showingCB) CheckBox mVisible;
 
         @OnClick(R.id.fab_edit)

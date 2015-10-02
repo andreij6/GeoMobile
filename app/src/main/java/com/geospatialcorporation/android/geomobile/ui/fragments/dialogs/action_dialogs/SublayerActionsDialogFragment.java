@@ -14,15 +14,11 @@ import android.widget.TextView;
 import com.geospatialcorporation.android.geomobile.R;
 import com.geospatialcorporation.android.geomobile.application;
 import com.geospatialcorporation.android.geomobile.library.DI.UIHelpers.Interfaces.DialogHelpers.ISublayerDialog;
-import com.geospatialcorporation.android.geomobile.library.constants.GeoPanel;
-import com.geospatialcorporation.android.geomobile.library.helpers.GeoDialogHelper;
-import com.geospatialcorporation.android.geomobile.library.panelmanager.ISlidingPanelManager;
-import com.geospatialcorporation.android.geomobile.library.panelmanager.PanelManager;
 import com.geospatialcorporation.android.geomobile.models.Layers.Layer;
 import com.geospatialcorporation.android.geomobile.ui.fragments.dialogs.base.GeoDialogFragmentBase;
 
+import butterknife.Bind;
 import butterknife.ButterKnife;
-import butterknife.InjectView;
 
 
 public class SublayerActionsDialogFragment extends GeoDialogFragmentBase {
@@ -39,14 +35,14 @@ public class SublayerActionsDialogFragment extends GeoDialogFragmentBase {
     }
 
     //region ButterKnife
-    @InjectView(R.id.styleIV)ImageView mStyleIV;
-    @InjectView(R.id.styleTV)TextView mStyleTV;
-    @InjectView(R.id.renameTV) TextView mRename;
-    @InjectView(R.id.renameIV) ImageView mRenameIV;
-    @InjectView(R.id.filtersIV) ImageView mFilterIV;
-    @InjectView(R.id.filterTV) TextView mFilterTV;
-    @InjectView(R.id.deleteIV) ImageView mDeleteIV;
-    @InjectView(R.id.deleteTV) TextView mDeleteTV;
+    @Bind(R.id.styleIV)ImageView mStyleIV;
+    @Bind(R.id.styleTV)TextView mStyleTV;
+    @Bind(R.id.renameTV) TextView mRename;
+    @Bind(R.id.renameIV) ImageView mRenameIV;
+    @Bind(R.id.filtersIV) ImageView mFilterIV;
+    @Bind(R.id.filterTV) TextView mFilterTV;
+    @Bind(R.id.deleteIV) ImageView mDeleteIV;
+    @Bind(R.id.deleteTV) TextView mDeleteTV;
     //endregion
 
     @Override
@@ -68,7 +64,7 @@ public class SublayerActionsDialogFragment extends GeoDialogFragmentBase {
 
         View v = getDialogView(R.layout.dialog_actions_sublayers);
 
-        ButterKnife.inject(this, v);
+        ButterKnife.bind(this, v);
 
         mSublayerDialog = application.getUIHelperComponent().provideSublayerDialog();
 

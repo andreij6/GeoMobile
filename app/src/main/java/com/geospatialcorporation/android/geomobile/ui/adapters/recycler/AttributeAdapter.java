@@ -13,7 +13,7 @@ import com.geospatialcorporation.android.geomobile.ui.adapters.recycler.base.Geo
 
 import java.util.List;
 
-import butterknife.InjectView;
+import butterknife.Bind;
 
 /**
  * Created by andre on 6/13/2015.
@@ -32,10 +32,10 @@ public class AttributeAdapter extends GeoRecyclerAdapterBase<AttributeAdapter.Ho
 
     protected class Holder extends GeoHolderBase<LayerAttributeColumn> {
 
-        @InjectView(R.id.nameColumn) TextView mNameColumn;
-        @InjectView(R.id.typeColumn) TextView mTypeColumn;
-        @InjectView(R.id.defaultValue) TextView mDefaultValue;
-        @InjectView(R.id.hidden) CheckBox mHidden;
+        @Bind(R.id.nameColumn) TextView mNameColumn;
+        @Bind(R.id.typeColumn) TextView mTypeColumn;
+        @Bind(R.id.defaultValue) TextView mDefaultValue;
+        @Bind(R.id.hidden) CheckBox mHidden;
 
 
         public Holder(View itemView) {

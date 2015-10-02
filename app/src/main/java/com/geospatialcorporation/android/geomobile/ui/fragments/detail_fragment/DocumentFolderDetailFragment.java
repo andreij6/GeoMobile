@@ -17,17 +17,15 @@ import com.geospatialcorporation.android.geomobile.library.constants.GeoPanel;
 import com.geospatialcorporation.android.geomobile.library.helpers.GeoDialogHelper;
 import com.geospatialcorporation.android.geomobile.library.panelmanager.PanelManager;
 import com.geospatialcorporation.android.geomobile.models.Folders.Folder;
-import com.geospatialcorporation.android.geomobile.ui.MainActivity;
 import com.geospatialcorporation.android.geomobile.ui.fragments.GoogleMapFragment;
 import com.geospatialcorporation.android.geomobile.ui.fragments.detail_fragment.folder_tabs.FolderDetailsTab;
 import com.geospatialcorporation.android.geomobile.ui.fragments.detail_fragment.folder_tabs.PermissionsTab;
 import com.geospatialcorporation.android.geomobile.ui.fragments.dialogs.ItemDetailFragment;
 import com.geospatialcorporation.android.geomobile.ui.fragments.panel_fragments.tree_fragment_panels.DocumentFolderPanelFragment;
-import com.geospatialcorporation.android.geomobile.ui.fragments.panel_fragments.tree_fragment_panels.LibraryFolderPanelFragment;
 import com.sothree.slidinguppanel.SlidingUpPanelLayout;
 
+import butterknife.Bind;
 import butterknife.ButterKnife;
-import butterknife.InjectView;
 import butterknife.OnClick;
 
 public class DocumentFolderDetailFragment extends ItemDetailFragment<Folder> implements TabHost.OnTabChangeListener {
@@ -36,7 +34,7 @@ public class DocumentFolderDetailFragment extends ItemDetailFragment<Folder> imp
     private static final String DETAILS = "Details";
     private static final String PERMISSIONS = "Permissions";
 
-    @InjectView(R.id.sliding_layout) SlidingUpPanelLayout mPanel;
+    @Bind(R.id.sliding_layout) SlidingUpPanelLayout mPanel;
 
     IFolderDialog mFolderDialog;
 
@@ -80,7 +78,7 @@ public class DocumentFolderDetailFragment extends ItemDetailFragment<Folder> imp
 
         View view = inflater.inflate(R.layout.fragment_tree_detail, null);
 
-        ButterKnife.inject(this, view);
+        ButterKnife.bind(this, view);
 
         mFolderDialog = application.getUIHelperComponent().provideFolderDialog();
 

@@ -17,24 +17,17 @@
 package com.geospatialcorporation.android.geomobile.ui;
 
 import android.content.Intent;
-import android.content.pm.ActivityInfo;
-import android.content.res.Configuration;
-import android.graphics.Color;
-import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBarActivity;
-import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.telephony.TelephonyManager;
 import android.view.Gravity;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.Toast;
 
 import com.geospatialcorporation.android.geomobile.R;
 import com.geospatialcorporation.android.geomobile.application;
@@ -44,6 +37,7 @@ import com.geospatialcorporation.android.geomobile.library.DI.ErrorHandler.Inter
 import com.geospatialcorporation.android.geomobile.library.DI.MainNavigationController.DaggerMainNavCtrlComponent;
 import com.geospatialcorporation.android.geomobile.library.DI.MainNavigationController.Implementations.MainNavCtrl;
 import com.geospatialcorporation.android.geomobile.library.DI.MainNavigationController.MainNavCtrlComponent;
+import com.geospatialcorporation.android.geomobile.ui.Interfaces.IGeoMainActivity;
 import com.geospatialcorporation.android.geomobile.ui.Interfaces.OnFragmentInteractionListener;
 import com.geospatialcorporation.android.geomobile.ui.fragments.GoogleMapFragment;
 import com.geospatialcorporation.android.geomobile.ui.fragments.drawer.LayerSelectorDrawerFragment;
@@ -81,7 +75,7 @@ import butterknife.ButterKnife;
  */
 public class MainActivity extends ActionBarActivity
         implements MainNavigationDrawerFragment.NavigationDrawerCallbacks,
-        OnFragmentInteractionListener {
+        OnFragmentInteractionListener, IGeoMainActivity {
     private static final String TAG = MainActivity.class.getSimpleName();
 
     //region Properties
@@ -89,7 +83,7 @@ public class MainActivity extends ActionBarActivity
     GoogleMap mMap;
     private boolean mIsAdmin;
     MainNavigationDrawerFragment mMainMainNavigationDrawerFragment;
-    LayerSelectorDrawerFragment mLayerDrawerFragement;
+    LayerSelectorDrawerFragment mLayerDrawerFragment;
     MainNavCtrl mMainNavCtrl;
     DrawerLayout mDrawerLayout;
     IGeoErrorHandler mErrorHandler;
@@ -101,17 +95,11 @@ public class MainActivity extends ActionBarActivity
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        application.setIsTablet(true);
+        application.setGeoMainActivity(this);
 
-        //if(isTablet()){
-        //    //setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
-        //    Toast.makeText(this, "tablet", Toast.LENGTH_LONG).show();
-        //}
-
-        setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
-
-
-
-        ButterKnife.inject(this);
+        //region Common Btw Tablet & Phone
+        ButterKnife.bind(this);
         application.setMainActivity(this);
         ActionBar ab = getSupportActionBar();
 
@@ -125,27 +113,20 @@ public class MainActivity extends ActionBarActivity
         mAnalytics = application.getAnalyticsComponent().provideGeoAnalytics();
         application.getStatusBarManager().reset();
 
-        //mErrorHandler = application.getErrorsComponent().provideErrorHandler();
-        //Thread.setDefaultUncaughtExceptionHandler(mErrorHandler.UncaughtExceptionHandler());
+        mErrorHandler = application.getErrorsComponent().provideErrorHandler();
+        Thread.setDefaultUncaughtExceptionHandler(mErrorHandler.UncaughtExceptionHandler());
 
         mIsAdmin = application.getIsAdminUser();
+        //endregion
 
         mDrawerLayout = (DrawerLayout)findViewById(R.id.drawer_layout);
 
         mMainMainNavigationDrawerFragment = (MainNavigationDrawerFragment)getSupportFragmentManager().findFragmentById(R.id.navigation_drawer);
         mMainMainNavigationDrawerFragment.setUp(R.id.navigation_drawer, mDrawerLayout, getSupportActionBar());
 
-        mLayerDrawerFragement = (LayerSelectorDrawerFragment)getSupportFragmentManager().findFragmentById(R.id.layer_drawer);
-        mLayerDrawerFragement.setUp(R.id.layer_drawer, mDrawerLayout, new Toolbar(this));
+        mLayerDrawerFragment = (LayerSelectorDrawerFragment)getSupportFragmentManager().findFragmentById(R.id.layer_drawer);
+        mLayerDrawerFragment.setUp(R.id.layer_drawer, mDrawerLayout, new Toolbar(this));
 
-        //mDrawerLayout.setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED); //prevents drawer from being slide open.  Can slide close and use buttons to open
-
-    }
-
-    public boolean isTablet() {
-        return (getResources().getConfiguration().screenLayout
-                & Configuration.SCREENLAYOUT_SIZE_MASK)
-                >= Configuration.SCREENLAYOUT_SIZE_LARGE;
     }
 
     @Override
@@ -157,14 +138,6 @@ public class MainActivity extends ActionBarActivity
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         Fragment fragment = getSupportFragmentManager().findFragmentById(R.id.content_frame);
         fragment.onActivityResult(requestCode, resultCode, data);
-    }
-
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        return false;
-//        MenuInflater inflater = getMenuInflater();
-//        inflater.inflate(R.menu.main, menu);
-//        return super.onCreateOptionsMenu(menu);
     }
 
     @Override
@@ -212,7 +185,7 @@ public class MainActivity extends ActionBarActivity
 
     @Override
     public void onNavigationDrawerItemSelected(int position) {
-        Fragment pageFragment = setPageFragment(position);
+        Fragment pageFragment = setContentFragment(position);
 
         if (pageFragment == null) return;
 
@@ -223,9 +196,10 @@ public class MainActivity extends ActionBarActivity
                 .addToBackStack(null).commit();
     }
 
-    protected Fragment setPageFragment(int position) {
+    protected Fragment setContentFragment(int position) {
         mIsAdmin = application.getIsAdminUser();
         application.setMainActivity(this);
+
 
         MainNavCtrlComponent component = DaggerMainNavCtrlComponent.builder().build();
         mMainNavCtrl = component.provideMainNavCtrl();

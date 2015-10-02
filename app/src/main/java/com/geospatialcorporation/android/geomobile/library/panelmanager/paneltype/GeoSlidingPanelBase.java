@@ -7,7 +7,10 @@ import android.support.v4.app.FragmentManager;
 import android.view.View;
 
 import com.geospatialcorporation.android.geomobile.R;
+import com.geospatialcorporation.android.geomobile.application;
+import com.geospatialcorporation.android.geomobile.library.util.DeviceTypeUtil;
 import com.geospatialcorporation.android.geomobile.ui.MainActivity;
+import com.geospatialcorporation.android.geomobile.ui.MainTabletActivity;
 import com.geospatialcorporation.android.geomobile.ui.fragments.panel_fragments.tree_fragment_panels.DefaultCollapsedPanelFragment;
 import com.sothree.slidinguppanel.SlidingUpPanelLayout;
 
@@ -75,7 +78,14 @@ public abstract class GeoSlidingPanelBase {
     protected void completeDefaultCollapsedUI(Fragment collapsedFragment){
         Bundle args = getArguments();
         collapsedFragment.setArguments(args);
-        FragmentManager fragmentManager = ((MainActivity) mContext).getSupportFragmentManager();
+        FragmentManager fragmentManager;
+
+        if(DeviceTypeUtil.isTablet(mContext.getResources())){
+            fragmentManager = ((MainTabletActivity)mContext).getSupportFragmentManager();
+        } else {
+            fragmentManager = ((MainActivity) mContext).getSupportFragmentManager();
+        }
+
         fragmentManager.beginTransaction()
                 .replace(R.id.slider_content, collapsedFragment)
                 .commit();
@@ -115,7 +125,11 @@ public abstract class GeoSlidingPanelBase {
     }
 
     protected Bundle getArguments() {
-        return (((MainActivity)mContext).getContentFragment()).getArguments();
+        if(DeviceTypeUtil.isTablet(mContext.getResources())){
+            return (((MainTabletActivity) mContext).getContentFragment()).getArguments();
+        } else {
+            return (((MainActivity) mContext).getContentFragment()).getArguments();
+        }
     }
 
     public void halfAnchor() {

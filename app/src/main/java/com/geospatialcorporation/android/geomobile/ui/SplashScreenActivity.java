@@ -2,13 +2,16 @@ package com.geospatialcorporation.android.geomobile.ui;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.content.pm.ActivityInfo;
 import android.os.Bundle;
 import android.os.Handler;
+import android.widget.Toast;
 
 import com.geospatialcorporation.android.geomobile.R;
 import com.geospatialcorporation.android.geomobile.application;
 import com.geospatialcorporation.android.geomobile.library.DI.ErrorHandler.Interfaces.IGeoErrorHandler;
 import com.geospatialcorporation.android.geomobile.library.DI.Map.Interfaces.ILayerManager;
+import com.geospatialcorporation.android.geomobile.library.util.DeviceTypeUtil;
 
 public class SplashScreenActivity extends Activity {
     // Splash screen timer
@@ -20,6 +23,12 @@ public class SplashScreenActivity extends Activity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_splash_screen);
+
+        if(DeviceTypeUtil.isTablet(getResources())){
+            setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
+        } else {
+            setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
+        }
 
         mErrorHandler = application.getErrorsComponent().provideErrorHandler();
         mLayerManager = application.getLayerManager();

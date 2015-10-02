@@ -40,11 +40,11 @@ public class LegendLayerSectionBuilder extends SectionBuilderBase<Folder> implem
         mSubscription = application.getGeoSubscription();
     }
 
-    ArrayList<LegendLayer> mAppStateLayers;
-    AppStateSharedPrefs mStateSharedPrefs;
-    IMapStatusBarManager mMapStatusBarManager;
-    ILayerManager mLayerManager;
-    Subscription mSubscription;
+    protected ArrayList<LegendLayer> mAppStateLayers;
+    protected AppStateSharedPrefs mStateSharedPrefs;
+    protected IMapStatusBarManager mMapStatusBarManager;
+    protected ILayerManager mLayerManager;
+    protected Subscription mSubscription;
 
 
     @Override
@@ -70,11 +70,8 @@ public class LegendLayerSectionBuilder extends SectionBuilderBase<Folder> implem
             int skip = 0;
 
             for(Folder folder : data){
-                if(folder.isRoot()) {
-                    sections.add(new SimpleSectionedRecyclerViewAdapter.Section(skip, "ROOT"));
-                } else {
-                    sections.add(new SimpleSectionedRecyclerViewAdapter.Section(skip, folder.getName()));
-                }
+                sections.add(new SimpleSectionedRecyclerViewAdapter.Section(skip, folder.getProperName()));
+
                 skip = getSkipValue(folder, skip);
             }
         }
@@ -88,6 +85,18 @@ public class LegendLayerSectionBuilder extends SectionBuilderBase<Folder> implem
         return this;
     }
 
+    @Override
+    public ISectionBuilder<Folder> setRecycler(RecyclerView recycler) {
+        recycler.setAdapter(mSectionedAdapter);
+
+        RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(mContext);
+
+        recycler.setLayoutManager(layoutManager);
+
+        return this;
+    }
+
+    //region Helpers
     protected void showAppStateLayers(){
 
         for(LegendLayer legendLayer : mAppStateLayers){
@@ -95,17 +104,18 @@ public class LegendLayerSectionBuilder extends SectionBuilderBase<Folder> implem
         }
 
         for(LegendLayer llayer : mAppStateLayers) {
-            Layer layer = llayer.getLayer();
-            layer.setIsShowing(true);
 
+                Layer layer = llayer.getLayer();
+                layer.setIsShowing(true);
 
-            addLayerToMap(llayer);
+                addLayerToMap(llayer);
 
-            application.getMapLayerState().addLayer(layer);
+                application.getMapLayerState().addLayer(layer);
 
-            mLayerManager.addVisibleLayerExtent(layer.getId(), layer.getExtent());
+                mLayerManager.addVisibleLayerExtent(layer.getId(), layer.getExtent());
 
-            llayer.setMapped(true);
+                llayer.setMapped(true);
+
         }
 
 
@@ -145,7 +155,7 @@ public class LegendLayerSectionBuilder extends SectionBuilderBase<Folder> implem
         return mStateSharedPrefs.getInt(layer.getName() + layer.getId() + "_" + mSubscription.getId(), 0) != 0;
     }
 
-    private List<LegendLayer> getLayersFromFolders(List<Folder> layerFolders) {
+    protected List<LegendLayer> getLayersFromFolders(List<Folder> layerFolders) {
         List<LegendLayer> result = new ArrayList<>();
         HashMap<Integer, Layer> layerHashMap = new HashMap<>();
 
@@ -180,17 +190,9 @@ public class LegendLayerSectionBuilder extends SectionBuilderBase<Folder> implem
 
         return skip++;
     }
+    //endregion
 
-    @Override
-    public ISectionBuilder<Folder> setRecycler(RecyclerView recycler) {
-        recycler.setAdapter(mSectionedAdapter);
 
-        RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(mContext);
-
-        recycler.setLayoutManager(layoutManager);
-
-        return this;
-    }
 
 
 }

@@ -1,6 +1,7 @@
 package com.geospatialcorporation.android.geomobile.ui.adapters.recycler;
 
 import android.content.Context;
+import android.support.v4.content.ContextCompat;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
@@ -13,7 +14,7 @@ import com.geospatialcorporation.android.geomobile.ui.adapters.recycler.base.Geo
 
 import java.util.List;
 
-import butterknife.InjectView;
+import butterknife.Bind;
 
 public class QuickSearchAdapter extends GeoRecyclerAdapterBase<QuickSearchAdapter.Holder, QuickSearchResultVM> {
 
@@ -29,15 +30,15 @@ public class QuickSearchAdapter extends GeoRecyclerAdapterBase<QuickSearchAdapte
 
     protected class Holder extends GeoHolderBase<QuickSearchResultVM> {
 
-        @InjectView(R.id.nodeTypeIV) ImageView mNodeTypeIV;
-        @InjectView(R.id.resultValue) TextView mResult;
-        @InjectView(R.id.resultFoundIn) TextView mFoundIn;
+        @Bind(R.id.nodeTypeIV) ImageView mNodeTypeIV;
+        @Bind(R.id.resultValue) TextView mResult;
+        @Bind(R.id.resultFoundIn) TextView mFoundIn;
 
         public Holder(View v){ super(v);}
 
         @Override
         public void bind(QuickSearchResultVM response) {
-            mNodeTypeIV.setImageDrawable(mContext.getDrawable(response.getIcon()));
+            mNodeTypeIV.setImageDrawable(ContextCompat.getDrawable(mContext, response.getIcon()));
             mResult.setText(response.getResult());
             mFoundIn.setText(response.getFoundIn());
         }

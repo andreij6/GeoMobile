@@ -3,6 +3,7 @@ package com.geospatialcorporation.android.geomobile;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.net.Uri;
+import android.support.v4.app.Fragment;
 import android.support.v4.widget.DrawerLayout;
 import android.util.Log;
 
@@ -18,13 +19,18 @@ import com.geospatialcorporation.android.geomobile.library.constants.GeoPanel;
 import com.geospatialcorporation.android.geomobile.library.constants.GeoSharedPreferences;
 import com.geospatialcorporation.android.geomobile.library.DI.Map.Interfaces.ILayerManager;
 import com.geospatialcorporation.android.geomobile.models.Bookmarks.Bookmark;
+import com.geospatialcorporation.android.geomobile.models.Layers.LegendLayer;
 import com.geospatialcorporation.android.geomobile.models.Subscription;
 import com.geospatialcorporation.android.geomobile.models.Document.Document;
 import com.geospatialcorporation.android.geomobile.models.Folders.Folder;
 import com.geospatialcorporation.android.geomobile.models.Layers.Layer;
 import com.geospatialcorporation.android.geomobile.models.MapLayerState;
+import com.geospatialcorporation.android.geomobile.models.UserAccount;
+import com.geospatialcorporation.android.geomobile.ui.Interfaces.IFeatureWindowCtrl;
+import com.geospatialcorporation.android.geomobile.ui.Interfaces.IGeoMainActivity;
 import com.geospatialcorporation.android.geomobile.ui.MainActivity;
 import com.geospatialcorporation.android.geomobile.library.map.Models.GeoClusterMarker;
+import com.geospatialcorporation.android.geomobile.ui.MainTabletActivity;
 import com.geospatialcorporation.android.geomobile.ui.fragments.GoogleMapFragment;
 import com.google.android.gms.analytics.GoogleAnalytics;
 import com.google.android.gms.analytics.Tracker;
@@ -38,8 +44,12 @@ import com.squareup.okhttp.Request;
 import com.squareup.okhttp.Response;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.LinkedList;
+import java.util.List;
 import java.util.Locale;
+import java.util.Queue;
 
 import retrofit.RequestInterceptor;
 import retrofit.RestAdapter;
@@ -93,6 +103,15 @@ public class application extends applicationDIBase {
     private static SlidingUpPanelLayout documentFolderFragmentPanel;
     private static SlidingUpPanelLayout documentDetailFragmentPanel;
     private static IMapStatusBarManager statusBarManager;
+    private static String azureDomain;
+    private static UserAccount userAccount;
+    private static boolean isTablet;
+    private static MainTabletActivity mainTabletActivity;
+    private static IGeoMainActivity geoMainActivity;
+    private static IFeatureWindowCtrl featureWindowCtrl;
+    private static int currentFeatureWindowTab;
+    private static List<Folder> layerFolders;
+    private static List<LegendLayer> legendLayerQueue;
     //endregion
 
     //region stuff
@@ -244,6 +263,66 @@ public class application extends applicationDIBase {
 
         return statusBarManager;
     }
+
+    public static String getAzureDomain() {
+        return azureDomain;
+    }
+
+    public static UserAccount getUserAccount() {
+        return userAccount;
+    }
+
+    public static void setUserAccount(UserAccount userAccount) {
+        application.userAccount = userAccount;
+    }
+
+    public static boolean getIsTablet() {
+        return isTablet;
+    }
+
+    public static void setIsTablet(boolean isTablet) {
+        application.isTablet = isTablet;
+    }
+
+    public static MainTabletActivity getMainTabletActivity() {
+        return mainTabletActivity;
+    }
+
+    public static void setGeoMainActivity(IGeoMainActivity geoMainActivity) {
+        application.geoMainActivity = geoMainActivity;
+    }
+
+    public static IGeoMainActivity getGeoMainActivity() {
+        return geoMainActivity;
+    }
+
+    public static IFeatureWindowCtrl getFeatureWindowCtrl() {
+        return featureWindowCtrl;
+    }
+
+    public static void setFeatureWindowCtrl(IFeatureWindowCtrl featureWindowCtrl) {
+        application.featureWindowCtrl = featureWindowCtrl;
+    }
+
+    public static void setCurrentFeatureWindowTab(int currentFeatureWindowTab) {
+        application.currentFeatureWindowTab = currentFeatureWindowTab;
+    }
+
+    public static int getCurrentFeatureWindowTab() {
+        return currentFeatureWindowTab;
+    }
+
+    public static void setLayerFolders(List<Folder> layerFolders) {
+        application.layerFolders = layerFolders;
+    }
+
+    public static List<Folder> getLayerFolders() {
+        return layerFolders;
+    }
+
+    public static List<LegendLayer> getLegendLayerQueue() {
+        return legendLayerQueue;
+    }
     //endregion
 
     public void onCreate() {
@@ -263,9 +342,12 @@ public class application extends applicationDIBase {
 
         if (BuildConfig.DEBUG) {
             domain = Domains.DEVELOPMENT;
+            azureDomain = "https://geoeastusfilesdev01.blob.core.windows.net/icons/";
         } else {
             // TODO: Change on release
             domain = Domains.QUALITY_ASSURANCE;
+            azureDomain = "https://geoeastusfilesprod01.blob.core.windows.net/icons/";
+
         }
 
         Stetho.initialize(
@@ -418,6 +500,14 @@ public class application extends applicationDIBase {
         return FeatureWindowDocument_FeatureId;
     }
 
+    public static boolean areLayerFoldersStored() {
+        return layerFolders.size() > 0;
+    }
+
+    public static void addLegendLayerToQueue(LegendLayer legendLayer) {
+        legendLayerQueue.add(legendLayer);
+    }
+
     class TokenInterceptor implements Interceptor {
         @Override
         public Response intercept(Chain chain) throws IOException {
@@ -472,6 +562,9 @@ public class application extends applicationDIBase {
         layerHashMap = null;
         documentHashMap = null;
         folderHashMap = null;
+        userAccount = null;
+        layerFolders = new ArrayList<>();
+        legendLayerQueue = new ArrayList<>();
 
         getStatusBarManager().reset();
 
@@ -493,6 +586,8 @@ public class application extends applicationDIBase {
         documentHashMap = new HashMap<>();
         mGoogleMapFragment = new GoogleMapFragment();
         geoAuthToken = appState.getString(geoAuthTokenName, null);
+        layerFolders = new ArrayList<>();
+        legendLayerQueue = new ArrayList<>();
     }
 
 }

@@ -16,15 +16,14 @@ import com.geospatialcorporation.android.geomobile.library.constants.GeoPanel;
 import com.geospatialcorporation.android.geomobile.library.panelmanager.PanelManager;
 import com.geospatialcorporation.android.geomobile.models.Query.map.response.featurewindow.FeatureQueryResponse;
 import com.geospatialcorporation.android.geomobile.models.Query.map.response.featurewindow.ParcelableFeatureQueryResponse;
-import com.geospatialcorporation.android.geomobile.models.Query.map.response.mapquery.Feature;
 import com.geospatialcorporation.android.geomobile.ui.fragments.GeoViewFragmentBase;
 import com.geospatialcorporation.android.geomobile.ui.fragments.GoogleMapFragment;
 import com.geospatialcorporation.android.geomobile.ui.fragments.detail_fragment.feature_window_tabs.FeatureAttributesTab;
 import com.geospatialcorporation.android.geomobile.ui.fragments.detail_fragment.feature_window_tabs.FeatureDocumentsTab;
 import com.geospatialcorporation.android.geomobile.ui.fragments.detail_fragment.feature_window_tabs.FeatureMapInfoTab;
 
+import butterknife.Bind;
 import butterknife.ButterKnife;
-import butterknife.InjectView;
 import butterknife.OnClick;
 
 /**
@@ -38,7 +37,7 @@ public class FeatureWindowPanelFragment extends GeoViewFragmentBase {
     private static final String DOCUMENTS = "Documents";
     protected FeatureQueryResponse mResponse;
     GoogleMapFragment mContentFragment;
-    @InjectView(R.id.layerNameTV) TextView FeatureName;
+    @Bind(R.id.layerNameTV) TextView FeatureName;
 
     @OnClick(R.id.close)
     public void closeFeatureWindow(){
@@ -49,7 +48,7 @@ public class FeatureWindowPanelFragment extends GeoViewFragmentBase {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstance){
         View view = inflater.inflate(R.layout.fragment_panel_featurewindow, container, false);
 
-        ButterKnife.inject(this, view);
+        ButterKnife.bind(this, view);
 
         mPanelManager = new PanelManager(GeoPanel.MAP);
         mPanelManager.touch(false);

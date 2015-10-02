@@ -3,6 +3,7 @@ package com.geospatialcorporation.android.geomobile.ui.fragments.detail_fragment
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
+import android.support.v4.content.ContextCompat;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -13,37 +14,32 @@ import android.widget.TextView;
 import com.geospatialcorporation.android.geomobile.R;
 import com.geospatialcorporation.android.geomobile.application;
 import com.geospatialcorporation.android.geomobile.library.DI.Analytics.Models.GoogleAnalyticEvent;
-import com.geospatialcorporation.android.geomobile.library.DI.TreeServices.Interfaces.IDocumentTreeService;
-import com.geospatialcorporation.android.geomobile.library.DI.UIHelpers.Interfaces.DialogHelpers.IDocumentDialog;
 import com.geospatialcorporation.android.geomobile.library.helpers.DateTimeFormatter;
 import com.geospatialcorporation.android.geomobile.library.constants.GeoPanel;
-import com.geospatialcorporation.android.geomobile.library.helpers.DataHelper;
 import com.geospatialcorporation.android.geomobile.library.helpers.FileSizeFormatter;
 import com.geospatialcorporation.android.geomobile.library.panelmanager.PanelManager;
 import com.geospatialcorporation.android.geomobile.models.Document.Document;
-import com.geospatialcorporation.android.geomobile.ui.MainActivity;
 import com.geospatialcorporation.android.geomobile.ui.fragments.GoogleMapFragment;
 import com.geospatialcorporation.android.geomobile.ui.fragments.dialogs.ItemDetailFragment;
 import com.geospatialcorporation.android.geomobile.ui.fragments.panel_fragments.tree_fragment_panels.DocumentDetailPanelFragment;
-import com.melnykov.fab.FloatingActionButton;
 import com.sothree.slidinguppanel.SlidingUpPanelLayout;
 
+import butterknife.Bind;
 import butterknife.ButterKnife;
-import butterknife.InjectView;
 import butterknife.OnClick;
 
 public class DocumentDetailFragment extends ItemDetailFragment<Document>  {
     private static final String TAG = DocumentDetailFragment.class.getSimpleName();
 
     //region Butterknife
-    @InjectView(R.id.backgroundImageView) ImageView mFileTypeImage;
-    @InjectView(R.id.documentNameTV) TextView mDocumentName;
-    @InjectView(R.id.uploadTimeLabel) TextView mUploadLabel;
-    @InjectView(R.id.uploadTimeValue) TextView mUploadValue;
-    @InjectView(R.id.fileSizeLabel) TextView mFileSizeLabel;
-    @InjectView(R.id.fileSizeValue) TextView mFileSizeValue;
-    @InjectView(R.id.title) TextView mTitle;
-    @InjectView(R.id.sliding_layout) SlidingUpPanelLayout mPanel;
+    @Bind(R.id.backgroundImageView) ImageView mFileTypeImage;
+    @Bind(R.id.documentNameTV) TextView mDocumentName;
+    @Bind(R.id.uploadTimeLabel) TextView mUploadLabel;
+    @Bind(R.id.uploadTimeValue) TextView mUploadValue;
+    @Bind(R.id.fileSizeLabel) TextView mFileSizeLabel;
+    @Bind(R.id.fileSizeValue) TextView mFileSizeValue;
+    @Bind(R.id.title) TextView mTitle;
+    @Bind(R.id.sliding_layout) SlidingUpPanelLayout mPanel;
 
 
     @OnClick(R.id.goToMapIV)
@@ -85,7 +81,7 @@ public class DocumentDetailFragment extends ItemDetailFragment<Document>  {
         super.onCreate(savedInstanceState);
 
         View view = inflater.inflate(R.layout.fragment_detail_document, null);
-        ButterKnife.inject(this, view);
+        ButterKnife.bind(this, view);
 
         application.setDocumentDetailFragmentPanel(mPanel);
         mPanelManager = new PanelManager.Builder().type(GeoPanel.DOCUMENT_DETAIL).hide().build();
@@ -95,7 +91,7 @@ public class DocumentDetailFragment extends ItemDetailFragment<Document>  {
         handleArguments();
 
         mDocumentName.setText(mEntity.getNameWithExt());
-        mFileTypeImage.setImageDrawable(getActivity().getResources().getDrawable(mEntity.getFileTypeDrawable(true)));
+        mFileTypeImage.setImageDrawable(ContextCompat.getDrawable(getActivity(), mEntity.getFileTypeDrawable(true)));
         mUploadValue.setText(DateTimeFormatter.format(mEntity.getUploadTime()));
         mFileSizeValue.setText(FileSizeFormatter.format(mEntity.getSize() + ""));
 

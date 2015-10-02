@@ -36,7 +36,7 @@ public abstract class FeatureTabBase extends GeoViewFragmentBase {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View v = inflater.inflate(mLayout, container, false);
-        ButterKnife.inject(this, v);
+        ButterKnife.bind(this, v);
         mInflater = inflater;
         handleArgs();
         mContext = getActivity();

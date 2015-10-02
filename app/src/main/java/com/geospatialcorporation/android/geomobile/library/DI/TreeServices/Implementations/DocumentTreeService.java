@@ -4,6 +4,7 @@ import android.database.Cursor;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.provider.MediaStore;
+import android.util.Log;
 import android.widget.Toast;
 
 import com.geospatialcorporation.android.geomobile.application;
@@ -21,6 +22,7 @@ import com.geospatialcorporation.android.geomobile.models.Folders.Folder;
 import com.geospatialcorporation.android.geomobile.models.RenameRequest;
 
 import java.io.File;
+import java.io.FileNotFoundException;
 
 import retrofit.Callback;
 import retrofit.RetrofitError;
@@ -31,6 +33,8 @@ public class DocumentTreeService implements IDocumentTreeService {
 
     DocumentService Service;
     IFullDataRepository<Document> DocumentRepo;
+
+    private static final String TAG = DocumentTreeService.class.getSimpleName();
 
     public DocumentTreeService(IFullDataRepository<Document> repository){
         Service = application.getRestAdapter().create(DocumentService.class);
@@ -73,9 +77,13 @@ public class DocumentTreeService implements IDocumentTreeService {
         String actualPath = getRealPathFromUri(data);
         String mimeType = getMimeTypeOfFile(actualPath);
 
-        final TypedFile t = new TypedFile(mimeType, new File(actualPath));
+        if(mimeType == null || mimeType == ""){
+            Toast.makeText(application.getAppContext(), "File Not Found", Toast.LENGTH_LONG).show();
+        } else {
+            final TypedFile t = new TypedFile(mimeType, new File(actualPath));
 
-        SendImage(currentFolder, t, actualPath, callback);
+            SendImage(currentFolder, t, actualPath, callback);
+        }
     }
 
     @Override
@@ -153,24 +161,39 @@ public class DocumentTreeService implements IDocumentTreeService {
     }
 
     protected String getMimeTypeOfFile(String pathName) {
-        BitmapFactory.Options opt = new BitmapFactory.Options();
-        opt.inJustDecodeBounds = true;
-        BitmapFactory.decodeFile(pathName, opt);
-        return opt.outMimeType;
+        String result = "";
+        try {
+            BitmapFactory.Options opt = new BitmapFactory.Options();
+            opt.inJustDecodeBounds = true;
+            BitmapFactory.decodeFile(pathName, opt);
+            result = opt.outMimeType;
+        } catch (Exception e){
+            e.printStackTrace();
+            Log.e(TAG, e.getMessage());
+            Toast.makeText(application.getAppContext(), "Error Setting File From Path", Toast.LENGTH_LONG).show();
+        } finally {
+            return result;
+        }
     }
 
     protected String getRealPathFromUri(Uri contentUri) {
         Cursor cursor = null;
+        String result = "";
         try {
-            String[] proj = { MediaStore.Images.Media.DATA };
+            String[] proj = {MediaStore.Images.Media.DATA};
             cursor = application.getAppContext().getContentResolver().query(contentUri, proj, null, null, null);
             int column_index = cursor.getColumnIndexOrThrow(MediaStore.Images.Media.DATA);
             cursor.moveToFirst();
-            return cursor.getString(column_index);
-        } finally {
+            result = cursor.getString(column_index);
+        } catch (Exception e){
+            e.printStackTrace();
+            Log.e(TAG, e.getMessage());
+        }finally {
             if (cursor != null) {
                 cursor.close();
             }
+
+            return result;
         }
     }
     //endregion

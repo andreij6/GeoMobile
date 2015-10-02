@@ -1,6 +1,7 @@
 package com.geospatialcorporation.android.geomobile.ui.fragments.detail_fragment.feature_window_tabs;
 
 import android.os.Bundle;
+import android.support.v4.content.ContextCompat;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -23,7 +24,7 @@ import com.geospatialcorporation.android.geomobile.models.RemoveMapFeatureDocume
 import java.util.ArrayList;
 import java.util.List;
 
-import butterknife.InjectView;
+import butterknife.Bind;
 import butterknife.OnClick;
 
 public class FeatureDocumentsTab extends FeatureTabBase {
@@ -43,7 +44,7 @@ public class FeatureDocumentsTab extends FeatureTabBase {
         mDialog.addMapFeatureDocument(mLayerId, mFeatureId, mContext, getFragmentManager());
     }
 
-    @InjectView(R.id.featureWindowDocumentsTable) TableLayout mTableLayout;
+    @Bind(R.id.featureWindowDocumentsTable) TableLayout mTableLayout;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -86,7 +87,7 @@ public class FeatureDocumentsTab extends FeatureTabBase {
 
             ImageView download = (ImageView)mInflater.inflate(R.layout.template_feature_window_column_iv, null);
             download.setContentDescription(mContext.getString(R.string.download));
-            download.setImageDrawable(mContext.getDrawable(R.drawable.ic_file_download_black_24dp));
+            download.setImageDrawable(ContextCompat.getDrawable(mContext,R.drawable.ic_file_download_black_24dp));
             download.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
@@ -96,7 +97,7 @@ public class FeatureDocumentsTab extends FeatureTabBase {
 
             ImageView remove = (ImageView)mInflater.inflate(R.layout.template_feature_window_column_iv, null);
             remove.setContentDescription(mContext.getString(R.string.remove));
-            remove.setImageDrawable(mContext.getDrawable(R.drawable.ic_delete_black_24dp));
+            remove.setImageDrawable(ContextCompat.getDrawable(mContext, R.drawable.ic_delete_black_24dp));
             remove.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
@@ -117,8 +118,6 @@ public class FeatureDocumentsTab extends FeatureTabBase {
 
         mTableLayout.setStretchAllColumns(true);
     }
-
-
 
     protected List<MapFeatureDocumentVM> getDocumentVMList(List<MapFeatureFiles> files) {
         List<MapFeatureDocumentVM> result = new ArrayList<>();

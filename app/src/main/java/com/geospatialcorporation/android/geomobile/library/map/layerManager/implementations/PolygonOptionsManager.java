@@ -99,7 +99,7 @@ public class PolygonOptionsManager extends OptionsManagerBase<PolygonOptions, Po
 
         @Override
         protected void onPostExecute(PostParameters options) {
-            if(contentFragmentIsGoogleMapFragment()) {
+            if(contentFragmentIsGoogleMapFragment() || application.getIsTablet()) {
                 options.mapFeatures();
             }
         }
@@ -107,7 +107,11 @@ public class PolygonOptionsManager extends OptionsManagerBase<PolygonOptions, Po
     }
 
     protected boolean contentFragmentIsGoogleMapFragment() {
-        return application.getMainActivity().getContentFragment() instanceof GoogleMapFragment;
+        if(application.getMainActivity() == null){
+            return false;
+        }else {
+            return application.getMainActivity().getContentFragment() instanceof GoogleMapFragment;
+        }
     }
 
     protected class PostParameters {

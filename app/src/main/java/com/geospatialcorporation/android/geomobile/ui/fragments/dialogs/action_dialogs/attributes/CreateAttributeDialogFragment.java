@@ -26,15 +26,15 @@ import com.geospatialcorporation.android.geomobile.models.Layers.Layer;
 import com.geospatialcorporation.android.geomobile.models.Layers.LayerAttributeColumn;
 import com.geospatialcorporation.android.geomobile.ui.Interfaces.IPostExecuter;
 
+import butterknife.Bind;
 import butterknife.ButterKnife;
-import butterknife.InjectView;
 
 public class CreateAttributeDialogFragment extends AttributesActionDialogBase<Layer> implements IPostExecuter<Integer> {
 
-    @InjectView(R.id.attrNameET) EditText mName;
-    @InjectView(R.id.columnTypes) Spinner mColumnTypes;
-    @InjectView(R.id.defaultValueET) EditText mDefaultValue;
-    @InjectView(R.id.attrHidden) CheckBox mHidden;
+    @Bind(R.id.attrNameET) EditText mName;
+    @Bind(R.id.columnTypes) Spinner mColumnTypes;
+    @Bind(R.id.defaultValueET) EditText mDefaultValue;
+    @Bind(R.id.attrHidden) CheckBox mHidden;
 
     IGetOrderNumberTask mTask;
     ILayerTreeService mService;
@@ -47,7 +47,7 @@ public class CreateAttributeDialogFragment extends AttributesActionDialogBase<La
 
         View v = getDialogView(R.layout.dialog_add_attributes);
 
-        ButterKnife.inject(this, v);
+        ButterKnife.bind(this, v);
 
         setupSpinner();
 

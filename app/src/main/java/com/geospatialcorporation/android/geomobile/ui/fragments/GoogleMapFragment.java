@@ -62,6 +62,7 @@ import com.geospatialcorporation.android.geomobile.library.viewmode.implementati
 import com.geospatialcorporation.android.geomobile.models.Folders.Folder;
 import com.geospatialcorporation.android.geomobile.models.Layers.Extent;
 import com.geospatialcorporation.android.geomobile.models.Query.map.response.featurewindow.ParcelableFeatureQueryResponse;
+import com.geospatialcorporation.android.geomobile.ui.Interfaces.IFeatureWindowCtrl;
 import com.geospatialcorporation.android.geomobile.ui.Interfaces.IViewModeListener;
 import com.geospatialcorporation.android.geomobile.ui.MainActivity;
 import com.geospatialcorporation.android.geomobile.ui.fragments.panel_fragments.map_fragment_panels.FeatureWindowPanelFragment;
@@ -95,8 +96,8 @@ import com.sothree.slidinguppanel.SlidingUpPanelLayout;
 
 import java.util.List;
 
+import butterknife.Bind;
 import butterknife.ButterKnife;
-import butterknife.InjectView;
 import butterknife.OnClick;
 
 /**
@@ -107,7 +108,8 @@ public class GoogleMapFragment extends GeoViewFragmentBase implements
         GoogleApiClient.ConnectionCallbacks,
         GoogleApiClient.OnConnectionFailedListener,
         LocationListener,
-        GoogleMap.OnMapLoadedCallback
+        GoogleMap.OnMapLoadedCallback,
+        IFeatureWindowCtrl
 {
     private static final String TAG = GoogleMapFragment.class.getSimpleName();
     private final static int CONNECTION_FAILURE_RESOLUTION_REQUEST = 9000;
@@ -133,16 +135,16 @@ public class GoogleMapFragment extends GeoViewFragmentBase implements
     Polyline mHighlightedPolyline;
     Marker mHighlightedMarker;
 
-    @InjectView(R.id.map) MapView mMapView;
-    @InjectView(R.id.sliding_layout) SlidingUpPanelLayout mPanel;
-    @InjectView(R.id.fab_box) FloatingActionButton mBoxQueryBtn;
-    @InjectView(R.id.fab_point) FloatingActionButton mPointQueryBtn;
-    @InjectView(R.id.fab_close) FloatingActionButton mCloseBtn;
-    @InjectView(R.id.fab_save) FloatingActionButton mSaveBtn;
-    @InjectView(R.id.fab_bm_close) FloatingActionButton mBmClose;
-    @InjectView(R.id.fab_fullscreen_close) FloatingActionButton mFullScreenClose;
-    @InjectView(R.id.loadingBar) LinearLayout mLoadingBar;
-    @InjectView(R.id.loadingMessage) TextView mLoadingMessage;
+    @Bind(R.id.map) MapView mMapView;
+    @Bind(R.id.sliding_layout) SlidingUpPanelLayout mPanel;
+    @Bind(R.id.fab_box) FloatingActionButton mBoxQueryBtn;
+    @Bind(R.id.fab_point) FloatingActionButton mPointQueryBtn;
+    @Bind(R.id.fab_close) FloatingActionButton mCloseBtn;
+    @Bind(R.id.fab_save) FloatingActionButton mSaveBtn;
+    @Bind(R.id.fab_bm_close) FloatingActionButton mBmClose;
+    @Bind(R.id.fab_fullscreen_close) FloatingActionButton mFullScreenClose;
+    @Bind(R.id.loadingBar) LinearLayout mLoadingBar;
+    @Bind(R.id.loadingMessage) TextView mLoadingMessage;
     Menu mMenu;
     //endregion
 
@@ -269,6 +271,7 @@ public class GoogleMapFragment extends GeoViewFragmentBase implements
     public void onCreate(Bundle savedInstance){
         super.onCreate(savedInstance);
         application.setMapFragment(this);
+        application.setFeatureWindowCtrl(this);
 
         LifeCycleLogger("onCreate");
 
@@ -285,10 +288,9 @@ public class GoogleMapFragment extends GeoViewFragmentBase implements
 
         LifeCycleLogger("onCreateView");
 
-        ButterKnife.inject(this, rootView);
+        ButterKnife.bind(this, rootView);
 
         ActionBar actionBar = ((MainActivity)getActivity()).getSupportActionBar();
-
         if(actionBar != null){ actionBar.hide(); }
 
         mAnalytics.trackScreen(new GoogleAnalyticEvent().MapScreen());
@@ -298,6 +300,8 @@ public class GoogleMapFragment extends GeoViewFragmentBase implements
         mPanelManager = new PanelManager(GeoPanel.MAP);
         mPanelManager.setup();
         mPanelManager.hide();
+
+        //mPanelManager = new PanelManager.Builder().hide().build();
 
         mLayerManager = application.getMapComponent().provideLayerManager();
 
@@ -728,7 +732,7 @@ public class GoogleMapFragment extends GeoViewFragmentBase implements
                         .build();
                 try {
 
-                    MapsInitializer.initialize(GoogleMapFragment.this.getActivity());
+                    MapsInitializer.initialize(getActivity());
 
                     mLocationClient.connect();
 
@@ -739,9 +743,6 @@ public class GoogleMapFragment extends GeoViewFragmentBase implements
                 setMapState();
             }
         });
-
-
-
     }
 
     public void showFeatureWindow(ParcelableFeatureQueryResponse response) {
@@ -922,6 +923,5 @@ public class GoogleMapFragment extends GeoViewFragmentBase implements
             }
         }
     }
-
 
 }

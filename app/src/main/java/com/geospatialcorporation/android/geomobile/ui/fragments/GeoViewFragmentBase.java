@@ -19,13 +19,10 @@ import com.geospatialcorporation.android.geomobile.library.DI.Analytics.Interfac
 import com.geospatialcorporation.android.geomobile.library.DI.UIHelpers.Interfaces.IMainMenuHelper;
 import com.geospatialcorporation.android.geomobile.library.panelmanager.ISlidingPanelManager;
 import com.geospatialcorporation.android.geomobile.library.panelmanager.PanelManager;
-import com.geospatialcorporation.android.geomobile.models.Folders.Folder;
+import com.geospatialcorporation.android.geomobile.library.util.DeviceTypeUtil;
 import com.geospatialcorporation.android.geomobile.ui.Interfaces.OnFragmentInteractionListener;
 
-import org.w3c.dom.Text;
-
 import butterknife.ButterKnife;
-import butterknife.InjectView;
 
 public abstract class GeoViewFragmentBase extends Fragment {
 
@@ -40,7 +37,7 @@ public abstract class GeoViewFragmentBase extends Fragment {
 
     protected void setView(LayoutInflater inflater, ViewGroup container, int layout) {
         mView = inflater.inflate(layout, container, false);
-        ButterKnife.inject(this, mView);
+        ButterKnife.bind(this, mView);
     }
 
 
@@ -55,11 +52,13 @@ public abstract class GeoViewFragmentBase extends Fragment {
     @Override
     public void onAttach(Activity activity) {
         super.onAttach(activity);
-        try {
-            mListener = (OnFragmentInteractionListener) activity;
-        } catch (ClassCastException e) {
-            throw new ClassCastException(activity.toString()
-                    + " must implement OnFragmentInteractionListener");
+
+        if(!DeviceTypeUtil.isTablet(getResources())) {
+            try {
+                mListener = (OnFragmentInteractionListener) activity;
+            } catch (ClassCastException e) {
+
+            }
         }
     }
 
@@ -79,9 +78,12 @@ public abstract class GeoViewFragmentBase extends Fragment {
         //if (mListener != null) {
         //    mListener.onFragmentInteraction(string);
         //}
+    }
 
-
-
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        ButterKnife.unbind(this);
     }
 
     protected void Toaster(String message){

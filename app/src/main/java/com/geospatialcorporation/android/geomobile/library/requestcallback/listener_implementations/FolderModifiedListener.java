@@ -1,6 +1,8 @@
 package com.geospatialcorporation.android.geomobile.library.requestcallback.listener_implementations;
 
+import com.geospatialcorporation.android.geomobile.application;
 import com.geospatialcorporation.android.geomobile.library.requestcallback.RequestListener;
+import com.geospatialcorporation.android.geomobile.ui.Interfaces.IContentRefresher;
 import com.geospatialcorporation.android.geomobile.ui.fragments.drawer.LayerSelectorDrawerFragment;
 import com.geospatialcorporation.android.geomobile.ui.fragments.tree_fragments.LayerFragment;
 import com.geospatialcorporation.android.geomobile.ui.fragments.tree_fragments.LibraryFragment;
@@ -25,14 +27,13 @@ public class FolderModifiedListener extends RequestListenerBase<Response> implem
 
         if(mShouldRefresh) {
             if(mContentFragment instanceof LayerFragment){
-                ((LayerFragment) mContentFragment).refresh();
-
-                LayerSelectorDrawerFragment drawerFragment = getMainActivity().getLayerDrawerFragment();
+                LayerSelectorDrawerFragment drawerFragment = application.getMainActivity().getLayerDrawerFragment();
 
                 drawerFragment.refresh();
+            }
 
-            } else if (mContentFragment instanceof LibraryFragment){
-                ((LibraryFragment) mContentFragment).refresh();
+            if (mContentFragment instanceof IContentRefresher){
+                ((IContentRefresher) mContentFragment).refresh();
             }
 
 

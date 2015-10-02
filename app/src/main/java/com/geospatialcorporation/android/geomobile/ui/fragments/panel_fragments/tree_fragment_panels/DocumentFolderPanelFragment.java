@@ -20,7 +20,7 @@ public class DocumentFolderPanelFragment extends TreeFolderPanelFragmentBase<Doc
         return R.layout.fragment_panel_document_folder;
     }
 
-    @OnClick(R.id.closeIV)
+    @OnClick(R.id.close)
     public void close(){
         mContentFragment.closePanel();
     }

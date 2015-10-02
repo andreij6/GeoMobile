@@ -75,11 +75,8 @@ public class GetLayersTask implements IGetLayersTask {
 
     protected class GetAllLayersTask extends GeoAsyncTask<Integer, Void, List<Folder>> {
 
-        DrawerLayout mDrawerLayout;
-
         public GetAllLayersTask(GetLayersTaskParams params){
             super(params.getExecuter());
-            mDrawerLayout = params.getDrawer();
         }
 
         @Override
@@ -98,8 +95,6 @@ public class GetLayersTask implements IGetLayersTask {
                 folders.remove(index);
                 folders.add(0, root.get(0));
 
-                application.setLayerDrawer(mDrawerLayout);
-
             } catch (RetrofitError e) {
                 Log.d(TAG, "Messed up.");
             } catch (Exception e) {
@@ -108,7 +103,6 @@ public class GetLayersTask implements IGetLayersTask {
 
             return folders;
         }
-
 
     }
 

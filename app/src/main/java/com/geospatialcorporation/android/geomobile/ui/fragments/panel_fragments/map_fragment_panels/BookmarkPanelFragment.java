@@ -20,8 +20,8 @@ import com.geospatialcorporation.android.geomobile.library.panelmanager.PanelMan
 import com.geospatialcorporation.android.geomobile.ui.fragments.GeoViewFragmentBase;
 import com.google.android.gms.maps.GoogleMap;
 
+import butterknife.Bind;
 import butterknife.ButterKnife;
-import butterknife.InjectView;
 import butterknife.OnClick;
 
 /**
@@ -29,7 +29,7 @@ import butterknife.OnClick;
  */
 public class BookmarkPanelFragment extends GeoViewFragmentBase {
     View mView;
-    @InjectView(R.id.bookMarkNameInput)EditText mName;
+    @Bind(R.id.bookMarkNameInput)EditText mName;
     IMapStateService mMapStateService;
 
     //region Getters && Setters
@@ -61,7 +61,7 @@ public class BookmarkPanelFragment extends GeoViewFragmentBase {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState){
         mView = inflater.inflate(R.layout.fragment_panel_bookmarkmode, container, false);
-        ButterKnife.inject(this, mView);
+        ButterKnife.bind(this, mView);
         mPanelManager = new PanelManager(GeoPanel.MAP);
 
         SetTitle(R.string.add_bookmark);

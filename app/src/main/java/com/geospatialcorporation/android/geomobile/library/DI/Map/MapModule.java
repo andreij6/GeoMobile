@@ -1,7 +1,9 @@
 package com.geospatialcorporation.android.geomobile.library.DI.Map;
 
 import com.geospatialcorporation.android.geomobile.application;
+import com.geospatialcorporation.android.geomobile.library.DI.Map.Implementations.GeoUndergroundMap;
 import com.geospatialcorporation.android.geomobile.library.DI.Map.Implementations.MapStateService;
+import com.geospatialcorporation.android.geomobile.library.DI.Map.Interfaces.IGeoUndergroundMap;
 import com.geospatialcorporation.android.geomobile.library.DI.Map.Interfaces.ILayerManager;
 import com.geospatialcorporation.android.geomobile.library.DI.Map.Interfaces.IMapStateService;
 import com.geospatialcorporation.android.geomobile.library.DI.SharedPreferences.Implementations.GeoUndergroundSharedPrefs;
@@ -18,4 +20,8 @@ public class MapModule {
 
     @Provides @Singleton
     ILayerManager provideLayerManager(){ return application.getLayerManager(); }
+
+    @Provides
+    IGeoUndergroundMap provideGeoUndergroundMap(){
+        return new GeoUndergroundMap(application.getLayerManager(), application.getMapComponent().provideMapStateService()); }
 }

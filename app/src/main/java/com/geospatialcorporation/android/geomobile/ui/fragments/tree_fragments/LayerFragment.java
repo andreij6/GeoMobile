@@ -4,6 +4,7 @@ import android.content.Context;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
+import android.support.v4.content.ContextCompat;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -34,7 +35,7 @@ import com.sothree.slidinguppanel.SlidingUpPanelLayout;
 
 import java.util.List;
 
-import butterknife.InjectView;
+import butterknife.Bind;
 import butterknife.OnClick;
 
 public class LayerFragment extends GeoViewFragmentBase implements IContentRefresher, IPostExecuter<Folder> {
@@ -45,13 +46,13 @@ public class LayerFragment extends GeoViewFragmentBase implements IContentRefres
     DataHelper mDataHelper;
     ProgressDialogHelper mProgressDialogHelper;
 
-    @InjectView(R.id.layer_recyclerView) RecyclerView mRecycler;
-    @InjectView(R.id.swipe_refresh_layout) SwipeRefreshLayout mSwipeRefreshLayout;
-    @InjectView(R.id.sliding_layout) SlidingUpPanelLayout mPanel;
-    @InjectView(R.id.layerOptionsIV) ImageView mOptionsSlider;
-    @InjectView(R.id.showNavIV1) ImageView mNavBars;
-    @InjectView(R.id.showNavIV2) ImageView mNavLogo;
-    @InjectView(R.id.title) TextView mTitle;
+    @Bind(R.id.layer_recyclerView) RecyclerView mRecycler;
+    @Bind(R.id.swipe_refresh_layout) SwipeRefreshLayout mSwipeRefreshLayout;
+    @Bind(R.id.sliding_layout) SlidingUpPanelLayout mPanel;
+    @Bind(R.id.layerOptionsIV) ImageView mOptionsSlider;
+    @Bind(R.id.showNavIV1) ImageView mNavBars;
+    @Bind(R.id.showNavIV2) ImageView mNavLogo;
+    @Bind(R.id.title) TextView mTitle;
 
     @OnClick(R.id.showNavIV1)
     public void showNavigation(){
@@ -147,7 +148,7 @@ public class LayerFragment extends GeoViewFragmentBase implements IContentRefres
         if(currentFolder == null) { return; }
 
         if (currentFolder.getParent() != null) {
-            mNavLogo.setImageDrawable(mContext.getDrawable(R.drawable.ic_chevron_left_white_18dp));
+            mNavLogo.setImageDrawable(ContextCompat.getDrawable(mContext, R.drawable.ic_chevron_left_white_18dp));
             mNavLogo.setPadding(-12, 0, 0, 0);
 
             mNavBars.setOnClickListener(navigateUpTree);
@@ -155,12 +156,12 @@ public class LayerFragment extends GeoViewFragmentBase implements IContentRefres
 
             mTitle.setText(mCurrentFolder.getName());
         } else {
-            mNavBars.setImageDrawable(mContext.getDrawable(R.drawable.ic_nav_white));
+            mNavBars.setImageDrawable(ContextCompat.getDrawable(mContext,R.drawable.ic_nav_white));
 
             mNavBars.setOnClickListener(showNavigation);
             mNavLogo.setOnClickListener(showNavigation);
 
-            mNavLogo.setImageDrawable(mContext.getDrawable(R.drawable.ic_logo_g_white));
+            mNavLogo.setImageDrawable(ContextCompat.getDrawable(mContext,R.drawable.ic_logo_g_white));
             mNavBars.setVisibility(View.VISIBLE);
         }
 

@@ -17,6 +17,9 @@ import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.squareup.picasso.Picasso;
 import com.squareup.picasso.Target;
 
+import java.util.List;
+import java.util.Queue;
+
 public class LayerStyleTask implements ILayerStyleTask {
 
     private static final String TAG = LayerStyleTask.class.getSimpleName();
@@ -25,7 +28,7 @@ public class LayerStyleTask implements ILayerStyleTask {
     Context mContext;
 
     public LayerStyleTask(){
-        mContext = application.getMainActivity();
+        mContext = application.getAppContext();
     }
 
     @Override
@@ -33,9 +36,9 @@ public class LayerStyleTask implements ILayerStyleTask {
         mLegendLayer = layer;
 
         try {
-            String url = "https://geoeastusfilesdev01.blob.core.windows.net/icons/" + mLegendLayer.getLayer().getStylePath() + "/tree.png";
+            String url = application.getAzureDomain() + mLegendLayer.getLayer().getStylePath() + "/tree.png";
 
-            Picasso.with(application.getMainActivity())
+            Picasso.with(application.getAppContext())
                     .load(url)
                     .resize(50, 50)
                     .into(new Target() {
@@ -53,9 +56,77 @@ public class LayerStyleTask implements ILayerStyleTask {
 
                                 mLegendLayer.setBitmap(icon);
 
+                                mLegendLayer.setIsActiveBitmapLoaded(true);
+
                                 callback.invokeCallback();
-                            } catch (Exception e){
-                                Log.d(TAG, e.getMessage());
+                            } catch (NullPointerException e) {
+                                Log.d(TAG, "null pointer");
+                                e.printStackTrace();
+                            } catch (Exception e) {
+                                Log.d(TAG, "general exception");
+                                e.printStackTrace();
+                            }
+                        }
+
+                        @Override
+                        public void onBitmapFailed(Drawable errorDrawable) {
+                            Log.d(TAG, "Bitmap Failed");
+                        }
+
+                        @Override
+                        public void onPrepareLoad(Drawable placeHolderDrawable) {
+
+                        }
+                    });
+
+            //mLegendLayer.getCheckBox().setEnabled(true);
+        } catch (Exception e) {
+            Log.e(TAG, "Excpetion Message: " + e.getMessage());
+        }
+
+    }
+
+    @Override
+    public void getActiveStyle(LegendLayer llayer) {
+        mLegendLayer = llayer;
+
+        try {
+            if(mLegendLayer.getLayer() == null){
+                Log.d(TAG, "POLLED");
+                List<LegendLayer> llayers = application.getLegendLayerQueue();
+
+                llayers.remove(llayer);
+                return;
+            }
+
+            String url = application.getAzureDomain() + mLegendLayer.getLayer().getStylePath() + "/tree.png";
+
+            Picasso.with(application.getAppContext())
+                    .load(url)
+                    .resize(50, 50)
+                    .into(new Target() {
+                        @Override
+                        public void onBitmapLoaded(Bitmap bitmap, Picasso.LoadedFrom from) {
+                            try {
+                                Drawable drawImage = new BitmapDrawable(mContext.getResources(), bitmap);
+
+                                mLegendLayer.setLegendIcon(drawImage);
+
+                                mLegendLayer.setImageSrc(mContext);
+
+                                Bitmap iconBitmap = ((BitmapDrawable) drawImage).getBitmap();
+                                BitmapDescriptor icon = BitmapDescriptorFactory.fromBitmap(iconBitmap);
+
+                                mLegendLayer.setBitmap(icon);
+
+                                mLegendLayer.setIsActiveBitmapLoaded(true);
+
+                            }catch (NullPointerException e){
+                                Log.d(TAG, "null pointer");
+                                e.printStackTrace();
+                            }catch (Exception e){
+                                Log.d(TAG, "general exception");
+                                e.printStackTrace();
                             }
                         }
 

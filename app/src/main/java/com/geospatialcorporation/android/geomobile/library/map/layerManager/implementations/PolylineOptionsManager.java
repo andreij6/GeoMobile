@@ -101,14 +101,20 @@ public class PolylineOptionsManager extends OptionsManagerBase<PolylineOptions, 
 
         @Override
         protected void onPostExecute(PostParameters options) {
-            if(contentFragmentIsGoogleMapFragment()) {
+            if(contentFragmentIsGoogleMapFragment() || application.getIsTablet()) {
                 options.mapFeatures();
             }
+
+
         }
     }
 
     protected boolean contentFragmentIsGoogleMapFragment() {
-        return application.getMainActivity().getContentFragment() instanceof GoogleMapFragment;
+        if(application.getMainActivity() == null){
+            return false;
+        }else {
+            return application.getMainActivity().getContentFragment() instanceof GoogleMapFragment;
+        }
     }
 
     protected class PostParameters {

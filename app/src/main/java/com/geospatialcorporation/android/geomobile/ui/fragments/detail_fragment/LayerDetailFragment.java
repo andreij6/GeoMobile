@@ -16,25 +16,20 @@ import com.geospatialcorporation.android.geomobile.library.constants.GeoPanel;
 import com.geospatialcorporation.android.geomobile.library.helpers.DataHelper;
 import com.geospatialcorporation.android.geomobile.library.panelmanager.PanelManager;
 import com.geospatialcorporation.android.geomobile.models.Layers.Layer;
-import com.geospatialcorporation.android.geomobile.models.OptionSlideController.IOptionsSlideController;
-import com.geospatialcorporation.android.geomobile.ui.MainActivity;
 import com.geospatialcorporation.android.geomobile.ui.fragments.GoogleMapFragment;
 import com.geospatialcorporation.android.geomobile.ui.fragments.detail_fragment.layer_tabs.AttributeLayoutTab;
 import com.geospatialcorporation.android.geomobile.ui.fragments.detail_fragment.layer_tabs.DetailsTab;
 import com.geospatialcorporation.android.geomobile.ui.fragments.detail_fragment.layer_tabs.SublayersTab;
 import com.geospatialcorporation.android.geomobile.ui.fragments.dialogs.ItemDetailFragment;
-import com.geospatialcorporation.android.geomobile.ui.fragments.panel_fragments.tree_fragment_panels.DocumentFolderPanelFragment;
 import com.geospatialcorporation.android.geomobile.ui.fragments.panel_fragments.tree_fragment_panels.LayerDetailPanelFragment;
-import com.geospatialcorporation.android.geomobile.ui.fragments.panel_fragments.tree_fragment_panels.LibraryFolderPanelFragment;
 import com.sothree.slidinguppanel.SlidingUpPanelLayout;
 
+import butterknife.Bind;
 import butterknife.ButterKnife;
-import butterknife.InjectView;
 import butterknife.OnClick;
 
 public class LayerDetailFragment extends ItemDetailFragment<Layer>
-        implements TabHost.OnTabChangeListener,
-        IOptionsSlideController
+        implements TabHost.OnTabChangeListener
 {
     private static final String TAG = LayerDetailFragment.class.getSimpleName();
 
@@ -42,8 +37,8 @@ public class LayerDetailFragment extends ItemDetailFragment<Layer>
     private static final String ATTRIBUTES = "Attributes";
     private static final String DETAILS = "Details";
 
-    @InjectView(R.id.title) TextView mTitle;
-    @InjectView(R.id.sliding_layout) SlidingUpPanelLayout mPanel;
+    @Bind(R.id.title) TextView mTitle;
+    @Bind(R.id.sliding_layout) SlidingUpPanelLayout mPanel;
 
     FragmentTabHost mTabHost;
     View mView;
@@ -85,11 +80,9 @@ public class LayerDetailFragment extends ItemDetailFragment<Layer>
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState){
-        super.onCreate(savedInstanceState);
-
         mView = inflater.inflate(R.layout.fragment_tree_detail, null);
 
-        ButterKnife.inject(this, mView);
+        ButterKnife.bind(this, mView);
 
         handleArguments();
 
@@ -136,11 +129,6 @@ public class LayerDetailFragment extends ItemDetailFragment<Layer>
 
     public Fragment getCurrentTab() {
         return getChildFragmentManager().findFragmentById(android.R.id.tabcontent);
-    }
-
-    @Override
-    public void setSlideView() {
-
     }
 
     public void closePanel(){

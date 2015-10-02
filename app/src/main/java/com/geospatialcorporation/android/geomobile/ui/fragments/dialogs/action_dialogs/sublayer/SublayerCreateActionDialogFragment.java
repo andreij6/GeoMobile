@@ -10,19 +10,19 @@ import android.widget.EditText;
 import com.geospatialcorporation.android.geomobile.R;
 import com.geospatialcorporation.android.geomobile.models.Layers.SublayerCreateRequest;
 
+import butterknife.Bind;
 import butterknife.ButterKnife;
-import butterknife.InjectView;
 
 public class SublayerCreateActionDialogFragment extends SublayerActionDialogFragmentBase {
 
-    @InjectView(R.id.renameInput) EditText mName;
+    @Bind(R.id.renameInput) EditText mName;
 
     @NonNull
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState){
 
         View v = getDialogView(R.layout.dialog_shared_rename);
-        ButterKnife.inject(this, v);
+        ButterKnife.bind(this, v);
 
         return getDialogBuilder()
                 .setTitle(R.string.add_sublayer)

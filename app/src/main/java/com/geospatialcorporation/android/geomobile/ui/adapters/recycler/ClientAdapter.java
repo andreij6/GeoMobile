@@ -13,15 +13,16 @@ import com.geospatialcorporation.android.geomobile.R;
 import com.geospatialcorporation.android.geomobile.application;
 import com.geospatialcorporation.android.geomobile.library.constants.ClientTypeCodes;
 import com.geospatialcorporation.android.geomobile.library.rest.LoginService;
+import com.geospatialcorporation.android.geomobile.library.util.DeviceTypeUtil;
 import com.geospatialcorporation.android.geomobile.models.Subscription;
 import com.geospatialcorporation.android.geomobile.ui.MainActivity;
-import com.geospatialcorporation.android.geomobile.ui.SubscriptionSelectorActivity;
+import com.geospatialcorporation.android.geomobile.ui.MainTabletActivity;
 import com.geospatialcorporation.android.geomobile.ui.adapters.recycler.base.GeoHolderBase;
 import com.geospatialcorporation.android.geomobile.ui.adapters.recycler.base.GeoRecyclerAdapterBase;
 
 import java.util.List;
 
-import butterknife.InjectView;
+import butterknife.Bind;
 import retrofit.RetrofitError;
 
 public class ClientAdapter extends GeoRecyclerAdapterBase<ClientAdapter.Holder, Subscription> {
@@ -44,8 +45,8 @@ public class ClientAdapter extends GeoRecyclerAdapterBase<ClientAdapter.Holder, 
 
     protected class Holder extends GeoHolderBase<Subscription> {
         //region Properties
-        @InjectView(R.id.clientNameLabel) TextView mClientName;
-        @InjectView(R.id.clientTypeLabel) TextView mClientType;
+        @Bind(R.id.clientNameLabel) TextView mClientName;
+        @Bind(R.id.clientTypeLabel) TextView mClientType;
         ClientTypeCodes mClientTypeCodes;
         Subscription mSubscription;
         //endregion
@@ -90,7 +91,13 @@ public class ClientAdapter extends GeoRecyclerAdapterBase<ClientAdapter.Holder, 
         @Override
         protected void onPostExecute(Object nothing) {
             application.setGeoSubscription(mSelectedSubscription);
-            mContext.startActivity(new Intent(mContext, MainActivity.class));
+
+            if(DeviceTypeUtil.isTablet(mContext.getResources())) {
+                mContext.startActivity(new Intent(mContext, MainTabletActivity.class));
+            } else {
+                mContext.startActivity(new Intent(mContext, MainActivity.class));
+            }
+
         }
     }
 }

@@ -24,8 +24,8 @@ import com.geospatialcorporation.android.geomobile.ui.adapters.recycler.ClientAd
 import java.util.ArrayList;
 import java.util.List;
 
+import butterknife.Bind;
 import butterknife.ButterKnife;
-import butterknife.InjectView;
 
 public class ClientSelectorFragment extends Fragment
         implements IContentRefresher, IPostExecuter<List<Subscription>>
@@ -42,8 +42,8 @@ public class ClientSelectorFragment extends Fragment
         return this;
     }
 
-    @InjectView(R.id.clientitem_recyclerView) RecyclerView mRecyclerView;
-    @InjectView(R.id.swipe_refresh_layout) SwipeRefreshLayout mSwipeRefreshLayout;
+    @Bind(R.id.clientitem_recyclerView) RecyclerView mRecyclerView;
+    @Bind(R.id.swipe_refresh_layout) SwipeRefreshLayout mSwipeRefreshLayout;
     private List<Subscription> mDataSet;
     IGetClientsTask mTask;
 
@@ -53,7 +53,7 @@ public class ClientSelectorFragment extends Fragment
         View mRootView;
 
         mRootView = inflater.inflate(R.layout.fragment_clientitems, container, false);
-        ButterKnife.inject(this, mRootView);
+        ButterKnife.bind(this, mRootView);
 
         mDataSet = new ArrayList<>();
         ILayoutRefresher refresher = application.getUIHelperComponent().provideLayoutRefresher();
@@ -73,7 +73,7 @@ public class ClientSelectorFragment extends Fragment
 
     @Override
     public void refresh() {
-        mProgressHelper.showProgressDialog();
+        //mProgressHelper.showProgressDialog();
         mTask = application.getTasksComponent().provideGetClientsTask();
         mTask.getClients(new GetClientsTaskParams(mDataSet, mClientTypeCode, getActivity(), this));
     }
@@ -84,6 +84,6 @@ public class ClientSelectorFragment extends Fragment
 
         mRecyclerView.setAdapter(adapter);
 
-        mProgressHelper.hideProgressDialog();
+        //mProgressHelper.hideProgressDialog();
     }
 }

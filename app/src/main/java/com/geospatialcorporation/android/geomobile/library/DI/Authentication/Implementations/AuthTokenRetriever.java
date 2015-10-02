@@ -9,8 +9,10 @@ import com.afollestad.materialdialogs.MaterialDialog;
 import com.geospatialcorporation.android.geomobile.application;
 import com.geospatialcorporation.android.geomobile.library.helpers.ProgressDialogHelper;
 import com.geospatialcorporation.android.geomobile.library.rest.LoginService;
+import com.geospatialcorporation.android.geomobile.library.util.DeviceTypeUtil;
 import com.geospatialcorporation.android.geomobile.models.Subscription;
 import com.geospatialcorporation.android.geomobile.ui.LoginActivity;
+import com.geospatialcorporation.android.geomobile.ui.MainTabletActivity;
 import com.geospatialcorporation.android.geomobile.ui.SubscriptionSelectorActivity;
 import com.geospatialcorporation.android.geomobile.ui.GoogleApiActivity;
 import com.geospatialcorporation.android.geomobile.ui.MainActivity;
@@ -75,7 +77,11 @@ public class AuthTokenRetriever {
                 try {
                     mLoginService.getCurrentClient();
 
-                    mContext.startActivity(new Intent(mContext, MainActivity.class));
+                    if(DeviceTypeUtil.isTablet(mContext.getResources())) {
+                        mContext.startActivity(new Intent(mContext, MainTabletActivity.class));
+                    } else {
+                        mContext.startActivity(new Intent(mContext, MainActivity.class));
+                    }
                 } catch (RetrofitError e) {
                     if (e.getResponse() != null) {
                         Log.d(TAG, Integer.toString(e.getResponse().getStatus()));
@@ -118,7 +124,11 @@ public class AuthTokenRetriever {
 
                     application.setGeoSubscription(subscription);
 
-                    mContext.startActivity(new Intent(mContext, MainActivity.class));
+                    if(DeviceTypeUtil.isTablet(mContext.getResources())) {
+                        mContext.startActivity(new Intent(mContext, MainTabletActivity.class));
+                    } else {
+                        mContext.startActivity(new Intent(mContext, MainActivity.class));
+                    }
                     mContext.finish();
                 } catch (RetrofitError e) {
                     if (e.getResponse() != null) {

@@ -94,8 +94,6 @@ public class ClusterExtentMarkerOptionsManager extends OptionsManagerBase<Marker
             tempVisibleLayers = new HashMap<>();
         }
 
-
-
         @Override
         protected List<GeoClusterMarker> doInBackground(Void... params) {
 
