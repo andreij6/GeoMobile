@@ -6,6 +6,7 @@ import android.support.v4.app.FragmentTabHost;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 
 import com.geospatialcorporation.android.geomobile.R;
 import com.geospatialcorporation.android.geomobile.library.DI.UIHelpers.Interfaces.DialogHelpers.IFolderDialog;
@@ -15,7 +16,7 @@ import com.geospatialcorporation.android.geomobile.models.Folders.Folder;
 import com.geospatialcorporation.android.geomobile.ui.Interfaces.IPanelFragmentCtrl;
 import com.geospatialcorporation.android.geomobile.ui.MainTabletActivity;
 import com.geospatialcorporation.android.geomobile.ui.fragments.TabGeoViewFragmentBase;
-import com.geospatialcorporation.android.geomobile.ui.fragments.panel_fragments.tree_fragment_panels.tablet.TabletDocumentFolderPanelFragment;
+import com.geospatialcorporation.android.geomobile.ui.fragments.panel_fragments.tree_fragment_panels.tablet.TabletFolderPanelFragment;
 import com.sothree.slidinguppanel.SlidingUpPanelLayout;
 
 import butterknife.Bind;
@@ -30,9 +31,11 @@ public class TabDocumentFolderDetailFragment extends TabGeoViewFragmentBase impl
     IDocumentFolderDetailCommon mCommon;
     Folder mFolder;
 
+    @Bind(R.id.title) TextView mTitle;
+
     @OnClick(R.id.optionsIV)
     public void options(){
-        mCommon.onOptionsButtonPressed(mFolder, getFragmentManager(), new TabletDocumentFolderPanelFragment());
+        mCommon.onOptionsButtonPressed(mFolder, getFragmentManager(), new TabletFolderPanelFragment());
     }
 
     @OnClick(R.id.close)
@@ -48,6 +51,8 @@ public class TabDocumentFolderDetailFragment extends TabGeoViewFragmentBase impl
         mCommon = new DocumentFolderDetailCommon();
 
         mFolder = mCommon.handleArguments(getArguments());
+
+        mTitle.setText(mFolder.getProperName());
 
         mTabHost.setup(getActivity(), getChildFragmentManager(), android.R.id.tabcontent);
 

@@ -24,19 +24,6 @@ public class LibraryFolderPanelFragment extends TreeFolderPanelFragmentBase<Libr
     }
 
     //OnClicks
-    @OnClick(R.id.folderInfoSection)
-    public void folderInfo(){
-        Fragment f = new DocumentFolderDetailFragment();
-
-        f.setArguments(mFolder.toBundle());
-
-        getFragmentManager()
-            .beginTransaction()
-            .addToBackStack(null)
-            .replace(R.id.content_frame, f)
-            .commit();
-    }
-
     @OnClick(R.id.addDocumentSection)
     public void documentClicked(){
         mContentFragment.closePanel();

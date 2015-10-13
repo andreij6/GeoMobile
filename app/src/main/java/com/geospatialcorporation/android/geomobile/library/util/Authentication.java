@@ -161,12 +161,15 @@ public class Authentication {
 
                 boolean success = false;
                 for(Header header : headers) {
+                    Log.d(TAG, "Header " + header.getName());
+                    Log.d(TAG, header.getName() + " Value " + header.getValue());
+
                     if (header.getName().equals("X-WebToken")) {
                         application.setAuthToken(header.getValue());
-                        success = true;
 
-                        break;
+                        success = true;
                     }
+
                 }
 
                 if (success) {

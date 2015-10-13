@@ -32,8 +32,11 @@ public class AccountFragment extends GeoViewFragmentBase implements IAccountFrag
     @Bind(R.id.firstName) TextView FirstName;
     @Bind(R.id.lastName) TextView LastName;
     @Bind(R.id.email) TextView Email;
+    @Bind(R.id.emailLabel) TextView EmailLabel;
     @Bind(R.id.cellPhone) TextView CellPhone;
+    @Bind(R.id.cellPhoneLabel) TextView CellPhoneLabel;
     @Bind(R.id.officePhone) TextView OfficePhone;
+    @Bind(R.id.officePhoneLabel) TextView OfficePhoneLabel;
 
     @OnClick(R.id.showNavIV1)
     public void showNavigation(){
@@ -57,12 +60,20 @@ public class AccountFragment extends GeoViewFragmentBase implements IAccountFrag
     }
     //endregion
 
+
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+
+        mProcessor = setProcessor();
+    }
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState){
         setView(inflater, container, R.layout.fragment_account);
         SetTitle(R.string.account_title);
 
-        mProcessor = new UserAccountProcessor().GetUserAccountData(getActivity(), this);
+        mProcessor.GetUserAccountData(getActivity(), this);
 
         mNavigationHelper.syncMenu(3);
 
@@ -71,6 +82,15 @@ public class AccountFragment extends GeoViewFragmentBase implements IAccountFrag
 
     @Override
     public void fillAccountData(UserAccount userAccount) {
-        mProcessor.setValues(FirstName, LastName, Email, CellPhone, OfficePhone);
+
+        if(mProcessor == null){
+            mProcessor = setProcessor();
+        }
+
+        mProcessor.setValues(FirstName, LastName, Email, CellPhone, OfficePhone, CellPhoneLabel, OfficePhoneLabel, EmailLabel);
+    }
+
+    private IUserAccountProcessor setProcessor() {
+        return new UserAccountProcessor();
     }
 }

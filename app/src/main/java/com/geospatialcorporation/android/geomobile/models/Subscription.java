@@ -33,7 +33,6 @@ public class Subscription {
     public void setCreated(String created) {
         Created = created;
     }
-
     //endregion
 
     String Name;

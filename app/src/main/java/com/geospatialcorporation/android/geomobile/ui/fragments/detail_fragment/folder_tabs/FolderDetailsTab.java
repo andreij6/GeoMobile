@@ -38,6 +38,8 @@ public class FolderDetailsTab extends GeoDetailsTabBase<Folder> implements IPost
     @Bind(R.id.folderCountValue) TextView mFolderCount;
     @Bind(R.id.entityCountValue) TextView mEntityCount;
     @Bind(R.id.entityCountLabel) TextView mEntityCountLabel;
+    @Bind(R.id.updateUserLabel) TextView mUpdateUserLabel;
+    @Bind(R.id.lastUpdatedLabel) TextView mLastUpdateLabel;
     //endregion
 
 
@@ -73,12 +75,14 @@ public class FolderDetailsTab extends GeoDetailsTabBase<Folder> implements IPost
         mCreatedBy.setText(response.getCreateUser());
         mDateCreated.setText(DateTimeFormatter.format(response.getCreateDateTime()));
 
-        if (response.getUpdateUser() != null && response.getUpdateUser().length() > 0) {
+        if (response.getUpdateUser() != null && response.getUpdateUser().length() > 0 && response.getUpdateUser() != "") {
             mUpdateUser.setText(response.getUpdateUser());
             mUpdated.setText(DateTimeFormatter.format(response.getUpdateDateTime()));
         } else {
             mUpdateUser.setVisibility(View.GONE);
             mUpdated.setVisibility(View.GONE);
+            mLastUpdateLabel.setVisibility(View.GONE);
+            mUpdateUserLabel.setVisibility(View.GONE);
         }
 
         if(mEntity.getFolders() != null) {

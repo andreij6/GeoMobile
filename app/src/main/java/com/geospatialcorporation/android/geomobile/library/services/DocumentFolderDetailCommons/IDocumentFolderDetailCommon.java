@@ -6,7 +6,7 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTabHost;
 
 import com.geospatialcorporation.android.geomobile.models.Folders.Folder;
-import com.geospatialcorporation.android.geomobile.ui.fragments.panel_fragments.tree_fragment_panels.tablet.TabletDocumentFolderPanelFragment;
+import com.geospatialcorporation.android.geomobile.ui.fragments.panel_fragments.tree_fragment_panels.tablet.TabletFolderPanelFragment;
 import com.sothree.slidinguppanel.SlidingUpPanelLayout;
 
 public interface IDocumentFolderDetailCommon {
@@ -16,7 +16,7 @@ public interface IDocumentFolderDetailCommon {
 
     void tabHost(FragmentTabHost tabHost, Resources resources, Bundle args);
 
-    void onOptionsButtonPressed(Folder folder, FragmentManager fragmentManager, TabletDocumentFolderPanelFragment tabletDocumentFolderPanelFragment);
+    void onOptionsButtonPressed(Folder folder, FragmentManager fragmentManager, TabletFolderPanelFragment tabletFolderPanelFragment);
 
     void closePanel();
 }

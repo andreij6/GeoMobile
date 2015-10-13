@@ -1,58 +1,86 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                xmlns:fab="http://schemas.android.com/apk/res-auto"
+                xmlns:tools="http://schemas.android.com/tools"
               android:orientation="vertical"
               android:layout_width="match_parent"
               android:layout_height="match_parent"
                 >
 
-    <LinearLayout
-        android:orientation="horizontal"
+    <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="48dp"
-        android:layout_below="@+id/fab_point"
-        android:layout_toEndOf="@+id/fab_point"
-        android:background="@color/primary_dark"
+        android:layout_height="56dp"
+        android:background="@color/white"
         android:layout_gravity="center_horizontal"
         android:layout_centerHorizontal="true"
         android:id="@+id/tree_actionbar">
 
         <ImageView
-            android:layout_width="wrap_content"
+            android:layout_width="48dp"
             android:layout_height="match_parent"
             android:id="@+id/goBackIV"
-            android:src="@drawable/ic_chevron_left_white_36dp"
+            android:layout_gravity="left"
+            android:src="@drawable/ic_chevron_left_grey600_18dp"
+            android:paddingLeft="-10dp"
+            android:layout_alignParentStart="true"
+            android:paddingRight="-10dp"/>
+
+        <ImageView
+            android:layout_width="36dp"
+            android:layout_height="match_parent"
+            android:id="@+id/goToMapIV"
+            android:src="@drawable/ic_earth_grey600_36dp"
             android:layout_gravity="center_vertical"
-            android:layout_weight="1"
-            android:paddingLeft="-12dp"/>
+            android:layout_alignParentEnd="true"
+            android:layout_marginRight="8dp"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textAppearance="?android:attr/textAppearanceSmall"
+            android:text="@string/back"
+            android:id="@+id/backFolder"
+            android:layout_centerVertical="true"
+            android:textStyle="italic"
+            android:layout_toEndOf="@+id/goBackIV"/>
+
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="72dp"
+        android:layout_below="@+id/tree_actionbar"
+        android:layout_centerHorizontal="true"
+        android:id="@+id/titleSection"
+        android:background="@color/white">
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
-            android:text="@string/geounderground"
-            android:gravity="center"
+            android:textAppearance="?android:attr/textAppearanceLarge"
             android:id="@+id/title"
-            android:textSize="18sp"
-            android:layout_weight="4"
-            android:textColor="@color/white"
-            android:textStyle="bold"
-            />
+            tools:text="Root"
+            android:layout_alignParentStart="true"
+            android:gravity="center_vertical"
+            android:textColor="@color/primary_text"
+            android:layout_marginLeft="72dp"
+            android:textStyle="bold"/>
 
-        <ImageView
-            android:layout_width="36dp"
-            android:layout_height="36dp"
-            android:id="@+id/optionsIV"
-            android:src="@drawable/ic_dropdown"
-            android:layout_gravity="center_vertical"
-            android:padding="2dp"/>
+    </RelativeLayout>
 
-        <ImageView
-            android:layout_width="36dp"
-            android:layout_height="36dp"
-            android:id="@+id/goToMapIV"
-            android:src="@drawable/ic_earth_white_36dp"
-            android:layout_gravity="center_vertical"
-            android:layout_weight="1"/>
-    </LinearLayout>
+    <com.melnykov.fab.FloatingActionButton
+        android:id="@+id/optionsIV"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentRight="true"
+        android:src="@drawable/ic_menu_down_white_48dp"
+        fab:fab_colorNormal="@color/accent"
+        fab:fab_colorPressed="@color/accent"
+        fab:fab_colorRipple="@color/accent_dark"
+        android:layout_marginTop="96dp"
+        android:layout_marginRight="32dp"/>
 
     <com.sothree.slidinguppanel.SlidingUpPanelLayout
         xmlns:sothree="http://schemas.android.com/apk/res-auto"
@@ -63,17 +91,20 @@
         sothree:umanoPanelHeight="68dp"
         sothree:umanoShadowHeight="4dp"
         android:background="@color/white"
-        android:layout_below="@+id/tree_actionbar">
+        android:layout_below="@+id/titleSection">
 
         <RelativeLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent">
+            android:layout_height="match_parent"
+            android:paddingLeft="8dp"
+            android:paddingRight="8dp"
+            android:background="@color/body_bkg">
 
             <android.support.v4.app.FragmentTabHost
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:id="@+id/tabHost"
-                android:layout_alignParentTop="true"
+                android:layout_marginTop="32dp"
                 android:layout_centerHorizontal="true">
 
                 <LinearLayout
@@ -85,10 +116,7 @@
                         android:id="@android:id/tabs"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:background="@color/primary_dark"
-                        android:layout_alignParentBottom="true"
-                        >
-                    </TabWidget>
+                        android:layout_alignParentBottom="true"/>
 
                     <FrameLayout
                         android:id="@android:id/tabcontent"
@@ -97,6 +125,7 @@
                     </FrameLayout>
 
                 </LinearLayout>
+
             </android.support.v4.app.FragmentTabHost>
 
         </RelativeLayout>

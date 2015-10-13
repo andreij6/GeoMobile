@@ -13,6 +13,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageButton;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.geospatialcorporation.android.geomobile.R;
@@ -20,11 +22,13 @@ import com.geospatialcorporation.android.geomobile.application;
 import com.geospatialcorporation.android.geomobile.library.DI.Analytics.Models.GoogleAnalyticEvent;
 import com.geospatialcorporation.android.geomobile.library.DI.Map.Interfaces.IGeoUndergroundMap;
 import com.geospatialcorporation.android.geomobile.library.DI.Map.Interfaces.ILayerManager;
+import com.geospatialcorporation.android.geomobile.library.DI.UIHelpers.Interfaces.IMapStatusBarManager;
 import com.geospatialcorporation.android.geomobile.library.constants.GeoPanel;
 import com.geospatialcorporation.android.geomobile.library.panelmanager.PanelManager;
 import com.geospatialcorporation.android.geomobile.models.Layers.Extent;
 import com.geospatialcorporation.android.geomobile.models.Query.map.response.featurewindow.ParcelableFeatureQueryResponse;
 import com.geospatialcorporation.android.geomobile.ui.Interfaces.IFeatureWindowCtrl;
+import com.geospatialcorporation.android.geomobile.ui.Interfaces.IMapStatusCtrl;
 import com.geospatialcorporation.android.geomobile.ui.MainTabletActivity;
 import com.geospatialcorporation.android.geomobile.ui.fragments.panel_fragments.map_fragment_panels.FeatureWindowPanelFragment;
 import com.geospatialcorporation.android.geomobile.ui.fragments.panel_fragments.map_fragment_panels.TabletFeatureWindowPanelFragment;
@@ -37,14 +41,18 @@ import butterknife.ButterKnife;
 import butterknife.OnClick;
 
 public class TabletMapFragment extends Fragment
-    implements IFeatureWindowCtrl
+    implements IFeatureWindowCtrl, IMapStatusCtrl
 {
     public GoogleMap mMap;
     IGeoUndergroundMap mGeoMap;
     ILayerManager mLayerManager;
+    IMapStatusBarManager mStatusBarManager;
+
 
     @Bind(R.id.map) MapView mMapView;
     @Bind(R.id.getLocationIB) ImageButton mGPSbtn;
+    @Bind(R.id.loadingBar) LinearLayout mLoadingBar;
+    @Bind(R.id.loadingMessage) TextView mLoadingMessage;
 
     @OnClick(R.id.extentIB)
     public void zoomToExtent(){
@@ -59,6 +67,7 @@ public class TabletMapFragment extends Fragment
 
         mGeoMap = application.getMapComponent().provideGeoUndergroundMap();
         mGeoMap.setup(getActivity());
+        mStatusBarManager = application.getStatusBarManager();
     }
 
     @Nullable
@@ -127,12 +136,28 @@ public class TabletMapFragment extends Fragment
                     .commit();
 
             ((MainTabletActivity)getActivity()).featureWindow();
+
+            mStatusBarManager.reset();
+
         } else {
             mGeoMap.clearHighlights();
 
             Toast.makeText(getActivity(), "No Data To Display", Toast.LENGTH_LONG).show();
 
-            //mStatusBarManager.reset();
+            mStatusBarManager.reset();
         }
+    }
+
+    public void clearHighlights() {
+        mGeoMap.clearHighlights();
+    }
+
+
+    public LinearLayout getLoadingBar() {
+        return mLoadingBar;
+    }
+
+    public TextView getStatusBarMessage() {
+        return mLoadingMessage;
     }
 }

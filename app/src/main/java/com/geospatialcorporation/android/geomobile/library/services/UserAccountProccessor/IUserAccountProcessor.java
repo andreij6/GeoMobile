@@ -10,5 +10,5 @@ public interface IUserAccountProcessor {
 
     IUserAccountProcessor GetUserAccountData(Context context, IAccountFragment accountFragment);
 
-    void setValues(TextView firstName, TextView LastName, TextView email, TextView cellPhone, TextView OfficePhone);
+    void setValues(TextView name, TextView lastName, TextView textView, TextView firstName, TextView LastName, TextView email, TextView cellPhone, TextView OfficePhone);
 }

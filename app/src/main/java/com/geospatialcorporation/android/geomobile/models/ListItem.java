@@ -70,7 +70,6 @@ public class ListItem implements Comparable<ListItem> {
     private Boolean IsCompletelyEmpty;
 
 
-
     private int IconId;
 
     //region Constructors
@@ -78,7 +77,7 @@ public class ListItem implements Comparable<ListItem> {
         Name = folder.getName();
         Id = folder.getId();
         Order = 1;
-        IconId = R.drawable.ic_folder_black_24dp;
+        IconId = R.drawable.ic_folder_grey600_24dp;
         showInfoIcon = true;
         IsCompletelyEmpty = false;
 
@@ -98,10 +97,9 @@ public class ListItem implements Comparable<ListItem> {
         Name = layer.getName();
         Id = layer.getId();
         Order = 2;
-        IconId = R.drawable.ic_layers_black_24dp;
+        IconId = R.drawable.ic_layers_grey600_24dp;
         showInfoIcon = true;
         IsCompletelyEmpty = false;
-
     }
 
     public ListItem(Layer layer, Boolean isEmpty) {
@@ -121,7 +119,6 @@ public class ListItem implements Comparable<ListItem> {
         IconId = document.getFileTypeDrawable(false);
         showInfoIcon = true;
         IsCompletelyEmpty = false;
-
     }
 
     public ListItem(Document document, Boolean isEmpty) {
@@ -150,5 +147,4 @@ public class ListItem implements Comparable<ListItem> {
 
         return ordered ? 0 : 1;
     }
-
 }

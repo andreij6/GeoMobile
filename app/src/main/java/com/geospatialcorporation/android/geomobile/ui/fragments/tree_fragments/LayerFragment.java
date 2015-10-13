@@ -29,6 +29,8 @@ import com.geospatialcorporation.android.geomobile.ui.Interfaces.IPostExecuter;
 import com.geospatialcorporation.android.geomobile.ui.MainActivity;
 import com.geospatialcorporation.android.geomobile.ui.fragments.GeoViewFragmentBase;
 import com.geospatialcorporation.android.geomobile.ui.fragments.GoogleMapFragment;
+import com.geospatialcorporation.android.geomobile.ui.fragments.detail_fragment.DocumentFolderDetailFragment;
+import com.geospatialcorporation.android.geomobile.ui.fragments.detail_fragment.LayerFolderDetailFragment;
 import com.geospatialcorporation.android.geomobile.ui.fragments.panel_fragments.tree_fragment_panels.LayerFolderPanelFragment;
 import com.geospatialcorporation.android.geomobile.models.ListItem;
 import com.sothree.slidinguppanel.SlidingUpPanelLayout;
@@ -53,6 +55,8 @@ public class LayerFragment extends GeoViewFragmentBase implements IContentRefres
     @Bind(R.id.showNavIV1) ImageView mNavBars;
     @Bind(R.id.showNavIV2) ImageView mNavLogo;
     @Bind(R.id.title) TextView mTitle;
+    @Bind(R.id.backFolder) TextView mBack;
+
 
     @OnClick(R.id.showNavIV1)
     public void showNavigation(){
@@ -93,6 +97,19 @@ public class LayerFragment extends GeoViewFragmentBase implements IContentRefres
         } else {
             closePanel();
         }
+    }
+
+    @OnClick(R.id.folderInformation)
+    public void folderInfo(){
+        Fragment f = new LayerFolderDetailFragment();
+
+        f.setArguments(mCurrentFolder.toBundle());
+
+        getFragmentManager()
+                .beginTransaction()
+                .addToBackStack(null)
+                .replace(R.id.content_frame, f)
+                .commit();
     }
 
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -148,31 +165,34 @@ public class LayerFragment extends GeoViewFragmentBase implements IContentRefres
         if(currentFolder == null) { return; }
 
         if (currentFolder.getParent() != null) {
-            mNavLogo.setImageDrawable(ContextCompat.getDrawable(mContext, R.drawable.ic_chevron_left_white_18dp));
+            mNavLogo.setImageDrawable(ContextCompat.getDrawable(mContext, R.drawable.ic_chevron_left_grey600_18dp));
             mNavLogo.setPadding(-12, 0, 0, 0);
 
             mNavBars.setOnClickListener(navigateUpTree);
             mNavLogo.setOnClickListener(navigateUpTree);
+            mBack.setOnClickListener(navigateUpTree);
 
-            mTitle.setText(mCurrentFolder.getName());
+            mBack.setVisibility(View.VISIBLE);
+
         } else {
-            mNavBars.setImageDrawable(ContextCompat.getDrawable(mContext,R.drawable.ic_nav_white));
+            mNavBars.setImageDrawable(ContextCompat.getDrawable(mContext,R.drawable.ic_nav_orange));
 
             mNavBars.setOnClickListener(showNavigation);
             mNavLogo.setOnClickListener(showNavigation);
 
-            mNavLogo.setImageDrawable(ContextCompat.getDrawable(mContext,R.drawable.ic_logo_g_white));
+            mNavLogo.setImageDrawable(ContextCompat.getDrawable(mContext,R.drawable.ic_g_logo));
             mNavBars.setVisibility(View.VISIBLE);
         }
 
         mNavLogo.setVisibility(View.VISIBLE);
         mTitle.setVisibility(View.VISIBLE);
+        mTitle.setText(mCurrentFolder.getProperName());
 
         mDataHelper = new DataHelper();
 
         List<ListItem> data = mDataHelper.CombineLayerItems(currentFolder.getLayers(), currentFolder.getFolders(), currentFolder.getParent());
 
-        mProgressDialogHelper.toggleProgressDialog();
+        mProgressDialogHelper.hideProgressDialog();
 
         new LayerTreeSectionBuilder(mContext, getFragmentManager(), currentFolder.getParent(), mPanelManager)
                 .BuildAdapter(data, currentFolder.getFolders().size())

@@ -159,7 +159,13 @@ public class LoginActivity extends GoogleApiActivity implements LoaderCallbacks<
         });
     }
 
-    private void AttemptAutomaticLogin() {
+    @Override
+    protected void onStop() {
+        super.onStop();
+        mAnalytics.onStop(this);
+    }
+
+    protected void AttemptAutomaticLogin() {
         String accountName = mGeoSharedPrefs.getString(GeoSharedPreferences.GOOGLE_ACCOUNT, null);
 
         if(accountName != null){

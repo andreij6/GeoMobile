@@ -3,7 +3,6 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent">
 
-
     <com.google.android.gms.maps.MapView
         xmlns:android="http://schemas.android.com/apk/res/android"
         xmlns:map="http://schemas.android.com/apk/res-auto"
@@ -13,6 +12,31 @@
         map:cameraTargetLat="38.3448001"
         map:cameraTargetLng="-96.5878515"
         map:cameraZoom="3" />
+
+    <LinearLayout
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="18dp"
+        android:background="@color/primary_dark"
+        android:layout_gravity="center_horizontal"
+        android:layout_centerHorizontal="true"
+        android:id="@+id/loadingBar"
+        android:layout_alignParentTop="true"
+        android:visibility="gone">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:text="Loading..."
+            android:gravity="center"
+            android:id="@+id/loadingMessage"
+            android:textSize="12sp"
+            android:layout_weight="4"
+            android:textColor="@color/white"
+            android:textStyle="bold"
+            />
+
+    </LinearLayout>
 
     <ImageButton
         android:layout_width="wrap_content"

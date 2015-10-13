@@ -4,7 +4,6 @@
               android:layout_width="match_parent"
               android:layout_height="match_parent"
               android:weightSum="1"
-              android:background="?android:attr/activatedBackgroundIndicator"
               android:minHeight="?android:attr/listPreferredItemHeightSmall"
               android:paddingLeft="20dp"
               android:paddingTop="8dp"
@@ -18,13 +17,13 @@
         android:contentDescription="@string/menu_icon"/>
 
     <TextView
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:textAppearance="?android:attr/textAppearanceMedium"
-    android:id="@+id/menuItemTV"
-    android:singleLine="true"
-    android:paddingLeft="15dp"
-    android:gravity="center_vertical"
-    android:textColor="#fffffbff"/>
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceMedium"
+        android:id="@+id/menuItemTV"
+        android:singleLine="true"
+        android:paddingLeft="15dp"
+        android:gravity="center_vertical"
+        android:textColor="@drawable/list_selector"/>
 
 </LinearLayout>

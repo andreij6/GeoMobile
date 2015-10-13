@@ -2,10 +2,10 @@ package com.geospatialcorporation.android.geomobile.library.services.DocumentFol
 
 import android.content.res.Resources;
 import android.os.Bundle;
-import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTabHost;
 import android.view.ViewGroup;
+import android.widget.TabHost;
 import android.widget.TextView;
 
 import com.geospatialcorporation.android.geomobile.R;
@@ -13,13 +13,11 @@ import com.geospatialcorporation.android.geomobile.application;
 import com.geospatialcorporation.android.geomobile.library.constants.GeoPanel;
 import com.geospatialcorporation.android.geomobile.library.panelmanager.ISlidingPanelManager;
 import com.geospatialcorporation.android.geomobile.library.panelmanager.PanelManager;
+import com.geospatialcorporation.android.geomobile.library.util.TabHostUtil;
 import com.geospatialcorporation.android.geomobile.models.Folders.Folder;
-import com.geospatialcorporation.android.geomobile.ui.fragments.detail_fragment.folder_tabs.FolderDetailsTab;
-import com.geospatialcorporation.android.geomobile.ui.fragments.detail_fragment.folder_tabs.PermissionsTab;
 import com.geospatialcorporation.android.geomobile.ui.fragments.detail_fragment.folder_tabs.tablet.TabletFolderDetailsTab;
 import com.geospatialcorporation.android.geomobile.ui.fragments.detail_fragment.folder_tabs.tablet.TabletPermissionsTab;
-import com.geospatialcorporation.android.geomobile.ui.fragments.panel_fragments.tree_fragment_panels.DocumentFolderPanelFragment;
-import com.geospatialcorporation.android.geomobile.ui.fragments.panel_fragments.tree_fragment_panels.tablet.TabletDocumentFolderPanelFragment;
+import com.geospatialcorporation.android.geomobile.ui.fragments.panel_fragments.tree_fragment_panels.tablet.TabletFolderPanelFragment;
 import com.sothree.slidinguppanel.SlidingUpPanelLayout;
 
 public class DocumentFolderDetailCommon implements IDocumentFolderDetailCommon {
@@ -45,29 +43,23 @@ public class DocumentFolderDetailCommon implements IDocumentFolderDetailCommon {
     public void tabHost(FragmentTabHost tabHost, Resources resources, Bundle args) {
         args.putString("Folder Type", "Document");
 
-        tabHost.addTab(tabHost.newTabSpec(DETAILS).setIndicator(DETAILS), TabletFolderDetailsTab.class, args);
-        tabHost.addTab(tabHost.newTabSpec(PERMISSIONS).setIndicator(PERMISSIONS), TabletPermissionsTab.class, args);
+        tabHost.addTab(tabHost.newTabSpec(DETAILS).setIndicator(TabHostUtil.createTabView(tabHost.getContext(), R.drawable.details_selector)), TabletFolderDetailsTab.class, args);
+        tabHost.addTab(tabHost.newTabSpec(PERMISSIONS).setIndicator(TabHostUtil.createTabView(tabHost.getContext(), R.drawable.permissions_selector)), TabletPermissionsTab.class, args);
 
         tabHost.setCurrentTab(0);
-
-        for (int i = 0; i < tabHost.getTabWidget().getTabCount(); i++) {
-            ViewGroup vg = (ViewGroup) tabHost.getTabWidget().getChildAt(i);
-            TextView tv = (TextView) vg.getChildAt(1);
-            tv.setTextColor(resources.getColor(R.color.white));
-        }
     }
 
+
+
     @Override
-    public void onOptionsButtonPressed(Folder folder, FragmentManager fragmentManager, TabletDocumentFolderPanelFragment tabletDocumentFolderPanelFragment) {
+    public void onOptionsButtonPressed(Folder folder, FragmentManager fragmentManager, TabletFolderPanelFragment fragment) {
         if(mPanelManager.getIsOpen()){
             mPanelManager.hide();
         } else {
-            Fragment f = new TabletDocumentFolderPanelFragment();
-
-            f.setArguments(folder.toBundle());
+            fragment.setArguments(folder.toBundle());
 
             fragmentManager.beginTransaction()
-                    .replace(R.id.slider_content, f)
+                    .replace(R.id.slider_content, fragment)
                     .commit();
 
             mPanelManager.halfAnchor();

@@ -39,6 +39,7 @@ import com.geospatialcorporation.android.geomobile.ui.fragments.GoogleMapFragmen
 import com.geospatialcorporation.android.geomobile.ui.fragments.detail_fragment.DocumentFolderDetailFragment;
 import com.geospatialcorporation.android.geomobile.ui.fragments.panel_fragments.tree_fragment_panels.LibraryFolderPanelFragment;
 import com.geospatialcorporation.android.geomobile.models.ListItem;
+import com.melnykov.fab.FloatingActionButton;
 import com.sothree.slidinguppanel.SlidingUpPanelLayout;
 
 
@@ -62,10 +63,12 @@ public class LibraryFragment extends GeoViewFragmentBase
     @Bind(R.id.libraryitem_recyclerView) RecyclerView mRecyclerView;
     @Bind(R.id.swipe_refresh_layout) SwipeRefreshLayout mSwipeRefreshLayout;
     @Bind(R.id.sliding_layout) SlidingUpPanelLayout mPanel;
-    @Bind(R.id.libraryOptionsIV) ImageView mOptionsSlider;
+    @Bind(R.id.libraryOptionsIV) FloatingActionButton mOptionsSlider;
     @Bind(R.id.showNavIV1) ImageView mNavBars;
     @Bind(R.id.showNavIV2) ImageView mNavLogo;
     @Bind(R.id.title) TextView mTitle;
+    @Bind(R.id.folderInformation) ImageView mInfo;
+    @Bind(R.id.backFolder) TextView mParentFolder;
     //endregion
 
     //region OnClicks
@@ -104,6 +107,19 @@ public class LibraryFragment extends GeoViewFragmentBase
         }
     }
 
+    @OnClick(R.id.folderInformation)
+    public void folderInfo(){
+        Fragment f = new DocumentFolderDetailFragment();
+
+        f.setArguments(mCurrentFolder.toBundle());
+
+        getFragmentManager()
+                .beginTransaction()
+                .addToBackStack(null)
+                .replace(R.id.content_frame, f)
+                .commit();
+    }
+
     @OnClick(R.id.title)
     public void titleClicked(){
         if(mPanelManager.getIsOpen()) {
@@ -124,7 +140,9 @@ public class LibraryFragment extends GeoViewFragmentBase
         setView(inflater, container, R.layout.fragment_libraryitems);
         mContext = getActivity();
 
-        mTitle.setText(R.string.geounderground);
+        mTitle.setText("Loading...");
+
+        mInfo.setVisibility(View.INVISIBLE);
 
         sendScreenName();
 
@@ -217,24 +235,29 @@ public class LibraryFragment extends GeoViewFragmentBase
 
         if(mCurrentFolder.getParent() != null){
             mNavBars.setVisibility(View.GONE);
-            mNavLogo.setImageDrawable(ContextCompat.getDrawable(mContext, R.drawable.ic_chevron_left_white_18dp));
+            mNavLogo.setImageDrawable(ContextCompat.getDrawable(mContext, R.drawable.ic_chevron_left_grey600_18dp));
             mNavLogo.setPadding(-12, 0, 0, 0);
 
             mNavBars.setOnClickListener(navigateUpTree);
             mNavLogo.setOnClickListener(navigateUpTree);
+            mParentFolder.setOnClickListener(navigateUpTree);
 
-            mTitle.setText(mCurrentFolder.getName());
+            mParentFolder.setVisibility(View.VISIBLE);
+            mParentFolder.setText(mCurrentFolder.getParent().getProperName());
 
         } else {
-            mNavBars.setImageDrawable(ContextCompat.getDrawable(mContext,R.drawable.ic_nav_white));
+            mNavBars.setImageDrawable(ContextCompat.getDrawable(mContext, R.drawable.ic_nav_orange));
 
             mNavBars.setOnClickListener(showNavigation);
             mNavLogo.setOnClickListener(showNavigation);
 
-            mNavLogo.setImageDrawable(ContextCompat.getDrawable(mContext,R.drawable.ic_logo_g_white));
+            mNavLogo.setImageDrawable(ContextCompat.getDrawable(mContext, R.drawable.ic_g_logo));
             mNavBars.setVisibility(View.VISIBLE);
         }
 
+        mTitle.setText(mCurrentFolder.getProperName());
+
+        mInfo.setVisibility(View.VISIBLE);
         mNavLogo.setVisibility(View.VISIBLE);
         mTitle.setVisibility(View.VISIBLE);
 

@@ -59,28 +59,6 @@
                 android:orientation="horizontal"
                 android:layout_width="match_parent"
                 style="@style/TreePanelSectionStyle"
-                android:id="@+id/folderInfoSection">
-
-                <ImageView
-                    android:layout_width="wrap_content"
-                    android:layout_height="match_parent"
-                    android:id="@+id/informationIB"
-                    android:src="@drawable/ic_information_outline_black_36dp"
-                    style="TreePanelImageViewStyle"
-                    android:layout_marginLeft="16dp"/>
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:text="Folder Information"
-                    android:id="@+id/informationTV"
-                    style="@style/TreePanelTextViewStyle"/>
-
-            </LinearLayout>
-
-            <LinearLayout
-                android:orientation="horizontal"
-                android:layout_width="match_parent"
-                style="@style/TreePanelSectionStyle"
                 android:id="@+id/addDocumentSection">
 
                 <ImageView
@@ -132,7 +110,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="match_parent"
                     android:id="@+id/uploadIV"
-                    android:src="@drawable/ic_upload_black_36dp"
+                    android:src="@drawable/ic_cloud_upload_black_36dp"
                     style="TreePanelImageViewStyle"
                     android:layout_marginLeft="16dp"/>
 

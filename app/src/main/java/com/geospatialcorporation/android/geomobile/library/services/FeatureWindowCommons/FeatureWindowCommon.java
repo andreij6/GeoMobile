@@ -10,6 +10,7 @@ import android.widget.Toast;
 
 import com.geospatialcorporation.android.geomobile.R;
 import com.geospatialcorporation.android.geomobile.application;
+import com.geospatialcorporation.android.geomobile.library.util.TabHostUtil;
 import com.geospatialcorporation.android.geomobile.models.Query.map.response.featurewindow.FeatureQueryResponse;
 import com.geospatialcorporation.android.geomobile.models.Query.map.response.featurewindow.ParcelableFeatureQueryResponse;
 import com.geospatialcorporation.android.geomobile.ui.fragments.detail_fragment.feature_window_tabs.FeatureAttributesTab;
@@ -49,17 +50,11 @@ public class FeatureWindowCommon implements IFeatureWindowCommon {
             featureDocuments = FeatureDocumentsTab.class;
         }
 
-        tabHost.addTab(tabHost.newTabSpec(MAPINFO).setIndicator(MAPINFO), featureMapInfo, arguments);
-        tabHost.addTab(tabHost.newTabSpec(ATTRIBUTES).setIndicator(ATTRIBUTES), featureAttributes, arguments);
-        tabHost.addTab(tabHost.newTabSpec(DOCUMENTS).setIndicator(DOCUMENTS), featureDocuments, arguments);
+        tabHost.addTab(tabHost.newTabSpec(MAPINFO).setIndicator(TabHostUtil.createTabView(tabHost.getContext(), R.drawable.details_selector)), featureMapInfo, arguments);
+        tabHost.addTab(tabHost.newTabSpec(ATTRIBUTES).setIndicator(TabHostUtil.createTabView(tabHost.getContext(), R.drawable.attr_selector)), featureAttributes, arguments);
+        tabHost.addTab(tabHost.newTabSpec(DOCUMENTS).setIndicator(TabHostUtil.createTabView(tabHost.getContext(), R.drawable.documents_selector)), featureDocuments, arguments);
 
         tabHost.setCurrentTab(currentTab);
-
-        for (int i = 0; i < tabHost.getTabWidget().getTabCount(); i++) {
-            ViewGroup vg = (ViewGroup) tabHost.getTabWidget().getChildAt(i);
-            TextView tv = (TextView) vg.getChildAt(1);
-            tv.setTextColor(resources.getColor(R.color.white));
-        }
 
         application.setCurrentFeatureWindowTab(0);
 

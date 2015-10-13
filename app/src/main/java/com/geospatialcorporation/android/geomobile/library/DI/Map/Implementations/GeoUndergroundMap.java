@@ -26,6 +26,8 @@ import com.geospatialcorporation.android.geomobile.library.DI.Tasks.Implementati
 import com.geospatialcorporation.android.geomobile.library.DI.Tasks.Interfaces.IGetLayersTask;
 import com.geospatialcorporation.android.geomobile.library.DI.Tasks.Interfaces.ILayerStyleTask;
 import com.geospatialcorporation.android.geomobile.library.DI.Tasks.models.GetLayersTaskParams;
+import com.geospatialcorporation.android.geomobile.library.DI.UIHelpers.Interfaces.IMapStatusBarManager;
+import com.geospatialcorporation.android.geomobile.library.helpers.ProgressDialogHelper;
 import com.geospatialcorporation.android.geomobile.library.map.GeoCallback;
 import com.geospatialcorporation.android.geomobile.library.map.SendMapQueryRequestCallback;
 import com.geospatialcorporation.android.geomobile.library.services.QueryRestService;
@@ -72,11 +74,13 @@ public class GeoUndergroundMap implements IGeoUndergroundMap, IPostExecuter<List
     ILayerManager mLayerManager;
     IMapStateService mMapStateService;
     IGetLayersTask mGetLayersTask;
+    IMapStatusBarManager mStatusBarManager;
     Marker mCurrentLocationMaker;
 
     Context mContext;
     GoogleApiClient mLocationClient;
     Activity mActivity;
+    ProgressDialogHelper mProgressDialogHelper;
 
     Polygon mHighlightedPolygon;
     Polyline mHighlightedPolyline;
@@ -94,6 +98,7 @@ public class GeoUndergroundMap implements IGeoUndergroundMap, IPostExecuter<List
         mAnalytics = application.getAnalyticsComponent().provideGeoAnalytics();
         mQueryService = new QueryRestService();
         mGetLayersTask = application.getTasksComponent().provideLayersTask();
+        mStatusBarManager = application.getStatusBarManager();
     }
 
     @Override
@@ -101,6 +106,12 @@ public class GeoUndergroundMap implements IGeoUndergroundMap, IPostExecuter<List
         mMapView = mapView;
 
         mMapView.onCreate(savedInstanceState);
+
+        if(application.getIsTablet()) {
+            mProgressDialogHelper = new ProgressDialogHelper(mContext);
+
+            mProgressDialogHelper.showProgressDialog();
+        }
 
         mMapView.getMapAsync(new OnMapReadyCallback() {
             @Override
@@ -196,7 +207,7 @@ public class GeoUndergroundMap implements IGeoUndergroundMap, IPostExecuter<List
                     highlight(marker);
 
                 } catch (Exception e) {
-                    //mStatusBarManager.reset();
+                    mStatusBarManager.reset();
                 }
 
                 return true;
@@ -231,15 +242,16 @@ public class GeoUndergroundMap implements IGeoUndergroundMap, IPostExecuter<List
             }
         });
 
-        if(application.getIsTablet()){
+        if(application.getIsTablet()) {
             preloadLayers();
-            mLayerManager.showLayers(mMap);
-        } else {
-            mLayerManager.showLayers(mMap);
         }
+
+        mLayerManager.showLayers(mMap);
+
     }
 
     protected void preloadLayers() {
+
         mGetLayersTask.getAll(new GetLayersTaskParams(this));
     }
 
@@ -499,26 +511,39 @@ public class GeoUndergroundMap implements IGeoUndergroundMap, IPostExecuter<List
     //region GeoUndergroundMap.Configuration
     @Override
     public void onPause() {
-        mMapView.onPause();
-        mLocationClient.disconnect();
+        if (notNull(mMapView)) {
+            mMapView.onPause();
+        }
+
+        if(notNull(mLocationClient)) {
+            mLocationClient.disconnect();
+        }
     }
 
     @Override
     public void onDestroy() {
         mLayerManager.clearVisibleLayers();
-        mMapView.onDestroy();
+        if(notNull(mMapView)) {
+            mMapView.onDestroy();
+        }
+    }
+
+    private boolean notNull(Object obj) {
+        return obj != null;
     }
 
     @Override
     public void onLowMemory() {
-        if(mMapView != null) {
+        if(notNull(mMapView)) {
             mMapView.onLowMemory();
         }
     }
 
     @Override
     public void onResume() {
-        mMapView.onResume();
+        if(notNull(mMapView)) {
+            mMapView.onResume();
+        }
     }
 
     @Override
@@ -553,7 +578,7 @@ public class GeoUndergroundMap implements IGeoUndergroundMap, IPostExecuter<List
     }
 
     protected void getFeatureWindow(String id, int shapeCode){
-        //mStatusBarManager.setMessage(mActivity.getString(R.string.loading_feature_window));
+        mStatusBarManager.setMessage(mActivity.getString(R.string.loading_feature_window));
 
         mSelectedFeatureId = mLayerManager.getFeatureId(id, shapeCode);
         mSelectedLayerId = mLayerManager.getLayerId(id, shapeCode);
@@ -564,6 +589,11 @@ public class GeoUndergroundMap implements IGeoUndergroundMap, IPostExecuter<List
     @Override
     public void onPostExecute(List<Folder> model) {
         application.setLayerFolders(model);
+
+        if(application.getIsTablet()){
+            application.setMapStateLoaded(true);
+            mProgressDialogHelper.hideProgressDialog();
+        }
 
         List<LegendLayer> llayers = getLayersFromFolders(model);
 

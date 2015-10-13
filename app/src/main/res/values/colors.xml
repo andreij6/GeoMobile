@@ -10,13 +10,12 @@
 
     <!-- Pallet -->
     <!-- Indigo -->
-   <color name="primary">#37474F</color>
+
     <color name="primary_light">#90A4AE</color>
-    <color name="primary_dark">#263238</color>
+
 
 
     <!-- Orange -->
-    <color name="accent">#FF5722</color>
     <color name="accent_dark">#BF360C</color>
     <!--End Pallet -->
 
@@ -25,5 +24,20 @@
 
     <color name="primary_dark_transparency">#99263238</color>
     <color name="white_transparency">#99FFFFFF</color>
+
+
+    <!-- Pallette 2 Oct Redesign -->
+    <color name="body_bkg">#FFF4F7F8</color>
+    <color name="primary_text">#FF42413E</color>
+    <color name="accent">#FFF27242</color>
+
+    <color name="primary">#263238</color> <!-- Todo: Condense -->
+    <color name="accent_blue">#FF6799CA</color>
+    <color name="primary_dark">#263238</color>
+
+    <color name="accent_yellow">#FFFFD55A</color>
+
+    <!-- End Pallette -->
+
 
 </resources>

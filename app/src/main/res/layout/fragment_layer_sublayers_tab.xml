@@ -19,16 +19,18 @@
             android:layout_height="match_parent"> -->
 
         <Button
-            android:layout_width="match_parent"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/add_sublayer"
             android:id="@+id/addSublayers"
             android:layout_alignParentTop="true"
-            android:layout_centerHorizontal="true"/>
+            android:layout_alignParentEnd="true"
+            android:background="@color/accent_blue"
+            android:padding="8dp"/>
 
             <android.support.v4.widget.SwipeRefreshLayout
                 android:id="@+id/swipe_refresh_layout"
-                android:layout_below="@id/addSublayers"
+                android:layout_below="@id/section_divider"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content">
 
@@ -41,7 +43,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:stretchColumns="1"
-                        android:background="@color/white"
+                        android:background="@color/body_bkg"
                         android:layout_centerVertical="true"
                         android:layout_centerHorizontal="true"
                         android:paddingRight="10dp"
@@ -53,6 +55,25 @@
                 </ScrollView>
 
             </android.support.v4.widget.SwipeRefreshLayout>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceLarge"
+        android:text="@string/sublayers"
+        android:id="@+id/section_title"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentStart="true"
+        android:layout_marginTop="16dp"
+        android:layout_marginLeft="16dp"/>
+
+    <View  android:layout_width="match_parent"
+          android:layout_height="1dp"
+           android:id="@+id/section_divider"
+           android:background="@android:color/darker_gray"
+           android:layout_marginTop="16dp"
+          android:layout_marginStart="16dp"
+         android:layout_below="@id/section_title"/>
 
     <!--</RelativeLayout>
 

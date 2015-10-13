@@ -44,12 +44,17 @@ import com.squareup.okhttp.Request;
 import com.squareup.okhttp.Response;
 
 import java.io.IOException;
+import java.net.CookieManager;
+import java.net.CookiePolicy;
+import java.net.HttpCookie;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Locale;
 import java.util.Queue;
+import java.util.prefs.Preferences;
 
 import retrofit.RequestInterceptor;
 import retrofit.RestAdapter;
@@ -69,7 +74,8 @@ public class application extends applicationDIBase {
     private static Subscription geoSubscription;
     private static String geoAuthToken;
     private static String googleAuthToken;
-    private static OkHttpClient client;
+    private static OkClient serviceClient;
+    private static CookieManager cookieManager;
     private static RestAdapter restAdapter;
     private static boolean isAdminUser;
     public static Uri mMediaUri;
@@ -113,6 +119,7 @@ public class application extends applicationDIBase {
     private static List<Folder> layerFolders;
     private static List<LegendLayer> legendLayerQueue;
     private static boolean shouldSetAppState;
+    private static boolean mapStateLoaded;
     //endregion
 
     //region stuff
@@ -332,6 +339,15 @@ public class application extends applicationDIBase {
     public static boolean getShouldSetAppState() {
         return shouldSetAppState;
     }
+
+    public static void setMapStateLoaded(boolean mapStateLoaded) {
+        application.mapStateLoaded = mapStateLoaded;
+    }
+
+    public static boolean getMapStateLoaded() {
+        return mapStateLoaded;
+    }
+
     //endregion
 
     public void onCreate() {
@@ -369,9 +385,15 @@ public class application extends applicationDIBase {
 
         RequestInterceptor requestInterceptor = setupInterceptor();
 
-        client = new OkHttpClient();
+        OkHttpClient client = new OkHttpClient();
         client.networkInterceptors().add(new StethoInterceptor());
         client.interceptors().add(new TokenInterceptor());
+
+        cookieManager = new CookieManager();
+        cookieManager.setCookiePolicy(CookiePolicy.ACCEPT_ALL);
+        client.setCookieHandler(cookieManager);
+
+        serviceClient = new OkClient(client);
 
         configRestAdapter(requestInterceptor);
 
@@ -413,13 +435,13 @@ public class application extends applicationDIBase {
         if (BuildConfig.DEBUG) {
             restAdapter = new RestAdapter.Builder()
                     .setLogLevel(RestAdapter.LogLevel.FULL)
-                    .setClient(new OkClient(client))
+                    .setClient(serviceClient)
                     .setEndpoint(domain)
                     .setRequestInterceptor(requestInterceptor)
                     .build();
         } else {
             restAdapter = new RestAdapter.Builder()
-                    .setClient(new OkClient(client))
+                    .setClient(serviceClient)
                     .setEndpoint(domain)
                     .setRequestInterceptor(requestInterceptor)
                     .build();
@@ -529,6 +551,9 @@ public class application extends applicationDIBase {
                 Log.d(TAG, "Set GeoToken to: " + newToken);
                 addTokenToSharedPreferences(newToken);
             }
+
+
+            String geoToken = response.header("Set-Cookie");
 
             return response;
         }

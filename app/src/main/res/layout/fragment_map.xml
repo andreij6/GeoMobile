@@ -139,63 +139,45 @@
                 android:layout_marginTop="18dp"
                 android:visibility="gone"/>
 
-            <LinearLayout
-                android:orientation="horizontal"
+
+            <RelativeLayout
                 android:layout_width="match_parent"
-                android:layout_height="48dp"
-                android:background="@color/primary_dark_transparency"
+                android:layout_height="56dp"
+                android:background="#99FFFFFF"
                 android:layout_gravity="center_horizontal"
                 android:layout_centerHorizontal="true"
-                android:id="@+id/linearLayout">
+                android:id="@+id/map_actionbar">
 
                 <ImageView
                     android:layout_width="wrap_content"
-                    android:layout_height="32dp"
+                    android:layout_height="match_parent"
                     android:id="@+id/showNavIV1"
-                    android:layout_gravity="center_vertical"
-                    android:src="@drawable/ic_nav_white"
-                    android:paddingLeft="-16dp"
+                    android:layout_gravity="left"
+                    android:src="@drawable/ic_nav_orange"
+                    android:paddingLeft="-10dp"
+                    android:layout_alignParentStart="true"
                     android:paddingRight="-10dp"/>
 
                 <ImageView
-                    android:layout_width="wrap_content"
+                    android:layout_width="48dp"
                     android:layout_height="match_parent"
                     android:id="@+id/showNavIV2"
-                    android:src="@drawable/ic_logo_g_white"
+                    android:src="@drawable/ic_g_logo"
                     android:layout_gravity="center_vertical"
-                    android:layout_weight="1"
-                    android:paddingLeft="-18dp"/>
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="match_parent"
-                    android:text="@string/geounderground"
-                    android:gravity="center"
-                    android:id="@+id/editText2"
-                    android:textSize="18sp"
-                    android:layout_weight="4"
-                    android:textColor="@color/white"
-                    android:textStyle="bold"
-                    />
-
-                <!-- Control for the create new features panel -->
-                <!--<ImageView
-                    android:layout_width="36dp"
-                    android:layout_height="36dp"
-                    android:id="@+id/mapOptionsIV"
-                    android:src="@drawable/ic_dropdown"
-                    android:layout_gravity="center_vertical"
-                    android:padding="2dp"/>-->
+                    android:layout_alignParentTop="true"
+                    android:layout_toEndOf="@+id/showNavIV1"
+                    android:paddingLeft="-10dp"/>
 
                 <ImageView
                     android:layout_width="36dp"
-                    android:layout_height="36dp"
+                    android:layout_height="match_parent"
                     android:id="@+id/showLayersIV"
-                    android:src="@drawable/ic_layers_white_36dp"
+                    android:src="@drawable/ic_layers_grey600_36dp"
                     android:layout_gravity="center_vertical"
-                    android:layout_weight="1"/>
+                    android:layout_alignParentEnd="true"
+                    android:layout_marginRight="8dp"/>
 
-            </LinearLayout>
+            </RelativeLayout>
 
             <LinearLayout
                 android:orientation="horizontal"
@@ -205,7 +187,7 @@
                 android:layout_gravity="center_horizontal"
                 android:layout_centerHorizontal="true"
                 android:id="@+id/loadingBar"
-                android:layout_below="@+id/linearLayout"
+                android:layout_below="@+id/map_actionbar"
                 android:visibility="gone">
 
                 <TextView

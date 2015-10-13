@@ -16,18 +16,18 @@ public class TabletLayerFolderPanelFragment extends TabletTreeFolderPanelFragmen
         return R.layout.fragment_panel_layerfolder;
     }
 
-    @OnClick(R.id.folderInfoSection)
-    public  void folderSection(){
-        Fragment f = new TabLayerFolderDetailFragment();
-
-        f.setArguments(mFolder.toBundle());
-
-        getFragmentManager()
-                .beginTransaction()
-                .addToBackStack(null)
-                .replace(R.id.info_frame, f)
-                .commit();
-    }
+    //@OnClick(R.id.folderInfoSection)
+    //public  void folderSection(){
+    //    Fragment f = new TabLayerFolderDetailFragment();
+    //
+    //    f.setArguments(mFolder.toBundle());
+    //
+    //    getFragmentManager()
+    //            .beginTransaction()
+    //            .addToBackStack(null)
+    //            .replace(R.id.info_frame, f)
+    //            .commit();
+    //}
 
     @OnClick(R.id.addLayerSection)
     public void layerSectionClicked(){

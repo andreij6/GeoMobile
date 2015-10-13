@@ -7,13 +7,13 @@ import android.support.v4.content.ContextCompat;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.geospatialcorporation.android.geomobile.R;
 import com.geospatialcorporation.android.geomobile.application;
 import com.geospatialcorporation.android.geomobile.library.DI.Analytics.Models.GoogleAnalyticEvent;
+import com.geospatialcorporation.android.geomobile.library.helpers.DataHelper;
 import com.geospatialcorporation.android.geomobile.library.helpers.DateTimeFormatter;
 import com.geospatialcorporation.android.geomobile.library.constants.GeoPanel;
 import com.geospatialcorporation.android.geomobile.library.helpers.FileSizeFormatter;
@@ -32,8 +32,6 @@ public class DocumentDetailFragment extends ItemDetailFragment<Document>  {
     private static final String TAG = DocumentDetailFragment.class.getSimpleName();
 
     //region Butterknife
-    @Bind(R.id.backgroundImageView) ImageView mFileTypeImage;
-    @Bind(R.id.documentNameTV) TextView mDocumentName;
     @Bind(R.id.uploadTimeLabel) TextView mUploadLabel;
     @Bind(R.id.uploadTimeValue) TextView mUploadValue;
     @Bind(R.id.fileSizeLabel) TextView mFileSizeLabel;
@@ -53,10 +51,13 @@ public class DocumentDetailFragment extends ItemDetailFragment<Document>  {
                 .addToBackStack(null).commit();
     }
 
-    @OnClick(R.id.navigateBackIV)
+    @OnClick(R.id.goBackIV)
     public void previousView(){
         getFragmentManager().popBackStack();
     }
+
+    @OnClick(R.id.backFolder)
+    public void goUp(){ getFragmentManager().popBackStack(); }
 
     @OnClick(R.id.optionsIV)
     public void bringUpOptions(){
@@ -69,7 +70,7 @@ public class DocumentDetailFragment extends ItemDetailFragment<Document>  {
             getFragmentManager().beginTransaction()
                     .replace(R.id.slider_content, f)
                     .commit();
-            mPanelManager.halfAnchor();
+            mPanelManager.halfAnchor(0.1f);
             mPanelManager.touch(false);
         }
     }
@@ -90,8 +91,7 @@ public class DocumentDetailFragment extends ItemDetailFragment<Document>  {
 
         handleArguments();
 
-        mDocumentName.setText(mEntity.getNameWithExt());
-        mFileTypeImage.setImageDrawable(ContextCompat.getDrawable(getActivity(), mEntity.getFileTypeDrawable(true)));
+        mTitle.setText(DataHelper.trimString(mEntity.getNameWithExt(), 15));
         mUploadValue.setText(DateTimeFormatter.format(mEntity.getUploadTime()));
         mFileSizeValue.setText(FileSizeFormatter.format(mEntity.getSize() + ""));
 
@@ -103,8 +103,6 @@ public class DocumentDetailFragment extends ItemDetailFragment<Document>  {
         Bundle args = getArguments();
 
         mEntity = args.getParcelable(Document.INTENT);
-
-        SetTitle(R.string.file_details);
     }
 
     public void closePanel() {

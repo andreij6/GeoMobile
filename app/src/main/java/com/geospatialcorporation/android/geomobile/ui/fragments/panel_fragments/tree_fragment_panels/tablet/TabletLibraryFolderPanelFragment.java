@@ -23,18 +23,18 @@ public class TabletLibraryFolderPanelFragment extends TabletTreeFolderPanelFragm
     }
 
     //OnClicks
-    @OnClick(R.id.folderInfoSection)
-    public void folderInfo(){
-        Fragment f = new TabDocumentFolderDetailFragment();
-
-        f.setArguments(mFolder.toBundle());
-
-        getFragmentManager()
-                .beginTransaction()
-                .addToBackStack(null)
-                .replace(R.id.info_frame, f)
-                .commit();
-    }
+    //@OnClick(R.id.folderInfoSection)
+    //public void folderInfo(){
+    //    Fragment f = new TabDocumentFolderDetailFragment();
+    //
+    //    f.setArguments(mFolder.toBundle());
+    //
+    //    getFragmentManager()
+    //            .beginTransaction()
+    //            .addToBackStack(null)
+    //            .replace(R.id.info_frame, f)
+    //            .commit();
+    //}
 
     //TODO: works but onSuccess doesnt work
     @OnClick(R.id.addFolderSection)

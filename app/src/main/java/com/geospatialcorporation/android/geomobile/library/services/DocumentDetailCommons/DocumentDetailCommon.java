@@ -43,9 +43,8 @@ public class DocumentDetailCommon implements IDocumentDetailCommon {
     }
 
     @Override
-    public void setViews(TextView documentName, TextView uploadValue, TextView fileSizeValue, ImageView fileTypeImage) {
+    public void setViews(TextView documentName, TextView uploadValue, TextView fileSizeValue) {
         documentName.setText(mEntity.getNameWithExt());
-        fileTypeImage.setImageDrawable(mResources.getDrawable(mEntity.getFileTypeDrawable(true)));
         uploadValue.setText(DateTimeFormatter.format(mEntity.getUploadTime()));
         fileSizeValue.setText(FileSizeFormatter.format(mEntity.getSize() + ""));
 
@@ -68,7 +67,7 @@ public class DocumentDetailCommon implements IDocumentDetailCommon {
                     .replace(R.id.slider_content, fragment)
                     .commit();
 
-            mPanelManager.halfAnchor();
+            mPanelManager.halfAnchor(0.15f);
             mPanelManager.touch(false);
         }
     }

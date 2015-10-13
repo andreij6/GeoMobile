@@ -1,6 +1,7 @@
 package com.geospatialcorporation.android.geomobile.ui.fragments.drawer;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.res.Configuration;
 import android.os.Bundle;
@@ -20,16 +21,21 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ListView;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.geospatialcorporation.android.geomobile.R;
 import com.geospatialcorporation.android.geomobile.application;
+import com.geospatialcorporation.android.geomobile.ui.LoginActivity;
 import com.geospatialcorporation.android.geomobile.ui.MainActivity;
 import com.geospatialcorporation.android.geomobile.ui.adapters.MainNavigationAdapter;
 
 import java.util.Arrays;
 import java.util.List;
+
+import butterknife.Bind;
+import butterknife.ButterKnife;
 
 /**
  * Fragment used for managing interactions for and presentation of a navigation drawer.
@@ -60,7 +66,6 @@ public class MainNavigationDrawerFragment extends Fragment {
     private ActionBarDrawerToggle mDrawerToggle;
 
     private DrawerLayout mDrawerLayout;
-    private ListView mDrawerListView;
     private View mFragmentContainerView;
     private ActionBar mActionBar;
 
@@ -69,6 +74,9 @@ public class MainNavigationDrawerFragment extends Fragment {
     private boolean mUserLearnedDrawer;
     private List<String> mViewTitles;
     private Boolean mIsAdmin;
+
+    @Bind(R.id.logoutLayout) RelativeLayout mLogout;
+    @Bind(R.id.menuList) ListView mDrawerListView;
 
     public MainNavigationDrawerFragment() {
     }
@@ -103,8 +111,21 @@ public class MainNavigationDrawerFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        mDrawerListView = (ListView) inflater.inflate(
+        View root = inflater.inflate(
                 R.layout.fragment_left_navigation_drawer, container, false);
+
+        ButterKnife.bind(this, root);
+
+        mLogout.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                application.Logout();
+                getActivity().startActivity(new Intent(getActivity(), LoginActivity.class));
+                getActivity().finish();
+            }
+        });
+
+
         mDrawerListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
@@ -113,9 +134,9 @@ public class MainNavigationDrawerFragment extends Fragment {
         });
 
         if(mIsAdmin){
-            mViewTitles = Arrays.asList(MenuConstants.MAP, MenuConstants.LIBRARY, MenuConstants.ACCOUNTS, MenuConstants.ALL_SUBSCRIPTIONS, MenuConstants.LOGOUT);
+            mViewTitles = Arrays.asList(MenuConstants.MAP, MenuConstants.LIBRARY, MenuConstants.ACCOUNTS, MenuConstants.ALL_SUBSCRIPTIONS);
         } else {
-            mViewTitles = Arrays.asList(MenuConstants.MAP, MenuConstants.LIBRARY, MenuConstants.ACCOUNTS, MenuConstants.LOGOUT);
+            mViewTitles = Arrays.asList(MenuConstants.MAP, MenuConstants.LIBRARY, MenuConstants.ACCOUNTS);
         }
         View header = inflater.inflate(R.layout.header_main_navigation, container, false);
         TextView clientName = (TextView)header.findViewById(R.id.subscriptionName);
@@ -126,7 +147,8 @@ public class MainNavigationDrawerFragment extends Fragment {
         mDrawerListView.setAdapter(new MainNavigationAdapter(getActivity(), mViewTitles));
 
         mDrawerListView.setItemChecked(mCurrentSelectedPosition, true);
-        return mDrawerListView;
+
+        return root;
     }
 
     public boolean isDrawerOpen() {

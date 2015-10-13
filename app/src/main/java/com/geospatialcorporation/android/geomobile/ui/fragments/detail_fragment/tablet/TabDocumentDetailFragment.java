@@ -22,8 +22,7 @@ import butterknife.OnClick;
 
 public class TabDocumentDetailFragment extends TabGeoViewFragmentBase implements IPanelFragmentCtrl {
 
-    @Bind(R.id.backgroundImageView) ImageView mFileTypeImage;
-    @Bind(R.id.documentNameTV) TextView mDocumentName;
+    @Bind(R.id.title) TextView mTitle;
     @Bind(R.id.uploadTimeLabel) TextView mUploadLabel;
     @Bind(R.id.uploadTimeValue) TextView mUploadValue;
     @Bind(R.id.fileSizeLabel) TextView mFileSizeLabel;
@@ -53,7 +52,7 @@ public class TabDocumentDetailFragment extends TabGeoViewFragmentBase implements
 
         mCommon.panel(mPanel)
                 .handleArguments(getArguments())
-                .setViews(mDocumentName, mUploadValue, mFileSizeValue, mFileTypeImage);
+                .setViews(mTitle, mUploadValue, mFileSizeValue);
 
         return v;
     }

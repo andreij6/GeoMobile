@@ -1,7 +1,8 @@
 package com.geospatialcorporation.android.geomobile.models;
 
 public class UserAccount {
-    
+
+
     //region Getters & Setters
     public Integer getId() {
         return Id;
@@ -59,6 +60,30 @@ public class UserAccount {
     private String LastName;
     private String CellPhone;
     private String OfficePhone;
+
+    public String getFormattedOfficePhone() {
+        if(OfficePhone != null){
+            return formatNumber(OfficePhone);
+        }
+
+        return OfficePhone;
+    }
+
+    public String getFormattedCellPhone() {
+        if(CellPhone != null){
+            return formatNumber(CellPhone);
+        }
+
+        return CellPhone;
+    }
+
+    private String formatNumber(String number){
+        if(number.length() == 10) {
+            return "(" + number.substring(0, 3) + ") " + number.substring(3, 6) + "-" + number.substring(6);
+        } else {
+            return number;
+        }
+    }
     //endregion
 
 }

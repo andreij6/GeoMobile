@@ -16,6 +16,7 @@ import com.geospatialcorporation.android.geomobile.library.services.FeatureWindo
 import com.geospatialcorporation.android.geomobile.library.services.QueryRestService;
 import com.geospatialcorporation.android.geomobile.models.Query.map.response.featurewindow.FeatureQueryResponse;
 import com.geospatialcorporation.android.geomobile.ui.MainTabletActivity;
+import com.geospatialcorporation.android.geomobile.ui.fragments.MapFragments.TabletMapFragment;
 import com.geospatialcorporation.android.geomobile.ui.fragments.TabGeoViewFragmentBase;
 
 import butterknife.Bind;
@@ -32,12 +33,15 @@ public class TabletFeatureWindowPanelFragment extends TabGeoViewFragmentBase {
 
     @OnClick(R.id.close)
     public void closeFeatureWindow(){
-        ((MainTabletActivity)getActivity()).closeInfoFragment();
+
+        MainTabletActivity activity = ((MainTabletActivity)getActivity());
+
+        activity.closeInfoFragment();
     }
 
     @Override
     protected int getLayoutResId() {
-        return R.layout.fragment_panel_featurewindow;
+        return R.layout.fragment_panel_featurewindow_tablet;
     }
 
     @Override

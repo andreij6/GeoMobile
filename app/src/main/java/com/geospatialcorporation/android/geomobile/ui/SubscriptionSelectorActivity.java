@@ -54,8 +54,8 @@ public class SubscriptionSelectorActivity extends ActionBarActivity implements A
 
         mSectionsPagerAdapter = new ClientSelectorSectionsPagerAdapter(getSupportFragmentManager(), this);
 
-        mErrorHandler = application.getErrorsComponent().provideErrorHandler();
-        Thread.setDefaultUncaughtExceptionHandler(mErrorHandler.UncaughtExceptionHandler());
+        //mErrorHandler = application.getErrorsComponent().provideErrorHandler();
+        //Thread.setDefaultUncaughtExceptionHandler(mErrorHandler.UncaughtExceptionHandler());
 
         mViewPager.setAdapter(mSectionsPagerAdapter);
 
@@ -106,6 +106,7 @@ public class SubscriptionSelectorActivity extends ActionBarActivity implements A
             setBackButtonClickOnce(true);
         }
     }
+
 
     //region Action.TabListner Interface
     @Override

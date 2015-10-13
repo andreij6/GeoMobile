@@ -4,27 +4,18 @@
               android:layout_width="match_parent"
               android:layout_height="match_parent">
 
-    <LinearLayout
-        android:id="@+id/parentFolderBar"
-        android:orientation="horizontal"
+    <TextView
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_alignParentTop="true"
+        android:layout_height="56dp"
+        android:textAppearance="?android:attr/textAppearanceLarge"
+        android:id="@+id/pagetitle"
+        android:text="@string/layer_tree"
         android:layout_alignParentStart="true"
-        android:background="@color/primary_light"
-        android:paddingTop="5dp"
-        android:paddingBottom="5dp">
-
-        <ImageView
-            android:layout_width="36dp"
-            android:layout_height="36dp"
-            android:id="@+id/close"
-            android:src="@drawable/ic_close_white_36dp"
-            android:layout_gravity="center_vertical"
-            android:padding="2dp"
-            android:layout_weight="1"/>
-
-    </LinearLayout>
+        android:gravity="center_vertical"
+        android:textColor="@color/primary_text"
+        android:paddingLeft="48dp"
+        android:textStyle="italic"
+        android:background="@color/white"/>
 
     <com.sothree.slidinguppanel.SlidingUpPanelLayout
         xmlns:sothree="http://schemas.android.com/apk/res-auto"
@@ -34,8 +25,8 @@
         android:gravity="bottom"
         sothree:umanoPanelHeight="68dp"
         sothree:umanoShadowHeight="4dp"
-        android:background="@color/primary_dark"
-        android:layout_below="@+id/parentFolderBar">
+        android:background="@color/body_bkg"
+        android:layout_below="@+id/pagetitle">
 
         <RelativeLayout
             android:layout_width="match_parent"
@@ -53,7 +44,6 @@
                 android:id="@+id/layerRecyclerView"
                 android:divider="@android:color/transparent"
                 android:dividerHeight="0dp"
-                android:background="@color/primary_dark"
                 android:layout_alignParentStart="true"
                 android:layout_alignParentTop="true"/>
 
@@ -68,5 +58,15 @@
         </RelativeLayout>
 
     </com.sothree.slidinguppanel.SlidingUpPanelLayout>
+
+    <Button
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/close"
+        android:id="@+id/close"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
+        android:background="@color/accent_blue"
+        android:textColor="@color/white"/>
 
 </RelativeLayout>

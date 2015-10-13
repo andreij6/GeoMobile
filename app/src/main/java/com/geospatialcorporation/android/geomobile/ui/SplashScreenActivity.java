@@ -9,8 +9,11 @@ import android.widget.Toast;
 
 import com.geospatialcorporation.android.geomobile.R;
 import com.geospatialcorporation.android.geomobile.application;
+import com.geospatialcorporation.android.geomobile.library.DI.Authentication.IGoogleAuthTokenService;
 import com.geospatialcorporation.android.geomobile.library.DI.ErrorHandler.Interfaces.IGeoErrorHandler;
 import com.geospatialcorporation.android.geomobile.library.DI.Map.Interfaces.ILayerManager;
+import com.geospatialcorporation.android.geomobile.library.DI.SharedPreferences.Interfaces.IGeoSharedPrefs;
+import com.geospatialcorporation.android.geomobile.library.constants.GeoSharedPreferences;
 import com.geospatialcorporation.android.geomobile.library.util.DeviceTypeUtil;
 
 public class SplashScreenActivity extends Activity {
@@ -18,6 +21,8 @@ public class SplashScreenActivity extends Activity {
     private static int SPLASH_TIME_OUT = 3000;
     IGeoErrorHandler mErrorHandler;
     ILayerManager mLayerManager;
+
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -30,10 +35,10 @@ public class SplashScreenActivity extends Activity {
             setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
         }
 
-        mErrorHandler = application.getErrorsComponent().provideErrorHandler();
+        //mErrorHandler = application.getErrorsComponent().provideErrorHandler();
         mLayerManager = application.getLayerManager();
 
-        Thread.setDefaultUncaughtExceptionHandler(mErrorHandler.UncaughtExceptionHandler());
+        //Thread.setDefaultUncaughtExceptionHandler(mErrorHandler.UncaughtExceptionHandler());
 
         new Handler().postDelayed(new Runnable() {
  
@@ -50,7 +55,5 @@ public class SplashScreenActivity extends Activity {
 
         mLayerManager.reset();
     }
-
-
 
 }

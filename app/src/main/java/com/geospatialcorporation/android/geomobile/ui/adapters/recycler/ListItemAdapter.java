@@ -22,6 +22,7 @@ import com.geospatialcorporation.android.geomobile.database.DataRepository.IFull
 import com.geospatialcorporation.android.geomobile.database.DataRepository.Implementations.Documents.DocumentsAppSource;
 import com.geospatialcorporation.android.geomobile.database.DataRepository.Implementations.Folders.FolderAppSource;
 import com.geospatialcorporation.android.geomobile.library.DI.TreeServices.Interfaces.ILayerTreeService;
+import com.geospatialcorporation.android.geomobile.library.helpers.DataHelper;
 import com.geospatialcorporation.android.geomobile.library.panelmanager.ISlidingPanelManager;
 import com.geospatialcorporation.android.geomobile.library.util.DeviceTypeUtil;
 import com.geospatialcorporation.android.geomobile.models.Folders.Folder;
@@ -42,6 +43,7 @@ import com.geospatialcorporation.android.geomobile.ui.fragments.dialogs.Download
 import com.geospatialcorporation.android.geomobile.models.ListItem;
 import com.geospatialcorporation.android.geomobile.ui.fragments.tree_fragments.tablet.TabLayerFragment;
 import com.geospatialcorporation.android.geomobile.ui.fragments.tree_fragments.tablet.TabLibraryFragment;
+import com.melnykov.fab.FloatingActionButton;
 
 import java.util.List;
 
@@ -77,7 +79,7 @@ public class ListItemAdapter extends GeoRecyclerAdapterBase<ListItemAdapter.Hold
         //endregion
 
         @Bind(R.id.itemNameTV) TextView itemName;
-        @Bind(R.id.itemImageView) ImageButton itemIcon;
+        @Bind(R.id.itemImageView) FloatingActionButton itemIcon;
         @Bind(R.id.infoImageView) ImageButton itemInfo;
         @Bind(R.id.listitem_container) RelativeLayout Container;
 
@@ -95,7 +97,8 @@ public class ListItemAdapter extends GeoRecyclerAdapterBase<ListItemAdapter.Hold
 
         public void bind(ListItem item) {
             mItem = item;
-            itemName.setText(item.getName());
+
+            itemName.setText(DataHelper.trimString(item.getName(), 15));
 
             itemIcon.setVisibility(View.VISIBLE);
             itemInfo.setVisibility(View.VISIBLE);

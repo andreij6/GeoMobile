@@ -1,5 +1,6 @@
 package com.geospatialcorporation.android.geomobile.library.DI.UIHelpers;
 
+import com.geospatialcorporation.android.geomobile.application;
 import com.geospatialcorporation.android.geomobile.library.DI.UIHelpers.Implementations.DialogHelpers.AttributeDialog;
 import com.geospatialcorporation.android.geomobile.library.DI.UIHelpers.Implementations.DialogHelpers.DocumentDialog;
 import com.geospatialcorporation.android.geomobile.library.DI.UIHelpers.Implementations.DialogHelpers.FolderDialog;
@@ -8,7 +9,7 @@ import com.geospatialcorporation.android.geomobile.library.DI.UIHelpers.Implemen
 import com.geospatialcorporation.android.geomobile.library.DI.UIHelpers.Implementations.DialogHelpers.SublayerDialog;
 import com.geospatialcorporation.android.geomobile.library.DI.UIHelpers.Implementations.GeoRefreshLayout;
 import com.geospatialcorporation.android.geomobile.library.DI.UIHelpers.Implementations.MainMenuHelper;
-import com.geospatialcorporation.android.geomobile.library.DI.UIHelpers.Implementations.MapStatusBarManager;
+import com.geospatialcorporation.android.geomobile.library.DI.UIHelpers.Implementations.StatusBarManager.MapStatusBarManager;
 import com.geospatialcorporation.android.geomobile.library.DI.UIHelpers.Interfaces.DialogHelpers.IAttributeDialog;
 import com.geospatialcorporation.android.geomobile.library.DI.UIHelpers.Interfaces.DialogHelpers.IDocumentDialog;
 import com.geospatialcorporation.android.geomobile.library.DI.UIHelpers.Interfaces.DialogHelpers.IFolderDialog;
@@ -52,6 +53,8 @@ public class UIHelperModule {
     IMainMenuHelper provideMainMenuHelper(){ return new MainMenuHelper(); }
 
     @Provides @Singleton
-    IMapStatusBarManager provideMapStatusBarManager(){ return new MapStatusBarManager(); }
+    IMapStatusBarManager provideMapStatusBarManager(){
+            return new MapStatusBarManager();
+    }
 
 }

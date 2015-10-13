@@ -42,6 +42,12 @@ public class GoogleAuthTokenService implements IGoogleAuthTokenService {
     private class GetAndUseAuthTokenInAsyncTask extends AsyncTask<Object, Void, Boolean> {
 
         @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+            ProgressHelper.show();
+        }
+
+        @Override
         protected Boolean doInBackground(Object[] params) {
             getAndUseAuthTokenBlocking();
             return true;

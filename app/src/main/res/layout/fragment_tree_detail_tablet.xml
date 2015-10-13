@@ -3,52 +3,37 @@
               android:layout_width="match_parent"
               android:layout_height="match_parent">
 
-    <LinearLayout
-        android:id="@+id/actionBar"
-        android:orientation="horizontal"
+    <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_alignParentTop="true"
-        android:layout_alignParentStart="true"
-        android:background="@color/primary_light"
-        android:paddingTop="5dp"
-        android:paddingBottom="5dp">
+        android:layout_height="56dp"
+        android:background="@color/white"
+        android:layout_gravity="center_horizontal"
+        android:layout_centerHorizontal="true"
+        android:id="@+id/actionBar">
 
-        <ImageView
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:id="@+id/goBackIV"
-            android:src="@drawable/ic_chevron_left_white_24dp"
-            android:layout_weight="1"/>
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
-            android:textAppearance="?android:attr/textAppearanceLarge"
-            android:text=""
-            android:textStyle="bold"
-            android:id="@+id/parentFolderTV"
-            android:layout_weight="3"/>
+            android:textAppearance="?android:attr/textAppearanceMedium"
+            android:id="@+id/title"
+            android:text="Account"
+            android:layout_alignParentStart="true"
+            android:gravity="center_vertical"
+            android:textColor="@color/primary_text"
+            android:layout_marginLeft="72dp"
+            android:textStyle="italic"/>
 
         <ImageView
             android:layout_width="36dp"
-            android:layout_height="36dp"
+            android:layout_height="match_parent"
             android:id="@+id/optionsIV"
-            android:src="@drawable/ic_dropdown"
+            android:src="@drawable/ic_menu_down_grey600_36dp"
             android:layout_gravity="center_vertical"
-            android:padding="2dp"
-            android:layout_weight="1"/>
+            android:layout_alignParentEnd="true"
+            android:layout_marginRight="8dp"/>
 
-        <ImageView
-            android:layout_width="36dp"
-            android:layout_height="36dp"
-            android:id="@+id/close"
-            android:src="@drawable/ic_close_white_36dp"
-            android:layout_gravity="center_vertical"
-            android:padding="2dp"
-            android:layout_weight="1"/>
-
-    </LinearLayout>
+    </RelativeLayout>
 
     <com.sothree.slidinguppanel.SlidingUpPanelLayout
         xmlns:sothree="http://schemas.android.com/apk/res-auto"
@@ -63,13 +48,16 @@
 
         <RelativeLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent">
+            android:layout_height="match_parent"
+            android:paddingLeft="8dp"
+            android:paddingRight="8dp"
+            android:background="@color/body_bkg">
 
             <android.support.v4.app.FragmentTabHost
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:id="@+id/tabHost"
-                android:layout_alignParentTop="true"
+                android:layout_marginTop="32dp"
                 android:layout_centerHorizontal="true">
 
                 <LinearLayout
@@ -81,9 +69,8 @@
                         android:id="@android:id/tabs"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:background="@color/primary_dark"
-                        android:layout_alignParentBottom="true"
-                        >
+                        android:layout_alignParentBottom="true">
+
                     </TabWidget>
 
                     <FrameLayout
@@ -104,5 +91,15 @@
         </RelativeLayout>
 
     </com.sothree.slidinguppanel.SlidingUpPanelLayout>
+
+    <Button
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/close"
+        android:id="@+id/close"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
+        android:background="@color/accent_blue"
+        android:textColor="@color/white"/>
 
 </RelativeLayout>

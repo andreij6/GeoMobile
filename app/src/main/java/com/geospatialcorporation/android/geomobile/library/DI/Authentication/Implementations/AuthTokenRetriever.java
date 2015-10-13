@@ -17,7 +17,10 @@ import com.geospatialcorporation.android.geomobile.ui.SubscriptionSelectorActivi
 import com.geospatialcorporation.android.geomobile.ui.GoogleApiActivity;
 import com.geospatialcorporation.android.geomobile.ui.MainActivity;
 
+import java.util.List;
+
 import retrofit.RetrofitError;
+import retrofit.client.Header;
 import retrofit.client.Response;
 
 public class AuthTokenRetriever {
@@ -45,6 +48,14 @@ public class AuthTokenRetriever {
         protected String doInBackground(String... urls) {
             try {
                 Response response = mLoginService.google(urls[0]);
+
+                List<Header> headers = response.getHeaders();
+
+                for(Header header : headers) {
+                    Log.d(TAG, "Header " + header.getName());
+                    Log.d(TAG, header.getName() + " Value " + header.getValue());
+                }
+
                 return response.getBody().toString();
 
             } catch (Exception e) {

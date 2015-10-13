@@ -18,7 +18,8 @@
             android:layout_width="match_parent"
             android:layout_height="20dp"
             android:gravity="center_vertical"
-            android:textColor="@android:color/black"
+            android:textColor="@color/primary_text"
+            android:textStyle="italic"
             android:textSize="14sp"
             android:paddingTop="5sp"
             android:paddingLeft="5sp"
@@ -29,7 +30,8 @@
             android:layout_height="wrap_content"
             android:textAppearance="?android:attr/textAppearanceLarge"
             android:id="@+id/clientNameLabel"
-            android:textColor="@android:color/black"
+            android:textColor="@color/primary_text"
+            android:textStyle="bold"
             android:layout_below="@+id/clientTypeLabel"
             android:layout_centerHorizontal="true"/>
 
@@ -38,9 +40,11 @@
             android:layout_height="wrap_content"
             android:gravity="center_horizontal"
             android:text="@string/impersonate"
+            android:textAllCaps="true"
             android:id="@+id/impersonate"
-            android:textColor="@android:color/black"
+            android:textColor="@color/accent_blue"
             android:layout_below="@+id/clientNameLabel"
+            android:textStyle="bold"
             android:layout_alignParentStart="true"
             android:layout_marginTop="30dp"
             android:background="?android:attr/selectableItemBackground"/>

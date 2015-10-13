@@ -12,19 +12,30 @@ import com.geospatialcorporation.android.geomobile.library.services.UserAccountP
 import com.geospatialcorporation.android.geomobile.library.services.UserAccountProccessor.UserAccountProcessor;
 import com.geospatialcorporation.android.geomobile.models.UserAccount;
 import com.geospatialcorporation.android.geomobile.ui.Interfaces.IAccountFragment;
+import com.geospatialcorporation.android.geomobile.ui.MainTabletActivity;
 import com.geospatialcorporation.android.geomobile.ui.fragments.TabGeoViewFragmentBase;
 
 import butterknife.Bind;
+import butterknife.OnClick;
 
 public class TabAccountFragment extends TabGeoViewFragmentBase implements IAccountFragment {
 
     @Bind(R.id.firstName) TextView FirstName;
     @Bind(R.id.lastName) TextView LastName;
     @Bind(R.id.email) TextView Email;
+    @Bind(R.id.emailLabel) TextView EmailLabel;
     @Bind(R.id.cellPhone) TextView CellPhone;
+    @Bind(R.id.cellPhoneLabel) TextView CellPhoneLabel;
     @Bind(R.id.officePhone) TextView OfficePhone;
+    @Bind(R.id.officePhoneLabel) TextView OfficePhoneLabel;
 
     IUserAccountProcessor mProcessor;
+
+    @SuppressWarnings("unused")
+    @OnClick(R.id.close)
+    public void close(){
+        ((MainTabletActivity)getActivity()).closeInfoFragment();
+    }
 
     @Nullable
     @Override
@@ -47,6 +58,6 @@ public class TabAccountFragment extends TabGeoViewFragmentBase implements IAccou
             mProcessor = new UserAccountProcessor();
         }
 
-        mProcessor.setValues(FirstName, LastName, Email, CellPhone, OfficePhone);
+        mProcessor.setValues(FirstName, LastName, Email, CellPhone, OfficePhone, CellPhoneLabel, OfficePhoneLabel, EmailLabel);
     }
 }

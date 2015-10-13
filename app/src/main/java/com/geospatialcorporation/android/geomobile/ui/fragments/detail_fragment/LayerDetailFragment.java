@@ -1,12 +1,15 @@
 package com.geospatialcorporation.android.geomobile.ui.fragments.detail_fragment;
 
+import android.content.Context;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTabHost;
+import android.support.v4.content.ContextCompat;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TabHost;
 import android.widget.TextView;
 
@@ -44,9 +47,10 @@ public class LayerDetailFragment extends ItemDetailFragment<Layer>
     View mView;
 
     @OnClick(R.id.goBackIV)
-    public void showNavigation(){
-        getFragmentManager().popBackStack();
-    }
+    public void showNavigation(){ getFragmentManager().popBackStack(); }
+
+    @OnClick(R.id.backFolder)
+    public void goUp(){ getChildFragmentManager().popBackStack(); }
 
     @OnClick(R.id.goToMapIV)
     public void goToMapIV(){
@@ -61,6 +65,7 @@ public class LayerDetailFragment extends ItemDetailFragment<Layer>
 
     @OnClick(R.id.optionsIV)
     public void bringUpOptions(){
+
         if(mPanelManager.getIsOpen()){
             closePanel();
         } else {
@@ -75,6 +80,7 @@ public class LayerDetailFragment extends ItemDetailFragment<Layer>
             mPanelManager.halfAnchor();
             mPanelManager.touch(false);
         }
+
     }
 
 
@@ -95,20 +101,25 @@ public class LayerDetailFragment extends ItemDetailFragment<Layer>
 
         mTabHost.setup(getActivity(), getChildFragmentManager(), android.R.id.tabcontent);
 
-        mTabHost.addTab(mTabHost.newTabSpec(SUBLAYERS).setIndicator(SUBLAYERS), SublayersTab.class, getArguments());
-        mTabHost.addTab(mTabHost.newTabSpec(ATTRIBUTES).setIndicator(ATTRIBUTES), AttributeLayoutTab.class, getArguments());
-        mTabHost.addTab(mTabHost.newTabSpec(DETAILS).setIndicator(DETAILS), DetailsTab.class, getArguments());
+        mTabHost.addTab(
+                mTabHost.newTabSpec(SUBLAYERS)
+                .setIndicator(createTabView(mTabHost.getContext(), R.drawable.sublayers_selector)),
+                SublayersTab.class, getArguments());
+
+        mTabHost.addTab(
+                mTabHost.newTabSpec(ATTRIBUTES)
+                        .setIndicator(createTabView(mTabHost.getContext(), R.drawable.attr_selector)),
+                AttributeLayoutTab.class, getArguments());
+        mTabHost.addTab(
+                mTabHost.newTabSpec(DETAILS)
+                        .setIndicator(createTabView(mTabHost.getContext(), R.drawable.details_selector)),
+                DetailsTab.class, getArguments());
 
         mTabHost.setCurrentTab(0);
 
-        for (int i = 0; i < mTabHost.getTabWidget().getTabCount(); i++) {
-            ViewGroup vg = (ViewGroup) mTabHost.getTabWidget().getChildAt(i);
-            TextView tv = (TextView) vg.getChildAt(1);
-            tv.setTextColor(getResources().getColor(R.color.white));
-        }
-
         return mView;
     }
+
 
     @Override
     protected void handleArguments() {

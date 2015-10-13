@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v4.content.ContextCompat;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -30,6 +31,7 @@ import com.geospatialcorporation.android.geomobile.ui.Interfaces.IPanelFragmentC
 import com.geospatialcorporation.android.geomobile.ui.Interfaces.IPostExecuter;
 import com.geospatialcorporation.android.geomobile.ui.MainTabletActivity;
 import com.geospatialcorporation.android.geomobile.ui.fragments.TabGeoViewFragmentBase;
+import com.geospatialcorporation.android.geomobile.ui.fragments.detail_fragment.tablet.TabDocumentFolderDetailFragment;
 import com.geospatialcorporation.android.geomobile.ui.fragments.panel_fragments.tree_fragment_panels.tablet.TabletLibraryFolderPanelFragment;
 import com.sothree.slidinguppanel.SlidingUpPanelLayout;
 
@@ -52,14 +54,12 @@ public class TabLibraryFragment extends TabGeoViewFragmentBase
     @Bind(R.id.swipe_refresh_layout) SwipeRefreshLayout mSwipeRefreshLayout;
     @Bind(R.id.libraryitem_recyclerView) RecyclerView mRecyclerView;
 
-    @Bind(R.id.parentFolderBar) LinearLayout mParentFolderNav;
-    @Bind(R.id.parentFolderTV) TextView mParentFolderTV;
     @Bind(R.id.goBackIV) ImageView mGoBack;
     @Bind(R.id.libraryOptionsIV) ImageView mOptions;
-    @Bind(R.id.close) ImageView mClose;
+    @Bind(R.id.title) TextView mTitle;
 
     @SuppressWarnings("unused")
-    @OnClick(R.id.parentFolderBar)
+    @OnClick(R.id.goBackIV)
     public void goUpOne(){
 
         Fragment fragment = new TabLibraryFragment();
@@ -75,16 +75,37 @@ public class TabLibraryFragment extends TabGeoViewFragmentBase
                 .commit();
     }
 
-    @SuppressWarnings("unused")
-    @OnClick(R.id.close)
-    public void close(){
-        ((MainTabletActivity)getActivity()).closeInfoFragment();
+    @OnClick(R.id.folderInformation)
+    public void info(){
+        goToFolderDetail();
     }
 
-    @SuppressWarnings("unused")
+    @OnClick(R.id.title)
+    public void titleClick(){
+        goToFolderDetail();
+    }
+
+    protected void goToFolderDetail() {
+        Fragment f = new TabDocumentFolderDetailFragment();
+
+        f.setArguments(mCurrentFolder.toBundle());
+
+        getFragmentManager()
+                .beginTransaction()
+                .addToBackStack(null)
+                .replace(R.id.info_frame, f)
+                .commit();
+    }
+
+        @SuppressWarnings("unused")
     @OnClick(R.id.libraryOptionsIV)
     public void openOptions(){
         mProcessor.onOptionsButtonPressed(mCurrentFolder, getFragmentManager(), new TabletLibraryFolderPanelFragment());
+    }
+
+    @OnClick(R.id.close)
+    public void closeFragment(){
+        ((MainTabletActivity)getActivity()).closeInfoFragment();
     }
 
     @Nullable
@@ -149,12 +170,12 @@ public class TabLibraryFragment extends TabGeoViewFragmentBase
 
         if(mCurrentFolder.getParent() != null){
             //has a folder to navigate up to
-            mParentFolderNav.setVisibility(View.VISIBLE);
             mGoBack.setVisibility(View.VISIBLE);
+            mGoBack.setImageDrawable(ContextCompat.getDrawable(mContext, R.drawable.ic_chevron_left_grey600_36dp));
 
-            mParentFolderTV.setText(mCurrentFolder.getParent().getProperName());
+            mTitle.setText(mCurrentFolder.getProperName());
         } else {
-            mParentFolderTV.setText(mCurrentFolder.getName());
+            mTitle.setText(mCurrentFolder.getProperName());
         }
 
         List<ListItem> data = mProcessor.getListItemData(mCurrentFolder);

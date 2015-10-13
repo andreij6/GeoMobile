@@ -39,6 +39,7 @@ import com.geospatialcorporation.android.geomobile.ui.adapters.recycler.base.Geo
 import com.geospatialcorporation.android.geomobile.ui.adapters.recycler.base.GeoRecyclerAdapterBase;
 import com.geospatialcorporation.android.geomobile.ui.fragments.GoogleMapFragment;
 import com.geospatialcorporation.android.geomobile.ui.fragments.detail_fragment.LayerDetailFragment;
+import com.geospatialcorporation.android.geomobile.ui.fragments.detail_fragment.tablet.TabLayerFolderDetailFragment;
 import com.geospatialcorporation.android.geomobile.ui.fragments.detail_fragment.tablet.TabletLayerDetailFragment;
 import com.geospatialcorporation.android.geomobile.ui.fragments.panel_fragments.tree_fragment_panels.LayerFolderPanelFragment;
 import com.geospatialcorporation.android.geomobile.ui.fragments.panel_fragments.tree_fragment_panels.tablet.TabletLayerFolderPanelFragment;
@@ -108,12 +109,12 @@ public class TabletLegendAdapter extends GeoRecyclerAdapterBase<TabletLegendAdap
                 gotoSublayer.setVisibility(View.VISIBLE);
                 geomIV.setVisibility(View.VISIBLE);
                 mFolderIcon.setVisibility(View.GONE);
-                gotoSublayer.setImageDrawable(ContextCompat.getDrawable(mContext, R.drawable.ic_information_outline_white_18dp));
+                gotoSublayer.setImageDrawable(ContextCompat.getDrawable(mContext, R.drawable.ic_information_outline_grey600_18dp));
 
                 mLayerName.setTextAppearance(mContext, android.R.style.TextAppearance_DeviceDefault_Medium);
-                mLayerName.setTextColor(mContext.getResources().getColor(R.color.white));
+                mLayerName.setTextColor(mContext.getResources().getColor(R.color.primary_text));
 
-                mView.setBackgroundColor(mContext.getResources().getColor(R.color.primary));
+                mView.setBackgroundColor(mContext.getResources().getColor(R.color.white));
 
                 if (!mLegendLayer.isIconSet()) {
                     mLegendLayer.setLegendIcon(getDrawable(mLayer.getGeometryTypeCodeId()));
@@ -136,20 +137,23 @@ public class TabletLegendAdapter extends GeoRecyclerAdapterBase<TabletLegendAdap
             } else {
                 mFolder = llayer.getFolder();
 
-                mView.setBackgroundColor(mContext.getResources().getColor(R.color.primary_light));
+                mView.setBackgroundColor(mContext.getResources().getColor(R.color.body_bkg));
 
                 mLayerName.setText(mFolder.getProperName().toUpperCase());
 
                 mLayerName.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 11);
-                mLayerName.setTextColor(mContext.getResources().getColor(R.color.primary_dark));
+                mLayerName.setTextColor(mContext.getResources().getColor(R.color.primary_text));
                 mLayerName.setTypeface(null, Typeface.BOLD);
 
-                mLayerName.setOnClickListener(ShowLayerFolderOptions);
+                mFolderIcon.setImageDrawable(ContextCompat.getDrawable(mContext, R.drawable.ic_information_outline_grey600_18dp));
+                mFolderIcon.setOnClickListener(ShowLayerFolderDetails);
+                mLayerName.setOnClickListener(ShowLayerFolderDetails);
+
                 gotoSublayer.setOnClickListener(ShowLayerFolderOptions);
 
                 isVisibleCB.setVisibility(View.INVISIBLE);
                 geomIV.setVisibility(View.INVISIBLE);
-                gotoSublayer.setImageDrawable(ContextCompat.getDrawable(mContext, R.drawable.ic_plus_circle_outline_white_18dp));
+                gotoSublayer.setImageDrawable(ContextCompat.getDrawable(mContext, R.drawable.ic_plus_circle_outline_grey600_18dp));
                 gotoSublayer.setBackgroundColor(Color.TRANSPARENT);
                 mFolderIcon.setVisibility(View.VISIBLE);
             }
@@ -168,8 +172,6 @@ public class TabletLegendAdapter extends GeoRecyclerAdapterBase<TabletLegendAdap
 
             Boolean alreadyShowing = false;
 
-            Toast.makeText(mContext, alreadyShowing + "", Toast.LENGTH_LONG).show();
-
             if(alwaysShowLayers){
                 alreadyShowing = isVisibleCB.isChecked();
                 isVisibleCB.setChecked(true);
@@ -184,8 +186,6 @@ public class TabletLegendAdapter extends GeoRecyclerAdapterBase<TabletLegendAdap
                     isVisibleCB.setEnabled(false);
 
                     mAnalytics.trackClick(new GoogleAnalyticEvent().ShowLayer());
-
-                    Toast.makeText(mContext, "Mapping" + mLegendLayer.getLayer().getName(), Toast.LENGTH_LONG).show();
 
                     //set Layer Loading
                     //mMapStatusBarManager.setLayerMessage(mLayer.getName());
@@ -256,6 +256,21 @@ public class TabletLegendAdapter extends GeoRecyclerAdapterBase<TabletLegendAdap
             }
         };
 
+        protected View.OnClickListener ShowLayerFolderDetails = new View.OnClickListener(){
+            @Override
+            public void onClick(View v) {
+                Fragment frag = new TabLayerFolderDetailFragment();
+                FragmentManager fm = ((MainTabletActivity)mContext).getSupportFragmentManager();
+
+                frag.setArguments(mFolder.toBundle());
+
+                fm.beginTransaction()
+                        .replace(R.id.info_frame, frag)
+                        .addToBackStack(null)
+                        .commit();
+            }
+        };
+
         private View.OnClickListener GoToSublayer = new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -296,20 +311,20 @@ public class TabletLegendAdapter extends GeoRecyclerAdapterBase<TabletLegendAdap
         }
 
         protected Drawable getDrawable(Integer geometryTypeCodeId) {
-            Drawable d = ContextCompat.getDrawable(mContext,R.drawable.ic_window_minimize_white_18dp);
+            Drawable d = ContextCompat.getDrawable(mContext,R.drawable.ic_window_minimize_grey600_18dp);
 
             switch (geometryTypeCodeId) {
                 case GeometryTypeCodes.Line:
                 case GeometryTypeCodes.MultiLine:
-                    d = ContextCompat.getDrawable(mContext,R.drawable.ic_window_minimize_white_18dp);
+                    d = ContextCompat.getDrawable(mContext,R.drawable.ic_window_minimize_grey600_18dp);
                     break;
                 case GeometryTypeCodes.Point:
                 case GeometryTypeCodes.MultiPoint:
-                    d = ContextCompat.getDrawable(mContext,R.drawable.ic_checkbox_blank_circle_white_18dp);
+                    d = ContextCompat.getDrawable(mContext,R.drawable.ic_checkbox_blank_circle_grey600_18dp);
                     break;
                 case GeometryTypeCodes.Polygon:
                 case GeometryTypeCodes.MultiPolygon:
-                    d = ContextCompat.getDrawable(mContext,R.drawable.ic_hexagon_outline_white_18dp);
+                    d = ContextCompat.getDrawable(mContext,R.drawable.ic_hexagon_outline_grey600_18dp);
                     break;
                 default:
                     break;

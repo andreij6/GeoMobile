@@ -1,6 +1,9 @@
 package com.geospatialcorporation.android.geomobile.library.DI.Analytics.Interfaces;
 
+import android.app.Activity;
+
 import com.geospatialcorporation.android.geomobile.library.DI.Analytics.Models.AnalyticEvent;
+import com.geospatialcorporation.android.geomobile.ui.MainActivity;
 
 public interface IGeoAnalytics<T extends  AnalyticEvent> {
 
@@ -9,4 +12,6 @@ public interface IGeoAnalytics<T extends  AnalyticEvent> {
     void trackScreen(T event);
 
     Thread.UncaughtExceptionHandler getExceptionReporter(Thread.UncaughtExceptionHandler defaultHandler);
+
+    void onStop(Activity activity);
 }

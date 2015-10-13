@@ -102,12 +102,12 @@ public class LegendLayerAdapter extends GeoRecyclerAdapterBase<LegendLayerAdapte
                 geomIV.setVisibility(View.VISIBLE);
                 mFolderIcon.setVisibility(View.GONE);
                 //gotoSublayer.setBackgroundColor(mContext.getResources().getColor(R.color.accent));
-                gotoSublayer.setImageDrawable(ContextCompat.getDrawable(mContext, R.drawable.ic_information_outline_white_18dp));
+                gotoSublayer.setImageDrawable(ContextCompat.getDrawable(mContext, R.drawable.ic_information_outline_grey600_18dp));
 
                 mLayerName.setTextAppearance(mContext, android.R.style.TextAppearance_DeviceDefault_Medium);
-                mLayerName.setTextColor(mContext.getResources().getColor(R.color.white));
+                mLayerName.setTextColor(mContext.getResources().getColor(R.color.primary_text));
 
-                mView.setBackgroundColor(mContext.getResources().getColor(R.color.primary));
+                mView.setBackgroundColor(mContext.getResources().getColor(R.color.white));
 
                 if (!mLegendLayer.isIconSet()) {
                     mLegendLayer.setLegendIcon(getDrawable(mLayer.getGeometryTypeCodeId()));
@@ -130,21 +130,20 @@ public class LegendLayerAdapter extends GeoRecyclerAdapterBase<LegendLayerAdapte
             } else {
                 mFolder = llayer.getFolder();
 
-                mView.setBackgroundColor(mContext.getResources().getColor(R.color.primary_light));
+                mView.setBackgroundColor(mContext.getResources().getColor(R.color.body_bkg));
 
                 mLayerName.setText(mFolder.getProperName().toUpperCase());
-
                 mLayerName.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 11);
-                mLayerName.setTextColor(mContext.getResources().getColor(R.color.primary_dark));
+                mLayerName.setTextColor(mContext.getResources().getColor(R.color.primary_text));
                 mLayerName.setTypeface(null, Typeface.BOLD);
-
                 mLayerName.setOnClickListener(GoToLayerFragment);
+
                 gotoSublayer.setOnClickListener(GoToLayerFragment);
 
                 isVisibleCB.setVisibility(View.INVISIBLE);
                 geomIV.setVisibility(View.INVISIBLE);
                 //mProgressBar.setVisibility(View.GONE);
-                gotoSublayer.setImageDrawable(ContextCompat.getDrawable(mContext, R.drawable.ic_information_outline_black_18dp));
+                gotoSublayer.setImageDrawable(ContextCompat.getDrawable(mContext, R.drawable.ic_information_outline_grey600_18dp));
                 gotoSublayer.setBackgroundColor(Color.TRANSPARENT);
                 mFolderIcon.setVisibility(View.VISIBLE);
             }
@@ -293,20 +292,20 @@ public class LegendLayerAdapter extends GeoRecyclerAdapterBase<LegendLayerAdapte
         }
 
         protected Drawable getDrawable(Integer geometryTypeCodeId) {
-            Drawable d = ContextCompat.getDrawable(mContext,R.drawable.ic_window_minimize_white_18dp);
+            Drawable d = ContextCompat.getDrawable(mContext,R.drawable.ic_window_minimize_grey600_18dp);
 
             switch (geometryTypeCodeId) {
                 case GeometryTypeCodes.Line:
                 case GeometryTypeCodes.MultiLine:
-                    d = ContextCompat.getDrawable(mContext,R.drawable.ic_window_minimize_white_18dp);
+                    d = ContextCompat.getDrawable(mContext,R.drawable.ic_window_minimize_grey600_18dp);
                     break;
                 case GeometryTypeCodes.Point:
                 case GeometryTypeCodes.MultiPoint:
-                    d = ContextCompat.getDrawable(mContext,R.drawable.ic_checkbox_blank_circle_white_18dp);
+                    d = ContextCompat.getDrawable(mContext,R.drawable.ic_checkbox_blank_circle_grey600_18dp);
                     break;
                 case GeometryTypeCodes.Polygon:
                 case GeometryTypeCodes.MultiPolygon:
-                    d = ContextCompat.getDrawable(mContext,R.drawable.ic_hexagon_outline_white_18dp);
+                    d = ContextCompat.getDrawable(mContext,R.drawable.ic_hexagon_outline_grey600_18dp);
                     break;
                 default:
                     break;

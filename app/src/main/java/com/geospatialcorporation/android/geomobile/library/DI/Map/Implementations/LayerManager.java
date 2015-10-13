@@ -4,13 +4,10 @@ import android.util.Log;
 
 import com.geospatialcorporation.android.geomobile.application;
 import com.geospatialcorporation.android.geomobile.library.DI.Map.Interfaces.ILayerManager;
-import com.geospatialcorporation.android.geomobile.library.DI.UIHelpers.Implementations.MapStatusBarManager;
 import com.geospatialcorporation.android.geomobile.library.DI.UIHelpers.Interfaces.IMapStatusBarManager;
 import com.geospatialcorporation.android.geomobile.library.constants.GeometryTypeCodes;
 import com.geospatialcorporation.android.geomobile.library.map.layerManager.IOptionsManager;
-import com.geospatialcorporation.android.geomobile.library.map.layerManager.implementations.ClusterExtentMarkerOptionsManager;
 import com.geospatialcorporation.android.geomobile.library.map.layerManager.implementations.ExtentMarkerOptionsManager;
-import com.geospatialcorporation.android.geomobile.library.map.layerManager.implementations.MarkerOptionsManager;
 import com.geospatialcorporation.android.geomobile.library.map.layerManager.implementations.PolygonOptionsManager;
 import com.geospatialcorporation.android.geomobile.library.map.layerManager.implementations.PolylineOptionsManager;
 import com.geospatialcorporation.android.geomobile.models.Layers.Extent;

@@ -120,6 +120,7 @@ public class GoogleApiActivity extends Activity implements
         if (mGoogleApiClient.isConnected()) {
             mGoogleApiClient.disconnect();
         }
+        mAnalytics.onStop(this);
     }
 
     public GoogleAuthTokenService.Parameters getGoogleAuthParmaters(String accountname, MaterialDialog helper){

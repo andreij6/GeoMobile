@@ -1,12 +1,17 @@
 package com.geospatialcorporation.android.geomobile.ui.fragments.dialogs;
 
+import android.content.Context;
+import android.support.v4.content.ContextCompat;
 import android.view.KeyEvent;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.view.inputmethod.EditorInfo;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.geospatialcorporation.android.geomobile.R;
 import com.geospatialcorporation.android.geomobile.application;
 import com.geospatialcorporation.android.geomobile.library.DI.TreeServices.Interfaces.IDocumentTreeService;
 import com.geospatialcorporation.android.geomobile.library.DI.TreeServices.Interfaces.IFolderTreeService;
@@ -38,6 +43,7 @@ public class ItemDetailFragment<ITreeEntity> extends GeoViewFragmentBase {
     protected void handleArguments(){
         Toast.makeText(getActivity(), "Override Me", Toast.LENGTH_LONG).show();
     }
+    /*
 
     protected void SetupUI(){
         Toast.makeText(getActivity(), "Override Me", Toast.LENGTH_LONG).show();
@@ -89,8 +95,18 @@ public class ItemDetailFragment<ITreeEntity> extends GeoViewFragmentBase {
         });
 
     }
+    */
 
+    protected View createTabView(Context context, int imageSelector) {
 
+        View view = LayoutInflater.from(context).inflate(R.layout.tabs_bg, null);
+
+        ImageView ti = (ImageView) view.findViewById(R.id.tabImage);
+
+        ti.setImageDrawable(ContextCompat.getDrawable(context, imageSelector));
+
+        return view;
+    }
 
 
 }

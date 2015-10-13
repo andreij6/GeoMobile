@@ -63,6 +63,7 @@ import com.geospatialcorporation.android.geomobile.models.Folders.Folder;
 import com.geospatialcorporation.android.geomobile.models.Layers.Extent;
 import com.geospatialcorporation.android.geomobile.models.Query.map.response.featurewindow.ParcelableFeatureQueryResponse;
 import com.geospatialcorporation.android.geomobile.ui.Interfaces.IFeatureWindowCtrl;
+import com.geospatialcorporation.android.geomobile.ui.Interfaces.IMapStatusCtrl;
 import com.geospatialcorporation.android.geomobile.ui.Interfaces.IViewModeListener;
 import com.geospatialcorporation.android.geomobile.ui.MainActivity;
 import com.geospatialcorporation.android.geomobile.ui.fragments.panel_fragments.map_fragment_panels.FeatureWindowPanelFragment;
@@ -109,7 +110,7 @@ public class GoogleMapFragment extends GeoViewFragmentBase implements
         GoogleApiClient.OnConnectionFailedListener,
         LocationListener,
         GoogleMap.OnMapLoadedCallback,
-        IFeatureWindowCtrl
+        IFeatureWindowCtrl, IMapStatusCtrl
 {
     private static final String TAG = GoogleMapFragment.class.getSimpleName();
     private final static int CONNECTION_FAILURE_RESOLUTION_REQUEST = 9000;
@@ -345,7 +346,9 @@ public class GoogleMapFragment extends GeoViewFragmentBase implements
         super.onDestroy();
         LifeCycleLogger("onDestroy");
         mLayerManager.clearVisibleLayers();
-        mMapView.onDestroy();
+        if(mMapView != null) {
+            mMapView.onDestroy();
+        }
     }
 
     @Override
@@ -381,8 +384,13 @@ public class GoogleMapFragment extends GeoViewFragmentBase implements
     public void onPause(){
         super.onPause();
         LifeCycleLogger("onPause");
-        mMapView.onPause();
-        mLocationClient.disconnect();
+        if(mMapView != null) {
+            mMapView.onPause();
+        }
+
+        if(mLocationClient != null) {
+            mLocationClient.disconnect();
+        }
     }
 
     @Override
@@ -460,8 +468,6 @@ public class GoogleMapFragment extends GeoViewFragmentBase implements
     //            break;
     //    }
     //}
-
-
 
     public void resetViewMode() {
         mViewMode = null;

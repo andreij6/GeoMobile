@@ -78,11 +78,18 @@ public class FolderTreeService implements IFolderTreeService {
         FolderCreateRequest createRequest = new FolderCreateRequest(name, parentFolderId);
 
         mFolderService.createFolder(createRequest, new RequestCallback<>(new FolderModifiedListener()));
+
     }
 
     @Override
     public void delete(int folderId) {
-        mFolderService.remove(folderId, new RequestCallback<>(new FolderModifiedListener()));
+        if(AuthorizedToRename(folderId)) {
+            mFolderService.remove(folderId, new RequestCallback<>(new FolderModifiedListener()));
+
+            mFolderRepo.Remove(folderId);
+        } else {
+            Toast.makeText(application.getAppContext(), "Not Authorized to Delte this Folder", Toast.LENGTH_LONG).show();
+        }
     }
 
     @Override
@@ -90,6 +97,11 @@ public class FolderTreeService implements IFolderTreeService {
         if(AuthorizedToRename(folderId)) {
 
             mFolderService.rename(folderId, new RenameRequest(name), new RequestCallback<>(new FolderModifiedListener()));
+
+            Folder folder = mFolderRepo.getById(folderId);
+            folder.setName(name);
+
+            mFolderRepo.update(folder, folderId);
         } else {
             Toast.makeText(application.getAppContext(), "Not Authorized to Rename Layer", Toast.LENGTH_LONG).show();
         }
@@ -109,6 +121,10 @@ public class FolderTreeService implements IFolderTreeService {
     //region Helpers
     protected boolean AuthorizedToRename(int id) {
         Folder f = mFolderRepo.getById(id);
+
+        if(f == null){
+            return false;
+        }
 
         return !(f.getIsFixed() || f.getIsImportFolder());
     }

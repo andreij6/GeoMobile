@@ -11,6 +11,7 @@ import com.geospatialcorporation.android.geomobile.application;
 import com.geospatialcorporation.android.geomobile.library.constants.GeoPanel;
 import com.geospatialcorporation.android.geomobile.library.panelmanager.ISlidingPanelManager;
 import com.geospatialcorporation.android.geomobile.library.panelmanager.PanelManager;
+import com.geospatialcorporation.android.geomobile.library.util.TabHostUtil;
 import com.geospatialcorporation.android.geomobile.models.Layers.Layer;
 import com.geospatialcorporation.android.geomobile.ui.fragments.detail_fragment.layer_tabs.AttributeLayoutTab;
 import com.geospatialcorporation.android.geomobile.ui.fragments.detail_fragment.layer_tabs.DetailsTab;
@@ -60,17 +61,12 @@ public class LayerDetailCommons implements ILayerDetailCommons {
             detailsTabClass = DetailsTab.class;
         }
 
-        tabHost.addTab(tabHost.newTabSpec(SUBLAYERS).setIndicator(SUBLAYERS), sublayerTabClass, args);
-        tabHost.addTab(tabHost.newTabSpec(ATTRIBUTES).setIndicator(ATTRIBUTES), attributeLayoutClass, args);
-        tabHost.addTab(tabHost.newTabSpec(DETAILS).setIndicator(DETAILS), detailsTabClass, args);
+        tabHost.addTab(tabHost.newTabSpec(SUBLAYERS).setIndicator(TabHostUtil.createTabView(tabHost.getContext(), R.drawable.sublayers_selector)), sublayerTabClass, args);
+        tabHost.addTab(tabHost.newTabSpec(ATTRIBUTES).setIndicator(TabHostUtil.createTabView(tabHost.getContext(), R.drawable.attr_selector)), attributeLayoutClass, args);
+        tabHost.addTab(tabHost.newTabSpec(DETAILS).setIndicator(TabHostUtil.createTabView(tabHost.getContext(), R.drawable.details_selector)), detailsTabClass, args);
 
         tabHost.setCurrentTab(0);
 
-        for (int i = 0; i < tabHost.getTabWidget().getTabCount(); i++) {
-            ViewGroup vg = (ViewGroup) tabHost.getTabWidget().getChildAt(i);
-            TextView tv = (TextView) vg.getChildAt(1);
-            tv.setTextColor(resources.getColor(R.color.white));
-        }
     }
 
     @Override

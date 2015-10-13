@@ -42,11 +42,6 @@ public class MainNavCtrl {
                 mainActivity.startActivity(new Intent(mainActivity, SubscriptionSelectorActivity.class));
                 mainActivity.finish();
                 break;
-            case ViewConstants.LOGOUT_ADMIN:
-                application.Logout();
-                mainActivity.startActivity(new Intent(mainActivity, LoginActivity.class));
-                mainActivity.finish();
-                break;
             default:
                 return null;
         }
@@ -54,7 +49,7 @@ public class MainNavCtrl {
         return mapFragment;
     }
 
-    public Fragment setStandardView(MainActivity mainActivity, GoogleMap map, GoogleMapFragment mapFragment, int position) {
+    public Fragment setStandardView(GoogleMap map, GoogleMapFragment mapFragment, int position) {
         switch (position) {
             case ViewConstants.HEADER:
             case ViewConstants.MAP:
@@ -66,15 +61,9 @@ public class MainNavCtrl {
                 return new LibraryFragment();
             case ViewConstants.ACCOUNT:
                 return new AccountFragment();
-            case ViewConstants.LOGOUT_REGULAR:
-                application.Logout();
-                mainActivity.startActivity(new Intent(mainActivity, LoginActivity.class));
-                mainActivity.finish();
-                break;
             default:
                 return null;
         }
-        return mapFragment;
     }
 
     private class ViewConstants {
@@ -83,9 +72,7 @@ public class MainNavCtrl {
         //public static final int LAYER = 0;
         public static final int LIBRARY = 2;
         public static final int ACCOUNT = 3;
-        public static final int LOGOUT_REGULAR = 4;
         public static final int ADMIN_CLIENTS = 4;
-        public static final int LOGOUT_ADMIN = 5;
 
     }
 }

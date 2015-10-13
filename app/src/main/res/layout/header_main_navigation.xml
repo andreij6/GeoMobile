@@ -1,32 +1,29 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-              android:orientation="vertical"
-              android:layout_width="match_parent"
-              android:layout_height="wrap_content">
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                xmlns:tools="http://schemas.android.com/tools"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@color/body_bkg"
+                android:paddingTop="32dp"
+                android:paddingLeft="32dp">
 
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:textAppearance="?android:attr/textAppearanceLarge"
         android:id="@+id/subscriptionName"
-        android:textColor="@color/white"
-        android:textAllCaps="true"
-        android:paddingTop="25dp"
-        android:paddingBottom="25dp"
-        android:paddingLeft="8dp"
-        android:paddingRight="8dp"
-        android:textStyle="bold"/>
+        android:textColor="@color/primary_text"
+        android:textStyle="bold"
+        tools:text="Andre Test"/>
 
-    <TextView
+    <View
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:text="@string/portal"
-        android:id="@+id/geoClient"
-        android:layout_gravity="center_horizontal"
-        android:paddingStart="8dp"
-        android:paddingEnd="8dp"
-        android:background="@color/primary_light"
-        android:layout_marginBottom="8dp"
-        android:textStyle="italic"/>
+        android:layout_height="1dp"
+        android:background="@android:color/darker_gray"
+        android:layout_marginTop="32dp"
+        android:layout_marginBottom="16dp"
+        android:layout_below="@id/subscriptionName"
+        android:id="@+id/divider"
+        android:layout_alignStart="@id/cellPhone"/>
 
-</LinearLayout>
+</RelativeLayout>

@@ -7,6 +7,7 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.ImageView;
 
 import com.geospatialcorporation.android.geomobile.R;
 import com.geospatialcorporation.android.geomobile.application;
@@ -14,9 +15,52 @@ import com.geospatialcorporation.android.geomobile.ui.Interfaces.IGeoMainActivit
 import com.geospatialcorporation.android.geomobile.ui.fragments.MapFragments.TabletMapFragment;
 import com.geospatialcorporation.android.geomobile.ui.fragments.tree_fragments.tablet.*;
 
+import butterknife.Bind;
+import butterknife.OnClick;
+
 public class MainTabletActivity extends GeoUndergroundMainActivity implements IGeoMainActivity{
 
     int mInfoFrameCode;
+
+    @Bind(R.id.subscriptionsIV) ImageView mSubscriptions;
+
+    @OnClick(R.id.showLayersIV)
+    public void showLayersClick(){
+        if(application.getMapStateLoaded()){
+            showLayers();
+        }
+    }
+
+    @OnClick(R.id.libraryIV)
+    public void showLibraryClick(){
+        if(application.getMapStateLoaded()){
+            showLibrary();
+        }
+    }
+
+    @OnClick(R.id.accountIV)
+    public void showAccountClick(){
+        if(application.getMapStateLoaded()){
+            showAccount();
+        }
+    }
+
+    @OnClick(R.id.subscriptionsIV)
+    public void showSubcriptionsIV(){
+        if(application.getMapStateLoaded()){
+            startActivity(new Intent(this, SubscriptionSelectorActivity.class));
+            finish();
+        }
+    }
+
+    @OnClick(R.id.logoutIV)
+    public void logoutClick(){
+        if(application.getMapStateLoaded()){
+            application.Logout();
+            startActivity(new Intent(this, LoginActivity.class));
+            finish();
+        }
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -29,45 +73,55 @@ public class MainTabletActivity extends GeoUndergroundMainActivity implements IG
 
         mInfoFrameCode = 0;
 
-        getSupportActionBar().setTitle(getResources().getString(R.string.geounderground));
-    }
+        getSupportActionBar().hide();
 
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        MenuInflater inflater = getMenuInflater();
-        if(application.getIsAdminUser()) {
-            inflater.inflate(R.menu.map_menu_admin, menu);
-        } else {
-            inflater.inflate(R.menu.map_menu, menu);
+        if(!application.getIsAdminUser()) {
+            mSubscriptions.setVisibility(View.GONE);
         }
-        return true;
+
     }
 
+   //@Override
+   //public boolean onCreateOptionsMenu(Menu menu) {
+   //    MenuInflater inflater = getMenuInflater();
+   //    if(application.getIsAdminUser()) {
+   //        inflater.inflate(R.menu.map_menu_admin, menu);
+   //    } else {
+   //        inflater.inflate(R.menu.map_menu, menu);
+   //    }
+   //    return true;
+   //}
+    /*
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()){
-            case R.id.action_show_layers:
-                showLayers();
-                return true;
-            case R.id.action_account:
-                showAccount();
-                return true;
-            case R.id.action_library:
-                showLibrary();
-                return true;
-            case R.id.action_subscriptions:
-                startActivity(new Intent(this, SubscriptionSelectorActivity.class));
-                finish();
-                return true;
-            case R.id.action_logout:
-                application.Logout();
-                startActivity(new Intent(this, LoginActivity.class));
-                finish();
-                return true;
-            default:
-                return true;
+        if(application.getMapStateLoaded()) {
+            switch (item.getItemId()) {
+                case R.id.action_show_layers:
+                    showLayers();
+                    return true;
+                case R.id.action_account:
+                    showAccount();
+                    return true;
+                case R.id.action_library:
+                    showLibrary();
+                    return true;
+                case R.id.action_subscriptions:
+                    startActivity(new Intent(this, SubscriptionSelectorActivity.class));
+                    finish();
+                    return true;
+                case R.id.action_logout:
+                    application.Logout();
+                    startActivity(new Intent(this, LoginActivity.class));
+                    finish();
+                    return true;
+                default:
+                    return true;
+            }
+        } else {
+            return true;
         }
     }
+    */
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
@@ -75,9 +129,19 @@ public class MainTabletActivity extends GeoUndergroundMainActivity implements IG
         fragment.onActivityResult(requestCode, resultCode, data);
     }
 
+    @Override
+    protected void onStop() {
+        super.onStop();
+        mAnalytics.onStop(this);
+    }
+
     public void closeInfoFragment(){
         mInfoFrameCode = 0;
         mInfoFrame.setVisibility(View.GONE);
+
+        TabletMapFragment mapFragment = getMapFragment();
+
+        mapFragment.clearHighlights();
     }
 
     //region Actions
@@ -94,18 +158,25 @@ public class MainTabletActivity extends GeoUndergroundMainActivity implements IG
     }
 
     protected void showFragment(int frameCode, Fragment fragment){
-        boolean isShowingNegative = showHideInfoFrame(frameCode);
+        boolean isShowingNegative = shouldShowInfoFrame(frameCode);
 
         if(isShowingNegative){
+            mInfoFrameCode = frameCode;
+            mInfoFrame.setVisibility(View.VISIBLE);
+
             getSupportFragmentManager().beginTransaction()
                     .replace(R.id.info_frame, fragment)
                     .addToBackStack(null).commit();
+        } else {
+            closeInfoFragment();
         }
     }
     //endregion
 
     //region Helpers
     protected void setMapFragment() {
+        application.setMapStateLoaded(false);
+
         Fragment contentFragment = new TabletMapFragment();
 
         getSupportFragmentManager().beginTransaction()
@@ -113,14 +184,10 @@ public class MainTabletActivity extends GeoUndergroundMainActivity implements IG
                 .addToBackStack(null).commit();
     }
 
-    protected boolean showHideInfoFrame(int infoFrame) {
-
+    protected boolean shouldShowInfoFrame(int infoFrame){
         if(mInfoFrame.getVisibility() == View.VISIBLE && infoFrame == mInfoFrameCode) {
-            closeInfoFragment();
             return false;
         } else {
-            mInfoFrameCode = infoFrame;
-            mInfoFrame.setVisibility(View.VISIBLE);
             return true;
         }
     }
@@ -134,11 +201,14 @@ public class MainTabletActivity extends GeoUndergroundMainActivity implements IG
         return getSupportFragmentManager().findFragmentById(R.id.info_frame);
     }
 
+    public TabletMapFragment getMapFragment(){
+        return (TabletMapFragment)getSupportFragmentManager().findFragmentById(R.id.content_frame);
+    }
+
     public void featureWindow() {
         mInfoFrame.setVisibility(View.VISIBLE);
         mInfoFrameCode = InfoFrame.FeatureWindow;
     }
-
     //endregion
 
     protected class InfoFrame {

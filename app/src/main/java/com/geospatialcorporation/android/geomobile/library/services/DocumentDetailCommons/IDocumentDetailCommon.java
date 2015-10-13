@@ -16,7 +16,7 @@ public interface IDocumentDetailCommon {
 
     IDocumentDetailCommon handleArguments(Bundle args);
 
-    void setViews(TextView documentName, TextView uploadValue, TextView fileSizeValue, ImageView fileTypeImage);
+    void setViews(TextView documentName, TextView uploadValue, TextView fileSizeValue);
 
     void closePanel();
 

@@ -7,12 +7,15 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.ImageView;
+import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.geospatialcorporation.android.geomobile.R;
 
 import java.util.List;
+
+import static com.geospatialcorporation.android.geomobile.R.color.primary_text;
 
 public class MainNavigationAdapter extends ArrayAdapter<String> {
     List<String> mMenuItems;
@@ -39,22 +42,20 @@ public class MainNavigationAdapter extends ArrayAdapter<String> {
 
         switch (mMenuItems.get(position)){
             case MenuConstants.MAP:
-                icon.setImageDrawable(ContextCompat.getDrawable(mContext, R.drawable.ic_map_marker_white_18dp));
+                icon.setImageDrawable(ContextCompat.getDrawable(mContext, R.drawable.map_selector));
                 break;
             //case MenuConstants.LAYERS:
                 //icon.setImageDrawable(ContextCompat.getDrawable(mContext, R.drawable.ic_layers_white_18dp));
                 //break;
             case MenuConstants.LIBRARY:
-                icon.setImageDrawable(ContextCompat.getDrawable(mContext, R.drawable.ic_book_white_18dp));
+                icon.setImageDrawable(ContextCompat.getDrawable(mContext, R.drawable.library_selector));
                 break;
             case MenuConstants.ALL_SUBSCRIPTIONS:
-                icon.setImageDrawable(ContextCompat.getDrawable(mContext, R.drawable.ic_account_search_white_18dp));
+                icon.setImageDrawable(ContextCompat.getDrawable(mContext, R.drawable.subscription_selector));
                 break;
             case MenuConstants.ACCOUNT:
-                icon.setImageDrawable(ContextCompat.getDrawable(mContext, R.drawable.ic_account_circle_white_18dp));
+                icon.setImageDrawable(ContextCompat.getDrawable(mContext, R.drawable.account_selector));
                 break;
-            case MenuConstants.LOGOUT:
-                icon.setImageDrawable(ContextCompat.getDrawable(mContext, R.drawable.ic_logout_white_18dp));
             default:
                 break;
         }
@@ -63,13 +64,14 @@ public class MainNavigationAdapter extends ArrayAdapter<String> {
 
     }
 
+
+
     private class MenuConstants {
         public static final String MAP = "Map";
         public static final String LAYERS = "Layers";
         public static final String LIBRARY = "Library";
         public static final String ALL_SUBSCRIPTIONS = "All Subscriptions";
         public static final String ACCOUNT = "Account";
-        public static final String LOGOUT = "Logout";
     }
 
 }

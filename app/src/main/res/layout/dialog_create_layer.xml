@@ -16,33 +16,41 @@
         android:hint="@string/layer_name_hint"/>
 
     <LinearLayout
-        android:orientation="horizontal"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:paddingTop="8dp">
+        android:paddingTop="8dp"
+        android:orientation="vertical">
 
-        <RadioButton
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/layer_point"
-            android:id="@+id/pointRadio"
-            android:layout_weight="1"
-            android:checked="false"/>
+        <RadioGroup
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="horizontal"
+            android:layout_weight="1">
 
-        <RadioButton
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/layer_line"
-            android:id="@+id/lineRadio"
-            android:layout_weight="1"
-            android:checked="false"/>
+            <RadioButton
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/layer_line"
+                android:id="@+id/lineRadio"
+                android:layout_weight="1"
+                android:checked="false"/>
 
-        <RadioButton
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/layer_polygon"
-            android:id="@+id/polygonRadio"
-            android:layout_weight="1"
-            android:checked="false"/>
+            <RadioButton
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/layer_point"
+                android:id="@+id/pointRadio"
+                android:layout_weight="1"
+                android:checked="false"/>
+
+            <RadioButton
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/layer_polygon"
+                android:id="@+id/polygonRadio"
+                android:layout_weight="1"
+                android:checked="false"/>
+        </RadioGroup>
+
     </LinearLayout>
 </LinearLayout>

@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 
 import com.geospatialcorporation.android.geomobile.R;
 import com.geospatialcorporation.android.geomobile.application;
@@ -14,6 +15,7 @@ import com.geospatialcorporation.android.geomobile.models.Document.Document;
 import com.geospatialcorporation.android.geomobile.ui.fragments.GeoViewFragmentBase;
 import com.geospatialcorporation.android.geomobile.ui.fragments.detail_fragment.DocumentDetailFragment;
 
+import butterknife.Bind;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 
@@ -24,6 +26,9 @@ public class DocumentDetailPanelFragment extends GeoViewFragmentBase {
     IDocumentDialog mDocumentDialog;
     Context mContext;
     IDocumentTreeService mService;
+
+    @Bind(R.id.title)
+    TextView mTitle;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstance) {
@@ -44,6 +49,8 @@ public class DocumentDetailPanelFragment extends GeoViewFragmentBase {
         Bundle args = getArguments();
 
         mDocument = args.getParcelable(Document.INTENT);
+
+        mTitle.setText(mDocument.getNameWithExt());
     }
 
     @OnClick(R.id.close)

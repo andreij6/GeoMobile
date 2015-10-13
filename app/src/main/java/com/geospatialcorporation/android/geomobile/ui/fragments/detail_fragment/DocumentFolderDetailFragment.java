@@ -14,6 +14,7 @@ import com.geospatialcorporation.android.geomobile.R;
 import com.geospatialcorporation.android.geomobile.application;
 import com.geospatialcorporation.android.geomobile.library.DI.UIHelpers.Interfaces.DialogHelpers.IFolderDialog;
 import com.geospatialcorporation.android.geomobile.library.constants.GeoPanel;
+import com.geospatialcorporation.android.geomobile.library.helpers.DataHelper;
 import com.geospatialcorporation.android.geomobile.library.helpers.GeoDialogHelper;
 import com.geospatialcorporation.android.geomobile.library.panelmanager.PanelManager;
 import com.geospatialcorporation.android.geomobile.models.Folders.Folder;
@@ -35,6 +36,7 @@ public class DocumentFolderDetailFragment extends ItemDetailFragment<Folder> imp
     private static final String PERMISSIONS = "Permissions";
 
     @Bind(R.id.sliding_layout) SlidingUpPanelLayout mPanel;
+    @Bind(R.id.title) TextView mTitle;
 
     IFolderDialog mFolderDialog;
 
@@ -42,6 +44,9 @@ public class DocumentFolderDetailFragment extends ItemDetailFragment<Folder> imp
     public void goBack(){
         getFragmentManager().popBackStack();
     }
+
+    @OnClick(R.id.backFolder)
+    public void goUp(){ getFragmentManager().popBackStack(); }
 
     @OnClick(R.id.goToMapIV)
     public void goToMapIV(){
@@ -93,16 +98,10 @@ public class DocumentFolderDetailFragment extends ItemDetailFragment<Folder> imp
 
         tabHost.setup(getActivity(), getChildFragmentManager(), android.R.id.tabcontent);
 
-        tabHost.addTab(tabHost.newTabSpec(DETAILS).setIndicator(DETAILS), FolderDetailsTab.class, args);
-        tabHost.addTab(tabHost.newTabSpec(PERMISSIONS).setIndicator(PERMISSIONS), PermissionsTab.class, args);
+        tabHost.addTab(tabHost.newTabSpec(DETAILS).setIndicator(createTabView(tabHost.getContext(), R.drawable.details_selector)), FolderDetailsTab.class, args);
+        tabHost.addTab(tabHost.newTabSpec(PERMISSIONS).setIndicator(createTabView(tabHost.getContext(), R.drawable.permissions_selector)), PermissionsTab.class, args);
 
         tabHost.setCurrentTab(0);
-
-        for (int i = 0; i < tabHost.getTabWidget().getTabCount(); i++) {
-            ViewGroup vg = (ViewGroup) tabHost.getTabWidget().getChildAt(i);
-            TextView tv = (TextView) vg.getChildAt(1);
-            tv.setTextColor(getResources().getColor(R.color.white));
-        }
 
         return view;
     }
@@ -113,9 +112,9 @@ public class DocumentFolderDetailFragment extends ItemDetailFragment<Folder> imp
 
         mEntity = args.getParcelable(Folder.FOLDER_INTENT);
 
-        assert mEntity != null;
-        
-        SetTitle(mEntity.getName());
+        if(mEntity != null){
+            mTitle.setText(DataHelper.trimString(mEntity.getProperName(), 15));
+        }
     }
 
     public View.OnClickListener DeleteonClickListner = new View.OnClickListener(){

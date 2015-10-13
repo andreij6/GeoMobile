@@ -64,7 +64,7 @@ public class SublayersTab extends GeoDetailsTabBase<Layer> implements IContentRe
 
         mAnalytics.trackScreen(new GoogleAnalyticEvent().SublayersTab());
 
-        mAddSublayerBtn.setVisibility(View.GONE);
+        mAddSublayerBtn.setVisibility(View.INVISIBLE);
 
         setIntentString(Layer.LAYER_INTENT);
         handleArgs();
@@ -89,7 +89,7 @@ public class SublayersTab extends GeoDetailsTabBase<Layer> implements IContentRe
         TableFactory factory = new TableFactory(getActivity(), mSublayerDataView, mInflater);
 
         //factory.addHeaders(R.layout.template_table_header, "Visible", "Name", "Edit");
-        factory.addHeaders(R.layout.template_table_header, "Visible", "Name");
+        factory.addHeaders(R.layout.template_table_header, "", "Name");
 
         mSublayerDataView = factory.build();
 

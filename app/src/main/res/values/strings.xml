@@ -154,8 +154,8 @@
     <string name="upload_time">Upload Time</string>
     <string name="file_details">File Details</string>
     <string name="permissions">Permissions</string>
-    <string name="last_updated_date">Last Updated:</string>
-    <string name="updated_by_user">Last  Updated By:</string>
+    <string name="last_updated_date">Last Updated</string>
+    <string name="updated_by_user">Last  Updated By</string>
     <string name="folder_actions">Folder Actions</string>
     <string name="rename_folder">Rename Folder</string>
     <string name="rename">Rename</string>
@@ -166,9 +166,9 @@
     <string name="edit_sublayer">Edit Sublayer</string>
 
 <!-- Layer - Details tabs -->
-    <string name="access_level">Access Level:</string>
-    <string name="shape_type">Shape Type:</string>
-    <string name="feature_count">Feature Count:</string>
+    <string name="access_level">Access Level</string>
+    <string name="shape_type">Shape Type</string>
+    <string name="feature_count">Feature Count</string>
 
     <string name="layer_actions">Layer Actions</string>
     <string name="finish">Finish</string>
@@ -201,9 +201,9 @@
     <string name="base_map">Base Map</string>
     <string name="full_screen">Full Screen</string>
     <string name="toggle">Toggle</string>
-    <string name="created">Created: </string>
-    <string name="created_by">Created By: </string>
-    <string name="folder_count">Folder Count:</string>
+    <string name="created">Created</string>
+    <string name="created_by">Created By</string>
+    <string name="folder_count">Folder Count</string>
 
     <!-- Content Descriptions -->
     <string name="upload_photo">Upload Photo</string>
@@ -291,4 +291,9 @@
     <string name="library">Library</string>
     <string name="account">Account</string>
     <string name="subscriptions">Subscriptions</string>
+    <string name="back">Back</string>
+    <string name="attributes">Attributes</string>
+    <string name="map_info">Map Info</string>
+    <string name="documents">Documents</string>
+    <string name="library_tree">Library</string>
 </resources>

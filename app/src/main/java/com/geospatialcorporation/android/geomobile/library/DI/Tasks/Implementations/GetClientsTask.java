@@ -15,7 +15,10 @@ import com.geospatialcorporation.android.geomobile.models.GeoAsyncTask;
 import java.util.ArrayList;
 import java.util.List;
 
+import retrofit.Callback;
 import retrofit.RetrofitError;
+import retrofit.client.Response;
+import retrofit.http.Body;
 
 public class GetClientsTask implements IGetClientsTask {
 
@@ -43,13 +46,7 @@ public class GetClientsTask implements IGetClientsTask {
         @Override
         protected List<Subscription> doInBackground(Void... params) {
             try {
-                //ClientSearchResponse response = mLoginService.searchClients(new ClientSearchFilter(mClientTypeCode));
-                //List<Subscription> Items = response.getItems();
-                //for (Subscription item: Items) {
-                //    mDataSet.add(item);
-                //}
-
-                mDataSet = mLoginService.getClients();
+                mDataSet = mLoginService.searchClients(new ClientSearchFilter(1));
 
             } catch (RetrofitError e) {
                 if (e.getResponse() != null) {

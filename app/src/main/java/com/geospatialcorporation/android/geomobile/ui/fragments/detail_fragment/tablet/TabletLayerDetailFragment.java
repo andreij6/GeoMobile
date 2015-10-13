@@ -7,6 +7,7 @@ import android.support.v4.app.FragmentTabHost;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 
 import com.geospatialcorporation.android.geomobile.R;
 import com.geospatialcorporation.android.geomobile.library.panelmanager.ISlidingPanelManager;
@@ -14,6 +15,7 @@ import com.geospatialcorporation.android.geomobile.library.services.LayerDetailC
 import com.geospatialcorporation.android.geomobile.library.services.LayerDetailCommons.LayerDetailCommons;
 import com.geospatialcorporation.android.geomobile.models.Layers.Layer;
 import com.geospatialcorporation.android.geomobile.ui.Interfaces.IPanelFragmentCtrl;
+import com.geospatialcorporation.android.geomobile.ui.MainTabletActivity;
 import com.geospatialcorporation.android.geomobile.ui.fragments.TabGeoViewFragmentBase;
 import com.geospatialcorporation.android.geomobile.ui.fragments.panel_fragments.tree_fragment_panels.LayerDetailPanelFragment;
 import com.geospatialcorporation.android.geomobile.ui.fragments.panel_fragments.tree_fragment_panels.tablet.TabletLayerDetailPanelFragment;
@@ -32,6 +34,7 @@ public class TabletLayerDetailFragment extends TabGeoViewFragmentBase implements
 
     @Bind(R.id.tabHost) FragmentTabHost mTabHost;
     @Bind(R.id.sliding_layout) SlidingUpPanelLayout mPanel;
+    @Bind(R.id.title) TextView mTitle;
 
     @OnClick(R.id.optionsIV)
     public void bringUpOptions(){
@@ -50,9 +53,15 @@ public class TabletLayerDetailFragment extends TabGeoViewFragmentBase implements
                     .replace(R.id.slider_content, f)
                     .commit();
 
-            mPanelManager.halfAnchor();
+            mPanelManager.halfAnchor(0.1f);
             mPanelManager.touch(false);
         }
+    }
+
+    @SuppressWarnings("unused")
+    @OnClick(R.id.close)
+    public void close(){
+        ((MainTabletActivity)getActivity()).closeInfoFragment();
     }
 
     @Nullable
@@ -63,6 +72,8 @@ public class TabletLayerDetailFragment extends TabGeoViewFragmentBase implements
         mCommons = new LayerDetailCommons();
 
         mLayer = mCommons.handleArguments(getArguments());
+
+        mTitle.setText(mLayer.getName());
 
         mTabHost.setup(getActivity(), getChildFragmentManager(), android.R.id.tabcontent);
 
@@ -78,6 +89,6 @@ public class TabletLayerDetailFragment extends TabGeoViewFragmentBase implements
 
     @Override
     protected int getLayoutResId() {
-        return R.layout.fragment_tree_detail;
+        return R.layout.fragment_tree_detail_tablet;
     }
 }

@@ -3,8 +3,7 @@ package com.geospatialcorporation.android.geomobile.library.map.layerManager.imp
 import android.os.AsyncTask;
 import android.util.Log;
 
-import com.geospatialcorporation.android.geomobile.library.DI.UIHelpers.Implementations.MapStatusBarManager;
-import com.geospatialcorporation.android.geomobile.library.constants.GeometryTypeCodes;
+import com.geospatialcorporation.android.geomobile.library.DI.UIHelpers.Implementations.StatusBarManager.MapStatusBarManager;
 import com.geospatialcorporation.android.geomobile.library.map.layerManager.OptionFeature;
 import com.geospatialcorporation.android.geomobile.library.map.layerManager.OptionsManagerBase;
 import com.geospatialcorporation.android.geomobile.models.Layers.FeatureInfo;

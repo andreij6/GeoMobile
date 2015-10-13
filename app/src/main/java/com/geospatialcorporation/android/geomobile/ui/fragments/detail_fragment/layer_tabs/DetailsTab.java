@@ -29,11 +29,13 @@ public class DetailsTab extends GeoDetailsTabBase<Layer> implements IPostExecute
     IGetLayerDetailsTask mTask;
     ILayerDialog mLayerDialog;
 
-    @Bind(R.id.access_level) TextView mAccessLevel;
+    //@Bind(R.id.access_level) TextView mAccessLevel;
     @Bind(R.id.createdValue) TextView mCreateDate;
     @Bind(R.id.createdByValue) TextView mCreatedBy;
     @Bind(R.id.lastUpdatedValue) TextView mLastUpdatedValue;
     @Bind(R.id.userUpdateValue) TextView mUserUpdated;
+    @Bind(R.id.updateUserLabel) TextView mUserUpdatedLabel;
+    @Bind(R.id.lastUpdatedLabel)TextView mLastUpdateLabel;
     @Bind(R.id.shapeTypeValue) TextView mShapeType;
     @Bind(R.id.entityCountValue) TextView mFeatureCount;
     //endregion
@@ -68,12 +70,15 @@ public class DetailsTab extends GeoDetailsTabBase<Layer> implements IPostExecute
             mFeatureCount.setText(details.getFeatureCount() + "");
             mCreateDate.setText(DateTimeFormatter.format(details.getCreateDateTime()));
             mCreatedBy.setText(details.getCreateUser());
-            if (details.getUpdateUser().length() > 0) {
+
+            if (details.getUpdateUser() != null || details.getUpdateUser() == "") {
                 mUserUpdated.setText(details.getUpdateUser());
                 mLastUpdatedValue.setText(DateTimeFormatter.format(details.getUpdateDateTime()));
             } else {
                 mUserUpdated.setVisibility(View.GONE);
                 mLastUpdatedValue.setVisibility(View.GONE);
+                mLastUpdateLabel.setVisibility(View.GONE);
+                mUserUpdatedLabel.setVisibility(View.GONE);
             }
             mShapeType.setText(mEntity.getReadableGeometryType());
         }

@@ -1,50 +1,56 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
+                android:layout_height="72dp"
                 android:background="@color/white"
                 android:id="@+id/listitem_container"
-                >
+                xmlns:fab="http://schemas.android.com/apk/res-auto"
+                xmlns:tools="http://schemas.android.com/tools"
+                android:paddingTop="8dp">
 
     <TextView
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_height="match_parent"
+        android:gravity="center_vertical"
         android:textAppearance="?android:attr/textAppearanceMedium"
+        android:textStyle="bold"
         style="@style/rippleBackground"
         android:id="@+id/itemNameTV"
-        android:paddingLeft="10dp"
-        android:gravity="center_vertical"
-        android:height="50dp"
-        android:layout_alignParentTop="true"
+        tools:text="List Item"
         android:singleLine="true"
-        android:minHeight="50dp"
-        android:layout_toEndOf="@+id/itemImageView"
-        android:layout_toStartOf="@+id/infoImageView"
-        android:maxLength="25"/>
-
-    <ImageButton
-        android:background="#fffffbff"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:id="@+id/itemImageView"
-        android:src="@drawable/ic_folder_black_24dp"
-        android:layout_alignParentTop="true"
-        android:layout_alignParentStart="true"
-        android:layout_marginStart="30dp"
-        android:layout_alignBottom="@+id/itemNameTV"
-        android:contentDescription="@string/folder_icon"/>
+        android:maxLength="15"
+        android:layout_marginStart="32dp"
+        android:layout_centerVertical="true"
+        android:layout_toEndOf="@+id/itemImageView"/>
 
     <ImageButton
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_height="match_parent"
         android:id="@+id/infoImageView"
-        android:src="@drawable/ic_information_black_24dp"
+        android:src="@drawable/ic_information_outline_grey600_24dp"
         android:layout_alignParentTop="true"
-        android:layout_alignBottom="@+id/itemNameTV"
         style="@style/information_img_btn"
         android:layout_alignParentEnd="true"
         android:contentDescription="@string/information"/>
 
-    <View style="@style/Divider"/>
+    <com.melnykov.fab.FloatingActionButton
+        android:id="@+id/itemImageView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@drawable/ic_folder_grey600_24dp"
+        fab:fab_colorNormal="@color/body_bkg"
+        fab:fab_colorPressed="@color/accent_blue"
+        fab:fab_colorRipple="@color/accent_blue"
+        fab:fab_shadow="false"
+        android:layout_marginStart="32dp"
+        android:paddingTop="8dp"/>
+
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="@color/body_bkg"
+        android:layout_alignParentBottom="true"
+        />
 
 </RelativeLayout>

@@ -25,18 +25,6 @@ public class LayerFolderPanelFragment extends TreeFolderPanelFragmentBase {
     }
 
     //On Clicks
-    @OnClick(R.id.folderInfoSection)
-    public  void folderSection(){
-        Fragment f = new LayerFolderDetailFragment();
-
-        f.setArguments(mFolder.toBundle());
-
-        getFragmentManager()
-                .beginTransaction()
-                .addToBackStack(null)
-                .replace(R.id.content_frame, f)
-                .commit();
-    }
 
     @OnClick(R.id.addLayerSection)
     public void layerSectionClicked(){

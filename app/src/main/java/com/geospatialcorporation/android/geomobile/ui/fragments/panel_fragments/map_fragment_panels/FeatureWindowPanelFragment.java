@@ -1,19 +1,18 @@
 package com.geospatialcorporation.android.geomobile.ui.fragments.panel_fragments.map_fragment_panels;
 
 import android.os.Bundle;
-import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTabHost;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.geospatialcorporation.android.geomobile.R;
 import com.geospatialcorporation.android.geomobile.application;
 import com.geospatialcorporation.android.geomobile.library.constants.GeoPanel;
 import com.geospatialcorporation.android.geomobile.library.panelmanager.PanelManager;
+import com.geospatialcorporation.android.geomobile.library.util.TabHostUtil;
 import com.geospatialcorporation.android.geomobile.models.Query.map.response.featurewindow.FeatureQueryResponse;
 import com.geospatialcorporation.android.geomobile.models.Query.map.response.featurewindow.ParcelableFeatureQueryResponse;
 import com.geospatialcorporation.android.geomobile.ui.fragments.GeoViewFragmentBase;
@@ -26,9 +25,6 @@ import butterknife.Bind;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 
-/**
- * Created by andre on 7/6/2015.
- */
 public class FeatureWindowPanelFragment extends GeoViewFragmentBase {
     private static final String TAG = FeatureWindowPanelFragment.class.getSimpleName();
 
@@ -36,6 +32,7 @@ public class FeatureWindowPanelFragment extends GeoViewFragmentBase {
     private static final String ATTRIBUTES = "Attributes";
     private static final String DOCUMENTS = "Documents";
     protected FeatureQueryResponse mResponse;
+    Bundle mArgs;
     GoogleMapFragment mContentFragment;
     @Bind(R.id.layerNameTV) TextView FeatureName;
 
@@ -63,20 +60,13 @@ public class FeatureWindowPanelFragment extends GeoViewFragmentBase {
 
         tabHost.setup(getActivity(), getChildFragmentManager(), android.R.id.tabcontent);
 
-        tabHost.addTab(tabHost.newTabSpec(MAPINFO).setIndicator(MAPINFO), FeatureMapInfoTab.class, getArguments());
-        tabHost.addTab(tabHost.newTabSpec(ATTRIBUTES).setIndicator(ATTRIBUTES), FeatureAttributesTab.class, getArguments());
-        tabHost.addTab(tabHost.newTabSpec(DOCUMENTS).setIndicator(DOCUMENTS), FeatureDocumentsTab.class, getArguments());
+        tabHost.addTab(tabHost.newTabSpec(MAPINFO).setIndicator(TabHostUtil.createTabView(tabHost.getContext(), R.drawable.details_selector)), FeatureMapInfoTab.class, mArgs);
+        tabHost.addTab(tabHost.newTabSpec(ATTRIBUTES).setIndicator(TabHostUtil.createTabView(tabHost.getContext(), R.drawable.attr_selector)), FeatureAttributesTab.class, mArgs);
+        tabHost.addTab(tabHost.newTabSpec(DOCUMENTS).setIndicator(TabHostUtil.createTabView(tabHost.getContext(), R.drawable.documents_selector)), FeatureDocumentsTab.class, mArgs);
 
         tabHost.setCurrentTab(mContentFragment.getFeatureWindowTab());
 
-        for (int i = 0; i < tabHost.getTabWidget().getTabCount(); i++) {
-            ViewGroup vg = (ViewGroup) tabHost.getTabWidget().getChildAt(i);
-            TextView tv = (TextView) vg.getChildAt(1);
-            tv.setTextColor(getResources().getColor(R.color.white));
-        }
-
         mContentFragment.setFeatureWindowTab(0);
-
 
         return view;
     }
@@ -101,9 +91,9 @@ public class FeatureWindowPanelFragment extends GeoViewFragmentBase {
     }
 
     protected void handleArgs() {
-        Bundle args = getArguments();
+        mArgs = getArguments();
 
-        ParcelableFeatureQueryResponse data = args.getParcelable(ParcelableFeatureQueryResponse.FEATURE_QUERY_RESPONSE);
+        ParcelableFeatureQueryResponse data = mArgs.getParcelable(ParcelableFeatureQueryResponse.FEATURE_QUERY_RESPONSE);
 
         if (data != null && data.getFeatureQueryResponse().size() > 0) {
             mResponse = data != null ? data.getFeatureQueryResponse().get(0) : null;

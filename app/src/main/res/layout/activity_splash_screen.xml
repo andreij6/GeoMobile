@@ -3,7 +3,7 @@
 xmlns:tools="http://schemas.android.com/tools"
 android:layout_width="match_parent"
 android:layout_height="match_parent"
-android:background="@color/primary"
+android:background="@color/body_bkg"
 tools:context="com.geospatialcorporation.android.geomobile.ui.SplashScreenActivity">
 
 <ImageView
@@ -11,7 +11,7 @@ tools:context="com.geospatialcorporation.android.geomobile.ui.SplashScreenActivi
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:contentDescription="@string/app_name"
-    android:src="@drawable/ic_logo_full_white"
+    android:src="@drawable/ic_full_color_logo"
     android:layout_gravity="right|top|bottom|center|left"
     android:layout_alignParentTop="true"
     android:layout_centerHorizontal="true"/>

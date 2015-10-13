@@ -14,12 +14,17 @@ import com.geospatialcorporation.android.geomobile.R;
 import com.geospatialcorporation.android.geomobile.application;
 import com.geospatialcorporation.android.geomobile.library.DI.Analytics.Models.GoogleAnalyticEvent;
 import com.geospatialcorporation.android.geomobile.library.constants.GeoPanel;
+import com.geospatialcorporation.android.geomobile.library.helpers.DataHelper;
 import com.geospatialcorporation.android.geomobile.library.panelmanager.PanelManager;
 import com.geospatialcorporation.android.geomobile.models.Folders.Folder;
 import com.geospatialcorporation.android.geomobile.ui.fragments.GoogleMapFragment;
 import com.geospatialcorporation.android.geomobile.ui.fragments.detail_fragment.folder_tabs.FolderDetailsTab;
 import com.geospatialcorporation.android.geomobile.ui.fragments.detail_fragment.folder_tabs.PermissionsTab;
 import com.geospatialcorporation.android.geomobile.ui.fragments.dialogs.ItemDetailFragment;
+import com.geospatialcorporation.android.geomobile.ui.fragments.panel_fragments.tree_fragment_panels.DocumentFolderPanelFragment;
+import com.geospatialcorporation.android.geomobile.ui.fragments.panel_fragments.tree_fragment_panels.LayerDetailPanelFragment;
+import com.geospatialcorporation.android.geomobile.ui.fragments.panel_fragments.tree_fragment_panels.LayerFolderDetailPanelFragment;
+import com.geospatialcorporation.android.geomobile.ui.fragments.panel_fragments.tree_fragment_panels.LayerFolderPanelFragment;
 import com.sothree.slidinguppanel.SlidingUpPanelLayout;
 
 import butterknife.Bind;
@@ -32,7 +37,10 @@ public class LayerFolderDetailFragment extends ItemDetailFragment<Folder> implem
     private static final String PERMISSIONS = "Permissions";
 
     @Bind(R.id.sliding_layout) SlidingUpPanelLayout mPanel;
+    @Bind(R.id.title) TextView mTitle;
 
+    @OnClick(R.id.backFolder)
+    public void goUp(){ getFragmentManager().popBackStack(); }
 
     @OnClick(R.id.goBackIV)
     public void goBack(){
@@ -48,6 +56,24 @@ public class LayerFolderDetailFragment extends ItemDetailFragment<Folder> implem
         fragmentManager.beginTransaction()
                 .replace(R.id.content_frame, pageFragment)
                 .addToBackStack(null).commit();
+    }
+
+    @OnClick(R.id.optionsIV)
+    public void openOptions(){
+        if(mPanelManager.getIsOpen()){
+            closePanel();
+        } else {
+            Fragment f = new LayerFolderDetailPanelFragment();
+
+            f.setArguments(mEntity.toBundle());
+
+            getFragmentManager().beginTransaction()
+                    .replace(R.id.slider_content, f)
+                    .commit();
+
+            mPanelManager.halfAnchor();
+            mPanelManager.touch(false);
+        }
     }
 
     @Override
@@ -67,19 +93,19 @@ public class LayerFolderDetailFragment extends ItemDetailFragment<Folder> implem
 
         tabHost.setup(getActivity(), getChildFragmentManager(), android.R.id.tabcontent);
 
+        handleArguments();
         Bundle args = getArguments();
         args.putString("Folder Type", "Layer");
 
-        tabHost.addTab(tabHost.newTabSpec(DETAILS).setIndicator(DETAILS), FolderDetailsTab.class, args);
-        tabHost.addTab(tabHost.newTabSpec(PERMISSIONS).setIndicator(PERMISSIONS), PermissionsTab.class, getArguments());
+        tabHost.addTab(
+                tabHost.newTabSpec(DETAILS)
+                        .setIndicator(createTabView(tabHost.getContext(), R.drawable.details_selector)), FolderDetailsTab.class, args);
+
+        tabHost.addTab(
+                tabHost.newTabSpec(PERMISSIONS)
+                        .setIndicator(createTabView(tabHost.getContext(), R.drawable.permissions_selector)), PermissionsTab.class, getArguments());
 
         tabHost.setCurrentTab(0);
-
-        for (int i = 0; i < tabHost.getTabWidget().getTabCount(); i++) {
-            ViewGroup vg = (ViewGroup) tabHost.getTabWidget().getChildAt(i);
-            TextView tv = (TextView) vg.getChildAt(1);
-            tv.setTextColor(getResources().getColor(R.color.white));
-        }
 
         return view;
     }
@@ -95,10 +121,16 @@ public class LayerFolderDetailFragment extends ItemDetailFragment<Folder> implem
 
         mEntity = args.getParcelable(Folder.FOLDER_INTENT);
 
-        SetTitle(mEntity != null ? mEntity.getName() : null);
+        if(mEntity != null){
+            mTitle.setText(DataHelper.trimString(mEntity.getProperName(), 15));
+        }
     }
 
     protected void sendScreenName() {
         mAnalytics.trackScreen(new GoogleAnalyticEvent().LayerFolderDetail());
+    }
+
+    public void closePanel() {
+        mPanelManager.hide();
     }
 }

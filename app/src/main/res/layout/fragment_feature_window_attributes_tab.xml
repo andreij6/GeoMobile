@@ -2,15 +2,33 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:background="@color/white">
+                android:background="@color/body_bkg">
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceMedium"
+        android:text="@string/attributes"
+        android:textStyle="bold"
+        android:textColor="@color/primary_text"
+        android:id="@+id/title"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentStart="true"
+        android:layout_marginTop="8dp"
+        android:layout_marginLeft="8dp"/>
 
     <Button
-        android:layout_width="match_parent"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/edit_attributes"
         android:id="@+id/edit_attributes"
         android:layout_alignParentTop="true"
-        android:layout_centerHorizontal="true"/>
+        android:layout_alignParentEnd="true"
+        android:background="@color/accent"
+        android:layout_marginTop="8dp"
+        android:layout_marginRight="8dp"
+        android:padding="8dp"
+        android:textColor="@color/white"/>
 
     <ScrollView android:layout_width="match_parent"
                 android:fadeScrollbars="false"

@@ -113,8 +113,8 @@ public class MainActivity extends ActionBarActivity
         mAnalytics = application.getAnalyticsComponent().provideGeoAnalytics();
         application.getStatusBarManager().reset();
 
-        mErrorHandler = application.getErrorsComponent().provideErrorHandler();
-        Thread.setDefaultUncaughtExceptionHandler(mErrorHandler.UncaughtExceptionHandler());
+        //mErrorHandler = application.getErrorsComponent().provideErrorHandler();
+        //Thread.setDefaultUncaughtExceptionHandler(mErrorHandler.UncaughtExceptionHandler());
 
         mIsAdmin = application.getIsAdminUser();
         //endregion
@@ -132,6 +132,12 @@ public class MainActivity extends ActionBarActivity
     @Override
     protected void onResume() {
         super.onResume();
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        mAnalytics.onStop(this);
     }
 
     @Override
@@ -207,7 +213,7 @@ public class MainActivity extends ActionBarActivity
         if(mIsAdmin) {
             return mMainNavCtrl.setAdminView(this, mMap, mMapFragment, position);
         } else {
-            return mMainNavCtrl.setStandardView(this, mMap, mMapFragment, position);
+            return mMainNavCtrl.setStandardView(mMap, mMapFragment, position);
         }
     }
 

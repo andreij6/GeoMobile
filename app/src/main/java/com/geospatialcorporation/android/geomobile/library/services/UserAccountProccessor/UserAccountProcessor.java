@@ -1,6 +1,7 @@
 package com.geospatialcorporation.android.geomobile.library.services.UserAccountProccessor;
 
 import android.content.Context;
+import android.view.View;
 import android.widget.TextView;
 
 import com.geospatialcorporation.android.geomobile.application;
@@ -31,16 +32,16 @@ public class UserAccountProcessor implements IUserAccountProcessor, IPostExecute
     }
 
     @Override
-    public void setValues(TextView firstName, TextView lastName, TextView email, TextView cellPhone, TextView officePhone) {
+    public void setValues(TextView firstName, TextView lastName, TextView email, TextView cellPhone, TextView officePhone, TextView cellPhoneLabel, TextView officePhoneLabel, TextView emailLabel) {
         if(mUserAccount == null){
             mUserAccount = application.getUserAccount();
         }
 
         setValue(firstName, mUserAccount.getFirstName());
         setValue(lastName, mUserAccount.getLastName());
-        setValue(email, mUserAccount.getEmail());
-        setValue(cellPhone, mUserAccount.getCellPhone());
-        setValue(officePhone, mUserAccount.getOfficePhone());
+        setValue(email, mUserAccount.getEmail(), "No Email Listed");
+        setValue(cellPhone, mUserAccount.getFormattedCellPhone(), "(---) --- ----");
+        setValue(officePhone, mUserAccount.getFormattedOfficePhone(), "(---) --- ----");
     }
     //endregion
 
@@ -63,6 +64,14 @@ public class UserAccountProcessor implements IUserAccountProcessor, IPostExecute
 
     protected void setValue(TextView textView, String value) {
         textView.setText(value);
+    }
+
+    protected void setValue(TextView textView, String value, String defaultValue) {
+        if(value == null || value == ""){
+            textView.setText(defaultValue);
+        } else {
+            textView.setText(value);
+        }
     }
 
     protected UserAccount getUserAccount() {

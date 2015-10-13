@@ -1,45 +1,40 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                xmlns:tools="http://schemas.android.com/tools"
               android:layout_width="match_parent"
               android:layout_height="match_parent">
 
-    <LinearLayout
-        android:orientation="horizontal"
+    <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="48dp"
-        android:layout_below="@+id/fab_point"
-        android:layout_toEndOf="@+id/fab_point"
-        android:background="@color/primary"
+        android:layout_height="56dp"
+        android:background="@color/white"
         android:layout_gravity="center_horizontal"
         android:layout_centerHorizontal="true"
-        android:id="@+id/docdetail_actionbar">
+        android:id="@+id/actionBar">
 
-        <ImageView
+
+        <TextView
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
-            android:id="@+id/navigateBackIV"
-            android:src="@drawable/ic_chevron_left_white_24dp"
-            android:layout_gravity="center_vertical"
-            android:layout_weight="1"
-            android:paddingLeft="-10dp"/>
-
+            android:textAppearance="?android:attr/textAppearanceMedium"
+            android:id="@+id/title"
+            android:text="Account"
+            android:layout_alignParentStart="true"
+            android:gravity="center_vertical"
+            android:textColor="@color/primary_text"
+            android:layout_marginLeft="72dp"
+            android:textStyle="italic"/>
 
         <ImageView
             android:layout_width="36dp"
-            android:layout_height="36dp"
+            android:layout_height="match_parent"
             android:id="@+id/optionsIV"
-            android:src="@drawable/ic_dropdown"
+            android:src="@drawable/ic_menu_down_grey600_36dp"
             android:layout_gravity="center_vertical"
-            android:padding="2dp"/>
+            android:layout_alignParentEnd="true"
+            android:layout_marginRight="8dp"/>
 
-        <ImageView
-            android:layout_width="36dp"
-            android:layout_height="36dp"
-            android:id="@+id/close"
-            android:src="@drawable/ic_close_white_36dp"
-            android:layout_gravity="center_vertical"
-            android:layout_weight="1"/>
-    </LinearLayout>
+    </RelativeLayout>
 
     <com.sothree.slidinguppanel.SlidingUpPanelLayout
         xmlns:sothree="http://schemas.android.com/apk/res-auto"
@@ -50,55 +45,24 @@
         sothree:umanoPanelHeight="68dp"
         sothree:umanoShadowHeight="4dp"
         android:background="@color/white"
-        android:layout_below="@+id/docdetail_actionbar">
+        android:paddingRight="8dp"
+        android:paddingLeft="8dp"
+        android:layout_below="@+id/actionBar">
 
         <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent">
-
-            <ImageView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:id="@+id/backgroundImageView"
-                android:layout_centerHorizontal="true"
-                android:background="@color/primary"
-                android:minHeight="100dp"
-                android:src="@drawable/ic_file_document_box_white_24dp"
-                android:layout_below="@id/docdetail_actionbar"
-                android:contentDescription="@string/document_icon"/>
-
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:textAppearance="?android:attr/textAppearanceLarge"
-                android:id="@+id/documentNameTV"
-                android:layout_below="@+id/backgroundImageView"
-                android:layout_alignParentStart="true"
-                android:paddingLeft="40dp"
-                android:background="@color/primary"
-                android:paddingBottom="10dp"
-                android:textColor="@color/white"
-                />
-
-            <EditText
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:inputType="textPersonName"
-                android:ems="10"
-                android:id="@+id/documentNameET"
-                android:layout_below="@+id/documentNameTV"
-                android:layout_centerHorizontal="true"
-                android:paddingLeft="25dp"
-                android:paddingRight="25dp"
-                android:visibility="gone"/>
 
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:textAppearance="?android:attr/textAppearanceLarge"
                 android:id="@+id/fileSizeValue"
-                android:layout_centerVertical="true"
-                android:layout_alignStart="@+id/fileSizeLabel"/>
+                tools:text="9.00 KB"
+                android:layout_marginTop="73dp"
+                android:layout_alignParentTop="true"
+                android:layout_alignParentStart="true"
+                android:layout_marginLeft="16dp"/>
 
             <TextView
                 android:layout_width="wrap_content"
@@ -107,11 +71,12 @@
                 android:text="@string/file_size"
                 android:id="@+id/fileSizeLabel"
                 android:layout_below="@+id/fileSizeValue"
-                android:layout_marginLeft="15dp"/>
+                android:layout_marginLeft="16dp"/>
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                tools:text="May 21, 2015 4:37PM"
                 android:textAppearance="?android:attr/textAppearanceLarge"
                 android:id="@+id/uploadTimeValue"
                 android:layout_marginTop="34dp"
@@ -136,5 +101,15 @@
         </RelativeLayout>
 
     </com.sothree.slidinguppanel.SlidingUpPanelLayout>
+
+    <Button
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/close"
+        android:id="@+id/close"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
+        android:background="@color/accent_blue"
+        android:textColor="@color/white"/>
 
 </RelativeLayout>
