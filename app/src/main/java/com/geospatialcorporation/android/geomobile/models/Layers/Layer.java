@@ -17,9 +17,11 @@ public class Layer implements Parcelable, ITreeEntity {
     public Layer(String name) {
         Name = name;
         IsShowing = false;
+        PluginId = 0;
     }
 
     public Layer(){
+        PluginId = 0;
         IsShowing = false;
     }
 
@@ -33,6 +35,7 @@ public class Layer implements Parcelable, ITreeEntity {
         //MobileId = in.readInt();
         Name = in.readString();
         IsShowing = (Boolean)in.readValue(Boolean.class.getClassLoader());
+        PluginId = in.readInt();
     }
     //endregion
 
@@ -48,10 +51,18 @@ public class Layer implements Parcelable, ITreeEntity {
     private Boolean IsShowing;
     private List<Layer> Sublayers;
     private StyleInfo StyleInfo;
-
+    private int PluginId;
     //endregion
 
     //region Getters & Setters
+    public int getPluginId() {
+        return PluginId;
+    }
+
+    public void setPluginId(int pluginId) {
+        PluginId = pluginId;
+    }
+
     public Boolean getIsShowing() {
         return IsShowing;
     }
@@ -156,6 +167,8 @@ public class Layer implements Parcelable, ITreeEntity {
 
         dest.writeString(Name);
         dest.writeValue(IsShowing);
+
+        dest.writeInt(PluginId);
     }
 
     public static final Creator<Layer> CREATOR = new Creator<Layer>(){

@@ -9,6 +9,7 @@ import com.geospatialcorporation.android.geomobile.library.DI.Analytics.Models.G
 import com.google.android.gms.analytics.ExceptionReporter;
 import com.google.android.gms.analytics.GoogleAnalytics;
 import com.google.android.gms.analytics.HitBuilders;
+import com.google.android.gms.analytics.StandardExceptionParser;
 import com.google.android.gms.analytics.Tracker;
 
 public class GeoGoogleAnalytics implements IGeoAnalytics<GoogleAnalyticEvent> {
@@ -46,5 +47,13 @@ public class GeoGoogleAnalytics implements IGeoAnalytics<GoogleAnalyticEvent> {
     @Override
     public void onStop(Activity activity) {
         mGoogleAnalytics.reportActivityStop(activity);
+    }
+
+    @Override
+    public void sendException(Exception e) {
+        mTracker.send(new HitBuilders.ExceptionBuilder()
+                        .setDescription(new StandardExceptionParser(mContext, null).getDescription(Thread.currentThread().getName(), e))
+                        .setFatal(false)
+                        .build());
     }
 }

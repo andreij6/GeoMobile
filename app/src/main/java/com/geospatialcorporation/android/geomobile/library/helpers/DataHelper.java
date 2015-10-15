@@ -102,8 +102,10 @@ public class DataHelper {
 
         if (layers != null) {
             for (Layer layer : layers) {
-                ListItem listItem = new ListItem(layer);
-                results.add(listItem);
+                if(layer.getPluginId() == 0) {
+                    ListItem listItem = new ListItem(layer);
+                    results.add(listItem);
+                }
             }
 
             if(layers.isEmpty()){

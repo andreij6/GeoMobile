@@ -84,44 +84,48 @@ public class SublayersTab extends GeoDetailsTabBase<Layer> implements IContentRe
 
     @Override
     public void onPostExecute(List<Layer> model) {
-        mSublayerDataView.removeAllViews();
+        try {
+            mSublayerDataView.removeAllViews();
 
-        TableFactory factory = new TableFactory(getActivity(), mSublayerDataView, mInflater);
+            TableFactory factory = new TableFactory(getActivity(), mSublayerDataView, mInflater);
 
-        //factory.addHeaders(R.layout.template_table_header, "Visible", "Name", "Edit");
-        factory.addHeaders(R.layout.template_table_header, "", "Name");
+            //factory.addHeaders(R.layout.template_table_header, "Visible", "Name", "Edit");
+            factory.addHeaders(R.layout.template_table_header, "", "Name");
 
-        mSublayerDataView = factory.build();
+            mSublayerDataView = factory.build();
 
-        AddAllFeatures();
+            AddAllFeatures();
 
-        if(model != null) {
-            for (final Layer layer : model) {
-                TableRow row = new TableRow(getActivity());
+            if (model != null) {
+                for (final Layer layer : model) {
+                    TableRow row = new TableRow(getActivity());
 
-                CheckBox visible = (CheckBox) mInflater.inflate(R.layout.template_table_checkbox, null);
-                visible.setChecked(layer.getIsShowing());
-                visible.setEnabled(false);
+                    CheckBox visible = (CheckBox) mInflater.inflate(R.layout.template_table_checkbox, null);
+                    visible.setChecked(layer.getIsShowing());
+                    visible.setEnabled(false);
 
-                TextView columnName = (TextView) mInflater.inflate(R.layout.template_table_column, null);
-                columnName.setText(layer.getName());
+                    TextView columnName = (TextView) mInflater.inflate(R.layout.template_table_column, null);
+                    columnName.setText(layer.getName());
 
-                //ImageView edit = (ImageView) mInflater.inflate(R.layout.template_table_column_image, null);
-                //edit.setImageDrawable(getActivity().getDrawable(R.drawable.ic_rename_box_black_18dp));
+                    //ImageView edit = (ImageView) mInflater.inflate(R.layout.template_table_column_image, null);
+                    //edit.setImageDrawable(getActivity().getDrawable(R.drawable.ic_rename_box_black_18dp));
 
-                //edit.setOnClickListener(new View.OnClickListener() {
-                //    @Override
-                //    public void onClick(View v) {
-                //        mDialog.modify(layer, getActivity(), getFragmentManager());
-                //    }
-                //});
+                    //edit.setOnClickListener(new View.OnClickListener() {
+                    //    @Override
+                    //    public void onClick(View v) {
+                    //        mDialog.modify(layer, getActivity(), getFragmentManager());
+                    //    }
+                    //});
 
-                row.addView(visible);
-                row.addView(columnName);
-                //row.addView(edit);
+                    row.addView(visible);
+                    row.addView(columnName);
+                    //row.addView(edit);
 
-                mSublayerDataView.addView(row);
+                    mSublayerDataView.addView(row);
+                }
             }
+        } catch (Exception e){
+            mAnalytics.sendException(e);
         }
     }
 

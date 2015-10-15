@@ -13,5 +13,5 @@ import dagger.Provides;
 public class ErrorsModule {
 
     @Provides @Singleton
-    IGeoErrorHandler provideErrorHandler(){ return new GeoErrorHandler(new GeoGoogleAnalytics()); }
+    IGeoErrorHandler provideErrorHandler(){ return new GeoErrorHandler(); }
 }

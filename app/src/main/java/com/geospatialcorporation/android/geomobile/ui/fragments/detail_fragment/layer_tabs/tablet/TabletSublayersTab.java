@@ -67,9 +67,13 @@ public class TabletSublayersTab extends TabGeoViewFragmentBase implements IConte
 
     @Override
     public void onPostExecute(List<Layer> model) {
-        mCommons.onPostExecute(model, mSublayerDataView, mInflater, getActivity());
+        try {
+            mCommons.onPostExecute(model, mSublayerDataView, mInflater, getActivity());
 
-        mProgressDialogHelper.hideProgressDialog();
+            mProgressDialogHelper.hideProgressDialog();
+        } catch (Exception e){
+            mAnalytics.sendException(e);
+        }
     }
 
     @Override

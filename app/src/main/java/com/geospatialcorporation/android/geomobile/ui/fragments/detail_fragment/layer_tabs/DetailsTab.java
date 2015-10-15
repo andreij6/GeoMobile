@@ -66,21 +66,25 @@ public class DetailsTab extends GeoDetailsTabBase<Layer> implements IPostExecute
 
     @Override
     public void onPostExecute(LayerDetailsVm details) {
-        if(details != null){
-            mFeatureCount.setText(details.getFeatureCount() + "");
-            mCreateDate.setText(DateTimeFormatter.format(details.getCreateDateTime()));
-            mCreatedBy.setText(details.getCreateUser());
+        try {
+            if (details != null) {
+                mFeatureCount.setText(details.getFeatureCount() + "");
+                mCreateDate.setText(DateTimeFormatter.format(details.getCreateDateTime()));
+                mCreatedBy.setText(details.getCreateUser());
 
-            if (details.getUpdateUser() != null || details.getUpdateUser() == "") {
-                mUserUpdated.setText(details.getUpdateUser());
-                mLastUpdatedValue.setText(DateTimeFormatter.format(details.getUpdateDateTime()));
-            } else {
-                mUserUpdated.setVisibility(View.GONE);
-                mLastUpdatedValue.setVisibility(View.GONE);
-                mLastUpdateLabel.setVisibility(View.GONE);
-                mUserUpdatedLabel.setVisibility(View.GONE);
+                if (details.getUpdateUser() != null || details.getUpdateUser() == "") {
+                    mUserUpdated.setText(details.getUpdateUser());
+                    mLastUpdatedValue.setText(DateTimeFormatter.format(details.getUpdateDateTime()));
+                } else {
+                    mUserUpdated.setVisibility(View.GONE);
+                    mLastUpdatedValue.setVisibility(View.GONE);
+                    mLastUpdateLabel.setVisibility(View.GONE);
+                    mUserUpdatedLabel.setVisibility(View.GONE);
+                }
+                mShapeType.setText(mEntity.getReadableGeometryType());
             }
-            mShapeType.setText(mEntity.getReadableGeometryType());
+        } catch (Exception e){
+            mAnalytics.sendException(e);
         }
     }
 }

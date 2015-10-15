@@ -24,14 +24,21 @@ import android.widget.Toast;
 
 import com.geospatialcorporation.android.geomobile.R;
 import com.geospatialcorporation.android.geomobile.application;
+import com.geospatialcorporation.android.geomobile.library.DI.Analytics.Interfaces.IGeoAnalytics;
+import com.geospatialcorporation.android.geomobile.library.DI.Tasks.Implementations.LayerStyleTask;
 import com.geospatialcorporation.android.geomobile.library.DI.Tasks.Interfaces.IGetLayersTask;
+import com.geospatialcorporation.android.geomobile.library.DI.Tasks.Interfaces.ILayerStyleTask;
 import com.geospatialcorporation.android.geomobile.library.DI.Tasks.models.GetLayersTaskParams;
 import com.geospatialcorporation.android.geomobile.library.sectionbuilders.implementations.LegendLayerSectionBuilder;
 import com.geospatialcorporation.android.geomobile.models.Folders.Folder;
+import com.geospatialcorporation.android.geomobile.models.Layers.Layer;
+import com.geospatialcorporation.android.geomobile.models.Layers.LegendLayer;
 import com.geospatialcorporation.android.geomobile.ui.Interfaces.IPostExecuter;
 import com.geospatialcorporation.android.geomobile.ui.MainActivity;
 
 import java.lang.reflect.Field;
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 import butterknife.Bind;
@@ -55,6 +62,7 @@ public class LayerSelectorDrawerFragment extends Fragment implements IPostExecut
     private View mFragmentContainerView;
     private View mRootView;
     @Bind(R.id.layerRecyclerView) RecyclerView mRecyclerView;
+    IGeoAnalytics mAnalytics;
     IGetLayersTask mGetLayersTask;
 
     private int mCurrentSelectedPosition = 0;
@@ -71,6 +79,7 @@ public class LayerSelectorDrawerFragment extends Fragment implements IPostExecut
         // drawer. See PREF_USER_LEARNED_DRAWER for details.
         SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(getActivity());
         mUserLearnedDrawer = sp.getBoolean(PREF_USER_LEARNED_DRAWER, false);
+        mAnalytics = application.getAnalyticsComponent().provideGeoAnalytics();
 
         if (savedInstanceState != null) {
             mCurrentSelectedPosition = savedInstanceState.getInt(STATE_SELECTED_POSITION);
@@ -87,8 +96,7 @@ public class LayerSelectorDrawerFragment extends Fragment implements IPostExecut
         // Indicate that this fragment would like to influence the set of actions in the action bar.
         mRecyclerView = (RecyclerView)mRootView.findViewById(R.id.layerRecyclerView);
 
-        mGetLayersTask = setTask();
-        mGetLayersTask.getAll(new GetLayersTaskParams(this));
+        refresh();
 
         setHasOptionsMenu(false);
     }
@@ -174,6 +182,8 @@ public class LayerSelectorDrawerFragment extends Fragment implements IPostExecut
                     }
                 } catch (Exception e) {
                     e.printStackTrace();
+
+                    mAnalytics.sendException(e);
                 }
 
             }

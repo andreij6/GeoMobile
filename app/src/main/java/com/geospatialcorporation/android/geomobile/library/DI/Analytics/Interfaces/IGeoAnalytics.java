@@ -14,4 +14,6 @@ public interface IGeoAnalytics<T extends  AnalyticEvent> {
     Thread.UncaughtExceptionHandler getExceptionReporter(Thread.UncaughtExceptionHandler defaultHandler);
 
     void onStop(Activity activity);
+
+    void sendException(Exception e);
 }

@@ -37,6 +37,7 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.geospatialcorporation.android.geomobile.R;
 import com.geospatialcorporation.android.geomobile.application;
@@ -327,6 +328,7 @@ public class GoogleMapFragment extends GeoViewFragmentBase implements
         super.onResume();
         LifeCycleLogger("onResume");
         mMapView.onResume();
+        setLocationClient();
     }
 
     @Override
@@ -509,6 +511,8 @@ public class GoogleMapFragment extends GeoViewFragmentBase implements
                 connectionResult.startResolutionForResult(getActivity(), CONNECTION_FAILURE_RESOLUTION_REQUEST);
             } catch (IntentSender.SendIntentException e) {
                 e.printStackTrace();
+
+                mAnalytics.sendException(e);
             }
         } else {
             Log.i(TAG, "Location services connection failed with code " + connectionResult.getErrorCode());
@@ -644,10 +648,6 @@ public class GoogleMapFragment extends GeoViewFragmentBase implements
     }
 
     private double calculateTolerance(float zoom) {
-        //Log.d(TAG, "Current: " + zoom);
-        //Log.d(TAG, "Max: " + mMap.getMaxZoomLevel());
-        //Log.d(TAG, "Min: " + mMap.getMinZoomLevel());
-
         if(zoom >= 12){
             return 450.0;
         }
@@ -731,19 +731,17 @@ public class GoogleMapFragment extends GeoViewFragmentBase implements
 
                 mMap.setOnMapLoadedCallback(GoogleMapFragment.this);
 
-                mLocationClient = new GoogleApiClient.Builder(getActivity())
-                        .addApi(LocationServices.API)
-                        .addConnectionCallbacks(GoogleMapFragment.this)
-                        .addOnConnectionFailedListener(GoogleMapFragment.this)
-                        .build();
+
                 try {
+
+                    setLocationClient();
 
                     MapsInitializer.initialize(getActivity());
 
-                    mLocationClient.connect();
-
                 } catch (Exception e) {
                     e.printStackTrace();
+
+                    mAnalytics.sendException(e);
                 }
 
                 setMapState();
@@ -751,32 +749,48 @@ public class GoogleMapFragment extends GeoViewFragmentBase implements
         });
     }
 
+    private void setLocationClient() {
+        mLocationClient = new GoogleApiClient.Builder(getActivity())
+                .addApi(LocationServices.API)
+                .addConnectionCallbacks(GoogleMapFragment.this)
+                .addOnConnectionFailedListener(GoogleMapFragment.this)
+                .build();
+
+        mLocationClient.connect();
+    }
+
     public void showFeatureWindow(ParcelableFeatureQueryResponse response) {
-        if(validate(response)){
-            mPanelManager = new PanelManager(GeoPanel.MAP);
+        try {
+            if (validate(response)) {
+                mPanelManager = new PanelManager(GeoPanel.MAP);
 
-            Fragment f = new FeatureWindowPanelFragment();
+                Fragment f = new FeatureWindowPanelFragment();
 
-            f.setArguments(response.toBundle());
+                f.setArguments(response.toBundle());
 
-            application.getMainActivity().getSupportFragmentManager()
-                    .beginTransaction()
-                    .replace(R.id.slider_content, f)
-                    .commit();
+                application.getMainActivity().getSupportFragmentManager()
+                        .beginTransaction()
+                        .replace(R.id.slider_content, f)
+                        .commit();
 
-            mPanelManager.halfAnchor();
+                mPanelManager.halfAnchor();
 
-            mStatusBarManager.reset();
-        } else {
+            } else {
+                clearHighlights();
+
+                Toaster("No Data To Display");
+            }
+        } catch (IndexOutOfBoundsException oe) {
             clearHighlights();
 
             Toaster("No Data To Display");
-
+        } finally {
             mStatusBarManager.reset();
+
         }
     }
 
-    private boolean validate(ParcelableFeatureQueryResponse response) {
+    private boolean validate(ParcelableFeatureQueryResponse response) throws IndexOutOfBoundsException{
         return response.getFeatureQueryResponse().get(0).getFeatures().size() != 0;
     }
 
@@ -824,6 +838,8 @@ public class GoogleMapFragment extends GeoViewFragmentBase implements
 
                         mClusterManager.onMarkerClick(marker);
                     }
+
+                    mAnalytics.sendException(e);
                 }
 
                 return true;

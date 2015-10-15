@@ -106,7 +106,7 @@ public class PolylineOptionsManager extends OptionsManagerBase<PolylineOptions, 
     }
 
     protected boolean contentFragmentIsGoogleMapFragment() {
-        if(application.getMainActivity() == null){
+        if(application.getIsTablet()){
             return false;
         }else {
             return application.getMainActivity().getContentFragment() instanceof GoogleMapFragment;

@@ -68,9 +68,9 @@ public class GoogleApiActivity extends Activity implements
         mGoogleAuthTokenService = application.getGoogleAuthComponent().provideGoogleAuthTokenService();
         mGeoSharedPrefs = application.getGeoSharedPrefsComponent().provideGeoSharedPrefs();
         mAnalytics = application.getAnalyticsComponent().provideGeoAnalytics();
-        mErrorHandler = application.getErrorsComponent().provideErrorHandler();
 
-        Thread.setDefaultUncaughtExceptionHandler(mErrorHandler.UncaughtExceptionHandler());
+        mErrorHandler = application.getErrorsComponent().provideErrorHandler();
+        Thread.setDefaultUncaughtExceptionHandler(mErrorHandler.UncaughtExceptionHandler(this));
 
         if (application.getGoogleClient() == null) {
             mGoogleApiClient = new GoogleApiClient.Builder(context)
@@ -168,6 +168,8 @@ public class GoogleApiActivity extends Activity implements
                 // state and attempt to connect to get an updated ConnectionResult.
                 mIntentInProgress = false;
                 mGoogleApiClient.connect();
+
+                mAnalytics.sendException(e);
             }
         }
     }

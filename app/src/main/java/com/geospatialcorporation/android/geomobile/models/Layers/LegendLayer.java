@@ -33,6 +33,7 @@ public class LegendLayer {
         mLayer = layer;
         MapObjects = new ArrayList<>();
         mMapped = false;
+        mIsActiveBitmapLoaded = false;
     }
 
     public LegendLayer(Folder folder) {
@@ -137,5 +138,9 @@ public class LegendLayer {
 
     public boolean getIsActiveBitmapLoaded() {
         return mIsActiveBitmapLoaded;
+    }
+
+    public ImageView getAppStateImageView() {
+        return mAppStateImageView;
     }
 }

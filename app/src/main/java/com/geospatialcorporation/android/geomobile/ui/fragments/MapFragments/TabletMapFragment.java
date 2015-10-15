@@ -48,7 +48,6 @@ public class TabletMapFragment extends Fragment
     ILayerManager mLayerManager;
     IMapStatusBarManager mStatusBarManager;
 
-
     @Bind(R.id.map) MapView mMapView;
     @Bind(R.id.getLocationIB) ImageButton mGPSbtn;
     @Bind(R.id.loadingBar) LinearLayout mLoadingBar;

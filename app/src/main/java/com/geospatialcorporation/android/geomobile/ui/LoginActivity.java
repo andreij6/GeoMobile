@@ -122,8 +122,6 @@ public class LoginActivity extends GoogleApiActivity implements LoaderCallbacks<
         mLayerManager = application.getLayerManager();
         mLayerManager.reset();
 
-
-
         if (!supportsGooglePlayServices()) {
             // Don't offer G+ sign in if the app's version is too low to support Google Play
             // Services.
@@ -131,7 +129,7 @@ public class LoginActivity extends GoogleApiActivity implements LoaderCallbacks<
             return;
         }
 
-        mAuthentication = new Authentication(this, ProgressHelper, FailureHelper);
+        mAuthentication = getAuthentication();
 
         mUserLoginTask = null;
 
@@ -237,7 +235,7 @@ public class LoginActivity extends GoogleApiActivity implements LoaderCallbacks<
                 mGeoSharedPrefs.commit();
             }
 
-            mAuthentication.emailLoginAttempt(email, password);
+            getAuthentication().emailLoginAttempt(email, password);
             // Show a progress spinner, and kick off a background task to
             // perform the user login attempt.
             mAnalytics.trackClick(new GoogleAnalyticEvent().LoginAttempt());
@@ -348,6 +346,13 @@ public class LoginActivity extends GoogleApiActivity implements LoaderCallbacks<
         mUserLoginTask = null;
 
         showProgress(false);
+    }
+
+    public Authentication getAuthentication() {
+        if(mAuthentication == null){
+            mAuthentication = new Authentication(this, ProgressHelper, FailureHelper);
+        }
+        return mAuthentication;
     }
 
     private interface ProfileQuery {

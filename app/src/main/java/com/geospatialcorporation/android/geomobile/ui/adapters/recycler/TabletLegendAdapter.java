@@ -21,6 +21,7 @@ import com.geospatialcorporation.android.geomobile.application;
 import com.geospatialcorporation.android.geomobile.library.DI.Analytics.Models.GoogleAnalyticEvent;
 import com.geospatialcorporation.android.geomobile.library.DI.Map.Interfaces.ILayerManager;
 import com.geospatialcorporation.android.geomobile.library.DI.SharedPreferences.Implementations.AppStateSharedPrefs;
+import com.geospatialcorporation.android.geomobile.library.DI.Tasks.Implementations.LayerStyleTask;
 import com.geospatialcorporation.android.geomobile.library.DI.Tasks.Interfaces.ILayerStyleTask;
 import com.geospatialcorporation.android.geomobile.library.DI.UIHelpers.Interfaces.IMapStatusBarManager;
 import com.geospatialcorporation.android.geomobile.library.constants.GeometryTypeCodes;
@@ -105,6 +106,12 @@ public class TabletLegendAdapter extends GeoRecyclerAdapterBase<TabletLegendAdap
                 mLayer = llayer.getLayer();
                 mLegendLayer = llayer;
 
+                if(!mLegendLayer.getIsActiveBitmapLoaded()) {
+                    ILayerStyleTask layerStyleTask = new LayerStyleTask();
+
+                    layerStyleTask.getActiveStyle(mLegendLayer);
+                }
+
                 isVisibleCB.setVisibility(View.VISIBLE);
                 gotoSublayer.setVisibility(View.VISIBLE);
                 geomIV.setVisibility(View.VISIBLE);
@@ -115,10 +122,6 @@ public class TabletLegendAdapter extends GeoRecyclerAdapterBase<TabletLegendAdap
                 mLayerName.setTextColor(mContext.getResources().getColor(R.color.primary_text));
 
                 mView.setBackgroundColor(mContext.getResources().getColor(R.color.white));
-
-                if (!mLegendLayer.isIconSet()) {
-                    mLegendLayer.setLegendIcon(getDrawable(mLayer.getGeometryTypeCodeId()));
-                }
 
                 mLayerName.setText(mLayer.getName());
                 mLayerName.setOnClickListener(ZoomToLayer);
@@ -132,6 +135,9 @@ public class TabletLegendAdapter extends GeoRecyclerAdapterBase<TabletLegendAdap
                 mLegendLayer.setImageView(geomIV);
                 mLegendLayer.setImageSrc(mContext);
                 mLegendLayer.setCheckBox(isVisibleCB);
+
+                geomIV.setImageDrawable(mLegendLayer.getLegendIcon());
+
 
 
             } else {
@@ -208,8 +214,8 @@ public class TabletLegendAdapter extends GeoRecyclerAdapterBase<TabletLegendAdap
                     //probably move this the Layer manager removeLayer
                     mLayer.setIsShowing(false);
 
-                    mLegendLayer.setLegendIcon(getDrawable(mLayer.getGeometryTypeCodeId()));
-                    mLegendLayer.setImageSrc(mContext);
+                    //mLegendLayer.setLegendIcon(getDrawable(mLayer.getGeometryTypeCodeId()));
+                    //mLegendLayer.setImageSrc(mContext);
 
                     application.getMapLayerState().removeLayer(mLayer);
 

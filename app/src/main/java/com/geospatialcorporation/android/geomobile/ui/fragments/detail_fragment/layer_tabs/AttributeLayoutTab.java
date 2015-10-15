@@ -82,38 +82,44 @@ public class AttributeLayoutTab extends GeoDetailsTabBase<Layer> implements ICon
 
     @Override
     public void onPostExecute(List<LayerAttributeColumn> model) {
-        mTableLayout.removeAllViews();
+        try {
+            mTableLayout.removeAllViews();
 
-        TableFactory factory = new TableFactory(getActivity(), mTableLayout, mInflater);
+            TableFactory factory = new TableFactory(getActivity(), mTableLayout, mInflater);
 
-        factory.addHeaders(R.layout.template_table_header, "Name", "Type", "Default", "Hidden");
+            factory.addHeaders(R.layout.template_table_header, "Name", "Type", "Default", "Hidden");
 
-        mTableLayout = factory.build();
+            mTableLayout = factory.build();
 
-        if(model != null) {
-            for (LayerAttributeColumn layer : model) {
-                TableRow row = new TableRow(getActivity());
+            if (model != null) {
+                for (LayerAttributeColumn layer : model) {
+                    TableRow row = new TableRow(getActivity());
 
-                TextView name = (TextView) mInflater.inflate(R.layout.template_table_column, null);
-                name.setText(layer.getName());
+                    TextView name = (TextView) mInflater.inflate(R.layout.template_table_column, null);
+                    name.setText(layer.getName());
 
-                TextView type = (TextView) mInflater.inflate(R.layout.template_table_column, null);
-                type.setText(layer.getDataTypeViewName());
+                    TextView type = (TextView) mInflater.inflate(R.layout.template_table_column, null);
+                    type.setText(layer.getDataTypeViewName());
 
-                TextView defaultValue = (TextView) mInflater.inflate(R.layout.template_table_column, null);
-                defaultValue.setText(layer.getDefaultValue());
+                    TextView defaultValue = (TextView) mInflater.inflate(R.layout.template_table_column, null);
+                    defaultValue.setText(layer.getDefaultValue());
 
-                CheckBox hidden = (CheckBox) mInflater.inflate(R.layout.template_table_checkbox, null);
-                hidden.setChecked(layer.getIsHidden());
-                hidden.setEnabled(false);
+                    CheckBox hidden = (CheckBox) mInflater.inflate(R.layout.template_table_checkbox, null);
+                    hidden.setChecked(layer.getIsHidden());
+                    hidden.setEnabled(false);
 
-                row.addView(name);
-                row.addView(type);
-                row.addView(defaultValue);
-                row.addView(hidden);
+                    row.addView(name);
+                    row.addView(type);
+                    row.addView(defaultValue);
+                    row.addView(hidden);
 
-                mTableLayout.addView(row);
+                    mTableLayout.addView(row);
+                }
             }
+        } catch (NullPointerException e){
+            mAnalytics.sendException(e);
+        } catch (Exception e){
+            mAnalytics.sendException(e);
         }
     }
 }

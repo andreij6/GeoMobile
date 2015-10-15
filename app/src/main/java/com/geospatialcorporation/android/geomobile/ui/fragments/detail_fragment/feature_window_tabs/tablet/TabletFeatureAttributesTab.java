@@ -38,7 +38,7 @@ public class TabletFeatureAttributesTab extends TabletFeatureTabBase {
 
     @Override
     protected int getLayoutResId() {
-        return  R.layout.fragment_feature_window_attributes_tab;
+        return  R.layout.fragment_feature_window_attributes_tab_tablet;
     }
 
     @Override

@@ -66,8 +66,6 @@ public class LayerManager implements ILayerManager {
 
         int code = llayer.getLayer().getGeometryTypeCodeId();
 
-        Log.d(TAG, "SHOW LAYER " + code);
-
         switch (code){
             case GeometryTypeCodes.Point:
             case GeometryTypeCodes.MultiPoint:
@@ -108,14 +106,9 @@ public class LayerManager implements ILayerManager {
 
     @Override
     public void clearVisibleLayers() {
-
-        Log.d(TAG, "about to clear");
         mMarkerManager.clearVisibleLayers();
-        Log.d(TAG, "markers cleared");
         mPolygonOptionsManager.clearVisibleLayers();
-        Log.d(TAG, "polygons cleared");
         mPolylineOptionsManager.clearVisibleLayers();
-        Log.d(TAG, "lines cleared");
 
     }
 

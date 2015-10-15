@@ -143,6 +143,8 @@ public class GeoUndergroundMap implements IGeoUndergroundMap, IPostExecuter<List
 
                 } catch (Exception e) {
                     e.printStackTrace();
+
+                    mAnalytics.sendException(e);
                 }
 
                 setMapState();
@@ -208,6 +210,8 @@ public class GeoUndergroundMap implements IGeoUndergroundMap, IPostExecuter<List
 
                 } catch (Exception e) {
                     mStatusBarManager.reset();
+
+                    mAnalytics.sendException(e);
                 }
 
                 return true;
@@ -251,7 +255,6 @@ public class GeoUndergroundMap implements IGeoUndergroundMap, IPostExecuter<List
     }
 
     protected void preloadLayers() {
-
         mGetLayersTask.getAll(new GetLayersTaskParams(this));
     }
 
@@ -275,6 +278,9 @@ public class GeoUndergroundMap implements IGeoUndergroundMap, IPostExecuter<List
             result = response.getFeatureQueryResponse().get(0).getFeatures().size() != 0;
         } catch (Exception exception){
             result = false;
+
+            mAnalytics.sendException(exception);
+
         } finally {
             return result;
         }
@@ -440,6 +446,8 @@ public class GeoUndergroundMap implements IGeoUndergroundMap, IPostExecuter<List
                 connectionResult.startResolutionForResult(mActivity, CONNECTION_FAILURE_RESOLUTION_REQUEST);
             } catch (IntentSender.SendIntentException e) {
                 e.printStackTrace();
+
+                mAnalytics.sendException(e);
             }
         } else {
             Log.i(TAG, "Location services connection failed with code " + connectionResult.getErrorCode());

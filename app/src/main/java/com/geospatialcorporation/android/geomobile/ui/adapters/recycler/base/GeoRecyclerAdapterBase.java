@@ -2,6 +2,7 @@ package com.geospatialcorporation.android.geomobile.ui.adapters.recycler.base;
 
 import android.content.Context;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -47,7 +48,15 @@ public abstract class GeoRecyclerAdapterBase<Holder extends GeoHolderBase<T>, T>
 
     @Override
     public void onBindViewHolder(Holder holder, int position) {
-        holder.bind(mData.get(position));
+        try {
+            holder.bind(mData.get(position));
+        } catch (IndexOutOfBoundsException oe){
+            mAnalytics.sendException(oe);
+            Log.e(TAG, oe.getMessage());
+        } catch ( Exception e){
+            Log.e(TAG, e.getMessage());
+            mAnalytics.sendException(e);
+        }
     }
 
     @Override

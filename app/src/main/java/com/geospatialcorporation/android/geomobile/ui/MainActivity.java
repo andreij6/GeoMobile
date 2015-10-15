@@ -24,10 +24,12 @@ import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBarActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.Toast;
 
 import com.geospatialcorporation.android.geomobile.R;
 import com.geospatialcorporation.android.geomobile.application;
@@ -43,6 +45,10 @@ import com.geospatialcorporation.android.geomobile.ui.fragments.GoogleMapFragmen
 import com.geospatialcorporation.android.geomobile.ui.fragments.drawer.LayerSelectorDrawerFragment;
 import com.geospatialcorporation.android.geomobile.ui.fragments.drawer.MainNavigationDrawerFragment;
 import com.google.android.gms.maps.GoogleMap;
+import com.squareup.picasso.Picasso;
+
+import java.io.PrintWriter;
+import java.io.StringWriter;
 
 import butterknife.ButterKnife;
 
@@ -95,7 +101,7 @@ public class MainActivity extends ActionBarActivity
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        application.setIsTablet(true);
+        application.setIsTablet(false);
         application.setGeoMainActivity(this);
 
         //region Common Btw Tablet & Phone
@@ -113,8 +119,8 @@ public class MainActivity extends ActionBarActivity
         mAnalytics = application.getAnalyticsComponent().provideGeoAnalytics();
         application.getStatusBarManager().reset();
 
-        //mErrorHandler = application.getErrorsComponent().provideErrorHandler();
-        //Thread.setDefaultUncaughtExceptionHandler(mErrorHandler.UncaughtExceptionHandler());
+        mErrorHandler = application.getErrorsComponent().provideErrorHandler();
+        Thread.setDefaultUncaughtExceptionHandler(mErrorHandler.UncaughtExceptionHandler(this));
 
         mIsAdmin = application.getIsAdminUser();
         //endregion

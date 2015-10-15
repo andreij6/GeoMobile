@@ -135,6 +135,8 @@ public class Authentication {
                         mFailureHelper.show();
                     } catch (Exception e) {
                         Log.e(TAG, "emailLoginStart failure failure: error showing error message");
+
+                        mAnalytics.sendException(e);
                     }
                 }
             }
@@ -192,6 +194,8 @@ public class Authentication {
                     mFailureHelper.show();
                 } catch (Exception e) {
                     Log.e(TAG, "postEmailLogin failure failure: error showing error message");
+
+                    mAnalytics.sendException(e);
                 }
             }
         };
@@ -227,6 +231,8 @@ public class Authentication {
             Log.d(TAG, "HmacSHA256 final: " + returnString);
         } catch (Exception e) {
             Log.e(TAG, "getLatestSignature error: " + e.getMessage());
+
+            mAnalytics.sendException(e);
         }
 
         return returnString;
@@ -250,6 +256,8 @@ public class Authentication {
             returnString = Base64.encodeToString(encrypted, Base64.NO_WRAP);
         } catch (Exception e) {
             Log.e(TAG, "encryptRSA error: " + e.getMessage());
+
+            mAnalytics.sendException(e);
         }
 
         Log.d(TAG, "Completed encryptRSA");
@@ -314,6 +322,8 @@ public class Authentication {
             mLoginAttemptSalt = loginAttemptStrings[1].getBytes("UTF-8");
         } catch (Exception e) {
             Log.d(TAG, "emailLoginStart error: " + e.getMessage());
+
+            mAnalytics.sendException(e);
         }
     }
 
@@ -352,6 +362,8 @@ public class Authentication {
             Log.d(TAG, returnString);
         } catch (Exception e) {
             Log.e(TAG, "testHmac error");
+
+            mAnalytics.sendException(e);
         }
         return returnString;
     }

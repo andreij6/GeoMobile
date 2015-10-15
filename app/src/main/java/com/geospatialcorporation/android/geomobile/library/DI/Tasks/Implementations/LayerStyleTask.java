@@ -9,16 +9,21 @@ import android.view.View;
 import android.widget.ImageView;
 
 import com.geospatialcorporation.android.geomobile.application;
+import com.geospatialcorporation.android.geomobile.library.DI.Analytics.Interfaces.IGeoAnalytics;
 import com.geospatialcorporation.android.geomobile.library.DI.Tasks.Interfaces.ILayerStyleTask;
 import com.geospatialcorporation.android.geomobile.library.map.GeoCallback;
 import com.geospatialcorporation.android.geomobile.models.Layers.LegendLayer;
 import com.google.android.gms.maps.model.BitmapDescriptor;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
+import com.squareup.picasso.Callback;
 import com.squareup.picasso.Picasso;
 import com.squareup.picasso.Target;
 
+import java.util.HashSet;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Queue;
+import java.util.Set;
 
 public class LayerStyleTask implements ILayerStyleTask {
 
@@ -26,62 +31,34 @@ public class LayerStyleTask implements ILayerStyleTask {
 
     LegendLayer mLegendLayer;
     Context mContext;
+    IGeoAnalytics mAnalytics;
+    GeoCallback mCallBack;
+    Set<Target> mTargets;
 
     public LayerStyleTask(){
         mContext = application.getAppContext();
+        mAnalytics = application.getAnalyticsComponent().provideGeoAnalytics();
+        mTargets = new HashSet<>();
     }
 
     @Override
     public void getStyle(LegendLayer layer, final GeoCallback callback) {
         mLegendLayer = layer;
+        mCallBack = callback;
 
         try {
-            String url = application.getAzureDomain() + mLegendLayer.getLayer().getStylePath() + "/tree.png";
 
-            Picasso.with(application.getAppContext())
-                    .load(url)
-                    .resize(50, 50)
-                    .into(new Target() {
-                        @Override
-                        public void onBitmapLoaded(Bitmap bitmap, Picasso.LoadedFrom from) {
-                            try {
-                                Drawable drawImage = new BitmapDrawable(mContext.getResources(), bitmap);
+            if(!mLegendLayer.getIsActiveBitmapLoaded()){
+                getImagePicasso(styleTarget);
+            } else {
+                mCallBack.invokeCallback();
+            }
 
-                                mLegendLayer.setLegendIcon(drawImage);
-
-                                mLegendLayer.setImageSrc(mContext);
-
-                                Bitmap iconBitmap = ((BitmapDrawable) drawImage).getBitmap();
-                                BitmapDescriptor icon = BitmapDescriptorFactory.fromBitmap(iconBitmap);
-
-                                mLegendLayer.setBitmap(icon);
-
-                                mLegendLayer.setIsActiveBitmapLoaded(true);
-
-                                callback.invokeCallback();
-                            } catch (NullPointerException e) {
-                                Log.d(TAG, "null pointer");
-                                e.printStackTrace();
-                            } catch (Exception e) {
-                                Log.d(TAG, "general exception");
-                                e.printStackTrace();
-                            }
-                        }
-
-                        @Override
-                        public void onBitmapFailed(Drawable errorDrawable) {
-                            Log.d(TAG, "Bitmap Failed");
-                        }
-
-                        @Override
-                        public void onPrepareLoad(Drawable placeHolderDrawable) {
-
-                        }
-                    });
-
-            //mLegendLayer.getCheckBox().setEnabled(true);
         } catch (Exception e) {
             Log.e(TAG, "Excpetion Message: " + e.getMessage());
+
+            mAnalytics.sendException(e);
+
         }
 
     }
@@ -92,58 +69,138 @@ public class LayerStyleTask implements ILayerStyleTask {
 
         try {
             if(mLegendLayer.getLayer() == null){
-                Log.d(TAG, "POLLED");
                 List<LegendLayer> llayers = application.getLegendLayerQueue();
 
                 llayers.remove(llayer);
                 return;
             }
 
-            String url = application.getAzureDomain() + mLegendLayer.getLayer().getStylePath() + "/tree.png";
+            getImagePicasso(activeStyleTarget);
 
-            Picasso.with(application.getAppContext())
-                    .load(url)
-                    .resize(50, 50)
-                    .into(new Target() {
-                        @Override
-                        public void onBitmapLoaded(Bitmap bitmap, Picasso.LoadedFrom from) {
-                            try {
-                                Drawable drawImage = new BitmapDrawable(mContext.getResources(), bitmap);
 
-                                mLegendLayer.setLegendIcon(drawImage);
 
-                                mLegendLayer.setImageSrc(mContext);
-
-                                Bitmap iconBitmap = ((BitmapDrawable) drawImage).getBitmap();
-                                BitmapDescriptor icon = BitmapDescriptorFactory.fromBitmap(iconBitmap);
-
-                                mLegendLayer.setBitmap(icon);
-
-                                mLegendLayer.setIsActiveBitmapLoaded(true);
-
-                            }catch (NullPointerException e){
-                                Log.d(TAG, "null pointer");
-                                e.printStackTrace();
-                            }catch (Exception e){
-                                Log.d(TAG, "general exception");
-                                e.printStackTrace();
-                            }
-                        }
-
-                        @Override
-                        public void onBitmapFailed(Drawable errorDrawable) {
-                            Log.d(TAG, "Bitmap Failed");
-                        }
-
-                        @Override
-                        public void onPrepareLoad(Drawable placeHolderDrawable) {
-
-                        }
-                    });
-
-            //mLegendLayer.getCheckBox().setEnabled(true);
         } catch (Exception e){
             Log.e(TAG, "Excpetion Message: " + e.getMessage());
+
+            mAnalytics.sendException(e);
         }
     }
+
+    private void getImagePicasso(final Target target) {
+        final String url = application.getAzureDomain() + mLegendLayer.getLayer().getStylePath() + "/tree.png";
+
+        mTargets.add(target);
+
+        Picasso.with(application.getAppContext())
+                .load(url)
+                .resize(50, 50)
+                .fetch(new Callback() {
+                    @Override
+                    public void onSuccess() {
+                        Picasso.with(application.getAppContext())
+                                .load(url)
+                                .resize(50, 50)
+                                .into(target);
+                    }
+
+                    @Override
+                    public void onError() {
+                    }
+                });
+
+
+
+    }
+
+    private Target activeStyleTarget = new Target() {
+        @Override
+        public void onBitmapLoaded(Bitmap bitmap, Picasso.LoadedFrom from) {
+            try {
+                Drawable drawImage = new BitmapDrawable(mContext.getResources(), bitmap);
+
+                mLegendLayer.setLegendIcon(drawImage);
+                mLegendLayer.setImageSrc(mContext);
+
+                Bitmap iconBitmap = ((BitmapDrawable) drawImage).getBitmap();
+                BitmapDescriptor icon = BitmapDescriptorFactory.fromBitmap(iconBitmap);
+
+                mLegendLayer.setBitmap(icon);
+
+                mLegendLayer.setIsActiveBitmapLoaded(true);
+
+            }catch (NullPointerException e){
+                e.printStackTrace();
+                mAnalytics.sendException(e);
+
+            }catch (Exception e){
+                e.printStackTrace();
+                mAnalytics.sendException(e);
+
+            } finally {
+                mTargets.remove(activeStyleTarget);
+                mTargets = null;
+            }
+        }
+
+        @Override
+        public void onBitmapFailed(Drawable errorDrawable) {
+            Log.d(TAG, "Error Loading " + mLegendLayer.getLayer().getName());
+
+            mTargets.remove(activeStyleTarget);
+            mTargets = null;
+        }
+
+        @Override
+        public void onPrepareLoad(Drawable placeHolderDrawable) {
+            Log.d(TAG, "On PrepareLoad " + mLegendLayer.getLayer().getName());
+        }
+    };
+
+    private Target styleTarget = new Target() {
+        @Override
+        public void onBitmapLoaded(Bitmap bitmap, Picasso.LoadedFrom from) {
+            try {
+                Drawable drawImage = new BitmapDrawable(mContext.getResources(), bitmap);
+
+                mLegendLayer.setLegendIcon(drawImage);
+
+                Bitmap iconBitmap = ((BitmapDrawable) drawImage).getBitmap();
+                BitmapDescriptor icon = BitmapDescriptorFactory.fromBitmap(iconBitmap);
+
+                mLegendLayer.setBitmap(icon);
+                mLegendLayer.setImageSrc(mContext);
+
+                mLegendLayer.setIsActiveBitmapLoaded(true);
+
+                mCallBack.invokeCallback();
+            } catch (NullPointerException e) {
+                Log.d(TAG, "null pointer");
+                e.printStackTrace();
+
+                mAnalytics.sendException(e);
+            } catch (Exception e) {
+                Log.d(TAG, "general exception");
+                e.printStackTrace();
+
+                mAnalytics.sendException(e);
+            } finally {
+                mTargets.remove(styleTarget);
+                mTargets = null;
+
+            }
+        }
+
+        @Override
+        public void onBitmapFailed(Drawable errorDrawable) {
+            Log.d(TAG, "Bitmap Failed");
+
+            mTargets.remove(styleTarget);
+            mTargets = null;
+        }
+
+        @Override
+        public void onPrepareLoad(Drawable placeHolderDrawable) {
+
+        }
+    };
 }

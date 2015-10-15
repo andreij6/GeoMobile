@@ -75,7 +75,6 @@ public class application extends applicationDIBase {
     private static String geoAuthToken;
     private static String googleAuthToken;
     private static OkClient serviceClient;
-    private static CookieManager cookieManager;
     private static RestAdapter restAdapter;
     private static boolean isAdminUser;
     public static Uri mMediaUri;
@@ -120,7 +119,18 @@ public class application extends applicationDIBase {
     private static List<LegendLayer> legendLayerQueue;
     private static boolean shouldSetAppState;
     private static boolean mapStateLoaded;
+
+    private Thread.UncaughtExceptionHandler androidDefaultUEH;
     //endregion
+
+    private Thread.UncaughtExceptionHandler handler = new Thread.UncaughtExceptionHandler() {
+         public void uncaughtException(Thread thread, Throwable ex) {
+                 Log.e("TestApplication", "Uncaught exception is: ", ex);
+                 // log it & phone home.
+                 androidDefaultUEH.uncaughtException(thread, ex);
+             }
+    };
+
 
     //region stuff
     public static GoogleAnalytics analytics() {
@@ -348,10 +358,17 @@ public class application extends applicationDIBase {
         return mapStateLoaded;
     }
 
+    public static void setLegendLayerQueue(List<LegendLayer> legendLayerQueue) {
+        application.legendLayerQueue = legendLayerQueue;
+    }
+
     //endregion
 
     public void onCreate() {
         super.onCreate();
+
+        androidDefaultUEH = Thread.getDefaultUncaughtExceptionHandler();
+        Thread.setDefaultUncaughtExceptionHandler(handler);
 
         context = getApplicationContext();
         appState = getSharedPreferences(prefsName, 0);
@@ -389,10 +406,6 @@ public class application extends applicationDIBase {
         client.networkInterceptors().add(new StethoInterceptor());
         client.interceptors().add(new TokenInterceptor());
 
-        cookieManager = new CookieManager();
-        cookieManager.setCookiePolicy(CookiePolicy.ACCEPT_ALL);
-        client.setCookieHandler(cookieManager);
-
         serviceClient = new OkClient(client);
 
         configRestAdapter(requestInterceptor);
@@ -426,7 +439,6 @@ public class application extends applicationDIBase {
 
         configRestAdapter(requestInterceptor);
 
-        Log.d(TAG, "Set GeoToken to: " + token);
         appState.getString(geoAuthTokenName, token);
 
     }
@@ -551,9 +563,6 @@ public class application extends applicationDIBase {
                 Log.d(TAG, "Set GeoToken to: " + newToken);
                 addTokenToSharedPreferences(newToken);
             }
-
-
-            String geoToken = response.header("Set-Cookie");
 
             return response;
         }

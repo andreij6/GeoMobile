@@ -30,7 +30,7 @@ public abstract class GeoUndergroundMainActivity extends ActionBarActivity {
         mAnalytics = application.getAnalyticsComponent().provideGeoAnalytics();
         mIsAdmin = application.getIsAdminUser();
         mErrorHandler = application.getErrorsComponent().provideErrorHandler();
-        Thread.setDefaultUncaughtExceptionHandler(mErrorHandler.UncaughtExceptionHandler());
+        Thread.setDefaultUncaughtExceptionHandler(mErrorHandler.UncaughtExceptionHandler(this));
         //endregion
 
     }

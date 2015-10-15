@@ -26,7 +26,8 @@
         sothree:umanoPanelHeight="68dp"
         sothree:umanoShadowHeight="4dp"
         android:background="@color/body_bkg"
-        android:layout_below="@+id/pagetitle">
+        android:layout_below="@+id/pagetitle"
+        android:layout_above="@+id/close">
 
         <RelativeLayout
             android:layout_width="match_parent"

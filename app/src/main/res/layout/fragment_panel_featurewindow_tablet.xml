@@ -34,6 +34,7 @@
         android:id="@+id/tabHost"
         android:layout_centerHorizontal="true"
         android:layout_below="@+id/featureInfoBar"
+        android:layout_above="@+id/close"
         android:paddingLeft="8dp"
         android:paddingRight="8dp">
 

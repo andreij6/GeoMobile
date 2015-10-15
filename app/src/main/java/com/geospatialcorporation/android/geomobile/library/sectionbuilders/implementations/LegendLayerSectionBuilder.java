@@ -8,6 +8,7 @@ import com.geospatialcorporation.android.geomobile.R;
 import com.geospatialcorporation.android.geomobile.application;
 import com.geospatialcorporation.android.geomobile.library.DI.Map.Interfaces.ILayerManager;
 import com.geospatialcorporation.android.geomobile.library.DI.SharedPreferences.Implementations.AppStateSharedPrefs;
+import com.geospatialcorporation.android.geomobile.library.DI.Tasks.Implementations.LayerStyleTask;
 import com.geospatialcorporation.android.geomobile.library.DI.Tasks.Interfaces.ILayerStyleTask;
 import com.geospatialcorporation.android.geomobile.library.DI.UIHelpers.Interfaces.IMapStatusBarManager;
 import com.geospatialcorporation.android.geomobile.library.map.AppStateMapQueryRequestCallback;
@@ -52,11 +53,19 @@ public class LegendLayerSectionBuilder extends SectionBuilderBase<Folder> implem
         mData = data;
 
         List<LegendLayer> llayers = getLayersFromFolders(data);
+        //List<LegendLayer> llayers = application.getLegendLayerQueue();
+
         ILayerManager layerManager = application.getMapComponent().provideLayerManager();
 
         //-- Add All Layers Extent
         getAllLayerExtents(llayers, layerManager);
         //--
+
+        for(LegendLayer llayer : llayers){
+            ILayerStyleTask layerStyleTask = new LayerStyleTask();
+
+            layerStyleTask.getActiveStyle(llayer);
+        }
 
         //-- Show AppState Layers
         showAppStateLayers();
@@ -171,7 +180,10 @@ public class LegendLayerSectionBuilder extends SectionBuilderBase<Folder> implem
 
                 for(Layer layer : layers){
                     layerHashMap.put(layer.getId(), layer);
-                    result.add(new LegendLayer(layer));
+
+                    if(layer.getPluginId() == 0) {
+                        result.add(new LegendLayer(layer));
+                    }
                 }
             }
         }

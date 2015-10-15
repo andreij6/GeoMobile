@@ -12,8 +12,9 @@ tools:context="com.geospatialcorporation.android.geomobile.ui.SplashScreenActivi
     android:layout_height="match_parent"
     android:contentDescription="@string/app_name"
     android:src="@drawable/ic_full_color_logo"
-    android:layout_gravity="right|top|bottom|center|left"
     android:layout_alignParentTop="true"
-    android:layout_centerHorizontal="true"/>
+    android:layout_centerHorizontal="true"
+    android:paddingLeft="16dp"
+    android:paddingRight="16dp"/>
 
 </RelativeLayout>

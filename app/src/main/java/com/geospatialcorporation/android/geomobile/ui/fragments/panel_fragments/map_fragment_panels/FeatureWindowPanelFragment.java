@@ -85,6 +85,8 @@ public class FeatureWindowPanelFragment extends GeoViewFragmentBase {
             }
         } catch (Exception e){
             Log.d(TAG, e.getMessage());
+
+            mAnalytics.sendException(e);
         }
 
         return result;

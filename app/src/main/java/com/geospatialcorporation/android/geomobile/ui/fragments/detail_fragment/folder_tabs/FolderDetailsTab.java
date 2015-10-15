@@ -72,39 +72,46 @@ public class FolderDetailsTab extends GeoDetailsTabBase<Folder> implements IPost
 
     @Override
     public void onPostExecute(FolderDetailsResponse response){
-        mCreatedBy.setText(response.getCreateUser());
-        mDateCreated.setText(DateTimeFormatter.format(response.getCreateDateTime()));
+        try {
+            mCreatedBy.setText(response.getCreateUser());
+            mDateCreated.setText(DateTimeFormatter.format(response.getCreateDateTime()));
 
-        if (response.getUpdateUser() != null && response.getUpdateUser().length() > 0 && response.getUpdateUser() != "") {
-            mUpdateUser.setText(response.getUpdateUser());
-            mUpdated.setText(DateTimeFormatter.format(response.getUpdateDateTime()));
-        } else {
-            mUpdateUser.setVisibility(View.GONE);
-            mUpdated.setVisibility(View.GONE);
-            mLastUpdateLabel.setVisibility(View.GONE);
-            mUpdateUserLabel.setVisibility(View.GONE);
-        }
-
-        if(mEntity.getFolders() != null) {
-            mFolderCount.setText(mEntity.getFolders().size() + "");
-        } else {
-            mFolderCount.setText("0");
-        }
-
-        if(mFolderType.equals("Layer")) {
-            mEntityCountLabel.setText("Layer Count");
-            if (mEntity.getLayers() != null) {
-                mEntityCount.setText(mEntity.getLayers().size() + "");
+            if (response.getUpdateUser() != null && response.getUpdateUser().length() > 0 && response.getUpdateUser() != "") {
+                mUpdateUser.setText(response.getUpdateUser());
+                mUpdated.setText(DateTimeFormatter.format(response.getUpdateDateTime()));
             } else {
-                mEntityCount.setText("0");
+                mUpdateUser.setVisibility(View.GONE);
+                mUpdated.setVisibility(View.GONE);
+                mLastUpdateLabel.setVisibility(View.GONE);
+                mUpdateUserLabel.setVisibility(View.GONE);
             }
-        } else {
-            mEntityCountLabel.setText("Document Count");
-            if (mEntity.getDocuments() != null) {
-                mEntityCount.setText(mEntity.getDocuments().size() + "");
+
+            if (mEntity.getFolders() != null) {
+                mFolderCount.setText(mEntity.getFolders().size() + "");
             } else {
-                mEntityCount.setText("0");
+                mFolderCount.setText("0");
             }
+
+            if (mFolderType.equals("Layer")) {
+                mEntityCountLabel.setText("Layer Count");
+                if (mEntity.getLayers() != null) {
+                    mEntityCount.setText(mEntity.getLayers().size() + "");
+                } else {
+                    mEntityCount.setText("0");
+                }
+            } else {
+                mEntityCountLabel.setText("Document Count");
+                if (mEntity.getDocuments() != null) {
+                    mEntityCount.setText(mEntity.getDocuments().size() + "");
+                } else {
+                    mEntityCount.setText("0");
+                }
+            }
+
+        } catch (NullPointerException e){
+            mAnalytics.sendException(e);
+        } catch (Exception e){
+            mAnalytics.sendException(e);
         }
     }
 
