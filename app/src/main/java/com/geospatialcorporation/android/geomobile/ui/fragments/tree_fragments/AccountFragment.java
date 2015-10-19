@@ -9,6 +9,7 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.geospatialcorporation.android.geomobile.R;
+import com.geospatialcorporation.android.geomobile.application;
 import com.geospatialcorporation.android.geomobile.library.services.UserAccountProccessor.IUserAccountProcessor;
 import com.geospatialcorporation.android.geomobile.library.services.UserAccountProccessor.UserAccountProcessor;
 import com.geospatialcorporation.android.geomobile.models.UserAccount;
@@ -57,6 +58,14 @@ public class AccountFragment extends GeoViewFragmentBase implements IAccountFrag
         fragmentManager.beginTransaction()
                 .replace(R.id.content_frame, pageFragment)
                 .addToBackStack(null).commit();
+    }
+
+    @SuppressWarnings("unused")
+    @OnClick(R.id.refreshIV)
+    public void refreshAccountInfo(){
+        application.setUserAccount(null);
+
+        mProcessor.GetUserAccountData(getActivity(), this);
     }
     //endregion
 

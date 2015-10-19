@@ -29,6 +29,7 @@ import com.google.android.gms.maps.model.PolylineOptions;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.UUID;
 
 public class LayerManager implements ILayerManager {
 
@@ -56,9 +57,13 @@ public class LayerManager implements ILayerManager {
     public void showLayers(GoogleMap map){
         mMap = map;
 
-        mMarkerManager.showLayers(mMap);
-        mPolygonOptionsManager.showLayers(mMap);
-        mPolylineOptionsManager.showLayers(mMap);
+        UUID uniqeId = UUID.randomUUID();
+
+        mMapStatusBarManager.showLayersMessage("Loading Layers", uniqeId);
+
+        mMarkerManager.showAllLayers(mMap, uniqeId);
+        mPolygonOptionsManager.showAllLayers(mMap, uniqeId);
+        mPolylineOptionsManager.showAllLayers(mMap, uniqeId);
     }
 
     @Override
@@ -244,13 +249,19 @@ public class LayerManager implements ILayerManager {
 
         switch(shapeCode) {
             case POINT:
-                result = mMarkerManager.getFeatureIdLayerId(id).getFeatureId();
+                if(mMarkerManager.getFeatureIdLayerId(id) != null) {
+                    result = mMarkerManager.getFeatureIdLayerId(id).getFeatureId();
+                }
                 break;
             case POLYGON:
-                result = mPolygonOptionsManager.getFeatureIdLayerId(id).getFeatureId();
+                if(mPolygonOptionsManager.getFeatureIdLayerId(id) != null){
+                    result = mPolygonOptionsManager.getFeatureIdLayerId(id).getFeatureId();
+                }
                 break;
             case LINE:
-                result = mPolylineOptionsManager.getFeatureIdLayerId(id).getFeatureId();
+                if(mPolylineOptionsManager.getFeatureIdLayerId(id) != null){
+                    result = mPolylineOptionsManager.getFeatureIdLayerId(id).getFeatureId();
+                }
                 break;
             default:
                 break;
@@ -319,7 +330,6 @@ public class LayerManager implements ILayerManager {
         double minY = Math.min(point1.getY(), point2.getY());
 
         return new Point(1, minX, minY);
-
     }
 
     protected Point compareMax(Point point1, Point point2) {

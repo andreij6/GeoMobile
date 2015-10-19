@@ -48,7 +48,7 @@ public class ClientSelectorSectionsPagerAdapter extends FragmentPagerAdapter {
         }
         */
 
-        return new ClientSelectorFragment().initialize(clientCode, mContext);
+        return new ClientSelectorFragment().initialize(clientCode);
     }
 
     @Override

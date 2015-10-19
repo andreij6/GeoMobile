@@ -5,4 +5,38 @@
               android:layout_height="match_parent"
     >
 
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceLarge"
+        android:text="@string/permissions"
+        android:id="@+id/section_title"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentStart="true"
+        android:layout_marginTop="16dp"
+        android:layout_marginLeft="16dp"/>
+
+    <View  android:layout_width="match_parent"
+           android:layout_height="1dp"
+           android:id="@+id/section_divider"
+           android:background="@android:color/darker_gray"
+           android:layout_marginTop="16dp"
+           android:layout_marginStart="16dp"
+           android:layout_below="@id/section_title"/>
+
+    <ScrollView android:layout_width="match_parent"
+                android:fadeScrollbars="false"
+                android:layout_height="match_parent"
+                android:layout_below="@id/section_divider"
+                android:id="@+id/scrollView3">
+
+        <TableLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_centerHorizontal="true"
+            android:id="@+id/permissionsTable">
+        </TableLayout>
+    </ScrollView>
+
 </RelativeLayout>

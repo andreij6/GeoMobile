@@ -9,6 +9,7 @@ import com.geospatialcorporation.android.geomobile.library.DI.Map.Implementation
 import com.geospatialcorporation.android.geomobile.models.Query.map.response.featurewindow.ParcelableFeatureQueryResponse;
 import com.geospatialcorporation.android.geomobile.ui.fragments.MapFragments.TabletMapFragment;
 import com.google.android.gms.common.api.GoogleApiClient;
+import com.google.android.gms.location.LocationListener;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.MapView;
 
@@ -18,7 +19,7 @@ public interface IGeoUndergroundMap
         GoogleApiClient.ConnectionCallbacks,
         GoogleApiClient.OnConnectionFailedListener,
         IGeoUMap.Configuration,
-        IGeoUMap.LifeCycle
+        IGeoUMap.LifeCycle, LocationListener
 
 {
     void initializeMap(Bundle savedInstanceState, MapView mapView, TabletMapFragment map);

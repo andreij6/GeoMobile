@@ -48,15 +48,26 @@ public class FolderDetailsCommons implements IFolderDetailsCommons, IPostExecute
 
     @Override
     public void onPostExecute(FolderDetailsResponse response) {
-        mViews.getCreatedBy().setText(response.getCreateUser());
+        String emptyValues = "--";
+
+        if(response == null){
+            return;
+        }
+
+        if (response.getCreateUser() == null || response.getCreateUser().equals("")) {
+            mViews.getCreatedBy().setText(emptyValues);
+        } else {
+            mViews.getCreatedBy().setText(response.getCreateUser());
+        }
+
         mViews.getDateCreated().setText(DateTimeFormatter.format(response.getCreateDateTime()));
 
         if (response.getUpdateUser() != null && response.getUpdateUser().length() > 0) {
             mViews.getUpdatedUser().setText(response.getUpdateUser());
             mViews.getUpdated().setText(DateTimeFormatter.format(response.getUpdateDateTime()));
         } else {
-            mViews.getUpdatedUser().setVisibility(View.GONE);
-            mViews.getUpdated().setVisibility(View.GONE);
+            mViews.getUpdatedUser().setText(emptyValues);
+            mViews.getUpdated().setText(emptyValues);
         }
 
         if(mFolder.getFolders() != null) {

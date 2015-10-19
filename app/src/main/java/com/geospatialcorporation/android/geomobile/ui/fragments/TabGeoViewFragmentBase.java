@@ -7,6 +7,7 @@ import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
 import com.geospatialcorporation.android.geomobile.application;
 import com.geospatialcorporation.android.geomobile.library.DI.Analytics.Interfaces.IGeoAnalytics;
@@ -43,4 +44,8 @@ public abstract class TabGeoViewFragmentBase extends Fragment {
     }
 
     protected abstract int getLayoutResId();
+
+    protected void Toaster(String message){
+        Toast.makeText(getActivity(), message, Toast.LENGTH_LONG).show();
+    }
 }

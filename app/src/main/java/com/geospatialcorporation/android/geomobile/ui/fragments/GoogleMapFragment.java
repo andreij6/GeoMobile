@@ -390,7 +390,8 @@ public class GoogleMapFragment extends GeoViewFragmentBase implements
             mMapView.onPause();
         }
 
-        if(mLocationClient != null) {
+        if(mLocationClient != null && mLocationClient.isConnected()) {
+            LocationServices.FusedLocationApi.removeLocationUpdates(mLocationClient, this);
             mLocationClient.disconnect();
         }
     }
@@ -634,6 +635,8 @@ public class GoogleMapFragment extends GeoViewFragmentBase implements
 
         double tolerance = calculateTolerance(mMap.getCameraPosition().zoom);
 
+        Toaster(tolerance + "");
+
         for (Polyline line : lines) {
             if (PolyUtil.isLocationOnPath(position, line.getPoints(), false, tolerance)) { //idea: reset tolerance by zoom level
                 getFeatureWindow(line.getId(), LayerManager.LINE);
@@ -648,11 +651,27 @@ public class GoogleMapFragment extends GeoViewFragmentBase implements
     }
 
     private double calculateTolerance(float zoom) {
-        if(zoom >= 12){
+        if(zoom >= 17){
+            return 2.0;
+        }
+
+        if(zoom < 17 && zoom >= 16){
+            return 25.0;
+        }
+
+        if(zoom < 16 && zoom >= 15){
+            return 75.0;
+        }
+
+        if(zoom < 14 && zoom >= 13 ){
+            return 150.0;
+        }
+
+        if(zoom > 11 && zoom < 12){
             return 450.0;
         }
 
-        if(zoom > 10 && zoom < 12){
+        if(zoom > 10 && zoom < 11){
             return 750.0;
         }
 

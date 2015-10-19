@@ -523,8 +523,10 @@ public class GeoUndergroundMap implements IGeoUndergroundMap, IPostExecuter<List
             mMapView.onPause();
         }
 
-        if(notNull(mLocationClient)) {
+        if(notNull(mLocationClient) && mLocationClient.isConnected()) {
+            LocationServices.FusedLocationApi.removeLocationUpdates(mLocationClient, this);
             mLocationClient.disconnect();
+
         }
     }
 
@@ -557,6 +559,10 @@ public class GeoUndergroundMap implements IGeoUndergroundMap, IPostExecuter<List
     @Override
     public void onStop(){
         mMapStateService.saveMapState(new MapStateSaveRequest(mMap));
+
+        if(mLocationClient != null) {
+            mLocationClient =  null;
+        }
     }
     //endregion
 
@@ -642,6 +648,11 @@ public class GeoUndergroundMap implements IGeoUndergroundMap, IPostExecuter<List
         application.setLayerHashMap(layerHashMap);
 
         return result;
+    }
+
+    @Override
+    public void onLocationChanged(Location location) {
+        handleNewLocation(location);
     }
 
     //endregion

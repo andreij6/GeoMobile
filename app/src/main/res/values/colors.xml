@@ -31,9 +31,9 @@
     <color name="primary_text">#FF42413E</color>
     <color name="accent">#FFF27242</color>
 
-    <color name="primary">#263238</color> <!-- Todo: Condense -->
+    <color name="primary">#ffffff</color> <!-- Todo: Condense -->
     <color name="accent_blue">#FF6799CA</color>
-    <color name="primary_dark">#263238</color>
+    <color name="primary_dark">#5a86b1</color>
 
     <color name="accent_yellow">#FFFFD55A</color>
 

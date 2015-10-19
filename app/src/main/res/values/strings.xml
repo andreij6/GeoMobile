@@ -296,4 +296,5 @@
     <string name="map_info">Map Info</string>
     <string name="documents">Documents</string>
     <string name="library_tree">Library</string>
+    <string name="document_to_large_error">Document to size to large to upload.</string>
 </resources>

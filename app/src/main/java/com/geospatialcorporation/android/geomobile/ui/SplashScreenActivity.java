@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.content.pm.ActivityInfo;
 import android.os.Bundle;
 import android.os.Handler;
+import android.util.Log;
 import android.widget.Toast;
 
 import com.geospatialcorporation.android.geomobile.R;
@@ -32,6 +33,8 @@ public class SplashScreenActivity extends Activity {
 
         if(stacktrace != null){
             Toast.makeText(this, "Whoops! An error occurred", Toast.LENGTH_LONG).show();
+
+            Log.e(TAG, stacktrace);
         }
 
         if(DeviceTypeUtil.isTablet(getResources())){

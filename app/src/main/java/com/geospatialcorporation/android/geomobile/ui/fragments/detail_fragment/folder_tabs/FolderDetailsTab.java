@@ -31,12 +31,12 @@ public class FolderDetailsTab extends GeoDetailsTabBase<Folder> implements IPost
     IFolderDialog mFolderDialog;
     FolderDetailsResponse mDetails;
     String mFolderType;
-    @Bind(R.id.createdByValue) TextView mCreatedBy;
-    @Bind(R.id.createdValue) TextView mDateCreated;
-    @Bind(R.id.lastUpdatedValue) TextView mUpdated;
-    @Bind(R.id.userUpdateValue) TextView mUpdateUser;
-    @Bind(R.id.folderCountValue) TextView mFolderCount;
-    @Bind(R.id.entityCountValue) TextView mEntityCount;
+    @Bind(R.id.createdByValue) TextView mCreatedByValue;
+    @Bind(R.id.createdValue) TextView mDateCreatedValue;
+    @Bind(R.id.lastUpdatedValue) TextView mUpdatedValue;
+    @Bind(R.id.userUpdateValue) TextView mUpdateUserValue;
+    @Bind(R.id.folderCountValue) TextView mFolderCountValue;
+    @Bind(R.id.entityCountValue) TextView mEntityCountValue;
     @Bind(R.id.entityCountLabel) TextView mEntityCountLabel;
     @Bind(R.id.updateUserLabel) TextView mUpdateUserLabel;
     @Bind(R.id.lastUpdatedLabel) TextView mLastUpdateLabel;
@@ -72,39 +72,48 @@ public class FolderDetailsTab extends GeoDetailsTabBase<Folder> implements IPost
 
     @Override
     public void onPostExecute(FolderDetailsResponse response){
-        try {
-            mCreatedBy.setText(response.getCreateUser());
-            mDateCreated.setText(DateTimeFormatter.format(response.getCreateDateTime()));
+        String emptyValue = "--";
 
-            if (response.getUpdateUser() != null && response.getUpdateUser().length() > 0 && response.getUpdateUser() != "") {
-                mUpdateUser.setText(response.getUpdateUser());
-                mUpdated.setText(DateTimeFormatter.format(response.getUpdateDateTime()));
+        if(response == null){
+            return;
+        }
+
+        try {
+            if (response.getCreateUser() == null || response.getCreateUser().equals("")) {
+                mCreatedByValue.setText(emptyValue);
             } else {
-                mUpdateUser.setVisibility(View.GONE);
-                mUpdated.setVisibility(View.GONE);
-                mLastUpdateLabel.setVisibility(View.GONE);
-                mUpdateUserLabel.setVisibility(View.GONE);
+                mCreatedByValue.setText(response.getCreateUser());
+            }
+
+            mDateCreatedValue.setText(DateTimeFormatter.format(response.getCreateDateTime()));
+
+            if (response.getUpdateUser() != null && response.getUpdateUser().length() > 0 && !response.getUpdateUser().equals("")) {
+                mUpdateUserValue.setText(response.getUpdateUser());
+                mUpdatedValue.setText(DateTimeFormatter.format(response.getUpdateDateTime()));
+            } else {
+                mUpdateUserValue.setText(emptyValue);
+                mUpdatedValue.setText(emptyValue);
             }
 
             if (mEntity.getFolders() != null) {
-                mFolderCount.setText(mEntity.getFolders().size() + "");
+                mFolderCountValue.setText(mEntity.getFolders().size() + "");
             } else {
-                mFolderCount.setText("0");
+                mFolderCountValue.setText("0");
             }
 
             if (mFolderType.equals("Layer")) {
                 mEntityCountLabel.setText("Layer Count");
                 if (mEntity.getLayers() != null) {
-                    mEntityCount.setText(mEntity.getLayers().size() + "");
+                    mEntityCountValue.setText(mEntity.getLayers().size() + "");
                 } else {
-                    mEntityCount.setText("0");
+                    mEntityCountValue.setText("0");
                 }
             } else {
                 mEntityCountLabel.setText("Document Count");
                 if (mEntity.getDocuments() != null) {
-                    mEntityCount.setText(mEntity.getDocuments().size() + "");
+                    mEntityCountValue.setText(mEntity.getDocuments().size() + "");
                 } else {
-                    mEntityCount.setText("0");
+                    mEntityCountValue.setText("0");
                 }
             }
 

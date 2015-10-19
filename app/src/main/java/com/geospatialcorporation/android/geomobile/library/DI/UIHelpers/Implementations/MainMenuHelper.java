@@ -17,7 +17,7 @@ public class MainMenuHelper implements IMainMenuHelper {
 
     @Override
     public void syncMenu(Integer relatedMenuItem) {
-        if(isAdmin) {
+        if(isAdmin && mNavigation != null) {
             mNavigation.selectItem(relatedMenuItem);
         }
     }

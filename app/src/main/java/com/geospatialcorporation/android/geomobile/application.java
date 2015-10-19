@@ -362,6 +362,10 @@ public class application extends applicationDIBase {
         application.legendLayerQueue = legendLayerQueue;
     }
 
+    public static void setMainTabletActivity(MainTabletActivity mainTabletActivity) {
+        application.mainTabletActivity = mainTabletActivity;
+    }
+
     //endregion
 
     public void onCreate() {

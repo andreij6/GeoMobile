@@ -1,6 +1,8 @@
 package com.geospatialcorporation.android.geomobile.library.DI.UIHelpers.Interfaces;
 
 
+import java.util.UUID;
+
 public interface IMapStatusBarManager {
 
     void setMessage(String string);
@@ -11,5 +13,11 @@ public interface IMapStatusBarManager {
 
     void FinishLoading(Integer geomtryCode);
 
+
+    void showLayersMessage(String message, UUID uniqeId);
+
+    void finished(int geometryCode, UUID uniqueId);
+
+    void ensureStatusBarVisible();
 
 }

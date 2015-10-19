@@ -66,10 +66,12 @@ public class DocumentTreeService implements IDocumentTreeService {
 
     @Override
     public void sendTakenImage(Folder currentFolder, Uri data, ISendFileCallback callback) {
-        final TypedFile t = new TypedFile("image/jpg", new File(data.getPath()));
-        final String path = data.getPath();
+        if(data != null) {
+            final TypedFile t = new TypedFile("image/jpg", new File(data.getPath()));
+            final String path = data.getPath();
 
-        SendImage(currentFolder, t, path, callback);
+            SendImage(currentFolder, t, path, callback);
+        }
     }
 
     @Override

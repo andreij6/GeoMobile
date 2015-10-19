@@ -1,7 +1,5 @@
 package com.geospatialcorporation.android.geomobile.library.map.layerManager.implementations;
 
-import android.util.Log;
-
 import com.geospatialcorporation.android.geomobile.library.map.layerManager.OptionFeature;
 import com.geospatialcorporation.android.geomobile.library.map.layerManager.OptionsManagerBase;
 import com.geospatialcorporation.android.geomobile.models.Layers.FeatureInfo;
@@ -9,13 +7,9 @@ import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 
-import java.util.ArrayList;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
-import java.util.Timer;
 import java.util.UUID;
 
 public class MarkerOptionsManager extends OptionsManagerBase<MarkerOptions, Marker> {
@@ -45,6 +39,11 @@ public class MarkerOptionsManager extends OptionsManagerBase<MarkerOptions, Mark
                 }
             }
         }
+    }
+
+    @Override
+    public void showAllLayers(GoogleMap map, UUID uniqeId) {
+
     }
 
     @Override

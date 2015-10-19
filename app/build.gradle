@@ -82,10 +82,13 @@ dependencies {
     compile 'com.squareup.okhttp:okhttp:2.3.0'
     compile 'com.squareup.picasso:picasso:2.5.2'
     compile 'com.squareup.retrofit:retrofit:1.9.0'
+    // at http://square.github.io/retrofit/
     compile 'com.facebook.stetho:stetho-okhttp:1.1.0'
     compile 'com.facebook.stetho:stetho:1.1.0'
     compile 'commons-io:commons-io:2.4'
+    // third party
     compile 'com.jakewharton:butterknife:7.0.1'
+    //was 6.1.0
     compile 'com.melnykov:floatingactionbutton:1.3.0'
     compile 'com.sothree.slidinguppanel:library:3.0.0'
     compile 'com.afollestad:material-dialogs:0.7.8.1'

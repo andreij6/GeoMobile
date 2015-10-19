@@ -3,10 +3,16 @@ package com.geospatialcorporation.android.geomobile.library.map.layerManager.imp
 import android.os.AsyncTask;
 import android.util.Log;
 
+import com.geospatialcorporation.android.geomobile.application;
 import com.geospatialcorporation.android.geomobile.library.DI.UIHelpers.Implementations.StatusBarManager.MapStatusBarManager;
+import com.geospatialcorporation.android.geomobile.library.DI.UIHelpers.Implementations.StatusBarManager.StatusBarManagerBase;
+import com.geospatialcorporation.android.geomobile.library.DI.UIHelpers.Interfaces.IMapStatusBarManager;
+import com.geospatialcorporation.android.geomobile.library.constants.GeometryTypeCodes;
 import com.geospatialcorporation.android.geomobile.library.map.layerManager.OptionFeature;
 import com.geospatialcorporation.android.geomobile.library.map.layerManager.OptionsManagerBase;
 import com.geospatialcorporation.android.geomobile.models.Layers.FeatureInfo;
+import com.geospatialcorporation.android.geomobile.models.Query.map.response.mapquery.Geometry;
+import com.geospatialcorporation.android.geomobile.ui.fragments.GoogleMapFragment;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.model.LatLngBounds;
 import com.google.android.gms.maps.model.Marker;
@@ -22,6 +28,11 @@ public class ExtentMarkerOptionsManager extends OptionsManagerBase<MarkerOptions
 
     private static final String TAG = ExtentMarkerOptionsManager.class.getSimpleName();
     GoogleMap mMap;
+    IMapStatusBarManager mMapStatusBarManager;
+
+    public ExtentMarkerOptionsManager(){
+        mMapStatusBarManager = application.getStatusBarManager();
+    }
 
     @Override
     protected void removeMapObject(UUID key) {
@@ -39,15 +50,27 @@ public class ExtentMarkerOptionsManager extends OptionsManagerBase<MarkerOptions
         mMap = map;
         LatLngBounds bounds = mMap.getProjection().getVisibleRegion().latLngBounds;
 
-        new ShowLayersAsync(bounds).execute();
+        new ShowLayersAsync(bounds, null).execute();
+    }
+
+    @Override
+    public void showAllLayers(GoogleMap map, UUID uniqueId) {
+        mMap = map;
+        LatLngBounds bounds = mMap.getProjection().getVisibleRegion().latLngBounds;
+
+        new ShowLayersAsync(bounds, uniqueId).execute();
     }
 
     protected class ShowLayersAsync extends AsyncTask<Void, Void, MarkerPostParamerters>{
 
         LatLngBounds mBounds;
+        UUID mUUID;
+        Boolean mStatusBarVisible;
 
-        public ShowLayersAsync(LatLngBounds bounds){
+        public ShowLayersAsync(LatLngBounds bounds, UUID uniqueId){
             mBounds =  bounds;
+            mUUID = uniqueId;
+            mStatusBarVisible = false;
         }
 
         @Override
@@ -70,6 +93,16 @@ public class ExtentMarkerOptionsManager extends OptionsManagerBase<MarkerOptions
                                 FeatureInfo featureInfo = entry.getValue().getFeatureInfo();
 
                                 result.addMarker(option, featureInfo, key);
+
+                                getActivity().runOnUiThread(new Runnable() {
+                                    @Override
+                                    public void run() {
+                                        if(!mStatusBarVisible && mUUID != null){
+                                            mMapStatusBarManager.ensureStatusBarVisible();
+                                            mStatusBarVisible = true;
+                                        }
+                                    }
+                                });
                             }
 
                         } else {
@@ -85,11 +118,24 @@ public class ExtentMarkerOptionsManager extends OptionsManagerBase<MarkerOptions
         }
 
         @Override
-        protected void onPostExecute(MarkerPostParamerters markerPostParamerters) {
-            markerPostParamerters.mapMarkers();
+        protected void onPostExecute(MarkerPostParamerters options) {
+            IMapStatusBarManager mapStatusBarManager = application.getStatusBarManager();
 
-            Log.d(TAG, "done loading markers");
+            if(contentFragmentIsGoogleMapFragment() || application.getIsTablet()) {
+                options.mapMarkers();
 
+                if(mUUID != null) {
+                    mapStatusBarManager.finished(StatusBarManagerBase.MARKERS, mUUID);
+                }
+            }
+        }
+    }
+
+    protected boolean contentFragmentIsGoogleMapFragment() {
+        if(application.getMainActivity() == null){
+            return false;
+        }else {
+            return application.getMainActivity().getContentFragment() instanceof GoogleMapFragment;
         }
     }
 
@@ -99,7 +145,6 @@ public class ExtentMarkerOptionsManager extends OptionsManagerBase<MarkerOptions
         List<UUID> mMarkersToRemove;
 
         public MarkerPostParamerters(){
-
             mMarkerOptions = new ArrayList<>();
             mMarkersToRemove = new ArrayList<>();
         }
