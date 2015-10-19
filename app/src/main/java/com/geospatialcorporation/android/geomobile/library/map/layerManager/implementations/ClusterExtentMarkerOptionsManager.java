@@ -65,6 +65,11 @@ public class ClusterExtentMarkerOptionsManager extends OptionsManagerBase<Marker
         new ShowLayersAsync(bounds).execute();
     }
 
+    @Override
+    public void showAllLayers(GoogleMap map, UUID uniqeId) {
+
+    }
+
     public List<Map.Entry<UUID, OptionFeature<MarkerOptions>>> getOptionsWithinExtent(HashMap<UUID, OptionFeature<MarkerOptions>> cachedOptions, LatLngBounds bounds){
         List<Map.Entry<UUID, OptionFeature<MarkerOptions>>> result = new ArrayList<>();
 

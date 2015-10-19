@@ -185,8 +185,15 @@
                 android:layout_alignStart="@+id/email"
                 />
 
-
-
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/refreshIV"
+            android:layout_marginBottom="16dp"
+            android:src="@drawable/ic_refresh_grey600_36dp"
+            android:layout_alignParentBottom="true"
+            android:layout_alignEnd="@+id/divider"
+            android:layout_marginEnd="16dp"/>
 
     </RelativeLayout>
 

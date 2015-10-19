@@ -8,6 +8,7 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.geospatialcorporation.android.geomobile.R;
+import com.geospatialcorporation.android.geomobile.application;
 import com.geospatialcorporation.android.geomobile.library.services.UserAccountProccessor.IUserAccountProcessor;
 import com.geospatialcorporation.android.geomobile.library.services.UserAccountProccessor.UserAccountProcessor;
 import com.geospatialcorporation.android.geomobile.models.UserAccount;
@@ -35,6 +36,14 @@ public class TabAccountFragment extends TabGeoViewFragmentBase implements IAccou
     @OnClick(R.id.close)
     public void close(){
         ((MainTabletActivity)getActivity()).closeInfoFragment();
+    }
+
+    @SuppressWarnings("unused")
+    @OnClick(R.id.refreshIV)
+    public void refreshAccountInfo(){
+        application.setUserAccount(null);
+
+        mProcessor.GetUserAccountData(getActivity(), this);
     }
 
     @Nullable

@@ -6,6 +6,7 @@ import android.widget.Toast;
 
 import com.geospatialcorporation.android.geomobile.R;
 import com.geospatialcorporation.android.geomobile.application;
+import com.geospatialcorporation.android.geomobile.library.DI.Analytics.Interfaces.IGeoAnalytics;
 import com.geospatialcorporation.android.geomobile.library.util.DeviceTypeUtil;
 import com.geospatialcorporation.android.geomobile.ui.Interfaces.IContentRefresher;
 import com.geospatialcorporation.android.geomobile.ui.Interfaces.IGeoMainActivity;
@@ -23,9 +24,11 @@ public abstract class RequestListenerBase<T> {
 
     protected Fragment mContentFragment;
     protected Boolean mShouldRefresh;
+    //IGeoAnalytics mAnalytics;
 
     public RequestListenerBase(Boolean shouldRefresh){
         mShouldRefresh = shouldRefresh;
+        //mAnalytics = application.getAnalyticsComponent().provideGeoAnalytics();
     }
 
     public void onSuccess(T response) {

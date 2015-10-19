@@ -36,9 +36,9 @@ public class ClientSelectorFragment extends Fragment
     Context mContext;
     ProgressDialogHelper mProgressHelper;
 
-    public ClientSelectorFragment initialize(int clientTypeCode, Context context){
+    public ClientSelectorFragment initialize(int clientTypeCode){
         this.mClientTypeCode = clientTypeCode;
-        this.mContext = context;
+        this.mContext = getActivity();
         return this;
     }
 
@@ -46,6 +46,12 @@ public class ClientSelectorFragment extends Fragment
     @Bind(R.id.swipe_refresh_layout) SwipeRefreshLayout mSwipeRefreshLayout;
     private List<Subscription> mDataSet;
     IGetClientsTask mTask;
+
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        mContext = getActivity();
+    }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,

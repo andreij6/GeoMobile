@@ -44,11 +44,25 @@ public class FolderPermissionsResponse {
     public void setRoleId(Integer roleId) {
         RoleId = roleId;
     }
+
+    public Integer getAccessLevel() {
+        return AccessLevel;
+    }
+
+    public void setAccessLevel(Integer accessLevel) {
+        AccessLevel = accessLevel;
+    }
+
     //endregion
+
+    public FolderPermissionsResponse(){
+        AccessLevel = null;
+    }
 
     Boolean IsFixed;
     String RoleName;
     Integer InheritedFolderId;
     Integer InheritedAccessLevel;
     Integer RoleId;
+    Integer AccessLevel;
 }

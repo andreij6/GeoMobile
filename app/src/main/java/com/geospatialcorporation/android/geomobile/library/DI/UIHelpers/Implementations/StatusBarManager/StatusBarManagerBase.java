@@ -13,6 +13,7 @@ import com.geospatialcorporation.android.geomobile.ui.Interfaces.IMapStatusCtrl;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.UUID;
 
 public abstract class StatusBarManagerBase implements IMapStatusBarManager{
 
@@ -24,9 +25,46 @@ public abstract class StatusBarManagerBase implements IMapStatusBarManager{
     LinearLayout mLoadingBar;
     TextView mMessage;
     ProgressDialogHelper mProgressDialogHelper;
+    HashMap<UUID, HashMap<Integer, Boolean>> showLayersMap;
 
     public StatusBarManagerBase(){
         LoadedMap = new HashMap<>();
+        showLayersMap = new HashMap<>();
+    }
+
+    @Override
+    public void showLayersMessage(String message, UUID uniqueId){
+        try {
+            setProperties();
+            mMessage.setText(message);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        HashMap<Integer, Boolean> innerHash = new HashMap<>();
+
+        innerHash.put(LINES, true);
+        innerHash.put(MARKERS, true);
+        innerHash.put(POLYGONS, true);
+
+        showLayersMap.put(uniqueId, innerHash);
+    }
+
+    @Override
+    public void ensureStatusBarVisible(){
+        mLoadingBar.setVisibility(View.VISIBLE);
+    }
+
+    @Override
+    public void finished(int geometryCode, UUID uniqueId){
+        HashMap<Integer, Boolean> innerHash = showLayersMap.get(uniqueId);
+
+        innerHash.put(geometryCode, false);
+
+        if(!innerHash.values().contains(true)){
+            reset();
+        }
+
     }
 
     @Override

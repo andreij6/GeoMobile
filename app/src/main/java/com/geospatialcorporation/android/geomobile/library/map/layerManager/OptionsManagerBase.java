@@ -1,5 +1,6 @@
 package com.geospatialcorporation.android.geomobile.library.map.layerManager;
 
+import android.app.Activity;
 import android.util.Log;
 
 import com.geospatialcorporation.android.geomobile.application;
@@ -30,6 +31,13 @@ public abstract class OptionsManagerBase<T, S> implements IOptionsManager<T, S> 
         mRemovedLayerOptions = new HashMap<>();
         mStatusBarManager = application.getStatusBarManager();
 
+    }
+    public Activity getActivity() {
+        if(application.getIsTablet()){
+            return application.getMainTabletActivity();
+        } else {
+            return application.getMainActivity();
+        }
     }
 
     //region Interface Methods

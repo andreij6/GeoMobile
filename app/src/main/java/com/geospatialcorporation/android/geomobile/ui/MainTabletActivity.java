@@ -68,6 +68,7 @@ public class MainTabletActivity extends GeoUndergroundMainActivity implements IG
         application.setIsTablet(true);
         application.setGeoMainActivity(this);
         application.setShouldSetAppState(true);
+        application.setMainTabletActivity(this);
 
         setMapFragment();
 
@@ -122,6 +123,16 @@ public class MainTabletActivity extends GeoUndergroundMainActivity implements IG
         }
     }
     */
+
+    @Override
+    public void onBackPressed() {
+        if(mInfoFrame.getVisibility() == View.GONE){
+            finish();
+        } else {
+            Fragment frag = getContentFragment();
+            //TODO: FINISH
+        }
+    }
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {

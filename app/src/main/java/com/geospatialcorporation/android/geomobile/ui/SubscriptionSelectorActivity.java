@@ -37,7 +37,6 @@ public class SubscriptionSelectorActivity extends ActionBarActivity implements A
         super.onCreate(savedInstanceState);
         setTitle(R.string.title_activity_select_subscription);
         setBackButtonClickOnce(false);
-        getSupportActionBar().setElevation(0);
 
         if(DeviceTypeUtil.isTablet(getResources())){
             setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
@@ -68,7 +67,6 @@ public class SubscriptionSelectorActivity extends ActionBarActivity implements A
                         actionBar.setSelectedNavigationItem(position);
                     }
                 });
-
 
         // Add 3 tabs, specifying the tab's text and TabListener
         for (int i = 0; i < mSectionsPagerAdapter.getCount(); i++) {

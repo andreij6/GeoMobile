@@ -29,4 +29,7 @@ public interface IOptionsManager<T, S> {
     Iterable<Integer> getShowingLayerIds();
 
     boolean isLayerCached(int layerId);
+
+    void showAllLayers(GoogleMap map, UUID uniqeId);
+
 }

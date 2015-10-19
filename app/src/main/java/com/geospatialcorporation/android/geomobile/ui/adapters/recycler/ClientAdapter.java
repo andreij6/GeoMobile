@@ -17,6 +17,7 @@ import com.geospatialcorporation.android.geomobile.library.util.DeviceTypeUtil;
 import com.geospatialcorporation.android.geomobile.models.Subscription;
 import com.geospatialcorporation.android.geomobile.ui.MainActivity;
 import com.geospatialcorporation.android.geomobile.ui.MainTabletActivity;
+import com.geospatialcorporation.android.geomobile.ui.SubscriptionSelectorActivity;
 import com.geospatialcorporation.android.geomobile.ui.adapters.recycler.base.GeoHolderBase;
 import com.geospatialcorporation.android.geomobile.ui.adapters.recycler.base.GeoRecyclerAdapterBase;
 
@@ -97,6 +98,7 @@ public class ClientAdapter extends GeoRecyclerAdapterBase<ClientAdapter.Holder, 
             } else {
                 mContext.startActivity(new Intent(mContext, MainActivity.class));
             }
+            ((SubscriptionSelectorActivity)mContext).finish();
 
         }
     }

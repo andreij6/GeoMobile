@@ -4,9 +4,12 @@ import android.os.AsyncTask;
 import android.util.Log;
 
 import com.geospatialcorporation.android.geomobile.application;
+import com.geospatialcorporation.android.geomobile.library.DI.UIHelpers.Implementations.StatusBarManager.StatusBarManagerBase;
+import com.geospatialcorporation.android.geomobile.library.DI.UIHelpers.Interfaces.IMapStatusBarManager;
 import com.geospatialcorporation.android.geomobile.library.constants.GeometryTypeCodes;
 import com.geospatialcorporation.android.geomobile.library.map.layerManager.OptionFeature;
 import com.geospatialcorporation.android.geomobile.library.map.layerManager.OptionsManagerBase;
+import com.geospatialcorporation.android.geomobile.library.util.GeoPolyUtil;
 import com.geospatialcorporation.android.geomobile.models.Layers.FeatureInfo;
 import com.geospatialcorporation.android.geomobile.ui.fragments.GoogleMapFragment;
 import com.google.android.gms.maps.GoogleMap;
@@ -14,6 +17,7 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.LatLngBounds;
 import com.google.android.gms.maps.model.Polygon;
 import com.google.android.gms.maps.model.PolygonOptions;
+import com.google.android.gms.maps.model.PolylineOptions;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -25,12 +29,25 @@ public class PolygonOptionsManager extends OptionsManagerBase<PolygonOptions, Po
     private static final String TAG = PolygonOptionsManager.class.getSimpleName();
 
     GoogleMap mMap;
+    IMapStatusBarManager mMapStatusBarManager;
+
+    public PolygonOptionsManager(){
+        mMapStatusBarManager = application.getStatusBarManager();
+    }
 
     public void showLayers(GoogleMap map) {
         mMap = map;
         LatLngBounds bounds = map.getProjection().getVisibleRegion().latLngBounds;
 
-        new ShowLayersAsync(map, bounds).execute();
+        new ShowLayersAsync(map, bounds, null).execute();
+    }
+
+    @Override
+    public void showAllLayers(GoogleMap map, UUID uniqueId) {
+        mMap = map;
+        LatLngBounds bounds = map.getProjection().getVisibleRegion().latLngBounds;
+
+        new ShowLayersAsync(map, bounds, uniqueId).execute();
     }
 
     @Override
@@ -48,10 +65,14 @@ public class PolygonOptionsManager extends OptionsManagerBase<PolygonOptions, Po
 
         GoogleMap mGoogleMap;
         LatLngBounds mBounds;
+        UUID mUUID;
+        Boolean mStatusBarVisible;
 
-        public ShowLayersAsync(GoogleMap map, LatLngBounds bounds){
+        public ShowLayersAsync(GoogleMap map, LatLngBounds bounds, UUID uniqueId){
             mGoogleMap = map;
             mBounds = bounds;
+            mUUID = uniqueId;
+            mStatusBarVisible = false;
         }
 
         @Override
@@ -69,18 +90,25 @@ public class PolygonOptionsManager extends OptionsManagerBase<PolygonOptions, Po
                         PolygonOptions option = entry.getValue().getOption();
                         Boolean pointInBounds = false;
 
-                        for(LatLng point : option.getPoints()) {
-                            if (mBounds.contains(point)) {
-                                if (!mVisibleLayers.containsKey(key)) {
+                        if (GeoPolyUtil.BoundsIntersect(option.getPoints(), mBounds)) {
+                            if (!mVisibleLayers.containsKey(key)) {
 
-                                    FeatureInfo featureInfo = entry.getValue().getFeatureInfo();
+                                FeatureInfo featureInfo = entry.getValue().getFeatureInfo();
 
-                                    result.addPolygon(option, featureInfo, key);
-                                }
+                                result.addPolygon(option, featureInfo, key);
 
-                                pointInBounds = true;
-                                break;
+                                getActivity().runOnUiThread(new Runnable() {
+                                    @Override
+                                    public void run() {
+                                        if (!mStatusBarVisible && mUUID != null) {
+                                            mMapStatusBarManager.ensureStatusBarVisible();
+                                            mStatusBarVisible = true;
+                                        }
+                                    }
+                                });
                             }
+
+                            pointInBounds = true;
                         }
 
                         if(!pointInBounds){
@@ -95,8 +123,15 @@ public class PolygonOptionsManager extends OptionsManagerBase<PolygonOptions, Po
 
         @Override
         protected void onPostExecute(PostParameters options) {
+            IMapStatusBarManager mapStatusBarManager = application.getStatusBarManager();
+
             if(contentFragmentIsGoogleMapFragment() || application.getIsTablet()) {
                 options.mapFeatures();
+
+                if(mUUID != null) {
+
+                    mapStatusBarManager.finished(StatusBarManagerBase.POLYGONS, mUUID);
+                }
             }
         }
 
@@ -141,6 +176,10 @@ public class PolygonOptionsManager extends OptionsManagerBase<PolygonOptions, Po
 
         public void remove(UUID key){
             mPolygonsToRemove.add(key);
+        }
+
+        public boolean hasFeatures() {
+            return mPolygonFeatures.size() > 0;
         }
     }
 

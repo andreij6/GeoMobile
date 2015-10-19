@@ -183,7 +183,7 @@
                 android:orientation="horizontal"
                 android:layout_width="match_parent"
                 android:layout_height="18dp"
-                android:background="@color/primary_dark"
+                android:background="@color/accent"
                 android:layout_gravity="center_horizontal"
                 android:layout_centerHorizontal="true"
                 android:id="@+id/loadingBar"

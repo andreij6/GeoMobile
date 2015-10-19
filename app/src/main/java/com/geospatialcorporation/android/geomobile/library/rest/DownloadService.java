@@ -25,8 +25,9 @@ public class DownloadService {
         }
 
         // Download File
-        DownloadManager.Request request =
-                new DownloadManager.Request(Uri.parse("https://dev.geounderground.com/API/Documents/" + docId + "/File")); //TODO: get ENV url from application
+        String downloadUrl = application.getDomain() + "/API/Documents/" + docId + "/File";
+
+        DownloadManager.Request request = new DownloadManager.Request(Uri.parse(downloadUrl));
 
         request.addRequestHeader("Authorization", "WebToken " + application.getAuthToken());
         request.setDescription(docName);

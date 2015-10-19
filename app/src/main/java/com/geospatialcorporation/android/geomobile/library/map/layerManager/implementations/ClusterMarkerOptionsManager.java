@@ -75,4 +75,9 @@ public class ClusterMarkerOptionsManager extends OptionsManagerBase<MarkerOption
             }
         }
     }
+
+    @Override
+    public void showAllLayers(GoogleMap map, UUID uniqeId) {
+
+    }
 }
