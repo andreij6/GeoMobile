@@ -8,12 +8,12 @@ android {
 
     signingConfigs {
         debug {
-            storeFile file("debug.keystore")
+            storeFile file('debug.keystore')
         }
         release {
             keyAlias 'GeoRelease'
             keyPassword '99bottleOBeer'
-            storeFile file('/Users/jonshaffer/StudioProjects/geomobile/app/android.jks')
+            storeFile file('android.jks')
             storePassword '87beerBottlesOLatern'
         }
     }
