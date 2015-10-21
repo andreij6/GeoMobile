@@ -1,6 +1,6 @@
 <resources>
 
-    <style name="GeoUndergroundTheme" parent="Theme.AppCompat.Light.DarkActionBar">
+    <style name="GeoUndergroundTheme" parent="@style/Theme.AppCompat.Light">
         <item name="colorPrimary">@color/primary</item>
         <item name="windowActionBarOverlay">true</item>
         <item name="colorPrimaryDark">@color/primary_dark</item>

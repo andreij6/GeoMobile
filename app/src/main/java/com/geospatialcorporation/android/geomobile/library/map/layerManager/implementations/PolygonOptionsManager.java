@@ -97,15 +97,15 @@ public class PolygonOptionsManager extends OptionsManagerBase<PolygonOptions, Po
 
                                 result.addPolygon(option, featureInfo, key);
 
-                                getActivity().runOnUiThread(new Runnable() {
-                                    @Override
-                                    public void run() {
-                                        if (!mStatusBarVisible && mUUID != null) {
-                                            mMapStatusBarManager.ensureStatusBarVisible();
-                                            mStatusBarVisible = true;
-                                        }
-                                    }
-                                });
+                                //getActivity().runOnUiThread(new Runnable() {
+                                //    @Override
+                                //    public void run() {
+                                //        if (!mStatusBarVisible && mUUID != null) {
+                                //            mMapStatusBarManager.ensureStatusBarVisible();
+                                //            mStatusBarVisible = true;
+                                //        }
+                                //    }
+                                //});
                             }
 
                             pointInBounds = true;
@@ -158,6 +158,7 @@ public class PolygonOptionsManager extends OptionsManagerBase<PolygonOptions, Po
         public void mapFeatures(){
             for (PolygonFeature pparams: mPolygonFeatures) {
                 Polygon polygon = mMap.addPolygon(pparams.getOptions());
+
                 mIdFeatureIdMap.put(polygon.getId(), pparams.getFeatureInfo());
                 mVisibleLayers.put(pparams.getKey(), polygon);
             }

@@ -2,11 +2,13 @@ package com.geospatialcorporation.android.geomobile.ui;
 
 import android.content.Intent;
 import android.content.pm.ActivityInfo;
+import android.support.design.widget.TabLayout;
 import android.os.Bundle;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.ActionBar;
-import android.support.v7.app.ActionBarActivity;
+import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.Toast;
@@ -17,11 +19,12 @@ import com.geospatialcorporation.android.geomobile.library.DI.ErrorHandler.Inter
 import com.geospatialcorporation.android.geomobile.library.util.DeviceTypeUtil;
 import com.geospatialcorporation.android.geomobile.ui.adapters.ClientSelectorSectionsPagerAdapter;
 
-public class SubscriptionSelectorActivity extends ActionBarActivity implements ActionBar.TabListener {
+public class SubscriptionSelectorActivity extends AppCompatActivity implements ActionBar.TabListener {
 
     ClientSelectorSectionsPagerAdapter mSectionsPagerAdapter;
 
     ViewPager mViewPager;
+    TabLayout mTabLayout;
     IGeoErrorHandler mErrorHandler;
 
     //region Getters & Setters
@@ -36,6 +39,7 @@ public class SubscriptionSelectorActivity extends ActionBarActivity implements A
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setTitle(R.string.title_activity_select_subscription);
+        setContentView(R.layout.activity_subscription_selector);
         setBackButtonClickOnce(false);
 
         if(DeviceTypeUtil.isTablet(getResources())){
@@ -43,13 +47,21 @@ public class SubscriptionSelectorActivity extends ActionBarActivity implements A
         } else {
             setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
         }
+        getSupportActionBar().hide();
 
         application.getLayerManager().reset();
-        setContentView(R.layout.activity_subscription_selector);
-        final ActionBar actionBar = getSupportActionBar();
-        actionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_TABS);
 
         mViewPager = (ViewPager) findViewById(R.id.pager);
+        mTabLayout = (TabLayout) findViewById(R.id.tab_layout);
+
+        mTabLayout.addTab(mTabLayout.newTab().setText(R.string.standard_subscription_section));
+        mTabLayout.addTab(mTabLayout.newTab().setText(R.string.tutorial_subscription_section));
+        mTabLayout.addTab(mTabLayout.newTab().setText(R.string.default_subscription_section));
+        mTabLayout.addTab(mTabLayout.newTab().setText(R.string.ssp_subscription_section));
+        mTabLayout.addTab(mTabLayout.newTab().setText(R.string.plugin_owners_section));
+
+        mTabLayout.setTabGravity(TabLayout.GRAVITY_FILL);
+        mTabLayout.setTabMode(TabLayout.MODE_SCROLLABLE);
 
         mSectionsPagerAdapter = new ClientSelectorSectionsPagerAdapter(getSupportFragmentManager(), this);
 
@@ -58,24 +70,27 @@ public class SubscriptionSelectorActivity extends ActionBarActivity implements A
 
         mViewPager.setAdapter(mSectionsPagerAdapter);
 
-        mViewPager.setOnPageChangeListener(
-                new ViewPager.SimpleOnPageChangeListener() {
-                    @Override
-                    public void onPageSelected(int position) {
-                        // When swiping between pages, select the
-                        // corresponding tab.
-                        actionBar.setSelectedNavigationItem(position);
-                    }
-                });
+        mViewPager.addOnPageChangeListener(new TabLayout.TabLayoutOnPageChangeListener(mTabLayout));
 
-        // Add 3 tabs, specifying the tab's text and TabListener
-        for (int i = 0; i < mSectionsPagerAdapter.getCount(); i++) {
-            actionBar.addTab(
-                    actionBar.newTab()
-                            .setText(mSectionsPagerAdapter.getPageTitle(i))
-                            .setTabListener(this));
-        }
+        mTabLayout.setOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
+            @Override
+            public void onTabSelected(TabLayout.Tab tab) {
+                mViewPager.setCurrentItem(tab.getPosition());
+            }
+
+            @Override
+            public void onTabUnselected(TabLayout.Tab tab) {
+
+            }
+
+            @Override
+            public void onTabReselected(TabLayout.Tab tab) {
+
+            }
+        });
     }
+
+
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {

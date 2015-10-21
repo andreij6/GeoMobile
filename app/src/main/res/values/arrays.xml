@@ -17,4 +17,11 @@
         <item>Decimal</item>
     </string-array>
 
+    <string-array name="ssp_clients">
+        <item>Administrator</item>
+        <item>Regional Administrators</item>
+        <item>Project Managers</item>
+        <item>Service Providers</item>
+    </string-array>
+
 </resources>

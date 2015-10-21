@@ -99,15 +99,15 @@ public class PolylineOptionsManager extends OptionsManagerBase<PolylineOptions, 
 
                                 mResult.addPolyline(option, featureInfo, key);
 
-                                getActivity().runOnUiThread(new Runnable() {
-                                    @Override
-                                    public void run() {
-                                        if (!mStatusBarVisible && mUUID != null) {
-                                            mMapStatusBarManager.ensureStatusBarVisible();
-                                            mStatusBarVisible = true;
-                                        }
-                                    }
-                                });
+                                //getActivity().runOnUiThread(new Runnable() {
+                                //    @Override
+                                //    public void run() {
+                                //        if (!mStatusBarVisible && mUUID != null) {
+                                //            mMapStatusBarManager.ensureStatusBarVisible();
+                                //            mStatusBarVisible = true;
+                                //        }
+                                //    }
+                                //});
                             }
 
                             pointInBounds = true;
@@ -161,6 +161,7 @@ public class PolylineOptionsManager extends OptionsManagerBase<PolylineOptions, 
         public void mapFeatures() {
             for (PolylineFeatures pparams: mFeatures) {
                 Polyline polyline = mMap.addPolyline(pparams.getOptions());
+
                 mIdFeatureIdMap.put(polyline.getId(), pparams.getFeatureInfo());
                 mVisibleLayers.put(pparams.getKey(), polyline);
             }

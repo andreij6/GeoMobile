@@ -29,11 +29,12 @@
     <!-- Pallette 2 Oct Redesign -->
     <color name="body_bkg">#FFF4F7F8</color>
     <color name="primary_text">#FF42413E</color>
-    <color name="accent">#FFF27242</color>
+    <color name="accent">#f27242</color>
+    <color name="loading_background">#9c9c9a</color>
 
     <color name="primary">#ffffff</color> <!-- Todo: Condense -->
     <color name="accent_blue">#FF6799CA</color>
-    <color name="primary_dark">#5a86b1</color>
+    <color name="primary_dark">#363332</color>
 
     <color name="accent_yellow">#FFFFD55A</color>
 

@@ -63,6 +63,8 @@ dependencies {
     // at http://square.github.io/retrofit/
     // third party
     //was 6.1.0
+
+    compile 'com.android.support:design:23.1.0'
     // Unit testing dependencies
     testCompile 'junit:junit:4.12'
     testCompile 'org.hamcrest:hamcrest-library:1.3'

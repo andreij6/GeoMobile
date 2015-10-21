@@ -11,12 +11,14 @@ public class GetClientsTaskParams extends ExecuterParamsBase {
     List<Subscription> mDataSet;
     int mClientTypeCode;
     FragmentActivity mContext;
+    private int mSSPClientTypeCode;
 
-    public GetClientsTaskParams(List<Subscription> dataSet, int clientTypeCode, FragmentActivity activity, IPostExecuter executer) {
+    public GetClientsTaskParams(List<Subscription> dataSet, int clientTypeCode, int sspClientTypeCode, FragmentActivity activity, IPostExecuter executer) {
         super(executer);
         mDataSet = dataSet;
         mClientTypeCode = clientTypeCode;
         mContext = activity;
+        mSSPClientTypeCode = sspClientTypeCode;
     }
 
 
@@ -30,5 +32,9 @@ public class GetClientsTaskParams extends ExecuterParamsBase {
 
     public FragmentActivity getContext() {
         return mContext;
+    }
+
+    public int getSSPClientTypeCode() {
+        return mSSPClientTypeCode;
     }
 }

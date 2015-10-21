@@ -11,13 +11,9 @@ public interface IMapStatusBarManager {
 
     void StartLoading(Integer geomtryCode);
 
-    void FinishLoading(Integer geomtryCode);
-
-
-    void showLayersMessage(String message, UUID uniqeId);
-
     void finished(int geometryCode, UUID uniqueId);
 
-    void ensureStatusBarVisible();
+    void showLayersProgress(UUID uniqeId);
 
+    void FinishLoading(Integer geomtryCode);
 }

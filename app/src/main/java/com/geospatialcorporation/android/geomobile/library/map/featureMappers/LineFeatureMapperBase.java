@@ -45,10 +45,11 @@ public abstract class LineFeatureMapperBase extends SingleFeatureMapperBase<Poly
     public int addStyles(PolylineOptions option, Style style) {
         if(mColor == 0) {
             String geoColor = style.getBorderColor();
-            mBorderWidth = style.getBorderWidth();
 
             mColor = new GeoColor().parseColor(geoColor);
         }
+
+        mBorderWidth = style.getBorderWidth();
 
         option.width(mBorderWidth);
         option.color(mColor);

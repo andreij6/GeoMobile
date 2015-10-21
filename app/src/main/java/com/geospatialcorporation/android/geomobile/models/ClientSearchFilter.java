@@ -1,13 +1,13 @@
 package com.geospatialcorporation.android.geomobile.models;
 
 public class ClientSearchFilter {
-    String type;
+    int type;
     String name;
     String page;
     String pagesize;
 
     public ClientSearchFilter(int clientTypeCode) {
-        type = clientTypeCode + "";
+        type = clientTypeCode;
         name = "";
         page = "1";
         pagesize = "20"; //doesnt matter the server always sends all for the type
@@ -16,11 +16,11 @@ public class ClientSearchFilter {
 
     //G's & S's
 
-    public String getType() {
+    public int getType() {
         return type;
     }
 
-    public void setType(String type) {
+    public void setType(int type) {
         this.type = type;
     }
 

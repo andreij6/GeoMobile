@@ -84,7 +84,8 @@
 
         <activity
             android:name=".ui.SubscriptionSelectorActivity"
-            android:label="@string/title_activity_subscription_selector" >
+            android:label="@string/title_activity_subscription_selector"
+            android:theme="@style/GeoUndergroundTheme">
         </activity>
 
         <receiver

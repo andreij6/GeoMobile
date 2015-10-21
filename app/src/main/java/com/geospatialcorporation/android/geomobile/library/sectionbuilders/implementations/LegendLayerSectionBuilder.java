@@ -108,9 +108,9 @@ public class LegendLayerSectionBuilder extends SectionBuilderBase<Folder> implem
     //region Helpers
     protected void showAppStateLayers(){
 
-        for(LegendLayer legendLayer : mAppStateLayers){
-            mMapStatusBarManager.StartLoading(legendLayer.getLayer().getGeometryTypeCodeId());
-        }
+        //for(LegendLayer legendLayer : mAppStateLayers){
+        //    mMapStatusBarManager.StartLoading(legendLayer.getLayer().getGeometryTypeCodeId());
+        //}
 
         for(LegendLayer llayer : mAppStateLayers) {
 

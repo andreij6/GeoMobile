@@ -204,6 +204,35 @@
 
             </LinearLayout>
 
+            <RelativeLayout
+                android:id="@+id/fourSquareContainerStart"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/map_actionbar"
+                >
+
+                <ImageView
+                    android:id="@+id/fourSquareStart"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:adjustViewBounds="true"
+                    android:background="@null"
+                    android:contentDescription="@null"
+                    android:src="@anim/anim_loader_grey"
+                    android:visibility="gone"/>
+
+                <ImageView
+                    android:id="@+id/fourSquareFinish"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:adjustViewBounds="true"
+                    android:background="@null"
+                    android:contentDescription="@null"
+                    android:src="@anim/anim_loader_grey_finish"
+                    android:visibility="gone"/>
+
+            </RelativeLayout>
+
             <ImageButton
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"

@@ -94,15 +94,15 @@ public class ExtentMarkerOptionsManager extends OptionsManagerBase<MarkerOptions
 
                                 result.addMarker(option, featureInfo, key);
 
-                                getActivity().runOnUiThread(new Runnable() {
-                                    @Override
-                                    public void run() {
-                                        if(!mStatusBarVisible && mUUID != null){
-                                            mMapStatusBarManager.ensureStatusBarVisible();
-                                            mStatusBarVisible = true;
-                                        }
-                                    }
-                                });
+                                //getActivity().runOnUiThread(new Runnable() {
+                                //    @Override
+                                //    public void run() {
+                                //        if(!mStatusBarVisible && mUUID != null){
+                                //            mMapStatusBarManager.ensureStatusBarVisible();
+                                //            mStatusBarVisible = true;
+                                //        }
+                                //    }
+                                //});
                             }
 
                         } else {

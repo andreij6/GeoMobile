@@ -14,6 +14,7 @@ import android.view.ViewGroup;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -52,6 +53,9 @@ public class TabletMapFragment extends Fragment
     @Bind(R.id.getLocationIB) ImageButton mGPSbtn;
     @Bind(R.id.loadingBar) LinearLayout mLoadingBar;
     @Bind(R.id.loadingMessage) TextView mLoadingMessage;
+
+    @Bind(R.id.fourSquareStart) ImageView fourSquareStart;
+    @Bind(R.id.fourSquareFinish) ImageView fourSquareFinish;
 
     @OnClick(R.id.extentIB)
     public void zoomToExtent(){
@@ -159,4 +163,15 @@ public class TabletMapFragment extends Fragment
     public TextView getStatusBarMessage() {
         return mLoadingMessage;
     }
+
+    @Override
+    public ImageView getLoadingAnimIV() {
+        return fourSquareStart;
+    }
+
+    @Override
+    public ImageView getFinishLoadingAnimIV() {
+        return fourSquareFinish;
+    }
+
 }

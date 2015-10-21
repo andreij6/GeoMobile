@@ -59,7 +59,7 @@ public class LayerManager implements ILayerManager {
 
         UUID uniqeId = UUID.randomUUID();
 
-        mMapStatusBarManager.showLayersMessage("Loading Layers", uniqeId);
+        mMapStatusBarManager.showLayersProgress(uniqeId);
 
         mMarkerManager.showAllLayers(mMap, uniqeId);
         mPolygonOptionsManager.showAllLayers(mMap, uniqeId);

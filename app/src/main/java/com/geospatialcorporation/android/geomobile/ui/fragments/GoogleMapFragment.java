@@ -21,6 +21,7 @@ import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentSender;
+import android.graphics.drawable.AnimationDrawable;
 import android.location.Location;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -34,10 +35,9 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.geospatialcorporation.android.geomobile.R;
 import com.geospatialcorporation.android.geomobile.application;
@@ -137,6 +137,8 @@ public class GoogleMapFragment extends GeoViewFragmentBase implements
     Polyline mHighlightedPolyline;
     Marker mHighlightedMarker;
 
+    AnimationDrawable mAnimationDrawable;
+
     @Bind(R.id.map) MapView mMapView;
     @Bind(R.id.sliding_layout) SlidingUpPanelLayout mPanel;
     @Bind(R.id.fab_box) FloatingActionButton mBoxQueryBtn;
@@ -147,6 +149,8 @@ public class GoogleMapFragment extends GeoViewFragmentBase implements
     @Bind(R.id.fab_fullscreen_close) FloatingActionButton mFullScreenClose;
     @Bind(R.id.loadingBar) LinearLayout mLoadingBar;
     @Bind(R.id.loadingMessage) TextView mLoadingMessage;
+    @Bind(R.id.fourSquareStart) ImageView fourSquareStart;
+    @Bind(R.id.fourSquareFinish) ImageView fourSquareFinish;
     Menu mMenu;
     //endregion
 
@@ -283,6 +287,12 @@ public class GoogleMapFragment extends GeoViewFragmentBase implements
 
     }
 
+    //public void fourSquareAnimation() {
+    //    mAnimationDrawable = (AnimationDrawable) fourSquare.getDrawable();
+    //
+    //    mAnimationDrawable.start();
+    //}
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         setHasOptionsMenu(true);
@@ -350,6 +360,10 @@ public class GoogleMapFragment extends GeoViewFragmentBase implements
         mLayerManager.clearVisibleLayers();
         if(mMapView != null) {
             mMapView.onDestroy();
+        }
+
+        if(mAnimationDrawable != null){
+            mAnimationDrawable.stop();
         }
     }
 
@@ -570,9 +584,19 @@ public class GoogleMapFragment extends GeoViewFragmentBase implements
     protected void zoomToFeature(Marker highlightedMarker){
         LatLng position = highlightedMarker.getPosition();
 
-        LatLng ll = new LatLng(position.latitude, position.longitude);
+        double lat = 0;
 
-        CameraUpdate update = CameraUpdateFactory.newLatLng(ll);
+        if(position.latitude > 0){
+            lat = position.latitude - .005;
+        } else {
+            lat = position.latitude + .005;
+        }
+
+        LatLng ll = new LatLng(lat, position.longitude);
+
+        float zoom = 15f;
+
+        CameraUpdate update = CameraUpdateFactory.newLatLngZoom(ll, zoom);
 
         mMap.animateCamera(update);
     }
@@ -634,8 +658,6 @@ public class GoogleMapFragment extends GeoViewFragmentBase implements
         Iterable<Polyline> lines = mLayerManager.getVisiblePolylines();
 
         double tolerance = calculateTolerance(mMap.getCameraPosition().zoom);
-
-        Toaster(tolerance + "");
 
         for (Polyline line : lines) {
             if (PolyUtil.isLocationOnPath(position, line.getPoints(), false, tolerance)) { //idea: reset tolerance by zoom level
@@ -735,7 +757,7 @@ public class GoogleMapFragment extends GeoViewFragmentBase implements
             public void onMapReady(GoogleMap googleMap) {
                 mMap = googleMap;
 
-                if(UsingClustering) {
+                if (UsingClustering) {
                     mClusterManager = new ClusterManager<>(getActivity(), mMap);
                     application.setClusterManager(mClusterManager);
                 }
@@ -829,6 +851,16 @@ public class GoogleMapFragment extends GeoViewFragmentBase implements
 
     public TextView getStatusBarMessage() {
         return mLoadingMessage;
+    }
+
+    @Override
+    public ImageView getLoadingAnimIV() {
+        return fourSquareStart;
+    }
+
+    @Override
+    public ImageView getFinishLoadingAnimIV() {
+        return fourSquareFinish;
     }
 
     @Override

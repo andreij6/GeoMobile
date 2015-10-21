@@ -1,7 +1,13 @@
 package com.geospatialcorporation.android.geomobile.library.DI.UIHelpers.Implementations.StatusBarManager;
 
+import android.graphics.drawable.AnimationDrawable;
+import android.graphics.drawable.Drawable;
+import android.os.Handler;
+import android.util.Log;
 import android.view.View;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.geospatialcorporation.android.geomobile.application;
@@ -27,16 +33,23 @@ public abstract class StatusBarManagerBase implements IMapStatusBarManager{
     ProgressDialogHelper mProgressDialogHelper;
     HashMap<UUID, HashMap<Integer, Boolean>> showLayersMap;
 
+    ImageView mLoadingAnimIV;
+    AnimationDrawable mAnimationDrawable;
+
+    ImageView mFinishLoadingAnimIV;
+    int mProgressStatus;
+
     public StatusBarManagerBase(){
         LoadedMap = new HashMap<>();
         showLayersMap = new HashMap<>();
+        mProgressStatus = 0;
     }
 
     @Override
-    public void showLayersMessage(String message, UUID uniqueId){
+    public void showLayersProgress(UUID uniqueId){
         try {
             setProperties();
-            mMessage.setText(message);
+            startLoadingAnimation();
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -50,21 +63,70 @@ public abstract class StatusBarManagerBase implements IMapStatusBarManager{
         showLayersMap.put(uniqueId, innerHash);
     }
 
-    @Override
-    public void ensureStatusBarVisible(){
-        mLoadingBar.setVisibility(View.VISIBLE);
+    private void startLoadingAnimation() {
+        IMapStatusCtrl mapFragment = getMapStatusCtrl();
+
+        if(mapFragment != null) {
+            mLoadingAnimIV = mapFragment.getLoadingAnimIV();
+
+            mFinishLoadingAnimIV.setVisibility(View.GONE);
+            mLoadingAnimIV.setVisibility(View.VISIBLE);
+
+            mLoadingAnimIV.setAlpha(0.5f);
+
+            mAnimationDrawable = (AnimationDrawable)mLoadingAnimIV.getDrawable();
+
+            mAnimationDrawable.start();
+        }
     }
 
     @Override
-    public void finished(int geometryCode, UUID uniqueId){
+    public void finished(int geometryCode, UUID uniqueId) {
         HashMap<Integer, Boolean> innerHash = showLayersMap.get(uniqueId);
 
         innerHash.put(geometryCode, false);
 
         if(!innerHash.values().contains(true)){
-            reset();
+            finishLoadingAnimation();
         }
 
+    }
+
+    private void finishLoadingAnimation() {
+        IMapStatusCtrl mapFragment = getMapStatusCtrl();
+        if(mapFragment != null) {
+            mFinishLoadingAnimIV = mapFragment.getFinishLoadingAnimIV();
+
+            mLoadingAnimIV.setVisibility(View.GONE);
+            mFinishLoadingAnimIV.setVisibility(View.VISIBLE);
+
+            mFinishLoadingAnimIV.setAlpha(0.5f);
+
+            mAnimationDrawable = (AnimationDrawable)mFinishLoadingAnimIV.getDrawable();
+
+
+            mFinishLoadingAnimIV.post(new Runnable() {
+                @Override
+                public void run() {
+                    mAnimationDrawable.start();
+                }
+            });
+
+            int duration = 0;
+
+            for(int i = 0; i < mAnimationDrawable.getNumberOfFrames(); i++){
+                duration += mAnimationDrawable.getDuration(i);
+            }
+
+            mAnimationDrawable.stop();
+
+            new Handler().postDelayed(new Runnable() {
+                @Override
+                public void run() {
+                   mFinishLoadingAnimIV.setVisibility(View.GONE);
+                }
+            }, 1000);
+        }
     }
 
     @Override
@@ -157,6 +219,7 @@ public abstract class StatusBarManagerBase implements IMapStatusBarManager{
             LoadedMap.clear();
             mProgressDialogHelper = null;
             setProperties();
+            mProgressStatus = 0;
 
         } catch (Exception e) {
             e.printStackTrace();
@@ -174,7 +237,14 @@ public abstract class StatusBarManagerBase implements IMapStatusBarManager{
             mMessage = mapFragment.getStatusBarMessage();
             mLoadingBar.setVisibility(View.GONE);
             mMessage.setText("");
+
+            mFinishLoadingAnimIV = mapFragment.getFinishLoadingAnimIV();
+            mLoadingAnimIV = mapFragment.getLoadingAnimIV();
+
+            mFinishLoadingAnimIV.setVisibility(View.GONE);
+            mLoadingAnimIV.setVisibility(View.GONE);
         }
-    };
+    }
+
 
 }
