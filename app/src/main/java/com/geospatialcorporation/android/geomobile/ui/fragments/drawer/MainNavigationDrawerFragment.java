@@ -33,6 +33,7 @@ import com.geospatialcorporation.android.geomobile.ui.adapters.MainNavigationAda
 
 import java.util.Arrays;
 import java.util.List;
+import java.util.logging.Handler;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
@@ -128,8 +129,16 @@ public class MainNavigationDrawerFragment extends Fragment {
 
         mDrawerListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                selectItem(position);
+            public void onItemClick(AdapterView<?> parent, View view, final int position, long id) {
+
+                new android.os.Handler().postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        selectItem(position);
+                    }
+                }, 250);
+
+                mDrawerLayout.closeDrawer(mFragmentContainerView);
             }
         });
 
@@ -244,9 +253,10 @@ public class MainNavigationDrawerFragment extends Fragment {
         if (mDrawerListView != null) {
             mDrawerListView.setItemChecked(position, true);
         }
-        if (mDrawerLayout != null) {
-            mDrawerLayout.closeDrawer(mFragmentContainerView);
-        }
+        //if (mDrawerLayout != null) {
+        //    mDrawerLayout.closeDrawer(mFragmentContainerView);
+        //}
+
         if (mCallbacks != null) {
             mCallbacks.onNavigationDrawerItemSelected(position);
         }

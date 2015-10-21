@@ -1,5 +1,8 @@
 package com.geospatialcorporation.android.geomobile.library.DI.UIHelpers.Implementations;
 
+import android.app.Application;
+import android.widget.Toast;
+
 import com.geospatialcorporation.android.geomobile.application;
 import com.geospatialcorporation.android.geomobile.library.DI.UIHelpers.Interfaces.IMainMenuHelper;
 import com.geospatialcorporation.android.geomobile.ui.fragments.drawer.MainNavigationDrawerFragment;
