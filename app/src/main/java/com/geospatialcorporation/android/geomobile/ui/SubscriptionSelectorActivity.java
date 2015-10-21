@@ -16,6 +16,7 @@ import android.widget.Toast;
 import com.geospatialcorporation.android.geomobile.R;
 import com.geospatialcorporation.android.geomobile.application;
 import com.geospatialcorporation.android.geomobile.library.DI.ErrorHandler.Interfaces.IGeoErrorHandler;
+import com.geospatialcorporation.android.geomobile.library.helpers.ZoomOutPageTransformer;
 import com.geospatialcorporation.android.geomobile.library.util.DeviceTypeUtil;
 import com.geospatialcorporation.android.geomobile.ui.adapters.ClientSelectorSectionsPagerAdapter;
 
@@ -69,6 +70,8 @@ public class SubscriptionSelectorActivity extends AppCompatActivity implements A
         //Thread.setDefaultUncaughtExceptionHandler(mErrorHandler.UncaughtExceptionHandler());
 
         mViewPager.setAdapter(mSectionsPagerAdapter);
+
+        mViewPager.setPageTransformer(true, new ZoomOutPageTransformer());
 
         mViewPager.addOnPageChangeListener(new TabLayout.TabLayoutOnPageChangeListener(mTabLayout));
 
