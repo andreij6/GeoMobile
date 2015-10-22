@@ -8,6 +8,7 @@ import com.geospatialcorporation.android.geomobile.library.map.layerManager.Opti
 import com.geospatialcorporation.android.geomobile.library.map.layerManager.OptionsManagerBase;
 import com.geospatialcorporation.android.geomobile.models.Layers.FeatureInfo;
 import com.google.android.gms.maps.GoogleMap;
+import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.maps.android.clustering.ClusterManager;
 
@@ -16,7 +17,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
-
+/*
 public class ClusterMarkerOptionsManager extends OptionsManagerBase<MarkerOptions, GeoClusterMarker> {
 
     ClusterManager<GeoClusterMarker> mClusterManager;
@@ -80,4 +81,10 @@ public class ClusterMarkerOptionsManager extends OptionsManagerBase<MarkerOption
     public void showAllLayers(GoogleMap map, UUID uniqeId) {
 
     }
+
+    @Override
+    public LatLng getNextPosition(LatLng highightedCenter) {
+        return null;
+    }
 }
+*/

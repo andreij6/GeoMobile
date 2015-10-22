@@ -59,6 +59,7 @@ public class PanelManager implements ISlidingPanelManager {
     @Override
     public void collapse() {
         mGeoPanel.collapse();
+        mGeoPanel.touch(false);
     }
 
     @Override

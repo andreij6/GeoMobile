@@ -175,22 +175,18 @@ public class MainActivity extends ActionBarActivity
 
     @Override
     public void onBackPressed() {
-        super.onBackPressed();
 
-        mBackPressedFromGoogleMapFragmentCount += 1;
-
-        if(!getContentFragment().getClass().getSimpleName().equals(GoogleMapFragment.class.getSimpleName())){
-            mBackPressedFromGoogleMapFragmentCount = 0;
-        } else {
-
-            if (getContentFragment().getClass().getSimpleName().equals(GoogleMapFragment.class.getSimpleName()) && mBackPressedFromGoogleMapFragmentCount < 2) {
-
-                onNavigationDrawerItemSelected(0);
-            }
-
-            if (mBackPressedFromGoogleMapFragmentCount >= 2) {
+        if(getContentFragment().getClass().getSimpleName().equals(GoogleMapFragment.class.getSimpleName())){
+            if(mIsAdmin) {
+                startActivity(new Intent(MainActivity.this, SubscriptionSelectorActivity.class));
+                finish();
+            } else {
+                application.Logout();
+                startActivity(new Intent(this, LoginActivity.class));
                 finish();
             }
+        } else {
+            super.onBackPressed();
         }
 
     }

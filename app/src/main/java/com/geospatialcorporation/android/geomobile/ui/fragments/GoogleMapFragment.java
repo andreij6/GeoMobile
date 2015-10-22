@@ -21,10 +21,13 @@ import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentSender;
+import android.graphics.Point;
 import android.graphics.drawable.AnimationDrawable;
 import android.location.Location;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.SystemClock;
 import android.provider.Settings;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.ActionBar;
@@ -33,6 +36,7 @@ import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
@@ -51,6 +55,7 @@ import com.geospatialcorporation.android.geomobile.library.DI.UIHelpers.Interfac
 import com.geospatialcorporation.android.geomobile.library.DocumentSentCallback;
 import com.geospatialcorporation.android.geomobile.library.ISendFileCallback;
 import com.geospatialcorporation.android.geomobile.library.constants.GeoPanel;
+import com.geospatialcorporation.android.geomobile.library.constants.GeometryTypeCodes;
 import com.geospatialcorporation.android.geomobile.library.helpers.DataHelper;
 import com.geospatialcorporation.android.geomobile.library.map.Models.GeoClusterMarker;
 import com.geospatialcorporation.android.geomobile.library.panelmanager.ISlidingPanelManager;
@@ -68,8 +73,6 @@ import com.geospatialcorporation.android.geomobile.ui.Interfaces.IMapStatusCtrl;
 import com.geospatialcorporation.android.geomobile.ui.Interfaces.IViewModeListener;
 import com.geospatialcorporation.android.geomobile.ui.MainActivity;
 import com.geospatialcorporation.android.geomobile.ui.fragments.panel_fragments.map_fragment_panels.FeatureWindowPanelFragment;
-import com.geospatialcorporation.android.geomobile.ui.fragments.panel_fragments.map_fragment_panels.MapOptionsPanelFragment;
-import com.geospatialcorporation.android.geomobile.ui.fragments.panel_fragments.tree_fragment_panels.LayerFolderPanelFragment;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.location.LocationListener;
@@ -536,7 +539,9 @@ public class GoogleMapFragment extends GeoViewFragmentBase implements
     //endregion
 
     //region HighLighters
-    protected void highlight(Polygon feature){
+    public void highlight(Polygon feature){
+        clearHighlights();
+
         PolygonOptions options = new PolygonOptions();
         options.strokeColor(invertColor(feature.getStrokeColor()));
         options.fillColor(invertColor(feature.getFillColor()));
@@ -554,7 +559,9 @@ public class GoogleMapFragment extends GeoViewFragmentBase implements
         zoomToFeature(mHighlightedPolygon);
     }
 
-    protected void highlight(Polyline feature){
+    public void highlight(Polyline feature){
+        clearHighlights();
+
         PolylineOptions options = new PolylineOptions();
         options.color(invertColor(feature.getColor()));
 
@@ -571,6 +578,8 @@ public class GoogleMapFragment extends GeoViewFragmentBase implements
     }
 
     protected void highlight(Marker feature){
+        clearHighlights();
+
         MarkerOptions options = new MarkerOptions();
         options.anchor(0.5f, 0.5f);
         options.position(feature.getPosition());
@@ -623,17 +632,21 @@ public class GoogleMapFragment extends GeoViewFragmentBase implements
     }
 
     public void polyZoomToFeature(List<LatLng> points){
+        LatLngBounds bounds = getBounds(points);
+
+        CameraUpdate update = CameraUpdateFactory.newLatLngBounds(bounds, 20);
+
+        mMap.animateCamera(update);
+    }
+
+    private LatLngBounds getBounds(List<LatLng> points) {
         LatLngBounds.Builder builder = new LatLngBounds.Builder();
 
         for (LatLng point : points) {
             builder.include(point);
         }
 
-        LatLngBounds bounds = builder.build();
-
-        CameraUpdate update = CameraUpdateFactory.newLatLngBounds(bounds, 20);
-
-        mMap.animateCamera(update);
+        return builder.build();
     }
 
     protected int invertColor(int color){
@@ -643,12 +656,15 @@ public class GoogleMapFragment extends GeoViewFragmentBase implements
     public void clearHighlights() {
         if(mHighlightedPolyline != null) {
             mHighlightedPolyline.remove();
+            mHighlightedPolyline = null;
         }
         if(mHighlightedPolygon != null){
             mHighlightedPolygon.remove();
+            mHighlightedPolygon = null;
         }
         if(mHighlightedMarker != null) {
             mHighlightedMarker.remove();
+            mHighlightedMarker = null;
         }
     }
 
@@ -723,7 +739,7 @@ public class GoogleMapFragment extends GeoViewFragmentBase implements
     }
     //endregion
 
-    protected void getFeatureWindow(String id, int shapeCode){
+    public void getFeatureWindow(String id, int shapeCode){
         mStatusBarManager.setMessage(getString(R.string.loading_feature_window));
 
         mSelectedFeatureId = mLayerManager.getFeatureId(id, shapeCode);
@@ -805,7 +821,7 @@ public class GoogleMapFragment extends GeoViewFragmentBase implements
             if (validate(response)) {
                 mPanelManager = new PanelManager(GeoPanel.MAP);
 
-                Fragment f = new FeatureWindowPanelFragment();
+                Fragment f = new FeatureWindowPanelFragment().initialize(mHighlightedMarker);
 
                 f.setArguments(response.toBundle());
 
@@ -815,6 +831,7 @@ public class GoogleMapFragment extends GeoViewFragmentBase implements
                         .commit();
 
                 mPanelManager.halfAnchor();
+
 
             } else {
                 clearHighlights();
@@ -931,6 +948,107 @@ public class GoogleMapFragment extends GeoViewFragmentBase implements
 
         mLayerManager.showLayers(mMap);
     }
+
+    public void getNextFeature() {
+        //Get Next Feature to the right of the current feature
+        //1. get LatLng center of current highlight
+        LatLng highightedCenter = null;
+        int typeCode = 0;
+
+        if(mHighlightedMarker != null){
+            typeCode = GeometryTypeCodes.Point;
+        }
+
+        if(mHighlightedPolyline != null){
+            typeCode = GeometryTypeCodes.Line;
+        }
+
+        if(mHighlightedPolygon != null){
+            typeCode = GeometryTypeCodes.Polygon;
+        }
+
+        if(typeCode != 0){
+            mLayerManager.getNextFeature(mSelectedFeatureId, mSelectedLayerId, typeCode, true);
+        }
+    }
+
+
+    public void simulateClick(final LatLng latLng) {
+
+        if(latLng == null){
+            Toaster("No Next Feature");
+            return;
+        }
+
+        CameraUpdate update = CameraUpdateFactory.newLatLng(latLng);
+
+        mMap.animateCamera(update);
+
+        new Handler().postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                Point point = mMap.getProjection().toScreenLocation(latLng);
+
+                long touchTime = SystemClock.uptimeMillis();
+
+                MotionEvent simulationEvent = MotionEvent.obtain(touchTime, touchTime,
+                        MotionEvent.ACTION_DOWN, point.x, point.y, 0);
+                mMapView.dispatchTouchEvent(simulationEvent);
+
+                simulationEvent = MotionEvent.obtain(touchTime, touchTime,
+                        MotionEvent.ACTION_UP, point.x, point.y, 0);
+
+                mMapView.dispatchTouchEvent(simulationEvent);
+            }
+        }, 1500);
+
+    }
+
+    public void getPrevious() {
+        int typeCode = 0;
+
+        if(mHighlightedMarker != null){
+            typeCode = GeometryTypeCodes.Point;
+        }
+
+        if(mHighlightedPolyline != null){
+            typeCode = GeometryTypeCodes.Line;
+        }
+
+        if(mHighlightedPolygon != null){
+            typeCode = GeometryTypeCodes.Polygon;
+        }
+
+        if(typeCode != 0){
+            mLayerManager.getNextFeature(mSelectedFeatureId, mSelectedLayerId, typeCode, false);
+        }
+    }
+
+    public Polygon getHighlightedPolygon() {
+        return mHighlightedPolygon;
+    }
+
+    public void centerMap(LatLng center) {
+        CameraUpdate update = CameraUpdateFactory.newLatLng(center);
+
+        mMap.animateCamera(update);
+    }
+
+    public void rezoomToHighlight() {
+
+        if(mHighlightedMarker != null){
+            zoomToFeature(mHighlightedMarker);
+        }
+
+        if(mHighlightedPolygon != null){
+            zoomToFeature(mHighlightedPolygon);
+        }
+
+        if(mHighlightedPolyline != null){
+            zoomToFeature(mHighlightedPolyline);
+        }
+    }
+
 
     protected class GetLibraryImportFolderTask extends AsyncTask<Void, Void, Folder> {
 

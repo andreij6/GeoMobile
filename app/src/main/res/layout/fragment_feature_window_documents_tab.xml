@@ -2,7 +2,7 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:background="@color/body_bkg">
+                android:background="@color/white">
 
     <TextView
         android:layout_width="wrap_content"
@@ -12,29 +12,17 @@
         android:textColor="@color/primary_text"
         android:text="@string/documents"
         android:id="@+id/title"
-        android:layout_alignParentTop="true"
+        android:layout_below="@+id/addDocument"
         android:layout_alignParentStart="true"
         android:layout_marginTop="8dp"
         android:layout_marginLeft="8dp"/>
 
-    <Button
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/add_feature_window_document"
-        android:id="@+id/addDocument"
-        android:layout_alignParentTop="true"
-        android:layout_alignParentEnd="true"
-        android:background="@color/accent"
-        android:layout_marginTop="8dp"
-        android:layout_marginRight="8dp"
-        android:padding="8dp"
-        android:textColor="@color/white"/>
-
-    <ScrollView android:layout_below="@+id/addDocument"
-                android:id="@+id/contentScrollView"
+    <ScrollView android:id="@+id/contentScrollView"
                 android:layout_width="match_parent"
                 android:fadeScrollbars="false"
-                android:layout_height="150dp">
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/title"
+                android:layout_marginTop="8dp">
         <TableLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -43,5 +31,17 @@
             android:id="@+id/featureWindowDocumentsTable">
         </TableLayout>
     </ScrollView>
+
+    <Button
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/add_feature_window_document"
+        android:layout_alignParentTop="true"
+        android:id="@+id/addDocument"
+        android:background="@color/accent"
+        android:textColor="@color/white"
+        android:layout_centerHorizontal="true"/>
+
+
 
 </RelativeLayout>

@@ -1,9 +1,11 @@
 package com.geospatialcorporation.android.geomobile.library.map.layerManager.implementations;
 
 import android.os.AsyncTask;
+import android.os.Handler;
 import android.util.Log;
 
 import com.geospatialcorporation.android.geomobile.application;
+import com.geospatialcorporation.android.geomobile.library.DI.Map.Implementations.LayerManager;
 import com.geospatialcorporation.android.geomobile.library.DI.UIHelpers.Implementations.StatusBarManager.StatusBarManagerBase;
 import com.geospatialcorporation.android.geomobile.library.DI.UIHelpers.Interfaces.IMapStatusBarManager;
 import com.geospatialcorporation.android.geomobile.library.constants.GeometryTypeCodes;
@@ -15,11 +17,14 @@ import com.geospatialcorporation.android.geomobile.ui.fragments.GoogleMapFragmen
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.LatLngBounds;
+import com.google.android.gms.maps.model.Polygon;
+import com.google.android.gms.maps.model.PolygonOptions;
 import com.google.android.gms.maps.model.Polyline;
 import com.google.android.gms.maps.model.PolylineOptions;
-import com.google.maps.android.PolyUtil;
 
 import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -49,6 +54,65 @@ public class PolylineOptionsManager extends OptionsManagerBase<PolylineOptions, 
     }
 
     @Override
+    public void getNextFeature(String featureId, int layerId, boolean isNext) {
+        HashMap<UUID, OptionFeature<PolylineOptions>> optionFeatures = mLayerOptions.get(layerId);
+
+        Collection<OptionFeature<PolylineOptions>> values = optionFeatures.values();
+
+        List<OptionFeature<PolylineOptions>> valuesList = new ArrayList<>(values);
+
+        Collections.sort(valuesList);
+
+        for (int i = 0; i < valuesList.size(); i++) {
+
+            if(valuesList.get(i).getFeatureInfo().getFeatureId().equals(featureId)){
+
+                int next = 0;
+
+                if(isNext){
+                    next = i + 1;
+                } else {
+                    next = i - 1;
+                }
+
+                if(next < 0){
+                    next = valuesList.size() - 1;
+                }
+
+                if(next >= valuesList.size()){
+                    next = 0;
+                }
+
+                final GoogleMapFragment mapFragment = (GoogleMapFragment)application.getMainActivity().getContentFragment();
+
+                final Iterable<Polyline> polygons = getShowingLayers();
+
+                final PolylineOptions selected = valuesList.get(next).getOption();
+
+                LatLngBounds bounds = getBounds(selected.getPoints());
+
+                mapFragment.centerMap(bounds.getCenter());
+
+                new Handler().postDelayed(new Runnable(){
+                    @Override
+                    public void run() {
+                        for (Polyline ss : polygons) {
+                            if (ss.getPoints().equals(selected.getPoints())) {
+                                mapFragment.getFeatureWindow(ss.getId(), LayerManager.LINE);
+
+                                mapFragment.highlight(ss);
+                                break;
+                            }
+                        }
+                    }
+                }, 2000);
+
+
+            }
+        }
+    }
+
+    @Override
     public void removeMapObject(UUID key){
         try {
             if (mVisibleLayers.get(key) != null) {
@@ -59,6 +123,7 @@ public class PolylineOptionsManager extends OptionsManagerBase<PolylineOptions, 
         }
     }
 
+    //region ShowLayers
     protected class ShowLayersAsync extends AsyncTask<Void, Void, PostParameters> {
 
         GoogleMap mGoogleMap;
@@ -212,5 +277,132 @@ public class PolylineOptionsManager extends OptionsManagerBase<PolylineOptions, 
         public FeatureInfo getFeatureInfo() {
             return mFeatureInfo;
         }
+    }
+    //endregion
+
+    //region Attempt
+    protected class GetNextFeatureAsync extends AsyncTask<Void, Void, LatLng>{
+
+        LatLng mHighlightedCenter;
+
+        public GetNextFeatureAsync(LatLng center){
+            mHighlightedCenter = center;
+        }
+
+        @Override
+        protected LatLng doInBackground(Void... params) {
+            int Radius = 6371;
+            int closest = -1;
+            int furthest = -1;
+            LatLng closestPos = null;
+            LatLng furthestPos = null;
+
+            HashMap<Integer, Double> distances = new HashMap<>();
+
+            List<HashMap<UUID, OptionFeature<PolylineOptions>>> CachedOptions = getOption();
+            int counter = 0;
+            for (HashMap<UUID, OptionFeature<PolylineOptions>> cachedOptions : CachedOptions) {
+
+                if (cachedOptions != null) {
+                    for (Map.Entry<UUID, OptionFeature<PolylineOptions>> entry : cachedOptions.entrySet()) {
+                        PolylineOptions option = entry.getValue().getOption();
+
+                        LatLng pos = getBounds(option.getPoints()).getCenter();
+
+                        if(pos.longitude == mHighlightedCenter.longitude && pos.latitude == mHighlightedCenter.latitude){
+                            continue;
+                        }
+
+                        if(pos.longitude > mHighlightedCenter.longitude) {
+                            double dLat = rad(pos.latitude - mHighlightedCenter.latitude);
+                            double dLong = rad(pos.longitude - mHighlightedCenter.longitude);
+
+                            double a = Math.sin(dLat / 2) * Math.sin(dLat / 2) + Math.cos(rad(mHighlightedCenter.latitude)) * Math.cos(rad(mHighlightedCenter.latitude))
+                                    * Math.sin(dLong / 2) * Math.sin(dLong / 2);
+
+                            double c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+                            double d = Radius * c;
+
+                            distances.put(counter, d);
+
+                            if (closest == -1 || d < distances.get(closest)) {
+                                closest = counter;
+                                closestPos = getMidPoint(option.getPoints().get(0), option.getPoints().get(1));
+                            }
+                        } else {
+                            double dLat = rad(pos.latitude - mHighlightedCenter.latitude);
+                            double dLong = rad(pos.longitude - mHighlightedCenter.longitude);
+
+                            double a = Math.sin(dLat / 2) * Math.sin(dLat / 2) + Math.cos(rad(mHighlightedCenter.latitude)) * Math.cos(rad(mHighlightedCenter.latitude))
+                                    * Math.sin(dLong / 2) * Math.sin(dLong / 2);
+
+                            double c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+                            double d = Radius * c;
+
+                            distances.put(counter, d);
+
+                            if (furthest == -1 || d > distances.get(furthest)) {
+                                furthest = counter;
+                                furthestPos= getMidPoint(option.getPoints().get(0), option.getPoints().get(1));
+                            }
+                        }
+
+                        counter++;
+                    }
+                }
+            }
+
+            if(closestPos != null){
+                return closestPos;
+            } else {
+                if(furthestPos != null){
+                    return furthestPos;
+                }
+
+                return null;
+            }
+        }
+
+        public LatLng getMidPoint(LatLng point1, LatLng point2){
+            double dLon = Math.toRadians(point2.longitude - point1.longitude);
+
+            //convert to radians
+            double lat1 = Math.toRadians(point1.latitude);
+            double lat2 = Math.toRadians(point2.latitude);
+            double lon1 = Math.toRadians(point1.longitude);
+
+            double Bx = Math.cos(lat2) * Math.cos(dLon);
+            double By = Math.cos(lat2) * Math.sin(dLon);
+            double lat3 = Math.atan2(Math.sin(lat1) + Math.sin(lat2), Math.sqrt((Math.cos(lat1) + Bx) * (Math.cos(lat1) + Bx) + By * By));
+            double lon3 = lon1 + Math.atan2(By, Math.cos(lat1) + Bx);
+
+            //print out in degrees
+            return new LatLng(Math.toDegrees(lat3), Math.toDegrees(lon3));
+        }
+
+
+        public double rad(double x){
+            return x * Math.PI / 180;
+        }
+
+        @Override
+        protected void onPostExecute(LatLng latLng) {
+            super.onPostExecute(latLng);
+
+            GoogleMapFragment mapFragment = (GoogleMapFragment)application.getMainActivity().getContentFragment();
+
+            mapFragment.simulateClick(latLng);
+        }
+    }
+    //endregion
+
+    private LatLngBounds getBounds(List<LatLng> points) {
+        LatLngBounds.Builder builder = new LatLngBounds.Builder();
+
+        for (LatLng point : points) {
+            builder.include(point);
+        }
+
+        return builder.build();
     }
 }

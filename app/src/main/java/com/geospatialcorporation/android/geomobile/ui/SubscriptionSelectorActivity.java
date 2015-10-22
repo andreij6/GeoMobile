@@ -56,8 +56,8 @@ public class SubscriptionSelectorActivity extends AppCompatActivity implements A
         mTabLayout = (TabLayout) findViewById(R.id.tab_layout);
 
         mTabLayout.addTab(mTabLayout.newTab().setText(R.string.standard_subscription_section));
-        mTabLayout.addTab(mTabLayout.newTab().setText(R.string.tutorial_subscription_section));
-        mTabLayout.addTab(mTabLayout.newTab().setText(R.string.default_subscription_section));
+        //mTabLayout.addTab(mTabLayout.newTab().setText(R.string.tutorial_subscription_section));
+        //mTabLayout.addTab(mTabLayout.newTab().setText(R.string.default_subscription_section));
         mTabLayout.addTab(mTabLayout.newTab().setText(R.string.ssp_subscription_section));
         mTabLayout.addTab(mTabLayout.newTab().setText(R.string.plugin_owners_section));
 

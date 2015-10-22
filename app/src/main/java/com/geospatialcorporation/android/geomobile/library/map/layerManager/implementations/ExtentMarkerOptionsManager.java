@@ -7,18 +7,20 @@ import com.geospatialcorporation.android.geomobile.application;
 import com.geospatialcorporation.android.geomobile.library.DI.UIHelpers.Implementations.StatusBarManager.MapStatusBarManager;
 import com.geospatialcorporation.android.geomobile.library.DI.UIHelpers.Implementations.StatusBarManager.StatusBarManagerBase;
 import com.geospatialcorporation.android.geomobile.library.DI.UIHelpers.Interfaces.IMapStatusBarManager;
-import com.geospatialcorporation.android.geomobile.library.constants.GeometryTypeCodes;
 import com.geospatialcorporation.android.geomobile.library.map.layerManager.OptionFeature;
 import com.geospatialcorporation.android.geomobile.library.map.layerManager.OptionsManagerBase;
 import com.geospatialcorporation.android.geomobile.models.Layers.FeatureInfo;
-import com.geospatialcorporation.android.geomobile.models.Query.map.response.mapquery.Geometry;
 import com.geospatialcorporation.android.geomobile.ui.fragments.GoogleMapFragment;
 import com.google.android.gms.maps.GoogleMap;
+import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.LatLngBounds;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 
 import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -61,6 +63,47 @@ public class ExtentMarkerOptionsManager extends OptionsManagerBase<MarkerOptions
         new ShowLayersAsync(bounds, uniqueId).execute();
     }
 
+    @Override
+    public void getNextFeature(String featureId, int layerId, boolean isNext) {
+        HashMap<UUID, OptionFeature<MarkerOptions>> optionFeatures = mLayerOptions.get(layerId);
+
+        Collection<OptionFeature<MarkerOptions>> values = optionFeatures.values();
+
+        List<OptionFeature<MarkerOptions>> valuesList = new ArrayList<>(values);
+
+        Collections.sort(valuesList);
+
+        for (int i = 0; i < valuesList.size(); i++) {
+
+            if(valuesList.get(i).getFeatureInfo().getFeatureId().equals(featureId)){
+
+                int next = 0;
+
+                if(isNext){
+                    next = i + 1;
+                } else {
+                    next = i - 1;
+                }
+
+                if(next < 0){
+                    next = valuesList.size() - 1;
+                }
+
+                if(next >= valuesList.size()){
+                    next = 0;
+                }
+
+                GoogleMapFragment mapFragment = (GoogleMapFragment)application.getMainActivity().getContentFragment();
+
+                LatLng position = valuesList.get(next).getOption().getPosition();
+
+                mapFragment.simulateClick(position);
+
+            }
+        }
+    }
+
+    //region ShowLayersTask
     protected class ShowLayersAsync extends AsyncTask<Void, Void, MarkerPostParamerters>{
 
         LatLngBounds mBounds;
@@ -198,4 +241,115 @@ public class ExtentMarkerOptionsManager extends OptionsManagerBase<MarkerOptions
             return mKey;
         }
     }
+    //endregion
+
+    //region Attempt
+    protected class GetNextFeatureAsync extends AsyncTask<Void, Void, LatLng>{
+
+        LatLng mHighlightedCenter;
+        Boolean mIsNext;
+
+        public GetNextFeatureAsync(LatLng center, Boolean isNext){
+            mHighlightedCenter = center;
+            mIsNext = isNext;
+        }
+
+        @Override
+        protected LatLng doInBackground(Void... params) {
+            int Radius = 6371;
+            int closest = -1;
+            int furthest = -1;
+            MarkerOptions closestMarker = null;
+            MarkerOptions furthestMarker = null;
+
+            HashMap<Integer, Double> distances = new HashMap<>();
+
+            List<HashMap<UUID, OptionFeature<MarkerOptions>>> CachedOptions = getOption();
+            int counter = 0;
+            for (HashMap<UUID, OptionFeature<MarkerOptions>> cachedOptions : CachedOptions) {
+
+                if (cachedOptions != null) {
+                    for (Map.Entry<UUID, OptionFeature<MarkerOptions>> entry : cachedOptions.entrySet()) {
+                        MarkerOptions option = entry.getValue().getOption();
+
+                        LatLng pos = option.getPosition();
+
+                        if(pos.longitude == mHighlightedCenter.longitude && pos.latitude == mHighlightedCenter.latitude){
+                            continue;
+                        }
+
+                        boolean condition = true;
+
+                        if(mIsNext){
+                            condition = pos.longitude > mHighlightedCenter.longitude;
+                        } else {
+                            condition = pos.longitude < mHighlightedCenter.longitude;
+                        }
+
+                        if(condition) {
+                            double dLat = rad(pos.latitude - mHighlightedCenter.latitude);
+                            double dLong = rad(pos.longitude - mHighlightedCenter.longitude);
+
+                            double a = Math.sin(dLat / 2) * Math.sin(dLat / 2) + Math.cos(rad(mHighlightedCenter.latitude)) * Math.cos(rad(mHighlightedCenter.latitude))
+                                    * Math.sin(dLong / 2) * Math.sin(dLong / 2);
+
+                            double c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+                            double d = Radius * c;
+
+                            distances.put(counter, d);
+
+                            if (closest == -1 || d < distances.get(closest)) {
+                                closest = counter;
+                                closestMarker = option;
+                            }
+                        } else {
+                            double dLat = rad(pos.latitude - mHighlightedCenter.latitude);
+                            double dLong = rad(pos.longitude - mHighlightedCenter.longitude);
+
+                            double a = Math.sin(dLat / 2) * Math.sin(dLat / 2) + Math.cos(rad(mHighlightedCenter.latitude)) * Math.cos(rad(mHighlightedCenter.latitude))
+                                    * Math.sin(dLong / 2) * Math.sin(dLong / 2);
+
+                            double c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+                            double d = Radius * c;
+
+                            distances.put(counter, d);
+
+                            if (furthest == -1 || d > distances.get(furthest)) {
+                                furthest = counter;
+                                furthestMarker = option;
+                            }
+                        }
+
+
+
+                        counter++;
+                    }
+                }
+            }
+
+            if(closestMarker != null){
+                return closestMarker.getPosition();
+            } else {
+                if(furthestMarker != null){
+                    return furthestMarker.getPosition();
+                }
+
+                return null;
+            }
+        }
+
+        public double rad(double x){
+            return x * Math.PI / 180;
+        }
+
+        @Override
+        protected void onPostExecute(LatLng latLng) {
+            super.onPostExecute(latLng);
+
+            GoogleMapFragment mapFragment = (GoogleMapFragment)application.getMainActivity().getContentFragment();
+
+            mapFragment.simulateClick(latLng);
+        }
+    }
+    //endregion
 }

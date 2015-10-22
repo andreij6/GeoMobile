@@ -121,7 +121,9 @@ public class Authentication {
                 Log.d(TAG, "Message: " + retrofitError.getMessage());
                 Log.e(TAG, "Error calling: " + retrofitError.getUrl());
 
-                if (retrofitError.getResponse().getBody() != null) {
+                Response response = retrofitError.getResponse();
+
+                if (response != null && response.getBody() != null) {
                     Log.e(TAG, "emailLoginStart failure: " + new String(((TypedByteArray) retrofitError.getResponse().getBody()).getBytes()));
                 }
 

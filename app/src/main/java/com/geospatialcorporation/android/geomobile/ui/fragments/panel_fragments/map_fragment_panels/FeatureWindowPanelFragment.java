@@ -1,11 +1,13 @@
 package com.geospatialcorporation.android.geomobile.ui.fragments.panel_fragments.map_fragment_panels;
 
 import android.os.Bundle;
+import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTabHost;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.geospatialcorporation.android.geomobile.R;
@@ -20,6 +22,7 @@ import com.geospatialcorporation.android.geomobile.ui.fragments.GoogleMapFragmen
 import com.geospatialcorporation.android.geomobile.ui.fragments.detail_fragment.feature_window_tabs.FeatureAttributesTab;
 import com.geospatialcorporation.android.geomobile.ui.fragments.detail_fragment.feature_window_tabs.FeatureDocumentsTab;
 import com.geospatialcorporation.android.geomobile.ui.fragments.detail_fragment.feature_window_tabs.FeatureMapInfoTab;
+import com.google.android.gms.maps.model.Marker;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
@@ -35,11 +38,20 @@ public class FeatureWindowPanelFragment extends GeoViewFragmentBase {
     Bundle mArgs;
     GoogleMapFragment mContentFragment;
     @Bind(R.id.layerNameTV) TextView FeatureName;
+    @Bind(R.id.nextIV) ImageView mNextIV;
+    @Bind(R.id.previousIV) ImageView mPreviousIV;
+    Boolean mIsPointFeature;
 
-    @OnClick(R.id.close)
+    @OnClick(R.id.previousIV)
     public void closeFeatureWindow(){
-        mPanelManager.collapse();
+        mContentFragment.getPrevious();
     }
+
+    @OnClick(R.id.nextIV)
+    public void nextFeature(){ mContentFragment.getNextFeature(); }
+
+    @OnClick(R.id.rezoomIV)
+    public void rezoomToFeature(){ mContentFragment.rezoomToHighlight(); }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstance){
@@ -48,11 +60,16 @@ public class FeatureWindowPanelFragment extends GeoViewFragmentBase {
         ButterKnife.bind(this, view);
 
         mPanelManager = new PanelManager(GeoPanel.MAP);
-        mPanelManager.touch(false);
+        mPanelManager.touch(true);
 
         mContentFragment = (GoogleMapFragment)application.getMainActivity().getContentFragment();
 
         handleArgs();
+
+        //if(!mIsPointFeature){
+        //    mNextIV.setVisibility(View.GONE);
+        //    mPreviousIV.setVisibility(View.GONE);
+        //}
 
         FeatureName.setText(getFeatureName());
 
@@ -104,4 +121,13 @@ public class FeatureWindowPanelFragment extends GeoViewFragmentBase {
     }
 
 
+    public Fragment initialize(Marker highlightedMarker) {
+        if(highlightedMarker != null){
+            mIsPointFeature = true;
+        } else {
+            mIsPointFeature = false;
+        }
+
+        return this;
+    }
 }

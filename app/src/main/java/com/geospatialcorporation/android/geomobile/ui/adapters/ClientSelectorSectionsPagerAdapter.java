@@ -16,7 +16,7 @@ import java.util.Locale;
 public class ClientSelectorSectionsPagerAdapter extends FragmentStatePagerAdapter  {
     Context mContext;
     private static final String TAG = ClientSelectorSectionsPagerAdapter.class.getSimpleName();
-    private int NUM_PAGES = 5;
+    private int NUM_PAGES = 3;
 
     public ClientSelectorSectionsPagerAdapter(FragmentManager fm, Context context) {
         super(fm);
@@ -33,16 +33,16 @@ public class ClientSelectorSectionsPagerAdapter extends FragmentStatePagerAdapte
             case 0:
                 clientCode = ClientTypeCodes.STANDARD.getKey();
                 break;
+            //case 1:
+            //    clientCode = ClientTypeCodes.TUTORIAL.getKey();
+            //    break;
+            //case 2:
+            //    clientCode = ClientTypeCodes.DEFAULT.getKey();
+            //    break;
             case 1:
-                clientCode = ClientTypeCodes.TUTORIAL.getKey();
-                break;
-            case 2:
-                clientCode = ClientTypeCodes.DEFAULT.getKey();
-                break;
-            case 3:
                 clientCode = ClientTypeCodes.SSP.getKey();
                 break;
-            case 4:
+            case 2:
                 clientCode = ClientTypeCodes.PLUGINOWNERS.getKey();
                 break;
             default:
@@ -66,13 +66,13 @@ public class ClientSelectorSectionsPagerAdapter extends FragmentStatePagerAdapte
         switch (position) {
             case 0:
                 return mContext.getString(R.string.standard_subscription_section).toUpperCase(l);
+            //case 1:
+            //    return mContext.getString(R.string.tutorial_subscription_section).toUpperCase(l);
+            //case 2:
+            //    return mContext.getString(R.string.default_subscription_section).toUpperCase(l);
             case 1:
-                return mContext.getString(R.string.tutorial_subscription_section).toUpperCase(l);
-            case 2:
-                return mContext.getString(R.string.default_subscription_section).toUpperCase(l);
-            case 3:
                 return mContext.getString(R.string.ssp_subscription_section).toUpperCase(l);
-            case 4:
+            case 2:
                 return mContext.getString(R.string.plugin_owners_section).toUpperCase(l);
             default:
                 return null;

@@ -4,6 +4,7 @@ import com.geospatialcorporation.android.geomobile.library.map.layerManager.Opti
 import com.geospatialcorporation.android.geomobile.library.map.layerManager.OptionsManagerBase;
 import com.geospatialcorporation.android.geomobile.models.Layers.FeatureInfo;
 import com.google.android.gms.maps.GoogleMap;
+import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 
@@ -12,6 +13,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
+/*
 public class MarkerOptionsManager extends OptionsManagerBase<MarkerOptions, Marker> {
 
     private static final String TAG = MarkerOptionsManager.class.getSimpleName();
@@ -47,7 +49,13 @@ public class MarkerOptionsManager extends OptionsManagerBase<MarkerOptions, Mark
     }
 
     @Override
+    public LatLng getNextPosition(LatLng highightedCenter) {
+        return null;
+    }
+
+    @Override
     protected void removeMapObject(UUID key) {
         mVisibleLayers.get(key).remove();
     }
 }
+*/

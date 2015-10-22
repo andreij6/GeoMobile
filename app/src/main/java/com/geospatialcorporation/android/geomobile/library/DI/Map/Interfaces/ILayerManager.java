@@ -5,6 +5,7 @@ import com.geospatialcorporation.android.geomobile.models.Layers.FeatureInfo;
 import com.geospatialcorporation.android.geomobile.models.Layers.Layer;
 import com.geospatialcorporation.android.geomobile.models.Layers.LegendLayer;
 import com.google.android.gms.maps.GoogleMap;
+import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.maps.model.Polygon;
 import com.google.android.gms.maps.model.PolygonOptions;
@@ -43,4 +44,6 @@ public interface ILayerManager {
     void showLayer(LegendLayer llayer);
 
     boolean isLayerCached(Layer layer);
+
+    void getNextFeature(String featureId, int selectedLayerId, int code, boolean b);
 }

@@ -369,7 +369,7 @@ public class GeoUndergroundMap implements IGeoUndergroundMap, IPostExecuter<List
         return (0xFFFFFF - color) | 0xFF000000;
     }
 
-    protected Boolean highlightLine(LatLng position){
+    public Boolean highlightLine(LatLng position){
         Boolean foundMatch = false;
 
         Iterable<Polyline> lines = mLayerManager.getVisiblePolylines();

@@ -2,6 +2,7 @@ package com.geospatialcorporation.android.geomobile.library.map.layerManager;
 
 import com.geospatialcorporation.android.geomobile.models.Layers.FeatureInfo;
 import com.google.android.gms.maps.GoogleMap;
+import com.google.android.gms.maps.model.LatLng;
 
 import java.util.Collection;
 import java.util.HashMap;
@@ -32,4 +33,5 @@ public interface IOptionsManager<T, S> {
 
     void showAllLayers(GoogleMap map, UUID uniqeId);
 
+    void getNextFeature(String featureId, int layerId, boolean isNext);
 }

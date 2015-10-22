@@ -21,6 +21,7 @@ import com.geospatialcorporation.android.geomobile.library.panelmanager.ISliding
 import com.geospatialcorporation.android.geomobile.library.panelmanager.PanelManager;
 import com.geospatialcorporation.android.geomobile.library.util.DeviceTypeUtil;
 import com.geospatialcorporation.android.geomobile.ui.Interfaces.OnFragmentInteractionListener;
+import com.google.android.gms.maps.model.LatLng;
 
 import butterknife.ButterKnife;
 
@@ -101,5 +102,7 @@ public abstract class GeoViewFragmentBase extends Fragment {
     public String getValue(Spinner spinner){
         return spinner.getSelectedItem().toString();
     }
+
+
 
 }

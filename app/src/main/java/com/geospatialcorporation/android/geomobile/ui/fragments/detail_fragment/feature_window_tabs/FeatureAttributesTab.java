@@ -1,6 +1,7 @@
 package com.geospatialcorporation.android.geomobile.ui.fragments.detail_fragment.feature_window_tabs;
 
 import android.os.Bundle;
+import android.support.v4.app.Fragment;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -14,10 +15,15 @@ import com.geospatialcorporation.android.geomobile.application;
 import com.geospatialcorporation.android.geomobile.library.DI.Analytics.Models.GoogleAnalyticEvent;
 import com.geospatialcorporation.android.geomobile.library.DI.FeatureWindow.models.FeatureWindowData;
 import com.geospatialcorporation.android.geomobile.library.DI.UIHelpers.Interfaces.DialogHelpers.IAttributeDialog;
+import com.geospatialcorporation.android.geomobile.library.constants.GeoPanel;
 import com.geospatialcorporation.android.geomobile.library.helpers.DataHelper;
+import com.geospatialcorporation.android.geomobile.library.panelmanager.PanelManager;
 import com.geospatialcorporation.android.geomobile.models.AttributeValueVM;
+import com.geospatialcorporation.android.geomobile.models.Folders.Folder;
 import com.geospatialcorporation.android.geomobile.models.Layers.Columns;
 import com.geospatialcorporation.android.geomobile.models.Query.map.response.featurewindow.WindowFeatures;
+import com.geospatialcorporation.android.geomobile.ui.fragments.panel_fragments.map_fragment_panels.FeatureAttributePanelFragment;
+import com.geospatialcorporation.android.geomobile.ui.fragments.panel_fragments.map_fragment_panels.FeatureWindowPanelFragment;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -36,15 +42,30 @@ public class FeatureAttributesTab extends FeatureTabBase {
 
     @OnClick(R.id.edit_attributes)
     public void editAttributes(){
-        mAttributeDialog = application.getUIHelperComponent().provideAttributeDialog();
+        //mAttributeDialog = application.getUIHelperComponent().provideAttributeDialog();
 
-        mAttributeDialog.edit(mData, getActivity(), getFragmentManager());
+        //mAttributeDialog.edit(mData, getActivity(), getFragmentManager());
+
+        Fragment f = new FeatureAttributePanelFragment();
+
+        f.setArguments(mData.toBundle());
+
+        application.getMainActivity().getSupportFragmentManager()
+                .beginTransaction()
+                .addToBackStack("Feature Attributes")
+                .replace(R.id.slider_content, f)
+                .commit();
+
+        mPanelManager.expand();
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         mLayout = R.layout.fragment_feature_window_attributes_tab;
         mAnalytics.trackScreen(new GoogleAnalyticEvent().FeatureAttributesTab());
+
+        mPanelManager = new PanelManager(GeoPanel.MAP);
+
         return super.onCreateView(inflater, container, savedInstanceState);
     }
 

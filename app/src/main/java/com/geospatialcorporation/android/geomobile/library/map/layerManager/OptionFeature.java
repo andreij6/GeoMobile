@@ -5,7 +5,7 @@ import com.geospatialcorporation.android.geomobile.models.Layers.FeatureInfo;
 /**
  * Created by andre on 7/6/2015.
  */
-public class OptionFeature<T> {
+public class OptionFeature<T> implements Comparable<OptionFeature> {
     T Option;
     FeatureInfo mFeatureInfo;
 
@@ -30,5 +30,14 @@ public class OptionFeature<T> {
     public OptionFeature(T option, FeatureInfo featureInfo){
         Option = option;
         mFeatureInfo = featureInfo;
+    }
+
+    @Override
+    public int compareTo(OptionFeature another) {
+
+        int tID = Integer.parseInt(mFeatureInfo.getFeatureId());
+        int aId = Integer.parseInt(another.getFeatureInfo().getFeatureId());
+
+        return tID - aId;
     }
 }
