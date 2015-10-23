@@ -95,7 +95,7 @@
         android:layout_alignParentTop="true"
         android:layout_alignParentEnd="true"
         android:layout_alignParentRight="true"
-        android:src="@drawable/ic_action_add"
+        android:src="@drawable/ic_plus_white_36dp"
         fab:fab_colorNormal="@color/accent"
         fab:fab_colorPressed="@color/accent"
         fab:fab_colorRipple="@color/accent_dark"

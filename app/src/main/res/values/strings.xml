@@ -15,7 +15,7 @@
   -->
 
 <resources>
-    <string name="app_name">GeoUnderground Mobile</string>
+    <string name="app_name">GeoUnderground</string>
     <string name="choose_subscription">Choose Subscription</string>
     <string name="drawer_open">Open navigation drawer</string>
     <string name="drawer_close">Close navigation drawer</string>

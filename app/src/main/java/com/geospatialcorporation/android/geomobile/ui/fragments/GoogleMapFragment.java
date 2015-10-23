@@ -980,7 +980,17 @@ public class GoogleMapFragment extends GeoViewFragmentBase implements
             return;
         }
 
-        CameraUpdate update = CameraUpdateFactory.newLatLng(latLng);
+        float zoom = 15f;
+
+        double lat = 0;
+
+        if(latLng.latitude > 0){
+            lat = latLng.latitude - .005;
+        } else {
+            lat = latLng.latitude + .005;
+        }
+
+        CameraUpdate update = CameraUpdateFactory.newLatLngZoom(new LatLng(lat, latLng.longitude), zoom);
 
         mMap.animateCamera(update);
 
@@ -1000,7 +1010,7 @@ public class GoogleMapFragment extends GeoViewFragmentBase implements
 
                 mMapView.dispatchTouchEvent(simulationEvent);
             }
-        }, 1500);
+        }, 1100);
 
     }
 

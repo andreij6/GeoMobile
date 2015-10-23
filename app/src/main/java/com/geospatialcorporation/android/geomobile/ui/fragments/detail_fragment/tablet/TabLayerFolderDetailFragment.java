@@ -16,7 +16,6 @@ import com.geospatialcorporation.android.geomobile.ui.Interfaces.IPanelFragmentC
 import com.geospatialcorporation.android.geomobile.ui.MainTabletActivity;
 import com.geospatialcorporation.android.geomobile.ui.fragments.TabGeoViewFragmentBase;
 import com.geospatialcorporation.android.geomobile.ui.fragments.panel_fragments.tree_fragment_panels.tablet.TabletFolderPanelFragment;
-import com.geospatialcorporation.android.geomobile.ui.fragments.panel_fragments.tree_fragment_panels.tablet.TabletLayerFolderPanelFragment;
 import com.sothree.slidinguppanel.SlidingUpPanelLayout;
 
 import butterknife.Bind;

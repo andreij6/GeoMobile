@@ -11,6 +11,7 @@ import com.geospatialcorporation.android.geomobile.library.map.layerManager.Opti
 import com.geospatialcorporation.android.geomobile.library.map.layerManager.OptionsManagerBase;
 import com.geospatialcorporation.android.geomobile.models.Layers.FeatureInfo;
 import com.geospatialcorporation.android.geomobile.ui.fragments.GoogleMapFragment;
+import com.geospatialcorporation.android.geomobile.ui.fragments.MapFragments.TabletMapFragment;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.LatLngBounds;
@@ -93,11 +94,19 @@ public class ExtentMarkerOptionsManager extends OptionsManagerBase<MarkerOptions
                     next = 0;
                 }
 
-                GoogleMapFragment mapFragment = (GoogleMapFragment)application.getMainActivity().getContentFragment();
-
                 LatLng position = valuesList.get(next).getOption().getPosition();
 
-                mapFragment.simulateClick(position);
+                if(!application.getIsTablet()){
+                    GoogleMapFragment mapFragment = (GoogleMapFragment)application.getMainActivity().getContentFragment();
+
+                    mapFragment.simulateClick(position);
+                } else {
+                    TabletMapFragment mapFragment = application.getMainTabletActivity().getMapFragment();
+
+                    mapFragment.simulateClick(position);
+                }
+
+
 
             }
         }

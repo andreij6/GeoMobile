@@ -1,6 +1,7 @@
 package com.geospatialcorporation.android.geomobile.ui.fragments.panel_fragments.tree_fragment_panels;
 
 import android.os.Bundle;
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -36,8 +37,8 @@ public abstract class TreeFolderPanelFragmentBase<T> extends GeoViewFragmentBase
         if(mFolder.getParent() != null) {
             if(mFolder.getParent().getName().equals("/")){
                 mPath.setText("ROOT");
-            } else {
-                mPath.setText(mFolder.getParent().getName());
+            } else{
+                mPath.setText(TextUtils.join(" / ", mFolder.getPath()));
             }
         } else {
             mPath.setText("");

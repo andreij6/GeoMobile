@@ -145,43 +145,29 @@ public class Document implements Parcelable, ITreeEntity {
         String lowerExt = getExtension().toLowerCase();
 
         if(word.contains(lowerExt)){
-            //if(white){
-            //    return R.drawable.ic_file_word_white_24dp;
-            //}
             return R.drawable.ic_file_word_grey600_24dp;
         }
 
         if(excel.contains(lowerExt)){
-            //if(white){
-            //    return R.drawable.ic_file_excel_white_24dp;
-            //}
             return R.drawable.ic_file_excel_grey600_24dp;
         }
 
         if(powerpoint.contains(lowerExt)){
-            //if(white){
-            //    return R.drawable.ic_file_powerpoint_white_24dp;
-            //}
             return R.drawable.ic_file_powerpoint_grey600_24dp;
         }
 
         if(images.contains(lowerExt)){
-            if(white){
-                return R.drawable.ic_file_image_grey600_24dp;
-            }
             return R.drawable.ic_file_image_grey600_24dp;
         }
 
         if (lowerExt.equals(".pdf")) {
-            if(white){
-                return R.drawable.ic_file_pdf_box_grey600_24dp;
-            }
             return R.drawable.ic_file_pdf_box_grey600_24dp;
         }
 
-        if(white){
-            return R.drawable.ic_file_document_box_grey600_24dp;
+        if(lowerExt.equals(".zip")){
+            return R.drawable.ic_zip_box_grey600_24dp;
         }
+
         return R.drawable.ic_file_document_box_grey600_24dp;
     }
 

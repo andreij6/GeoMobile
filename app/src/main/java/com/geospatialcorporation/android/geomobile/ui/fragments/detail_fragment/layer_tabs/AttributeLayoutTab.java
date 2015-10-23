@@ -57,7 +57,7 @@ public class AttributeLayoutTab extends GeoDetailsTabBase<Layer> implements ICon
         mLayerDialog = component.provideLayerDialog();
 
         mSwipeRefreshLayout.setOnRefreshListener(mRefresher.build(mSwipeRefreshLayout, this));
-        mSwipeRefreshLayout.setProgressBackgroundColorSchemeColor(getActivity().getResources().getColor(R.color.accent));
+        mSwipeRefreshLayout.setProgressBackgroundColorSchemeColor(getActivity().getResources().getColor(R.color.white));
 
         //application.setLayerAttributePanel(mPanel);
         //mPanelManager = new PanelManager(GeoPanel.LAYER_ATTRIBUTE);

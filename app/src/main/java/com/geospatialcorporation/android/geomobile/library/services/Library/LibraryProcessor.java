@@ -116,7 +116,7 @@ public class LibraryProcessor implements ILibraryProcessor {
         public Builder swipeRefresh(SwipeRefreshLayout swipeRefreshLayout, IContentRefresher contentRefresher, Context context) {
             ILayoutRefresher refresher = application.getUIHelperComponent().provideLayoutRefresher();
             swipeRefreshLayout.setOnRefreshListener(refresher.build(swipeRefreshLayout, contentRefresher));
-            swipeRefreshLayout.setProgressBackgroundColorSchemeColor(context.getResources().getColor(R.color.accent));
+            swipeRefreshLayout.setProgressBackgroundColorSchemeColor(context.getResources().getColor(R.color.white));
 
             return this;
         }

@@ -38,9 +38,9 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:src="@drawable/ic_folder_grey600_24dp"
-        fab:fab_colorNormal="@color/body_bkg"
-        fab:fab_colorPressed="@color/accent_blue"
-        fab:fab_colorRipple="@color/accent_blue"
+        fab:fab_colorNormal="@color/transparent"
+        fab:fab_colorPressed="@color/primary_text"
+        fab:fab_colorRipple="@color/primary_text"
         fab:fab_shadow="false"
         android:layout_marginStart="32dp"
         android:paddingTop="8dp"/>
@@ -51,6 +51,7 @@
         android:layout_height="1dp"
         android:background="@color/body_bkg"
         android:layout_alignParentBottom="true"
+        android:layout_marginStart="112dp"
         />
 
 </RelativeLayout>

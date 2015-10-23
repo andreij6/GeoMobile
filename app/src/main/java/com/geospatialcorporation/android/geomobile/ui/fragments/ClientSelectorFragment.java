@@ -72,7 +72,7 @@ public class ClientSelectorFragment extends Fragment
         mProgressHelper = new ProgressDialogHelper(getActivity());
 
         mSwipeRefreshLayout.setOnRefreshListener(refresher.build(mSwipeRefreshLayout, this));
-        mSwipeRefreshLayout.setProgressBackgroundColorSchemeColor(mContext.getResources().getColor(R.color.accent));
+        mSwipeRefreshLayout.setProgressBackgroundColorSchemeColor(mContext.getResources().getColor(R.color.white));
 
         mSSPClientTypeCode = 1;
 

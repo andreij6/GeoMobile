@@ -45,7 +45,6 @@ public class FeatureAttributePanelFragment extends GeoViewFragmentBase {
 
     @Bind(R.id.editAttributes) TableLayout mTableLayout;
 
-
     @OnClick(R.id.close)
     public void closeFeatureWindow(){
         mPanelManager.collapse();
@@ -70,10 +69,6 @@ public class FeatureAttributePanelFragment extends GeoViewFragmentBase {
 
                     EditLayerAttributesRequest request = new EditLayerAttributesRequest(Arrays.asList(features));
 
-                    //if(!application.getIsTablet()) {
-                    //    mStatusBarManager.setMessage(mContext.getString(R.string.saving_attribute_updates));
-                    //}
-
                     application.setFeatureWindowDocumentIds(mData.getLayerId(), mData.getColumns().get(0).getFeatureId());
 
                     mService.editAttributeValue(mData.getLayerId(), request);
@@ -83,6 +78,8 @@ public class FeatureAttributePanelFragment extends GeoViewFragmentBase {
         } else {
 
             Toaster("No Changes Made");
+
+            mPanelManager.halfAnchor();
         }
 
 

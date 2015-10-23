@@ -197,6 +197,14 @@ public class Folder implements Parcelable, ITreeEntity {
     }
 
     public List<String> getPath() {
+        if(mPath != null && !mPath.isEmpty()){
+            if(!mPath.get(0).equals("ROOT")){
+                Collections.reverse(mPath);
+            }
+        } else {
+            setPath(getParentPath(Parent));
+        }
+
         return mPath;
     }
 
@@ -212,4 +220,21 @@ public class Folder implements Parcelable, ITreeEntity {
         }
     }
     //endregion
+
+    protected List<String> getParentPath(Folder parent) {
+        List<String> paths = new ArrayList<>();
+
+        if(parent != null) {
+            if (parent.getParent() != null) {
+                paths.add(parent.getName());
+                paths.addAll(getParentPath(parent.getParent()));
+            } else {
+                paths.add("ROOT");
+            }
+        }
+
+        Collections.reverse(paths);
+
+        return paths;
+    }
 }

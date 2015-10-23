@@ -77,7 +77,7 @@ public class ListItem implements Comparable<ListItem> {
         Name = folder.getName();
         Id = folder.getId();
         Order = 1;
-        IconId = R.drawable.ic_folder_grey600_24dp;
+        IconId = R.drawable.ic_folder_blue_24;
         showInfoIcon = true;
         IsCompletelyEmpty = false;
 

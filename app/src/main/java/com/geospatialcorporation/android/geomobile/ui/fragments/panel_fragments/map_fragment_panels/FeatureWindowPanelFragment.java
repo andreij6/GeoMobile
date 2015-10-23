@@ -43,7 +43,7 @@ public class FeatureWindowPanelFragment extends GeoViewFragmentBase {
     Boolean mIsPointFeature;
 
     @OnClick(R.id.previousIV)
-    public void closeFeatureWindow(){
+    public void previousFeature(){
         mContentFragment.getPrevious();
     }
 

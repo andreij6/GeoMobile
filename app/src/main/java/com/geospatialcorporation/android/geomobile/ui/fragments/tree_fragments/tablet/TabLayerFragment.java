@@ -76,7 +76,7 @@ public class TabLayerFragment extends TabGeoViewFragmentBase
     protected void swipeRefresh() {
         ILayoutRefresher refresher = application.getUIHelperComponent().provideLayoutRefresher();
         mSwipeRefreshLayout.setOnRefreshListener(refresher.build(mSwipeRefreshLayout, this));
-        mSwipeRefreshLayout.setProgressBackgroundColorSchemeColor(getResources().getColor(R.color.accent));
+        mSwipeRefreshLayout.setProgressBackgroundColorSchemeColor(getResources().getColor(R.color.white));
     }
 
     @Override

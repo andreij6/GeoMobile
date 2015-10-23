@@ -25,6 +25,7 @@ import com.geospatialcorporation.android.geomobile.library.DI.Map.Interfaces.IGe
 import com.geospatialcorporation.android.geomobile.library.DI.Map.Interfaces.ILayerManager;
 import com.geospatialcorporation.android.geomobile.library.DI.UIHelpers.Interfaces.IMapStatusBarManager;
 import com.geospatialcorporation.android.geomobile.library.constants.GeoPanel;
+import com.geospatialcorporation.android.geomobile.library.constants.GeometryTypeCodes;
 import com.geospatialcorporation.android.geomobile.library.panelmanager.PanelManager;
 import com.geospatialcorporation.android.geomobile.models.Layers.Extent;
 import com.geospatialcorporation.android.geomobile.models.Query.map.response.featurewindow.ParcelableFeatureQueryResponse;
@@ -36,6 +37,9 @@ import com.geospatialcorporation.android.geomobile.ui.fragments.panel_fragments.
 import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.MapView;
+import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.Polygon;
+import com.google.android.gms.maps.model.Polyline;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
@@ -151,10 +155,24 @@ public class TabletMapFragment extends Fragment
         }
     }
 
+    @Override
+    public void getNextFeature() {
+       mGeoMap.getNextFeature();
+    }
+
+    @Override
+    public void rezoomToHighlight() {
+        mGeoMap.rezoomToHighlighted();
+    }
+
+    @Override
+    public void getPrevious() {
+        mGeoMap.getPreviousFeature();
+    }
+
     public void clearHighlights() {
         mGeoMap.clearHighlights();
     }
-
 
     public LinearLayout getLoadingBar() {
         return mLoadingBar;
@@ -174,4 +192,22 @@ public class TabletMapFragment extends Fragment
         return fourSquareFinish;
     }
 
+    public void simulateClick(LatLng position) {
+        mGeoMap.simulateClick(position);
+    }
+
+    public void getFeatureWindow(String id, int geometry) {
+        mGeoMap.getFeatureWindow(id, geometry);
+    }
+
+    public void centerMap(LatLng position) {
+        mGeoMap.centerMap(position);
+    }
+
+    public void highlight(Polyline line) {
+        mGeoMap.highlight(line);
+    }
+    public void highlight(Polygon polygon) {
+        mGeoMap.highlight(polygon);
+    }
 }

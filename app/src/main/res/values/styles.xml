@@ -75,6 +75,7 @@
         <item name="android:gravity">center_vertical</item>
         <item name="android:textAppearance">?android:attr/textAppearanceMedium</item>
         <item name="android:paddingLeft">56dp</item>
+        <item name="android:textColor">@color/primary_text</item>
     </style>
     <!-- End Panel Layouts -->
 

@@ -1,12 +1,10 @@
 package com.geospatialcorporation.android.geomobile.ui.fragments.panel_fragments.tree_fragment_panels.tablet;
 
-import android.support.v4.app.Fragment;
 
 import com.geospatialcorporation.android.geomobile.R;
 import com.geospatialcorporation.android.geomobile.application;
 import com.geospatialcorporation.android.geomobile.library.DI.UIHelpers.Interfaces.DialogHelpers.IFolderDialog;
 import com.geospatialcorporation.android.geomobile.library.DI.UIHelpers.Interfaces.DialogHelpers.ILayerDialog;
-import com.geospatialcorporation.android.geomobile.ui.fragments.detail_fragment.tablet.TabLayerFolderDetailFragment;
 
 import butterknife.OnClick;
 

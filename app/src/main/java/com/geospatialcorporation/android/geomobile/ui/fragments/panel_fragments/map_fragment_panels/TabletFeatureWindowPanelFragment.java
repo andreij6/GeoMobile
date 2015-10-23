@@ -11,10 +11,12 @@ import android.widget.Toast;
 
 import com.geospatialcorporation.android.geomobile.R;
 import com.geospatialcorporation.android.geomobile.application;
+import com.geospatialcorporation.android.geomobile.library.DI.Map.Interfaces.IGeoUndergroundMap;
 import com.geospatialcorporation.android.geomobile.library.services.FeatureWindowCommons.FeatureWindowCommon;
 import com.geospatialcorporation.android.geomobile.library.services.FeatureWindowCommons.IFeatureWindowCommon;
 import com.geospatialcorporation.android.geomobile.library.services.QueryRestService;
 import com.geospatialcorporation.android.geomobile.models.Query.map.response.featurewindow.FeatureQueryResponse;
+import com.geospatialcorporation.android.geomobile.ui.Interfaces.IFeatureWindowCtrl;
 import com.geospatialcorporation.android.geomobile.ui.MainTabletActivity;
 import com.geospatialcorporation.android.geomobile.ui.fragments.MapFragments.TabletMapFragment;
 import com.geospatialcorporation.android.geomobile.ui.fragments.TabGeoViewFragmentBase;
@@ -30,6 +32,7 @@ public class TabletFeatureWindowPanelFragment extends TabGeoViewFragmentBase {
     IFeatureWindowCommon mCommon;
     FeatureQueryResponse mResponse;
     QueryRestService mQueryService;
+    IFeatureWindowCtrl mMapFragment; //TODO: extract interface
 
     @OnClick(R.id.close)
     public void closeFeatureWindow(){
@@ -38,6 +41,17 @@ public class TabletFeatureWindowPanelFragment extends TabGeoViewFragmentBase {
 
         activity.closeInfoFragment();
     }
+
+    @OnClick(R.id.previousIV)
+    public void previousFeature(){
+        mMapFragment.getPrevious();
+    }
+
+    @OnClick(R.id.nextIV)
+    public void nextFeature(){ mMapFragment.getNextFeature(); }
+
+    @OnClick(R.id.rezoomIV)
+    public void rezoomToFeature(){ mMapFragment.rezoomToHighlight(); }
 
     @Override
     protected int getLayoutResId() {
@@ -49,6 +63,8 @@ public class TabletFeatureWindowPanelFragment extends TabGeoViewFragmentBase {
         super.onCreate(savedInstanceState);
         mCommon = new FeatureWindowCommon();
         mQueryService = new QueryRestService();
+        mMapFragment = application.getFeatureWindowCtrl();
+
     }
 
     @Nullable

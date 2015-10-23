@@ -17,7 +17,7 @@ public class AttributeLayoutTabCommon implements IAttributeLayoutTabCommon {
         ILayoutRefresher refresher = application.getUIHelperComponent().provideLayoutRefresher();
 
         swipeRefreshLayout.setOnRefreshListener(refresher.build(swipeRefreshLayout, contentRefresher));
-        swipeRefreshLayout.setProgressBackgroundColorSchemeColor(resources.getColor(R.color.accent));
+        swipeRefreshLayout.setProgressBackgroundColorSchemeColor(resources.getColor(R.color.white));
 
     }
 

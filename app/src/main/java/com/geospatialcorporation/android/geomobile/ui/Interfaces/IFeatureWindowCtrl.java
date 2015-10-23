@@ -4,4 +4,10 @@ import com.geospatialcorporation.android.geomobile.models.Query.map.response.fea
 
 public interface IFeatureWindowCtrl {
     void showFeatureWindow(ParcelableFeatureQueryResponse response);
+
+    void getNextFeature();
+
+    void rezoomToHighlight();
+
+    void getPrevious();
 }

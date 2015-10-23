@@ -2,6 +2,7 @@ package com.geospatialcorporation.android.geomobile.ui.fragments.detail_fragment
 
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -17,6 +18,8 @@ import com.geospatialcorporation.android.geomobile.library.helpers.DataHelper;
 import com.geospatialcorporation.android.geomobile.models.AttributeValueVM;
 import com.geospatialcorporation.android.geomobile.models.Layers.Columns;
 import com.geospatialcorporation.android.geomobile.models.Query.map.response.featurewindow.WindowFeatures;
+import com.geospatialcorporation.android.geomobile.ui.fragments.panel_fragments.map_fragment_panels.FeatureAttributePanelFragment;
+import com.geospatialcorporation.android.geomobile.ui.fragments.panel_fragments.map_fragment_panels.TabletFeatureAttributePanelFragment;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -33,7 +36,15 @@ public class TabletFeatureAttributesTab extends TabletFeatureTabBase {
 
     @OnClick(R.id.edit_attributes)
     public void editAttributes(){
-        mAttributeDialog.edit(mData, getActivity(), getFragmentManager());
+        Fragment f = new TabletFeatureAttributePanelFragment();
+
+        f.setArguments(mData.toBundle());
+
+        application.getMainTabletActivity().getSupportFragmentManager()
+                .beginTransaction()
+                .addToBackStack("Feature Attributes")
+                .replace(R.id.info_frame, f)
+                .commit();
     }
 
     @Override

@@ -153,7 +153,7 @@ public class LibraryFragment extends GeoViewFragmentBase
         mPanelManager = new PanelManager.Builder().type(GeoPanel.LIBRARY_FRAGMENT).hide().build();
 
         mSwipeRefreshLayout.setOnRefreshListener(refresher.build(mSwipeRefreshLayout, this));
-        mSwipeRefreshLayout.setProgressBackgroundColorSchemeColor(mContext.getResources().getColor(R.color.accent));
+        mSwipeRefreshLayout.setProgressBackgroundColorSchemeColor(mContext.getResources().getColor(R.color.white));
 
         mProgressHelper.showProgressDialog();
         mDocumentsTask = application.getTasksComponent().provideGetDocumentsTask();

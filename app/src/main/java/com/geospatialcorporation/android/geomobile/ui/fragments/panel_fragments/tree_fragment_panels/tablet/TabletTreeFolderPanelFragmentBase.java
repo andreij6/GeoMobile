@@ -3,6 +3,7 @@ package com.geospatialcorporation.android.geomobile.ui.fragments.panel_fragments
 import android.app.Activity;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -36,7 +37,11 @@ public abstract class TabletTreeFolderPanelFragmentBase extends TabletPanelFragm
 
         //TODO: condense - same as TreeFolderPanelFragmentBase
         if(mFolder.getParent() != null) {
-            mPath.setText(mFolder.getParent().getProperName());
+            if(mFolder.getParent().getName().equals("/")){
+                mPath.setText("ROOT");
+            } else{
+                mPath.setText(TextUtils.join(" / ", mFolder.getPath()));
+            }
         } else {
             mPath.setText("");
         }

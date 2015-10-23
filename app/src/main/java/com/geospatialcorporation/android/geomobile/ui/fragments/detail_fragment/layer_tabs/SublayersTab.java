@@ -60,7 +60,7 @@ public class SublayersTab extends GeoDetailsTabBase<Layer> implements IContentRe
         mDialog = application.getUIHelperComponent().provideSublayerDialog();
 
         mSwipeRefreshLayout.setOnRefreshListener(mRefresher.build(mSwipeRefreshLayout, this));
-        mSwipeRefreshLayout.setProgressBackgroundColorSchemeColor(getActivity().getResources().getColor(R.color.accent));
+        mSwipeRefreshLayout.setProgressBackgroundColorSchemeColor(getActivity().getResources().getColor(R.color.white));
 
         mAnalytics.trackScreen(new GoogleAnalyticEvent().SublayersTab());
 

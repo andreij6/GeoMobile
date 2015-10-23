@@ -14,6 +14,7 @@ import com.geospatialcorporation.android.geomobile.library.map.layerManager.Opti
 import com.geospatialcorporation.android.geomobile.library.util.GeoPolyUtil;
 import com.geospatialcorporation.android.geomobile.models.Layers.FeatureInfo;
 import com.geospatialcorporation.android.geomobile.ui.fragments.GoogleMapFragment;
+import com.geospatialcorporation.android.geomobile.ui.fragments.MapFragments.TabletMapFragment;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.LatLngBounds;
@@ -83,29 +84,50 @@ public class PolylineOptionsManager extends OptionsManagerBase<PolylineOptions, 
                     next = 0;
                 }
 
-                final GoogleMapFragment mapFragment = (GoogleMapFragment)application.getMainActivity().getContentFragment();
-
                 final Iterable<Polyline> polygons = getShowingLayers();
 
                 final PolylineOptions selected = valuesList.get(next).getOption();
 
                 LatLngBounds bounds = getBounds(selected.getPoints());
 
-                mapFragment.centerMap(bounds.getCenter());
 
-                new Handler().postDelayed(new Runnable(){
-                    @Override
-                    public void run() {
-                        for (Polyline ss : polygons) {
-                            if (ss.getPoints().equals(selected.getPoints())) {
-                                mapFragment.getFeatureWindow(ss.getId(), LayerManager.LINE);
+                if(!application.getIsTablet()) {
+                    final GoogleMapFragment mapFragment = (GoogleMapFragment) application.getMainActivity().getContentFragment();
 
-                                mapFragment.highlight(ss);
-                                break;
+                    mapFragment.centerMap(bounds.getCenter());
+
+                    new Handler().postDelayed(new Runnable() {
+                        @Override
+                        public void run() {
+                            for (Polyline ss : polygons) {
+                                if (ss.getPoints().equals(selected.getPoints())) {
+                                    mapFragment.getFeatureWindow(ss.getId(), LayerManager.LINE);
+
+                                    mapFragment.highlight(ss);
+                                    break;
+                                }
                             }
                         }
-                    }
-                }, 2000);
+                    }, 1100);
+                } else {
+                    final TabletMapFragment mapFragment = application.getMainTabletActivity().getMapFragment();
+
+                    mapFragment.centerMap(bounds.getCenter());
+
+                    new Handler().postDelayed(new Runnable() {
+                        @Override
+                        public void run() {
+                            for (Polyline ss : polygons) {
+                                if (ss.getPoints().equals(selected.getPoints())) {
+                                    mapFragment.getFeatureWindow(ss.getId(), LayerManager.LINE);
+
+                                    mapFragment.highlight(ss);
+                                    break;
+                                }
+                            }
+                        }
+                    }, 1100);
+                }
 
 
             }

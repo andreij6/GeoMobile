@@ -6,10 +6,14 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentSender;
+import android.graphics.Point;
 import android.location.Location;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.SystemClock;
 import android.provider.Settings;
 import android.util.Log;
+import android.view.MotionEvent;
 import android.view.View;
 import android.widget.ImageButton;
 import android.widget.Toast;
@@ -27,6 +31,7 @@ import com.geospatialcorporation.android.geomobile.library.DI.Tasks.Interfaces.I
 import com.geospatialcorporation.android.geomobile.library.DI.Tasks.Interfaces.ILayerStyleTask;
 import com.geospatialcorporation.android.geomobile.library.DI.Tasks.models.GetLayersTaskParams;
 import com.geospatialcorporation.android.geomobile.library.DI.UIHelpers.Interfaces.IMapStatusBarManager;
+import com.geospatialcorporation.android.geomobile.library.constants.GeometryTypeCodes;
 import com.geospatialcorporation.android.geomobile.library.helpers.ProgressDialogHelper;
 import com.geospatialcorporation.android.geomobile.library.map.GeoCallback;
 import com.geospatialcorporation.android.geomobile.library.map.SendMapQueryRequestCallback;
@@ -262,12 +267,15 @@ public class GeoUndergroundMap implements IGeoUndergroundMap, IPostExecuter<List
     public void clearHighlights() {
         if(mHighlightedPolyline != null) {
             mHighlightedPolyline.remove();
+            mHighlightedPolyline = null;
         }
         if(mHighlightedPolygon != null){
             mHighlightedPolygon.remove();
+            mHighlightedPolygon = null;
         }
         if(mHighlightedMarker != null) {
             mHighlightedMarker.remove();
+            mHighlightedMarker = null;
         }
     }
 
@@ -286,8 +294,85 @@ public class GeoUndergroundMap implements IGeoUndergroundMap, IPostExecuter<List
         }
     }
 
+    @Override
+    public void getNextFeature() {
+        int typeCode = getTypeCode();
+
+        if(typeCode != 0){
+            mLayerManager.getNextFeature(mSelectedFeatureId, mSelectedLayerId, typeCode, true);
+        }
+    }
+
+    @Override
+    public void getPreviousFeature() {
+        int typeCode = getTypeCode();
+
+        if(typeCode != 0){
+            mLayerManager.getNextFeature(mSelectedFeatureId, mSelectedLayerId, typeCode, false);
+        }
+    }
+
+
+
+    @Override
+    public void rezoomToHighlighted() {
+        if(mHighlightedMarker != null){
+            zoomToFeature(mHighlightedMarker);
+        }
+
+        if(mHighlightedPolygon != null){
+            zoomToFeature(mHighlightedPolygon);
+        }
+
+        if(mHighlightedPolyline != null){
+            zoomToFeature(mHighlightedPolyline);
+        }
+    }
+
+    @Override
+    public void simulateClick(final LatLng latLng) {
+        if(latLng == null){
+            Toast.makeText(mContext, "No Next Feature", Toast.LENGTH_SHORT).show();
+            return;
+        }
+
+        float zoom = 15f;
+
+        double lat = 0;
+
+        if(latLng.latitude > 0){
+            lat = latLng.latitude - .005;
+        } else {
+            lat = latLng.latitude + .005;
+        }
+
+        CameraUpdate update = CameraUpdateFactory.newLatLngZoom(new LatLng(lat, latLng.longitude), zoom);
+
+        mMap.animateCamera(update);
+
+        new Handler().postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                Point point = mMap.getProjection().toScreenLocation(latLng);
+
+                long touchTime = SystemClock.uptimeMillis();
+
+                MotionEvent simulationEvent = MotionEvent.obtain(touchTime, touchTime,
+                        MotionEvent.ACTION_DOWN, point.x, point.y, 0);
+                mMapView.dispatchTouchEvent(simulationEvent);
+
+                simulationEvent = MotionEvent.obtain(touchTime, touchTime,
+                        MotionEvent.ACTION_UP, point.x, point.y, 0);
+
+                mMapView.dispatchTouchEvent(simulationEvent);
+            }
+        }, 1100);
+    }
+
     //region Highlight Helpers
     protected void highlight(Marker feature){
+        clearHighlights();
+
         MarkerOptions options = new MarkerOptions();
         options.anchor(0.5f, 0.5f);
         options.position(feature.getPosition());
@@ -298,7 +383,9 @@ public class GeoUndergroundMap implements IGeoUndergroundMap, IPostExecuter<List
         zoomToFeature(mHighlightedMarker);
     }
 
-    protected void highlight(Polygon feature){
+    public void highlight(Polygon feature){
+        clearHighlights();
+
         PolygonOptions options = new PolygonOptions();
         options.strokeColor(invertColor(feature.getStrokeColor()));
         options.fillColor(invertColor(feature.getFillColor()));
@@ -316,7 +403,9 @@ public class GeoUndergroundMap implements IGeoUndergroundMap, IPostExecuter<List
         zoomToFeature(mHighlightedPolygon);
     }
 
-    protected void highlight(Polyline feature){
+    public void highlight(Polyline feature){
+        clearHighlights();
+
         PolylineOptions options = new PolylineOptions();
         options.color(invertColor(feature.getColor()));
 
@@ -330,6 +419,13 @@ public class GeoUndergroundMap implements IGeoUndergroundMap, IPostExecuter<List
         mHighlightedPolyline = mMap.addPolyline(options);
 
         zoomToFeature(mHighlightedPolyline);
+    }
+
+    @Override
+    public void centerMap(LatLng position) {
+        CameraUpdate update = CameraUpdateFactory.newLatLng(position);
+
+        mMap.animateCamera(update);
     }
 
     protected void zoomToFeature(Marker highlightedMarker){
@@ -591,7 +687,7 @@ public class GeoUndergroundMap implements IGeoUndergroundMap, IPostExecuter<List
 
     }
 
-    protected void getFeatureWindow(String id, int shapeCode){
+    public void getFeatureWindow(String id, int shapeCode){
         mStatusBarManager.setMessage(mActivity.getString(R.string.loading_feature_window));
 
         mSelectedFeatureId = mLayerManager.getFeatureId(id, shapeCode);
@@ -599,6 +695,23 @@ public class GeoUndergroundMap implements IGeoUndergroundMap, IPostExecuter<List
 
         mQueryService.featureWindow(mSelectedFeatureId, mSelectedLayerId);
     }
+
+    protected int getTypeCode() {
+        if(mHighlightedMarker != null){
+            return GeometryTypeCodes.Point;
+        }
+
+        if(mHighlightedPolyline != null){
+            return GeometryTypeCodes.Line;
+        }
+
+        if(mHighlightedPolygon != null){
+            return GeometryTypeCodes.Polygon;
+        }
+        return 0;
+    }
+
+
 
     @Override
     public void onPostExecute(List<Folder> model) {

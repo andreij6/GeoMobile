@@ -12,6 +12,9 @@ import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.location.LocationListener;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.MapView;
+import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.Polygon;
+import com.google.android.gms.maps.model.Polyline;
 
 public interface IGeoUndergroundMap
         extends
@@ -31,4 +34,20 @@ public interface IGeoUndergroundMap
     void clearHighlights();
 
     boolean validate(ParcelableFeatureQueryResponse response);
+
+    void getNextFeature();
+
+    void rezoomToHighlighted();
+
+    void simulateClick(LatLng position);
+
+    void highlight(Polygon polygon);
+
+    void highlight(Polyline line);
+
+    void centerMap(LatLng position);
+
+    void getFeatureWindow(String id, int geometry);
+
+    void getPreviousFeature();
 }
