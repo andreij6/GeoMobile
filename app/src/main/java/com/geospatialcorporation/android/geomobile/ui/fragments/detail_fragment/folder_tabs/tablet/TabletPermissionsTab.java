@@ -66,8 +66,8 @@ public class TabletPermissionsTab extends TabGeoViewFragmentBase implements IPos
 
     @Override
     public void onPostExecute(List<FolderPermissionsResponse> permissions) {
-        if(permissions == null){
-            Toaster("No Permissions Recieved");
+        if(permissions == null || permissions.isEmpty()){
+            Toaster("No Access to Permissions");
             return;
         }
 

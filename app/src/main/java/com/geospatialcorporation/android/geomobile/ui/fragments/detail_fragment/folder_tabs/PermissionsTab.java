@@ -61,8 +61,8 @@ public class PermissionsTab extends GeoDetailsTabBase<Folder> implements IPostEx
 
     @Override
     public void onPostExecute(List<FolderPermissionsResponse> permissions){
-        if(permissions == null){
-            Toaster("No Permissions Recieved");
+        if(permissions == null || permissions.isEmpty()){
+            Toaster("No Access to Permissions");
             return;
         }
 

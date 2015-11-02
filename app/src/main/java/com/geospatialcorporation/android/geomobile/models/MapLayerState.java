@@ -30,6 +30,10 @@ public class MapLayerState {
 
     public void removeLayer(Layer layer){
         int index = LayerIds.indexOf(layer.getId());
-        LayerIds.remove(index);
+        try {
+            LayerIds.remove(index);
+        } catch (Exception e){
+
+        }
     }
 }

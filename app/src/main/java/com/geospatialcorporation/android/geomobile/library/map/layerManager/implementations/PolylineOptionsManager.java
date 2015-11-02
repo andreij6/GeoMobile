@@ -13,11 +13,13 @@ import com.geospatialcorporation.android.geomobile.library.map.layerManager.Opti
 import com.geospatialcorporation.android.geomobile.library.map.layerManager.OptionsManagerBase;
 import com.geospatialcorporation.android.geomobile.library.util.GeoPolyUtil;
 import com.geospatialcorporation.android.geomobile.models.Layers.FeatureInfo;
+import com.geospatialcorporation.android.geomobile.models.Layers.LegendLayer;
 import com.geospatialcorporation.android.geomobile.ui.fragments.GoogleMapFragment;
 import com.geospatialcorporation.android.geomobile.ui.fragments.MapFragments.TabletMapFragment;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.LatLngBounds;
+import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.maps.model.Polygon;
 import com.google.android.gms.maps.model.PolygonOptions;
 import com.google.android.gms.maps.model.Polyline;
@@ -102,8 +104,6 @@ public class PolylineOptionsManager extends OptionsManagerBase<PolylineOptions, 
                             for (Polyline ss : polygons) {
                                 if (ss.getPoints().equals(selected.getPoints())) {
                                     mapFragment.getFeatureWindow(ss.getId(), LayerManager.LINE);
-
-                                    mapFragment.highlight(ss);
                                     break;
                                 }
                             }
@@ -130,6 +130,28 @@ public class PolylineOptionsManager extends OptionsManagerBase<PolylineOptions, 
                 }
 
 
+            }
+        }
+    }
+
+    @Override
+    public void getNextFeature(String featureId, int layerId, LatLng center, boolean isNext) {
+        new GetNextFeatureAsync(center, isNext, featureId, layerId).execute();
+    }
+
+    @Override
+    public void showLayer(GoogleMap map, LegendLayer legendLayer) {
+        mMap = map;
+
+        HashMap<UUID, OptionFeature<PolylineOptions>> removedOptions = mRemovedLayerOptions.get(legendLayer.getLayer().getId());
+        HashMap<UUID, OptionFeature<PolylineOptions>> layerOptions = mLayerOptions.get(legendLayer.getLayer().getId());
+
+        if(removedOptions != null){
+            new ShowLayerTask(removedOptions).execute();
+        } else {
+
+            if (layerOptions != null) {
+                new ShowLayerTask(layerOptions).execute();
             }
         }
     }
@@ -185,16 +207,6 @@ public class PolylineOptionsManager extends OptionsManagerBase<PolylineOptions, 
                                 FeatureInfo featureInfo = entry.getValue().getFeatureInfo();
 
                                 mResult.addPolyline(option, featureInfo, key);
-
-                                //getActivity().runOnUiThread(new Runnable() {
-                                //    @Override
-                                //    public void run() {
-                                //        if (!mStatusBarVisible && mUUID != null) {
-                                //            mMapStatusBarManager.ensureStatusBarVisible();
-                                //            mStatusBarVisible = true;
-                                //        }
-                                //    }
-                                //});
                             }
 
                             pointInBounds = true;
@@ -303,21 +315,27 @@ public class PolylineOptionsManager extends OptionsManagerBase<PolylineOptions, 
     //endregion
 
     //region Attempt
-    protected class GetNextFeatureAsync extends AsyncTask<Void, Void, LatLng>{
+    protected class GetNextFeatureAsync extends AsyncTask<Void, Void, PolylineOptions>{
 
         LatLng mHighlightedCenter;
+        boolean mIsNext;
+        String FeatureId;
+        int LayerId;
 
-        public GetNextFeatureAsync(LatLng center){
+        public GetNextFeatureAsync(LatLng center, boolean isNext, String featureId, int layerId){
             mHighlightedCenter = center;
+            mIsNext = isNext;
+            FeatureId = featureId;
+            LayerId = layerId;
         }
 
         @Override
-        protected LatLng doInBackground(Void... params) {
+        protected PolylineOptions doInBackground(Void... params) {
             int Radius = 6371;
             int closest = -1;
             int furthest = -1;
-            LatLng closestPos = null;
-            LatLng furthestPos = null;
+            PolylineOptions closestOption = null;
+            PolylineOptions furthestOption = null;
 
             HashMap<Integer, Double> distances = new HashMap<>();
 
@@ -335,7 +353,15 @@ public class PolylineOptionsManager extends OptionsManagerBase<PolylineOptions, 
                             continue;
                         }
 
-                        if(pos.longitude > mHighlightedCenter.longitude) {
+                        boolean condition = false;
+
+                        if(mIsNext){
+                            condition = pos.longitude > mHighlightedCenter.longitude;
+                        } else {
+                            condition = pos.longitude < mHighlightedCenter.longitude;
+                        }
+
+                        if(condition) {
                             double dLat = rad(pos.latitude - mHighlightedCenter.latitude);
                             double dLong = rad(pos.longitude - mHighlightedCenter.longitude);
 
@@ -349,7 +375,7 @@ public class PolylineOptionsManager extends OptionsManagerBase<PolylineOptions, 
 
                             if (closest == -1 || d < distances.get(closest)) {
                                 closest = counter;
-                                closestPos = getMidPoint(option.getPoints().get(0), option.getPoints().get(1));
+                                closestOption = option;
                             }
                         } else {
                             double dLat = rad(pos.latitude - mHighlightedCenter.latitude);
@@ -365,7 +391,7 @@ public class PolylineOptionsManager extends OptionsManagerBase<PolylineOptions, 
 
                             if (furthest == -1 || d > distances.get(furthest)) {
                                 furthest = counter;
-                                furthestPos= getMidPoint(option.getPoints().get(0), option.getPoints().get(1));
+                                furthestOption = option;
                             }
                         }
 
@@ -374,11 +400,11 @@ public class PolylineOptionsManager extends OptionsManagerBase<PolylineOptions, 
                 }
             }
 
-            if(closestPos != null){
-                return closestPos;
+            if(closestOption != null){
+                return closestOption;
             } else {
-                if(furthestPos != null){
-                    return furthestPos;
+                if(furthestOption != null){
+                    return furthestOption;
                 }
 
                 return null;
@@ -402,21 +428,108 @@ public class PolylineOptionsManager extends OptionsManagerBase<PolylineOptions, 
             return new LatLng(Math.toDegrees(lat3), Math.toDegrees(lon3));
         }
 
-
         public double rad(double x){
             return x * Math.PI / 180;
         }
 
         @Override
-        protected void onPostExecute(LatLng latLng) {
-            super.onPostExecute(latLng);
+        protected void onPostExecute(PolylineOptions options) {
+            super.onPostExecute(options);
 
-            GoogleMapFragment mapFragment = (GoogleMapFragment)application.getMainActivity().getContentFragment();
+            HashMap<UUID, OptionFeature<PolylineOptions>> optionFeatures = mLayerOptions.get(LayerId);
 
-            mapFragment.simulateClick(latLng);
+            Collection<OptionFeature<PolylineOptions>> values = optionFeatures.values();
+
+            List<OptionFeature<PolylineOptions>> valuesList = new ArrayList<>(values);
+
+            Collections.sort(valuesList);
+
+            for(OptionFeature<PolylineOptions> value : valuesList){
+                if(value.getOption().getPoints().equals(options.getPoints())){
+
+                    final PolylineOptions selected = value.getOption();
+
+                    final Iterable<Polyline> polygons = getShowingLayers();
+
+                    LatLngBounds bounds = getBounds(selected.getPoints());
+
+
+                    if(!application.getIsTablet()) {
+                        final GoogleMapFragment mapFragment = (GoogleMapFragment) application.getMainActivity().getContentFragment();
+
+                        mapFragment.centerMap(bounds.getCenter());
+
+                        new Handler().postDelayed(new Runnable() {
+                            @Override
+                            public void run() {
+                                for (Polyline ss : polygons) {
+                                    if (ss.getPoints().equals(selected.getPoints())) {
+                                        mapFragment.getFeatureWindow(ss.getId(), LayerManager.LINE);
+                                        break;
+                                    }
+                                }
+                            }
+                        }, 1100);
+                    } else {
+                        final TabletMapFragment mapFragment = application.getMainTabletActivity().getMapFragment();
+
+                        mapFragment.centerMap(bounds.getCenter());
+
+                        new Handler().postDelayed(new Runnable() {
+                            @Override
+                            public void run() {
+                                for (Polyline ss : polygons) {
+                                    if (ss.getPoints().equals(selected.getPoints())) {
+                                        mapFragment.getFeatureWindow(ss.getId(), LayerManager.LINE);
+
+                                        mapFragment.highlight(ss); //TODO: UPDATE FEATURE WINDOW TO HIGHLIGHT
+                                        break;
+                                    }
+                                }
+                            }
+                        }, 1100);
+                    }
+
+                    break;
+                }
+            }
         }
     }
     //endregion
+
+    protected class ShowLayerTask extends AsyncTask<Void, Void, PostParameters>{
+
+        HashMap<UUID, OptionFeature<PolylineOptions>> mOptionsMap;
+
+        public ShowLayerTask(HashMap<UUID, OptionFeature<PolylineOptions>> options){
+            mOptionsMap = options;
+        }
+        
+        @Override
+        protected PostParameters doInBackground(Void... params) {
+            PostParameters result = new PostParameters();
+
+            for (Map.Entry<UUID, OptionFeature<PolylineOptions>> entry : mOptionsMap.entrySet()) {
+
+                UUID key = entry.getKey();
+
+                PolylineOptions option = entry.getValue().getOption();
+
+                FeatureInfo featureInfo = entry.getValue().getFeatureInfo();
+
+                result.addPolyline(option, featureInfo, key);
+            }
+
+            return result;
+        }
+
+        @Override
+        protected void onPostExecute(PostParameters options) {
+            if(contentFragmentIsGoogleMapFragment() || application.getIsTablet()) {
+                options.mapFeatures();
+            }
+        }
+    }
 
     private LatLngBounds getBounds(List<LatLng> points) {
         LatLngBounds.Builder builder = new LatLngBounds.Builder();

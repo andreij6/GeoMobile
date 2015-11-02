@@ -7,6 +7,7 @@ import android.widget.CheckBox;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
 
+import com.geospatialcorporation.android.geomobile.library.constants.GeometryTypeCodes;
 import com.geospatialcorporation.android.geomobile.models.Folders.Folder;
 import com.google.android.gms.maps.model.BitmapDescriptor;
 
@@ -16,7 +17,7 @@ import java.util.List;
 /**
  * Created by andre on 6/25/2015.
  */
-public class LegendLayer {
+public class LegendLayer implements Comparable<LegendLayer> {
     Layer mLayer;
     Drawable mLegendIcon;
     List<Object> MapObjects;
@@ -142,5 +143,45 @@ public class LegendLayer {
 
     public ImageView getAppStateImageView() {
         return mAppStateImageView;
+    }
+
+    @Override
+    public int compareTo(LegendLayer another) {
+        int code = mLayer.getGeometryTypeCodeId();
+        int anotherCode = another.getLayer().getGeometryTypeCodeId();
+
+        int result = 0;
+
+        if(code == GeometryTypeCodes.Point || code == GeometryTypeCodes.MultiPoint){
+            result = compareGeometry(3, anotherCode);
+        }
+
+        if(code == GeometryTypeCodes.Line || code == GeometryTypeCodes.MultiLine){
+            result = compareGeometry(2, anotherCode);
+        }
+
+        if(code == GeometryTypeCodes.Polygon || code == GeometryTypeCodes.MultiPolygon){
+            result = compareGeometry(1, anotherCode);
+        }
+
+        return result;
+    }
+
+    private int compareGeometry(int i, int code) {
+        int result = 0;
+
+        if(code == GeometryTypeCodes.Point || code == GeometryTypeCodes.MultiPoint){
+            result = i - 3;
+        }
+
+        if(code == GeometryTypeCodes.Line || code == GeometryTypeCodes.MultiLine){
+            result = i - 2;
+        }
+
+        if(code == GeometryTypeCodes.Polygon || code == GeometryTypeCodes.MultiPolygon){
+            result = i - 1;
+        }
+
+        return result;
     }
 }

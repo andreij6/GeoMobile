@@ -8,11 +8,15 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
+import android.widget.Toast;
 
 import com.geospatialcorporation.android.geomobile.R;
 import com.geospatialcorporation.android.geomobile.application;
+import com.geospatialcorporation.android.geomobile.library.DI.UIHelpers.Interfaces.DialogHelpers.IGeneralDialog;
 import com.geospatialcorporation.android.geomobile.ui.Interfaces.IGeoMainActivity;
+import com.geospatialcorporation.android.geomobile.ui.fragments.GoogleMapFragment;
 import com.geospatialcorporation.android.geomobile.ui.fragments.MapFragments.TabletMapFragment;
+import com.geospatialcorporation.android.geomobile.ui.fragments.panel_fragments.map_fragment_panels.TabletFeatureWindowPanelFragment;
 import com.geospatialcorporation.android.geomobile.ui.fragments.tree_fragments.tablet.*;
 
 import butterknife.Bind;
@@ -127,10 +131,26 @@ public class MainTabletActivity extends GeoUndergroundMainActivity implements IG
     @Override
     public void onBackPressed() {
         if(mInfoFrame.getVisibility() == View.GONE){
-            finish();
+            IGeneralDialog dialog = application.getUIHelperComponent().provideGeneralDialog();
+
+            if(mIsAdmin) {
+                dialog.Subscriptions(this, getSupportFragmentManager());
+            } else {
+                dialog.Logout(this, getSupportFragmentManager());
+            }
         } else {
+
+            super.onBackPressed();
+
             Fragment frag = getContentFragment();
-            //TODO: FINISH
+
+            if(frag instanceof TabletFeatureWindowPanelFragment){
+                closeInfoFragment();
+            }
+
+            if(frag == null){
+                closeInfoFragment();
+            }
         }
     }
 

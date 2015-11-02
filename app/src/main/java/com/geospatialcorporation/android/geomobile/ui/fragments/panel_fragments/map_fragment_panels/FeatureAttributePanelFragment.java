@@ -228,7 +228,7 @@ public class FeatureAttributePanelFragment extends GeoViewFragmentBase {
     public void hideSoftKeyboard() {
         Activity activity = getActivity();
 
-        if(activity.getCurrentFocus()!= null) {
+        if(activity.getCurrentFocus() != null) {
             InputMethodManager inputMethodManager = (InputMethodManager) activity.getSystemService(activity.INPUT_METHOD_SERVICE);
             inputMethodManager.hideSoftInputFromWindow(activity.getCurrentFocus().getWindowToken(), 0);
         }

@@ -193,24 +193,21 @@ public abstract class StatusBarManagerBase implements IMapStatusBarManager{
     }
 
     protected void ToggleLoadingLayers() {
-        if(!application.getIsTablet()) {
-            getProgressDialogHelper();
+        getProgressDialogHelper();
 
-            Boolean isLoading = false;
+        Boolean isLoading = false;
 
-            for (Integer code : LoadedMap.keySet()) {
-                if (!LoadedMap.get(code).isEmpty()) {
-                    mProgressDialogHelper.showProgressDialog();
-                    isLoading = true;
-                    break;
-                }
-            }
-
-            if (!isLoading) {
-                mProgressDialogHelper.hideProgressDialog();
+        for (Integer code : LoadedMap.keySet()) {
+            if (!LoadedMap.get(code).isEmpty()) {
+                mProgressDialogHelper.showProgressDialog();
+                isLoading = true;
+                break;
             }
         }
 
+        if (!isLoading) {
+            mProgressDialogHelper.hideProgressDialog();
+        }
     }
 
     @Override

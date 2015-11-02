@@ -39,6 +39,7 @@ import com.geospatialcorporation.android.geomobile.library.DI.ErrorHandler.Inter
 import com.geospatialcorporation.android.geomobile.library.DI.MainNavigationController.DaggerMainNavCtrlComponent;
 import com.geospatialcorporation.android.geomobile.library.DI.MainNavigationController.Implementations.MainNavCtrl;
 import com.geospatialcorporation.android.geomobile.library.DI.MainNavigationController.MainNavCtrlComponent;
+import com.geospatialcorporation.android.geomobile.library.DI.UIHelpers.Interfaces.DialogHelpers.IGeneralDialog;
 import com.geospatialcorporation.android.geomobile.ui.Interfaces.IGeoMainActivity;
 import com.geospatialcorporation.android.geomobile.ui.Interfaces.OnFragmentInteractionListener;
 import com.geospatialcorporation.android.geomobile.ui.fragments.GoogleMapFragment;
@@ -131,7 +132,7 @@ public class MainActivity extends ActionBarActivity
         mMainMainNavigationDrawerFragment.setUp(R.id.navigation_drawer, mDrawerLayout, getSupportActionBar());
 
         mLayerDrawerFragment = (LayerSelectorDrawerFragment)getSupportFragmentManager().findFragmentById(R.id.layer_drawer);
-        mLayerDrawerFragment.setUp(R.id.layer_drawer, mDrawerLayout, new Toolbar(this));
+        mLayerDrawerFragment.setUp(R.id.layer_drawer, mDrawerLayout, new Toolbar(this), mMainMainNavigationDrawerFragment);
 
     }
 
@@ -177,13 +178,12 @@ public class MainActivity extends ActionBarActivity
     public void onBackPressed() {
 
         if(getContentFragment().getClass().getSimpleName().equals(GoogleMapFragment.class.getSimpleName())){
+            IGeneralDialog dialog = application.getUIHelperComponent().provideGeneralDialog();
+
             if(mIsAdmin) {
-                startActivity(new Intent(MainActivity.this, SubscriptionSelectorActivity.class));
-                finish();
+                dialog.Subscriptions(this, getSupportFragmentManager());
             } else {
-                application.Logout();
-                startActivity(new Intent(this, LoginActivity.class));
-                finish();
+                dialog.Logout(this, getSupportFragmentManager());
             }
         } else {
             super.onBackPressed();

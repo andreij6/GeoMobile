@@ -1,8 +1,10 @@
 package com.geospatialcorporation.android.geomobile.library.map.layerManager;
 
 import com.geospatialcorporation.android.geomobile.models.Layers.FeatureInfo;
+import com.geospatialcorporation.android.geomobile.models.Layers.LegendLayer;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.Marker;
 
 import java.util.Collection;
 import java.util.HashMap;
@@ -34,4 +36,10 @@ public interface IOptionsManager<T, S> {
     void showAllLayers(GoogleMap map, UUID uniqeId);
 
     void getNextFeature(String featureId, int layerId, boolean isNext);
+
+    void getNextFeature(String featureId, int layerId, LatLng center, boolean isNext);
+
+    void showLayer(GoogleMap map, LegendLayer legendLayer);
+
+    List<String> getMarkerIds(String featureId);
 }

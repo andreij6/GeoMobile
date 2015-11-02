@@ -32,115 +32,7 @@
                 map:cameraTargetLng="-96.5878515"
                 map:cameraZoom="3" />
 
-            <!-- Normal Map Mode Buttons -->
-            <!--<com.melnykov.fab.FloatingActionButton
-                android:id="@+id/fab"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignParentTop="true"
-                android:layout_alignParentEnd="true"
-                android:layout_alignParentRight="true"
-                android:src="@drawable/ic_map_marker_radius_white_24dp"
-                fab:fab_colorNormal="@color/accent"
-                fab:fab_colorPressed="@color/primary_dark"
-                fab:fab_colorRipple="@color/primary_light"
-                android:layout_marginTop="30dp"
-                android:layout_marginLeft="16dp"
-                android:layout_marginRight="16dp"
-                android:layout_marginBottom="16dp"
-                />
-
-            <com.melnykov.fab.FloatingActionButton
-                android:id="@+id/fab_layers"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:src="@drawable/ic_layers_white_24dp"
-                fab:fab_colorNormal="@color/accent"
-                fab:fab_colorPressed="@color/primary_dark"
-                fab:fab_colorRipple="@color/primary_light"
-                android:layout_below="@+id/fab"
-                android:layout_alignEnd="@+id/fab"
-                />-->
-
-            <!-- Query Mode Buttons -->
-            <com.melnykov.fab.FloatingActionButton
-                android:id="@+id/fab_point"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignParentTop="true"
-                android:layout_alignParentEnd="true"
-                android:layout_alignParentRight="true"
-                android:layout_marginTop="65dp"
-                android:layout_marginLeft="16dp"
-                android:layout_marginRight="16dp"
-                android:layout_marginBottom="16dp"
-                android:src="@drawable/ic_crosshairs_gps_white_24dp"
-                fab:fab_colorNormal="@color/accent_dark"
-                fab:fab_colorPressed="@color/primary_dark"
-                fab:fab_colorRipple="@color/primary_light"
-                android:visibility="gone"/>
-
-            <com.melnykov.fab.FloatingActionButton
-                android:id="@+id/fab_box"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:src="@drawable/ic_vector_square_white_24dp"
-                fab:fab_colorNormal="@color/accent_dark"
-                fab:fab_colorPressed="@color/primary_dark"
-                fab:fab_colorRipple="@color/primary_light"
-                android:visibility="gone"/>
-
-            <com.melnykov.fab.FloatingActionButton
-                android:id="@+id/fab_close"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:src="@drawable/ic_close_circle_white_24dp"
-                fab:fab_colorNormal="@color/accent_dark"
-                fab:fab_colorPressed="@color/primary_dark"
-                fab:fab_colorRipple="@color/primary_light"
-                android:layout_marginTop="18dp"
-                android:visibility="gone"/>
-
-            <!-- Bookmark Mode Buttons -->
-            <com.melnykov.fab.FloatingActionButton
-                android:id="@+id/fab_save"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignParentTop="true"
-                android:layout_alignParentEnd="true"
-                android:layout_alignParentRight="true"
-                android:layout_marginTop="65dp"
-                android:layout_marginLeft="16dp"
-                android:layout_marginRight="16dp"
-                android:layout_marginBottom="16dp"
-                android:src="@drawable/ic_content_save_white_24dp"
-                fab:fab_colorNormal="@color/accent_dark"
-                fab:fab_colorPressed="@color/primary_dark"
-                fab:fab_colorRipple="@color/primary_light"
-                android:visibility="gone"/>
-
-            <com.melnykov.fab.FloatingActionButton
-                android:id="@+id/fab_bm_close"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:src="@drawable/ic_close_circle_white_24dp"
-                fab:fab_colorNormal="@color/accent_dark"
-                fab:fab_colorPressed="@color/primary_dark"
-                fab:fab_colorRipple="@color/primary_light"
-                android:visibility="gone"/>
-
-            <com.melnykov.fab.FloatingActionButton
-                android:id="@+id/fab_fullscreen_close"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:src="@drawable/ic_close_circle_white_24dp"
-                fab:fab_colorNormal="@color/accent"
-                fab:fab_colorPressed="@color/primary_dark"
-                fab:fab_colorRipple="@color/primary_light"
-                android:layout_marginTop="18dp"
-                android:visibility="gone"/>
-
-
+            <!-- Action Bar -->
             <RelativeLayout
                 android:layout_width="match_parent"
                 android:layout_height="56dp"
@@ -172,6 +64,15 @@
                 <ImageView
                     android:layout_width="36dp"
                     android:layout_height="match_parent"
+                    android:id="@+id/optionsIV"
+                    android:src="@drawable/ic_plus_circle_outline_grey600_36dp"
+                    android:layout_gravity="center_vertical"
+                    android:layout_alignEnd="@+id/showLayersIV"
+                    android:layout_marginRight="48dp"/>
+
+                <ImageView
+                    android:layout_width="36dp"
+                    android:layout_height="match_parent"
                     android:id="@+id/showLayersIV"
                     android:src="@drawable/ic_layers_grey600_36dp"
                     android:layout_gravity="center_vertical"
@@ -179,7 +80,51 @@
                     android:layout_marginRight="8dp"/>
 
             </RelativeLayout>
+            <!-- End Action Bar -->
 
+            <!-- Editing Action Bar -->
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="56dp"
+                android:background="#99FFFFFF"
+                android:layout_gravity="center_horizontal"
+                android:layout_centerHorizontal="true"
+                android:id="@+id/edit_actionBar"
+                android:visibility="gone">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textAppearance="?android:attr/textAppearanceMedium"
+                    android:text="Editing"
+                    android:id="@+id/editLayerTitle"
+                    android:textStyle="bold"
+                    android:layout_centerVertical="true"
+                    android:layout_alignParentStart="true"
+                    android:layout_marginStart="45dp"/>
+
+                <ImageView
+                    android:layout_width="36dp"
+                    android:layout_height="match_parent"
+                    android:id="@+id/cancel"
+                    android:src="@drawable/ic_close_circle_grey600_36dp"
+                    android:layout_gravity="center_vertical"
+                    android:layout_alignEnd="@+id/save"
+                    android:layout_marginRight="48dp"/>
+
+                <ImageView
+                    android:layout_width="36dp"
+                    android:layout_height="match_parent"
+                    android:id="@+id/save"
+                    android:src="@drawable/ic_content_save_grey600_36dp"
+                    android:layout_gravity="center_vertical"
+                    android:layout_alignParentEnd="true"
+                    android:layout_marginRight="8dp"/>
+
+            </RelativeLayout>
+            <!-- End Editing Action Bar -->
+
+            <!-- Feature Window Status Bar-->
             <LinearLayout
                 android:orientation="horizontal"
                 android:layout_width="match_parent"
@@ -204,7 +149,9 @@
                     />
 
             </LinearLayout>
+            <!-- End Feature Window Status Bar -->
 
+            <!-- Loading Animation Start -->
             <RelativeLayout
                 android:id="@+id/fourSquareContainerStart"
                 android:layout_width="match_parent"
@@ -233,6 +180,37 @@
                     android:visibility="gone"/>
 
             </RelativeLayout>
+            <!-- End Loading Animation Start -->
+
+            <com.melnykov.fab.FloatingActionButton
+                android:id="@+id/undoBtn"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/ic_undo_white_24dp"
+                fab:fab_colorNormal="@color/accent_blue"
+                fab:fab_colorPressed="@color/body_bkg"
+                fab:fab_colorRipple="@color/body_bkg"
+                android:layout_alignParentTop="true"
+                android:layout_alignParentStart="true"
+                android:layout_marginTop="82dp"
+                android:layout_marginRight="25dp"
+                android:layout_marginStart="25dp"
+                android:visibility="gone"/>
+
+            <com.melnykov.fab.FloatingActionButton
+                android:id="@+id/redoBtn"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/ic_redo_white_24dp"
+                fab:fab_colorNormal="@color/accent_blue"
+                fab:fab_colorPressed="@color/body_bkg"
+                fab:fab_colorRipple="@color/body_bkg"
+                android:layout_alignParentTop="true"
+                android:layout_alignParentEnd="true"
+                android:layout_marginEnd="25dp"
+                android:layout_marginTop="82dp"
+                android:layout_marginRight="25dp"
+                android:visibility="gone"/>
 
             <ImageButton
                 android:layout_width="wrap_content"

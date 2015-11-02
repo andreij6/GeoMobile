@@ -1,9 +1,15 @@
 package com.geospatialcorporation.android.geomobile.models;
 
+import android.graphics.drawable.Drawable;
+
 import com.geospatialcorporation.android.geomobile.R;
+import com.geospatialcorporation.android.geomobile.application;
 import com.geospatialcorporation.android.geomobile.models.Folders.Folder;
 import com.geospatialcorporation.android.geomobile.models.Layers.Layer;
 import com.geospatialcorporation.android.geomobile.models.Document.Document;
+import com.geospatialcorporation.android.geomobile.models.Layers.LegendLayer;
+
+import java.util.List;
 
 public class ListItem implements Comparable<ListItem> {
     public static final int FOLDER = 1;
@@ -146,5 +152,31 @@ public class ListItem implements Comparable<ListItem> {
         Boolean ordered = Order > another.getOrder();
 
         return ordered ? 0 : 1;
+    }
+
+    public Drawable getDrawable() {
+        if(Order == 2){
+            LegendLayer ll = getLegendLayer();
+
+            if(ll == null){
+                return null;
+            }
+
+            return ll.getLegendIcon();
+        }
+
+        return null;
+    }
+
+    public LegendLayer getLegendLayer() {
+        List<LegendLayer> layers = application.getLegendLayerQueue();
+
+        for(LegendLayer ll : layers){
+            if(ll.getLayer().getId() == Id){
+                return ll;
+            }
+        }
+
+        return null;
     }
 }

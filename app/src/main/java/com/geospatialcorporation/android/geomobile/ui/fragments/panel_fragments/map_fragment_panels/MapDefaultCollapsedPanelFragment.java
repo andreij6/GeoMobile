@@ -1,6 +1,7 @@
 package com.geospatialcorporation.android.geomobile.ui.fragments.panel_fragments.map_fragment_panels;
 
 import android.os.Bundle;
+import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -11,6 +12,7 @@ import android.widget.TextView;
 import com.geospatialcorporation.android.geomobile.R;
 import com.geospatialcorporation.android.geomobile.application;
 import com.geospatialcorporation.android.geomobile.library.DI.Map.Interfaces.ILayerManager;
+import com.geospatialcorporation.android.geomobile.library.DI.UIHelpers.Interfaces.DialogHelpers.ILayerEditDialog;
 import com.geospatialcorporation.android.geomobile.library.constants.GeoPanel;
 import com.geospatialcorporation.android.geomobile.library.panelmanager.ISlidingPanelManager;
 import com.geospatialcorporation.android.geomobile.library.panelmanager.PanelManager;
@@ -37,28 +39,39 @@ public class MapDefaultCollapsedPanelFragment extends GeoViewFragmentBase {
     //@InjectView(R.id.queryBtn) Button mQuery;
     //@InjectView(R.id.panelAnchor) ImageView mAnchor;
 
-    @OnClick(R.id.currentLocation)
-    public void currentLocation(){
-        GoogleMapFragment mapFragment = (GoogleMapFragment)application.getMainActivity().getContentFragment();
+    @OnClick(R.id.map_settings)
+    public void mapSettings(){
+        Toaster("Map Settings Not Implemented");
 
-        mapFragment.getLocation();
+        //1. expand the panel to show base map options
+
+        mPanelManager.collapse();
     }
 
-    @OnClick(R.id.showLayers)
-    public void showLayers(){
-        GoogleMapFragment mapFragment = (GoogleMapFragment)application.getMainActivity().getContentFragment();
+    @OnClick(R.id.edit_layer)
+    public void editLayer(){
+        //1. show dialog of layers to choose to edit
+        ILayerEditDialog dialog = application.getUIHelperComponent().provideLayerEditDialog();
 
-        mapFragment.showLayersDrawer();
+        dialog.editLayers(getActivity(), getFragmentManager());
+
+        mPanelManager.collapse();
     }
 
-    @OnClick(R.id.extent)
-    public void zoomToExtent(){
-        if(mLayerManager == null) {
-            mLayerManager = application.getMapComponent().provideLayerManager();
-        }
+    @OnClick(R.id.quick_search)
+    public void quickSearch(){
+        Toaster("Quick Search Not Implemented");
 
-        Extent extent = mLayerManager.getFullExtent();
-        mLayerManager.zoomToExtent(extent);
+        //1. expand the panel and to show search
+        Fragment f = new QuickSearchPanelFragment();
+
+        application.getMainActivity().getSupportFragmentManager()
+                .beginTransaction()
+                .replace(R.id.slider_content, f)
+                .commit();
+
+
+        mPanelManager.expand();
     }
 
     @Override
@@ -67,13 +80,8 @@ public class MapDefaultCollapsedPanelFragment extends GeoViewFragmentBase {
         ButterKnife.bind(this, mView);
 
         mPanelManager = new PanelManager(GeoPanel.MAP);
-        mPanelManager.touch(false);
 
-        //mBookmark.setOnClickListener(setBookmarkMode);
-        //mSearch.setOnClickListener(performQuickSearch);
-        //mQuery.setOnClickListener(setQueryMode);
-        //mAnchor.setOnClickListener(anchorPanel);
-        //Title.setOnClickListener(anchorPanel);
+        mPanelManager.touch(false);
 
         return mView;
     }

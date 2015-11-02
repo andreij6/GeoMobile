@@ -1,5 +1,6 @@
 package com.geospatialcorporation.android.geomobile.models.Layers;
 
+import com.geospatialcorporation.android.geomobile.library.constants.GeometryTypeCodes;
 import com.google.android.gms.maps.model.LatLng;
 
 public class Point {
@@ -18,6 +19,12 @@ public class Point {
         GeometryType = geometryType;
         X = x;
         Y = y;
+    }
+
+    public Point(LatLng position){
+        GeometryType = GeometryTypeCodes.Point;
+        X = position.latitude;
+        Y = position.longitude;
     }
     //endregion
 

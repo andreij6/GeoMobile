@@ -44,6 +44,17 @@ public class FeatureDocumentsTab extends FeatureTabBase {
         mDialog.addMapFeatureDocument(mLayerId, mFeatureId, mContext, getFragmentManager());
     }
 
+    @OnClick(R.id.moreInfo)
+    public void moreInfo(){
+        if(mPanelManager.isExpanded()){
+            mPanelManager.halfAnchor();
+            mPanelManager.touch(true);
+        } else {
+            mPanelManager.expand();
+            mPanelManager.touch(true);
+        }
+    }
+
     @Bind(R.id.featureWindowDocumentsTable) TableLayout mTableLayout;
 
     @Override

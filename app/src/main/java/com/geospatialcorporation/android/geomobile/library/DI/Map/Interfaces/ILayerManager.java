@@ -6,6 +6,7 @@ import com.geospatialcorporation.android.geomobile.models.Layers.Layer;
 import com.geospatialcorporation.android.geomobile.models.Layers.LegendLayer;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.maps.model.Polygon;
 import com.google.android.gms.maps.model.PolygonOptions;
@@ -46,4 +47,12 @@ public interface ILayerManager {
     boolean isLayerCached(Layer layer);
 
     void getNextFeature(String featureId, int selectedLayerId, int code, boolean b);
+
+    void getNextFeature(String featureId, int layerId, int code, boolean isNext, LatLng center);
+
+    List<Marker> getVisibleMarkersByLayerId(LegendLayer legendLayer);
+
+    void editLayers(LegendLayer legendLayer);
+
+    List<String> getAssociatedShapes(String geomId, int shapeCode);
 }

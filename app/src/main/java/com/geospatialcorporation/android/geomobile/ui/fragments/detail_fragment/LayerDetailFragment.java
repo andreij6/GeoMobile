@@ -95,8 +95,6 @@ public class LayerDetailFragment extends ItemDetailFragment<Layer>
         application.setLayerDetailFragmentPanel(mPanel);
         mPanelManager = new PanelManager.Builder().type(GeoPanel.LAYER_DETAIL).hide().build();
 
-        mNavigationHelper.syncMenu(55);
-
         mTabHost = (FragmentTabHost)mView.findViewById(R.id.tabHost);
 
         mTabHost.setup(getActivity(), getChildFragmentManager(), android.R.id.tabcontent);

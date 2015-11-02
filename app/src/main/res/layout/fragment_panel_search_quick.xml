@@ -51,5 +51,13 @@
         android:layout_alignTop="@+id/title"
         android:layout_alignParentEnd="true"/>
 
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Search"
+        android:id="@+id/searchBtn"
+        android:layout_below="@+id/title"
+        android:layout_alignParentEnd="true"/>
+
 
 </RelativeLayout>

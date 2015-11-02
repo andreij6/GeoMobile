@@ -125,6 +125,10 @@ public abstract class OptionsManagerBase<T, S> implements IOptionsManager<T, S> 
             return true;
         }
 
+        if(mLayerOptions.containsKey(layerId)){
+            return true;
+        }
+
         return false;
     }
 
@@ -138,8 +142,20 @@ public abstract class OptionsManagerBase<T, S> implements IOptionsManager<T, S> 
     protected abstract void removeMapObject(UUID key);
 
     @Override
-    public FeatureInfo getFeatureIdLayerId(String id) {
-        return mIdFeatureIdMap.get(id);
+    public FeatureInfo getFeatureIdLayerId(String markerId) {
+        return mIdFeatureIdMap.get(markerId);
+    }
+
+    public List<String> getMarkerIds(String FeatureId){
+        List<String> result = new ArrayList<>();
+
+        for(String key : mIdFeatureIdMap.keySet()){
+            if(mIdFeatureIdMap.get(key).getFeatureId().equals(FeatureId)){
+                result.add(key);
+            }
+        }
+
+        return result;
     }
 
     @Override

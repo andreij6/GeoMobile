@@ -17,6 +17,19 @@
         android:layout_marginTop="8dp"
         android:layout_marginLeft="8dp"/>
 
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceMedium"
+        android:textStyle="italic"
+        android:textColor="@color/primary_text"
+        android:text="@string/more_info"
+        android:id="@+id/moreInfo"
+        android:layout_below="@+id/addDocument"
+        android:layout_alignParentEnd="true"
+        android:layout_marginTop="8dp"
+        android:layout_marginRight="8dp"/>
+
     <ScrollView android:id="@+id/contentScrollView"
                 android:layout_width="match_parent"
                 android:fadeScrollbars="false"

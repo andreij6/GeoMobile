@@ -130,6 +130,7 @@ public class application extends applicationDIBase {
                  androidDefaultUEH.uncaughtException(thread, ex);
              }
     };
+    private static boolean editingLayerMode;
 
 
     //region stuff
@@ -366,6 +367,14 @@ public class application extends applicationDIBase {
         application.mainTabletActivity = mainTabletActivity;
     }
 
+    public static void setEditingLayerMode(boolean editingLayerMode) {
+        application.editingLayerMode = editingLayerMode;
+    }
+
+    public static boolean getEditingLayerMode() {
+        return editingLayerMode;
+    }
+
     //endregion
 
     public void onCreate() {
@@ -415,6 +424,7 @@ public class application extends applicationDIBase {
         configRestAdapter(requestInterceptor);
 
         isAdminUser = false;
+        editingLayerMode = false;
 
         mapLayerState = new MapLayerState();
         layerManager = new LayerManager();
@@ -552,7 +562,24 @@ public class application extends applicationDIBase {
     }
 
     public static void addLegendLayerToQueue(LegendLayer legendLayer) {
-        legendLayerQueue.add(legendLayer);
+        if(!containsLegendLayer(legendLayerQueue, legendLayer)) {
+            legendLayerQueue.add(legendLayer);
+        }
+    }
+
+    private static boolean containsLegendLayer(List<LegendLayer> legendLayerQueue, LegendLayer layerToCheck) {
+        boolean result = false;
+
+        for (LegendLayer layer : legendLayerQueue) {
+            if(layer.getLayer() != null && layerToCheck.getLayer() != null){
+                if(layer.getLayer().getId() == layerToCheck.getLayer().getId()){
+                    result = true;
+                    break;
+                }
+            }
+        }
+
+        return result;
     }
 
     class TokenInterceptor implements Interceptor {
@@ -606,12 +633,7 @@ public class application extends applicationDIBase {
     public static void Logout() {
         geoAuthToken = null;
         googleAuthToken = null;
-        layerHashMap = null;
-        documentHashMap = null;
-        folderHashMap = null;
-        userAccount = null;
-        layerFolders = new ArrayList<>();
-        legendLayerQueue = new ArrayList<>();
+        clearUserSpecificData();
 
         getStatusBarManager().reset();
 
@@ -625,6 +647,15 @@ public class application extends applicationDIBase {
         appState.getStringSet(geoAuthTokenName, null);
 
         initializeApplication();
+    }
+
+    public static void clearUserSpecificData(){
+        folderHashMap = new HashMap<>();
+        layerHashMap = new HashMap<>();
+        documentHashMap = new HashMap<>();
+        userAccount = null;
+        layerFolders = new ArrayList<>();
+        legendLayerQueue = new ArrayList<>();
     }
 
     private static void initializeApplication() {

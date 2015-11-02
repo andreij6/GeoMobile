@@ -1,0 +1,102 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="@color/primary_dark">
+
+    <!-- <Button
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/query"
+        android:id="@+id/queryBtn"
+        android:layout_below="@+id/title"
+        android:layout_marginTop="46dp"
+        android:layout_alignParentEnd="true"
+        />
+
+    <Button
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/quicksearch"
+        android:id="@+id/quickSearchBtn"
+        android:layout_below="@+id/queryBtn"
+        android:layout_centerHorizontal="true"/>
+
+    <Button
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/bookmark"
+        android:id="@+id/bookmarkBtn"
+        android:layout_below="@+id/quickSearchBtn"
+        android:layout_centerHorizontal="true"/> -->
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceSmall"
+        android:text="@string/select_edit_task"
+        android:id="@+id/task"
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginStart="32dp"
+        android:textAlignment="center"
+        android:textColor="@color/white"
+        android:background="@color/primary_dark"/>
+
+    <LinearLayout
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@id/task"
+        android:paddingTop="4dp">
+
+        <ImageButton
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/create_polygon"
+            android:layout_alignParentTop="true"
+            android:layout_alignParentStart="true"
+            android:layout_weight="1"
+            android:src="@drawable/ic_vector_square_white_36dp"
+            android:contentDescription="@string/add_polygon"
+            android:background="@color/transparent"/>
+
+        <!-- Quick Square & Circle
+        <ImageButton
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/create_polygon"
+            android:layout_alignParentTop="true"
+            android:layout_alignParentStart="true"
+            android:layout_weight="1"
+            android:src="@drawable/ic_vector_square_white_36dp"
+            android:contentDescription="@string/add_polygon"
+            android:background="@color/transparent"/>
+
+        <ImageButton
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/create_polygon"
+            android:layout_alignParentTop="true"
+            android:layout_alignParentStart="true"
+            android:layout_weight="1"
+            android:src="@drawable/ic_vector_square_white_36dp"
+            android:contentDescription="@string/add_polygon"
+            android:background="@color/transparent"/>
+            -->
+
+        <ImageButton
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/remove_polygon"
+            android:layout_alignParentTop="true"
+            android:layout_alignParentStart="true"
+            android:layout_weight="1"
+            android:src="@drawable/ic_eraser_white_36dp"
+            android:contentDescription="@string/remove_polygon"
+            android:background="@color/transparent"/>
+
+    </LinearLayout>
+
+
+
+</RelativeLayout>

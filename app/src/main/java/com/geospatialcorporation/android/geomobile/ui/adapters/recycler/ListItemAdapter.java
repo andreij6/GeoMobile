@@ -114,7 +114,13 @@ public class ListItemAdapter extends GeoRecyclerAdapterBase<ListItemAdapter.Hold
                 itemIcon.setVisibility(View.INVISIBLE);
                 itemInfo.setVisibility(View.INVISIBLE);
             } else {
-                itemIcon.setImageDrawable(ContextCompat.getDrawable(mContext, item.getIconId()));
+
+                if(item.getDrawable() != null){
+                    itemIcon.setImageDrawable(item.getDrawable());
+                } else {
+                    itemIcon.setImageDrawable(ContextCompat.getDrawable(mContext, item.getIconId()));
+                }
+
 
                 if(!item.getShowInfoIcon()){
                     itemInfo.setVisibility(View.INVISIBLE);  //for parent folder

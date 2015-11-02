@@ -74,7 +74,11 @@ public class GeoMapper implements IMapFeaturesTask, IPostExecuter<Integer> {
 
     @Override
     public void onPostExecute(Integer integer) {
-        mLayerManager.showLayer(mLlayer);
+        if(application.getEditingLayerMode()){
+            mLayerManager.editLayers(mLlayer);
+        } else {
+            mLayerManager.showLayer(mLlayer);
+        }
 
         if (mLlayer.getCheckBox() != null) {
             mLlayer.getCheckBox().setEnabled(true);

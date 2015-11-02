@@ -2,26 +2,23 @@ package com.geospatialcorporation.android.geomobile.ui.fragments;
 
 import android.app.Activity;
 import android.os.Bundle;
+import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.Spinner;
-import android.widget.TextView;
 import android.widget.Toast;
 
-import com.geospatialcorporation.android.geomobile.R;
 import com.geospatialcorporation.android.geomobile.application;
 import com.geospatialcorporation.android.geomobile.library.DI.Analytics.AnalyticsComponent;
 import com.geospatialcorporation.android.geomobile.library.DI.Analytics.DaggerAnalyticsComponent;
 import com.geospatialcorporation.android.geomobile.library.DI.Analytics.Interfaces.IGeoAnalytics;
-import com.geospatialcorporation.android.geomobile.library.DI.UIHelpers.Interfaces.IMainMenuHelper;
 import com.geospatialcorporation.android.geomobile.library.panelmanager.ISlidingPanelManager;
 import com.geospatialcorporation.android.geomobile.library.panelmanager.PanelManager;
 import com.geospatialcorporation.android.geomobile.library.util.DeviceTypeUtil;
 import com.geospatialcorporation.android.geomobile.ui.Interfaces.OnFragmentInteractionListener;
-import com.google.android.gms.maps.model.LatLng;
 
 import butterknife.ButterKnife;
 
@@ -33,8 +30,14 @@ public abstract class GeoViewFragmentBase extends Fragment {
     protected ISlidingPanelManager mPanelManager;
     protected IGeoAnalytics mAnalytics;
     private AnalyticsComponent mAnalyticsComponent;
-    protected IMainMenuHelper mNavigationHelper;
 
+    @Nullable
+    @Override
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        mView = super.onCreateView(inflater, container, savedInstanceState);
+        ButterKnife.bind(this, mView);
+        return mView;
+    }
 
     protected void setView(LayoutInflater inflater, ViewGroup container, int layout) {
         mView = inflater.inflate(layout, container, false);
@@ -47,7 +50,6 @@ public abstract class GeoViewFragmentBase extends Fragment {
         super.onCreate(savedInstanceState);
         mAnalyticsComponent = DaggerAnalyticsComponent.builder().build();
         mAnalytics = mAnalyticsComponent.provideGeoAnalytics();
-        mNavigationHelper = application.getUIHelperComponent().provideMainMenuHelper();
     }
 
     @Override

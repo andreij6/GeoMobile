@@ -19,7 +19,10 @@ import com.geospatialcorporation.android.geomobile.models.Folders.FolderPermissi
 import com.geospatialcorporation.android.geomobile.models.Layers.Layer;
 import com.geospatialcorporation.android.geomobile.models.RenameRequest;
 
+import java.util.ArrayList;
 import java.util.List;
+
+import retrofit.RetrofitError;
 
 public class FolderTreeService implements IFolderTreeService {
     private static final String TAG = FolderTreeService.class.getSimpleName();
@@ -114,7 +117,16 @@ public class FolderTreeService implements IFolderTreeService {
 
     @Override
     public List<FolderPermissionsResponse> permissions(int folderId) {
-        return mFolderService.getFolderPermission(folderId);
+        List<FolderPermissionsResponse> result = new ArrayList<>();
+
+        try {
+            result = mFolderService.getFolderPermission(folderId);
+        } catch (RetrofitError error){
+
+
+        } finally {
+            return  result;
+        }
     }
 
 

@@ -9,6 +9,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.inputmethod.EditorInfo;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 
@@ -42,10 +43,17 @@ public class QuickSearchPanelFragment extends GeoViewFragmentBase {
     @Bind(R.id.searchBox) EditText SearchBox;
     @Bind(R.id.searchRecyclerView) RecyclerView mRecyclerView;
     @Bind(R.id.resultCount) TextView mResultCount;
+    @Bind(R.id.searchBtn)
+    Button mSearch;
 
     @OnClick(R.id.close)
     public void close(){
         mPanelManager.collapse();
+    }
+
+    @OnClick(R.id.searchBtn)
+    public void search(){
+        sendSearch();
     }
     //endregion
 
@@ -58,17 +66,6 @@ public class QuickSearchPanelFragment extends GeoViewFragmentBase {
         mDataHelper = new DataHelper();
 
         mRecyclerView.setLayoutManager(layoutManager);
-
-        SearchBox.setOnEditorActionListener(new TextView.OnEditorActionListener() {
-            @Override
-            public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
-                if (actionId == EditorInfo.IME_ACTION_DONE) {
-                    sendSearch();
-                }
-
-                return false;
-            }
-        });
 
         mService = application.getRestAdapter().create(QueryService.class);
 

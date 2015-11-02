@@ -12,7 +12,7 @@
         android:background="@color/body_bkg"
         android:id="@+id/featureInfoBar">
 
-        <ImageView
+        <!--<ImageView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center_vertical"
@@ -20,7 +20,7 @@
             android:src="@drawable/ic_chevron_left_grey600_36dp"
             android:layout_weight="1.17"
             android:paddingTop="8dp"
-            android:contentDescription="@string/previous"/>
+            android:contentDescription="@string/previous"/> -->
 
         <TextView
             android:layout_width="wrap_content"
@@ -48,7 +48,7 @@
             android:paddingTop="8dp"
             android:contentDescription="@string/rezoom"/>
 
-        <ImageView
+       <!--<ImageView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center_vertical"
@@ -56,7 +56,7 @@
             android:src="@drawable/ic_chevron_right_grey600_36dp"
             android:layout_weight="1.17"
             android:paddingTop="8dp"
-            android:contentDescription="@string/next"/>
+            android:contentDescription="@string/next"/> -->
 
     </LinearLayout>
 

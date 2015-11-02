@@ -14,6 +14,7 @@ import com.geospatialcorporation.android.geomobile.library.map.layerManager.Opti
 import com.geospatialcorporation.android.geomobile.library.map.layerManager.OptionsManagerBase;
 import com.geospatialcorporation.android.geomobile.library.util.GeoPolyUtil;
 import com.geospatialcorporation.android.geomobile.models.Layers.FeatureInfo;
+import com.geospatialcorporation.android.geomobile.models.Layers.LegendLayer;
 import com.geospatialcorporation.android.geomobile.ui.fragments.GoogleMapFragment;
 import com.geospatialcorporation.android.geomobile.ui.fragments.MapFragments.TabletMapFragment;
 import com.google.android.gms.maps.GoogleMap;
@@ -22,6 +23,7 @@ import com.google.android.gms.maps.model.LatLngBounds;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.maps.model.Polygon;
 import com.google.android.gms.maps.model.PolygonOptions;
+import com.google.android.gms.maps.model.PolylineOptions;
 import com.google.maps.android.PolyUtil;
 
 import java.util.ArrayList;
@@ -125,8 +127,6 @@ public class PolygonOptionsManager extends OptionsManagerBase<PolygonOptions, Po
                             for (Polygon ss : polygons) {
                                 if(ss.getPoints().equals(selected.getPoints())){
                                     mapFragment.getFeatureWindow(ss.getId(), LayerManager.POLYGON);
-
-                                    mapFragment.highlight(ss);
                                     break;
                                 }
                             }
@@ -136,6 +136,27 @@ public class PolygonOptionsManager extends OptionsManagerBase<PolygonOptions, Po
 
             }
 
+        }
+    }
+
+    @Override
+    public void getNextFeature(String featureId, int layerId, LatLng center, boolean isNext) {
+        new GetNextFeatureAsync(center, featureId, layerId, isNext).execute();
+    }
+
+    @Override
+    public void showLayer(GoogleMap map, LegendLayer legendLayer) {
+        mMap = map;
+
+        HashMap<UUID, OptionFeature<PolygonOptions>> removedOptions = mRemovedLayerOptions.get(legendLayer.getLayer().getId());
+        HashMap<UUID, OptionFeature<PolygonOptions>> layerOptions = mLayerOptions.get(legendLayer.getLayer().getId());
+
+        if(removedOptions != null){
+            new ShowLayerTask(removedOptions).execute();
+        } else {
+            if (layerOptions != null) {
+                new ShowLayerTask(layerOptions).execute();
+            }
         }
     }
 
@@ -300,23 +321,29 @@ public class PolygonOptionsManager extends OptionsManagerBase<PolygonOptions, Po
     //endregion
 
     //region Attempt
-    /*
-    protected class GetNextFeatureAsync extends AsyncTask<Void, Void, LatLng>{
+
+    protected class GetNextFeatureAsync extends AsyncTask<Void, Void, PolygonOptions>{
 
         LatLng mHighlightedCenter;
+        String FeatureId;
+        int LayerId;
+        boolean IsNext;
 
-        public GetNextFeatureAsync(LatLng center){
+
+        public GetNextFeatureAsync(LatLng center, String featureId, int layerId, boolean isNext){
             mHighlightedCenter = center;
-
+            FeatureId = featureId;
+            LayerId = layerId;
+            IsNext = isNext;
         }
 
         @Override
-        protected LatLng doInBackground(Void... params) {
+        protected PolygonOptions doInBackground(Void... params) {
             int Radius = 6371;
             int closest = -1;
             int furthest = -1;
-            LatLng closestPos = null;
-            LatLng furthestPos = null;
+            PolygonOptions closestOption = null;
+            PolygonOptions furthestOption = null;
 
             if(application.getIsTablet()){
                 return null;
@@ -338,39 +365,40 @@ public class PolygonOptionsManager extends OptionsManagerBase<PolygonOptions, Po
                             continue;
                         }
 
-                        if(pos.longitude > mHighlightedCenter.longitude) {
-                            double dLat = rad(pos.latitude - mHighlightedCenter.latitude);
-                            double dLong = rad(pos.longitude - mHighlightedCenter.longitude);
+                        double dLat = rad(pos.latitude - mHighlightedCenter.latitude);
+                        double dLong = rad(pos.longitude - mHighlightedCenter.longitude);
 
-                            double a = Math.sin(dLat / 2) * Math.sin(dLat / 2) + Math.cos(rad(mHighlightedCenter.latitude)) * Math.cos(rad(mHighlightedCenter.latitude))
-                                    * Math.sin(dLong / 2) * Math.sin(dLong / 2);
+                        double a = Math.sin(dLat / 2) * Math.sin(dLat / 2) + Math.cos(rad(mHighlightedCenter.latitude)) * Math.cos(rad(mHighlightedCenter.latitude))
+                                * Math.sin(dLong / 2) * Math.sin(dLong / 2);
 
-                            double c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
-                            double d = Radius * c;
+                        double c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+                        double d = Radius * c;
 
-                            distances.put(counter, d);
+                        distances.put(counter, d);
+
+                        boolean condition = false;
+
+                        if(IsNext){
+                            condition = pos.longitude > mHighlightedCenter.longitude;
+                        } else {
+                            condition = pos.longitude < mHighlightedCenter.longitude;
+                        }
+
+                        if(condition) {
 
                             if (closest == -1 || d < distances.get(closest)) {
                                 closest = counter;
-                                List<LatLng> points = option.getPoints();
-                                closestPos = getMidPoint(points.get(0), points.get(1), points.get(2));
-                            }
+
+                                closestOption = option;
                         } else {
-                            double dLat = rad(pos.latitude - mHighlightedCenter.latitude);
-                            double dLong = rad(pos.longitude - mHighlightedCenter.longitude);
 
-                            double a = Math.sin(dLat / 2) * Math.sin(dLat / 2) + Math.cos(rad(mHighlightedCenter.latitude)) * Math.cos(rad(mHighlightedCenter.latitude))
-                                    * Math.sin(dLong / 2) * Math.sin(dLong / 2);
-
-                            double c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
-                            double d = Radius * c;
-
+                            }
                             distances.put(counter, d);
 
                             if (furthest == -1 || d > distances.get(furthest)) {
                                 furthest = counter;
-                                List<LatLng> points = option.getPoints();
-                                furthestPos = getMidPoint(points.get(0), points.get(1), points.get(2));
+
+                                furthestOption = option;
                             }
                         }
 
@@ -379,11 +407,11 @@ public class PolygonOptionsManager extends OptionsManagerBase<PolygonOptions, Po
                 }
             }
 
-            if(closestPos != null){
-                return closestPos;
+            if(closestOption != null){
+                return closestOption;
             } else {
-                if(furthestPos != null){
-                    return furthestPos;
+                if(furthestOption != null){
+                    return furthestOption;
                 }
 
                 return null;
@@ -407,31 +435,104 @@ public class PolygonOptionsManager extends OptionsManagerBase<PolygonOptions, Po
         }
 
         @Override
-        protected void onPostExecute(LatLng latLng) {
-            super.onPostExecute(latLng);
+        protected void onPostExecute(PolygonOptions options) {
+            super.onPostExecute(options);
 
-            GoogleMapFragment mapFragment = (GoogleMapFragment)application.getMainActivity().getContentFragment();
+            HashMap<UUID, OptionFeature<PolygonOptions>> optionFeatures = mLayerOptions.get(LayerId);
 
-            Polygon mHighlighed = mapFragment.getHighlightedPolygon();
+            Collection<OptionFeature<PolygonOptions>> values = optionFeatures.values();
 
-            Iterable<Polygon> polygons = getShowingLayers();
+            List<OptionFeature<PolygonOptions>> valuesList = new ArrayList<>(values);
 
-            for (Polygon ss : polygons) {
+            Collections.sort(valuesList);
 
-                if (PolyUtil.containsLocation(latLng, ss.getPoints(), true) && !ss.getPoints().equals(mHighlighed.getPoints())) {
-                    mapFragment.getFeatureWindow(ss.getId(), LayerManager.POLYGON);
+            for(OptionFeature<PolygonOptions> value : valuesList){
+                if(value.getOption().getPoints().equals(options.getPoints())){
 
-                    mapFragment.highlight(ss);
+                    final Iterable<Polygon> polygons = getShowingLayers();
+
+                    final PolygonOptions selected = value.getOption();
+
+                    LatLngBounds bounds = getBounds(selected.getPoints());
+
+                    if(application.getIsTablet()){
+                        final TabletMapFragment mapFragment = application.getMainTabletActivity().getMapFragment();
+
+                        mapFragment.centerMap(bounds.getCenter());
+
+                        new Handler().postDelayed(new Runnable(){
+
+                            @Override
+                            public void run() {
+                                for (Polygon ss : polygons) {
+                                    if(ss.getPoints().equals(selected.getPoints())){
+                                        mapFragment.getFeatureWindow(ss.getId(), LayerManager.POLYGON);
+
+                                        mapFragment.highlight(ss);
+                                        break;
+                                    }
+                                }
+                            }
+                        }, 1100);
+                    } else {
+                        final GoogleMapFragment mapFragment = (GoogleMapFragment) application.getMainActivity().getContentFragment();
+
+                        mapFragment.centerMap(bounds.getCenter());
+
+                        new Handler().postDelayed(new Runnable(){
+
+                            @Override
+                            public void run() {
+                                for (Polygon ss : polygons) {
+                                    if(ss.getPoints().equals(selected.getPoints())){
+                                        mapFragment.getFeatureWindow(ss.getId(), LayerManager.POLYGON);
+                                        break;
+                                    }
+                                }
+                            }
+                        }, 1100);
+                    }
+
                     break;
                 }
-
             }
-
-            //mapFragment.simulateClick(latLng);
         }
     }
-    */
+
     //endregion
+
+    protected class ShowLayerTask extends AsyncTask<Void, Void, PostParameters>{
+        HashMap<UUID, OptionFeature<PolygonOptions>> mOptionsMap;
+
+        public ShowLayerTask(HashMap<UUID, OptionFeature<PolygonOptions>> options){
+            mOptionsMap = options;
+        }
+
+        @Override
+        protected PostParameters doInBackground(Void... params) {
+            PostParameters result = new PostParameters();
+
+            for (Map.Entry<UUID, OptionFeature<PolygonOptions>> entry : mOptionsMap.entrySet()) {
+
+                UUID key = entry.getKey();
+
+                PolygonOptions option = entry.getValue().getOption();
+
+                FeatureInfo featureInfo = entry.getValue().getFeatureInfo();
+
+                result.addPolygon(option, featureInfo, key);
+            }
+
+            return result;
+        }
+
+        @Override
+        protected void onPostExecute(PostParameters options) {
+            if(contentFragmentIsGoogleMapFragment() || application.getIsTablet()) {
+                options.mapFeatures();
+            }
+        }
+    }
 
     private LatLngBounds getBounds(List<LatLng> points) {
         LatLngBounds.Builder builder = new LatLngBounds.Builder();

@@ -298,8 +298,10 @@ public class GeoUndergroundMap implements IGeoUndergroundMap, IPostExecuter<List
     public void getNextFeature() {
         int typeCode = getTypeCode();
 
+        LatLng center = getHighlightCenter();
+
         if(typeCode != 0){
-            mLayerManager.getNextFeature(mSelectedFeatureId, mSelectedLayerId, typeCode, true);
+            mLayerManager.getNextFeature(mSelectedFeatureId, mSelectedLayerId, typeCode, true, center);
         }
     }
 
@@ -307,8 +309,10 @@ public class GeoUndergroundMap implements IGeoUndergroundMap, IPostExecuter<List
     public void getPreviousFeature() {
         int typeCode = getTypeCode();
 
+        LatLng center = getHighlightCenter();
+
         if(typeCode != 0){
-            mLayerManager.getNextFeature(mSelectedFeatureId, mSelectedLayerId, typeCode, false);
+            mLayerManager.getNextFeature(mSelectedFeatureId, mSelectedLayerId, typeCode, false, center);
         }
     }
 
@@ -711,6 +715,36 @@ public class GeoUndergroundMap implements IGeoUndergroundMap, IPostExecuter<List
         return 0;
     }
 
+    public LatLng getHighlightCenter() {
+        if(mHighlightedMarker != null){
+            return mHighlightedMarker.getPosition();
+        }
+
+        if(mHighlightedPolyline != null){
+            LatLngBounds bounds = getBounds(mHighlightedPolyline.getPoints());
+
+            return bounds.getCenter();
+        }
+
+        if(mHighlightedPolygon != null){
+            LatLngBounds bounds = getBounds(mHighlightedPolygon.getPoints());
+
+            return bounds.getCenter();
+
+        }
+        return null;
+    }
+
+    private LatLngBounds getBounds(List<LatLng> points) {
+        LatLngBounds.Builder builder = new LatLngBounds.Builder();
+
+        for (LatLng point : points) {
+            builder.include(point);
+        }
+
+        return builder.build();
+    }
+
 
 
     @Override
@@ -767,6 +801,8 @@ public class GeoUndergroundMap implements IGeoUndergroundMap, IPostExecuter<List
     public void onLocationChanged(Location location) {
         handleNewLocation(location);
     }
+
+
 
     //endregion
 

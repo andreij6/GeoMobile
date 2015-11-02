@@ -21,6 +21,7 @@ import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.LatLngBounds;
+import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.maps.model.Polygon;
 import com.google.android.gms.maps.model.PolygonOptions;
@@ -108,6 +109,78 @@ public class LayerManager implements ILayerManager {
             default:
                 return false;
         }
+    }
+
+    @Override
+    public void getNextFeature(String featureId, int layerId, int code, boolean isNext, LatLng center){
+        if(code == GeometryTypeCodes.Point){
+            mMarkerManager.getNextFeature(featureId, layerId, center, isNext);
+        }
+
+        if(code == GeometryTypeCodes.Line){
+            mPolylineOptionsManager.getNextFeature(featureId, layerId, center,  isNext);
+        }
+
+        if(code == GeometryTypeCodes.Polygon){
+            mPolygonOptionsManager.getNextFeature(featureId, layerId, center,  isNext);
+        }
+    }
+
+    @Override
+    public List<Marker> getVisibleMarkersByLayerId(LegendLayer legendLayer) {
+        List<Marker> result = new ArrayList<>();
+        Iterable<Marker> markers = mMarkerManager.getShowingLayers();
+
+        for(Marker marker : markers){
+            result.add(marker);
+        }
+
+        return result;
+    }
+
+    @Override
+    public void editLayers(LegendLayer legendLayer) {
+        clearVisibleLayers();
+
+        int code = legendLayer.getLayer().getGeometryTypeCodeId();
+
+        switch (code){
+            case GeometryTypeCodes.Point:
+            case GeometryTypeCodes.MultiPoint:
+                mMarkerManager.showLayer(mMap, legendLayer);
+                break;
+            case GeometryTypeCodes.Line:
+            case GeometryTypeCodes.MultiLine:
+                mPolylineOptionsManager.showLayer(mMap, legendLayer);
+                break;
+            case GeometryTypeCodes.Polygon:
+            case GeometryTypeCodes.MultiPolygon:
+                mPolygonOptionsManager.showLayer(mMap, legendLayer);
+                break;
+            default:
+                break;
+        }
+    }
+
+    @Override
+    public List<String> getAssociatedShapes(String featureId, int shapeCode) {
+        List<String> result = new ArrayList<>();
+
+        switch(shapeCode) {
+            case POINT:
+                result = mMarkerManager.getMarkerIds(featureId);
+                break;
+            case POLYGON:
+                result = mPolygonOptionsManager.getMarkerIds(featureId);
+                break;
+            case LINE:
+                result = mPolylineOptionsManager.getMarkerIds(featureId);
+                break;
+            default:
+                break;
+        }
+
+        return result;
     }
 
     @Override

@@ -120,7 +120,7 @@ public class LayerSelectorDrawerFragment extends Fragment implements IPostExecut
         return mDrawerLayout != null && mDrawerLayout.isDrawerOpen(mFragmentContainerView);
     }
 
-    public void setUp(int fragmentId, final DrawerLayout drawerLayout, Toolbar toolbar) {
+    public void setUp(int fragmentId, final DrawerLayout drawerLayout, Toolbar toolbar, final MainNavigationDrawerFragment mainDrawer) {
         mFragmentContainerView = getActivity().findViewById(fragmentId);
         mDrawerLayout = drawerLayout;
 
@@ -186,6 +186,15 @@ public class LayerSelectorDrawerFragment extends Fragment implements IPostExecut
                     mAnalytics.sendException(e);
                 }
 
+            }
+
+            @Override
+            public void onDrawerSlide(View drawerView, float slideOffset) {
+                Log.d(TAG, "dRAWER slide");
+
+                mainDrawer.getCurretSelectionByContentFragment();
+
+                super.onDrawerSlide(drawerView, slideOffset);
             }
         };
 

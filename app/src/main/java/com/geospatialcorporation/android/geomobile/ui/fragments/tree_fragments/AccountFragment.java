@@ -84,8 +84,6 @@ public class AccountFragment extends GeoViewFragmentBase implements IAccountFrag
 
         mProcessor.GetUserAccountData(getActivity(), this);
 
-        mNavigationHelper.syncMenu(3);
-
         return mView;
     }
 

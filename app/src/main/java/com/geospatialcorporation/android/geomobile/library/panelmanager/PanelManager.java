@@ -58,6 +58,7 @@ public class PanelManager implements ISlidingPanelManager {
 
     @Override
     public void collapse() {
+        mGeoPanel.setIsOpen(false);
         mGeoPanel.collapse();
         mGeoPanel.touch(false);
     }
@@ -112,6 +113,10 @@ public class PanelManager implements ISlidingPanelManager {
     public void halfAnchor(float plus) {
         mGeoPanel.setIsOpen(true);
         mGeoPanel.halfAnchor(plus);
+    }
+
+    public boolean isExpanded() {
+        return mGeoPanel.getPanelState().equals(SlidingUpPanelLayout.PanelState.EXPANDED);
     }
 
     public static class Builder {

@@ -53,7 +53,10 @@ public class MapQueryListener extends RequestListenerBase<List<MapQueryResponse>
     @Override
     public void onFailure(RetrofitError error) {
         super.onFailure(error);
-
-        mLLayer.getCheckBox().setEnabled(true);
+        try {
+            mLLayer.getCheckBox().setEnabled(true);
+        } catch (Exception e){
+            
+        }
     }
 }

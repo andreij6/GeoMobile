@@ -42,6 +42,7 @@ public class SubscriptionSelectorActivity extends AppCompatActivity implements A
         setTitle(R.string.title_activity_select_subscription);
         setContentView(R.layout.activity_subscription_selector);
         setBackButtonClickOnce(false);
+        application.clearUserSpecificData();
 
         if(DeviceTypeUtil.isTablet(getResources())){
             setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
@@ -91,6 +92,7 @@ public class SubscriptionSelectorActivity extends AppCompatActivity implements A
 
             }
         });
+
     }
 
 

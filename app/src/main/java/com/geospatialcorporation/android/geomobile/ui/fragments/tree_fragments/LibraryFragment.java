@@ -159,8 +159,6 @@ public class LibraryFragment extends GeoViewFragmentBase
         mDocumentsTask = application.getTasksComponent().provideGetDocumentsTask();
         handleArguments();
 
-        mNavigationHelper.syncMenu(2);
-
         return mView;
     }
 

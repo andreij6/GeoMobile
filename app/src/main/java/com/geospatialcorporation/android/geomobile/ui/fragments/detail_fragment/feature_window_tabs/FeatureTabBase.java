@@ -14,6 +14,8 @@ import com.geospatialcorporation.android.geomobile.library.DI.FeatureWindow.Dagg
 import com.geospatialcorporation.android.geomobile.library.DI.FeatureWindow.FeatureWindowComponent;
 import com.geospatialcorporation.android.geomobile.library.DI.FeatureWindow.IFeatureWindowDataParser;
 import com.geospatialcorporation.android.geomobile.library.DI.FeatureWindow.models.FeatureWindowData;
+import com.geospatialcorporation.android.geomobile.library.constants.GeoPanel;
+import com.geospatialcorporation.android.geomobile.library.panelmanager.PanelManager;
 import com.geospatialcorporation.android.geomobile.models.Query.map.response.featurewindow.FeatureQueryResponse;
 import com.geospatialcorporation.android.geomobile.models.Query.map.response.featurewindow.ParcelableFeatureQueryResponse;
 import com.geospatialcorporation.android.geomobile.ui.fragments.GeoViewFragmentBase;
@@ -32,6 +34,7 @@ public abstract class FeatureTabBase extends GeoViewFragmentBase {
     IFeatureWindowDataParser DataParser;
     protected LayoutInflater mInflater;
     Context mContext;
+    PanelManager mPanelManager;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -43,6 +46,8 @@ public abstract class FeatureTabBase extends GeoViewFragmentBase {
         FeatureWindowComponent component = DaggerFeatureWindowComponent.builder().build();
 
         DataParser = component.provideDataParser();
+
+        mPanelManager = new PanelManager(GeoPanel.MAP);
 
         setDataView();
 

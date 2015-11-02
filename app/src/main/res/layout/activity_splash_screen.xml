@@ -3,18 +3,16 @@
 xmlns:tools="http://schemas.android.com/tools"
 android:layout_width="match_parent"
 android:layout_height="match_parent"
-android:background="@color/body_bkg"
+android:background="@color/white"
 tools:context="com.geospatialcorporation.android.geomobile.ui.SplashScreenActivity">
 
 <ImageView
     android:id="@+id/imgLogo"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
+    android:layout_width="400dp"
+    android:layout_height="400dp"
     android:contentDescription="@string/app_name"
     android:src="@drawable/ic_full_color_logo"
-    android:layout_alignParentTop="true"
-    android:layout_centerHorizontal="true"
-    android:paddingLeft="16dp"
-    android:paddingRight="16dp"/>
+    android:layout_centerVertical="true"
+    android:layout_centerHorizontal="true"/>
 
 </RelativeLayout>

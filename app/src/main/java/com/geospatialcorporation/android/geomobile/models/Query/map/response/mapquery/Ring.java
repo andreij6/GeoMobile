@@ -24,8 +24,18 @@ public class Ring {
     public void setPoints(List<Point> points) {
         Points = points;
     }
+
+    public int getPointCount() {
+        return PointCount;
+    }
+
+    public void setPointCount(int pointCount) {
+        PointCount = pointCount;
+    }
+
     //endregion
 
     Integer GeometryTypeCode;
     List<Point> Points;
+    int PointCount;
 }

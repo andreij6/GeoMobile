@@ -15,8 +15,27 @@ public class Geometry {
     List<Geometry> Points;
     List<Geometry> Polygons;
     List<Geometry> Lines;
+    int PointCount;
+
+    public Geometry(LatLng ll) {
+        setGeometryTypeCode(1);
+        setX(ll.latitude);
+        setY(ll.longitude);
+    }
+
+    public Geometry(){
+
+    }
 
     //region Getters & Setters
+    public int getPointCount() {
+        return PointCount;
+    }
+
+    public void setPointCount(int pointCount) {
+        PointCount = pointCount;
+    }
+
     public List<Geometry> getLines() {
         return Lines;
     }

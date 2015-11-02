@@ -29,9 +29,7 @@ public class SendMapQueryRequestCallback implements GeoCallback {
     public void invokeCallback() {
         mLegendLayer.getLayer().setIsShowing(true);
 
-        if (!application.getIsTablet()) {
-            MapStatusBarManager.StartLoading(mLegendLayer.getLayer().getGeometryTypeCodeId());
-        }
+        MapStatusBarManager.StartLoading(mLegendLayer.getLayer().getGeometryTypeCodeId());
 
         if(mLayerManager.isLayerCached(mLegendLayer.getLayer())){
             mLegendLayer.getCheckBox().setEnabled(true);

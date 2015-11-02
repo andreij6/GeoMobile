@@ -40,6 +40,17 @@ public class FeatureAttributesTab extends FeatureTabBase {
     AttributeValueVM mData;
     IAttributeDialog mAttributeDialog;
 
+    @OnClick(R.id.moreInfo)
+    public void moreInfo(){
+        if(mPanelManager.isExpanded()){
+            mPanelManager.halfAnchor();
+            mPanelManager.touch(true);
+        } else {
+            mPanelManager.expand();
+            mPanelManager.touch(true);
+        }
+    }
+
     @OnClick(R.id.edit_attributes)
     public void editAttributes(){
         //mAttributeDialog = application.getUIHelperComponent().provideAttributeDialog();

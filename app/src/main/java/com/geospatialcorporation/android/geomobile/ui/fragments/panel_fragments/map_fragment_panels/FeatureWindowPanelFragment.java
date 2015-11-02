@@ -38,17 +38,16 @@ public class FeatureWindowPanelFragment extends GeoViewFragmentBase {
     Bundle mArgs;
     GoogleMapFragment mContentFragment;
     @Bind(R.id.layerNameTV) TextView FeatureName;
-    @Bind(R.id.nextIV) ImageView mNextIV;
-    @Bind(R.id.previousIV) ImageView mPreviousIV;
     Boolean mIsPointFeature;
 
-    @OnClick(R.id.previousIV)
+    /*@OnClick(R.id.previousIV)
     public void previousFeature(){
         mContentFragment.getPrevious();
     }
 
     @OnClick(R.id.nextIV)
     public void nextFeature(){ mContentFragment.getNextFeature(); }
+    */
 
     @OnClick(R.id.rezoomIV)
     public void rezoomToFeature(){ mContentFragment.rezoomToHighlight(); }

@@ -43,5 +43,4 @@ public class QueryRestService  {
         result.add(item);
         return result;
     }
-
 }

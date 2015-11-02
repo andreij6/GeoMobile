@@ -137,6 +137,8 @@ public class LegendLayerSectionBuilder extends SectionBuilderBase<Folder> implem
             Layer toLayerAdd = llayer.getLayer();
 
             if (toLayerAdd != null) {
+                application.addLegendLayerToQueue(llayer);
+
                 layerManager.addAllLayersExtent(toLayerAdd.getId(), toLayerAdd.getExtent());
 
                 if(IsSetInAppState(toLayerAdd)){

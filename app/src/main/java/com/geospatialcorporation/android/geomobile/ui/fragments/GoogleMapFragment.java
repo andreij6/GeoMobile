@@ -39,8 +39,10 @@ import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.geospatialcorporation.android.geomobile.R;
@@ -50,6 +52,7 @@ import com.geospatialcorporation.android.geomobile.library.DI.Map.Implementation
 import com.geospatialcorporation.android.geomobile.library.DI.Map.Interfaces.ILayerManager;
 import com.geospatialcorporation.android.geomobile.library.DI.Map.Interfaces.IMapStateService;
 import com.geospatialcorporation.android.geomobile.library.DI.Map.Models.MapStateSaveRequest;
+import com.geospatialcorporation.android.geomobile.library.DI.Tasks.Interfaces.ILayerStyleTask;
 import com.geospatialcorporation.android.geomobile.library.DI.TreeServices.Interfaces.IDocumentTreeService;
 import com.geospatialcorporation.android.geomobile.library.DI.UIHelpers.Interfaces.IMapStatusBarManager;
 import com.geospatialcorporation.android.geomobile.library.DocumentSentCallback;
@@ -57,22 +60,33 @@ import com.geospatialcorporation.android.geomobile.library.ISendFileCallback;
 import com.geospatialcorporation.android.geomobile.library.constants.GeoPanel;
 import com.geospatialcorporation.android.geomobile.library.constants.GeometryTypeCodes;
 import com.geospatialcorporation.android.geomobile.library.helpers.DataHelper;
+import com.geospatialcorporation.android.geomobile.library.map.EditLayerMapQueryRequestCallback;
 import com.geospatialcorporation.android.geomobile.library.map.Models.GeoClusterMarker;
 import com.geospatialcorporation.android.geomobile.library.panelmanager.ISlidingPanelManager;
 import com.geospatialcorporation.android.geomobile.library.panelmanager.PanelManager;
 import com.geospatialcorporation.android.geomobile.library.rest.TreeService;
+import com.geospatialcorporation.android.geomobile.library.services.LayerEditor.ILayerEditor;
+import com.geospatialcorporation.android.geomobile.library.services.LayerEditor.LineLayerEditor;
+import com.geospatialcorporation.android.geomobile.library.services.LayerEditor.PointLayerEditor;
+import com.geospatialcorporation.android.geomobile.library.services.LayerEditor.PolygonLayerEditor;
 import com.geospatialcorporation.android.geomobile.library.services.QueryRestService;
 import com.geospatialcorporation.android.geomobile.library.viewmode.IViewMode;
-import com.geospatialcorporation.android.geomobile.library.viewmode.implementations.QueryMode;
-import com.geospatialcorporation.android.geomobile.library.viewmode.implementations.SearchMode;
 import com.geospatialcorporation.android.geomobile.models.Folders.Folder;
 import com.geospatialcorporation.android.geomobile.models.Layers.Extent;
+import com.geospatialcorporation.android.geomobile.models.Layers.LegendLayer;
+import com.geospatialcorporation.android.geomobile.models.Query.map.Layers;
+import com.geospatialcorporation.android.geomobile.models.Query.map.MapDefaultQueryRequest;
+import com.geospatialcorporation.android.geomobile.models.Query.map.Options;
 import com.geospatialcorporation.android.geomobile.models.Query.map.response.featurewindow.ParcelableFeatureQueryResponse;
 import com.geospatialcorporation.android.geomobile.ui.Interfaces.IFeatureWindowCtrl;
 import com.geospatialcorporation.android.geomobile.ui.Interfaces.IMapStatusCtrl;
 import com.geospatialcorporation.android.geomobile.ui.Interfaces.IViewModeListener;
 import com.geospatialcorporation.android.geomobile.ui.MainActivity;
+import com.geospatialcorporation.android.geomobile.ui.fragments.panel_fragments.map_fragment_panels.EditLinePanelFragment;
+import com.geospatialcorporation.android.geomobile.ui.fragments.panel_fragments.map_fragment_panels.EditPointPanelFragment;
+import com.geospatialcorporation.android.geomobile.ui.fragments.panel_fragments.map_fragment_panels.EditPolygonPanelFragment;
 import com.geospatialcorporation.android.geomobile.ui.fragments.panel_fragments.map_fragment_panels.FeatureWindowPanelFragment;
+import com.geospatialcorporation.android.geomobile.ui.fragments.panel_fragments.map_fragment_panels.MapDefaultCollapsedPanelFragment;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.location.LocationListener;
@@ -99,6 +113,7 @@ import com.google.maps.android.clustering.ClusterManager;
 import com.melnykov.fab.FloatingActionButton;
 import com.sothree.slidinguppanel.SlidingUpPanelLayout;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import butterknife.Bind;
@@ -136,6 +151,11 @@ public class GoogleMapFragment extends GeoViewFragmentBase implements
     int mSelectedLayerId;
     int mFeatureWindowTabToShow;
 
+    ILayerEditor mEditor;
+
+    List<Polygon> mHighlightedPolygons;
+    List<Polyline> mHighlightedPolylines;
+
     Polygon mHighlightedPolygon;
     Polyline mHighlightedPolyline;
     Marker mHighlightedMarker;
@@ -144,16 +164,20 @@ public class GoogleMapFragment extends GeoViewFragmentBase implements
 
     @Bind(R.id.map) MapView mMapView;
     @Bind(R.id.sliding_layout) SlidingUpPanelLayout mPanel;
-    @Bind(R.id.fab_box) FloatingActionButton mBoxQueryBtn;
-    @Bind(R.id.fab_point) FloatingActionButton mPointQueryBtn;
-    @Bind(R.id.fab_close) FloatingActionButton mCloseBtn;
-    @Bind(R.id.fab_save) FloatingActionButton mSaveBtn;
-    @Bind(R.id.fab_bm_close) FloatingActionButton mBmClose;
-    @Bind(R.id.fab_fullscreen_close) FloatingActionButton mFullScreenClose;
     @Bind(R.id.loadingBar) LinearLayout mLoadingBar;
     @Bind(R.id.loadingMessage) TextView mLoadingMessage;
     @Bind(R.id.fourSquareStart) ImageView fourSquareStart;
     @Bind(R.id.fourSquareFinish) ImageView fourSquareFinish;
+    @Bind(R.id.optionsIV) ImageView mMapOptionsIV;
+    @Bind(R.id.map_actionbar) RelativeLayout mMapActionBar;
+    @Bind(R.id.undoBtn) FloatingActionButton mUndoBtn;
+    @Bind(R.id.redoBtn) FloatingActionButton mRedoBtn;
+    @Bind(R.id.save) ImageView mEditLayerSave;
+    @Bind(R.id.cancel) ImageView mEditLayerCancel;
+    @Bind(R.id.editLayerTitle) TextView mEditLayerTitle;
+    @Bind(R.id.edit_actionBar) RelativeLayout mEditActionBar;
+    @Bind(R.id.getLocationIB) ImageButton mLocationBtn;
+    @Bind(R.id.extentIB) ImageButton mExtentBtn;
     Menu mMenu;
     //endregion
 
@@ -208,35 +232,149 @@ public class GoogleMapFragment extends GeoViewFragmentBase implements
     public void showLayersDrawer(){
         if(mPanelManager.getIsOpen()){
             mPanelManager.hide();
-        } else {
-            ((MainActivity) getActivity()).openLayersDrawer();
         }
+
+        ((MainActivity) getActivity()).openLayersDrawer();
     }
 
     @OnClick(R.id.showNavIV1)
     public void showNavigation(){
         if(mPanelManager.getIsOpen()){
             mPanelManager.hide();
-        } else {
-            ((MainActivity) getActivity()).openNavigationDrawer();
         }
+
+        ((MainActivity) getActivity()).openNavigationDrawer();
     }
 
     @OnClick(R.id.showNavIV2)
     public void showNavigation1(){
         if(mPanelManager.getIsOpen()){
             mPanelManager.hide();
+        }
+
+        ((MainActivity) getActivity()).openNavigationDrawer();
+
+    }
+
+    @OnClick(R.id.optionsIV)
+    public void optionsIV(){
+        if(mPanelManager.getIsOpen()){
+            mPanelManager.collapse();
         } else {
-            ((MainActivity) getActivity()).openNavigationDrawer();
+            Fragment f = new MapDefaultCollapsedPanelFragment();
+
+            application.getMainActivity().getSupportFragmentManager()
+                    .beginTransaction()
+                    .replace(R.id.slider_content, f)
+                    .commit();
+
+            mPanelManager.halfAnchor(-0.40f);
         }
     }
 
-    @OnClick(R.id.fab_fullscreen_close)
-    public void closeFullScreenMode(){
-        //probably an expensive way to reset after fullscreen mode but I havent found a good solution yet to disable fullscreen mode
-        onStop();
-        getActivity().finish();
-        startActivity(getActivity().getIntent());
+    @OnClick(R.id.save)
+    public void saveEdits(){
+        mEditor.saveEdits();
+
+        setStandardMapOnClicks();
+
+        mEditor.resetMapFragment();
+
+        resetMapFragment();
+    }
+
+    @OnClick(R.id.cancel)
+    public void cancelEdits(){
+        setStandardMapOnClicks();
+
+        mEditor.resetMapFragment();
+
+        resetMapFragment();
+    }
+
+    private void resetMapFragment() {
+        clearHighlights();
+
+        switchActionBarVisibility(mMapActionBar, mEditActionBar);
+
+        mLocationBtn.setVisibility(View.VISIBLE);
+        mExtentBtn.setVisibility(View.VISIBLE);
+
+        mRedoBtn.setVisibility(View.GONE);
+        mUndoBtn.setVisibility(View.GONE);
+
+        mLayerManager.clearVisibleLayers();
+
+        mPanelManager.collapse();
+
+        application.setEditingLayerMode(false);
+
+        zoomToExtent();
+    }
+
+    protected void setStandardMapOnClicks() {
+        mMap.setOnMarkerClickListener(new GoogleMap.OnMarkerClickListener() {
+            @Override
+            public boolean onMarkerClick(Marker marker) {
+                clearHighlights();
+
+
+                try {
+                    if (!UsingClustering) {
+                        getFeatureWindow(marker.getId(), LayerManager.POINT);
+                    } else {
+                        getFeatureWindow(marker.getTitle(), LayerManager.POINT);  //For Clusterer
+                    }
+
+                    highlight(marker, true);
+
+                } catch (Exception e) {
+                    mStatusBarManager.reset();
+
+                    if (UsingClustering) {
+                        zoomToCluster(marker);
+
+                        mClusterManager.onMarkerClick(marker);
+                    }
+
+                    mAnalytics.sendException(e);
+                }
+
+                return true;
+
+            }
+
+        });
+
+        mMap.setOnMapClickListener(new GoogleMap.OnMapClickListener() {
+            @Override
+            public void onMapClick(LatLng latLng) {
+
+                clearHighlights();
+
+                Boolean highlightFound;
+
+                highlightFound = highlightLine(latLng);
+
+                if (!highlightFound) {
+                    highlightPolygon(latLng);
+                }
+            }
+        });
+
+        //endregion
+
+        mMap.setOnCameraChangeListener(new GoogleMap.OnCameraChangeListener() {
+            @Override
+            public void onCameraChange(CameraPosition cameraPosition) {
+
+                mLayerManager.showLayers(mMap);
+
+                if(UsingClustering) {
+                    mClusterManager.onCameraChange(cameraPosition);
+                }
+            }
+        });
     }
 
     @OnClick(R.id.extentIB)
@@ -244,20 +382,6 @@ public class GoogleMapFragment extends GeoViewFragmentBase implements
         Extent extent = mLayerManager.getFullExtent();
         mLayerManager.zoomToExtent(extent);
     }
-
-    //@OnClick(R.id.mapOptionsIV)
-    //public void showMapOptions(){
-    //    if(!mPanelManager.getIsOpen()){
-    //        Fragment f = new MapOptionsPanelFragment();
-    //        getFragmentManager().beginTransaction()
-    //                .replace(R.id.slider_content, f)
-    //                .commit();
-    //        mPanelManager.halfAnchor();
-    //        mPanelManager.touch(false);
-    //    } else {
-    //        mPanelManager.hide();
-    //    }
-    //}
 
     //endregion
 
@@ -284,9 +408,14 @@ public class GoogleMapFragment extends GeoViewFragmentBase implements
 
         LifeCycleLogger("onCreate");
 
+        mEditor = null;
+
         UsingClustering = false;
         mMapStateService = application.getMapComponent().provideMapStateService();
         mStatusBarManager = application.getStatusBarManager();
+
+        mHighlightedPolygons = new ArrayList<>();
+        mHighlightedPolylines = new ArrayList<>();
 
     }
 
@@ -323,8 +452,6 @@ public class GoogleMapFragment extends GeoViewFragmentBase implements
         mQueryService = new QueryRestService();
 
         initializeGoogleMap(savedInstanceState);
-
-        mNavigationHelper.syncMenu(1);
 
         return rootView;
     }
@@ -423,24 +550,24 @@ public class GoogleMapFragment extends GeoViewFragmentBase implements
     //endregion
 
     //region ViewModeSetups
-    protected IViewMode querySetup() {
-        mAnalytics.trackClick(new GoogleAnalyticEvent().QueryModeInit());
+    //protected IViewMode querySetup() {
+    //    mAnalytics.trackClick(new GoogleAnalyticEvent().QueryModeInit());
+    //
+    //    return new QueryMode.Builder()
+    //            .setDependents(mMap, mListener, getActivity())
+    //            .setControls(mBoxQueryBtn, mPointQueryBtn, mCloseBtn, getActivity().getSupportFragmentManager())
+    //            .setupUI()
+    //            .create();
+    //
+    //}
 
-        return new QueryMode.Builder()
-                .setDependents(mMap, mListener, getActivity())
-                .setControls(mBoxQueryBtn, mPointQueryBtn, mCloseBtn, getActivity().getSupportFragmentManager())
-                .setupUI()
-                .create();
-
-    }
-
-    protected IViewMode searchSetup() {
-        mAnalytics.trackClick(new GoogleAnalyticEvent().QuickSearchInit());
-
-        return new SearchMode.Builder()
-                        .init(getActivity().getSupportFragmentManager(), mPanelManager)
-                        .create();
-    }
+    //protected IViewMode searchSetup() {
+    //    mAnalytics.trackClick(new GoogleAnalyticEvent().QuickSearchInit());
+    //
+    //    return new SearchMode.Builder()
+    //                    .init(getActivity().getSupportFragmentManager(), mPanelManager)
+    //                    .create();
+    //}
 
     //protected IViewMode fullScreenSetup(){
     //    mAnalytics.sendClickEvent(R.string.full_screen_mode);
@@ -540,8 +667,6 @@ public class GoogleMapFragment extends GeoViewFragmentBase implements
 
     //region HighLighters
     public void highlight(Polygon feature){
-        clearHighlights();
-
         PolygonOptions options = new PolygonOptions();
         options.strokeColor(invertColor(feature.getStrokeColor()));
         options.fillColor(invertColor(feature.getFillColor()));
@@ -554,14 +679,12 @@ public class GoogleMapFragment extends GeoViewFragmentBase implements
         options.zIndex(1000);
         options.add(points);
 
-        mHighlightedPolygon = mMap.addPolygon(options);
+        Polygon polygon = mMap.addPolygon(options);
 
-        zoomToFeature(mHighlightedPolygon);
+        mHighlightedPolygons.add(polygon);
     }
 
     public void highlight(Polyline feature){
-        clearHighlights();
-
         PolylineOptions options = new PolylineOptions();
         options.color(invertColor(feature.getColor()));
 
@@ -572,12 +695,12 @@ public class GoogleMapFragment extends GeoViewFragmentBase implements
         options.zIndex(1000);
         options.add(points);
 
-        mHighlightedPolyline = mMap.addPolyline(options);
+        Polyline polyline = mMap.addPolyline(options);
 
-        zoomToFeature(mHighlightedPolyline);
+        mHighlightedPolylines.add(polyline);
     }
 
-    protected void highlight(Marker feature){
+    public void highlight(Marker feature, boolean zoomTo){
         clearHighlights();
 
         MarkerOptions options = new MarkerOptions();
@@ -587,7 +710,9 @@ public class GoogleMapFragment extends GeoViewFragmentBase implements
 
         mHighlightedMarker = mMap.addMarker(options);
 
-        zoomToFeature(mHighlightedMarker);
+        if(zoomTo) {
+            zoomToFeature(mHighlightedMarker);
+        }
     }
 
     protected void zoomToFeature(Marker highlightedMarker){
@@ -622,13 +747,30 @@ public class GoogleMapFragment extends GeoViewFragmentBase implements
         mMap.animateCamera(update);
     }
 
-    protected void zoomToFeature(Polyline polyline){
-        polyZoomToFeature(polyline.getPoints());
-    }
 
-    protected void zoomToFeature(Polygon polygon){
-        polyZoomToFeature(polygon.getPoints());
 
+    public void zoomToHighlights() {
+        if(mHighlightedPolygons.size() > 0){
+            List<LatLng> points = new ArrayList<>();
+
+            for ( Polygon p : mHighlightedPolygons) {
+                points.addAll(p.getPoints());
+            }
+
+            polyZoomToFeature(points);
+
+        } else if(mHighlightedPolylines.size() > 0){
+            List<LatLng> points = new ArrayList<>();
+
+            for ( Polyline p : mHighlightedPolylines) {
+                points.addAll(p.getPoints());
+            }
+
+            polyZoomToFeature(points);
+
+        } else {
+
+        }
     }
 
     public void polyZoomToFeature(List<LatLng> points){
@@ -666,6 +808,16 @@ public class GoogleMapFragment extends GeoViewFragmentBase implements
             mHighlightedMarker.remove();
             mHighlightedMarker = null;
         }
+
+        for(Polyline polyline : mHighlightedPolylines){
+            polyline.remove();
+        }
+        for(Polygon gon : mHighlightedPolygons){
+            gon.remove();
+        }
+
+        mHighlightedPolygons.clear();
+        mHighlightedPolylines.clear();
     }
 
     protected Boolean highlightLine(LatLng position){
@@ -679,7 +831,6 @@ public class GoogleMapFragment extends GeoViewFragmentBase implements
             if (PolyUtil.isLocationOnPath(position, line.getPoints(), false, tolerance)) { //idea: reset tolerance by zoom level
                 getFeatureWindow(line.getId(), LayerManager.LINE);
 
-                highlight(line);
                 foundMatch = true;
                 break;
             }
@@ -688,7 +839,7 @@ public class GoogleMapFragment extends GeoViewFragmentBase implements
         return foundMatch;
     }
 
-    private double calculateTolerance(float zoom) {
+    public double calculateTolerance(float zoom) {
         if(zoom >= 17){
             return 2.0;
         }
@@ -730,8 +881,6 @@ public class GoogleMapFragment extends GeoViewFragmentBase implements
         for (Polygon ss : polygons) {
             if (PolyUtil.containsLocation(position, ss.getPoints(), true)) {
                 getFeatureWindow(ss.getId(), LayerManager.POLYGON);
-
-                highlight(ss);
                 break;
             }
 
@@ -739,14 +888,57 @@ public class GoogleMapFragment extends GeoViewFragmentBase implements
     }
     //endregion
 
-    public void getFeatureWindow(String id, int shapeCode){
+    public void getFeatureWindow(String geomId, int shapeCode){
         mStatusBarManager.setMessage(getString(R.string.loading_feature_window));
 
-        mSelectedFeatureId = mLayerManager.getFeatureId(id, shapeCode);
-        mSelectedLayerId = mLayerManager.getLayerId(id, shapeCode);
+        mSelectedFeatureId = mLayerManager.getFeatureId(geomId, shapeCode);
+        mSelectedLayerId = mLayerManager.getLayerId(geomId, shapeCode);
+
+        if(shapeCode == LayerManager.POLYGON){
+            highlightAssociatedPolygons(shapeCode);
+        }
+
+        if(shapeCode == LayerManager.LINE){
+            highlightPolylinesAssociated(shapeCode);
+        }
+
+        zoomToHighlights();
 
         mQueryService.featureWindow(mSelectedFeatureId, mSelectedLayerId);
     }
+
+    public void highlightAssociatedPolygons(int shapeCode) {
+        clearHighlights();
+
+        List<String> markerIds = mLayerManager.getAssociatedShapes(mSelectedFeatureId, shapeCode);
+
+        Iterable<Polygon> polygons = mLayerManager.getVisiblePolygons();
+
+        for (Polygon ss : polygons) {
+            for(String markerId : markerIds){
+                if(markerId.equals(ss.getId())){
+                    highlight(ss);
+                }
+            }
+        }
+    }
+
+    public void highlightPolylinesAssociated(int shapeCode) {
+        clearHighlights();
+
+        List<String> markerIds = mLayerManager.getAssociatedShapes(mSelectedFeatureId, shapeCode);
+
+        Iterable<Polyline> lines = mLayerManager.getVisiblePolylines();
+
+        for (Polyline ss : lines) {
+            for(String markerId : markerIds){
+                if(markerId.equals(ss.getId())){
+                    highlight(ss);
+                }
+            }
+        }
+    }
+
 
     public void refreshFeatureWindow(int tab){
         mStatusBarManager.setMessage(getString(R.string.refreshing_feature_window));
@@ -883,68 +1075,7 @@ public class GoogleMapFragment extends GeoViewFragmentBase implements
     @Override
     public void onMapLoaded() {
         //region Show Feature Window Code
-        mMap.setOnMarkerClickListener(new GoogleMap.OnMarkerClickListener() {
-            @Override
-            public boolean onMarkerClick(Marker marker) {
-                clearHighlights();
-
-
-                try {
-                    if (!UsingClustering) {
-                        getFeatureWindow(marker.getId(), LayerManager.POINT);
-                    } else {
-                        getFeatureWindow(marker.getTitle(), LayerManager.POINT);  //For Clusterer
-                    }
-
-                    highlight(marker);
-
-                } catch (Exception e) {
-                    mStatusBarManager.reset();
-
-                    if (UsingClustering) {
-                        zoomToCluster(marker);
-
-                        mClusterManager.onMarkerClick(marker);
-                    }
-
-                    mAnalytics.sendException(e);
-                }
-
-                return true;
-
-            }
-
-        });
-
-        mMap.setOnMapClickListener(new GoogleMap.OnMapClickListener() {
-            @Override
-            public void onMapClick(LatLng latLng) {
-
-                clearHighlights();
-
-                Boolean highlightFound;
-
-                highlightFound = highlightLine(latLng);
-
-                if (!highlightFound) {
-                    highlightPolygon(latLng);
-                }
-            }
-        });
-
-        //endregion
-
-        mMap.setOnCameraChangeListener(new GoogleMap.OnCameraChangeListener() {
-            @Override
-            public void onCameraChange(CameraPosition cameraPosition) {
-
-                mLayerManager.showLayers(mMap);
-
-                if(UsingClustering) {
-                    mClusterManager.onCameraChange(cameraPosition);
-                }
-            }
-        });
+        setStandardMapOnClicks();
 
         mLayerManager.showLayers(mMap);
     }
@@ -952,23 +1083,29 @@ public class GoogleMapFragment extends GeoViewFragmentBase implements
     public void getNextFeature() {
         //Get Next Feature to the right of the current feature
         //1. get LatLng center of current highlight
-        LatLng highightedCenter = null;
+        LatLng center = null;
         int typeCode = 0;
 
         if(mHighlightedMarker != null){
             typeCode = GeometryTypeCodes.Point;
+
+            center = mHighlightedMarker.getPosition();
         }
 
         if(mHighlightedPolyline != null){
             typeCode = GeometryTypeCodes.Line;
+
+            center = getBounds(mHighlightedPolyline.getPoints()).getCenter();
         }
 
         if(mHighlightedPolygon != null){
             typeCode = GeometryTypeCodes.Polygon;
+
+            center = getBounds(mHighlightedPolygon.getPoints()).getCenter();
         }
 
         if(typeCode != 0){
-            mLayerManager.getNextFeature(mSelectedFeatureId, mSelectedLayerId, typeCode, true);
+            mLayerManager.getNextFeature(mSelectedFeatureId, mSelectedLayerId, typeCode, true, center);
         }
     }
 
@@ -1016,21 +1153,26 @@ public class GoogleMapFragment extends GeoViewFragmentBase implements
 
     public void getPrevious() {
         int typeCode = 0;
+        LatLng center = null;
 
         if(mHighlightedMarker != null){
             typeCode = GeometryTypeCodes.Point;
+            center = mHighlightedMarker.getPosition();
         }
 
         if(mHighlightedPolyline != null){
             typeCode = GeometryTypeCodes.Line;
+            center = getBounds(mHighlightedPolyline.getPoints()).getCenter();
         }
 
         if(mHighlightedPolygon != null){
             typeCode = GeometryTypeCodes.Polygon;
+            center = getBounds(mHighlightedPolygon.getPoints()).getCenter();
+
         }
 
         if(typeCode != 0){
-            mLayerManager.getNextFeature(mSelectedFeatureId, mSelectedLayerId, typeCode, false);
+            mLayerManager.getNextFeature(mSelectedFeatureId, mSelectedLayerId, typeCode, false, center);
         }
     }
 
@@ -1048,17 +1190,95 @@ public class GoogleMapFragment extends GeoViewFragmentBase implements
 
         if(mHighlightedMarker != null){
             zoomToFeature(mHighlightedMarker);
-        }
-
-        if(mHighlightedPolygon != null){
-            zoomToFeature(mHighlightedPolygon);
-        }
-
-        if(mHighlightedPolyline != null){
-            zoomToFeature(mHighlightedPolyline);
+        } else {
+            zoomToHighlights();
         }
     }
 
+    public void editLayer(LegendLayer legendLayer) {
+        application.setEditingLayerMode(true);
+
+        if(legendLayer.getCheckBox() != null){
+            legendLayer.getCheckBox().setChecked(true);
+            legendLayer.getLayer().setIsShowing(true);
+        } else {
+            legendLayer.getLayer().setIsShowing(true);
+        }
+
+        int code = legendLayer.getLayer().getGeometryTypeCodeId();
+
+        mMap.setOnMarkerClickListener(null);
+        mMap.setOnMapClickListener(null);
+        mMap.setOnCameraChangeListener(null);
+
+        mLayerManager.clearVisibleLayers();
+
+        Layers single = new Layers(legendLayer.getLayer());
+        List<Layers> layers = new ArrayList<>();
+        layers.add(single);
+
+        MapDefaultQueryRequest request = new MapDefaultQueryRequest(layers, Options.MAP_QUERY);
+
+        ILayerStyleTask layerStyleTask = application.getTasksComponent().provideLayerStyleTask();
+
+        layerStyleTask.getStyle(legendLayer, new EditLayerMapQueryRequestCallback(request, legendLayer));
+
+        switchActionBarVisibility(mEditActionBar, mMapActionBar);
+
+        mRedoBtn.setVisibility(View.VISIBLE);
+        mUndoBtn.setVisibility(View.VISIBLE);
+
+        mExtentBtn.setVisibility(View.GONE);
+        mLocationBtn.setVisibility(View.GONE);
+
+        Fragment f = null;
+
+        if(code == GeometryTypeCodes.Point || code == GeometryTypeCodes.MultiPoint){
+            //1. Show Panel Fragment
+            f = new EditPointPanelFragment();
+
+            mEditor = new PointLayerEditor(legendLayer, mMap, getActivity());
+
+            ((EditPointPanelFragment)f).init(mEditor);
+
+        } else if(code == GeometryTypeCodes.Line || code == GeometryTypeCodes.MultiLine){
+            f = new EditLinePanelFragment();
+
+            mEditor = new LineLayerEditor(legendLayer, mMap, getActivity());
+
+            ((EditLinePanelFragment)f).init(mEditor);
+
+        } else if (code == GeometryTypeCodes.Polygon || code == GeometryTypeCodes.MultiPolygon){
+            f = new EditPolygonPanelFragment();
+
+            mEditor = new PolygonLayerEditor(legendLayer, mMap, getActivity());
+
+            ((EditPolygonPanelFragment)f).init(mEditor);
+
+        } else{
+            try {
+                throw new Exception("Not Sure What the user is trying to Edit");
+            } catch (Exception e) {
+                mAnalytics.sendException(e);
+            } finally {
+                return;
+            }
+        }
+
+        mEditor.setUndoRedoListeners(mUndoBtn, mRedoBtn);
+
+        application.getMainActivity().getSupportFragmentManager()
+                .beginTransaction()
+                .replace(R.id.slider_content, f)
+                .commit();
+
+        mPanelManager.halfAnchor(-0.40f);
+    }
+
+    protected void switchActionBarVisibility(RelativeLayout actionBartoShow, RelativeLayout actionBartoHide) {
+        actionBartoShow.setVisibility(View.VISIBLE);
+        actionBartoHide.setVisibility(View.GONE);
+    }
 
     protected class GetLibraryImportFolderTask extends AsyncTask<Void, Void, Folder> {
 

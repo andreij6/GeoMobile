@@ -27,6 +27,17 @@ public class FeatureMapInfoTab extends FeatureTabBase {
 
     @Bind(R.id.mapInfoTable) TableLayout mTableLayout;
 
+    @OnClick(R.id.moreInfo)
+    public void moreInfo(){
+        if(mPanelManager.isExpanded()){
+            mPanelManager.halfAnchor();
+            mPanelManager.touch(true);
+        } else {
+            mPanelManager.expand();
+            mPanelManager.touch(true);
+        }
+    }
+
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         mLayout = R.layout.fragment_feature_window_mapinfo_tab;
         mAnalytics.trackScreen(new GoogleAnalyticEvent().MapInfoTab());

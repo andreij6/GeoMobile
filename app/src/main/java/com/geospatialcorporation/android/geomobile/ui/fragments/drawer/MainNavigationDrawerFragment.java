@@ -1,6 +1,7 @@
 package com.geospatialcorporation.android.geomobile.ui.fragments.drawer;
 
 import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.res.Configuration;
@@ -13,6 +14,7 @@ import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBarActivity;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -30,6 +32,10 @@ import com.geospatialcorporation.android.geomobile.application;
 import com.geospatialcorporation.android.geomobile.ui.LoginActivity;
 import com.geospatialcorporation.android.geomobile.ui.MainActivity;
 import com.geospatialcorporation.android.geomobile.ui.adapters.MainNavigationAdapter;
+import com.geospatialcorporation.android.geomobile.ui.fragments.GoogleMapFragment;
+import com.geospatialcorporation.android.geomobile.ui.fragments.tree_fragments.AccountFragment;
+import com.geospatialcorporation.android.geomobile.ui.fragments.tree_fragments.LayerFragment;
+import com.geospatialcorporation.android.geomobile.ui.fragments.tree_fragments.LibraryFragment;
 
 import java.util.Arrays;
 import java.util.List;
@@ -44,6 +50,8 @@ import butterknife.ButterKnife;
  * design guidelines</a> for a complete explanation of the behaviors implemented here.
  */
 public class MainNavigationDrawerFragment extends Fragment {
+
+    private static final String TAG = MainNavigationDrawerFragment.class.getSimpleName();
 
     /**
      * Remember the position of the selected item.
@@ -225,6 +233,8 @@ public class MainNavigationDrawerFragment extends Fragment {
 
                 activity.supportInvalidateOptionsMenu(); // calls onPrepareOptionsMenu()
             }
+
+
         };
 
 
@@ -318,6 +328,29 @@ public class MainNavigationDrawerFragment extends Fragment {
     private void showGlobalContextActionBar() {
         mActionBar.setDisplayShowTitleEnabled(false);
         mActionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_STANDARD);
+    }
+
+    public void getCurretSelectionByContentFragment() {
+        Fragment content = ((MainActivity) getActivity()).getContentFragment();
+
+        if(content instanceof GoogleMapFragment){
+            mCurrentSelectedPosition = 1;
+
+        }
+
+        if(content instanceof LayerFragment){
+            mCurrentSelectedPosition = 0;
+        }
+
+        if(content instanceof LibraryFragment){
+            mCurrentSelectedPosition = 2;
+        }
+
+        if(content instanceof AccountFragment){
+            mCurrentSelectedPosition = 3;
+        }
+
+        mDrawerListView.setItemChecked(mCurrentSelectedPosition, true);
     }
 
 

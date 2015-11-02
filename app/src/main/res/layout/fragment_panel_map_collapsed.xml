@@ -40,32 +40,33 @@
         <ImageView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:id="@+id/currentLocation"
+            android:id="@+id/map_settings"
             android:layout_alignParentTop="true"
-            android:layout_toEndOf="@+id/showLayers"
+            android:layout_toEndOf="@+id/edit_layer"
             android:layout_weight="1"
             android:src="@drawable/ic_map_marker_circle_white_36dp"
             android:contentDescription="@string/current_location"/>
 
         <ImageView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:id="@+id/showLayers"
-        android:layout_alignParentTop="true"
-        android:layout_alignParentStart="true"
-        android:layout_weight="1"
-        android:src="@drawable/ic_layers_white_36dp"
-        android:contentDescription="@string/show_layers"/>
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/edit_layer"
+            android:layout_alignParentTop="true"
+            android:layout_alignParentStart="true"
+            android:layout_weight="1"
+            android:src="@drawable/ic_rename_box_white_36dp"
+            android:contentDescription="@string/show_layers"/>
 
         <ImageView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:id="@+id/extent"
+            android:id="@+id/quick_search"
             android:layout_alignParentTop="true"
             android:layout_alignParentStart="true"
             android:layout_weight="1"
-            android:src="@drawable/ic_arrow_expand_white_36dp"
+            android:src="@drawable/ic_magnify_white_36dp"
             android:contentDescription="@string/show_layers"/>
+
     </LinearLayout>
 
 </RelativeLayout>

@@ -132,8 +132,6 @@ public class LayerFragment extends GeoViewFragmentBase implements IContentRefres
 
         handleArguments();
 
-        mNavigationHelper.syncMenu(55); //TODO: REMOVE magic numbers
-
         return mView;
     }
 

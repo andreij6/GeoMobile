@@ -42,13 +42,13 @@ public class TabletFeatureWindowPanelFragment extends TabGeoViewFragmentBase {
         activity.closeInfoFragment();
     }
 
-    @OnClick(R.id.previousIV)
-    public void previousFeature(){
-        mMapFragment.getPrevious();
-    }
+    //@OnClick(R.id.previousIV)
+    //public void previousFeature(){
+    //    mMapFragment.getPrevious();
+    //}
 
-    @OnClick(R.id.nextIV)
-    public void nextFeature(){ mMapFragment.getNextFeature(); }
+    //@OnClick(R.id.nextIV)
+    //public void nextFeature(){ mMapFragment.getNextFeature(); }
 
     @OnClick(R.id.rezoomIV)
     public void rezoomToFeature(){ mMapFragment.rezoomToHighlight(); }
