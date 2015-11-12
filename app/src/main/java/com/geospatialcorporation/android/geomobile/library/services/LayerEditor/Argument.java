@@ -4,9 +4,9 @@ import com.geospatialcorporation.android.geomobile.models.Query.map.response.map
 
 public class Argument {
     int TypeCode;
-    Geometry MapFeature;
+    ShapeModel MapFeature;
     String MapFeatureId;
-    Geometry OldFeature;
+    ShapeModel OldFeature;
     int LayerId;
 
     //region G's & S's
@@ -18,11 +18,11 @@ public class Argument {
         TypeCode = typeCode;
     }
 
-    public Geometry getMapFeature() {
+    public ShapeModel getMapFeature() {
         return MapFeature;
     }
 
-    public void setMapFeature(Geometry mapFeature) {
+    public void setMapFeature(ShapeModel mapFeature) {
         MapFeature = mapFeature;
     }
 
@@ -34,11 +34,11 @@ public class Argument {
         MapFeatureId = mapFeatureId;
     }
 
-    public Geometry getOldFeature() {
+    public ShapeModel getOldFeature() {
         return OldFeature;
     }
 
-    public void setOldFeature(Geometry oldFeature) {
+    public void setOldFeature(ShapeModel oldFeature) {
         OldFeature = oldFeature;
     }
 

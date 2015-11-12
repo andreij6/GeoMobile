@@ -1,5 +1,7 @@
 package com.geospatialcorporation.android.geomobile.library.rest;
 
+import com.geospatialcorporation.android.geomobile.library.services.LayerEditor.EditChangeRequest;
+import com.geospatialcorporation.android.geomobile.library.services.LayerEditor.LayerFeatureChangeResponse;
 import com.geospatialcorporation.android.geomobile.models.Layers.EditLayerAttributesRequest;
 import com.geospatialcorporation.android.geomobile.models.Layers.Layer;
 import com.geospatialcorporation.android.geomobile.models.Layers.LayerCreateRequest;
@@ -48,4 +50,7 @@ public interface LayerService {
 
     @DELETE("/API/Layers/{layerId}/Features/{featureId}/Documents/{documentId}")
     void removeMapFeatureDocument(@Path("layerId") int layerId, @Path("featureId") String featureId, @Path("documentId") int documentId, Callback<Response> cb);
+
+    @POST("/API/Layers/{layerId}/ChangeSet")
+    void editLayer(@Path("layerId") int layerId, @Body EditChangeRequest changeSet, Callback<LayerFeatureChangeResponse> cb);
 }

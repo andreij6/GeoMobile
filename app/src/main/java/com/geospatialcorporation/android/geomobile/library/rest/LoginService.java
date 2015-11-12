@@ -35,7 +35,7 @@ public interface LoginService {
     List<Subscription> getClients();
 
     @POST("/API/Clients/Search")
-    List<Subscription> searchClients(@Query("type") int type);
+    List<Subscription> searchClients(@Query("type") int type, @Query("pagesize") int pageSize);
 
     @POST("/Plugins/Map/SSP/Clients/Search")
     PluginSubscriptionResponse searchPluginClients(@Query("type") int type);

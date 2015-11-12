@@ -26,6 +26,7 @@ public class FeatureMapInfoTab extends FeatureTabBase {
     private static final String TAG = FeatureMapInfoTab.class.getSimpleName();
 
     @Bind(R.id.mapInfoTable) TableLayout mTableLayout;
+    @Bind(R.id.moreInfo) TextView mMoreInfo;
 
     @OnClick(R.id.moreInfo)
     public void moreInfo(){
@@ -36,12 +37,14 @@ public class FeatureMapInfoTab extends FeatureTabBase {
             mPanelManager.expand();
             mPanelManager.touch(true);
         }
+
     }
 
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         mLayout = R.layout.fragment_feature_window_mapinfo_tab;
         mAnalytics.trackScreen(new GoogleAnalyticEvent().MapInfoTab());
-        return super.onCreateView(inflater, container, savedInstanceState);
+        View v = super.onCreateView(inflater, container, savedInstanceState);
+        return v;
     }
 
     @Override

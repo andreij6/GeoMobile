@@ -75,7 +75,7 @@ public class LibraryProcessor implements ILibraryProcessor {
                     .replace(R.id.slider_content, fragment)
                     .commit();
 
-            panelManager.halfAnchor(0.15f);
+            panelManager.halfAnchor(0.25f);
             panelManager.touch(false);
         } else {
             panelManager.hide();

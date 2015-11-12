@@ -102,6 +102,7 @@ public class Document implements Parcelable, ITreeEntity {
         dest.writeString(UploadTime);
         dest.writeString(MimeType);
         dest.writeString(Ext);
+        dest.writeParcelable(ParentFolder, Folder.PARCELABLE_WRITE_RETURN_VALUE);
     }
 
     private Document(Parcel in) {
@@ -111,6 +112,7 @@ public class Document implements Parcelable, ITreeEntity {
         UploadTime = in.readString();
         MimeType = in.readString();
         Ext = in.readString();
+        ParentFolder = in.readParcelable(Folder.class.getClassLoader());
     }
 
     public static final Parcelable.Creator<Document> CREATOR = new Parcelable.Creator<Document>() {

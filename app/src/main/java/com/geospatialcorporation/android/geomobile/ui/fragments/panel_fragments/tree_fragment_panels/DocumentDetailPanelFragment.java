@@ -5,12 +5,15 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.geospatialcorporation.android.geomobile.R;
 import com.geospatialcorporation.android.geomobile.application;
 import com.geospatialcorporation.android.geomobile.library.DI.TreeServices.Interfaces.IDocumentTreeService;
 import com.geospatialcorporation.android.geomobile.library.DI.UIHelpers.Interfaces.DialogHelpers.IDocumentDialog;
+import com.geospatialcorporation.android.geomobile.library.constants.AccessLevelCodes;
+import com.geospatialcorporation.android.geomobile.library.helpers.DataHelper;
 import com.geospatialcorporation.android.geomobile.models.Document.Document;
 import com.geospatialcorporation.android.geomobile.ui.fragments.GeoViewFragmentBase;
 import com.geospatialcorporation.android.geomobile.ui.fragments.detail_fragment.DocumentDetailFragment;
@@ -27,8 +30,10 @@ public class DocumentDetailPanelFragment extends GeoViewFragmentBase {
     Context mContext;
     IDocumentTreeService mService;
 
-    @Bind(R.id.title)
-    TextView mTitle;
+    @Bind(R.id.title) TextView mTitle;
+    @Bind(R.id.renameSection) LinearLayout mRenameSection;
+    @Bind(R.id.moveSection) LinearLayout mMoveSection;
+    @Bind(R.id.deleteSection) LinearLayout mDeleteSection;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstance) {
@@ -50,7 +55,13 @@ public class DocumentDetailPanelFragment extends GeoViewFragmentBase {
 
         mDocument = args.getParcelable(Document.INTENT);
 
-        mTitle.setText(mDocument.getNameWithExt());
+        mTitle.setText(DataHelper.trimString(mDocument.getNameWithExt(), 15));
+
+        if(mDocument.getParentFolder().getAccessLevel() == AccessLevelCodes.ReadOnly){
+            mRenameSection.setVisibility(View.GONE);
+            mMoveSection.setVisibility(View.GONE);
+            mDeleteSection.setVisibility(View.GONE);
+        }
     }
 
     @OnClick(R.id.close)

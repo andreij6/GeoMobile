@@ -129,6 +129,26 @@ public class FolderTreeService implements IFolderTreeService {
         }
     }
 
+    @Override
+    public Folder getParentFolderByLayerId(Integer id) {
+        List<Folder> folders =  mFolderRepo.getAll();
+
+        Folder result = null;
+
+        for (Folder folder : folders) {
+            if(folder.getLayers() != null){
+                for (Layer layer : folder.getLayers()) {
+                    if(layer.getId() == id){
+                        result = folder;
+                        break;
+                    }
+                }
+            }
+        }
+
+        return result;
+    }
+
 
     //region Helpers
     protected boolean AuthorizedToRename(int id) {
@@ -138,7 +158,7 @@ public class FolderTreeService implements IFolderTreeService {
             return false;
         }
 
-        return !(f.getIsFixed() || f.getIsImportFolder());
+        return !(f.getIsFixed() || f.getIsImportFolder() || f.isEditable());
     }
     //endregion
 }

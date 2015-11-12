@@ -235,6 +235,7 @@ public class PolylineOptionsManager extends OptionsManagerBase<PolylineOptions, 
                 }
             }
 
+            mStatusBarManager.FinishLoading(GeometryTypeCodes.Line);
 
         }
     }
@@ -528,6 +529,8 @@ public class PolylineOptionsManager extends OptionsManagerBase<PolylineOptions, 
             if(contentFragmentIsGoogleMapFragment() || application.getIsTablet()) {
                 options.mapFeatures();
             }
+
+            mStatusBarManager.FinishLoading(GeometryTypeCodes.Line);
         }
     }
 

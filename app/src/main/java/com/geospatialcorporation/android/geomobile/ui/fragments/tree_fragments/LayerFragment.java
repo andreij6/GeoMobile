@@ -18,6 +18,7 @@ import com.geospatialcorporation.android.geomobile.application;
 import com.geospatialcorporation.android.geomobile.library.DI.Tasks.Interfaces.IGetLayersTask;
 import com.geospatialcorporation.android.geomobile.library.DI.Tasks.models.GetLayersByFolderTaskParams;
 import com.geospatialcorporation.android.geomobile.library.DI.UIHelpers.Interfaces.ILayoutRefresher;
+import com.geospatialcorporation.android.geomobile.library.constants.AccessLevelCodes;
 import com.geospatialcorporation.android.geomobile.library.constants.GeoPanel;
 import com.geospatialcorporation.android.geomobile.library.helpers.DataHelper;
 import com.geospatialcorporation.android.geomobile.library.helpers.ProgressDialogHelper;
@@ -33,6 +34,7 @@ import com.geospatialcorporation.android.geomobile.ui.fragments.detail_fragment.
 import com.geospatialcorporation.android.geomobile.ui.fragments.detail_fragment.LayerFolderDetailFragment;
 import com.geospatialcorporation.android.geomobile.ui.fragments.panel_fragments.tree_fragment_panels.LayerFolderPanelFragment;
 import com.geospatialcorporation.android.geomobile.models.ListItem;
+import com.melnykov.fab.FloatingActionButton;
 import com.sothree.slidinguppanel.SlidingUpPanelLayout;
 
 import java.util.List;
@@ -51,7 +53,7 @@ public class LayerFragment extends GeoViewFragmentBase implements IContentRefres
     @Bind(R.id.layer_recyclerView) RecyclerView mRecycler;
     @Bind(R.id.swipe_refresh_layout) SwipeRefreshLayout mSwipeRefreshLayout;
     @Bind(R.id.sliding_layout) SlidingUpPanelLayout mPanel;
-    @Bind(R.id.layerOptionsIV) ImageView mOptionsSlider;
+    @Bind(R.id.layerOptionsIV) FloatingActionButton mOptionsSlider;
     @Bind(R.id.showNavIV1) ImageView mNavBars;
     @Bind(R.id.showNavIV2) ImageView mNavLogo;
     @Bind(R.id.title) TextView mTitle;
@@ -157,6 +159,10 @@ public class LayerFragment extends GeoViewFragmentBase implements IContentRefres
     @Override
     public void onPostExecute(Folder currentFolder) {
         mCurrentFolder = currentFolder;
+
+        if(mCurrentFolder.getAccessLevel() != AccessLevelCodes.ReadOnly){
+            mOptionsSlider.setVisibility(View.VISIBLE);
+        }
 
         mPanelManager.hide();
 

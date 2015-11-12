@@ -274,7 +274,8 @@ public class PointLayerEditor extends LayerEditorBase<Marker> {
             public void onMapClick(LatLng latLng) {
                 if (mSelectedMoveMarker != null) {
                     mMapFragment.clearHighlights();
-                    mMarkerMovedPosition.add(mSelectedMoveMarker.getPosition());
+                    LatLng oldPosition = mSelectedMoveMarker.getPosition();
+                    mMarkerMovedPosition.add(oldPosition);
                     mSelectedMoveMarker.setPosition(new LatLng(latLng.latitude, latLng.longitude));
                     mMapFragment.highlight(mSelectedMoveMarker, false);
 
@@ -286,15 +287,18 @@ public class PointLayerEditor extends LayerEditorBase<Marker> {
                         String mapFeatureId = mLayerManager.getFeatureId(mSelectedMoveMarker.getId(), LayerManager.POINT);
 
                         Change change = new Change.Factory()
-                                .Create(Change.MOVE, mLayer.getId(), null,
-                                        new Geometry(mSelectedMoveMarker.getPosition()), mapFeatureId, GeometryTypeCodes.Point);
+                                .Create(Change.MOVE, mLayer.getId(),
+                                        new Geometry(mSelectedMoveMarker.getPosition()), new Geometry(oldPosition), mapFeatureId,
+                                        GeometryTypeCodes.Point);
 
                         mChangeMap.put(mSelectedMoveMarker.getId(), change);
                     } else {
                         //the marker is a create Argument just update the position
                         Change change = mChangeMap.get(mSelectedMoveMarker.getId());
 
-                        change.updateMapFeature(new Geometry(mSelectedMoveMarker.getPosition()));
+                        if (change != null) {
+                            change.updateMapFeature(new Geometry(mSelectedMoveMarker.getPosition()));
+                        }
                     }
                 }
             }

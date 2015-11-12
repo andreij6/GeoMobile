@@ -10,6 +10,8 @@ import android.view.View;
 import com.geospatialcorporation.android.geomobile.R;
 import com.geospatialcorporation.android.geomobile.application;
 import com.geospatialcorporation.android.geomobile.library.util.DeviceTypeUtil;
+import com.geospatialcorporation.android.geomobile.ui.Interfaces.IPanelFragmentCtrl;
+import com.geospatialcorporation.android.geomobile.ui.Interfaces.IPanelStateReactor;
 import com.geospatialcorporation.android.geomobile.ui.MainActivity;
 import com.geospatialcorporation.android.geomobile.ui.MainTabletActivity;
 import com.geospatialcorporation.android.geomobile.ui.fragments.panel_fragments.tree_fragment_panels.DefaultCollapsedPanelFragment;
@@ -56,7 +58,19 @@ public abstract class GeoSlidingPanelBase {
 
             @Override
             public void onPanelAnchored(View view) {
+                FragmentManager fragmentManager;
 
+                if (DeviceTypeUtil.isTablet(mContext.getResources())) {
+                    fragmentManager = ((MainTabletActivity) mContext).getSupportFragmentManager();
+                } else {
+                    fragmentManager = ((MainActivity) mContext).getSupportFragmentManager();
+                }
+
+                Fragment sliderFragment = fragmentManager.findFragmentById(R.id.slider_content);
+
+                if (sliderFragment instanceof IPanelStateReactor) {
+                    ((IPanelStateReactor) sliderFragment).Anchored();
+                }
             }
 
             @Override
@@ -67,6 +81,19 @@ public abstract class GeoSlidingPanelBase {
     }
 
     protected void expandedBehaviour() {
+        FragmentManager fragmentManager;
+
+        if(DeviceTypeUtil.isTablet(mContext.getResources())){
+            fragmentManager = ((MainTabletActivity)mContext).getSupportFragmentManager();
+        } else {
+            fragmentManager = ((MainActivity) mContext).getSupportFragmentManager();
+        }
+
+        Fragment sliderFragment = fragmentManager.findFragmentById(R.id.slider_content);
+
+        if(sliderFragment instanceof IPanelStateReactor){
+            ((IPanelStateReactor)sliderFragment).Expanded();
+        }
 
     }
 
@@ -147,6 +174,4 @@ public abstract class GeoSlidingPanelBase {
 
         anchorPanel(half + plus);
     }
-
-
 }

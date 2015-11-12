@@ -25,6 +25,7 @@ import com.geospatialcorporation.android.geomobile.library.DI.Tasks.models.GetDo
 import com.geospatialcorporation.android.geomobile.library.DI.TreeServices.Interfaces.IDocumentTreeService;
 import com.geospatialcorporation.android.geomobile.library.DI.UIHelpers.Interfaces.DialogHelpers.IGeneralDialog;
 import com.geospatialcorporation.android.geomobile.library.DI.UIHelpers.Interfaces.ILayoutRefresher;
+import com.geospatialcorporation.android.geomobile.library.constants.AccessLevelCodes;
 import com.geospatialcorporation.android.geomobile.library.constants.GeoPanel;
 import com.geospatialcorporation.android.geomobile.library.helpers.DataHelper;
 import com.geospatialcorporation.android.geomobile.library.helpers.ProgressDialogHelper;
@@ -230,6 +231,10 @@ public class LibraryFragment extends GeoViewFragmentBase
         mCurrentFolder = model;
 
         mPanelManager.hide();
+
+        if(mCurrentFolder.getAccessLevel() != AccessLevelCodes.ReadOnly){
+            mOptionsSlider.setVisibility(View.VISIBLE);
+        }
 
         if(mCurrentFolder.getParent() != null){
             mNavBars.setVisibility(View.GONE);

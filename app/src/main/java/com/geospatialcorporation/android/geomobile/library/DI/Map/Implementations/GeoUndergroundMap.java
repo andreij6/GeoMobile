@@ -316,6 +316,10 @@ public class GeoUndergroundMap implements IGeoUndergroundMap, IPostExecuter<List
         }
     }
 
+    @Override
+    public int getSelectedLayerId() {
+        return mSelectedLayerId;
+    }
 
 
     @Override
@@ -435,9 +439,19 @@ public class GeoUndergroundMap implements IGeoUndergroundMap, IPostExecuter<List
     protected void zoomToFeature(Marker highlightedMarker){
         LatLng position = highlightedMarker.getPosition();
 
-        LatLng ll = new LatLng(position.latitude, position.longitude);
+        double lng;
 
-        CameraUpdate update = CameraUpdateFactory.newLatLng(ll);
+        if(position.longitude > 0){
+            lng = position.longitude - .008;
+        } else {
+            lng = position.longitude + .008;
+        }
+
+        LatLng ll = new LatLng(position.latitude, lng);
+
+        float zoom = 15f;
+
+        CameraUpdate update = CameraUpdateFactory.newLatLngZoom(ll, zoom);
 
         mMap.animateCamera(update);
     }
@@ -452,18 +466,26 @@ public class GeoUndergroundMap implements IGeoUndergroundMap, IPostExecuter<List
     }
 
     public void polyZoomToFeature(List<LatLng> points){
-        LatLngBounds.Builder builder = new LatLngBounds.Builder();
+        final LatLngBounds bounds = getBounds(points);
 
-        for (LatLng point : points) {
-            builder.include(point);
-        }
+        LatLngBounds horizontalDoubleBounds = createDoubleBounds(bounds);
 
-        LatLngBounds bounds = builder.build();
-
-        CameraUpdate update = CameraUpdateFactory.newLatLngBounds(bounds, 20);
+        CameraUpdate update = CameraUpdateFactory.newLatLngBounds(horizontalDoubleBounds, 50);
 
         mMap.animateCamera(update);
     }
+
+    private LatLngBounds createDoubleBounds(LatLngBounds bounds) {
+        double diff = bounds.southwest.longitude - bounds.northeast.longitude;
+
+        double longitude = bounds.northeast.longitude - diff;
+
+        LatLng northeast = new LatLng(bounds.northeast.latitude, longitude);
+
+        return new LatLngBounds(bounds.southwest , northeast);
+    }
+
+
 
     protected int invertColor(int color){
         return (0xFFFFFF - color) | 0xFF000000;

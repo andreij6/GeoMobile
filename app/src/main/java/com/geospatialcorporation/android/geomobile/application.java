@@ -3,6 +3,7 @@ package com.geospatialcorporation.android.geomobile;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.net.Uri;
+import android.os.StrictMode;
 import android.support.v4.app.Fragment;
 import android.support.v4.widget.DrawerLayout;
 import android.util.Log;
@@ -398,6 +399,21 @@ public class application extends applicationDIBase {
         if (BuildConfig.DEBUG) {
             domain = Domains.DEVELOPMENT;
             azureDomain = "https://geoeastusfilesdev01.blob.core.windows.net/icons/";
+
+            StrictMode.setThreadPolicy(new StrictMode.ThreadPolicy.Builder()
+                    .detectDiskReads()
+                    .detectDiskWrites()
+                    .detectNetwork()   // or .detectAll() for all detectable problems
+                    .penaltyLog()
+                    .build());
+            
+            StrictMode.setVmPolicy(new StrictMode.VmPolicy.Builder()
+                    .detectLeakedSqlLiteObjects()
+                    .detectLeakedClosableObjects()
+                    .penaltyLog()
+                    .penaltyDeath()
+                    .build());
+
         } else {
             // TODO: Change on release
             domain = Domains.QUALITY_ASSURANCE;

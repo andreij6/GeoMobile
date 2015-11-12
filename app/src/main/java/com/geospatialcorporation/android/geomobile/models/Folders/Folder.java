@@ -110,6 +110,7 @@ public class Folder implements Parcelable, ITreeEntity {
 
     //region Constants
     public static final String FOLDER_INTENT = "Folder";
+    public static final String FOLDER_TYPE_INTENT = "Folder Type";
     //endregion
 
     //region Parcelable Contract
@@ -237,4 +238,13 @@ public class Folder implements Parcelable, ITreeEntity {
 
         return paths;
     }
+
+    public boolean isEditable() {
+        if(AccessLevel == AccessLevelCodes.NoAccess || AccessLevel == AccessLevelCodes.ReadOnly){
+            return false;
+        } else {
+            return true;
+        }
+    }
+
 }

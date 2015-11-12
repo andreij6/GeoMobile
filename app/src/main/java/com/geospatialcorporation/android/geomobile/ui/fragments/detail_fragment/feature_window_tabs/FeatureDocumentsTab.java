@@ -5,6 +5,7 @@ import android.support.v4.content.ContextCompat;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TableLayout;
 import android.widget.TableRow;
@@ -14,9 +15,12 @@ import com.geospatialcorporation.android.geomobile.R;
 import com.geospatialcorporation.android.geomobile.application;
 import com.geospatialcorporation.android.geomobile.library.DI.Analytics.Models.GoogleAnalyticEvent;
 import com.geospatialcorporation.android.geomobile.library.DI.TreeServices.Interfaces.IDocumentTreeService;
+import com.geospatialcorporation.android.geomobile.library.DI.TreeServices.Interfaces.IFolderTreeService;
 import com.geospatialcorporation.android.geomobile.library.DI.TreeServices.Interfaces.ILayerTreeService;
 import com.geospatialcorporation.android.geomobile.library.DI.UIHelpers.Interfaces.DialogHelpers.IGeneralDialog;
 import com.geospatialcorporation.android.geomobile.library.helpers.TableFactory;
+import com.geospatialcorporation.android.geomobile.models.Folders.Folder;
+import com.geospatialcorporation.android.geomobile.models.Layers.Layer;
 import com.geospatialcorporation.android.geomobile.models.MapFeatureDocumentVM;
 import com.geospatialcorporation.android.geomobile.models.Query.map.response.featurewindow.MapFeatureFiles;
 import com.geospatialcorporation.android.geomobile.models.RemoveMapFeatureDocumentRequest;
@@ -33,9 +37,11 @@ public class FeatureDocumentsTab extends FeatureTabBase {
     String mFeatureId;
     IGeneralDialog mDialog;
     List<MapFeatureDocumentVM> mData;
+    Folder mParentFolder;
 
-    ILayerTreeService mLayerTreeService;
+    IFolderTreeService mFolderTreeService;
     IDocumentTreeService mDocumentTreeService;
+    @Bind(R.id.addDocument) Button mAddDocument;
 
     @SuppressWarnings("unused")
     @OnClick(R.id.addDocument)
@@ -55,15 +61,21 @@ public class FeatureDocumentsTab extends FeatureTabBase {
         }
     }
 
+
+
     @Bind(R.id.featureWindowDocumentsTable) TableLayout mTableLayout;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         mLayout = R.layout.fragment_feature_window_documents_tab;
+        mFolderTreeService = application.getTreeServiceComponent().provideFolderTreeService();
+        View v =  super.onCreateView(inflater, container, savedInstanceState);
         mDialog = application.getUIHelperComponent().provideGeneralDialog();
         mDocumentTreeService = application.getTreeServiceComponent().provideDocumentTreeService();
         mAnalytics.trackScreen(new GoogleAnalyticEvent().MapFeatureDocumentsTab());
-        return super.onCreateView(inflater, container, savedInstanceState);
+
+
+        return v;
     }
 
     @Override
@@ -72,6 +84,14 @@ public class FeatureDocumentsTab extends FeatureTabBase {
 
         mLayerId = mResponse.getId();
         mFeatureId = mResponse.getFeatures().get(0).getId();
+
+        mParentFolder =  mFolderTreeService.getParentFolderByLayerId(mResponse.getId());
+
+        if(mParentFolder != null) {
+            if (!mParentFolder.isEditable()) {
+                mAddDocument.setVisibility(View.GONE);
+            }
+        }
 
         mData = data;
 
@@ -82,8 +102,15 @@ public class FeatureDocumentsTab extends FeatureTabBase {
         mTableLayout.removeAllViews();
 
         TableFactory factory = new TableFactory(getActivity(), mTableLayout, mInflater);
+        String[] headers;
 
-        factory.addHeaders(R.layout.template_table_header, "Name", "Size", " ", " ");
+        if(mParentFolder != null && mParentFolder.isEditable()) {
+            headers = new String[]{"Name", "Size", " ", " "};
+        } else {
+            headers = new String[]{"Name", "Size", " "};
+        }
+
+        factory.addHeaders(R.layout.template_table_header, headers);
 
         mTableLayout = factory.build();
 
@@ -98,7 +125,7 @@ public class FeatureDocumentsTab extends FeatureTabBase {
 
             ImageView download = (ImageView)mInflater.inflate(R.layout.template_feature_window_column_iv, null);
             download.setContentDescription(mContext.getString(R.string.download));
-            download.setImageDrawable(ContextCompat.getDrawable(mContext,R.drawable.ic_file_download_black_24dp));
+            download.setImageDrawable(ContextCompat.getDrawable(mContext, R.drawable.ic_file_download_black_24dp));
             download.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
@@ -106,22 +133,28 @@ public class FeatureDocumentsTab extends FeatureTabBase {
                 }
             });
 
-            ImageView remove = (ImageView)mInflater.inflate(R.layout.template_feature_window_column_iv, null);
-            remove.setContentDescription(mContext.getString(R.string.remove));
-            remove.setImageDrawable(ContextCompat.getDrawable(mContext, R.drawable.ic_delete_black_24dp));
-            remove.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    RemoveMapFeatureDocumentRequest request = new RemoveMapFeatureDocumentRequest(doc, mLayerId, mFeatureId, getActivity());
-
-                    mDialog.removeMapFeatureDocument(request);
-                }
-            });
-
             row.addView(name);
             row.addView(fileSize);
             row.addView(download);
-            row.addView(remove);
+
+            if(mParentFolder != null && mParentFolder.isEditable()) {
+                ImageView remove = (ImageView) mInflater.inflate(R.layout.template_feature_window_column_iv, null);
+                remove.setContentDescription(mContext.getString(R.string.remove));
+                remove.setImageDrawable(ContextCompat.getDrawable(mContext, R.drawable.ic_delete_black_24dp));
+                remove.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        RemoveMapFeatureDocumentRequest request = new RemoveMapFeatureDocumentRequest(doc, mLayerId, mFeatureId, getActivity());
+
+                        mDialog.removeMapFeatureDocument(request);
+                    }
+                });
+
+                row.addView(remove);
+            }
+
+
+
 
             mTableLayout.addView(row);
             mTableLayout.setStretchAllColumns(true);

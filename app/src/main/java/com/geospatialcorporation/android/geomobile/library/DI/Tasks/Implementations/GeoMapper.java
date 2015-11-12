@@ -12,6 +12,7 @@ import com.geospatialcorporation.android.geomobile.library.DI.Map.Interfaces.ILa
 import com.geospatialcorporation.android.geomobile.library.DI.Tasks.Interfaces.ILayerStyleTask;
 import com.geospatialcorporation.android.geomobile.library.DI.Tasks.Interfaces.IMapFeaturesTask;
 import com.geospatialcorporation.android.geomobile.library.constants.GeometryTypeCodes;
+import com.geospatialcorporation.android.geomobile.library.constants.PluginCodes;
 import com.geospatialcorporation.android.geomobile.library.map.featureMappers.CollectionFeatureMapper;
 import com.geospatialcorporation.android.geomobile.library.map.featureMappers.ExtentFeatureMapper;
 import com.geospatialcorporation.android.geomobile.library.map.featureMappers.IFeatureMapper;
@@ -23,6 +24,7 @@ import com.geospatialcorporation.android.geomobile.library.map.featureMappers.Po
 import com.geospatialcorporation.android.geomobile.library.map.featureMappers.PolygonFeatureMapper;
 import com.geospatialcorporation.android.geomobile.library.map.featureMappers.RasterFeatureMapper;
 import com.geospatialcorporation.android.geomobile.models.GeoAsyncTask;
+import com.geospatialcorporation.android.geomobile.models.Layers.Layer;
 import com.geospatialcorporation.android.geomobile.models.Layers.LegendLayer;
 import com.geospatialcorporation.android.geomobile.models.Query.map.response.mapquery.Feature;
 import com.geospatialcorporation.android.geomobile.models.Query.map.response.mapquery.MapQueryResponse;
@@ -68,6 +70,13 @@ public class GeoMapper implements IMapFeaturesTask, IPostExecuter<Integer> {
     @Override
     public void mapFeatures(List<MapQueryResponse> responses, LegendLayer legendLayer) {
         mLlayer = legendLayer;
+
+        if(legendLayer.getLayer().getPluginId() == PluginCodes.VideoLayers){
+            mMapper = mStrategies.get(GeometryTypeCodes.Line);
+
+            //new MapVideoLineTask(responses, legendLayer).execute();
+        }
+
         mMapper = mStrategies.get(legendLayer.getLayer().getGeometryTypeCodeId());
         new MapFeaturesTask(responses, legendLayer).execute();
     }
@@ -133,7 +142,6 @@ public class GeoMapper implements IMapFeaturesTask, IPostExecuter<Integer> {
 
                 result = 1;
             } catch (Exception e){
-                Log.d(TAG, e.getMessage());
 
                 result = 2;
             }

@@ -30,7 +30,7 @@ public class FolderDetailsCommons implements IFolderDetailsCommons, IPostExecute
     public IFolderDetailsCommons handleArguments(Bundle arguments) {
         mFolder = arguments.getParcelable(Folder.FOLDER_INTENT);
 
-        mFolderType = arguments.getString("Folder Type");
+        mFolderType = arguments.getString(Folder.FOLDER_TYPE_INTENT);
 
         return this;
     }

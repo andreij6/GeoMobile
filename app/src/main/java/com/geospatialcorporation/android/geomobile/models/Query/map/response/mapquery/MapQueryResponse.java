@@ -1,5 +1,7 @@
 package com.geospatialcorporation.android.geomobile.models.Query.map.response.mapquery;
 
+import com.geospatialcorporation.android.geomobile.models.Query.map.response.featurewindow.VideoDetailsModel;
+
 import java.util.List;
 
 public class MapQueryResponse {
@@ -36,6 +38,30 @@ public class MapQueryResponse {
         Id = id;
     }
 
+    public String getVideoHashId() {
+        return VideoHashId;
+    }
+
+    public void setVideoHashId(String videoHashId) {
+        VideoHashId = videoHashId;
+    }
+
+    public VideoDetailsModel getVideoDetails() {
+        return VideoDetails;
+    }
+
+    public void setVideoDetails(VideoDetailsModel videoDetails) {
+        VideoDetails = videoDetails;
+    }
+
+    public Geometry getLine() {
+        return Line;
+    }
+
+    public void setLine(Geometry line) {
+        Line = line;
+    }
+
     //endregion
 
     List<Feature> Features;
@@ -43,4 +69,7 @@ public class MapQueryResponse {
     List<Sublayers> Sublayers;
     Integer Id;
 
+    String VideoHashId;
+    VideoDetailsModel VideoDetails;
+    Geometry Line;
 }

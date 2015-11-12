@@ -9,14 +9,17 @@ public class EditChangeRequest {
         Changes = new ArrayList<>();
     }
 
-    Iterable<Change> Changes;
+    List<Change> Changes;
 
-    public Iterable<Change> getChanges() {
+    public List<Change> getChanges() {
         return Changes;
     }
 
     public void setChanges(Iterable<Change> changes) {
-        Changes = changes;
+
+        for (Change change : changes) {
+            Changes.add(change);
+        }
     }
 }
 

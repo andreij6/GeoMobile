@@ -20,6 +20,7 @@ import com.geospatialcorporation.android.geomobile.R;
 import com.geospatialcorporation.android.geomobile.application;
 import com.geospatialcorporation.android.geomobile.library.DI.Tasks.models.GetDocumentsParam;
 import com.geospatialcorporation.android.geomobile.library.DI.TreeServices.Interfaces.IDocumentTreeService;
+import com.geospatialcorporation.android.geomobile.library.constants.AccessLevelCodes;
 import com.geospatialcorporation.android.geomobile.library.constants.MediaConstants;
 import com.geospatialcorporation.android.geomobile.library.sectionbuilders.implementations.LibraryTreeSectionBuilder;
 import com.geospatialcorporation.android.geomobile.library.services.Library.ILibraryProcessor;
@@ -167,6 +168,14 @@ public class TabLibraryFragment extends TabGeoViewFragmentBase
     @Override
     public void onPostExecute(Folder model) {
         mCurrentFolder = model;
+
+        if(mCurrentFolder == null){
+            return;
+        }
+
+        if(!mCurrentFolder.isEditable()){
+            mOptions.setVisibility(View.GONE);
+        }
 
         if(mCurrentFolder.getParent() != null){
             //has a folder to navigate up to

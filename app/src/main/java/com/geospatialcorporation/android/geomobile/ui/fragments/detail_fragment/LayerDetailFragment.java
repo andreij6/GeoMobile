@@ -15,9 +15,12 @@ import android.widget.TextView;
 
 import com.geospatialcorporation.android.geomobile.R;
 import com.geospatialcorporation.android.geomobile.application;
+import com.geospatialcorporation.android.geomobile.library.DI.TreeServices.Implementations.FolderTreeService;
+import com.geospatialcorporation.android.geomobile.library.DI.TreeServices.Interfaces.IFolderTreeService;
 import com.geospatialcorporation.android.geomobile.library.constants.GeoPanel;
 import com.geospatialcorporation.android.geomobile.library.helpers.DataHelper;
 import com.geospatialcorporation.android.geomobile.library.panelmanager.PanelManager;
+import com.geospatialcorporation.android.geomobile.models.Folders.Folder;
 import com.geospatialcorporation.android.geomobile.models.Layers.Layer;
 import com.geospatialcorporation.android.geomobile.ui.fragments.GoogleMapFragment;
 import com.geospatialcorporation.android.geomobile.ui.fragments.detail_fragment.layer_tabs.AttributeLayoutTab;
@@ -25,6 +28,7 @@ import com.geospatialcorporation.android.geomobile.ui.fragments.detail_fragment.
 import com.geospatialcorporation.android.geomobile.ui.fragments.detail_fragment.layer_tabs.SublayersTab;
 import com.geospatialcorporation.android.geomobile.ui.fragments.dialogs.ItemDetailFragment;
 import com.geospatialcorporation.android.geomobile.ui.fragments.panel_fragments.tree_fragment_panels.LayerDetailPanelFragment;
+import com.melnykov.fab.FloatingActionButton;
 import com.sothree.slidinguppanel.SlidingUpPanelLayout;
 
 import butterknife.Bind;
@@ -42,9 +46,11 @@ public class LayerDetailFragment extends ItemDetailFragment<Layer>
 
     @Bind(R.id.title) TextView mTitle;
     @Bind(R.id.sliding_layout) SlidingUpPanelLayout mPanel;
+    @Bind(R.id.optionsIV) FloatingActionButton mOptions;
 
     FragmentTabHost mTabHost;
     View mView;
+    IFolderTreeService mFolderService;
 
     @OnClick(R.id.goBackIV)
     public void showNavigation(){ getFragmentManager().popBackStack(); }
@@ -87,6 +93,7 @@ public class LayerDetailFragment extends ItemDetailFragment<Layer>
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState){
         mView = inflater.inflate(R.layout.fragment_tree_detail, null);
+        mFolderService = application.getTreeServiceComponent().provideFolderTreeService();
 
         ButterKnife.bind(this, mView);
 
@@ -108,6 +115,7 @@ public class LayerDetailFragment extends ItemDetailFragment<Layer>
                 mTabHost.newTabSpec(ATTRIBUTES)
                         .setIndicator(createTabView(mTabHost.getContext(), R.drawable.attr_selector)),
                 AttributeLayoutTab.class, getArguments());
+
         mTabHost.addTab(
                 mTabHost.newTabSpec(DETAILS)
                         .setIndicator(createTabView(mTabHost.getContext(), R.drawable.details_selector)),
@@ -128,6 +136,14 @@ public class LayerDetailFragment extends ItemDetailFragment<Layer>
         if(mEntity != null){
 
             mTitle.setText(DataHelper.trimString(mEntity.getName(), 15));
+        }
+
+        Folder folder = mFolderService.getParentFolderByLayerId(mEntity.getId());
+
+        if(folder != null){
+            if(!folder.isEditable()) {
+                mOptions.setVisibility(View.GONE);
+            }
         }
     }
 

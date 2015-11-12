@@ -1,12 +1,13 @@
 package com.geospatialcorporation.android.geomobile.models.Query.map.response.mapquery;
 
+import com.geospatialcorporation.android.geomobile.library.services.LayerEditor.ShapeModel;
 import com.google.android.gms.maps.model.LatLng;
 
 import java.util.List;
 
-public class Geometry {
+public class Geometry extends ShapeModel {
 
-    Integer GeometryTypeCode;
+
     double X;
     double Y;
     double Z;
@@ -16,11 +17,12 @@ public class Geometry {
     List<Geometry> Polygons;
     List<Geometry> Lines;
     int PointCount;
+    int PointOrder;
 
     public Geometry(LatLng ll) {
         setGeometryTypeCode(1);
-        setX(ll.latitude);
-        setY(ll.longitude);
+        setX(ll.longitude);
+        setY(ll.latitude);
     }
 
     public Geometry(){
@@ -28,6 +30,15 @@ public class Geometry {
     }
 
     //region Getters & Setters
+
+    public int getPointOrder() {
+        return PointOrder;
+    }
+
+    public void setPointOrder(int pointOrder) {
+        PointOrder = pointOrder;
+    }
+
     public int getPointCount() {
         return PointCount;
     }
@@ -42,14 +53,6 @@ public class Geometry {
 
     public void setLines(List<Geometry> lines) {
         Lines = lines;
-    }
-
-    public Integer getGeometryTypeCode() {
-        return GeometryTypeCode;
-    }
-
-    public void setGeometryTypeCode(Integer geometryTypeCode) {
-        GeometryTypeCode = geometryTypeCode;
     }
 
     public double getX() {

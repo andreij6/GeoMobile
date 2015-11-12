@@ -77,7 +77,10 @@ public class DataHelper {
         if (folder == null) return result;
 
         if (folder.getFolders().size() == 0) {
-            result.addAll(folder.getDocuments());
+            for(Document document : folder.getDocuments()){
+                document.setParentFolder(folder);
+                result.add(document);
+            }
         } else {
             for (Folder x : folder.getFolders()) {
                 result.addAll(getDocumentsRecursively(x));
@@ -102,7 +105,7 @@ public class DataHelper {
 
         if (layers != null) {
             for (Layer layer : layers) {
-                if(layer.getPluginId() == 0) {
+                if(layer.isMobileCompatible()) {
                     ListItem listItem = new ListItem(layer);
                     results.add(listItem);
                 }

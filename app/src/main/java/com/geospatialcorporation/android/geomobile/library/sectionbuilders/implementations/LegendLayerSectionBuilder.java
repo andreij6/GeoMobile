@@ -3,14 +3,18 @@ package com.geospatialcorporation.android.geomobile.library.sectionbuilders.impl
 import android.content.Context;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 
 import com.geospatialcorporation.android.geomobile.R;
 import com.geospatialcorporation.android.geomobile.application;
+import com.geospatialcorporation.android.geomobile.database.DataRepository.IAddDataRepository;
+import com.geospatialcorporation.android.geomobile.database.DataRepository.Implementations.Folders.FolderAppSource;
 import com.geospatialcorporation.android.geomobile.library.DI.Map.Interfaces.ILayerManager;
 import com.geospatialcorporation.android.geomobile.library.DI.SharedPreferences.Implementations.AppStateSharedPrefs;
 import com.geospatialcorporation.android.geomobile.library.DI.Tasks.Implementations.LayerStyleTask;
 import com.geospatialcorporation.android.geomobile.library.DI.Tasks.Interfaces.ILayerStyleTask;
 import com.geospatialcorporation.android.geomobile.library.DI.UIHelpers.Interfaces.IMapStatusBarManager;
+import com.geospatialcorporation.android.geomobile.library.constants.PluginCodes;
 import com.geospatialcorporation.android.geomobile.library.map.AppStateMapQueryRequestCallback;
 import com.geospatialcorporation.android.geomobile.library.sectionbuilders.ISectionBuilder;
 import com.geospatialcorporation.android.geomobile.library.sectionbuilders.SectionBuilderBase;
@@ -39,6 +43,8 @@ public class LegendLayerSectionBuilder extends SectionBuilderBase<Folder> implem
         mMapStatusBarManager = application.getStatusBarManager();
         mLayerManager = application.getMapComponent().provideLayerManager();
         mSubscription = application.getGeoSubscription();
+        mFolderRepo = new FolderAppSource();
+
     }
 
     protected ArrayList<LegendLayer> mAppStateLayers;
@@ -46,6 +52,7 @@ public class LegendLayerSectionBuilder extends SectionBuilderBase<Folder> implem
     protected IMapStatusBarManager mMapStatusBarManager;
     protected ILayerManager mLayerManager;
     protected Subscription mSubscription;
+    protected IAddDataRepository<Folder> mFolderRepo;
 
 
     @Override
@@ -53,7 +60,6 @@ public class LegendLayerSectionBuilder extends SectionBuilderBase<Folder> implem
         mData = data;
 
         List<LegendLayer> llayers = getLayersFromFolders(data);
-        //List<LegendLayer> llayers = application.getLegendLayerQueue();
 
         ILayerManager layerManager = application.getMapComponent().provideLayerManager();
 
@@ -126,10 +132,6 @@ public class LegendLayerSectionBuilder extends SectionBuilderBase<Folder> implem
                 llayer.setMapped(true);
 
         }
-
-
-
-
     }
 
     protected void getAllLayerExtents(List<LegendLayer> llayers, ILayerManager layerManager) {
@@ -170,6 +172,7 @@ public class LegendLayerSectionBuilder extends SectionBuilderBase<Folder> implem
         List<LegendLayer> result = new ArrayList<>();
         HashMap<Integer, Layer> layerHashMap = new HashMap<>();
 
+        addFoldersToRepo(layerFolders);
 
         for(Folder folder : layerFolders){
 
@@ -183,7 +186,7 @@ public class LegendLayerSectionBuilder extends SectionBuilderBase<Folder> implem
                 for(Layer layer : layers){
                     layerHashMap.put(layer.getId(), layer);
 
-                    if(layer.getPluginId() == 0) {
+                    if(layer.isMobileCompatible()) {
                         result.add(new LegendLayer(layer));
                     }
                 }
@@ -195,14 +198,22 @@ public class LegendLayerSectionBuilder extends SectionBuilderBase<Folder> implem
         return result;
     }
 
+    private void addFoldersToRepo(List<Folder> folders) {
+
+        if (folders.size() > 0) {
+            mFolderRepo.Add(folders);
+        }
+    }
+
+
     protected int getSkipValue(Folder folder, int skip) {
-        skip += 1;
+        //skip += 1;
 
         if(folder != null && folder.getLayers() != null){
             skip += folder.getLayers().size();
         }
 
-        return skip++;
+        return skip;
     }
     //endregion
 

@@ -58,8 +58,8 @@ public class GetClientsTask implements IGetClientsTask {
 
                     mDataSet = response.getItems();
                 } else {
-
-                    mDataSet = mLoginService.searchClients(mClientTypeCode);
+                    Integer pageSize = 25000;
+                    mDataSet = mLoginService.searchClients(mClientTypeCode, pageSize);
                 }
 
             } catch (RetrofitError e) {

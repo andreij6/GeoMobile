@@ -50,4 +50,6 @@ public interface IGeoUndergroundMap
     void getFeatureWindow(String id, int geometry);
 
     void getPreviousFeature();
+
+    int getSelectedLayerId();
 }

@@ -1,10 +1,12 @@
 package com.geospatialcorporation.android.geomobile.library.services.LayerEditor;
 
 import android.content.Context;
+import android.util.Log;
 
 import com.geospatialcorporation.android.geomobile.application;
 import com.geospatialcorporation.android.geomobile.library.DI.Map.Interfaces.ILayerManager;
 import com.geospatialcorporation.android.geomobile.library.helpers.GeoColor;
+import com.geospatialcorporation.android.geomobile.library.rest.LayerService;
 import com.geospatialcorporation.android.geomobile.models.Layers.Layer;
 import com.geospatialcorporation.android.geomobile.models.Layers.LegendLayer;
 import com.geospatialcorporation.android.geomobile.ui.fragments.GoogleMapFragment;
@@ -17,7 +19,12 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
+import retrofit.Callback;
+import retrofit.RetrofitError;
+import retrofit.client.Response;
+
 public abstract class LayerEditorBase<T> implements ILayerEditor {
+    private static final String TAG = LayerEditorBase.class.getSimpleName();
 
     protected LegendLayer mLegendLayer;
     protected GoogleMap mMap;
@@ -32,6 +39,7 @@ public abstract class LayerEditorBase<T> implements ILayerEditor {
     List<HashMap<Integer, T>> mUndos;
     Iterable<T> mExistingFeatures;
     Layer mLayer;
+    LayerService mLayerService;
 
 
     public LayerEditorBase(LegendLayer legendLayer, GoogleMap map, Context context) {
@@ -49,6 +57,8 @@ public abstract class LayerEditorBase<T> implements ILayerEditor {
 
         mChangeMap = new HashMap<>();
         mChangeRequest = new EditChangeRequest();
+
+        mLayerService = application.getRestAdapter().create(LayerService.class);
     }
 
     protected Iterable<LatLng> getLinePositions(List<Marker> lineMarkers) {
@@ -145,6 +155,21 @@ public abstract class LayerEditorBase<T> implements ILayerEditor {
     public void saveEdits() {
         mChangeRequest.setChanges(mChangeMap.values());
 
+        Log.d(TAG, mChangeRequest.getChanges().size() + "nUMBER OF CHANGES ");
+
+        mLayerService.editLayer(mLayer.getId(), mChangeRequest, new Callback<LayerFeatureChangeResponse>() {
+            @Override
+            public void success(LayerFeatureChangeResponse response, Response response2) {
+
+                Log.d(TAG, "rESON");
+            }
+
+            @Override
+            public void failure(RetrofitError error) {
+                Log.d(TAG, "Failed");
+
+            }
+        });
         int count = 9;
 
         int som = count + 1;

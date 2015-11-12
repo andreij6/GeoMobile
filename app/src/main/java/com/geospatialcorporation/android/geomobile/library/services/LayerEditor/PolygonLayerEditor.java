@@ -171,7 +171,7 @@ public class PolygonLayerEditor extends LayerEditorBase<Polygon> {
 
                     Change change = new Change.Factory()
                             .Create(Change.REMOVE, mLayer.getId(), null,
-                                    createGeometry(ss), mapFeatureId, POLYGON);
+                                    new PolygonGeometry(ss), mapFeatureId, POLYGON);
 
                     mChangeMap.put(ss.getId(), change);
                 } else {
@@ -240,7 +240,7 @@ public class PolygonLayerEditor extends LayerEditorBase<Polygon> {
 
                     Change change = new Change.Factory()
                             .Create(Change.ADD, mLayer.getId(),
-                                    createGeometry(polygon), null, "-1", POLYGON);
+                                    new PolygonGeometry(polygon), null, "-1", POLYGON);
 
                     mChangeMap.put(polygon.getId(), change);
 
@@ -248,31 +248,6 @@ public class PolygonLayerEditor extends LayerEditorBase<Polygon> {
                 }
             }
         });
-    }
-
-    private Geometry createGeometry(Polygon polygon) {
-        Geometry result = new Geometry();
-
-        result.setGeometryTypeCode(POLYGON);
-
-        Ring ring = new Ring();
-        ring.setGeometryTypeCode(GeometryTypeCodes.Line);
-
-        List<Point> points = new ArrayList<>();
-
-        for (LatLng point : polygon.getPoints()) {
-            points.add(new Point(point));
-        }
-
-        ring.setPoints(points);
-        ring.setPointCount(points.size());
-
-        List<Ring> rings = new ArrayList<>();
-        rings.add(ring);
-
-        result.setRings(new ArrayList<Ring>(rings));
-
-        return result;
     }
 /*
     "GeometryTypeCode":3,

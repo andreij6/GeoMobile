@@ -68,7 +68,8 @@
                     android:src="@drawable/ic_plus_circle_outline_grey600_36dp"
                     android:layout_gravity="center_vertical"
                     android:layout_alignEnd="@+id/showLayersIV"
-                    android:layout_marginRight="48dp"/>
+                    android:layout_marginRight="48dp"
+                    android:visibility="gone"/>
 
                 <ImageView
                     android:layout_width="36dp"

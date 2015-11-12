@@ -78,7 +78,6 @@ public class ExtentMarkerOptionsManager extends OptionsManagerBase<MarkerOptions
         HashMap<UUID, OptionFeature<MarkerOptions>> removedOptions = mRemovedLayerOptions.get(legendLayer.getLayer().getId());
         HashMap<UUID, OptionFeature<MarkerOptions>> layerOptions = mLayerOptions.get(legendLayer.getLayer().getId());
 
-
         if(removedOptions != null){
             new ShowLayerTask(removedOptions).execute();
         } else {
@@ -195,6 +194,8 @@ public class ExtentMarkerOptionsManager extends OptionsManagerBase<MarkerOptions
                     mapStatusBarManager.finished(StatusBarManagerBase.MARKERS, mUUID);
                 }
             }
+
+            mStatusBarManager.FinishLoading(MapStatusBarManager.MARKERS);
         }
     }
 
@@ -298,6 +299,8 @@ public class ExtentMarkerOptionsManager extends OptionsManagerBase<MarkerOptions
             if(contentFragmentIsGoogleMapFragment() || application.getIsTablet()) {
                 options.mapMarkers();
             }
+
+            mStatusBarManager.FinishLoading(MapStatusBarManager.MARKERS);
         }
 
     }

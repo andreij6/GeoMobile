@@ -8,7 +8,7 @@ import com.google.android.gms.maps.model.Polygon;
 public class Change {
     int ActionId;
     int OldGeometryTypeCode;
-    Geometry OldFeature;
+    ShapeModel OldFeature;
     Argument Arguments;
 
     //region G's & S's
@@ -29,11 +29,11 @@ public class Change {
         OldGeometryTypeCode = oldGeometryTypeCode;
     }
 
-    public Geometry getOldFeature() {
+    public ShapeModel getOldFeature() {
         return OldFeature;
     }
 
-    public void setOldFeature(Geometry oldFeature) {
+    public void setOldFeature(ShapeModel oldFeature) {
         OldFeature = oldFeature;
     }
 
@@ -56,7 +56,7 @@ public class Change {
     }
 
     public static class Factory {
-        public Change Create(int action, int layerId, Geometry point, Geometry oldFeature, String mapFeatureId, int geomTypeCode){
+        public Change Create(int action, int layerId, ShapeModel point, ShapeModel oldFeature, String mapFeatureId, int geomTypeCode){
             if(action == ADD){
                 mapFeatureId = "-1";
             }

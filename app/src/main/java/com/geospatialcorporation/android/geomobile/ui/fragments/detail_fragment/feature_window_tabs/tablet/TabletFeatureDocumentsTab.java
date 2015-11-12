@@ -9,6 +9,7 @@ import android.support.v4.content.ContextCompat;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TableLayout;
 import android.widget.TableRow;
@@ -42,9 +43,11 @@ public class TabletFeatureDocumentsTab extends TabletFeatureTabBase {
     String mFeatureId;
     IGeneralDialog mDialog;
     List<MapFeatureDocumentVM> mData;
+    Folder mParentFolder;
 
     IDocumentTreeService mDocumentTreeService;
 
+    @Bind(R.id.addDocument) Button mAddDocument;
     @Bind(R.id.featureWindowDocumentsTable) TableLayout mTableLayout;
 
     @SuppressWarnings("unused")
@@ -83,6 +86,14 @@ public class TabletFeatureDocumentsTab extends TabletFeatureTabBase {
         mLayerId = mResponse.getId();
         mFeatureId = mResponse.getFeatures().get(0).getId();
 
+        mParentFolder =  mFolderTreeService.getParentFolderByLayerId(mResponse.getId());
+
+        if(mParentFolder != null) {
+            if (!mParentFolder.isEditable()) {
+                mAddDocument.setVisibility(View.GONE);
+            }
+        }
+
         mData = data;
 
         setDocumentsTable();
@@ -101,7 +112,15 @@ public class TabletFeatureDocumentsTab extends TabletFeatureTabBase {
 
         TableFactory factory = new TableFactory(getActivity(), mTableLayout, mInflater);
 
-        factory.addHeaders(R.layout.template_table_header, "Name", "Size", " ", " ");
+        String[] headers;
+
+        if(mParentFolder != null && mParentFolder.isEditable()) {
+            headers = new String[]{"Name", "Size", " ", " "};
+        } else {
+            headers = new String[]{"Name", "Size", " "};
+        }
+
+        factory.addHeaders(R.layout.template_table_header, headers);
 
         mTableLayout = factory.build();
 
@@ -124,22 +143,27 @@ public class TabletFeatureDocumentsTab extends TabletFeatureTabBase {
                 }
             });
 
-            ImageView remove = (ImageView)mInflater.inflate(R.layout.template_feature_window_column_iv, null);
-            remove.setContentDescription(mContext.getString(R.string.remove));
-            remove.setImageDrawable(ContextCompat.getDrawable(mContext, R.drawable.ic_delete_black_24dp));
-            remove.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    RemoveMapFeatureDocumentRequest request = new RemoveMapFeatureDocumentRequest(doc, mLayerId, mFeatureId, getActivity());
-
-                    mDialog.removeMapFeatureDocument(request);
-                }
-            });
-
             row.addView(name);
             row.addView(fileSize);
             row.addView(download);
-            row.addView(remove);
+
+            if(mParentFolder != null && mParentFolder.isEditable()) {
+                ImageView remove = (ImageView) mInflater.inflate(R.layout.template_feature_window_column_iv, null);
+                remove.setContentDescription(mContext.getString(R.string.remove));
+                remove.setImageDrawable(ContextCompat.getDrawable(mContext, R.drawable.ic_delete_black_24dp));
+                remove.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        RemoveMapFeatureDocumentRequest request = new RemoveMapFeatureDocumentRequest(doc, mLayerId, mFeatureId, getActivity());
+
+                        mDialog.removeMapFeatureDocument(request);
+                    }
+                });
+
+                row.addView(remove);
+            }
+
+
 
             mTableLayout.addView(row);
             mTableLayout.setStretchAllColumns(true);

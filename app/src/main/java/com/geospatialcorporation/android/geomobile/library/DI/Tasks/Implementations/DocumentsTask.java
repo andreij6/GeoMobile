@@ -100,6 +100,11 @@ public class DocumentsTask implements IGetDocumentsTask {
 
                 List<Folder> folders = mFolderTreeService.getFoldersByFolder(mCurrentFolder.getId(), false);
                 List<Document> documents = mFolderTreeService.getDocumentsByFolder(mCurrentFolder.getId());
+
+                for(Document document : documents){
+                    document.setParentFolder(mCurrentFolder);
+                }
+
                 mDocumentRepo.Add(documents);
 
                 mCurrentFolder.setFolders(folders);

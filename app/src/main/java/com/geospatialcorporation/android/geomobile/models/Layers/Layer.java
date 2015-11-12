@@ -7,6 +7,7 @@ import android.text.TextUtils;
 import android.util.Log;
 
 import com.geospatialcorporation.android.geomobile.library.constants.GeometryTypeCodes;
+import com.geospatialcorporation.android.geomobile.library.constants.PluginCodes;
 import com.geospatialcorporation.android.geomobile.models.Interfaces.ITreeEntity;
 
 import java.util.List;
@@ -226,6 +227,10 @@ public class Layer implements Parcelable, ITreeEntity {
         Bundle b = new Bundle();
         b.putParcelable(LAYER_INTENT, this);
         return b;
+    }
+
+    public boolean isMobileCompatible() {
+        return PluginId == PluginCodes.Default; // || PluginId == PluginCodes.VideoLayers;
     }
 
     public class StyleInfo {

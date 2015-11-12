@@ -38,7 +38,6 @@ public class LayerFolderDetailCommons implements ILayerFolderDetailCommons {
 
     @Override
     public ILayerFolderDetailCommons tabHost(FragmentTabHost tabHost, Resources resources, Bundle args) {
-        args.putString("Folder Type", "Document");
 
         tabHost.addTab(tabHost.newTabSpec(DETAILS).setIndicator(TabHostUtil.createTabView(tabHost.getContext(), R.drawable.details_selector)), TabletFolderDetailsTab.class, args);
         tabHost.addTab(tabHost.newTabSpec(PERMISSIONS).setIndicator(TabHostUtil.createTabView(tabHost.getContext(), R.drawable.permissions_selector)), TabletPermissionsTab.class, args);

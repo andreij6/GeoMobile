@@ -181,7 +181,6 @@ public class LoginActivity extends GoogleApiActivity implements LoaderCallbacks<
      * errors are presented and no actual login attempt is made.
      */
     private void validateLogin() {
-        Log.d(TAG, "Beginning validateLogin");
         if (mUserLoginTask != null) {
             return;
         }

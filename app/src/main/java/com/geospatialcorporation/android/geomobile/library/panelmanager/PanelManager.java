@@ -10,6 +10,7 @@ import com.geospatialcorporation.android.geomobile.library.panelmanager.paneltyp
 import com.geospatialcorporation.android.geomobile.library.panelmanager.paneltype.DocumentDetailSlidingPanel;
 import com.geospatialcorporation.android.geomobile.library.panelmanager.paneltype.DocumentFolderSlidingPanel;
 import com.geospatialcorporation.android.geomobile.library.panelmanager.paneltype.LayerDetailSlidingPanel;
+import com.geospatialcorporation.android.geomobile.ui.fragments.detail_fragment.feature_window_tabs.FeatureTabBase;
 import com.sothree.slidinguppanel.SlidingUpPanelLayout;
 
 public class PanelManager implements ISlidingPanelManager {

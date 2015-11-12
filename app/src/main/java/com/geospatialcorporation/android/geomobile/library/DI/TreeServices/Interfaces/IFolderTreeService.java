@@ -27,4 +27,5 @@ public interface IFolderTreeService {
 
     List<FolderPermissionsResponse> permissions(int folderId);
 
+    Folder getParentFolderByLayerId(Integer id);
 }

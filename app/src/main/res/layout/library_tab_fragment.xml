@@ -78,7 +78,7 @@
         sothree:umanoShadowHeight="4dp"
         android:background="@color/body_bkg"
         android:layout_below="@+id/library_actionbar"
-        android:layout_above="@+id/close">
+        >
 
         <RelativeLayout
             android:layout_width="match_parent"
@@ -88,6 +88,7 @@
                 android:id="@+id/swipe_refresh_layout"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_above="@+id/close"
                 >
 
                 <android.support.v7.widget.RecyclerView
@@ -97,6 +98,16 @@
                     android:layout_alignParentTop="true"/>
 
             </android.support.v4.widget.SwipeRefreshLayout>
+
+            <Button
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/close"
+                android:id="@+id/close"
+                android:layout_alignParentBottom="true"
+                android:layout_centerHorizontal="true"
+                android:background="@color/accent_blue"
+                android:textColor="@color/white"/>
 
         </RelativeLayout>
 
@@ -108,14 +119,6 @@
 
     </com.sothree.slidinguppanel.SlidingUpPanelLayout>
 
-    <Button
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="@string/close"
-        android:id="@+id/close"
-        android:layout_alignParentBottom="true"
-        android:layout_centerHorizontal="true"
-        android:background="@color/accent_blue"
-        android:textColor="@color/white"/>
+
 
 </RelativeLayout>

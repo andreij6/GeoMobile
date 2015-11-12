@@ -419,12 +419,6 @@ public class GoogleMapFragment extends GeoViewFragmentBase implements
 
     }
 
-    //public void fourSquareAnimation() {
-    //    mAnimationDrawable = (AnimationDrawable) fourSquare.getDrawable();
-    //
-    //    mAnimationDrawable.start();
-    //}
-
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         setHasOptionsMenu(true);
@@ -718,7 +712,7 @@ public class GoogleMapFragment extends GeoViewFragmentBase implements
     protected void zoomToFeature(Marker highlightedMarker){
         LatLng position = highlightedMarker.getPosition();
 
-        double lat = 0;
+        double lat;
 
         if(position.latitude > 0){
             lat = position.latitude - .005;
@@ -774,11 +768,23 @@ public class GoogleMapFragment extends GeoViewFragmentBase implements
     }
 
     public void polyZoomToFeature(List<LatLng> points){
-        LatLngBounds bounds = getBounds(points);
+        final LatLngBounds bounds = getBounds(points);
+        LatLngBounds verticalDoubleBounds = createDoubleBounds(bounds);
 
-        CameraUpdate update = CameraUpdateFactory.newLatLngBounds(bounds, 20);
+        CameraUpdate update1 = CameraUpdateFactory.newLatLngBounds(verticalDoubleBounds, 50);
 
-        mMap.animateCamera(update);
+        mMap.animateCamera(update1);
+
+    }
+
+    private LatLngBounds createDoubleBounds(LatLngBounds bounds) {
+        double diff = bounds.northeast.latitude - bounds.southwest.latitude;
+
+        double latitude = bounds.southwest.latitude - diff;
+
+        LatLng southwest = new LatLng(latitude, bounds.southwest.longitude);
+
+        return new LatLngBounds(southwest , bounds.northeast);
     }
 
     private LatLngBounds getBounds(List<LatLng> points) {
@@ -1013,7 +1019,7 @@ public class GoogleMapFragment extends GeoViewFragmentBase implements
             if (validate(response)) {
                 mPanelManager = new PanelManager(GeoPanel.MAP);
 
-                Fragment f = new FeatureWindowPanelFragment().initialize(mHighlightedMarker);
+                Fragment f = new FeatureWindowPanelFragment().initialize(mHighlightedMarker, mSelectedLayerId);
 
                 f.setArguments(response.toBundle());
 

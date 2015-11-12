@@ -35,8 +35,6 @@ public class AuthTokenRetriever {
         ProgressHelper = helper;
         mLoginService = application.getRestAdapter().create(LoginService.class);
 
-        Log.d(TAG, token);
-
         new RetrieveAuthToken().execute(token);
     }
 
@@ -48,13 +46,6 @@ public class AuthTokenRetriever {
         protected String doInBackground(String... urls) {
             try {
                 Response response = mLoginService.google(urls[0]);
-
-                List<Header> headers = response.getHeaders();
-
-                for(Header header : headers) {
-                    Log.d(TAG, "Header " + header.getName());
-                    Log.d(TAG, header.getName() + " Value " + header.getValue());
-                }
 
                 return response.getBody().toString();
 
@@ -69,8 +60,9 @@ public class AuthTokenRetriever {
 
         @Override
         protected void onPostExecute(String authToken) {
+            Log.d(TAG, authToken + " variable");
+            Log.d(TAG, application.getAuthToken() + " cached");
             if (application.getAuthToken() != null) {
-
                 getCurrentClient();
             } else {
                 if(ProgressHelper != null){

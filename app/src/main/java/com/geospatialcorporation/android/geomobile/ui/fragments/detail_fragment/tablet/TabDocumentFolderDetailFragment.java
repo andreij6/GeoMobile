@@ -6,6 +6,7 @@ import android.support.v4.app.FragmentTabHost;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.geospatialcorporation.android.geomobile.R;
@@ -32,6 +33,7 @@ public class TabDocumentFolderDetailFragment extends TabGeoViewFragmentBase impl
     Folder mFolder;
 
     @Bind(R.id.title) TextView mTitle;
+    @Bind(R.id.optionsIV) ImageView mOptions;
 
     @OnClick(R.id.optionsIV)
     public void options(){
@@ -57,6 +59,10 @@ public class TabDocumentFolderDetailFragment extends TabGeoViewFragmentBase impl
         mTabHost.setup(getActivity(), getChildFragmentManager(), android.R.id.tabcontent);
 
         mCommon.panel(mPanel).tabHost(mTabHost, getResources(), getArguments());
+
+        if(mFolder.isEditable()){
+            mOptions.setVisibility(View.VISIBLE);
+        }
 
         return v;
     }

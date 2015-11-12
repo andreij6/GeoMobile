@@ -6,6 +6,7 @@ import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.TableLayout;
 import android.widget.TableRow;
 import android.widget.TextView;
@@ -16,6 +17,7 @@ import com.geospatialcorporation.android.geomobile.library.DI.Analytics.Models.G
 import com.geospatialcorporation.android.geomobile.library.DI.UIHelpers.Interfaces.DialogHelpers.IAttributeDialog;
 import com.geospatialcorporation.android.geomobile.library.helpers.DataHelper;
 import com.geospatialcorporation.android.geomobile.models.AttributeValueVM;
+import com.geospatialcorporation.android.geomobile.models.Folders.Folder;
 import com.geospatialcorporation.android.geomobile.models.Layers.Columns;
 import com.geospatialcorporation.android.geomobile.models.Query.map.response.featurewindow.WindowFeatures;
 import com.geospatialcorporation.android.geomobile.ui.fragments.panel_fragments.map_fragment_panels.FeatureAttributePanelFragment;
@@ -33,6 +35,8 @@ public class TabletFeatureAttributesTab extends TabletFeatureTabBase {
     IAttributeDialog mAttributeDialog;
 
     @Bind(R.id.featureWindowAttributesTable) TableLayout mTableLayout;
+    @Bind(R.id.edit_attributes) Button mEditAttributs;
+
 
     @OnClick(R.id.edit_attributes)
     public void editAttributes(){
@@ -72,6 +76,14 @@ public class TabletFeatureAttributesTab extends TabletFeatureTabBase {
     protected void setDataView() {
         if(mResponse == null || mResponse.getFeatures() == null || mResponse.getFeatures().get(0) == null){
             return;
+        }
+
+        Folder folder = mFolderTreeService.getParentFolderByLayerId(mResponse.getId());
+        //
+        if(folder != null){
+            if(!folder.isEditable()) {
+                mEditAttributs.setVisibility(View.GONE);
+            }
         }
 
         mData = MatchColumnValues();

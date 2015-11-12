@@ -133,7 +133,7 @@ public class TabletMapFragment extends Fragment
     @Override
     public void showFeatureWindow(ParcelableFeatureQueryResponse response) {
         if(mGeoMap.validate(response)){
-            Fragment f = new TabletFeatureWindowPanelFragment();
+            Fragment f = new TabletFeatureWindowPanelFragment().init(mGeoMap.getSelectedLayerId());
 
             f.setArguments(response.toBundle());
 

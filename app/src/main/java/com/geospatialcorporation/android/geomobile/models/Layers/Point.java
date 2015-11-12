@@ -5,36 +5,36 @@ import com.google.android.gms.maps.model.LatLng;
 
 public class Point {
     //region Properties
-    private Integer GeometryType;
+    private Integer GeometryTypeCode;
     private double X;
     private double Y;
-    private double Z;
-    private double M;
+    //private double Z;
+    //private double M;
     //endregion
 
     //region Constructors
     public Point(){}
 
     public Point(Integer geometryType, double x, double y){
-        GeometryType = geometryType;
+        GeometryTypeCode = geometryType;
         X = x;
         Y = y;
     }
 
     public Point(LatLng position){
-        GeometryType = GeometryTypeCodes.Point;
-        X = position.latitude;
-        Y = position.longitude;
+        GeometryTypeCode = GeometryTypeCodes.Point;
+        X = position.longitude;
+        Y = position.latitude;
     }
     //endregion
 
     //region Getters & Setters
     public Integer getGeometryType() {
-        return GeometryType;
+        return GeometryTypeCode;
     }
 
     public void setGeometryType(Integer geometryType) {
-        GeometryType = geometryType;
+        GeometryTypeCode = geometryType;
     }
 
     public double getX() {
@@ -57,26 +57,20 @@ public class Point {
         return new LatLng(getY(), getX());
     }
 
-    public double getM() {
-        return M;
-    }
-
-    public void setM(double m) {
-        M = m;
-    }
-
-    public double getZ() {
-        return Z;
-    }
-
-    public void setZ(double z) {
-        Z = z;
-    }
+    //public double getM() {
+    //    return M;
+    //}
+    //
+    //public void setM(double m) {
+    //    M = m;
+    //}
+    //
+    //public double getZ() {
+    //    return Z;
+    //}
+    //
+    //public void setZ(double z) {
+    //    Z = z;
+    //}
     //endregion
-
-
-    @Override
-    public String toString() {
-        return " Geometry: " + GeometryType + " X: " + X + " Y: " + Y + " Z: " + Z + " M: " + M;
-    }
 }

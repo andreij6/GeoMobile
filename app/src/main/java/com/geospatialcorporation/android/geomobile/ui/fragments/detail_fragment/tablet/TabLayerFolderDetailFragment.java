@@ -6,6 +6,7 @@ import android.support.v4.app.FragmentTabHost;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.geospatialcorporation.android.geomobile.R;
@@ -26,6 +27,8 @@ public class TabLayerFolderDetailFragment extends TabGeoViewFragmentBase impleme
     @Bind(R.id.sliding_layout) SlidingUpPanelLayout mPanel;
     @Bind(R.id.tabHost) FragmentTabHost mTabHost;
     @Bind(R.id.title) TextView mTitle;
+    @Bind(R.id.optionsIV) ImageView mOptions;
+
 
     ILayerFolderDetailCommons mCommon;
     Folder mFolder;
@@ -45,8 +48,6 @@ public class TabLayerFolderDetailFragment extends TabGeoViewFragmentBase impleme
         ((MainTabletActivity)getActivity()).closeInfoFragment();
     }
 
-
-
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -62,6 +63,10 @@ public class TabLayerFolderDetailFragment extends TabGeoViewFragmentBase impleme
 
         mCommon.panel(mPanel)
                 .tabHost(mTabHost, getResources(), getArguments());
+
+        if(mFolder.isEditable()){
+            mOptions.setVisibility(View.VISIBLE);
+        }
 
         return v;
     }

@@ -24,6 +24,7 @@ import com.geospatialcorporation.android.geomobile.library.DI.SharedPreferences.
 import com.geospatialcorporation.android.geomobile.library.DI.Tasks.Implementations.LayerStyleTask;
 import com.geospatialcorporation.android.geomobile.library.DI.Tasks.Interfaces.ILayerStyleTask;
 import com.geospatialcorporation.android.geomobile.library.DI.UIHelpers.Interfaces.IMapStatusBarManager;
+import com.geospatialcorporation.android.geomobile.library.constants.AccessLevelCodes;
 import com.geospatialcorporation.android.geomobile.library.constants.GeometryTypeCodes;
 import com.geospatialcorporation.android.geomobile.library.map.SendMapQueryRequestCallback;
 import com.geospatialcorporation.android.geomobile.library.panelmanager.ISlidingPanelManager;
@@ -139,7 +140,6 @@ public class TabletLegendAdapter extends GeoRecyclerAdapterBase<TabletLegendAdap
                 geomIV.setImageDrawable(mLegendLayer.getLegendIcon());
 
 
-
             } else {
                 mFolder = llayer.getFolder();
 
@@ -155,12 +155,19 @@ public class TabletLegendAdapter extends GeoRecyclerAdapterBase<TabletLegendAdap
                 mFolderIcon.setOnClickListener(ShowLayerFolderDetails);
                 mLayerName.setOnClickListener(ShowLayerFolderDetails);
 
-                gotoSublayer.setOnClickListener(ShowLayerFolderOptions);
+
 
                 isVisibleCB.setVisibility(View.INVISIBLE);
                 geomIV.setVisibility(View.INVISIBLE);
-                gotoSublayer.setImageDrawable(ContextCompat.getDrawable(mContext, R.drawable.ic_plus_circle_outline_grey600_18dp));
-                gotoSublayer.setBackgroundColor(Color.TRANSPARENT);
+
+                if(mFolder.isEditable()) {
+                    gotoSublayer.setImageDrawable(ContextCompat.getDrawable(mContext, R.drawable.ic_plus_circle_outline_grey600_18dp));
+                    gotoSublayer.setBackgroundColor(Color.TRANSPARENT);
+                    gotoSublayer.setOnClickListener(ShowLayerFolderOptions);
+                } else {
+                    gotoSublayer.setVisibility(View.INVISIBLE);
+                }
+
                 mFolderIcon.setVisibility(View.VISIBLE);
             }
 
@@ -268,7 +275,11 @@ public class TabletLegendAdapter extends GeoRecyclerAdapterBase<TabletLegendAdap
                 Fragment frag = new TabLayerFolderDetailFragment();
                 FragmentManager fm = ((MainTabletActivity)mContext).getSupportFragmentManager();
 
-                frag.setArguments(mFolder.toBundle());
+                Bundle bundle = new Bundle();
+                bundle.putParcelable(Folder.FOLDER_INTENT, mFolder);
+                bundle.putString(Folder.FOLDER_TYPE_INTENT, "Layer");
+
+                frag.setArguments(bundle);
 
                 fm.beginTransaction()
                         .replace(R.id.info_frame, frag)

@@ -244,6 +244,8 @@ public class PolygonOptionsManager extends OptionsManagerBase<PolygonOptions, Po
                     mapStatusBarManager.finished(StatusBarManagerBase.POLYGONS, mUUID);
                 }
             }
+
+            mStatusBarManager.FinishLoading(GeometryTypeCodes.Polygon);
         }
 
     }
@@ -531,6 +533,8 @@ public class PolygonOptionsManager extends OptionsManagerBase<PolygonOptions, Po
             if(contentFragmentIsGoogleMapFragment() || application.getIsTablet()) {
                 options.mapFeatures();
             }
+
+            mStatusBarManager.FinishLoading(GeometryTypeCodes.Polygon);
         }
     }
 

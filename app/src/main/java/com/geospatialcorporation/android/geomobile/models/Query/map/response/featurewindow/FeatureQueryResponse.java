@@ -1,6 +1,7 @@
 package com.geospatialcorporation.android.geomobile.models.Query.map.response.featurewindow;
 
 import com.geospatialcorporation.android.geomobile.models.Layers.Columns;
+import com.geospatialcorporation.android.geomobile.models.Query.map.response.mapquery.Geometry;
 
 import java.io.Serializable;
 import java.util.List;
@@ -12,6 +13,10 @@ public class FeatureQueryResponse implements Serializable {
     List<MapQueryFeatures> Sublayers;
     List<WindowFeatures> Features;
 
+    String VideoHashId;
+    VideoDetailsModel VideoDetails;
+    Geometry Line;
+
     //region Gs & Ss
     public List<com.geospatialcorporation.android.geomobile.models.Layers.Columns> getColumns() {
         return Columns;
@@ -19,6 +24,14 @@ public class FeatureQueryResponse implements Serializable {
 
     public void setColumns(List<com.geospatialcorporation.android.geomobile.models.Layers.Columns> columns) {
         Columns = columns;
+    }
+
+    public String getVideoHashId() {
+        return VideoHashId;
+    }
+
+    public void setVideoHashId(String videoHashId) {
+        VideoHashId = videoHashId;
     }
 
     public Integer getId() {

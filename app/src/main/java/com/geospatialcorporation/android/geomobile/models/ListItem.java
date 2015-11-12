@@ -67,6 +67,7 @@ public class ListItem implements Comparable<ListItem> {
         IsCompletelyEmpty = isCompletelyEmpty;
     }
 
+
     //endregion
 
     private String Name;

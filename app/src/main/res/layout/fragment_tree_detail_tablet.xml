@@ -31,7 +31,8 @@
             android:src="@drawable/ic_menu_down_grey600_36dp"
             android:layout_gravity="center_vertical"
             android:layout_alignParentEnd="true"
-            android:layout_marginRight="8dp"/>
+            android:layout_marginRight="8dp"
+            android:visibility="gone"/>
 
     </RelativeLayout>
 
@@ -58,7 +59,8 @@
                 android:layout_height="match_parent"
                 android:id="@+id/tabHost"
                 android:layout_marginTop="32dp"
-                android:layout_centerHorizontal="true">
+                android:layout_centerHorizontal="true"
+                android:layout_above="@+id/close">
 
                 <LinearLayout
                     android:layout_width="match_parent"
@@ -82,6 +84,16 @@
                 </LinearLayout>
             </android.support.v4.app.FragmentTabHost>
 
+            <Button
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/close"
+                android:id="@+id/close"
+                android:layout_alignParentBottom="true"
+                android:layout_centerHorizontal="true"
+                android:background="@color/accent_blue"
+                android:textColor="@color/white"/>
+
         </RelativeLayout>
 
         <RelativeLayout
@@ -92,14 +104,6 @@
 
     </com.sothree.slidinguppanel.SlidingUpPanelLayout>
 
-    <Button
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="@string/close"
-        android:id="@+id/close"
-        android:layout_alignParentBottom="true"
-        android:layout_centerHorizontal="true"
-        android:background="@color/accent_blue"
-        android:textColor="@color/white"/>
+
 
 </RelativeLayout>

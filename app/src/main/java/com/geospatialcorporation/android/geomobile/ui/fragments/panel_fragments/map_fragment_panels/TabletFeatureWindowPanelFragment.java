@@ -2,23 +2,21 @@ package com.geospatialcorporation.android.geomobile.ui.fragments.panel_fragments
 
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTabHost;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.geospatialcorporation.android.geomobile.R;
 import com.geospatialcorporation.android.geomobile.application;
-import com.geospatialcorporation.android.geomobile.library.DI.Map.Interfaces.IGeoUndergroundMap;
 import com.geospatialcorporation.android.geomobile.library.services.FeatureWindowCommons.FeatureWindowCommon;
 import com.geospatialcorporation.android.geomobile.library.services.FeatureWindowCommons.IFeatureWindowCommon;
 import com.geospatialcorporation.android.geomobile.library.services.QueryRestService;
 import com.geospatialcorporation.android.geomobile.models.Query.map.response.featurewindow.FeatureQueryResponse;
 import com.geospatialcorporation.android.geomobile.ui.Interfaces.IFeatureWindowCtrl;
 import com.geospatialcorporation.android.geomobile.ui.MainTabletActivity;
-import com.geospatialcorporation.android.geomobile.ui.fragments.MapFragments.TabletMapFragment;
 import com.geospatialcorporation.android.geomobile.ui.fragments.TabGeoViewFragmentBase;
 
 import butterknife.Bind;
@@ -33,6 +31,7 @@ public class TabletFeatureWindowPanelFragment extends TabGeoViewFragmentBase {
     FeatureQueryResponse mResponse;
     QueryRestService mQueryService;
     IFeatureWindowCtrl mMapFragment; //TODO: extract interface
+    int mLayerId;
 
     @OnClick(R.id.close)
     public void closeFeatureWindow(){
@@ -78,7 +77,7 @@ public class TabletFeatureWindowPanelFragment extends TabGeoViewFragmentBase {
 
         mTabHost.setup(getActivity(), getChildFragmentManager(), android.R.id.tabcontent);
 
-        mCommon.tabHost(mTabHost, getResources(), getArguments(), application.getCurrentFeatureWindowTab());
+        mCommon.tabHost(mTabHost, getResources(), getArguments(), application.getCurrentFeatureWindowTab(), mLayerId);
 
         return v;
     }
@@ -93,4 +92,8 @@ public class TabletFeatureWindowPanelFragment extends TabGeoViewFragmentBase {
         mQueryService.featureWindow(featureId, layerId);
     }
 
+    public Fragment init(int selectedLayerId) {
+        mLayerId = selectedLayerId;
+        return this;
+    }
 }
