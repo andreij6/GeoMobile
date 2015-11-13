@@ -7,6 +7,7 @@ import android.os.StrictMode;
 import android.support.v4.app.Fragment;
 import android.support.v4.widget.DrawerLayout;
 import android.util.Log;
+import android.widget.Toast;
 
 import com.facebook.stetho.Stetho;
 import com.facebook.stetho.okhttp.StethoInterceptor;
@@ -462,17 +463,6 @@ public class application extends applicationDIBase {
 
     public static String getDomain() { return domain; }
 
-    public static void setAuthToken(String token) {
-        geoAuthToken = token;
-
-        RequestInterceptor requestInterceptor = setupInterceptor();
-
-        configRestAdapter(requestInterceptor);
-
-        appState.getString(geoAuthTokenName, token);
-
-    }
-
     protected static void configRestAdapter(RequestInterceptor requestInterceptor) {
         if (BuildConfig.DEBUG) {
             restAdapter = new RestAdapter.Builder()
@@ -605,6 +595,7 @@ public class application extends applicationDIBase {
             Response response = chain.proceed(request);
 
             String newToken = response.header("X-WebToken");
+
             if (newToken != null) {
                 geoAuthToken = newToken;
                 Log.d(TAG, "Set GeoToken to: " + newToken);
@@ -615,14 +606,9 @@ public class application extends applicationDIBase {
         }
 
         private void addTokenToSharedPreferences(String token) {
-            Context context = application.this;
-            SharedPreferences preferences = context.getSharedPreferences("geoAuthToken", Context.MODE_PRIVATE);
-
-            SharedPreferences.Editor editor = preferences.edit();
-
-            editor.putString("GeoUndergroundAuthToken", token);
-
-            editor.apply();
+            IGeoSharedPrefs prefs = getGeoSharedPrefsComponent().provideGeoSharedPrefs();
+            prefs.add(geoAuthTokenName, token);
+            prefs.apply();
         }
     }
 
@@ -660,7 +646,9 @@ public class application extends applicationDIBase {
         IGeoAnalytics analytics = getAnalyticsComponent().provideGeoAnalytics();
         analytics.trackClick(new GoogleAnalyticEvent().Logout());
 
-        appState.getStringSet(geoAuthTokenName, null);
+        //appState.getStringSet(geoAuthTokenName, null);
+        prefs.remove(geoAuthTokenName);
+        prefs.commit();
 
         initializeApplication();
     }
@@ -679,9 +667,14 @@ public class application extends applicationDIBase {
         layerHashMap = new HashMap<>();
         documentHashMap = new HashMap<>();
         mGoogleMapFragment = new GoogleMapFragment();
-        geoAuthToken = appState.getString(geoAuthTokenName, null);
+        //geoAuthToken = appState.getString(geoAuthTokenName, null);
+        geoAuthToken = null;
         layerFolders = new ArrayList<>();
         legendLayerQueue = new ArrayList<>();
+
+        IGeoSharedPrefs prefs = getGeoSharedPrefsComponent().provideGeoSharedPrefs();
+        prefs.remove(geoAuthTokenName);
+        prefs.commit();
     }
 
 }

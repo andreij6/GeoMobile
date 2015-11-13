@@ -2,6 +2,7 @@ package com.geospatialcorporation.android.geomobile.library.DI.Authentication.Im
 
 import android.app.Dialog;
 import android.os.AsyncTask;
+import android.util.Log;
 
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.geospatialcorporation.android.geomobile.application;
@@ -18,6 +19,8 @@ import com.google.android.gms.common.GooglePlayServicesUtil;
 import java.io.IOException;
 
 public class GoogleAuthTokenService implements IGoogleAuthTokenService {
+
+    private static final String TAG = GoogleAuthTokenService.class.getSimpleName();
 
     private AuthTokenRetriever mAuthTokenRetriever;
     protected int ACTIVITY_AUTH_REQUEST_CODE;
@@ -68,8 +71,7 @@ public class GoogleAuthTokenService implements IGoogleAuthTokenService {
                 if (token != null) {
                     // invalidate the token that we found is bad so that GoogleAuthUtil won't
                     // return it next time (it may have cached it)
-                    //GoogleAuthUtil.invalidateToken(Context, String)(context, token);
-                    // consider retrying getAndUseTokenBlocking() once more
+                    GoogleAuthUtil.clearToken(mContext, token);
                     return;
                 }
             } catch (GooglePlayServicesAvailabilityException playEx) {

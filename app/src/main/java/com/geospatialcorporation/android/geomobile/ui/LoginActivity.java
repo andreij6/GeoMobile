@@ -117,7 +117,7 @@ public class LoginActivity extends GoogleApiActivity implements LoaderCallbacks<
         }
 
         application.setIsAdminUser(false);
-        application.setAuthToken(null);
+        application.setGeoAuthToken(null);
 
         mLayerManager = application.getLayerManager();
         mLayerManager.reset();

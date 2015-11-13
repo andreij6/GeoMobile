@@ -11,7 +11,7 @@ tools:context="com.geospatialcorporation.android.geomobile.ui.SplashScreenActivi
     android:layout_width="400dp"
     android:layout_height="400dp"
     android:contentDescription="@string/app_name"
-    android:src="@drawable/ic_full_color_logo"
+    android:src="@drawable/ic_full_color_logo_200"
     android:layout_centerVertical="true"
     android:layout_centerHorizontal="true"/>
 

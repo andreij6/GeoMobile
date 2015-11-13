@@ -28,9 +28,9 @@
             <ImageView
                 android:id="@+id/textView8"
                 android:layout_width="250dp"
-                android:layout_height="wrap_content"
+                android:layout_height="40dp"
                 android:scaleType="centerCrop"
-                android:src="@drawable/ic_full_color_logo"
+                android:src="@drawable/ic_full_color_logo_200"
                 android:layout_gravity="center_horizontal"/>
 
             <TextView
@@ -39,7 +39,6 @@
                 android:layout_height="wrap_content"
                 android:layout_alignEnd="@+id/textView8"
                 android:layout_below="@+id/textView8"
-                android:layout_gravity="end"
                 android:gravity="center_horizontal"
                 android:text="@string/powered_by"
                 android:textAppearance="?android:attr/textAppearanceSmall"

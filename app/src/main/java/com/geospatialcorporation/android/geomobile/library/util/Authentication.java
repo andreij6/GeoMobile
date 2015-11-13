@@ -1,6 +1,7 @@
 package com.geospatialcorporation.android.geomobile.library.util;
 
 import android.content.Context;
+import android.telephony.TelephonyManager;
 import android.util.Base64;
 import android.util.Log;
 
@@ -26,6 +27,7 @@ import java.security.KeyFactory;
 import java.security.PublicKey;
 import java.security.spec.RSAPublicKeySpec;
 import java.util.List;
+import java.util.UUID;
 
 import javax.crypto.Cipher;
 import javax.crypto.Mac;
@@ -65,7 +67,24 @@ public class Authentication {
     private static byte[] keyTwo = null;
 
     /** This changes (or can change) per user device **/
-    public final static String deviceId = "defaultDeviceId";
+    //public final static String deviceId = "defaultDeviceId";
+    String deviceId;
+
+    public String getDeviceId() {
+        if(deviceId == null){
+            final TelephonyManager tm = (TelephonyManager) application.getAppContext().getSystemService(Context.TELEPHONY_SERVICE);
+
+            final String tmDevice, tmSerial, androidId;
+            tmDevice = "" + tm.getDeviceId();
+            tmSerial = "" + tm.getSimSerialNumber();
+            androidId = "" + android.provider.Settings.Secure.getString(application.getAppContext().getContentResolver(), android.provider.Settings.Secure.ANDROID_ID);
+
+            UUID deviceUuid = new UUID(androidId.hashCode(), ((long)tmDevice.hashCode() << 32) | tmSerial.hashCode());
+            deviceId = deviceUuid.toString();
+        }
+
+        return  deviceId;
+    }
 
     /** These change with each login attempt. **/
     private String mUsername;
@@ -145,7 +164,11 @@ public class Authentication {
         };
 
         // Returns {attemptId}.{base64Key}
-        mService.start(new TypedString(fixedKey), callback);
+        String xGeoHeader = getXGeoUndergroundHeader();
+
+        Log.d(TAG, xGeoHeader);
+
+        mService.start(xGeoHeader, new TypedString(fixedKey), callback);
     }
 
     private void postEmailLogin() {
@@ -160,21 +183,7 @@ public class Authentication {
         Callback<Response> callback = new Callback<Response>() {
             @Override
             public void success(Response result, Response response) {
-                List<Header> headers = response.getHeaders();
-
-                boolean success = false;
-                for(Header header : headers) {
-                    if (header.getName().equals("X-WebToken")) {
-                        application.setAuthToken(header.getValue());
-
-                        success = true;
-                    }
-
-                }
-
-                if (success) {
-                    new AuthTokenRetriever().getCurrentClient(mContext, mProgressHelper);
-                }
+                new AuthTokenRetriever().getCurrentClient(mContext, mProgressHelper);
             }
 
             @Override
@@ -206,7 +215,7 @@ public class Authentication {
         Log.d(TAG, "Encrypted JSON Body: " + encryptedJSONBody);
         Log.d(TAG, "Signature: " + signature);
 
-        mService.login(getLatestSignature(), new TypedString(encryptedJSONBody), callback);
+        mService.login(getXGeoUndergroundHeader(), signature, new TypedString(encryptedJSONBody), callback);
     }
 
     //region Helpers
@@ -219,7 +228,7 @@ public class Authentication {
 
             String saltKeyTwo = Base64.encodeToString(concat(Base64.decode(mLoginAttemptSalt, Base64.NO_WRAP), Base64.decode(keyTwo, Base64.NO_WRAP)), Base64.NO_WRAP);
 
-            String preHash = versionId + "." + deviceId + "." + mBody;
+            String preHash = versionId + "." + getDeviceId() + "." + mBody;
 
             Log.d(TAG, "HmacSHA256 on: " + preHash);
             Log.d(TAG, "HmacSHA256 secret: " + saltKeyTwo);
@@ -373,6 +382,10 @@ public class Authentication {
         System.arraycopy(a, 0, c, 0, aLen);
         System.arraycopy(b, 0, c, aLen, bLen);
         return c;
+    }
+
+    public String getXGeoUndergroundHeader() {
+        return Authentication.version + ';' + Authentication.versionId + ';' + getDeviceId();
     }
     // end region
 }

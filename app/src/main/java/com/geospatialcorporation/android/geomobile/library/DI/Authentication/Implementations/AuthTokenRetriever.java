@@ -60,8 +60,6 @@ public class AuthTokenRetriever {
 
         @Override
         protected void onPostExecute(String authToken) {
-            Log.d(TAG, authToken + " variable");
-            Log.d(TAG, application.getAuthToken() + " cached");
             if (application.getAuthToken() != null) {
                 getCurrentClient();
             } else {
