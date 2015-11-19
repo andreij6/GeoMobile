@@ -85,7 +85,9 @@ public class FeatureAttributesTab extends FeatureTabBase {
         mFolderTreeService = application.getTreeServiceComponent().provideFolderTreeService();
         mPanelManager = new PanelManager(GeoPanel.MAP);
 
-        return super.onCreateView(inflater, container, savedInstanceState);
+        View v = super.onCreateView(inflater, container, savedInstanceState);
+
+        return v;
     }
 
     protected void setDataView() {

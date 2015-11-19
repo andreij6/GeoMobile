@@ -183,7 +183,23 @@ public class Authentication {
         Callback<Response> callback = new Callback<Response>() {
             @Override
             public void success(Response result, Response response) {
-                new AuthTokenRetriever().getCurrentClient(mContext, mProgressHelper);
+                List<Header> headers = response.getHeaders();
+
+                boolean success = false;
+
+                for(Header header : headers) {
+                    if (header.getName().equals("X-WebToken")) {
+                        application.setGeoAuthToken(header.getValue());
+
+                        success = true;
+                        break;
+                    }
+
+                }
+
+                if (success) {
+                    new AuthTokenRetriever().getCurrentClient(mContext, mProgressHelper);
+                }
             }
 
             @Override

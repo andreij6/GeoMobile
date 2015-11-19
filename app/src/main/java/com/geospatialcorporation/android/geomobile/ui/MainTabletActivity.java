@@ -1,6 +1,7 @@
 package com.geospatialcorporation.android.geomobile.ui;
 
 import android.content.Intent;
+import android.content.res.Configuration;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.Menu;
@@ -84,8 +85,38 @@ public class MainTabletActivity extends GeoUndergroundMainActivity implements IG
             mSubscriptions.setVisibility(View.GONE);
         }
 
+        //determineScreenSize();
+
     }
 
+    public void determineScreenSize() {
+        float density = getResources().getDisplayMetrics().density;
+
+        Toast.makeText(this, "Density: " + density, Toast.LENGTH_LONG).show();
+
+        int screenSize = getResources().getConfiguration().screenLayout
+                & Configuration.SCREENLAYOUT_SIZE_MASK;
+        switch (screenSize) {
+            case Configuration.SCREENLAYOUT_SIZE_XLARGE:
+                Toast.makeText(this, "XLarge screen", Toast.LENGTH_LONG).show();
+                break;
+            case Configuration.SCREENLAYOUT_SIZE_LARGE:
+                Toast.makeText(this, "Large screen", Toast.LENGTH_LONG).show();
+                break;
+            case Configuration.SCREENLAYOUT_SIZE_NORMAL:
+                Toast.makeText(this, "Normal screen", Toast.LENGTH_LONG).show();
+                break;
+            case Configuration.SCREENLAYOUT_SIZE_SMALL:
+                Toast.makeText(this, "Small screen", Toast.LENGTH_LONG).show();
+                break;
+            default:
+                Toast.makeText(this,
+                        "Screen size is neither large, normal or small",
+                        Toast.LENGTH_LONG).show();
+        }
+    }
+
+    //region Commentedd
    //@Override
    //public boolean onCreateOptionsMenu(Menu menu) {
    //    MenuInflater inflater = getMenuInflater();
@@ -127,6 +158,7 @@ public class MainTabletActivity extends GeoUndergroundMainActivity implements IG
         }
     }
     */
+    //endregion
 
     @Override
     public void onBackPressed() {

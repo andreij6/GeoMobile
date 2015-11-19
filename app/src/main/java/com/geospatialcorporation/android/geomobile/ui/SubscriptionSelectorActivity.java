@@ -44,11 +44,6 @@ public class SubscriptionSelectorActivity extends AppCompatActivity implements A
         setBackButtonClickOnce(false);
         application.clearUserSpecificData();
 
-        if(DeviceTypeUtil.isTablet(getResources())){
-            setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
-        } else {
-            setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
-        }
         getSupportActionBar().hide();
 
         application.getLayerManager().reset();

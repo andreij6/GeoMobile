@@ -160,6 +160,9 @@ public class LibraryFragment extends GeoViewFragmentBase
         mDocumentsTask = application.getTasksComponent().provideGetDocumentsTask();
         handleArguments();
 
+        //fixes 4.3
+        mOptionsSlider.bringToFront();
+
         return mView;
     }
 

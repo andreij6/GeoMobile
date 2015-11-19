@@ -57,6 +57,10 @@ public abstract class FeatureTabBase extends GeoViewFragmentBase implements IPan
 
         setDataView();
 
+        if(mPanelManager.isExpanded()){
+            Expanded();
+        }
+
         return v;
     }
 

@@ -25,6 +25,7 @@ import com.geospatialcorporation.android.geomobile.ui.fragments.panel_fragments.
 import com.geospatialcorporation.android.geomobile.ui.fragments.panel_fragments.tree_fragment_panels.LayerDetailPanelFragment;
 import com.geospatialcorporation.android.geomobile.ui.fragments.panel_fragments.tree_fragment_panels.LayerFolderDetailPanelFragment;
 import com.geospatialcorporation.android.geomobile.ui.fragments.panel_fragments.tree_fragment_panels.LayerFolderPanelFragment;
+import com.melnykov.fab.FloatingActionButton;
 import com.sothree.slidinguppanel.SlidingUpPanelLayout;
 
 import butterknife.Bind;
@@ -38,6 +39,7 @@ public class LayerFolderDetailFragment extends ItemDetailFragment<Folder> implem
 
     @Bind(R.id.sliding_layout) SlidingUpPanelLayout mPanel;
     @Bind(R.id.title) TextView mTitle;
+    @Bind(R.id.optionsIV) FloatingActionButton mOptionsSlider;
 
     @OnClick(R.id.backFolder)
     public void goUp(){ getFragmentManager().popBackStack(); }
@@ -106,6 +108,8 @@ public class LayerFolderDetailFragment extends ItemDetailFragment<Folder> implem
                         .setIndicator(createTabView(tabHost.getContext(), R.drawable.permissions_selector)), PermissionsTab.class, getArguments());
 
         tabHost.setCurrentTab(0);
+
+        mOptionsSlider.bringToFront();
 
         return view;
     }

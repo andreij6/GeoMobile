@@ -17,6 +17,7 @@
 package com.geospatialcorporation.android.geomobile.ui;
 
 import android.content.Intent;
+import android.content.res.Configuration;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
@@ -134,6 +135,34 @@ public class MainActivity extends ActionBarActivity
         mLayerDrawerFragment = (LayerSelectorDrawerFragment)getSupportFragmentManager().findFragmentById(R.id.layer_drawer);
         mLayerDrawerFragment.setUp(R.id.layer_drawer, mDrawerLayout, new Toolbar(this), mMainMainNavigationDrawerFragment);
 
+        //determineScreenSize();
+    }
+
+    public void determineScreenSize() {
+        float density = getResources().getDisplayMetrics().density;
+
+        Toast.makeText(this, "Density: " + density, Toast.LENGTH_LONG).show();
+
+        int screenSize = getResources().getConfiguration().screenLayout
+                & Configuration.SCREENLAYOUT_SIZE_MASK;
+        switch (screenSize) {
+            case Configuration.SCREENLAYOUT_SIZE_XLARGE:
+                Toast.makeText(this, "XLarge screen", Toast.LENGTH_LONG).show();
+                break;
+            case Configuration.SCREENLAYOUT_SIZE_LARGE:
+                Toast.makeText(this, "Large screen", Toast.LENGTH_LONG).show();
+                break;
+            case Configuration.SCREENLAYOUT_SIZE_NORMAL:
+                Toast.makeText(this, "Normal screen", Toast.LENGTH_LONG).show();
+                break;
+            case Configuration.SCREENLAYOUT_SIZE_SMALL:
+                Toast.makeText(this, "Small screen", Toast.LENGTH_LONG).show();
+                break;
+            default:
+                Toast.makeText(this,
+                        "Screen size is neither large, normal or small",
+                        Toast.LENGTH_LONG).show();
+        }
     }
 
     @Override

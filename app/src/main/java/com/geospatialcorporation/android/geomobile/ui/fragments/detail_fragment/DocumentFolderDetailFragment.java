@@ -23,6 +23,7 @@ import com.geospatialcorporation.android.geomobile.ui.fragments.detail_fragment.
 import com.geospatialcorporation.android.geomobile.ui.fragments.detail_fragment.folder_tabs.PermissionsTab;
 import com.geospatialcorporation.android.geomobile.ui.fragments.dialogs.ItemDetailFragment;
 import com.geospatialcorporation.android.geomobile.ui.fragments.panel_fragments.tree_fragment_panels.DocumentFolderPanelFragment;
+import com.melnykov.fab.FloatingActionButton;
 import com.sothree.slidinguppanel.SlidingUpPanelLayout;
 
 import butterknife.Bind;
@@ -37,6 +38,7 @@ public class DocumentFolderDetailFragment extends ItemDetailFragment<Folder> imp
 
     @Bind(R.id.sliding_layout) SlidingUpPanelLayout mPanel;
     @Bind(R.id.title) TextView mTitle;
+    @Bind(R.id.optionsIV) FloatingActionButton mOptionsSlider;
 
     IFolderDialog mFolderDialog;
 
@@ -93,6 +95,8 @@ public class DocumentFolderDetailFragment extends ItemDetailFragment<Folder> imp
         handleArguments();
         Bundle args = getArguments();
         args.putString("Folder Type", "Document");
+
+        mOptionsSlider.bringToFront();
 
         FragmentTabHost tabHost = (FragmentTabHost)view.findViewById(R.id.tabHost);
 

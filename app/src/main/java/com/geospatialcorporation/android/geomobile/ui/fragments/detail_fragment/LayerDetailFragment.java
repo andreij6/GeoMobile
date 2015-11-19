@@ -123,6 +123,8 @@ public class LayerDetailFragment extends ItemDetailFragment<Layer>
 
         mTabHost.setCurrentTab(0);
 
+        mOptions.bringToFront();
+
         return mView;
     }
 

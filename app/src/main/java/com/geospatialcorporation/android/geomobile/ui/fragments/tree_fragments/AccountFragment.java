@@ -84,6 +84,8 @@ public class AccountFragment extends GeoViewFragmentBase implements IAccountFrag
 
         mProcessor.GetUserAccountData(getActivity(), this);
 
+        //Toaster(application.getAuthToken());
+
         return mView;
     }
 

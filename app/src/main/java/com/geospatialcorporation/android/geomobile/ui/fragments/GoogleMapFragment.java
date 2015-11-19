@@ -709,24 +709,28 @@ public class GoogleMapFragment extends GeoViewFragmentBase implements
         }
     }
 
-    protected void zoomToFeature(Marker highlightedMarker){
-        LatLng position = highlightedMarker.getPosition();
+    protected void zoomToFeature(Marker highlightedMarker) {
+        float zoom = mMap.getCameraPosition().zoom;
 
-        double lat;
+        CameraUpdate update = CameraUpdateFactory.newLatLng(highlightedMarker.getPosition());
 
-        if(position.latitude > 0){
-            lat = position.latitude - .005;
-        } else {
-            lat = position.latitude + .005;
-        }
+        mMap.moveCamera(update);
 
-        LatLng ll = new LatLng(lat, position.longitude);
+        LatLngBounds bounds = mMap.getProjection().getVisibleRegion().latLngBounds;
 
-        float zoom = 15f;
+        LatLngBounds dblBounds = createDoubleBounds(bounds);
 
-        CameraUpdate update = CameraUpdateFactory.newLatLngZoom(ll, zoom);
+        CameraUpdate update2 = CameraUpdateFactory.newLatLngBounds(dblBounds, 0);
 
-        mMap.animateCamera(update);
+        mMap.animateCamera(update2);
+
+        double latDiff = (dblBounds.getCenter().latitude - highlightedMarker.getPosition().latitude) / 2;
+
+        double latBtwCenterMarker = highlightedMarker.getPosition().latitude + latDiff;
+
+        CameraUpdate finalUpdate = CameraUpdateFactory.newLatLngZoom(new LatLng(latBtwCenterMarker, dblBounds.getCenter().longitude), zoom);
+
+        mMap.animateCamera(finalUpdate);
     }
 
     protected void zoomToCluster(Marker clusterMarker){

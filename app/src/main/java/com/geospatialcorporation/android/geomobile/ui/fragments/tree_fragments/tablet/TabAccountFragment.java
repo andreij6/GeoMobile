@@ -53,6 +53,8 @@ public class TabAccountFragment extends TabGeoViewFragmentBase implements IAccou
 
         mProcessor = new UserAccountProcessor().GetUserAccountData(getActivity(), this);
 
+        //Toaster(application.getAuthToken());
+
         return v;
     }
 

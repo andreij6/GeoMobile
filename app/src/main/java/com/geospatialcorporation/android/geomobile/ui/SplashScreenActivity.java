@@ -37,12 +37,6 @@ public class SplashScreenActivity extends Activity {
             Log.e(TAG, stacktrace);
         }
 
-        if(DeviceTypeUtil.isTablet(getResources())){
-            setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
-        } else {
-            setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
-        }
-
         mErrorHandler = application.getErrorsComponent().provideErrorHandler();
         mLayerManager = application.getLayerManager();
 

@@ -18,9 +18,6 @@ import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 
-/**
- * Created by andre on 6/25/2015.
- */
 public abstract class PointFeatureMapperBase extends SingleFeatureMapperBase<MarkerOptions> {
 
     BitmapDescriptor mIcon;
@@ -30,6 +27,7 @@ public abstract class PointFeatureMapperBase extends SingleFeatureMapperBase<Mar
         options.position(getLatLng(geometry));
         options.anchor(0.5f, 0.5f);
         options.flat(true);
+
     }
 
     @Override

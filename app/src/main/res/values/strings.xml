@@ -319,4 +319,7 @@
     <string name="back_to_subscriptions">Do you want to go back to the Subscriptions page?</string>
     <string name="more_info">More Info</string>
     <string name="less_info">Less Info</string>
+    <string name="no_internet_connection_title">No Internet Connection</string>
+    <string name="no_internet_connection_message">You don\'t have internet connection</string>
+    <string name="ok">OK</string>
 </resources>

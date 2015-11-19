@@ -134,6 +134,8 @@ public class LayerFragment extends GeoViewFragmentBase implements IContentRefres
 
         handleArguments();
 
+        mOptionsSlider.bringToFront();
+
         return mView;
     }
 

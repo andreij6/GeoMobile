@@ -3,9 +3,11 @@ package com.geospatialcorporation.android.geomobile.ui;
 import android.accounts.AccountManager;
 import android.app.Activity;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentSender;
 import android.os.Bundle;
+import android.support.v7.app.AlertDialog;
 import android.util.Log;
 
 import com.afollestad.materialdialogs.MaterialDialog;
@@ -18,6 +20,7 @@ import com.geospatialcorporation.android.geomobile.library.DI.ErrorHandler.Inter
 import com.geospatialcorporation.android.geomobile.library.DI.SharedPreferences.Interfaces.IGeoSharedPrefs;
 import com.geospatialcorporation.android.geomobile.library.constants.GeoSharedPreferences;
 import com.geospatialcorporation.android.geomobile.library.helpers.ProgressDialogHelper;
+import com.geospatialcorporation.android.geomobile.library.util.ConnectionDetector;
 import com.google.android.gms.common.AccountPicker;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient.ConnectionCallbacks;
@@ -88,14 +91,45 @@ public class GoogleApiActivity extends Activity implements
      * Try to sign in the user.
      */
     public void signIn() {
-        Intent intent = AccountPicker.newChooseAccountIntent(null, null, new String[]{"com.google"},
-                false, null, null, null, null);
+        ConnectionDetector detector = new ConnectionDetector(this);
 
-        startActivityForResult(intent, ACTIVITY_AUTH_REQUEST_CODE);
+        boolean isConnected = detector.isConnectingToInternet();
 
-        if (!mGoogleApiClient.isConnected()) {
-            mGoogleApiClient.connect();
+        if(!isConnected){
+            showAlertDialog(getString(R.string.no_internet_connection_title), getString(R.string.no_internet_connection_message));
+        } else {
+            Intent intent = AccountPicker.newChooseAccountIntent(null, null, new String[]{"com.google"},
+                    false, null, null, null, null);
+
+            startActivityForResult(intent, ACTIVITY_AUTH_REQUEST_CODE);
+
+            if (!mGoogleApiClient.isConnected()) {
+                mGoogleApiClient.connect();
+            }
         }
+    }
+
+    protected void showAlertDialog(String title, String message) {
+        AlertDialog alertDialog = new AlertDialog.Builder(this).create();
+
+        // Setting Dialog Title
+        alertDialog.setTitle(title);
+
+        // Setting Dialog Message
+        alertDialog.setMessage(message);
+
+        // Setting alert dialog icon
+        //alertDialog.setIcon(R.drawable.fail);
+
+        alertDialog.setButton(AlertDialog.BUTTON_POSITIVE, getString(R.string.ok), new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                dialog.cancel();
+            }
+        });
+
+        // Showing Alert Message
+        alertDialog.show();
     }
 
     public void signOut() {

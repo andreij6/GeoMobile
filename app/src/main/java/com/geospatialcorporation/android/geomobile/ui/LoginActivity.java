@@ -6,6 +6,7 @@ import android.annotation.TargetApi;
 import android.app.LoaderManager.LoaderCallbacks;
 import android.content.Context;
 import android.content.CursorLoader;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.Loader;
 import android.content.SharedPreferences;
@@ -15,6 +16,7 @@ import android.os.Build;
 import android.os.Bundle;
 import android.provider.ContactsContract;
 import android.support.annotation.Nullable;
+import android.support.v7.app.AlertDialog;
 import android.text.TextUtils;
 import android.text.method.LinkMovementMethod;
 import android.util.AttributeSet;
@@ -38,6 +40,7 @@ import com.geospatialcorporation.android.geomobile.library.DI.Map.Interfaces.ILa
 import com.geospatialcorporation.android.geomobile.library.DI.Tasks.Interfaces.IUserLoginTask;
 import com.geospatialcorporation.android.geomobile.library.constants.GeoSharedPreferences;
 import com.geospatialcorporation.android.geomobile.library.util.Authentication;
+import com.geospatialcorporation.android.geomobile.library.util.ConnectionDetector;
 import com.geospatialcorporation.android.geomobile.library.util.DeviceTypeUtil;
 import com.geospatialcorporation.android.geomobile.library.util.LoginValidator;
 import com.geospatialcorporation.android.geomobile.ui.Interfaces.IFullExecuter;
@@ -59,6 +62,7 @@ public class LoginActivity extends GoogleApiActivity implements LoaderCallbacks<
     private Authentication mAuthentication;
     private ILayerManager mLayerManager;
     private IUserLoginTask mUserLoginTask;
+    final int RQS_GooglePlayServices = 1;
 
     //region  UI references.
     @Bind(R.id.email) AutoCompleteTextView mEmailView;
@@ -122,10 +126,30 @@ public class LoginActivity extends GoogleApiActivity implements LoaderCallbacks<
         mLayerManager = application.getLayerManager();
         mLayerManager.reset();
 
+        ConnectionDetector detector = new ConnectionDetector(this);
+
+        boolean isConnected = detector.isConnectingToInternet();
+
+        if(!isConnected){
+            showAlertDialog(getString(R.string.no_internet_connection_title), getString(R.string.no_internet_connection_message));
+        }
+
         if (!supportsGooglePlayServices()) {
             // Don't offer G+ sign in if the app's version is too low to support Google Play
             // Services.
             mPlusSignInButton.setVisibility(View.GONE);
+
+            int resultCode = GooglePlayServicesUtil.isGooglePlayServicesAvailable(getApplicationContext());
+
+            if (resultCode == ConnectionResult.SUCCESS){
+                Toast.makeText(getApplicationContext(),
+                        "isGooglePlayServicesAvailable SUCCESS",
+                        Toast.LENGTH_LONG).show();
+            }else{
+                GooglePlayServicesUtil.getErrorDialog(resultCode, this, RQS_GooglePlayServices).show();
+            }
+
+
             return;
         }
 
@@ -156,6 +180,8 @@ public class LoginActivity extends GoogleApiActivity implements LoaderCallbacks<
             }
         });
     }
+
+
 
     @Override
     protected void onStop() {
@@ -234,10 +260,19 @@ public class LoginActivity extends GoogleApiActivity implements LoaderCallbacks<
                 mGeoSharedPrefs.commit();
             }
 
-            getAuthentication().emailLoginAttempt(email, password);
-            // Show a progress spinner, and kick off a background task to
-            // perform the user login attempt.
-            mAnalytics.trackClick(new GoogleAnalyticEvent().LoginAttempt());
+            ConnectionDetector detector = new ConnectionDetector(this);
+
+            boolean isConnected = detector.isConnectingToInternet();
+
+            if(!isConnected){
+                showAlertDialog(getString(R.string.no_internet_connection_title), getString(R.string.no_internet_connection_message));
+            } else {
+
+                getAuthentication().emailLoginAttempt(email, password);
+                // Show a progress spinner, and kick off a background task to
+                // perform the user login attempt.
+                mAnalytics.trackClick(new GoogleAnalyticEvent().LoginAttempt());
+            }
         }
     }
 

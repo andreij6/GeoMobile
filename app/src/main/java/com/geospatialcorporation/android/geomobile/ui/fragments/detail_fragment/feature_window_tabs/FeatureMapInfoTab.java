@@ -44,6 +44,8 @@ public class FeatureMapInfoTab extends FeatureTabBase {
         mLayout = R.layout.fragment_feature_window_mapinfo_tab;
         mAnalytics.trackScreen(new GoogleAnalyticEvent().MapInfoTab());
         View v = super.onCreateView(inflater, container, savedInstanceState);
+
+
         return v;
     }
 

@@ -252,6 +252,7 @@ public class GeoUndergroundMap implements IGeoUndergroundMap, IPostExecuter<List
         });
 
         if(application.getIsTablet()) {
+            mProgressDialogHelper.showProgressDialog();
             preloadLayers();
         }
 
@@ -329,11 +330,11 @@ public class GeoUndergroundMap implements IGeoUndergroundMap, IPostExecuter<List
         }
 
         if(mHighlightedPolygon != null){
-            zoomToFeature(mHighlightedPolygon);
+            polyZoomToFeature(mHighlightedPolygon.getPoints());
         }
 
         if(mHighlightedPolyline != null){
-            zoomToFeature(mHighlightedPolyline);
+            polyZoomToFeature(mHighlightedPolyline.getPoints());
         }
     }
 
@@ -408,7 +409,7 @@ public class GeoUndergroundMap implements IGeoUndergroundMap, IPostExecuter<List
 
         mHighlightedPolygon = mMap.addPolygon(options);
 
-        zoomToFeature(mHighlightedPolygon);
+        polyZoomToFeature(mHighlightedPolygon.getPoints());
     }
 
     public void highlight(Polyline feature){
@@ -426,7 +427,7 @@ public class GeoUndergroundMap implements IGeoUndergroundMap, IPostExecuter<List
 
         mHighlightedPolyline = mMap.addPolyline(options);
 
-        zoomToFeature(mHighlightedPolyline);
+        polyZoomToFeature(mHighlightedPolyline.getPoints());
     }
 
     @Override
@@ -437,32 +438,27 @@ public class GeoUndergroundMap implements IGeoUndergroundMap, IPostExecuter<List
     }
 
     protected void zoomToFeature(Marker highlightedMarker){
-        LatLng position = highlightedMarker.getPosition();
+        float zoom = mMap.getCameraPosition().zoom;
 
-        double lng;
+        CameraUpdate update = CameraUpdateFactory.newLatLng(highlightedMarker.getPosition());
 
-        if(position.longitude > 0){
-            lng = position.longitude - .008;
-        } else {
-            lng = position.longitude + .008;
-        }
+        mMap.moveCamera(update);
 
-        LatLng ll = new LatLng(position.latitude, lng);
+        LatLngBounds bounds = mMap.getProjection().getVisibleRegion().latLngBounds;
 
-        float zoom = 15f;
+        LatLngBounds dblBounds = createDoubleBounds(bounds);
 
-        CameraUpdate update = CameraUpdateFactory.newLatLngZoom(ll, zoom);
+        CameraUpdate update2 = CameraUpdateFactory.newLatLngBounds(dblBounds, 0);
 
-        mMap.animateCamera(update);
-    }
+        mMap.animateCamera(update2);
 
-    protected void zoomToFeature(Polyline polyline){
-        polyZoomToFeature(polyline.getPoints());
-    }
+        double longDiff = (dblBounds.getCenter().longitude - highlightedMarker.getPosition().longitude) / 2;
 
-    protected void zoomToFeature(Polygon polygon){
-        polyZoomToFeature(polygon.getPoints());
+        double lngBtwCenterMarker = highlightedMarker.getPosition().longitude + longDiff;
 
+        CameraUpdate finalUpdate = CameraUpdateFactory.newLatLngZoom(new LatLng(dblBounds.getCenter().latitude, lngBtwCenterMarker), zoom);
+
+        mMap.animateCamera(finalUpdate);
     }
 
     public void polyZoomToFeature(List<LatLng> points){
@@ -766,17 +762,11 @@ public class GeoUndergroundMap implements IGeoUndergroundMap, IPostExecuter<List
 
         return builder.build();
     }
-
-
+    //endregion
 
     @Override
     public void onPostExecute(List<Folder> model) {
         application.setLayerFolders(model);
-
-        if(application.getIsTablet()){
-            application.setMapStateLoaded(true);
-            mProgressDialogHelper.hideProgressDialog();
-        }
 
         List<LegendLayer> llayers = getLayersFromFolders(model);
 
@@ -790,7 +780,13 @@ public class GeoUndergroundMap implements IGeoUndergroundMap, IPostExecuter<List
             layerStyleTask.getActiveStyle(llayer);
         }
 
+        if(application.getIsTablet()){
+            application.setMapStateLoaded(true);
+            mProgressDialogHelper.hideProgressDialog();
+        }
+
         ((MainTabletActivity)application.getGeoMainActivity()).showLayers();
+        ((MainTabletActivity)application.getGeoMainActivity()).closeInfoFragment();
     }
 
     protected List<LegendLayer> getLayersFromFolders(List<Folder> layerFolders) {
@@ -824,8 +820,5 @@ public class GeoUndergroundMap implements IGeoUndergroundMap, IPostExecuter<List
         handleNewLocation(location);
     }
 
-
-
-    //endregion
 
 }
