@@ -52,9 +52,10 @@
         android:icon="@drawable/ic_launcher"
         android:label="@string/app_name"
         android:theme="@style/GeoUndergroundTheme" >
+
         <meta-data
             android:name="com.google.android.maps.v2.API_KEY"
-            android:value="AIzaSyAGQZBaR5kYQApwXL-613tNiQGJwxw5TLg" />
+            android:value="AIzaSyBO8L6_5-kKdAJpiCok3XvuJCrniRajBC4"/>
 
         <!-- On load: Splash -> Login? -> Main -->
         <activity
@@ -64,7 +65,6 @@
             android:theme="@android:style/Theme.Black.NoTitleBar" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>

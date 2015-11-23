@@ -13,7 +13,7 @@ android {
         release {
             keyAlias 'GeoRelease'
             keyPassword '99bottleOBeer'
-            storeFile file('android.jks')
+            storeFile file('georelease.jks')
             storePassword '87beerBottlesOLatern'
         }
     }
