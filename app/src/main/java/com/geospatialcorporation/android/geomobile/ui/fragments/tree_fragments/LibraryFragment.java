@@ -9,6 +9,7 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -231,51 +232,59 @@ public class LibraryFragment extends GeoViewFragmentBase
 
     @Override
     public void onPostExecute(Folder model) {
-        mCurrentFolder = model;
+        try {
+            mCurrentFolder = model;
 
-        mPanelManager.hide();
+            mPanelManager.hide();
 
-        if(mCurrentFolder.getAccessLevel() != AccessLevelCodes.ReadOnly){
-            mOptionsSlider.setVisibility(View.VISIBLE);
+            if (mCurrentFolder.getAccessLevel() != AccessLevelCodes.ReadOnly) {
+                mOptionsSlider.setVisibility(View.VISIBLE);
+            }
+
+            if (mCurrentFolder.getParent() != null) {
+                mNavBars.setVisibility(View.GONE);
+                mNavLogo.setImageDrawable(ContextCompat.getDrawable(mContext, R.drawable.ic_chevron_left_grey600_18dp));
+                mNavLogo.setPadding(-12, 0, 0, 0);
+
+                mNavBars.setOnClickListener(navigateUpTree);
+                mNavLogo.setOnClickListener(navigateUpTree);
+                mParentFolder.setOnClickListener(navigateUpTree);
+
+                mParentFolder.setVisibility(View.VISIBLE);
+                mParentFolder.setText(mCurrentFolder.getParent().getProperName());
+
+            } else {
+                mNavBars.setImageDrawable(ContextCompat.getDrawable(mContext, R.drawable.ic_nav_orange));
+
+                mNavBars.setOnClickListener(showNavigation);
+                mNavLogo.setOnClickListener(showNavigation);
+
+                mNavLogo.setImageDrawable(ContextCompat.getDrawable(mContext, R.drawable.ic_g_logo));
+                mNavBars.setVisibility(View.VISIBLE);
+            }
+
+            mTitle.setText(mCurrentFolder.getProperName());
+
+            mInfo.setVisibility(View.VISIBLE);
+            mNavLogo.setVisibility(View.VISIBLE);
+            mTitle.setVisibility(View.VISIBLE);
+
+            mHelper = new DataHelper();
+
+            List<ListItem> data = mHelper.CombineLibraryItems(mCurrentFolder.getDocuments(), mCurrentFolder.getFolders(), mCurrentFolder.getParent());
+
+            new LibraryTreeSectionBuilder(mContext, getFragmentManager(), mCurrentFolder.getParent(), mPanelManager)
+                    .BuildAdapter(data, mCurrentFolder.getFolders().size())
+                    .setRecycler(mRecyclerView);
+
+
+        } catch (NullPointerException nullpointer){
+            Log.d(TAG, nullpointer.getMessage());
+        } catch (Exception e){
+            Log.d(TAG, e.getMessage());
+        } finally {
+            mProgressHelper.hideProgressDialog();
         }
-
-        if(mCurrentFolder.getParent() != null){
-            mNavBars.setVisibility(View.GONE);
-            mNavLogo.setImageDrawable(ContextCompat.getDrawable(mContext, R.drawable.ic_chevron_left_grey600_18dp));
-            mNavLogo.setPadding(-12, 0, 0, 0);
-
-            mNavBars.setOnClickListener(navigateUpTree);
-            mNavLogo.setOnClickListener(navigateUpTree);
-            mParentFolder.setOnClickListener(navigateUpTree);
-
-            mParentFolder.setVisibility(View.VISIBLE);
-            mParentFolder.setText(mCurrentFolder.getParent().getProperName());
-
-        } else {
-            mNavBars.setImageDrawable(ContextCompat.getDrawable(mContext, R.drawable.ic_nav_orange));
-
-            mNavBars.setOnClickListener(showNavigation);
-            mNavLogo.setOnClickListener(showNavigation);
-
-            mNavLogo.setImageDrawable(ContextCompat.getDrawable(mContext, R.drawable.ic_g_logo));
-            mNavBars.setVisibility(View.VISIBLE);
-        }
-
-        mTitle.setText(mCurrentFolder.getProperName());
-
-        mInfo.setVisibility(View.VISIBLE);
-        mNavLogo.setVisibility(View.VISIBLE);
-        mTitle.setVisibility(View.VISIBLE);
-
-        mHelper = new DataHelper();
-
-        List<ListItem> data = mHelper.CombineLibraryItems(mCurrentFolder.getDocuments(), mCurrentFolder.getFolders(), mCurrentFolder.getParent());
-
-        new LibraryTreeSectionBuilder(mContext, getFragmentManager(), mCurrentFolder.getParent(), mPanelManager)
-                .BuildAdapter(data,  mCurrentFolder.getFolders().size())
-                .setRecycler(mRecyclerView);
-
-        mProgressHelper.hideProgressDialog();
     }
 
     public void closePanel() {

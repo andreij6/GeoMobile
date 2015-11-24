@@ -10,6 +10,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.Loader;
 import android.content.SharedPreferences;
+import android.content.res.Configuration;
 import android.database.Cursor;
 import android.net.Uri;
 import android.os.Build;
@@ -108,6 +109,8 @@ public class LoginActivity extends GoogleApiActivity implements LoaderCallbacks<
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
+        determineOrientation();
+
         if (hasAuthToken()) {
             setContentView(R.layout.activity_login);
             ButterKnife.bind(this);
@@ -181,6 +184,15 @@ public class LoginActivity extends GoogleApiActivity implements LoaderCallbacks<
         });
     }
 
+    public void determineOrientation(){
+        int display_mode = getResources().getConfiguration().orientation;
+
+        if (display_mode == Configuration.ORIENTATION_PORTRAIT) {
+            Toast.makeText(this, "Is Portrait", Toast.LENGTH_LONG).show();
+        } else {
+            Toast.makeText(this, "Is Landscape", Toast.LENGTH_LONG).show();
+        }
+    }
 
 
     @Override
@@ -354,13 +366,7 @@ public class LoginActivity extends GoogleApiActivity implements LoaderCallbacks<
         showProgress(false);
 
         if (success) {
-            Intent mainActivityIntent = null;
-
-            if(DeviceTypeUtil.isTablet(getResources())) {
-                mainActivityIntent = new Intent(this, MainTabletActivity.class);
-            } else {
-                mainActivityIntent = new Intent(this, MainActivity.class);
-            }
+            Intent mainActivityIntent = new Intent(this, MainActivity.class);
 
             String authtoken = (application.getAuthToken() == null) ? "fakeAuthToken" : application.getAuthToken();
 

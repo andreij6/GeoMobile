@@ -78,11 +78,9 @@ public class AuthTokenRetriever {
                 try {
                     mLoginService.getCurrentClient();
 
-                    if(DeviceTypeUtil.isTablet(mContext.getResources())) {
-                        mContext.startActivity(new Intent(mContext, MainTabletActivity.class));
-                    } else {
-                        mContext.startActivity(new Intent(mContext, MainActivity.class));
-                    }
+
+                    mContext.startActivity(new Intent(mContext, MainActivity.class));
+
                 } catch (RetrofitError e) {
                     if (e.getResponse() != null) {
                         Log.d(TAG, Integer.toString(e.getResponse().getStatus()));
@@ -125,11 +123,9 @@ public class AuthTokenRetriever {
 
                     application.setGeoSubscription(subscription);
 
-                    if(DeviceTypeUtil.isTablet(mContext.getResources())) {
-                        mContext.startActivity(new Intent(mContext, MainTabletActivity.class));
-                    } else {
-                        mContext.startActivity(new Intent(mContext, MainActivity.class));
-                    }
+
+                    mContext.startActivity(new Intent(mContext, MainActivity.class));
+
                     mContext.finish();
                 } catch (RetrofitError e) {
                     if (e.getResponse() != null) {

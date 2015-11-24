@@ -2,7 +2,6 @@ package com.geospatialcorporation.android.geomobile.ui.fragments.panel_fragments
 
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentTabHost;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -10,6 +9,7 @@ import android.widget.TextView;
 
 import com.geospatialcorporation.android.geomobile.R;
 import com.geospatialcorporation.android.geomobile.application;
+import com.geospatialcorporation.android.geomobile.library.FragmentTabHost;
 import com.geospatialcorporation.android.geomobile.library.constants.GeoPanel;
 import com.geospatialcorporation.android.geomobile.library.panelmanager.PanelManager;
 import com.geospatialcorporation.android.geomobile.library.services.FeatureWindowCommons.FeatureWindowCommon;
@@ -57,19 +57,26 @@ public class FeatureWindowPanelFragment extends GeoViewFragmentBase implements I
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstance){
-        View view = inflater.inflate(R.layout.fragment_panel_featurewindow, container, false);
-        ButterKnife.bind(this, view);
+        try {
+            View view = inflater.inflate(R.layout.fragment_panel_featurewindow, container, false);
+            ButterKnife.bind(this, view);
 
-        mPanelManager = new PanelManager(GeoPanel.MAP);
-        mPanelManager.touch(true);
+            mPanelManager = new PanelManager(GeoPanel.MAP);
+            mPanelManager.touch(true);
 
-        mResponse = mCommon.handleArguments(getArguments());
-        mCommon.setFeatureName(mResponse, FeatureName);
-        mTabHost.setup(getActivity(), getChildFragmentManager(), android.R.id.tabcontent);
+            mResponse = mCommon.handleArguments(getArguments());
+            mCommon.setFeatureName(mResponse, FeatureName);
 
-        mCommon.tabHost(mTabHost, getResources(), getArguments(), application.getCurrentFeatureWindowTab(), mLayerId);
+            //mTabHost = new FragmentTabHost(getActivity());
 
-        return view;
+            mTabHost.setup(getActivity(), getChildFragmentManager(), android.R.id.tabcontent);
+
+            mCommon.tabHost(mTabHost, getResources(), getArguments(), application.getCurrentFeatureWindowTab(), mLayerId);
+
+            return view;
+        } catch (Exception e){
+            return null;
+        }
     }
 
 

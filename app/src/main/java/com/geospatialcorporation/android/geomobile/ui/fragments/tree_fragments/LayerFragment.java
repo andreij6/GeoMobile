@@ -7,6 +7,7 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -160,49 +161,57 @@ public class LayerFragment extends GeoViewFragmentBase implements IContentRefres
 
     @Override
     public void onPostExecute(Folder currentFolder) {
-        mCurrentFolder = currentFolder;
+        try {
+            mCurrentFolder = currentFolder;
 
-        if(mCurrentFolder.getAccessLevel() != AccessLevelCodes.ReadOnly){
-            mOptionsSlider.setVisibility(View.VISIBLE);
+            if (mCurrentFolder.getAccessLevel() != AccessLevelCodes.ReadOnly) {
+                mOptionsSlider.setVisibility(View.VISIBLE);
+            }
+
+            mPanelManager.hide();
+
+            if (currentFolder == null) {
+                return;
+            }
+
+            if (currentFolder.getParent() != null) {
+                mNavLogo.setImageDrawable(ContextCompat.getDrawable(mContext, R.drawable.ic_chevron_left_grey600_18dp));
+                mNavLogo.setPadding(-12, 0, 0, 0);
+
+                mNavBars.setOnClickListener(navigateUpTree);
+                mNavLogo.setOnClickListener(navigateUpTree);
+                mBack.setOnClickListener(navigateUpTree);
+
+                mBack.setVisibility(View.VISIBLE);
+
+            } else {
+                mNavBars.setImageDrawable(ContextCompat.getDrawable(mContext, R.drawable.ic_nav_orange));
+
+                mNavBars.setOnClickListener(showNavigation);
+                mNavLogo.setOnClickListener(showNavigation);
+
+                mNavLogo.setImageDrawable(ContextCompat.getDrawable(mContext, R.drawable.ic_g_logo));
+                mNavBars.setVisibility(View.VISIBLE);
+            }
+
+            mNavLogo.setVisibility(View.VISIBLE);
+            mTitle.setVisibility(View.VISIBLE);
+            mTitle.setText(mCurrentFolder.getProperName());
+
+            mDataHelper = new DataHelper();
+
+            List<ListItem> data = mDataHelper.CombineLayerItems(currentFolder.getLayers(), currentFolder.getFolders(), currentFolder.getParent());
+
+            new LayerTreeSectionBuilder(mContext, getFragmentManager(), currentFolder.getParent(), mPanelManager)
+                    .BuildAdapter(data, currentFolder.getFolders().size())
+                    .setRecycler(mRecycler);
+        } catch (NullPointerException nullpointer){
+            Log.d(TAG, nullpointer.getMessage());
+        } catch (Exception e){
+            Log.d(TAG, e.getMessage());
+        } finally {
+            mProgressDialogHelper.hideProgressDialog();
         }
-
-        mPanelManager.hide();
-
-        if(currentFolder == null) { return; }
-
-        if (currentFolder.getParent() != null) {
-            mNavLogo.setImageDrawable(ContextCompat.getDrawable(mContext, R.drawable.ic_chevron_left_grey600_18dp));
-            mNavLogo.setPadding(-12, 0, 0, 0);
-
-            mNavBars.setOnClickListener(navigateUpTree);
-            mNavLogo.setOnClickListener(navigateUpTree);
-            mBack.setOnClickListener(navigateUpTree);
-
-            mBack.setVisibility(View.VISIBLE);
-
-        } else {
-            mNavBars.setImageDrawable(ContextCompat.getDrawable(mContext,R.drawable.ic_nav_orange));
-
-            mNavBars.setOnClickListener(showNavigation);
-            mNavLogo.setOnClickListener(showNavigation);
-
-            mNavLogo.setImageDrawable(ContextCompat.getDrawable(mContext,R.drawable.ic_g_logo));
-            mNavBars.setVisibility(View.VISIBLE);
-        }
-
-        mNavLogo.setVisibility(View.VISIBLE);
-        mTitle.setVisibility(View.VISIBLE);
-        mTitle.setText(mCurrentFolder.getProperName());
-
-        mDataHelper = new DataHelper();
-
-        List<ListItem> data = mDataHelper.CombineLayerItems(currentFolder.getLayers(), currentFolder.getFolders(), currentFolder.getParent());
-
-        mProgressDialogHelper.hideProgressDialog();
-
-        new LayerTreeSectionBuilder(mContext, getFragmentManager(), currentFolder.getParent(), mPanelManager)
-                .BuildAdapter(data, currentFolder.getFolders().size())
-                .setRecycler(mRecycler);
     }
 
     protected View.OnClickListener showNavigation = new View.OnClickListener() {

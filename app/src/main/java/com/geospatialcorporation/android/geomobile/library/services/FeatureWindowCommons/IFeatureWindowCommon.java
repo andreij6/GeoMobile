@@ -2,11 +2,10 @@ package com.geospatialcorporation.android.geomobile.library.services.FeatureWind
 
 import android.content.res.Resources;
 import android.os.Bundle;
-import android.support.v4.app.FragmentTabHost;
 import android.widget.TextView;
 
+import com.geospatialcorporation.android.geomobile.library.FragmentTabHost;
 import com.geospatialcorporation.android.geomobile.models.Query.map.response.featurewindow.FeatureQueryResponse;
-import com.geospatialcorporation.android.geomobile.ui.Interfaces.IPanelStateReactor;
 
 public interface IFeatureWindowCommon {
     FeatureQueryResponse handleArguments(Bundle arguments);

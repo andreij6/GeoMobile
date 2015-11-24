@@ -19,7 +19,7 @@ import com.sothree.slidinguppanel.SlidingUpPanelLayout;
 
 public abstract class GeoSlidingPanelBase {
 
-    protected  SlidingUpPanelLayout mPanel;
+    protected SlidingUpPanelLayout mPanel;
     protected Context mContext;
     protected Boolean mIsOpen;
 
@@ -58,13 +58,7 @@ public abstract class GeoSlidingPanelBase {
 
             @Override
             public void onPanelAnchored(View view) {
-                FragmentManager fragmentManager;
-
-                if (DeviceTypeUtil.isTablet(mContext.getResources())) {
-                    fragmentManager = ((MainTabletActivity) mContext).getSupportFragmentManager();
-                } else {
-                    fragmentManager = ((MainActivity) mContext).getSupportFragmentManager();
-                }
+                FragmentManager fragmentManager = ((MainActivity) mContext).getSupportFragmentManager();
 
                 Fragment sliderFragment = fragmentManager.findFragmentById(R.id.slider_content);
 
@@ -81,13 +75,7 @@ public abstract class GeoSlidingPanelBase {
     }
 
     protected void expandedBehaviour() {
-        FragmentManager fragmentManager;
-
-        if(DeviceTypeUtil.isTablet(mContext.getResources())){
-            fragmentManager = ((MainTabletActivity)mContext).getSupportFragmentManager();
-        } else {
-            fragmentManager = ((MainActivity) mContext).getSupportFragmentManager();
-        }
+        FragmentManager fragmentManager = ((MainActivity) mContext).getSupportFragmentManager();
 
         Fragment sliderFragment = fragmentManager.findFragmentById(R.id.slider_content);
 
@@ -106,13 +94,7 @@ public abstract class GeoSlidingPanelBase {
     protected void completeDefaultCollapsedUI(Fragment collapsedFragment){
         Bundle args = getArguments();
         collapsedFragment.setArguments(args);
-        FragmentManager fragmentManager;
-
-        if(DeviceTypeUtil.isTablet(mContext.getResources())){
-            fragmentManager = ((MainTabletActivity)mContext).getSupportFragmentManager();
-        } else {
-            fragmentManager = ((MainActivity) mContext).getSupportFragmentManager();
-        }
+        FragmentManager fragmentManager = ((MainActivity) mContext).getSupportFragmentManager();
 
         fragmentManager.beginTransaction()
                 .replace(R.id.slider_content, collapsedFragment)
@@ -142,9 +124,16 @@ public abstract class GeoSlidingPanelBase {
     }
 
     public void hide() {
-        if(getPanelState() != SlidingUpPanelLayout.PanelState.HIDDEN) {
-            mPanel.setPanelState(SlidingUpPanelLayout.PanelState.HIDDEN);
+        if(!getPanelState().equals(SlidingUpPanelLayout.PanelState.HIDDEN)) {
             mPanel.setPanelHeight(0);
+            mPanel.setPanelState(SlidingUpPanelLayout.PanelState.HIDDEN);
+
+        }
+
+        if(!getPanelState().equals(SlidingUpPanelLayout.PanelState.HIDDEN)) {
+            mPanel.setPanelHeight(0);
+            mPanel.setPanelState(SlidingUpPanelLayout.PanelState.HIDDEN);
+
         }
     }
 
@@ -153,11 +142,7 @@ public abstract class GeoSlidingPanelBase {
     }
 
     protected Bundle getArguments() {
-        if(DeviceTypeUtil.isTablet(mContext.getResources())){
-            return (((MainTabletActivity) mContext).getContentFragment()).getArguments();
-        } else {
-            return (((MainActivity) mContext).getContentFragment()).getArguments();
-        }
+        return (((MainActivity) mContext).getContentFragment()).getArguments();
     }
 
     public void halfAnchor() {

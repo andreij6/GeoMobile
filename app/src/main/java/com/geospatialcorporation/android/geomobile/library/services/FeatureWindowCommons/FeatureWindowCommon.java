@@ -2,18 +2,17 @@ package com.geospatialcorporation.android.geomobile.library.services.FeatureWind
 
 import android.content.res.Resources;
 import android.os.Bundle;
-import android.support.v4.app.FragmentTabHost;
 import android.util.Log;
 import android.widget.TextView;
 
 import com.geospatialcorporation.android.geomobile.R;
 import com.geospatialcorporation.android.geomobile.application;
+import com.geospatialcorporation.android.geomobile.library.FragmentTabHost;
 import com.geospatialcorporation.android.geomobile.library.constants.PluginCodes;
 import com.geospatialcorporation.android.geomobile.library.util.TabHostUtil;
 import com.geospatialcorporation.android.geomobile.models.Layers.Layer;
 import com.geospatialcorporation.android.geomobile.models.Query.map.response.featurewindow.FeatureQueryResponse;
 import com.geospatialcorporation.android.geomobile.models.Query.map.response.featurewindow.ParcelableFeatureQueryResponse;
-import com.geospatialcorporation.android.geomobile.ui.Interfaces.IPanelStateReactor;
 import com.geospatialcorporation.android.geomobile.ui.fragments.detail_fragment.feature_window_tabs.FeatureAttributesTab;
 import com.geospatialcorporation.android.geomobile.ui.fragments.detail_fragment.feature_window_tabs.FeatureDocumentsTab;
 import com.geospatialcorporation.android.geomobile.ui.fragments.detail_fragment.feature_window_tabs.FeatureMapInfoTab;

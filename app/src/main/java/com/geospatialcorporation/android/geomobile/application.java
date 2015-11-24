@@ -133,6 +133,7 @@ public class application extends applicationDIBase {
              }
     };
     private static boolean editingLayerMode;
+    private static Integer clientCode;
 
 
     //region stuff

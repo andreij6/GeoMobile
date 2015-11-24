@@ -21,6 +21,7 @@ import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentSender;
+import android.content.res.Configuration;
 import android.graphics.Point;
 import android.graphics.drawable.AnimationDrawable;
 import android.location.Location;
@@ -44,6 +45,7 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.geospatialcorporation.android.geomobile.R;
 import com.geospatialcorporation.android.geomobile.application;
@@ -406,8 +408,6 @@ public class GoogleMapFragment extends GeoViewFragmentBase implements
         application.setMapFragment(this);
         application.setFeatureWindowCtrl(this);
 
-        LifeCycleLogger("onCreate");
-
         mEditor = null;
 
         UsingClustering = false;
@@ -416,16 +416,13 @@ public class GoogleMapFragment extends GeoViewFragmentBase implements
 
         mHighlightedPolygons = new ArrayList<>();
         mHighlightedPolylines = new ArrayList<>();
-
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         setHasOptionsMenu(true);
         View rootView = inflater.inflate(R.layout.fragment_map, container, false);
-
-        LifeCycleLogger("onCreateView");
-
+        Toaster("onCreateView");
         ButterKnife.bind(this, rootView);
 
         ActionBar actionBar = ((MainActivity)getActivity()).getSupportActionBar();
@@ -438,8 +435,6 @@ public class GoogleMapFragment extends GeoViewFragmentBase implements
         mPanelManager = new PanelManager(GeoPanel.MAP);
         mPanelManager.setup();
         mPanelManager.hide();
-
-        //mPanelManager = new PanelManager.Builder().hide().build();
 
         mLayerManager = application.getMapComponent().provideLayerManager();
 
@@ -478,9 +473,18 @@ public class GoogleMapFragment extends GeoViewFragmentBase implements
     }
 
     @Override
+    public void onSaveInstanceState(Bundle outState) {
+        if(mMapView != null) {
+            final Bundle mapViewSaveState = new Bundle(outState);
+            mMapView.onSaveInstanceState(mapViewSaveState);
+            outState.putBundle("mapViewSaveState", mapViewSaveState);
+        }
+        super.onSaveInstanceState(outState);
+    }
+
+    @Override
     public void onDestroy() {
         super.onDestroy();
-        LifeCycleLogger("onDestroy");
         mLayerManager.clearVisibleLayers();
         if(mMapView != null) {
             mMapView.onDestroy();
@@ -503,13 +507,16 @@ public class GoogleMapFragment extends GeoViewFragmentBase implements
     public void onStop(){
         super.onStop();
         LifeCycleLogger("onStop");
+        Toaster("onStop");
+        mPanelManager.hide();
         saveMapState();
     }
 
     @Override
     public void onDestroyView(){
+        mPanelManager.hide();
         super.onDestroyView();
-        LifeCycleLogger("onDestroyView");
+        Toaster("onDestroyView");
         mLayerManager.clearVisibleLayers();
         LifeCycleLogger("Done Clearing Layers");
 
@@ -968,7 +975,8 @@ public class GoogleMapFragment extends GeoViewFragmentBase implements
     }
 
     protected void initializeGoogleMap(Bundle savedInstanceState) {
-        mMapView.onCreate(savedInstanceState);
+        final Bundle mapViewSavedInstanceState = savedInstanceState != null ? savedInstanceState.getBundle("mapViewSaveState") : null;
+        mMapView.onCreate(mapViewSavedInstanceState);
 
         mMapView.getMapAsync(new OnMapReadyCallback() {
             @Override

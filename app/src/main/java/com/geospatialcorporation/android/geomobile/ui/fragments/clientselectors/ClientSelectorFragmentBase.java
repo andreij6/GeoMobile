@@ -1,4 +1,4 @@
-package com.geospatialcorporation.android.geomobile.ui.fragments;
+package com.geospatialcorporation.android.geomobile.ui.fragments.clientselectors;
 
 import android.content.Context;
 import android.os.Bundle;
@@ -32,10 +32,10 @@ import java.util.List;
 import butterknife.Bind;
 import butterknife.ButterKnife;
 
-public class ClientSelectorFragment extends Fragment
+public abstract class ClientSelectorFragmentBase extends Fragment
         implements IContentRefresher, IPostExecuter<List<Subscription>>
 {
-    private static final String TAG = ClientSelectorFragment.class.getName();
+    private static final String TAG = ClientSelectorFragmentBase.class.getName();
 
     int mClientTypeCode;
     int mSSPClientTypeCode;

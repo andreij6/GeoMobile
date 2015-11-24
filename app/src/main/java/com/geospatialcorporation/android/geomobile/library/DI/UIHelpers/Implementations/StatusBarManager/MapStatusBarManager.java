@@ -10,10 +10,14 @@ public class MapStatusBarManager extends StatusBarManagerBase {
     private static final String TAG = MapStatusBarManager.class.getSimpleName();
 
     protected IMapStatusCtrl getMapStatusCtrl() {
-        if(application.getIsTablet()){
-            return ((MainTabletActivity)(application.getGeoMainActivity())).getMapFragment();
-        }
+        try {
+            if (application.getIsTablet()) {
+                return ((MainTabletActivity) (application.getGeoMainActivity())).getMapFragment();
+            }
 
-        return (GoogleMapFragment)application.getMainActivity().getContentFragment();
+            return (GoogleMapFragment) application.getMainActivity().getContentFragment();
+        } catch (NullPointerException n){
+            return null;
+        }
     }
 }

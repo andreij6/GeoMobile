@@ -7,9 +7,6 @@ import com.geospatialcorporation.android.geomobile.ui.fragments.GoogleMapFragmen
 import com.geospatialcorporation.android.geomobile.ui.fragments.panel_fragments.map_fragment_panels.MapDefaultCollapsedPanelFragment;
 import com.sothree.slidinguppanel.SlidingUpPanelLayout;
 
-/**
- * Created by andre on 6/19/2015.
- */
 public class MapSlidingPanel extends GeoSlidingPanelBase {
 
     GoogleMapFragment mMapFragment;

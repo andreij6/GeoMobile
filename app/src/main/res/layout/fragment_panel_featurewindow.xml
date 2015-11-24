@@ -60,7 +60,7 @@
 
     </LinearLayout>
 
-    <android.support.v4.app.FragmentTabHost
+    <com.geospatialcorporation.android.geomobile.library.FragmentTabHost
          android:layout_width="match_parent"
          android:layout_height="match_parent"
          android:id="@+id/tabHost"
@@ -85,6 +85,6 @@
              </FrameLayout>
 
          </LinearLayout>
-     </android.support.v4.app.FragmentTabHost>
+     </com.geospatialcorporation.android.geomobile.library.FragmentTabHost>
 
 </RelativeLayout>

@@ -229,6 +229,7 @@ public abstract class StatusBarManagerBase implements IMapStatusBarManager{
     protected void setProperties() throws Exception {
         //mMapFragment = (GoogleMapFragment)application.getMainActivity().getContentFragment();
         IMapStatusCtrl mapFragment = getMapStatusCtrl();
+
         if(mapFragment != null) {
             mLoadingBar = (LinearLayout)mapFragment.getLoadingBar();
             mMessage = mapFragment.getStatusBarMessage();

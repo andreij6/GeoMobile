@@ -93,11 +93,8 @@ public class ClientAdapter extends GeoRecyclerAdapterBase<ClientAdapter.Holder, 
         protected void onPostExecute(Object nothing) {
             application.setGeoSubscription(mSelectedSubscription);
 
-            if(DeviceTypeUtil.isTablet(mContext.getResources())) {
-                mContext.startActivity(new Intent(mContext, MainTabletActivity.class));
-            } else {
-                mContext.startActivity(new Intent(mContext, MainActivity.class));
-            }
+            mContext.startActivity(new Intent(mContext, MainActivity.class));
+
             ((SubscriptionSelectorActivity)mContext).finish();
 
         }

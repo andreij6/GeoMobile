@@ -77,7 +77,7 @@ public class TabletFeatureWindowPanelFragment extends TabGeoViewFragmentBase {
 
         mTabHost.setup(getActivity(), getChildFragmentManager(), android.R.id.tabcontent);
 
-        mCommon.tabHost(mTabHost, getResources(), getArguments(), application.getCurrentFeatureWindowTab(), mLayerId);
+        //mCommon.tabHost(mTabHost, getResources(), getArguments(), application.getCurrentFeatureWindowTab(), mLayerId);
 
         return v;
     }

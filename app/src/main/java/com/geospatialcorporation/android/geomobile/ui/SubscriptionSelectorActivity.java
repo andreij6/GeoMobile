@@ -1,14 +1,13 @@
 package com.geospatialcorporation.android.geomobile.ui;
 
 import android.content.Intent;
-import android.content.pm.ActivityInfo;
+import android.os.PersistableBundle;
 import android.support.design.widget.TabLayout;
 import android.os.Bundle;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.Toast;
@@ -17,7 +16,6 @@ import com.geospatialcorporation.android.geomobile.R;
 import com.geospatialcorporation.android.geomobile.application;
 import com.geospatialcorporation.android.geomobile.library.DI.ErrorHandler.Interfaces.IGeoErrorHandler;
 import com.geospatialcorporation.android.geomobile.library.helpers.ZoomOutPageTransformer;
-import com.geospatialcorporation.android.geomobile.library.util.DeviceTypeUtil;
 import com.geospatialcorporation.android.geomobile.ui.adapters.ClientSelectorSectionsPagerAdapter;
 
 public class SubscriptionSelectorActivity extends AppCompatActivity implements ActionBar.TabListener {
@@ -89,7 +87,6 @@ public class SubscriptionSelectorActivity extends AppCompatActivity implements A
         });
 
     }
-
 
 
     @Override

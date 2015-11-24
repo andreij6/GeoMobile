@@ -1,0 +1,256 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                xmlns:fab="http://schemas.android.com/apk/res-auto"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+
+    <com.sothree.slidinguppanel.SlidingUpPanelLayout
+        xmlns:sothree="http://schemas.android.com/apk/res-auto"
+        android:id="@+id/sliding_layout"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:gravity="bottom"
+        sothree:umanoPanelHeight="68dp"
+        sothree:umanoShadowHeight="4dp"
+        sothree:umanoFadeColor="@android:color/transparent"
+        android:background="@color/primary_light"
+        >
+
+        <!--android:layout_marginTop="?attr/actionBarSize"-->
+
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            >
+
+            <com.google.android.gms.maps.MapView
+                xmlns:android="http://schemas.android.com/apk/res/android"
+                xmlns:map="http://schemas.android.com/apk/res-auto"
+                android:id="@+id/map"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                map:cameraTargetLat="38.3448001"
+                map:cameraTargetLng="-96.5878515"
+                map:cameraZoom="3" />
+
+            <!-- Action Bar -->
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="56dp"
+                android:background="#99FFFFFF"
+                android:layout_gravity="center_horizontal"
+                android:layout_centerHorizontal="true"
+                android:id="@+id/map_actionbar">
+
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:id="@+id/showNavIV1"
+                    android:layout_gravity="left"
+                    android:src="@drawable/ic_nav_orange"
+                    android:paddingLeft="-10dp"
+                    android:layout_alignParentStart="true"
+                    android:paddingRight="-10dp"/>
+
+                <ImageView
+                    android:layout_width="48dp"
+                    android:layout_height="match_parent"
+                    android:id="@+id/showNavIV2"
+                    android:src="@drawable/ic_g_logo"
+                    android:layout_gravity="center_vertical"
+                    android:layout_alignParentTop="true"
+                    android:layout_toEndOf="@+id/showNavIV1"
+                    android:paddingLeft="-10dp"/>
+
+                <ImageView
+                    android:layout_width="36dp"
+                    android:layout_height="match_parent"
+                    android:id="@+id/optionsIV"
+                    android:src="@drawable/ic_plus_circle_outline_grey600_36dp"
+                    android:layout_gravity="center_vertical"
+                    android:layout_alignEnd="@+id/showLayersIV"
+                    android:layout_marginRight="48dp"
+                    android:visibility="gone"/>
+
+                <ImageView
+                    android:layout_width="36dp"
+                    android:layout_height="match_parent"
+                    android:id="@+id/showLayersIV"
+                    android:src="@drawable/ic_layers_grey600_36dp"
+                    android:layout_gravity="center_vertical"
+                    android:layout_alignParentEnd="true"
+                    android:layout_marginRight="8dp"/>
+
+            </RelativeLayout>
+            <!-- End Action Bar -->
+
+            <!-- Editing Action Bar -->
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="56dp"
+                android:background="#99FFFFFF"
+                android:layout_gravity="center_horizontal"
+                android:layout_centerHorizontal="true"
+                android:id="@+id/edit_actionBar"
+                android:visibility="gone">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textAppearance="?android:attr/textAppearanceMedium"
+                    android:text="Editing"
+                    android:id="@+id/editLayerTitle"
+                    android:textStyle="bold"
+                    android:layout_centerVertical="true"
+                    android:layout_alignParentStart="true"
+                    android:layout_marginStart="45dp"/>
+
+                <ImageView
+                    android:layout_width="36dp"
+                    android:layout_height="match_parent"
+                    android:id="@+id/cancel"
+                    android:src="@drawable/ic_close_circle_grey600_36dp"
+                    android:layout_gravity="center_vertical"
+                    android:layout_alignEnd="@+id/save"
+                    android:layout_marginRight="48dp"/>
+
+                <ImageView
+                    android:layout_width="36dp"
+                    android:layout_height="match_parent"
+                    android:id="@+id/save"
+                    android:src="@drawable/ic_content_save_grey600_36dp"
+                    android:layout_gravity="center_vertical"
+                    android:layout_alignParentEnd="true"
+                    android:layout_marginRight="8dp"/>
+
+            </RelativeLayout>
+            <!-- End Editing Action Bar -->
+
+            <!-- Feature Window Status Bar-->
+            <LinearLayout
+                android:orientation="horizontal"
+                android:layout_width="match_parent"
+                android:layout_height="18dp"
+                android:background="@color/accent"
+                android:layout_gravity="center_horizontal"
+                android:layout_centerHorizontal="true"
+                android:id="@+id/loadingBar"
+                android:layout_below="@+id/map_actionbar"
+                android:visibility="gone">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:text="Loading..."
+                    android:gravity="center"
+                    android:id="@+id/loadingMessage"
+                    android:textSize="12sp"
+                    android:layout_weight="4"
+                    android:textColor="@color/white"
+                    android:textStyle="bold"
+                    />
+
+            </LinearLayout>
+            <!-- End Feature Window Status Bar -->
+
+            <!-- Loading Animation Start -->
+            <RelativeLayout
+                android:id="@+id/fourSquareContainerStart"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/map_actionbar"
+                >
+
+                <ImageView
+                    android:id="@+id/fourSquareStart"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:adjustViewBounds="true"
+                    android:background="@null"
+                    android:contentDescription="@null"
+                    android:src="@anim/anim_loader_grey"
+                    android:visibility="gone"/>
+
+                <ImageView
+                    android:id="@+id/fourSquareFinish"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:adjustViewBounds="true"
+                    android:background="@null"
+                    android:contentDescription="@null"
+                    android:src="@anim/anim_loader_grey_finish"
+                    android:visibility="gone"/>
+
+            </RelativeLayout>
+            <!-- End Loading Animation Start -->
+
+            <com.melnykov.fab.FloatingActionButton
+                android:id="@+id/undoBtn"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/ic_undo_white_24dp"
+                fab:fab_colorNormal="@color/accent_blue"
+                fab:fab_colorPressed="@color/body_bkg"
+                fab:fab_colorRipple="@color/body_bkg"
+                android:layout_alignParentTop="true"
+                android:layout_alignParentStart="true"
+                android:layout_marginTop="82dp"
+                android:layout_marginRight="25dp"
+                android:layout_marginStart="25dp"
+                android:visibility="gone"/>
+
+            <com.melnykov.fab.FloatingActionButton
+                android:id="@+id/redoBtn"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/ic_redo_white_24dp"
+                fab:fab_colorNormal="@color/accent_blue"
+                fab:fab_colorPressed="@color/body_bkg"
+                fab:fab_colorRipple="@color/body_bkg"
+                android:layout_alignParentTop="true"
+                android:layout_alignParentEnd="true"
+                android:layout_marginEnd="25dp"
+                android:layout_marginTop="82dp"
+                android:layout_marginRight="25dp"
+                android:visibility="gone"/>
+
+            <ImageButton
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/getLocationIB"
+                android:src="@drawable/ic_crosshairs_gps_grey600_36dp"
+                android:layout_marginBottom="82dp"
+                android:layout_marginRight="25dp"
+                android:padding="5dp"
+                android:background="@color/white_transparency"
+                android:layout_alignParentBottom="true"
+                android:layout_alignParentStart="true"
+                android:layout_marginStart="25dp"/>
+
+            <ImageButton
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/extentIB"
+                android:src="@drawable/ic_arrow_expand_grey600_36dp"
+                android:layout_marginBottom="25dp"
+                android:layout_marginRight="25dp"
+                android:padding="5dp"
+                android:background="@color/white_transparency"
+                android:layout_alignParentBottom="true"
+                android:layout_alignParentStart="true"
+                android:layout_marginStart="25dp"/>
+
+
+        </RelativeLayout>
+
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:id="@+id/slider_content"
+            android:visibility="gone">
+        </RelativeLayout>
+
+    </com.sothree.slidinguppanel.SlidingUpPanelLayout>
+
+</RelativeLayout>
