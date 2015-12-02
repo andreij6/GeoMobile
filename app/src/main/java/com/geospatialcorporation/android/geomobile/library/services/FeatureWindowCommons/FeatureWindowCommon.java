@@ -19,7 +19,6 @@ import com.geospatialcorporation.android.geomobile.ui.fragments.detail_fragment.
 import com.geospatialcorporation.android.geomobile.ui.fragments.detail_fragment.feature_window_tabs.VideoDetailsTab;
 import com.geospatialcorporation.android.geomobile.ui.fragments.detail_fragment.feature_window_tabs.VideoPlayTab;
 import com.geospatialcorporation.android.geomobile.ui.fragments.detail_fragment.feature_window_tabs.tablet.*;
-import com.google.gson.Gson;
 
 public class FeatureWindowCommon implements IFeatureWindowCommon {
 

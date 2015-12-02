@@ -33,8 +33,6 @@ import com.geospatialcorporation.android.geomobile.library.DI.Tasks.models.GetLa
 import com.geospatialcorporation.android.geomobile.library.DI.UIHelpers.Interfaces.IMapStatusBarManager;
 import com.geospatialcorporation.android.geomobile.library.constants.GeometryTypeCodes;
 import com.geospatialcorporation.android.geomobile.library.helpers.ProgressDialogHelper;
-import com.geospatialcorporation.android.geomobile.library.map.GeoCallback;
-import com.geospatialcorporation.android.geomobile.library.map.SendMapQueryRequestCallback;
 import com.geospatialcorporation.android.geomobile.library.services.QueryRestService;
 import com.geospatialcorporation.android.geomobile.models.Folders.Folder;
 import com.geospatialcorporation.android.geomobile.models.Layers.Layer;

@@ -13,7 +13,6 @@ import com.geospatialcorporation.android.geomobile.library.requestcallback.liste
 import com.geospatialcorporation.android.geomobile.library.rest.AttributeService;
 import com.geospatialcorporation.android.geomobile.library.rest.LayerService;
 import com.geospatialcorporation.android.geomobile.models.AddAttributeRequest;
-import com.geospatialcorporation.android.geomobile.models.Layers.Columns;
 import com.geospatialcorporation.android.geomobile.models.Layers.EditLayerAttributesRequest;
 import com.geospatialcorporation.android.geomobile.models.Layers.Layer;
 import com.geospatialcorporation.android.geomobile.models.Layers.LayerAttributeColumn;
@@ -22,10 +21,8 @@ import com.geospatialcorporation.android.geomobile.models.Layers.LayerDetailsVm;
 import com.geospatialcorporation.android.geomobile.models.RemoveMapFeatureDocumentRequest;
 import com.geospatialcorporation.android.geomobile.models.RenameRequest;
 import com.geospatialcorporation.android.geomobile.ui.fragments.GoogleMapFragment;
-import com.geospatialcorporation.android.geomobile.ui.fragments.detail_fragment.feature_window_tabs.tablet.TabletFeatureDocumentsTab;
 import com.geospatialcorporation.android.geomobile.ui.fragments.panel_fragments.map_fragment_panels.TabletFeatureWindowPanelFragment;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import retrofit.Callback;

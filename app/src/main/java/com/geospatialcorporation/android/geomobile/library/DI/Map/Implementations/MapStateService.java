@@ -2,7 +2,6 @@ package com.geospatialcorporation.android.geomobile.library.DI.Map.Implementatio
 
 import com.geospatialcorporation.android.geomobile.application;
 import com.geospatialcorporation.android.geomobile.database.DataRepository.IFullDataRepository;
-import com.geospatialcorporation.android.geomobile.database.DataRepository.Implementations.Bookmark.BookmarkDataSource;
 import com.geospatialcorporation.android.geomobile.library.DI.Map.Interfaces.IMapStateService;
 import com.geospatialcorporation.android.geomobile.library.DI.Map.Models.BookmarkMapStateSaveRequest;
 import com.geospatialcorporation.android.geomobile.library.DI.Map.Models.MapStateSaveRequest;
@@ -18,11 +17,10 @@ import com.google.android.gms.maps.model.LatLng;
 public class MapStateService implements IMapStateService {
 
     IGeoSharedPrefs mSharedPrefs;
-    Subscription mSubscription;
 
     public MapStateService(IGeoSharedPrefs sharedPrefs){
         mSharedPrefs = sharedPrefs;
-        mSubscription = application.getGeoSubscription();
+
     }
 
     //region Constants
@@ -38,16 +36,18 @@ public class MapStateService implements IMapStateService {
     public void saveMapState(MapStateSaveRequest request) {
         GoogleMap map = request.getMap();
 
-        CameraPosition position = map.getCameraPosition();
+        if(map != null) {
+            CameraPosition position = map.getCameraPosition();
 
-        mSharedPrefs.add(makeKey(LATITUDE), (float)position.target.latitude);
-        mSharedPrefs.add(makeKey(LONGITUDE), (float)position.target.longitude);
-        mSharedPrefs.add(makeKey(ZOOM), position.zoom);
-        mSharedPrefs.add(makeKey(TILT), position.tilt);
-        mSharedPrefs.add(makeKey(BEARING), position.bearing);
-        mSharedPrefs.add(makeKey(MAPTYPE), map.getMapType());
+            mSharedPrefs.add(makeKey(LATITUDE), (float) position.target.latitude);
+            mSharedPrefs.add(makeKey(LONGITUDE), (float) position.target.longitude);
+            mSharedPrefs.add(makeKey(ZOOM), position.zoom);
+            mSharedPrefs.add(makeKey(TILT), position.tilt);
+            mSharedPrefs.add(makeKey(BEARING), position.bearing);
+            mSharedPrefs.add(makeKey(MAPTYPE), map.getMapType());
 
-        mSharedPrefs.apply();
+            mSharedPrefs.apply();
+        }
     }
 
     @Override
@@ -81,7 +81,7 @@ public class MapStateService implements IMapStateService {
 
     @Override
     public void saveBookmarkState(BookmarkMapStateSaveRequest request) {
-        IFullDataRepository<Bookmark> BookmarkRepo = new BookmarkDataSource(application.getAppContext()); //not cache repo
+        //IFullDataRepository<Bookmark> BookmarkRepo = new BookmarkDataSource(application.getAppContext()); //not cache repo
 
         CameraPosition position = request.getMap().getCameraPosition();
 
@@ -95,12 +95,12 @@ public class MapStateService implements IMapStateService {
 
         Bookmark bookmark = new Bookmark(request.getName(), bp);
 
-        BookmarkRepo.Create(bookmark);
+        //BookmarkRepo.Create(bookmark);
     }
 
     //region Helpers
     protected String makeKey(String key){
-        return key + mSubscription.getName();
+        return key + application.getGeoSubscription().getName();
     }
     //endregion
 }

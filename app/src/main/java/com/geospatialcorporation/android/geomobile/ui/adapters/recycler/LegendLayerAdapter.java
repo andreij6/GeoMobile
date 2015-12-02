@@ -33,6 +33,7 @@ import com.geospatialcorporation.android.geomobile.models.Query.map.Layers;
 import com.geospatialcorporation.android.geomobile.models.Query.map.MapDefaultQueryRequest;
 import com.geospatialcorporation.android.geomobile.models.Query.map.Options;
 import com.geospatialcorporation.android.geomobile.models.Subscription;
+import com.geospatialcorporation.android.geomobile.ui.Interfaces.OnFragmentInteractionListener;
 import com.geospatialcorporation.android.geomobile.ui.MainActivity;
 import com.geospatialcorporation.android.geomobile.ui.adapters.recycler.base.GeoHolderBase;
 import com.geospatialcorporation.android.geomobile.ui.adapters.recycler.base.GeoRecyclerAdapterBase;
@@ -225,7 +226,19 @@ public class LegendLayerAdapter extends GeoRecyclerAdapterBase<LegendLayerAdapte
             }
         }
 
+        public int getFrameId() {
+            if(application.getIsLandscape()){
+                ((OnFragmentInteractionListener)mContext).showDetailFragment();
+
+                return R.id.detail_frame;
+            } else {
+                return R.id.content_frame;
+            }
+        }
+
         protected View.OnClickListener GoToLayerFragment = new View.OnClickListener() {
+
+
             @Override
             public void onClick(View v) {
                 Fragment layerFragment = new LayerFragment();
@@ -237,10 +250,11 @@ public class LegendLayerAdapter extends GeoRecyclerAdapterBase<LegendLayerAdapte
                 layerFragment.setArguments(bundle);
 
                 fragmentManager.beginTransaction()
-                        .replace(R.id.content_frame, layerFragment)
+                        .replace(getFrameId(), layerFragment)
                         .addToBackStack(null).commit();
 
                 ((MainActivity)mContext).closeLayerDrawer();
+
             }
         };
 
@@ -254,7 +268,7 @@ public class LegendLayerAdapter extends GeoRecyclerAdapterBase<LegendLayerAdapte
                 frag.setArguments(mLayer.toBundle());
 
                 fm.beginTransaction()
-                        .replace(R.id.content_frame, frag)
+                        .replace(getFrameId(), frag)
                         .addToBackStack(null)
                         .commit();
 

@@ -4,9 +4,6 @@ import android.content.Intent;
 import android.content.res.Configuration;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.view.Menu;
-import android.view.MenuInflater;
-import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.Toast;
@@ -15,7 +12,6 @@ import com.geospatialcorporation.android.geomobile.R;
 import com.geospatialcorporation.android.geomobile.application;
 import com.geospatialcorporation.android.geomobile.library.DI.UIHelpers.Interfaces.DialogHelpers.IGeneralDialog;
 import com.geospatialcorporation.android.geomobile.ui.Interfaces.IGeoMainActivity;
-import com.geospatialcorporation.android.geomobile.ui.fragments.GoogleMapFragment;
 import com.geospatialcorporation.android.geomobile.ui.fragments.MapFragments.TabletMapFragment;
 import com.geospatialcorporation.android.geomobile.ui.fragments.panel_fragments.map_fragment_panels.TabletFeatureWindowPanelFragment;
 import com.geospatialcorporation.android.geomobile.ui.fragments.tree_fragments.tablet.*;
@@ -79,7 +75,7 @@ public class MainTabletActivity extends GeoUndergroundMainActivity implements IG
 
         mInfoFrameCode = 0;
 
-        getSupportActionBar().hide();
+        //getSupportActionBar().hide();
 
         if(!application.getIsAdminUser()) {
             mSubscriptions.setVisibility(View.GONE);
@@ -213,7 +209,7 @@ public class MainTabletActivity extends GeoUndergroundMainActivity implements IG
     }
 
     protected void showAccount() {
-        showFragment(InfoFrame.Account, new TabAccountFragment());
+        //showFragment(InfoFrame.Account, new TabAccountFragment());
     }
 
     public void showLayers() {

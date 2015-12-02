@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.content.Intent;
 import android.content.Context;
 import android.os.Bundle;
+import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.content.ContextCompat;
@@ -11,8 +12,6 @@ import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
-import android.view.Menu;
-import android.view.MenuInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
@@ -21,10 +20,10 @@ import android.widget.TextView;
 import com.geospatialcorporation.android.geomobile.R;
 import com.geospatialcorporation.android.geomobile.application;
 import com.geospatialcorporation.android.geomobile.library.DI.Analytics.Models.GoogleAnalyticEvent;
+import com.geospatialcorporation.android.geomobile.library.DI.MainNavigationController.Implementations.MainNavCtrl;
 import com.geospatialcorporation.android.geomobile.library.DI.Tasks.Interfaces.IGetDocumentsTask;
 import com.geospatialcorporation.android.geomobile.library.DI.Tasks.models.GetDocumentsParam;
 import com.geospatialcorporation.android.geomobile.library.DI.TreeServices.Interfaces.IDocumentTreeService;
-import com.geospatialcorporation.android.geomobile.library.DI.UIHelpers.Interfaces.DialogHelpers.IGeneralDialog;
 import com.geospatialcorporation.android.geomobile.library.DI.UIHelpers.Interfaces.ILayoutRefresher;
 import com.geospatialcorporation.android.geomobile.library.constants.AccessLevelCodes;
 import com.geospatialcorporation.android.geomobile.library.constants.GeoPanel;
@@ -34,11 +33,13 @@ import com.geospatialcorporation.android.geomobile.library.panelmanager.PanelMan
 import com.geospatialcorporation.android.geomobile.library.sectionbuilders.implementations.LibraryTreeSectionBuilder;
 import com.geospatialcorporation.android.geomobile.ui.Interfaces.IContentRefresher;
 import com.geospatialcorporation.android.geomobile.models.Folders.Folder;
+import com.geospatialcorporation.android.geomobile.ui.Interfaces.IFragmentView;
 import com.geospatialcorporation.android.geomobile.ui.Interfaces.IPostExecuter;
+import com.geospatialcorporation.android.geomobile.ui.Interfaces.OnFragmentInteractionListener;
 import com.geospatialcorporation.android.geomobile.ui.MainActivity;
-import com.geospatialcorporation.android.geomobile.ui.fragments.GeoViewFragmentBase;
 import com.geospatialcorporation.android.geomobile.ui.fragments.GoogleMapFragment;
 import com.geospatialcorporation.android.geomobile.ui.fragments.detail_fragment.DocumentFolderDetailFragment;
+import com.geospatialcorporation.android.geomobile.ui.fragments.drawer.MainNavigationDrawerFragment;
 import com.geospatialcorporation.android.geomobile.ui.fragments.panel_fragments.tree_fragment_panels.LibraryFolderPanelFragment;
 import com.geospatialcorporation.android.geomobile.models.ListItem;
 import com.melnykov.fab.FloatingActionButton;
@@ -50,47 +51,39 @@ import java.util.List;
 import butterknife.Bind;
 import butterknife.OnClick;
 
-public class LibraryFragment extends GeoViewFragmentBase
-        implements IContentRefresher, IPostExecuter<Folder> {
+public class LibraryFragment extends RecyclerTreeFragment
+        implements IContentRefresher, IFragmentView, IPostExecuter<Folder> {
     protected static final String TAG = LibraryFragment.class.getSimpleName();
 
     //region Properties
-    private Folder mCurrentFolder;
-    private Context mContext;
+
     IGetDocumentsTask mDocumentsTask;
     IDocumentTreeService mUploader;
-    DataHelper mHelper;
-    ProgressDialogHelper mProgressHelper;
 
-    @Bind(R.id.libraryitem_recyclerView) RecyclerView mRecyclerView;
-    @Bind(R.id.swipe_refresh_layout) SwipeRefreshLayout mSwipeRefreshLayout;
-    @Bind(R.id.sliding_layout) SlidingUpPanelLayout mPanel;
-    @Bind(R.id.libraryOptionsIV) FloatingActionButton mOptionsSlider;
-    @Bind(R.id.showNavIV1) ImageView mNavBars;
-    @Bind(R.id.showNavIV2) ImageView mNavLogo;
-    @Bind(R.id.title) TextView mTitle;
-    @Bind(R.id.folderInformation) ImageView mInfo;
-    @Bind(R.id.backFolder) TextView mParentFolder;
-    //endregion
+    @Nullable
+    @OnClick(R.id.OptionsFab)
+    public void optionsDropDown(){
+        if(!mPanelManager.getIsOpen()){
 
-    //region OnClicks
-    @OnClick(R.id.goToMapIV)
-    public void goToMapIV(){
-        if(mPanelManager.getIsOpen()){
-            closePanel();
+            Fragment f = new LibraryFolderPanelFragment();
+
+            f.setArguments(mCurrentFolder.toBundle());
+
+            getFragmentManager()
+                    .beginTransaction()
+                    .replace(R.id.slider_content, f)
+                    .commit();
+
+            mPanelManager.halfAnchor(0.1f);
+            mPanelManager.touch(false);
         } else {
-            Fragment pageFragment = new GoogleMapFragment();
-
-            FragmentManager fragmentManager = getFragmentManager();
-
-            fragmentManager.beginTransaction()
-                    .replace(R.id.content_frame, pageFragment)
-                    .addToBackStack(null).commit();
+            closePanel();
         }
     }
 
-    @OnClick(R.id.libraryOptionsIV)
-    public void optionsDropDown(){
+    @Nullable
+    @OnClick(R.id.landOptionsIV)
+    public void optionsDropDownland(){
         if(!mPanelManager.getIsOpen()){
 
             Fragment f = new LibraryFolderPanelFragment();
@@ -131,19 +124,13 @@ public class LibraryFragment extends GeoViewFragmentBase
     //endregion
 
     //region Fragment Overrides
-    @Override
-    public void onCreate(Bundle savedInstance) {
-        setHasOptionsMenu(false);
-        super.onCreate(savedInstance);
-    }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        setView(inflater, container, R.layout.fragment_libraryitems);
+        setView(inflater, container, R.layout.fragment_recyclertree);
         mContext = getActivity();
 
         mTitle.setText("Loading...");
-
         mInfo.setVisibility(View.INVISIBLE);
 
         sendScreenName();
@@ -157,21 +144,15 @@ public class LibraryFragment extends GeoViewFragmentBase
         mSwipeRefreshLayout.setOnRefreshListener(refresher.build(mSwipeRefreshLayout, this));
         mSwipeRefreshLayout.setProgressBackgroundColorSchemeColor(mContext.getResources().getColor(R.color.white));
 
-        mProgressHelper.showProgressDialog();
-        mDocumentsTask = application.getTasksComponent().provideGetDocumentsTask();
+
         handleArguments();
 
         //fixes 4.3
-        mOptionsSlider.bringToFront();
+        if(mOptionsSlider != null) {
+            mOptionsSlider.bringToFront();
+        }
 
         return mView;
-    }
-
-    @Override
-    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
-        //inflater.inflate(R.menu.document_menu, menu);
-
-        super.onCreateOptionsMenu(menu, inflater);
     }
 
     @Override
@@ -230,65 +211,16 @@ public class LibraryFragment extends GeoViewFragmentBase
     };
     //endregion
 
+
     @Override
-    public void onPostExecute(Folder model) {
-        try {
-            mCurrentFolder = model;
+    protected void buildRecycler() {
+        mHelper = new DataHelper();
 
-            mPanelManager.hide();
+        List<ListItem> data = mHelper.CombineLibraryItems(mCurrentFolder.getDocuments(), mCurrentFolder.getFolders(), mCurrentFolder.getParent());
 
-            if (mCurrentFolder.getAccessLevel() != AccessLevelCodes.ReadOnly) {
-                mOptionsSlider.setVisibility(View.VISIBLE);
-            }
-
-            if (mCurrentFolder.getParent() != null) {
-                mNavBars.setVisibility(View.GONE);
-                mNavLogo.setImageDrawable(ContextCompat.getDrawable(mContext, R.drawable.ic_chevron_left_grey600_18dp));
-                mNavLogo.setPadding(-12, 0, 0, 0);
-
-                mNavBars.setOnClickListener(navigateUpTree);
-                mNavLogo.setOnClickListener(navigateUpTree);
-                mParentFolder.setOnClickListener(navigateUpTree);
-
-                mParentFolder.setVisibility(View.VISIBLE);
-                mParentFolder.setText(mCurrentFolder.getParent().getProperName());
-
-            } else {
-                mNavBars.setImageDrawable(ContextCompat.getDrawable(mContext, R.drawable.ic_nav_orange));
-
-                mNavBars.setOnClickListener(showNavigation);
-                mNavLogo.setOnClickListener(showNavigation);
-
-                mNavLogo.setImageDrawable(ContextCompat.getDrawable(mContext, R.drawable.ic_g_logo));
-                mNavBars.setVisibility(View.VISIBLE);
-            }
-
-            mTitle.setText(mCurrentFolder.getProperName());
-
-            mInfo.setVisibility(View.VISIBLE);
-            mNavLogo.setVisibility(View.VISIBLE);
-            mTitle.setVisibility(View.VISIBLE);
-
-            mHelper = new DataHelper();
-
-            List<ListItem> data = mHelper.CombineLibraryItems(mCurrentFolder.getDocuments(), mCurrentFolder.getFolders(), mCurrentFolder.getParent());
-
-            new LibraryTreeSectionBuilder(mContext, getFragmentManager(), mCurrentFolder.getParent(), mPanelManager)
-                    .BuildAdapter(data, mCurrentFolder.getFolders().size())
-                    .setRecycler(mRecyclerView);
-
-
-        } catch (NullPointerException nullpointer){
-            Log.d(TAG, nullpointer.getMessage());
-        } catch (Exception e){
-            Log.d(TAG, e.getMessage());
-        } finally {
-            mProgressHelper.hideProgressDialog();
-        }
-    }
-
-    public void closePanel() {
-        mPanelManager.hide();
+        new LibraryTreeSectionBuilder(mContext, getFragmentManager(), mCurrentFolder.getParent(), mPanelManager)
+                .BuildAdapter(data, mCurrentFolder.getFolders().size())
+                .setRecycler(mRecyclerView);
     }
 
     public void goToFolderInfo() {
@@ -307,12 +239,11 @@ public class LibraryFragment extends GeoViewFragmentBase
     }
 
     @Override
-    public void refresh() {
-        handleArguments();
-    }
-
-    protected void handleArguments() {
+    public void handleArguments() {
         Bundle args = getArguments();
+
+        mProgressHelper.showProgressDialog();
+        mDocumentsTask = application.getTasksComponent().provideGetDocumentsTask();
 
         GetDocumentsParam params = new GetDocumentsParam(getFragmentManager(), mCurrentFolder, mContext, this);
 
@@ -321,10 +252,19 @@ public class LibraryFragment extends GeoViewFragmentBase
 
             mDocumentsTask.getDocumentsByFolderId(params, folderId);
 
-
         } else {
             mDocumentsTask.getDocumentsByFolderId(params, 0);
         }
 
+    }
+
+    @Override
+    public void setDetailFrame(View view, FragmentManager fm) {
+        view.performClick();
+    }
+
+    @Override
+    public void setContentFragment(FragmentManager fm) {
+        application.getMainActivity().onNavigationDrawerItemSelected(MainNavCtrl.ViewConstants.LIBRARY);
     }
 }

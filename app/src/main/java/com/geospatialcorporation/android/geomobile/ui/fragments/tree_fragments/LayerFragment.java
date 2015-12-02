@@ -2,24 +2,19 @@ package com.geospatialcorporation.android.geomobile.ui.fragments.tree_fragments;
 
 import android.content.Context;
 import android.os.Bundle;
+import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
-import android.support.v4.content.ContextCompat;
-import android.support.v4.widget.SwipeRefreshLayout;
-import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageView;
-import android.widget.TextView;
 
 import com.geospatialcorporation.android.geomobile.R;
 import com.geospatialcorporation.android.geomobile.application;
 import com.geospatialcorporation.android.geomobile.library.DI.Tasks.Interfaces.IGetLayersTask;
 import com.geospatialcorporation.android.geomobile.library.DI.Tasks.models.GetLayersByFolderTaskParams;
 import com.geospatialcorporation.android.geomobile.library.DI.UIHelpers.Interfaces.ILayoutRefresher;
-import com.geospatialcorporation.android.geomobile.library.constants.AccessLevelCodes;
 import com.geospatialcorporation.android.geomobile.library.constants.GeoPanel;
 import com.geospatialcorporation.android.geomobile.library.helpers.DataHelper;
 import com.geospatialcorporation.android.geomobile.library.helpers.ProgressDialogHelper;
@@ -27,66 +22,48 @@ import com.geospatialcorporation.android.geomobile.library.panelmanager.PanelMan
 import com.geospatialcorporation.android.geomobile.library.sectionbuilders.implementations.LayerTreeSectionBuilder;
 import com.geospatialcorporation.android.geomobile.ui.Interfaces.IContentRefresher;
 import com.geospatialcorporation.android.geomobile.models.Folders.Folder;
+import com.geospatialcorporation.android.geomobile.ui.Interfaces.IFragmentView;
 import com.geospatialcorporation.android.geomobile.ui.Interfaces.IPostExecuter;
 import com.geospatialcorporation.android.geomobile.ui.MainActivity;
-import com.geospatialcorporation.android.geomobile.ui.fragments.GeoViewFragmentBase;
 import com.geospatialcorporation.android.geomobile.ui.fragments.GoogleMapFragment;
-import com.geospatialcorporation.android.geomobile.ui.fragments.detail_fragment.DocumentFolderDetailFragment;
 import com.geospatialcorporation.android.geomobile.ui.fragments.detail_fragment.LayerFolderDetailFragment;
 import com.geospatialcorporation.android.geomobile.ui.fragments.panel_fragments.tree_fragment_panels.LayerFolderPanelFragment;
 import com.geospatialcorporation.android.geomobile.models.ListItem;
-import com.melnykov.fab.FloatingActionButton;
-import com.sothree.slidinguppanel.SlidingUpPanelLayout;
 
 import java.util.List;
 
-import butterknife.Bind;
 import butterknife.OnClick;
 
-public class LayerFragment extends GeoViewFragmentBase implements IContentRefresher, IPostExecuter<Folder> {
+public class LayerFragment extends RecyclerTreeFragment implements IContentRefresher, IPostExecuter<Folder>, IFragmentView {
     protected final static String TAG = LayerFragment.class.getSimpleName();
 
-    private Context mContext;
-    Folder mCurrentFolder;
-    DataHelper mDataHelper;
     ProgressDialogHelper mProgressDialogHelper;
 
-    @Bind(R.id.layer_recyclerView) RecyclerView mRecycler;
-    @Bind(R.id.swipe_refresh_layout) SwipeRefreshLayout mSwipeRefreshLayout;
-    @Bind(R.id.sliding_layout) SlidingUpPanelLayout mPanel;
-    @Bind(R.id.layerOptionsIV) FloatingActionButton mOptionsSlider;
-    @Bind(R.id.showNavIV1) ImageView mNavBars;
-    @Bind(R.id.showNavIV2) ImageView mNavLogo;
-    @Bind(R.id.title) TextView mTitle;
-    @Bind(R.id.backFolder) TextView mBack;
-
-
-    @OnClick(R.id.showNavIV1)
-    public void showNavigation(){
-        ((MainActivity)getActivity()).openNavigationDrawer();
-    }
-
-    @OnClick(R.id.showNavIV2)
-    public void showNavigation2(){
-        ((MainActivity)getActivity()).openNavigationDrawer();
-    }
-
-    @OnClick(R.id.goToMapIV)
-    public void goToMapIV(){
-        Fragment pageFragment = new GoogleMapFragment();
-
-        FragmentManager fragmentManager = getFragmentManager();
-
-        fragmentManager.beginTransaction()
-                .replace(R.id.content_frame, pageFragment)
-                .addToBackStack(null).commit();
-    }
-
-    @OnClick(R.id.layerOptionsIV)
+    @Nullable
+    @OnClick(R.id.OptionsFab)
     public void optionsDropDown(){
 
         if(!mPanelManager.getIsOpen()){
 
+            Fragment f = new LayerFolderPanelFragment();
+
+            f.setArguments(mCurrentFolder.toBundle());
+
+            getFragmentManager().beginTransaction()
+                    .replace(R.id.slider_content, f)
+                    .commit();
+
+            mPanelManager.halfAnchor();
+            mPanelManager.touch(false);
+        } else {
+            closePanel();
+        }
+    }
+
+    @Nullable
+    @OnClick(R.id.landOptionsIV)
+    public void optionsDropDownland(){
+        if(!mPanelManager.getIsOpen()){
             Fragment f = new LayerFolderPanelFragment();
 
             f.setArguments(mCurrentFolder.toBundle());
@@ -118,12 +95,11 @@ public class LayerFragment extends GeoViewFragmentBase implements IContentRefres
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setView(inflater, container, R.layout.fragment_layeritems);
+        setView(inflater, container, R.layout.fragment_recyclertree);
         mContext = getActivity();
 
-        mNavLogo.setVisibility(View.GONE);
-        mNavBars.setVisibility(View.GONE);
-        mTitle.setVisibility(View.INVISIBLE);
+        mTitle.setText("Loading...");
+        mInfo.setVisibility(View.INVISIBLE);
 
         ILayoutRefresher refresher = application.getUIHelperComponent().provideLayoutRefresher();
 
@@ -133,17 +109,17 @@ public class LayerFragment extends GeoViewFragmentBase implements IContentRefres
         mSwipeRefreshLayout.setOnRefreshListener(refresher.build(mSwipeRefreshLayout, this));
         mSwipeRefreshLayout.setProgressBackgroundColorSchemeColor(mContext.getResources().getColor(R.color.white));
 
+
         handleArguments();
 
-        mOptionsSlider.bringToFront();
+        if(mOptionsSlider != null) {
+            mOptionsSlider.bringToFront();
+        }
 
         return mView;
     }
 
-    public void refresh() {
-        handleArguments();
-    }
-
+    @Override
     public void handleArguments() {
         Bundle args = getArguments();
         IGetLayersTask task = application.getTasksComponent().provideLayersTask();
@@ -153,90 +129,38 @@ public class LayerFragment extends GeoViewFragmentBase implements IContentRefres
             folderId = args.getInt(Folder.FOLDER_INTENT, 0);
         }
 
-        mProgressDialogHelper = new ProgressDialogHelper(mContext);
-        mProgressDialogHelper.toggleProgressDialog();
+        mProgressHelper = new ProgressDialogHelper(mContext);
+        mProgressHelper.toggleProgressDialog();
 
         task.getByFolder(new GetLayersByFolderTaskParams(getFragmentManager(), mContext, this), folderId);
     }
 
     @Override
-    public void onPostExecute(Folder currentFolder) {
-        try {
-            mCurrentFolder = currentFolder;
+    protected void buildRecycler() {
+        mHelper = new DataHelper();
 
-            if (mCurrentFolder.getAccessLevel() != AccessLevelCodes.ReadOnly) {
-                mOptionsSlider.setVisibility(View.VISIBLE);
-            }
+        List<ListItem> data = mHelper.CombineLayerItems(mCurrentFolder.getLayers(), mCurrentFolder.getFolders(), mCurrentFolder.getParent());
 
-            mPanelManager.hide();
-
-            if (currentFolder == null) {
-                return;
-            }
-
-            if (currentFolder.getParent() != null) {
-                mNavLogo.setImageDrawable(ContextCompat.getDrawable(mContext, R.drawable.ic_chevron_left_grey600_18dp));
-                mNavLogo.setPadding(-12, 0, 0, 0);
-
-                mNavBars.setOnClickListener(navigateUpTree);
-                mNavLogo.setOnClickListener(navigateUpTree);
-                mBack.setOnClickListener(navigateUpTree);
-
-                mBack.setVisibility(View.VISIBLE);
-
-            } else {
-                mNavBars.setImageDrawable(ContextCompat.getDrawable(mContext, R.drawable.ic_nav_orange));
-
-                mNavBars.setOnClickListener(showNavigation);
-                mNavLogo.setOnClickListener(showNavigation);
-
-                mNavLogo.setImageDrawable(ContextCompat.getDrawable(mContext, R.drawable.ic_g_logo));
-                mNavBars.setVisibility(View.VISIBLE);
-            }
-
-            mNavLogo.setVisibility(View.VISIBLE);
-            mTitle.setVisibility(View.VISIBLE);
-            mTitle.setText(mCurrentFolder.getProperName());
-
-            mDataHelper = new DataHelper();
-
-            List<ListItem> data = mDataHelper.CombineLayerItems(currentFolder.getLayers(), currentFolder.getFolders(), currentFolder.getParent());
-
-            new LayerTreeSectionBuilder(mContext, getFragmentManager(), currentFolder.getParent(), mPanelManager)
-                    .BuildAdapter(data, currentFolder.getFolders().size())
-                    .setRecycler(mRecycler);
-        } catch (NullPointerException nullpointer){
-            Log.d(TAG, nullpointer.getMessage());
-        } catch (Exception e){
-            Log.d(TAG, e.getMessage());
-        } finally {
-            mProgressDialogHelper.hideProgressDialog();
-        }
+        new LayerTreeSectionBuilder(mContext, getFragmentManager(), mCurrentFolder.getParent(), mPanelManager)
+                .BuildAdapter(data, mCurrentFolder.getFolders().size())
+                .setRecycler(mRecyclerView);
     }
 
-    protected View.OnClickListener showNavigation = new View.OnClickListener() {
-        @Override
-        public void onClick(View v) {
-            if(mPanelManager.getIsOpen()){
-                closePanel();
-            } else {
-                ((MainActivity) getActivity()).openNavigationDrawer();
-            }
-        }
-    };
-
-    protected View.OnClickListener navigateUpTree = new View.OnClickListener() {
-        @Override
-        public void onClick(View v) {
-            if(mPanelManager.getIsOpen()){
-                closePanel();
-            } else {
-                getFragmentManager().popBackStack();
-            }
-        }
-    };
-
-    public void closePanel() {
-        mPanelManager.hide();
+    @Override
+    public void setDetailFrame(View view, FragmentManager fm) {
+        setFrame(R.id.detail_frame, fm);
     }
+
+    @Override
+    public void setContentFragment(FragmentManager fm) {
+        setFrame(R.id.content_frame, fm);
+    }
+
+    private void setFrame(int frame, FragmentManager fm){
+        fm.beginTransaction()
+                .replace(frame, this)
+                .addToBackStack(null)
+                .commit();
+    }
+
 }

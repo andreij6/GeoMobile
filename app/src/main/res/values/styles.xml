@@ -1,6 +1,6 @@
 <resources>
 
-    <style name="GeoUndergroundTheme" parent="@style/Theme.AppCompat.Light">
+    <style name="GeoUndergroundTheme" parent="@style/Theme.AppCompat.Light.NoActionBar">
         <item name="colorPrimary">@color/primary</item>
         <item name="windowActionBarOverlay">true</item>
         <item name="colorPrimaryDark">@color/primary_dark</item>
@@ -118,6 +118,11 @@
 
     <style name="spinnerDropDownItemStyle" parent="android:TextAppearance.Widget.TextView.SpinnerItem">
         <item name="android:padding">10dp</item>
+    </style>
+
+    <style name="landNavigation">
+        <item name="android:padding">8dp</item>
+        <item name="android:layout_weight">1</item>
     </style>
 
 </resources>

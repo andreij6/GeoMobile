@@ -12,15 +12,12 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.geospatialcorporation.android.geomobile.R;
 import com.geospatialcorporation.android.geomobile.application;
 import com.geospatialcorporation.android.geomobile.library.DI.Tasks.models.GetDocumentsParam;
 import com.geospatialcorporation.android.geomobile.library.DI.TreeServices.Interfaces.IDocumentTreeService;
-import com.geospatialcorporation.android.geomobile.library.constants.AccessLevelCodes;
 import com.geospatialcorporation.android.geomobile.library.constants.MediaConstants;
 import com.geospatialcorporation.android.geomobile.library.sectionbuilders.implementations.LibraryTreeSectionBuilder;
 import com.geospatialcorporation.android.geomobile.library.services.Library.ILibraryProcessor;
@@ -53,10 +50,10 @@ public class TabLibraryFragment extends TabGeoViewFragmentBase
 
     @Bind(R.id.sliding_layout) SlidingUpPanelLayout mPanel;
     @Bind(R.id.swipe_refresh_layout) SwipeRefreshLayout mSwipeRefreshLayout;
-    @Bind(R.id.libraryitem_recyclerView) RecyclerView mRecyclerView;
+    @Bind(R.id.recyclerView) RecyclerView mRecyclerView;
 
     @Bind(R.id.goBackIV) ImageView mGoBack;
-    @Bind(R.id.libraryOptionsIV) ImageView mOptions;
+    @Bind(R.id.OptionsFab) ImageView mOptions;
     @Bind(R.id.title) TextView mTitle;
 
     @SuppressWarnings("unused")
@@ -99,7 +96,7 @@ public class TabLibraryFragment extends TabGeoViewFragmentBase
     }
 
         @SuppressWarnings("unused")
-    @OnClick(R.id.libraryOptionsIV)
+    @OnClick(R.id.OptionsFab)
     public void openOptions(){
         mProcessor.onOptionsButtonPressed(mCurrentFolder, getFragmentManager(), new TabletLibraryFolderPanelFragment());
     }

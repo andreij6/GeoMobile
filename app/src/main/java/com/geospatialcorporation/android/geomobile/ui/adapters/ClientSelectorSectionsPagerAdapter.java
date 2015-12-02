@@ -17,37 +17,24 @@ import java.util.Locale;
 public class ClientSelectorSectionsPagerAdapter extends FragmentStatePagerAdapter  {
     Context mContext;
     private static final String TAG = ClientSelectorSectionsPagerAdapter.class.getSimpleName();
-    private int NUM_PAGES = 3;
+    ClientSelectorFragmentBase[] mClientFragments;
 
     public ClientSelectorSectionsPagerAdapter(FragmentManager fm, Context context) {
         super(fm);
         mContext = context;
+
+        mClientFragments = new ClientSelectorFragmentBase[]{ new StandardClientSelectorFragment(),
+                                                             new SSPClientSelectorFragment(), new PluginOwnerClientSelectorFragment() };
     }
 
     @Override
     public Fragment getItem(int position) {
-        switch (position){
-            case 0:
-                return new StandardClientSelectorFragment();
-            //case 1:
-            //    clientCode = ClientTypeCodes.TUTORIAL.getKey();
-            //    break;
-            //case 2:
-            //    clientCode = ClientTypeCodes.DEFAULT.getKey();
-            //    break;
-            case 1:
-                return new SSPClientSelectorFragment();
-            case 2:
-                return new PluginOwnerClientSelectorFragment();
-            default:
-                return  null;
-        }
-
+        return mClientFragments[position];
     }
 
     @Override
     public int getCount() {
-        return NUM_PAGES;
+        return mClientFragments.length;
     }
 
     @Override

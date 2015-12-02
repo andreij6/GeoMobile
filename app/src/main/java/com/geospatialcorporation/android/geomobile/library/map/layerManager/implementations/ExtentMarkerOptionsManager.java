@@ -1,7 +1,6 @@
 package com.geospatialcorporation.android.geomobile.library.map.layerManager.implementations;
 
 import android.os.AsyncTask;
-import android.text.BoringLayout;
 import android.util.Log;
 
 import com.geospatialcorporation.android.geomobile.application;
@@ -23,7 +22,6 @@ import com.google.android.gms.maps.model.MarkerOptions;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
-import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;

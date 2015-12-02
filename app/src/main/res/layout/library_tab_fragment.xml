@@ -23,7 +23,7 @@
         android:layout_height="56dp"
         android:layout_gravity="center_horizontal"
         android:layout_centerHorizontal="true"
-        android:id="@+id/library_actionbar"
+        android:id="@+id/actionBar"
         android:layout_below="@id/pagetitle">
 
         <ImageView
@@ -60,7 +60,7 @@
         <ImageView
             android:layout_width="36dp"
             android:layout_height="match_parent"
-            android:id="@+id/libraryOptionsIV"
+            android:id="@+id/OptionsFab"
             android:src="@drawable/ic_plus_circle_outline_grey600_36dp"
             android:layout_gravity="center_vertical"
             android:layout_alignParentEnd="true"
@@ -77,7 +77,7 @@
         sothree:umanoPanelHeight="68dp"
         sothree:umanoShadowHeight="4dp"
         android:background="@color/body_bkg"
-        android:layout_below="@+id/library_actionbar"
+        android:layout_below="@+id/actionBar"
         >
 
         <RelativeLayout
@@ -94,7 +94,7 @@
                 <android.support.v7.widget.RecyclerView
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:id="@+id/libraryitem_recyclerView"
+                    android:id="@+id/recyclerView"
                     android:layout_alignParentTop="true"/>
 
             </android.support.v4.widget.SwipeRefreshLayout>

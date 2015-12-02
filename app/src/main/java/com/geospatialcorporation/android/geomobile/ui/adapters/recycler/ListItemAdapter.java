@@ -3,6 +3,7 @@ package com.geospatialcorporation.android.geomobile.ui.adapters.recycler;
 import android.app.Activity;
 import android.content.res.Resources;
 import android.graphics.Color;
+import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.content.Context;
@@ -12,6 +13,7 @@ import android.support.v7.app.ActionBarActivity;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageButton;
+import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -58,12 +60,22 @@ public class ListItemAdapter extends GeoRecyclerAdapterBase<ListItemAdapter.Hold
     private String mViewType;
     private FragmentManager mFragmentManager;
     private ISlidingPanelManager mPanelManager;
+    private int mInfoFrame;
 
     public ListItemAdapter(Context context, List<ListItem> data, String ViewType, FragmentManager fm, ISlidingPanelManager panelManager) {
         super(context, data, R.layout.recycler_list_library, Holder.class);
         mViewType = ViewType;
         mFragmentManager = fm;
         mPanelManager = panelManager;
+        setInfoFrame();
+    }
+
+    private void setInfoFrame() {
+        if(application.getIsLandscape()){
+            mInfoFrame = R.id.detail_frame;
+        } else {
+            mInfoFrame = R.id.content_frame;
+        }
     }
 
     @Override
@@ -81,7 +93,7 @@ public class ListItemAdapter extends GeoRecyclerAdapterBase<ListItemAdapter.Hold
         @Bind(R.id.itemNameTV) TextView itemName;
         @Bind(R.id.itemImageView) FloatingActionButton itemIcon;
         @Bind(R.id.infoImageView) ImageButton itemInfo;
-        @Bind(R.id.listitem_container) RelativeLayout Container;
+        @Nullable @Bind(R.id.listitem_container) RelativeLayout Container;
 
         IFullDataRepository<Document> DocumentRepo;
         IFullDataRepository<Folder> FolderRepo;
@@ -102,12 +114,13 @@ public class ListItemAdapter extends GeoRecyclerAdapterBase<ListItemAdapter.Hold
 
             itemIcon.setVisibility(View.VISIBLE);
             itemInfo.setVisibility(View.VISIBLE);
-            Container.setBackgroundColor(Color.WHITE);
+
+            setContainerBackground(Color.WHITE);
 
             if(item.getIsCompletelyEmpty()) {
                 itemIcon.setVisibility(View.INVISIBLE);
                 itemInfo.setVisibility(View.INVISIBLE);
-                Container.setBackgroundColor(Color.TRANSPARENT);
+                setContainerBackground(Color.TRANSPARENT);
 
             } else if(!item.getShowInfoIcon() && item.getIconId() == 0) {
                 itemName.setOnClickListener(null);
@@ -189,78 +202,43 @@ public class ListItemAdapter extends GeoRecyclerAdapterBase<ListItemAdapter.Hold
         }
 
         protected void DocumentDetailAction(ListItem item) {
-            Fragment f;
-            int info_frame;
+            Fragment f = new DocumentDetailFragment();
 
             Document d = DocumentRepo.getById(item.getId());
 
-            if(DeviceTypeUtil.isTablet(mContext.getResources())){
-                f = new TabDocumentDetailFragment();
-
-                info_frame = R.id.info_frame;
-            } else {
-                f = new DocumentDetailFragment();
-
-                info_frame = R.id.content_frame;
-            }
+            setInfoFrame();
 
             f.setArguments(d.toBundle());
 
             mFragmentManager.beginTransaction()
                     .addToBackStack(null)
-                    .replace(info_frame, f)
+                    .replace(mInfoFrame, f)
                     .commit();
         }
 
         protected void FolderAction(ListItem item) {
             mFolder = FolderRepo.getById(mItem.getId());
 
-            Fragment fragment;
+            Fragment fragment = mViewType.equals(ListItemAdapter.LAYER) ? new LayerFragment() : new LibraryFragment();
 
             Bundle bundle = new Bundle();
             bundle.putInt(Folder.FOLDER_INTENT, mItem.getId());
 
             Activity activity = (Activity) itemView.getContext();
             FragmentManager fragmentManager = ((ActionBarActivity) activity).getSupportFragmentManager();
-            int info_frame = 0;
-
-            if(DeviceTypeUtil.isTablet(mContext.getResources())){
-                fragment = mViewType.equals(ListItem.LAYER) ? new TabLayerFragment() : new TabLibraryFragment();
-
-                info_frame = R.id.info_frame;
-
-            } else {
-
-                if (mFolder != null && mFolder.getAccessLevel() != null && mFolder.getAccessLevel() < 1) {
-                    //new Dialogs().error("You don't have access to folder: " + mFolder.getName());
-                }
-
-                fragment = mViewType.equals(ListItemAdapter.LAYER) ? new LayerFragment() : new LibraryFragment();
-
-                info_frame = R.id.content_frame;
-            }
 
             fragment.setArguments(bundle);
 
             fragmentManager.beginTransaction()
-                    .replace(info_frame, fragment)
+                    .replace(mInfoFrame, fragment)
                     .setCustomAnimations(R.anim.enter, R.anim.exit, R.anim.pop_enter, R.anim.pop_exit)
                     .addToBackStack(null)
                     .commit();
         }
 
         protected void FolderDetailAction(ListItem item) {
-            int infoFrame = 0;
-            Fragment f;
-
-
-            if(DeviceTypeUtil.isTablet(mContext.getResources())){
-                infoFrame = R.id.info_frame;
-                f = mViewType.equals(ListItemAdapter.LAYER) ? new TabLayerFolderDetailFragment() : new TabDocumentFolderDetailFragment();
-            } else {
-                infoFrame = R.id.content_frame;
-                f = mViewType.equals(ListItemAdapter.LAYER) ? new LayerFolderDetailFragment() : new DocumentFolderDetailFragment();
-            }
+            Fragment f = mViewType.equals(ListItemAdapter.LAYER) ? new LayerFolderDetailFragment() : new DocumentFolderDetailFragment();
+            setInfoFrame();
 
             Folder folder = FolderRepo.getById(item.getId());
 
@@ -268,7 +246,7 @@ public class ListItemAdapter extends GeoRecyclerAdapterBase<ListItemAdapter.Hold
 
             mFragmentManager.beginTransaction()
                     .addToBackStack(null)
-                    .replace(infoFrame, f)
+                    .replace(mInfoFrame, f)
                     .commit();
 
         }
@@ -282,20 +260,23 @@ public class ListItemAdapter extends GeoRecyclerAdapterBase<ListItemAdapter.Hold
         }
         //region Helper
         protected void toLayerDetailView(ListItem item) {
-            if(DeviceTypeUtil.isTablet(mContext.getResources())){
-                Toast.makeText(mContext, "is tablet", Toast.LENGTH_LONG).show();
-            } else {
-                Fragment f = new LayerDetailFragment();
-                ILayerTreeService service = application.getTreeServiceComponent().provideLayerTreeService();
-                Layer layer = service.get(item.getId());
+            Fragment f = new LayerDetailFragment();
+            ILayerTreeService service = application.getTreeServiceComponent().provideLayerTreeService();
+            Layer layer = service.get(item.getId());
 
-                f.setArguments(layer.toBundle());
+            f.setArguments(layer.toBundle());
 
-                mFragmentManager.beginTransaction()
-                        .addToBackStack(null)
-                        .replace(R.id.content_frame, f)
-                        .commit();
-            }
+            mFragmentManager.beginTransaction()
+                    .addToBackStack(null)
+                    .replace(mInfoFrame, f)
+                    .commit();
+
+        }
+
+        public void setContainerBackground(int color) {
+            setInfoFrame();
+
+            Container.setBackgroundColor(color);
         }
         //endregion
         //endregion

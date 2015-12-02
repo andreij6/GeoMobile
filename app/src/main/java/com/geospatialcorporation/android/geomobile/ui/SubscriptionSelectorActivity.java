@@ -37,6 +37,7 @@ public class SubscriptionSelectorActivity extends AppCompatActivity implements A
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
         setTitle(R.string.title_activity_select_subscription);
         setContentView(R.layout.activity_subscription_selector);
         setBackButtonClickOnce(false);
@@ -86,6 +87,7 @@ public class SubscriptionSelectorActivity extends AppCompatActivity implements A
             }
         });
 
+
     }
 
 
@@ -107,7 +109,7 @@ public class SubscriptionSelectorActivity extends AppCompatActivity implements A
 
     @Override
     public void onBackPressed() {
-        if(mBackButtonClickOnce){
+        if (mBackButtonClickOnce) {
             application.Logout();
             startActivity(new Intent(this, LoginActivity.class));
             finish();

@@ -4,7 +4,7 @@
                 xmlns:fab="http://schemas.android.com/apk/res-auto"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:background="@color/body_bkg">
+                android:background="@color/primary_dark">
 
     <RelativeLayout
         android:layout_width="match_parent"
@@ -12,7 +12,7 @@
         android:background="@color/white"
         android:layout_gravity="center_horizontal"
         android:layout_centerHorizontal="true"
-        android:id="@+id/layer_actionbar">
+        android:id="@+id/actionBar">
 
         <ImageView
             android:layout_width="wrap_content"
@@ -47,7 +47,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textAppearance="?android:attr/textAppearanceSmall"
-            android:text="@string/back"
+            tools:text="Root"
             android:id="@+id/backFolder"
             android:layout_centerVertical="true"
             android:textStyle="italic"
@@ -59,7 +59,7 @@
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="72dp"
-        android:layout_below="@+id/layer_actionbar"
+        android:layout_below="@+id/actionBar"
         android:layout_centerHorizontal="true"
         android:id="@+id/titleSection"
         android:background="@color/white">
@@ -89,7 +89,7 @@
     </RelativeLayout>
 
     <com.melnykov.fab.FloatingActionButton
-        android:id="@+id/layerOptionsIV"
+        android:id="@+id/OptionsFab"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentTop="true"
@@ -122,14 +122,15 @@
             <android.support.v4.widget.SwipeRefreshLayout
                 android:id="@+id/swipe_refresh_layout"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content">
+                android:layout_height="wrap_content"
+                >
 
                 <android.support.v7.widget.RecyclerView
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:id="@+id/layer_recyclerView"
-                    android:layout_alignParentStart="true"
-                    />
+                    android:id="@+id/recyclerView"
+                    android:layout_alignParentTop="true"
+                    android:fadeScrollbars="false"/>
 
             </android.support.v4.widget.SwipeRefreshLayout>
 

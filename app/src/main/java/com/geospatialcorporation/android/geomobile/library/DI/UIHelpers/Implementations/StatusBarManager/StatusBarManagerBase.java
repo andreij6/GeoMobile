@@ -1,13 +1,10 @@
 package com.geospatialcorporation.android.geomobile.library.DI.UIHelpers.Implementations.StatusBarManager;
 
 import android.graphics.drawable.AnimationDrawable;
-import android.graphics.drawable.Drawable;
 import android.os.Handler;
-import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.geospatialcorporation.android.geomobile.application;

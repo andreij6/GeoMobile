@@ -29,16 +29,15 @@ public class Folder implements Parcelable, ITreeEntity {
     //endregion
 
     //region Properties
-    private Boolean IsImportFolder;
-    private Boolean IsFixed;
+    private Boolean IsImportFolder;     //
+    private Boolean IsFixed;            //
     private List<Document> Documents;
     private List<Layer> Layers;
     private List<Folder> Folders;
     private Folder Parent;
-    private Integer AccessLevel;
-    private Integer MobileId;
-    private Integer Id;
-    private String Name;
+    private Integer AccessLevel;       //
+    private Integer Id;                //
+    private String Name;              //
     private List<String> mPath;
     //endregion
 
@@ -84,13 +83,6 @@ public class Folder implements Parcelable, ITreeEntity {
     }
     public void setAccessLevel(Integer accessLevel) {
         AccessLevel = accessLevel;
-    }
-
-    public Integer getMobileId() {
-        return MobileId;
-    }
-    public void setMobileId(Integer id) {
-        MobileId = id;
     }
 
     public int getId() {return Id; }

@@ -19,9 +19,6 @@ import com.geospatialcorporation.android.geomobile.ui.fragments.MapFragments.Tab
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.LatLngBounds;
-import com.google.android.gms.maps.model.MarkerOptions;
-import com.google.android.gms.maps.model.Polygon;
-import com.google.android.gms.maps.model.PolygonOptions;
 import com.google.android.gms.maps.model.Polyline;
 import com.google.android.gms.maps.model.PolylineOptions;
 
@@ -70,7 +67,7 @@ public class PolylineOptionsManager extends OptionsManagerBase<PolylineOptions, 
 
             if(valuesList.get(i).getFeatureInfo().getFeatureId().equals(featureId)){
 
-                int next = 0;
+                int next;
 
                 if(isNext){
                     next = i + 1;
@@ -227,7 +224,7 @@ public class PolylineOptionsManager extends OptionsManagerBase<PolylineOptions, 
         protected void onPostExecute(PostParameters options) {
             IMapStatusBarManager mapStatusBarManager = application.getStatusBarManager();
 
-            if(contentFragmentIsGoogleMapFragment() || application.getIsTablet()) {
+            if(contentFragmentIsGoogleMapFragment() || application.getIsLandscape()) {
                 options.mapFeatures();
 
                 if(mUUID != null) {
@@ -241,11 +238,7 @@ public class PolylineOptionsManager extends OptionsManagerBase<PolylineOptions, 
     }
 
     protected boolean contentFragmentIsGoogleMapFragment() {
-        if(application.getIsTablet()){
-            return false;
-        }else {
-            return application.getMainActivity().getContentFragment() instanceof GoogleMapFragment;
-        }
+       return application.getMainActivity().getContentFragment() instanceof GoogleMapFragment;
     }
 
     protected class PostParameters {
@@ -526,7 +519,7 @@ public class PolylineOptionsManager extends OptionsManagerBase<PolylineOptions, 
 
         @Override
         protected void onPostExecute(PostParameters options) {
-            if(contentFragmentIsGoogleMapFragment() || application.getIsTablet()) {
+            if(contentFragmentIsGoogleMapFragment() || application.getIsLandscape()) {
                 options.mapFeatures();
             }
 

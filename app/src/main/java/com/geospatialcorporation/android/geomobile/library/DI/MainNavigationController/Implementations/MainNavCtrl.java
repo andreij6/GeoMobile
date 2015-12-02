@@ -66,7 +66,7 @@ public class MainNavCtrl {
         }
     }
 
-    private class ViewConstants {
+    public static class ViewConstants {
         public static final int HEADER = 0;
         public static final int MAP = 1;
         //public static final int LAYER = 0;

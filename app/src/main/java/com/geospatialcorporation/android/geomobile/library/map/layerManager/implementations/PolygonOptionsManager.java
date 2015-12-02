@@ -3,7 +3,6 @@ package com.geospatialcorporation.android.geomobile.library.map.layerManager.imp
 import android.os.AsyncTask;
 import android.os.Handler;
 import android.util.Log;
-import android.widget.Toast;
 
 import com.geospatialcorporation.android.geomobile.application;
 import com.geospatialcorporation.android.geomobile.library.DI.Map.Implementations.LayerManager;
@@ -20,11 +19,8 @@ import com.geospatialcorporation.android.geomobile.ui.fragments.MapFragments.Tab
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.LatLngBounds;
-import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.maps.model.Polygon;
 import com.google.android.gms.maps.model.PolygonOptions;
-import com.google.android.gms.maps.model.PolylineOptions;
-import com.google.maps.android.PolyUtil;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -73,7 +69,7 @@ public class PolygonOptionsManager extends OptionsManagerBase<PolygonOptions, Po
 
             if(valuesList.get(i).getFeatureInfo().getFeatureId().equals(featureId)){
 
-                int next = 0;
+                int next;
 
                 if(isNext){
                     next = i + 1;
@@ -412,11 +408,7 @@ public class PolygonOptionsManager extends OptionsManagerBase<PolygonOptions, Po
             if(closestOption != null){
                 return closestOption;
             } else {
-                if(furthestOption != null){
-                    return furthestOption;
-                }
-
-                return null;
+               return furthestOption;
             }
         }
 

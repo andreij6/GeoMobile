@@ -186,12 +186,6 @@ public class LoginActivity extends GoogleApiActivity implements LoaderCallbacks<
 
     public void determineOrientation(){
         int display_mode = getResources().getConfiguration().orientation;
-
-        if (display_mode == Configuration.ORIENTATION_PORTRAIT) {
-            Toast.makeText(this, "Is Portrait", Toast.LENGTH_LONG).show();
-        } else {
-            Toast.makeText(this, "Is Landscape", Toast.LENGTH_LONG).show();
-        }
     }
 
 

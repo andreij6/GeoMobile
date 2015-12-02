@@ -1,0 +1,164 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<ScrollView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/body_bkg">
+
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <RelativeLayout
+            android:id="@+id/account_actionbar"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
+            android:layout_alignParentTop="true"
+            android:paddingTop="4dp"
+            android:paddingBottom="4dp"
+            android:paddingLeft="16dp"
+            android:paddingRight="16dp">
+
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textAppearance="?android:attr/textAppearanceMedium"
+                android:text="@string/account"
+                android:textStyle="italic"
+                android:textColor="@color/primary_text"
+                android:id="@+id/textView4"/>
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/closeIV"
+                android:layout_alignParentEnd="true"
+                android:src="@drawable/ic_close_grey600_24dp"/>
+
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:id="@+id/nameSection"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/account_actionbar"
+            android:layout_centerHorizontal="true"
+            android:paddingLeft="8dp"
+            android:paddingBottom="32dp"
+            android:paddingTop="32dp">
+
+            <TextView
+                android:id="@+id/firstName"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentStart="true"
+                android:layout_alignParentTop="true"
+                android:layout_marginStart="18dp"
+                android:gravity="center_vertical"
+                android:textAppearance="?android:attr/textAppearanceMedium"
+                android:textColor="@color/primary_text"
+                android:textStyle="bold"
+                tools:text="Andre"/>
+
+            <TextView
+                android:id="@+id/lastName"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_toRightOf="@id/firstName"
+                android:gravity="center_vertical"
+                android:paddingLeft="8dp"
+                android:textAppearance="?android:attr/textAppearanceMedium"
+                android:textColor="@color/primary_text"
+                android:textStyle="bold"
+                tools:text="Jones"/>
+
+        </RelativeLayout>
+
+
+        <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                        xmlns:tools="http://schemas.android.com/tools"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_below="@+id/nameSection"
+                        android:paddingLeft="16dp"
+                        android:paddingRight="16dp">
+
+            <TextView
+                android:id="@+id/cellPhone"
+                style="bold"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignTop="@+id/phoneIV"
+                android:layout_toEndOf="@+id/phoneIV"
+                android:singleLine="true"
+                android:textAppearance="?android:attr/textAppearanceMedium"
+                android:textColor="@color/primary_text"
+                android:textStyle="bold"
+                tools:text="@string/account_cell_phone"/>
+
+            <TextView
+                android:id="@+id/cellPhoneLabel"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/cellPhone"
+                android:layout_toEndOf="@+id/phoneIV"
+                android:text="@string/account_cell_phone"
+                android:textAppearance="?android:attr/textAppearanceSmall"/>
+
+            <TextView
+                android:id="@+id/officePhone"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignStart="@id/cellPhone"
+                android:layout_below="@id/cellPhoneLabel"
+                android:layout_marginTop="32dp"
+                android:singleLine="true"
+                android:textAppearance="?android:attr/textAppearanceMedium"
+                android:textColor="@color/primary_text"
+                android:textStyle="bold"
+                tools:text="@string/account_office_phone"/>
+
+            <TextView
+                android:id="@+id/officePhoneLabel"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignStart="@+id/officePhone"
+                android:layout_below="@+id/officePhone"
+                android:text="@string/account_office_phone"
+                android:textAppearance="?android:attr/textAppearanceSmall"
+                />
+
+
+            <TextView
+                android:id="@+id/email"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignStart="@id/cellPhone"
+                android:layout_below="@id/officePhoneLabel"
+                android:layout_marginTop="32dp"
+                android:singleLine="true"
+                android:textAppearance="?android:attr/textAppearanceMedium"
+                android:textColor="@color/primary_text"
+                android:textStyle="bold"
+                tools:text="@string/account_email"/>
+
+            <TextView
+                android:id="@+id/emailLabel"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignStart="@+id/email"
+                android:layout_below="@+id/email"
+                android:text="@string/account_email"
+                android:textAppearance="?android:attr/textAppearanceSmall"
+                />
+
+        </RelativeLayout>
+
+    </RelativeLayout>
+
+</ScrollView>

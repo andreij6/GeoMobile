@@ -3,8 +3,6 @@ package com.geospatialcorporation.android.geomobile.library.services.LayerDetail
 import android.content.res.Resources;
 import android.os.Bundle;
 import android.support.v4.app.FragmentTabHost;
-import android.view.ViewGroup;
-import android.widget.TextView;
 
 import com.geospatialcorporation.android.geomobile.R;
 import com.geospatialcorporation.android.geomobile.application;

@@ -25,11 +25,12 @@ import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBarActivity;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.Gravity;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.FrameLayout;
+import android.widget.ImageView;
 import android.widget.Toast;
 
 import com.geospatialcorporation.android.geomobile.R;
@@ -41,16 +42,17 @@ import com.geospatialcorporation.android.geomobile.library.DI.MainNavigationCont
 import com.geospatialcorporation.android.geomobile.library.DI.MainNavigationController.Implementations.MainNavCtrl;
 import com.geospatialcorporation.android.geomobile.library.DI.MainNavigationController.MainNavCtrlComponent;
 import com.geospatialcorporation.android.geomobile.library.DI.UIHelpers.Interfaces.DialogHelpers.IGeneralDialog;
+import com.geospatialcorporation.android.geomobile.models.Subscription;
+import com.geospatialcorporation.android.geomobile.ui.Interfaces.IFragmentView;
 import com.geospatialcorporation.android.geomobile.ui.Interfaces.IGeoMainActivity;
 import com.geospatialcorporation.android.geomobile.ui.Interfaces.OnFragmentInteractionListener;
 import com.geospatialcorporation.android.geomobile.ui.fragments.GoogleMapFragment;
 import com.geospatialcorporation.android.geomobile.ui.fragments.drawer.LayerSelectorDrawerFragment;
 import com.geospatialcorporation.android.geomobile.ui.fragments.drawer.MainNavigationDrawerFragment;
+import com.geospatialcorporation.android.geomobile.ui.fragments.tree_fragments.AccountFragment;
+import com.geospatialcorporation.android.geomobile.ui.fragments.tree_fragments.LayerFragment;
+import com.geospatialcorporation.android.geomobile.ui.fragments.tree_fragments.LibraryFragment;
 import com.google.android.gms.maps.GoogleMap;
-import com.squareup.picasso.Picasso;
-
-import java.io.PrintWriter;
-import java.io.StringWriter;
 
 import butterknife.ButterKnife;
 
@@ -85,6 +87,7 @@ public class MainActivity extends ActionBarActivity
         implements MainNavigationDrawerFragment.NavigationDrawerCallbacks,
         OnFragmentInteractionListener, IGeoMainActivity {
     private static final String TAG = MainActivity.class.getSimpleName();
+    private static final String CURRENT_FRAGMENT = "current_fragment";
 
     //region Properties
     private GoogleMapFragment mMapFragment;
@@ -97,21 +100,35 @@ public class MainActivity extends ActionBarActivity
     IGeoErrorHandler mErrorHandler;
     IGeoAnalytics mAnalytics;
     int mBackPressedFromGoogleMapFragmentCount;
+    Boolean mIsLandscape;
+    FrameLayout mDetailFrame;
+    String mCurrentFragment;
+    //region Landscape Views
+    ImageView mMapIV;
+    ImageView mLayersIV;
+    ImageView mLibrayIV;
+    ImageView mAccountIV;
+    ImageView mSubscriptionsIV;
+    ImageView mLogoutIV;
+    //endregion
     //endregion
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
         setContentView(R.layout.activity_main);
+        determineOrientation();
+
         application.setIsTablet(false);
+        application.setIsLandscape(mIsLandscape);
         application.setGeoMainActivity(this);
+        Subscription subscription = application.getGeoSubscription();
 
         //region Common Btw Tablet & Phone
         ButterKnife.bind(this);
         application.setMainActivity(this);
         ActionBar ab = getSupportActionBar();
-
-        determineOrientation();
 
         if(ab != null){
             ab.hide();
@@ -131,23 +148,162 @@ public class MainActivity extends ActionBarActivity
 
         mDrawerLayout = (DrawerLayout)findViewById(R.id.drawer_layout);
 
-        mMainMainNavigationDrawerFragment = (MainNavigationDrawerFragment)getSupportFragmentManager().findFragmentById(R.id.navigation_drawer);
-        mMainMainNavigationDrawerFragment.setUp(R.id.navigation_drawer, mDrawerLayout, getSupportActionBar());
+        if (!mIsLandscape) {
+            mMainMainNavigationDrawerFragment = (MainNavigationDrawerFragment) getSupportFragmentManager().findFragmentById(R.id.navigation_drawer);
+            mMainMainNavigationDrawerFragment.setUp(R.id.navigation_drawer, mDrawerLayout, getSupportActionBar());
+        }
 
         mLayerDrawerFragment = (LayerSelectorDrawerFragment)getSupportFragmentManager().findFragmentById(R.id.layer_drawer);
         mLayerDrawerFragment.setUp(R.id.layer_drawer, mDrawerLayout, new Toolbar(this), mMainMainNavigationDrawerFragment);
 
+        if(mIsLandscape) {
+            setupLandscapeUI();
+        }
         //determineScreenSize();
+    }
+
+    private void setupLandscapeUI() {
+        mDetailFrame = (FrameLayout)findViewById(R.id.detail_frame);
+
+        mMapIV = (ImageView)findViewById(R.id.mapIV);
+        mLayersIV = (ImageView)findViewById(R.id.layersIV);
+        mLibrayIV = (ImageView)findViewById(R.id.libraryIV);
+        mAccountIV = (ImageView)findViewById(R.id.accountIV);
+        mSubscriptionsIV = (ImageView)findViewById(R.id.SubscriptionsIV);
+        mLogoutIV = (ImageView)findViewById(R.id.logoutIV);
+
+        if(mIsAdmin){
+            mSubscriptionsIV.setVisibility(View.VISIBLE);
+        }
+
+        FragmentManager fragmentManager = getSupportFragmentManager();
+
+        fragmentManager.beginTransaction()
+                .replace(R.id.content_frame, mMapFragment)
+                .addToBackStack(null).commit();
+
+        mMapIV.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                mDetailFrame.setVisibility(View.GONE);
+            }
+        });
+
+        mLayersIV.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                openLayersDrawer();
+            }
+        });
+
+        mLogoutIV.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                application.Logout();
+                startActivity(new Intent(MainActivity.this, LoginActivity.class));
+                finish();
+            }
+        });
+
+        mSubscriptionsIV.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(MainActivity.this, SubscriptionSelectorActivity.class));
+                finish();
+            }
+        });
+
+        showDetailFrame(mLibrayIV, new LibraryFragment());
+        showDetailFrame(mAccountIV, new AccountFragment());
+
+    }
+
+    public void setFragmentFrame(IFragmentView fragment, View controller){
+        if (mCurrentFragment.equals(fragment.getClass().getSimpleName())) {
+            if(mIsLandscape) {
+                showDetailFragment();
+
+                fragment.setDetailFrame(controller, getSupportFragmentManager());
+            } else {
+                fragment.setContentFragment(getSupportFragmentManager());
+            }
+        }
+    }
+
+    @Override
+    protected void onRestoreInstanceState(Bundle savedInstanceState) {
+        super.onRestoreInstanceState(savedInstanceState);
+
+        if(savedInstanceState != null){
+            mCurrentFragment = savedInstanceState.getString(CURRENT_FRAGMENT);
+
+            if(mCurrentFragment != null){
+                setFragmentFrame(new AccountFragment(), mAccountIV);
+                setFragmentFrame(new LibraryFragment(), mLibrayIV);
+                setFragmentFrame(new LayerFragment(), null);
+            }
+        }
+
+        mCurrentFragment = null;
+    }
+
+    @Override
+    protected void onSaveInstanceState(Bundle outState) {
+        if(mIsLandscape){
+            if(mDetailFrame.getVisibility() == View.VISIBLE) {
+                Fragment detailFragment = getDetailFragment();
+
+                if(detailFragment != null){
+                    mCurrentFragment = detailFragment.getClass().getSimpleName();
+
+                    outState.putString(CURRENT_FRAGMENT, mCurrentFragment);
+                }
+            }
+        } else {
+            outState.putString(CURRENT_FRAGMENT , getContentFragment().getClass().getSimpleName());
+        }
+        super.onSaveInstanceState(outState);
+    }
+
+    private void showDetailFrame(ImageView control, final Fragment fragment) {
+        control.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Fragment currentFragment = getDetailFragment();
+
+                if (currentFragment != null) {
+                    if (fragment.getClass().getSimpleName().equals(currentFragment.getClass().getSimpleName()) && mDetailFrame.getVisibility() == View.VISIBLE) {
+                        //If the fragment is Visible and already the target fragment just hide the frame
+                        mDetailFrame.setVisibility(View.GONE);
+                    } else {
+                        setDetailFragment();
+                    }
+                } else {
+                    setDetailFragment();
+                }
+            }
+
+            protected void setDetailFragment() {
+                mDetailFrame.setVisibility(View.VISIBLE);
+
+                FragmentManager fragmentManager = getSupportFragmentManager();
+
+                fragmentManager.beginTransaction()
+                        .replace(R.id.detail_frame, fragment)
+                        .addToBackStack(null).commit();
+            }
+        });
     }
 
     public void determineOrientation(){
         int display_mode = getResources().getConfiguration().orientation;
 
-        if (display_mode == Configuration.ORIENTATION_PORTRAIT) {
-            Toast.makeText(this, "Is Portrait", Toast.LENGTH_LONG).show();
+        if(display_mode == Configuration.ORIENTATION_LANDSCAPE){
+            mIsLandscape = true;
         } else {
-            Toast.makeText(this, "Is Landscape", Toast.LENGTH_LONG).show();
+            mIsLandscape = false;
         }
+
     }
 
     public void determineScreenSize() {
@@ -292,8 +448,10 @@ public class MainActivity extends ActionBarActivity
             drawerLayout.openDrawer(toShow);
         }
 
-        if(drawerLayout.isDrawerOpen(toClose)){
-            drawerLayout.closeDrawer(toClose);
+        if(toClose != null) {  //null in landscape
+            if (drawerLayout.isDrawerOpen(toClose)) {
+                drawerLayout.closeDrawer(toClose);
+            }
         }
 
     }
@@ -303,17 +461,26 @@ public class MainActivity extends ActionBarActivity
         getSupportActionBar().setTitle(title);
     }
 
+    @Override
+    public void closeDetailFragment() {
+        FrameLayout frameLayout = (FrameLayout)findViewById(R.id.detail_frame);
+
+        if(frameLayout != null){
+            frameLayout.setVisibility(View.GONE);
+        }
+    }
+
+    @Override
+    public void showDetailFragment() {
+        mDetailFrame.setVisibility(View.VISIBLE);
+    }
+
     public DrawerLayout getDrawerLayout() {
         return (DrawerLayout)findViewById(R.id.drawer_layout);
     }
 
     public LayerSelectorDrawerFragment getLayerDrawerFragment(){
         return (LayerSelectorDrawerFragment)getSupportFragmentManager().findFragmentById(R.id.layer_drawer);
-    }
-
-    public MainNavigationDrawerFragment getMainMenuFragment(){
-        return (MainNavigationDrawerFragment)getSupportFragmentManager().findFragmentById(R.id.navigation_drawer);
-
     }
 
     public void closeLayerDrawer() {
@@ -330,6 +497,10 @@ public class MainActivity extends ActionBarActivity
 
     public View getMainNavView(){
         return findViewById(R.id.navigation_drawer);
+    }
+
+    public Fragment getDetailFragment() {
+        return getSupportFragmentManager().findFragmentById(R.id.detail_frame);
     }
 
     public static class MediaConstants {

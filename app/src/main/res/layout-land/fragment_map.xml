@@ -40,7 +40,8 @@
                 android:background="#99FFFFFF"
                 android:layout_gravity="center_horizontal"
                 android:layout_centerHorizontal="true"
-                android:id="@+id/map_actionbar">
+                android:id="@+id/map_actionbar"
+                android:visibility="gone">
 
                 <ImageView
                     android:layout_width="wrap_content"
@@ -224,8 +225,8 @@
                 android:padding="5dp"
                 android:background="@color/white_transparency"
                 android:layout_alignParentBottom="true"
-                android:layout_alignParentStart="true"
-                android:layout_marginStart="25dp"/>
+                android:layout_alignParentEnd="true"
+                android:layout_marginEnd="25dp"/>
 
             <ImageButton
                 android:layout_width="wrap_content"
@@ -237,8 +238,8 @@
                 android:padding="5dp"
                 android:background="@color/white_transparency"
                 android:layout_alignParentBottom="true"
-                android:layout_alignParentStart="true"
-                android:layout_marginStart="25dp"/>
+                android:layout_alignParentEnd="true"
+                android:layout_marginEnd="25dp"/>
 
 
         </RelativeLayout>

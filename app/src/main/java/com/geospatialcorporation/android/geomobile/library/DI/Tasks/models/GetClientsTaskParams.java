@@ -7,14 +7,13 @@ import com.geospatialcorporation.android.geomobile.ui.Interfaces.IPostExecuter;
 
 import java.util.List;
 
-public class GetClientsTaskParams extends ExecuterParamsBase {
+public class GetClientsTaskParams {
     List<Subscription> mDataSet;
     int mClientTypeCode;
     FragmentActivity mContext;
     private int mSSPClientTypeCode;
 
-    public GetClientsTaskParams(List<Subscription> dataSet, int clientTypeCode, int sspClientTypeCode, FragmentActivity activity, IPostExecuter executer) {
-        super(executer);
+    public GetClientsTaskParams(List<Subscription> dataSet, int clientTypeCode, int sspClientTypeCode, FragmentActivity activity) {
         mDataSet = dataSet;
         mClientTypeCode = clientTypeCode;
         mContext = activity;

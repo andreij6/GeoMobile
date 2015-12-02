@@ -4,10 +4,8 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.StrictMode;
-import android.support.v4.app.Fragment;
 import android.support.v4.widget.DrawerLayout;
 import android.util.Log;
-import android.widget.Toast;
 
 import com.facebook.stetho.Stetho;
 import com.facebook.stetho.okhttp.StethoInterceptor;
@@ -46,17 +44,10 @@ import com.squareup.okhttp.Request;
 import com.squareup.okhttp.Response;
 
 import java.io.IOException;
-import java.net.CookieManager;
-import java.net.CookiePolicy;
-import java.net.HttpCookie;
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.HashSet;
-import java.util.LinkedList;
 import java.util.List;
 import java.util.Locale;
-import java.util.Queue;
-import java.util.prefs.Preferences;
 
 import retrofit.RequestInterceptor;
 import retrofit.RestAdapter;
@@ -134,6 +125,7 @@ public class application extends applicationDIBase {
     };
     private static boolean editingLayerMode;
     private static Integer clientCode;
+    private static Boolean isLandscape;
 
 
     //region stuff
@@ -188,11 +180,16 @@ public class application extends applicationDIBase {
     }
 
     public static void setIsAdminUser(Boolean isAdminUser) {
-        application.isAdminUser = isAdminUser;
+        IGeoSharedPrefs geoSharedPrefs = getGeoSharedPrefsComponent().provideGeoSharedPrefs();
+
+        geoSharedPrefs.add("IsAdminUser", isAdminUser);
+        geoSharedPrefs.apply();
     }
 
     public static Boolean getIsAdminUser(){
-        return isAdminUser;
+        IGeoSharedPrefs geoSharedPrefs = getGeoSharedPrefsComponent().provideGeoSharedPrefs();
+
+        return geoSharedPrefs.getBoolean("IsAdminUser", false);
     }
 
     public static HashMap<Integer, Bookmark> getBookmarkHashMap() {
@@ -378,11 +375,19 @@ public class application extends applicationDIBase {
         return editingLayerMode;
     }
 
+    public static void setIsLandscape(Boolean isLandscape) {
+        application.isLandscape = isLandscape;
+    }
+
+    public static Boolean getIsLandscape() {
+        return isLandscape;
+    }
+
     //endregion
 
     public void onCreate() {
         super.onCreate();
-
+        Log.d(TAG, "onApplicationCreate");
         androidDefaultUEH = Thread.getDefaultUncaughtExceptionHandler();
         Thread.setDefaultUncaughtExceptionHandler(handler);
 

@@ -1,27 +1,33 @@
 package com.geospatialcorporation.android.geomobile.ui.fragments.tree_fragments;
 
 import android.os.Bundle;
+import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.geospatialcorporation.android.geomobile.R;
 import com.geospatialcorporation.android.geomobile.application;
+import com.geospatialcorporation.android.geomobile.library.DI.MainNavigationController.Implementations.MainNavCtrl;
 import com.geospatialcorporation.android.geomobile.library.services.UserAccountProccessor.IUserAccountProcessor;
 import com.geospatialcorporation.android.geomobile.library.services.UserAccountProccessor.UserAccountProcessor;
 import com.geospatialcorporation.android.geomobile.models.UserAccount;
 import com.geospatialcorporation.android.geomobile.ui.Interfaces.IAccountFragment;
+import com.geospatialcorporation.android.geomobile.ui.Interfaces.IFragmentView;
+import com.geospatialcorporation.android.geomobile.ui.Interfaces.OnFragmentInteractionListener;
 import com.geospatialcorporation.android.geomobile.ui.MainActivity;
 import com.geospatialcorporation.android.geomobile.ui.fragments.GeoViewFragmentBase;
 import com.geospatialcorporation.android.geomobile.ui.fragments.GoogleMapFragment;
+import com.geospatialcorporation.android.geomobile.ui.fragments.drawer.MainNavigationDrawerFragment;
 
 import butterknife.Bind;
 import butterknife.OnClick;
 
-public class AccountFragment extends GeoViewFragmentBase implements IAccountFragment {
+public class AccountFragment extends GeoViewFragmentBase implements IAccountFragment, IFragmentView {
 
     protected static final String TAG = AccountFragment.class.getSimpleName();
 
@@ -39,16 +45,19 @@ public class AccountFragment extends GeoViewFragmentBase implements IAccountFrag
     @Bind(R.id.officePhone) TextView OfficePhone;
     @Bind(R.id.officePhoneLabel) TextView OfficePhoneLabel;
 
+    @Nullable
     @OnClick(R.id.showNavIV1)
     public void showNavigation(){
         ((MainActivity)getActivity()).openNavigationDrawer();
     }
 
+    @Nullable
     @OnClick(R.id.showNavIV2)
     public void showNavigation2(){
         ((MainActivity)getActivity()).openNavigationDrawer();
     }
 
+    @Nullable
     @OnClick(R.id.goToMapIV)
     public void goToMapIV(){
         Fragment pageFragment = new GoogleMapFragment();
@@ -61,11 +70,18 @@ public class AccountFragment extends GeoViewFragmentBase implements IAccountFrag
     }
 
     @SuppressWarnings("unused")
+    @Nullable
     @OnClick(R.id.refreshIV)
     public void refreshAccountInfo(){
         application.setUserAccount(null);
 
         mProcessor.GetUserAccountData(getActivity(), this);
+    }
+
+    @Nullable
+    @OnClick(R.id.closeIV)
+    public void closeFragment(){
+        ((OnFragmentInteractionListener)getActivity()).closeDetailFragment();
     }
     //endregion
 
@@ -84,8 +100,6 @@ public class AccountFragment extends GeoViewFragmentBase implements IAccountFrag
 
         mProcessor.GetUserAccountData(getActivity(), this);
 
-        //Toaster(application.getAuthToken());
-
         return mView;
     }
 
@@ -101,5 +115,15 @@ public class AccountFragment extends GeoViewFragmentBase implements IAccountFrag
 
     private IUserAccountProcessor setProcessor() {
         return new UserAccountProcessor();
+    }
+
+    @Override
+    public void setDetailFrame(View view, FragmentManager fm) {
+        view.performClick();
+    }
+
+    @Override
+    public void setContentFragment(FragmentManager fm) {
+        application.getMainActivity().onNavigationDrawerItemSelected(MainNavCtrl.ViewConstants.ACCOUNT);
     }
 }

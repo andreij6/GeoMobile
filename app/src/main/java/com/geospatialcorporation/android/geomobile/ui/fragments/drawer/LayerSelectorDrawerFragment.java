@@ -190,7 +190,9 @@ public class LayerSelectorDrawerFragment extends Fragment implements IPostExecut
 
             @Override
             public void onDrawerSlide(View drawerView, float slideOffset) {
-                mainDrawer.getCurretSelectionByContentFragment();
+                if(mainDrawer != null) {
+                    mainDrawer.getCurretSelectionByContentFragment();
+                }
 
                 super.onDrawerSlide(drawerView, slideOffset);
             }

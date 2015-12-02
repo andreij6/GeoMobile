@@ -24,9 +24,6 @@ import butterknife.Bind;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 
-/**
- * Created by andre on 6/6/2015.
- */
 public class BookmarkPanelFragment extends GeoViewFragmentBase {
     View mView;
     @Bind(R.id.bookMarkNameInput)EditText mName;
@@ -73,7 +70,7 @@ public class BookmarkPanelFragment extends GeoViewFragmentBase {
             @Override
             public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
                 if (actionId == EditorInfo.IME_ACTION_DONE) {
-                    mMapStateService.saveBookmarkState(new BookmarkMapStateSaveRequest(mMap, mName.getText().toString()));
+                    //mMapStateService.saveBookmarkState(new BookmarkMapStateSaveRequest(mMap, mName.getText().toString()));
 
                     mPanelManager.hide();
 

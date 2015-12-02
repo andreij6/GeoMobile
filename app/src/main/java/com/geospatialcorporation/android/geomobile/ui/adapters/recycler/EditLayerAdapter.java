@@ -5,7 +5,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.geospatialcorporation.android.geomobile.R;
 import com.geospatialcorporation.android.geomobile.application;
@@ -50,17 +49,13 @@ public class EditLayerAdapter extends GeoRecyclerAdapterBase<EditLayerAdapter.Ho
 
                 @Override
                 public void onClick(View v) {
-                    if(application.getIsTablet()){
-
-                    } else {
-
                         GoogleMapFragment map = application.getMapFragment();
 
                         map.editLayer(response);
 
                         mDialog.close();
                     }
-                }
+
             });
         }
 

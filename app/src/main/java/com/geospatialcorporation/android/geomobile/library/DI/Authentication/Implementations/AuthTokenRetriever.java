@@ -121,10 +121,10 @@ public class AuthTokenRetriever {
                 try {
                     Subscription subscription = mLoginService.getCurrentClient();
 
+                    Intent intent = new Intent(mContext, MainActivity.class);
                     application.setGeoSubscription(subscription);
 
-
-                    mContext.startActivity(new Intent(mContext, MainActivity.class));
+                    mContext.startActivity(intent);
 
                     mContext.finish();
                 } catch (RetrofitError e) {

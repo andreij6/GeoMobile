@@ -1,6 +1,5 @@
 package com.geospatialcorporation.android.geomobile.library.DI.Tasks.Implementations;
 
-import android.support.v4.widget.DrawerLayout;
 import android.util.Log;
 
 import com.geospatialcorporation.android.geomobile.application;

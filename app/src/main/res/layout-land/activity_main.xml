@@ -21,6 +21,68 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent">
 
+            <LinearLayout
+                android:orientation="vertical"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:background="@color/accent">
+
+
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/mapIV"
+                    android:src="@drawable/ic_earth_white_24dp"
+                    style="@style/landNavigation"/>
+
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/layersIV"
+                    android:src="@drawable/ic_layers_white_24dp"
+                    style="@style/landNavigation"/>
+
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/libraryIV"
+                    android:src="@drawable/ic_book_white_24dp"
+                    style="@style/landNavigation"/>
+
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/accountIV"
+                    android:src="@drawable/ic_account_circle_white_24dp"
+                    style="@style/landNavigation"/>
+
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/SubscriptionsIV"
+                    android:src="@drawable/ic_account_search_white_24dp"
+                    style="@style/landNavigation"
+                    android:visibility="gone"/>
+
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/logoutIV"
+                    android:src="@drawable/ic_logout_white_24dp"
+                    style="@style/landNavigation"/>
+
+            </LinearLayout>
+
+            <FrameLayout
+                android:id="@+id/detail_frame"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_weight="1.5"
+                android:elevation="18dp"
+                android:visibility="gone">
+
+            </FrameLayout>
+
             <FrameLayout
                 android:id="@+id/content_frame"
                 android:layout_width="match_parent"
@@ -29,25 +91,8 @@
 
             </FrameLayout>
 
-            <FrameLayout
-                android:id="@+id/detail_frame"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_weight="1"
-                android:visibility="gone">
 
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:textAppearance="?android:attr/textAppearanceLarge"
-                    android:text="Large Text"
-                    android:id="@+id/textView4"
-                    android:layout_gravity="center"/>
-
-            </FrameLayout>
         </LinearLayout>
-
-
 
         <!--
              android:layout_gravity="start" tells DrawerLayout to treat
@@ -57,14 +102,6 @@
              the container. A solid background is used for contrast
              with the content view.
         -->
-
-        <fragment
-            android:id="@+id/navigation_drawer"
-            android:name="com.geospatialcorporation.android.geomobile.ui.fragments.drawer.MainNavigationDrawerFragment"
-            android:layout_width="240dp"
-            android:layout_height="match_parent"
-            android:layout_gravity="start"
-            tools:layout="@layout/fragment_left_navigation_drawer"/>
 
         <fragment
             android:id="@+id/layer_drawer"

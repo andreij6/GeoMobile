@@ -422,7 +422,6 @@ public class GoogleMapFragment extends GeoViewFragmentBase implements
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         setHasOptionsMenu(true);
         View rootView = inflater.inflate(R.layout.fragment_map, container, false);
-        Toaster("onCreateView");
         ButterKnife.bind(this, rootView);
 
         ActionBar actionBar = ((MainActivity)getActivity()).getSupportActionBar();
@@ -485,7 +484,9 @@ public class GoogleMapFragment extends GeoViewFragmentBase implements
     @Override
     public void onDestroy() {
         super.onDestroy();
-        mLayerManager.clearVisibleLayers();
+        if(mLayerManager != null) {
+            mLayerManager.clearVisibleLayers();
+        }
         if(mMapView != null) {
             mMapView.onDestroy();
         }
@@ -506,8 +507,6 @@ public class GoogleMapFragment extends GeoViewFragmentBase implements
     @Override
     public void onStop(){
         super.onStop();
-        LifeCycleLogger("onStop");
-        Toaster("onStop");
         mPanelManager.hide();
         saveMapState();
     }
@@ -516,15 +515,12 @@ public class GoogleMapFragment extends GeoViewFragmentBase implements
     public void onDestroyView(){
         mPanelManager.hide();
         super.onDestroyView();
-        Toaster("onDestroyView");
         mLayerManager.clearVisibleLayers();
-        LifeCycleLogger("Done Clearing Layers");
 
         if(mViewMode != null){
             mViewMode.Disable(true);
             mViewMode = null;
         }
-        LifeCycleLogger("on Destroy View Complete");
     }
 
     @Override
@@ -550,36 +546,6 @@ public class GoogleMapFragment extends GeoViewFragmentBase implements
 
     //endregion
 
-    //region ViewModeSetups
-    //protected IViewMode querySetup() {
-    //    mAnalytics.trackClick(new GoogleAnalyticEvent().QueryModeInit());
-    //
-    //    return new QueryMode.Builder()
-    //            .setDependents(mMap, mListener, getActivity())
-    //            .setControls(mBoxQueryBtn, mPointQueryBtn, mCloseBtn, getActivity().getSupportFragmentManager())
-    //            .setupUI()
-    //            .create();
-    //
-    //}
-
-    //protected IViewMode searchSetup() {
-    //    mAnalytics.trackClick(new GoogleAnalyticEvent().QuickSearchInit());
-    //
-    //    return new SearchMode.Builder()
-    //                    .init(getActivity().getSupportFragmentManager(), mPanelManager)
-    //                    .create();
-    //}
-
-    //protected IViewMode fullScreenSetup(){
-    //    mAnalytics.sendClickEvent(R.string.full_screen_mode);
-    //    MainActivity activity = (MainActivity)getActivity();
-    //    return new FullScreenMode.Builder()
-    //                    .create(activity.getSupportActionBar(),
-    //                            activity.getDrawerLayout(),
-    //                            mPanel, mFullScreenClose);
-    //}
-    //endregion
-
     //region ViewMode Listener
     @Override
     public void setViewMode(IViewMode mode) {
@@ -598,24 +564,6 @@ public class GoogleMapFragment extends GeoViewFragmentBase implements
             mViewMode = mode;
         }
     }
-
-    //public void setViewMode(String mode){
-    //    switch(mode){
-    //        case ViewModes.BOOKMARK:
-    //            GeoDialogHelper.showBookmarks(getActivity(), getFragmentManager(), mSaveBtn, mBmClose, mPanel, mMap);
-    //            mPanelManager.collapse();
-    //            break;
-    //        case ViewModes.QUERY:
-    //            setViewMode(querySetup());
-    //            break;
-    //        case ViewModes.QUICKSEARCH:
-    //            setViewMode(searchSetup());
-    //            break;
-    //        default:
-    //            Toaster("Mode Not Set");
-    //            break;
-    //    }
-    //}
 
     public void resetViewMode() {
         mViewMode = null;
@@ -970,10 +918,6 @@ public class GoogleMapFragment extends GeoViewFragmentBase implements
         mFeatureWindowTabToShow = tab;
     }
 
-    public int getFeatureWindowTab(){
-        return mFeatureWindowTabToShow;
-    }
-
     protected void initializeGoogleMap(Bundle savedInstanceState) {
         final Bundle mapViewSavedInstanceState = savedInstanceState != null ? savedInstanceState.getBundle("mapViewSaveState") : null;
         mMapView.onCreate(mapViewSavedInstanceState);
@@ -1127,7 +1071,6 @@ public class GoogleMapFragment extends GeoViewFragmentBase implements
         }
     }
 
-
     public void simulateClick(final LatLng latLng) {
 
         if(latLng == null){
@@ -1192,10 +1135,6 @@ public class GoogleMapFragment extends GeoViewFragmentBase implements
         if(typeCode != 0){
             mLayerManager.getNextFeature(mSelectedFeatureId, mSelectedLayerId, typeCode, false, center);
         }
-    }
-
-    public Polygon getHighlightedPolygon() {
-        return mHighlightedPolygon;
     }
 
     public void centerMap(LatLng center) {
