@@ -6,9 +6,6 @@ import com.geospatialcorporation.android.geomobile.models.Document.Document;
 
 import java.util.HashMap;
 
-/**
- * Created by andre on 6/3/2015.
- */
 public class DocumentsAppSource extends AppSourceBase<Document> {
 
     HashMap<Integer, Document> Data;

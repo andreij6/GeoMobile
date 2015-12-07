@@ -12,25 +12,24 @@ import com.facebook.stetho.okhttp.StethoInterceptor;
 import com.geospatialcorporation.android.geomobile.library.DI.Analytics.Interfaces.IGeoAnalytics;
 import com.geospatialcorporation.android.geomobile.library.DI.Analytics.Models.GoogleAnalyticEvent;
 import com.geospatialcorporation.android.geomobile.library.DI.Map.Implementations.LayerManager;
+import com.geospatialcorporation.android.geomobile.library.DI.Map.Interfaces.ILayerManager;
 import com.geospatialcorporation.android.geomobile.library.DI.SharedPreferences.Interfaces.IGeoSharedPrefs;
 import com.geospatialcorporation.android.geomobile.library.DI.UIHelpers.Interfaces.IMapStatusBarManager;
 import com.geospatialcorporation.android.geomobile.library.constants.Domains;
 import com.geospatialcorporation.android.geomobile.library.constants.GeoPanel;
 import com.geospatialcorporation.android.geomobile.library.constants.GeoSharedPreferences;
-import com.geospatialcorporation.android.geomobile.library.DI.Map.Interfaces.ILayerManager;
+import com.geospatialcorporation.android.geomobile.library.map.Models.GeoClusterMarker;
 import com.geospatialcorporation.android.geomobile.models.Bookmarks.Bookmark;
-import com.geospatialcorporation.android.geomobile.models.Layers.LegendLayer;
-import com.geospatialcorporation.android.geomobile.models.Subscription;
 import com.geospatialcorporation.android.geomobile.models.Document.Document;
 import com.geospatialcorporation.android.geomobile.models.Folders.Folder;
 import com.geospatialcorporation.android.geomobile.models.Layers.Layer;
+import com.geospatialcorporation.android.geomobile.models.Layers.LegendLayer;
 import com.geospatialcorporation.android.geomobile.models.MapLayerState;
+import com.geospatialcorporation.android.geomobile.models.Subscription;
 import com.geospatialcorporation.android.geomobile.models.UserAccount;
 import com.geospatialcorporation.android.geomobile.ui.Interfaces.IFeatureWindowCtrl;
 import com.geospatialcorporation.android.geomobile.ui.Interfaces.IGeoMainActivity;
 import com.geospatialcorporation.android.geomobile.ui.MainActivity;
-import com.geospatialcorporation.android.geomobile.library.map.Models.GeoClusterMarker;
-import com.geospatialcorporation.android.geomobile.ui.MainTabletActivity;
 import com.geospatialcorporation.android.geomobile.ui.fragments.GoogleMapFragment;
 import com.google.android.gms.analytics.GoogleAnalytics;
 import com.google.android.gms.analytics.Tracker;
@@ -103,8 +102,6 @@ public class application extends applicationDIBase {
     private static IMapStatusBarManager statusBarManager;
     private static String azureDomain;
     private static UserAccount userAccount;
-    private static boolean isTablet;
-    private static MainTabletActivity mainTabletActivity;
     private static IGeoMainActivity geoMainActivity;
     private static IFeatureWindowCtrl featureWindowCtrl;
     private static int currentFeatureWindowTab;
@@ -295,18 +292,6 @@ public class application extends applicationDIBase {
         application.userAccount = userAccount;
     }
 
-    public static boolean getIsTablet() {
-        return isTablet;
-    }
-
-    public static void setIsTablet(boolean isTablet) {
-        application.isTablet = isTablet;
-    }
-
-    public static MainTabletActivity getMainTabletActivity() {
-        return mainTabletActivity;
-    }
-
     public static void setGeoMainActivity(IGeoMainActivity geoMainActivity) {
         application.geoMainActivity = geoMainActivity;
     }
@@ -363,10 +348,6 @@ public class application extends applicationDIBase {
         application.legendLayerQueue = legendLayerQueue;
     }
 
-    public static void setMainTabletActivity(MainTabletActivity mainTabletActivity) {
-        application.mainTabletActivity = mainTabletActivity;
-    }
-
     public static void setEditingLayerMode(boolean editingLayerMode) {
         application.editingLayerMode = editingLayerMode;
     }
@@ -382,6 +363,7 @@ public class application extends applicationDIBase {
     public static Boolean getIsLandscape() {
         return isLandscape;
     }
+
 
     //endregion
 
@@ -509,6 +491,7 @@ public class application extends applicationDIBase {
         return restAdapter;
     }
 
+    //TODO: REFACTOR THIS. not simple to set up for new panels
     public static SlidingUpPanelLayout getSlidingPanel(int panelType) {
         SlidingUpPanelLayout panel = null;
 

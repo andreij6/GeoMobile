@@ -2,9 +2,6 @@ package com.geospatialcorporation.android.geomobile.models.Query.map.response.fe
 
 import java.util.List;
 
-/**
- * Created by andre on 7/2/2015.
- */
 public class WindowFeatures {
     List<String> Attributes;
     String Id;

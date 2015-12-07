@@ -7,9 +7,6 @@ import com.geospatialcorporation.android.geomobile.models.Query.map.response.map
 import java.util.ArrayList;
 import java.util.List;
 
-/**
- * Created by andre on 6/26/2015.
- */
 public abstract class MultiFeatureMapperBase<T, H extends SingleFeatureMapperBase> extends FeatureMapperBase<T> {
 
     List<T> mOptions;

@@ -12,9 +12,6 @@ import com.google.android.gms.maps.model.PolygonOptions;
 import java.util.ArrayList;
 import java.util.List;
 
-/**
- * Created by andre on 6/25/2015.
- */
 public abstract class PolygonFeatureMapperBase extends SingleFeatureMapperBase<PolygonOptions> {
 
     int mStroke;

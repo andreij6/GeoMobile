@@ -4,6 +4,7 @@ import android.app.Dialog;
 import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
+import android.support.design.widget.Snackbar;
 import android.view.View;
 import android.widget.EditText;
 
@@ -12,9 +13,6 @@ import com.geospatialcorporation.android.geomobile.R;
 import butterknife.Bind;
 import butterknife.ButterKnife;
 
-/**
- * Created by andre on 6/12/2015.
- */
 public class RenameFolderActionDialogFragment extends FolderActionDialogBase {
     @Bind(R.id.renameInput)
     EditText mRenameInput;
@@ -38,10 +36,11 @@ public class RenameFolderActionDialogFragment extends FolderActionDialogBase {
                         String newName = mRenameInput.getText().toString();
 
                         if (!newName.isEmpty()) {
+                            Toaster(mContext.getString(R.string.rename_request_sent));
                             mService.rename(mFolder.getId(), newName);
                             getFragmentManager().popBackStack();
                         } else {
-                            Toaster("Please add a valid Name");
+                            Toaster(mContext.getString(R.string.folder_rename_validation));
                         }
                     }
                 }).setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {

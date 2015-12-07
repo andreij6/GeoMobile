@@ -6,9 +6,9 @@ import android.os.Parcel;
 import android.os.Parcelable;
 
 import com.geospatialcorporation.android.geomobile.library.constants.AccessLevelCodes;
+import com.geospatialcorporation.android.geomobile.models.Document.Document;
 import com.geospatialcorporation.android.geomobile.models.Interfaces.ITreeEntity;
 import com.geospatialcorporation.android.geomobile.models.Layers.Layer;
-import com.geospatialcorporation.android.geomobile.models.Document.Document;
 
 import java.util.ArrayList;
 import java.util.Collections;

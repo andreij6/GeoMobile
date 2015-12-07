@@ -1,8 +1,6 @@
 package com.geospatialcorporation.android.geomobile.models.Folders;
 
-/**
- * Created by andre on 6/9/2015.
- */
+
 public class FolderPermissionsResponse {
     //region Getters & Setters
     public Boolean getIsFixed() {

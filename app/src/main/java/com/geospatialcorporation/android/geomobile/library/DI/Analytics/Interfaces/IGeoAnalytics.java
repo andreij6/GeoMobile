@@ -3,7 +3,6 @@ package com.geospatialcorporation.android.geomobile.library.DI.Analytics.Interfa
 import android.app.Activity;
 
 import com.geospatialcorporation.android.geomobile.library.DI.Analytics.Models.AnalyticEvent;
-import com.geospatialcorporation.android.geomobile.ui.MainActivity;
 
 public interface IGeoAnalytics<T extends  AnalyticEvent> {
 

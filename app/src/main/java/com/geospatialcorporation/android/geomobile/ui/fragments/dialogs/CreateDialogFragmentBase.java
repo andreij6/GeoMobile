@@ -10,9 +10,6 @@ import com.geospatialcorporation.android.geomobile.library.DI.Analytics.Interfac
 import com.geospatialcorporation.android.geomobile.models.Folders.Folder;
 import com.geospatialcorporation.android.geomobile.ui.fragments.dialogs.base.GeoDialogFragmentBase;
 
-/**
- * Created by andre on 6/1/2015.
- */
 public class CreateDialogFragmentBase extends GeoDialogFragmentBase {
     //region Getters & Setters
     public Folder getFolder() {

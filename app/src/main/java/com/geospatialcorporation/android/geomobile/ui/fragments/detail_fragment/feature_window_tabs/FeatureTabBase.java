@@ -6,15 +6,12 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.TableLayout;
-import android.widget.TableRow;
 import android.widget.TextView;
 
 import com.geospatialcorporation.android.geomobile.R;
 import com.geospatialcorporation.android.geomobile.library.DI.FeatureWindow.DaggerFeatureWindowComponent;
 import com.geospatialcorporation.android.geomobile.library.DI.FeatureWindow.FeatureWindowComponent;
 import com.geospatialcorporation.android.geomobile.library.DI.FeatureWindow.IFeatureWindowDataParser;
-import com.geospatialcorporation.android.geomobile.library.DI.FeatureWindow.models.FeatureWindowData;
 import com.geospatialcorporation.android.geomobile.library.constants.GeoPanel;
 import com.geospatialcorporation.android.geomobile.library.panelmanager.PanelManager;
 import com.geospatialcorporation.android.geomobile.models.Query.map.response.featurewindow.FeatureQueryResponse;
@@ -22,10 +19,6 @@ import com.geospatialcorporation.android.geomobile.models.Query.map.response.fea
 import com.geospatialcorporation.android.geomobile.ui.Interfaces.IPanelStateReactor;
 import com.geospatialcorporation.android.geomobile.ui.fragments.GeoViewFragmentBase;
 import com.google.gson.Gson;
-
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.List;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
@@ -39,7 +32,6 @@ public abstract class FeatureTabBase extends GeoViewFragmentBase implements IPan
     IFeatureWindowDataParser DataParser;
     protected LayoutInflater mInflater;
     Context mContext;
-    PanelManager mPanelManager;
     @Bind(R.id.moreInfo) TextView mMoreInfo;
 
     @Override
@@ -53,13 +45,17 @@ public abstract class FeatureTabBase extends GeoViewFragmentBase implements IPan
 
         DataParser = component.provideDataParser();
 
-        mPanelManager = new PanelManager(GeoPanel.MAP);
+        if(!mIsLandscape) {
+            mPanelManager = new PanelManager(GeoPanel.MAP);
+
+            if(mPanelManager.isExpanded()){
+                Expanded();
+            }
+        }
 
         setDataView();
 
-        if(mPanelManager.isExpanded()){
-            Expanded();
-        }
+
 
         return v;
     }

@@ -1,7 +1,6 @@
 package com.geospatialcorporation.android.geomobile.library.DI.Authentication.models;
 
 import com.afollestad.materialdialogs.MaterialDialog;
-import com.geospatialcorporation.android.geomobile.library.helpers.ProgressDialogHelper;
 import com.geospatialcorporation.android.geomobile.ui.GoogleApiActivity;
 
 public abstract class AuthTokenParams {

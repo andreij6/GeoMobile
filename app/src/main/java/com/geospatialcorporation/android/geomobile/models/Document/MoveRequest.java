@@ -1,8 +1,5 @@
 package com.geospatialcorporation.android.geomobile.models.Document;
 
-/**
- * Created by andre on 6/9/2015.
- */
 public class MoveRequest {
     Integer DocumentId;
     String Ext;

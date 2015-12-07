@@ -4,7 +4,6 @@ import android.database.Cursor;
 import android.os.Parcel;
 import android.os.Parcelable;
 
-import com.geospatialcorporation.android.geomobile.data.GeoUndergroundDB;
 import com.geospatialcorporation.android.geomobile.data.tables.SubscriptionColumns;
 import com.geospatialcorporation.android.geomobile.library.constants.ClientTypeCodes;
 

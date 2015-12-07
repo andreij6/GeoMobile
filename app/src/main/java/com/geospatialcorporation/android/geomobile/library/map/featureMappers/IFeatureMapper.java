@@ -6,9 +6,6 @@ import com.geospatialcorporation.android.geomobile.models.Layers.LegendLayer;
 import com.geospatialcorporation.android.geomobile.models.Query.map.response.mapquery.Feature;
 import com.geospatialcorporation.android.geomobile.models.Query.map.response.mapquery.Style;
 
-/**
- * Created by andre on 6/24/2015.
- */
 public interface IFeatureMapper {
     IFeatureMapper draw(Feature feature);
 

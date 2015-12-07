@@ -3,9 +3,6 @@ package com.geospatialcorporation.android.geomobile.models.Query.map.response.fe
 import com.geospatialcorporation.android.geomobile.models.Layers.Extent;
 import com.geospatialcorporation.android.geomobile.models.Layers.Point;
 
-/**
- * Created by andre on 7/2/2015.
- */
 public class MapInfo {
     String GeometryType;
     Point Point;

@@ -6,30 +6,21 @@ import android.net.Uri;
 import android.os.AsyncTask;
 import android.support.v4.app.FragmentActivity;
 import android.util.Log;
-import android.widget.Toast;
 
 import com.geospatialcorporation.android.geomobile.application;
 import com.geospatialcorporation.android.geomobile.data.GeoUndergoundProvider;
-import com.geospatialcorporation.android.geomobile.data.GeoUndergroundDB;
 import com.geospatialcorporation.android.geomobile.data.tables.SubscriptionColumns;
 import com.geospatialcorporation.android.geomobile.library.DI.Tasks.Interfaces.IGetClientsTask;
 import com.geospatialcorporation.android.geomobile.library.DI.Tasks.models.GetClientsTaskParams;
 import com.geospatialcorporation.android.geomobile.library.constants.ClientTypeCodes;
 import com.geospatialcorporation.android.geomobile.library.rest.LoginService;
-import com.geospatialcorporation.android.geomobile.models.ClientSearchFilter;
-import com.geospatialcorporation.android.geomobile.models.ClientSearchResponse;
 import com.geospatialcorporation.android.geomobile.models.PluginSubscriptionResponse;
 import com.geospatialcorporation.android.geomobile.models.Subscription;
-import com.geospatialcorporation.android.geomobile.models.GeoAsyncTask;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Vector;
 
-import retrofit.Callback;
 import retrofit.RetrofitError;
-import retrofit.client.Response;
-import retrofit.http.Body;
 
 public class GetClientsTask implements IGetClientsTask {
 

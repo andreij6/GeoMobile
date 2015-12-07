@@ -9,8 +9,8 @@ import com.geospatialcorporation.android.geomobile.library.panelmanager.ISliding
 import com.geospatialcorporation.android.geomobile.library.sectionbuilders.ISectionBuilder;
 import com.geospatialcorporation.android.geomobile.library.sectionbuilders.TreeSectionBuilderBase;
 import com.geospatialcorporation.android.geomobile.models.Folders.Folder;
-import com.geospatialcorporation.android.geomobile.ui.adapters.recycler.ListItemAdapter;
 import com.geospatialcorporation.android.geomobile.models.ListItem;
+import com.geospatialcorporation.android.geomobile.ui.adapters.recycler.ListItemAdapter;
 
 import java.util.List;
 

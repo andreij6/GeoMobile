@@ -1,8 +1,6 @@
 package com.geospatialcorporation.android.geomobile.ui.fragments.drawer;
 
 import android.app.Activity;
-import android.content.Context;
-import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.res.Configuration;
 import android.os.Bundle;
@@ -11,10 +9,8 @@ import android.support.v4.app.Fragment;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBar;
-import android.support.v7.app.ActionBarActivity;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -25,12 +21,10 @@ import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.geospatialcorporation.android.geomobile.R;
 import com.geospatialcorporation.android.geomobile.application;
-import com.geospatialcorporation.android.geomobile.models.Subscription;
-import com.geospatialcorporation.android.geomobile.ui.LoginActivity;
+import com.geospatialcorporation.android.geomobile.library.DI.UIHelpers.Interfaces.DialogHelpers.IGeneralDialog;
 import com.geospatialcorporation.android.geomobile.ui.MainActivity;
 import com.geospatialcorporation.android.geomobile.ui.adapters.MainNavigationAdapter;
 import com.geospatialcorporation.android.geomobile.ui.fragments.GoogleMapFragment;
@@ -40,7 +34,6 @@ import com.geospatialcorporation.android.geomobile.ui.fragments.tree_fragments.L
 
 import java.util.Arrays;
 import java.util.List;
-import java.util.logging.Handler;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
@@ -129,9 +122,9 @@ public class MainNavigationDrawerFragment extends Fragment {
         mLogout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                application.Logout();
-                getActivity().startActivity(new Intent(getActivity(), LoginActivity.class));
-                getActivity().finish();
+                IGeneralDialog dialog = application.getUIHelperComponent().provideGeneralDialog();
+
+                dialog.Logout(getActivity(), getFragmentManager());
             }
         });
 

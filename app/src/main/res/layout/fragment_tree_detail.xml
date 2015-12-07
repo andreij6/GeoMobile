@@ -20,7 +20,7 @@
             android:layout_height="match_parent"
             android:id="@+id/goBackIV"
             android:layout_gravity="left"
-            android:src="@drawable/ic_chevron_left_grey600_18dp"
+            android:src="@drawable/ic_chevron_left_grey600_36dp"
             android:paddingLeft="-10dp"
             android:layout_alignParentStart="true"
             android:paddingRight="-10dp"/>
@@ -39,7 +39,7 @@
             android:layout_height="wrap_content"
             android:textAppearance="?android:attr/textAppearanceSmall"
             android:text="@string/back"
-            android:id="@+id/backFolder"
+            android:id="@+id/sectionTitle"
             android:layout_centerVertical="true"
             android:textStyle="italic"
             android:layout_toEndOf="@+id/goBackIV"/>

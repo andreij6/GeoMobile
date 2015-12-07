@@ -5,26 +5,26 @@
     <item android:id="@+id/action_show_layers"
           android:title="@string/show_layers"
           android:icon="@drawable/ic_layers_white_24dp"
-          app:showAsAction="always"/>
+          app:showAsAction="ifRoom"/>
 
     <item android:id="@+id/action_library"
           android:title="@string/library"
           android:icon="@drawable/ic_book_white_24dp"
-          app:showAsAction="always"/>
+          app:showAsAction="ifRoom"/>
 
     <item android:id="@+id/action_account"
           android:title="@string/account"
           android:icon="@drawable/ic_account_circle_white_24dp"
-          app:showAsAction="always"/>
+          app:showAsAction="ifRoom"/>
 
     <item android:id="@+id/action_subscriptions"
           android:title="@string/subscriptions"
           android:icon="@drawable/ic_account_search_white_24dp"
-          app:showAsAction="always"/>
+          app:showAsAction="ifRoom"/>
 
     <item android:id="@+id/action_logout"
           android:title="@string/account"
           android:icon="@drawable/ic_logout_white_24dp"
-          app:showAsAction="always"/>
+          app:showAsAction="ifRoom"/>
 
 </menu>

@@ -1,6 +1,5 @@
 package com.geospatialcorporation.android.geomobile.library.services.LayerEditor;
 
-import com.geospatialcorporation.android.geomobile.models.Query.map.response.mapquery.Geometry;
 
 public class Argument {
     int TypeCode;

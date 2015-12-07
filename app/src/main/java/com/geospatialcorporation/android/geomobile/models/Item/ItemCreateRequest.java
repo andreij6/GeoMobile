@@ -1,8 +1,5 @@
 package com.geospatialcorporation.android.geomobile.models.Item;
 
-/**
- * Created by andre on 6/1/2015.
- */
 public class ItemCreateRequest {
     //region Getters & Setters
     public int getParentId() {

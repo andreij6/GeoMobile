@@ -1,8 +1,5 @@
 package com.geospatialcorporation.android.geomobile.library.rest;
 
-import com.geospatialcorporation.android.geomobile.library.util.Authentication;
-import com.geospatialcorporation.android.geomobile.models.ClientSearchFilter;
-import com.geospatialcorporation.android.geomobile.models.ClientSearchResponse;
 import com.geospatialcorporation.android.geomobile.models.PluginSubscriptionResponse;
 import com.geospatialcorporation.android.geomobile.models.Subscription;
 
@@ -13,9 +10,7 @@ import retrofit.client.Response;
 import retrofit.http.Body;
 import retrofit.http.GET;
 import retrofit.http.Header;
-import retrofit.http.Headers;
 import retrofit.http.POST;
-import retrofit.http.Path;
 import retrofit.http.Query;
 import retrofit.mime.TypedString;
 

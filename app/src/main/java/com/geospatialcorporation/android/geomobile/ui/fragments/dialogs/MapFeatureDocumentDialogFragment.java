@@ -1,18 +1,15 @@
 package com.geospatialcorporation.android.geomobile.ui.fragments.dialogs;
 
-import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.provider.MediaStore;
 import android.support.annotation.NonNull;
 import android.view.View;
 import android.widget.ArrayAdapter;
-import android.widget.LinearLayout;
 import android.widget.Spinner;
 import android.widget.Toast;
 
@@ -21,18 +18,11 @@ import com.geospatialcorporation.android.geomobile.application;
 import com.geospatialcorporation.android.geomobile.library.DI.Analytics.Models.GoogleAnalyticEvent;
 import com.geospatialcorporation.android.geomobile.library.DI.Tasks.Interfaces.IGetDocumentsTask;
 import com.geospatialcorporation.android.geomobile.library.DI.Tasks.models.GetAllDocumentsParam;
-import com.geospatialcorporation.android.geomobile.library.DI.TreeServices.Implementations.LayerTreeService;
-import com.geospatialcorporation.android.geomobile.library.DI.TreeServices.Interfaces.IDocumentTreeService;
 import com.geospatialcorporation.android.geomobile.library.DI.TreeServices.Interfaces.ILayerTreeService;
-import com.geospatialcorporation.android.geomobile.library.DocumentSentCallback;
-import com.geospatialcorporation.android.geomobile.library.ISendFileCallback;
 import com.geospatialcorporation.android.geomobile.library.constants.MediaConstants;
-import com.geospatialcorporation.android.geomobile.library.helpers.DataHelper;
 import com.geospatialcorporation.android.geomobile.library.helpers.ItemSelectedListener;
 import com.geospatialcorporation.android.geomobile.library.helpers.MediaHelper;
-import com.geospatialcorporation.android.geomobile.library.rest.TreeService;
 import com.geospatialcorporation.android.geomobile.models.Document.Document;
-import com.geospatialcorporation.android.geomobile.models.Folders.Folder;
 import com.geospatialcorporation.android.geomobile.ui.Interfaces.ISpinnerListener;
 import com.geospatialcorporation.android.geomobile.ui.MainActivity;
 import com.geospatialcorporation.android.geomobile.ui.fragments.dialogs.base.GeoDialogFragmentBase;

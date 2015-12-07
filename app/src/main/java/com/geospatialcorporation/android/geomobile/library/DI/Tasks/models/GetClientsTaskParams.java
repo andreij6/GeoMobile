@@ -3,7 +3,6 @@ package com.geospatialcorporation.android.geomobile.library.DI.Tasks.models;
 import android.support.v4.app.FragmentActivity;
 
 import com.geospatialcorporation.android.geomobile.models.Subscription;
-import com.geospatialcorporation.android.geomobile.ui.Interfaces.IPostExecuter;
 
 import java.util.List;
 

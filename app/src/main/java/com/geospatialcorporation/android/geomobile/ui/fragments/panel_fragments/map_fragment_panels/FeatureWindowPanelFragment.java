@@ -1,10 +1,12 @@
 package com.geospatialcorporation.android.geomobile.ui.fragments.panel_fragments.map_fragment_panels;
 
 import android.os.Bundle;
+import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.geospatialcorporation.android.geomobile.R;
@@ -17,8 +19,10 @@ import com.geospatialcorporation.android.geomobile.library.services.FeatureWindo
 import com.geospatialcorporation.android.geomobile.models.Query.map.response.featurewindow.FeatureQueryResponse;
 import com.geospatialcorporation.android.geomobile.ui.Interfaces.IFeatureWindowCtrl;
 import com.geospatialcorporation.android.geomobile.ui.Interfaces.IPanelStateReactor;
+import com.geospatialcorporation.android.geomobile.ui.Interfaces.OnFragmentInteractionListener;
 import com.geospatialcorporation.android.geomobile.ui.fragments.GeoViewFragmentBase;
 import com.google.android.gms.maps.model.Marker;
+import com.sothree.slidinguppanel.SlidingUpPanelLayout;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
@@ -34,15 +38,20 @@ public class FeatureWindowPanelFragment extends GeoViewFragmentBase implements I
 
     @Bind(R.id.layerNameTV) TextView FeatureName;
     @Bind(R.id.tabHost) FragmentTabHost mTabHost;
+    @Nullable @Bind(R.id.closeIV) ImageView mClose;
+    @Nullable @Bind(R.id.sliding_layout) SlidingUpPanelLayout mPanel;
     Boolean mIsPointFeature;
 
-    /*@OnClick(R.id.previousIV)
-    public void previousFeature(){
-        mContentFragment.getPrevious();
+    @Nullable
+    @OnClick(R.id.closeIV)
+    public void close(){
+        ((OnFragmentInteractionListener)getActivity()).closeDetailFragment();
     }
 
+    /*
     @OnClick(R.id.nextIV)
     public void nextFeature(){ mContentFragment.getNextFeature(); }
+
     */
 
     @OnClick(R.id.rezoomIV)
@@ -60,9 +69,6 @@ public class FeatureWindowPanelFragment extends GeoViewFragmentBase implements I
         try {
             View view = inflater.inflate(R.layout.fragment_panel_featurewindow, container, false);
             ButterKnife.bind(this, view);
-
-            mPanelManager = new PanelManager(GeoPanel.MAP);
-            mPanelManager.touch(true);
 
             mResponse = mCommon.handleArguments(getArguments());
             mCommon.setFeatureName(mResponse, FeatureName);

@@ -1,6 +1,5 @@
 package com.geospatialcorporation.android.geomobile;
 
-import android.app.Application;
 import android.support.multidex.MultiDexApplication;
 
 import com.geospatialcorporation.android.geomobile.library.DI.Analytics.AnalyticsComponent;

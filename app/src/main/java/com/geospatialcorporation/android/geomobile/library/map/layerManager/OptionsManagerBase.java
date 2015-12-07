@@ -33,11 +33,7 @@ public abstract class OptionsManagerBase<T, S> implements IOptionsManager<T, S> 
 
     }
     public Activity getActivity() {
-        if(application.getIsTablet()){
-            return application.getMainTabletActivity();
-        } else {
-            return application.getMainActivity();
-        }
+        return application.getMainActivity();
     }
 
     //region Interface Methods

@@ -2,7 +2,6 @@ package com.geospatialcorporation.android.geomobile.ui;
 
 import android.app.Activity;
 import android.content.Intent;
-import android.content.pm.ActivityInfo;
 import android.os.Bundle;
 import android.os.Handler;
 import android.util.Log;
@@ -12,7 +11,6 @@ import com.geospatialcorporation.android.geomobile.R;
 import com.geospatialcorporation.android.geomobile.application;
 import com.geospatialcorporation.android.geomobile.library.DI.ErrorHandler.Interfaces.IGeoErrorHandler;
 import com.geospatialcorporation.android.geomobile.library.DI.Map.Interfaces.ILayerManager;
-import com.geospatialcorporation.android.geomobile.library.util.DeviceTypeUtil;
 
 public class SplashScreenActivity extends Activity {
     private static final String TAG = SplashScreenActivity.class.getSimpleName();

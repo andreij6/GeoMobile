@@ -2,7 +2,6 @@ package com.geospatialcorporation.android.geomobile.ui.fragments.detail_fragment
 
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -14,18 +13,14 @@ import android.widget.TextView;
 import com.geospatialcorporation.android.geomobile.R;
 import com.geospatialcorporation.android.geomobile.application;
 import com.geospatialcorporation.android.geomobile.library.DI.Analytics.Models.GoogleAnalyticEvent;
-import com.geospatialcorporation.android.geomobile.library.DI.FeatureWindow.models.FeatureWindowData;
 import com.geospatialcorporation.android.geomobile.library.DI.TreeServices.Interfaces.IFolderTreeService;
-import com.geospatialcorporation.android.geomobile.library.DI.TreeServices.Interfaces.ILayerTreeService;
 import com.geospatialcorporation.android.geomobile.library.DI.UIHelpers.Interfaces.DialogHelpers.IAttributeDialog;
-import com.geospatialcorporation.android.geomobile.library.constants.AccessLevelCodes;
 import com.geospatialcorporation.android.geomobile.library.constants.GeoPanel;
 import com.geospatialcorporation.android.geomobile.library.helpers.DataHelper;
 import com.geospatialcorporation.android.geomobile.library.panelmanager.PanelManager;
 import com.geospatialcorporation.android.geomobile.models.AttributeValueVM;
 import com.geospatialcorporation.android.geomobile.models.Folders.Folder;
 import com.geospatialcorporation.android.geomobile.models.Layers.Columns;
-import com.geospatialcorporation.android.geomobile.models.Layers.Layer;
 import com.geospatialcorporation.android.geomobile.models.Query.map.response.featurewindow.WindowFeatures;
 import com.geospatialcorporation.android.geomobile.ui.fragments.panel_fragments.map_fragment_panels.FeatureAttributePanelFragment;
 
@@ -48,6 +43,7 @@ public class FeatureAttributesTab extends FeatureTabBase {
     IAttributeDialog mAttributeDialog;
     IFolderTreeService mFolderTreeService;
 
+
     @OnClick(R.id.moreInfo)
     public void moreInfo(){
         if(mPanelManager.isExpanded()){
@@ -64,18 +60,23 @@ public class FeatureAttributesTab extends FeatureTabBase {
         //mAttributeDialog = application.getUIHelperComponent().provideAttributeDialog();
 
         //mAttributeDialog.edit(mData, getActivity(), getFragmentManager());
-
         Fragment f = new FeatureAttributePanelFragment();
 
         f.setArguments(mData.toBundle());
 
-        application.getMainActivity().getSupportFragmentManager()
-                .beginTransaction()
-                .addToBackStack("Feature Attributes")
-                .replace(R.id.slider_content, f)
-                .commit();
+        if(mIsLandscape){
+            application.getMainActivity()
+                    .setDetailFrame(f);
+        } else {
 
-        mPanelManager.expand();
+            application.getMainActivity().getSupportFragmentManager()
+                    .beginTransaction()
+                    .addToBackStack("Feature Attributes")
+                    .replace(R.id.slider_content, f)
+                    .commit();
+
+            mPanelManager.expand();
+        }
     }
 
     @Override
@@ -83,9 +84,13 @@ public class FeatureAttributesTab extends FeatureTabBase {
         mLayout = R.layout.fragment_feature_window_attributes_tab;
         mAnalytics.trackScreen(new GoogleAnalyticEvent().FeatureAttributesTab());
         mFolderTreeService = application.getTreeServiceComponent().provideFolderTreeService();
-        mPanelManager = new PanelManager(GeoPanel.MAP);
 
         View v = super.onCreateView(inflater, container, savedInstanceState);
+
+        if(!mIsLandscape){
+            mPanelManager = new PanelManager(GeoPanel.MAP);
+            mPanelManager.touch(true);
+        }
 
         return v;
     }

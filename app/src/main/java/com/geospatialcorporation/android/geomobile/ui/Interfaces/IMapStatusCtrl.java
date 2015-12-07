@@ -2,7 +2,6 @@ package com.geospatialcorporation.android.geomobile.ui.Interfaces;
 
 import android.view.View;
 import android.widget.ImageView;
-import android.widget.ProgressBar;
 import android.widget.TextView;
 
 public interface IMapStatusCtrl {

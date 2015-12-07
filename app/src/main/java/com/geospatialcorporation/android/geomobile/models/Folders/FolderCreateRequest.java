@@ -2,9 +2,6 @@ package com.geospatialcorporation.android.geomobile.models.Folders;
 
 import com.geospatialcorporation.android.geomobile.models.Item.ItemCreateRequest;
 
-/**
- * Created by andre on 6/1/2015.
- */
 public class FolderCreateRequest extends ItemCreateRequest {
     //region Getters & Setters
     public Boolean getIsFixed() {

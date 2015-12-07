@@ -9,9 +9,6 @@ import android.util.Log;
 import java.util.ArrayList;
 import java.util.List;
 
-/**
- * Created by andre on 7/7/2015.
- */
 public class ParcelableFeatureQueryResponse implements Parcelable {
 
     private static final String TAG = ParcelableFeatureQueryResponse.class.getSimpleName();

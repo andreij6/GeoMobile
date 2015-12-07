@@ -4,9 +4,6 @@ import com.google.android.gms.maps.model.Marker;
 
 import java.util.Comparator;
 
-/**
- * Created by andre on 6/4/2015.
- */
 public class MarkerComparer implements Comparator<Marker> {
     @Override
     public int compare(Marker o, Marker t) {

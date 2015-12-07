@@ -5,9 +5,6 @@ import com.geospatialcorporation.android.geomobile.models.Layers.Layer;
 import java.util.ArrayList;
 import java.util.List;
 
-/**
- * Created by andre on 6/24/2015.
- */
 public class Layers{
     //region Getters & Setters
     public Integer getId() {

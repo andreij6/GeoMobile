@@ -74,7 +74,6 @@
     <string name="layers_section">Layers</string>
 
     <string name="general_save">Save</string>
-    <string name="change_map_style">Change Map Style</string>
     <string name="download">Download</string>
     <string name="cancel">Cancel</string>
     <string name="OK">OK</string>
@@ -97,9 +96,6 @@
     <string name="add_image">Image</string>
     <string name="title_activity_subscription_selector">SubscriptionSelectorActivity</string>
 
-    <string name="title_section1">Section 1</string>
-    <string name="title_section2">Section 2</string>
-    <string name="title_section3">Section 3</string>
     <string name="standard_subscription_section">Standard</string>
     <string name="tutorial_clone_subscription_section">Tutorial Clone</string>
     <string name="demo_clone_subscription_section">Demo Clone</string>
@@ -161,7 +157,6 @@
     <string name="rename">Rename</string>
     <string name="edit_style">Edit Style</string>
     <string name="edit_filter">Edit Filters</string>
-    <string name="document_actions">Document Actions</string>
     <string name="move">Move</string>
     <string name="edit_sublayer">Edit Sublayer</string>
 
@@ -295,7 +290,7 @@
     <string name="attributes">Attributes</string>
     <string name="map_info">Map Info</string>
     <string name="documents">Documents</string>
-    <string name="library_tree">Library</string>
+    <string name="library_tree">Library Tree</string>
     <string name="document_to_large_error">Document to size to large to upload.</string>
     <string name="tutorial_subscription_section">Tutorial</string>
     <string name="next">Next</string>
@@ -316,10 +311,20 @@
     <string name="want_to_logout">Do you want to logout?</string>
     <string name="yes">Yes</string>
     <string name="no">No</string>
-    <string name="back_to_subscriptions">Do you want to go back to the Subscriptions page?</string>
+    <string name="back_to_subscriptions">Do you want to go to the Subscriptions page?</string>
     <string name="more_info">More Info</string>
     <string name="less_info">Less Info</string>
     <string name="no_internet_connection_title">No Internet Connection</string>
     <string name="no_internet_connection_message">You don\'t have internet connection</string>
     <string name="ok">OK</string>
+    <string name="video_details">Video Details</string>
+    <string name="video_play">Video Play</string>
+    <string name="layer">Layer</string>
+    <string name="loading">Loading...</string>
+    <string name="editing">Editing</string>
+    <string name="not_authorized_to_delete_folder">Not Authorized to Delete this Folder</string>
+    <string name="not_authorized_to_rename_layer">Not Authorized to Rename Layer</string>
+    <string name="delete_request_sent">Delete Request Sent!</string>
+    <string name="rename_request_sent">Rename Request Sent</string>
+    <string name="folder_rename_validation">Please add a Valid Folder Name</string>
 </resources>

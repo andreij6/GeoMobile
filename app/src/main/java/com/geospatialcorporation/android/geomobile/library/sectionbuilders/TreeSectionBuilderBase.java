@@ -7,8 +7,8 @@ import android.support.v7.widget.RecyclerView;
 
 import com.geospatialcorporation.android.geomobile.R;
 import com.geospatialcorporation.android.geomobile.models.Folders.Folder;
-import com.geospatialcorporation.android.geomobile.ui.adapters.recycler.ListItemAdapter;
 import com.geospatialcorporation.android.geomobile.ui.adapters.SimpleSectionedRecyclerViewAdapter;
+import com.geospatialcorporation.android.geomobile.ui.adapters.recycler.ListItemAdapter;
 
 import java.util.ArrayList;
 import java.util.List;

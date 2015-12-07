@@ -3,7 +3,6 @@ package com.geospatialcorporation.android.geomobile.library.DI.Tasks.models;
 import com.geospatialcorporation.android.geomobile.models.Folders.Folder;
 import com.geospatialcorporation.android.geomobile.models.Folders.FolderDetailsResponse;
 import com.geospatialcorporation.android.geomobile.ui.Interfaces.IPostExecuter;
-import com.geospatialcorporation.android.geomobile.ui.fragments.detail_fragment.folder_tabs.FolderDetailsTab;
 
 public class GetFolderDetailsParams extends ExecuterParamsBase {
 

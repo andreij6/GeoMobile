@@ -2,9 +2,6 @@ package com.geospatialcorporation.android.geomobile.models.Query.point;
 
 import com.geospatialcorporation.android.geomobile.models.Query.ParametersBase;
 
-/**
- * Created by andre on 6/9/2015.
- */
 public class PointParameters extends ParametersBase {
 
     //region Getters and Setters

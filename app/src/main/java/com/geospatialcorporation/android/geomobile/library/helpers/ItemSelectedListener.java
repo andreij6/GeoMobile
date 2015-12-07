@@ -2,11 +2,8 @@ package com.geospatialcorporation.android.geomobile.library.helpers;
 
 import android.view.View;
 import android.widget.AdapterView;
-import android.widget.Toast;
 
-import com.geospatialcorporation.android.geomobile.application;
 import com.geospatialcorporation.android.geomobile.ui.Interfaces.ISpinnerListener;
-import com.geospatialcorporation.android.geomobile.ui.fragments.dialogs.action_dialogs.document.MoveDocumentDialogFragment;
 
 import java.util.List;
 

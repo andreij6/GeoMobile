@@ -1,16 +1,9 @@
 package com.geospatialcorporation.android.geomobile.library.DI.Tasks.Implementations;
 
-import android.os.AsyncTask;
-import android.widget.EditText;
-
-import com.geospatialcorporation.android.geomobile.R;
 import com.geospatialcorporation.android.geomobile.library.DI.Tasks.Interfaces.IUserLoginTask;
-import com.geospatialcorporation.android.geomobile.library.DI.Tasks.models.LoginUIModel;
 import com.geospatialcorporation.android.geomobile.library.DI.Tasks.models.UserLoginModel;
 import com.geospatialcorporation.android.geomobile.models.GeoAsyncTask;
 import com.geospatialcorporation.android.geomobile.ui.Interfaces.IFullExecuter;
-import com.geospatialcorporation.android.geomobile.ui.Interfaces.IPostExecuter;
-import com.geospatialcorporation.android.geomobile.ui.LoginActivity;
 
 public class GeoUserLoginTask implements IUserLoginTask {
 

@@ -8,9 +8,6 @@ import com.geospatialcorporation.android.geomobile.models.Query.map.response.map
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.PolylineOptions;
 
-/**
- * Created by andre on 6/25/2015.
- */
 public abstract class LineFeatureMapperBase extends SingleFeatureMapperBase<PolylineOptions> {
 
     int mBorderWidth;

@@ -1,6 +1,5 @@
 package com.geospatialcorporation.android.geomobile.library.DI.ErrorHandler;
 
-import com.geospatialcorporation.android.geomobile.library.DI.Analytics.Implementations.GeoGoogleAnalytics;
 import com.geospatialcorporation.android.geomobile.library.DI.ErrorHandler.Implementations.GeoErrorHandler;
 import com.geospatialcorporation.android.geomobile.library.DI.ErrorHandler.Interfaces.IGeoErrorHandler;
 

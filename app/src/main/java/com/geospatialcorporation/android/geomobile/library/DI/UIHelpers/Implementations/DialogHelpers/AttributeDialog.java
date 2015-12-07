@@ -1,7 +1,6 @@
 package com.geospatialcorporation.android.geomobile.library.DI.UIHelpers.Implementations.DialogHelpers;
 
 import android.content.Context;
-import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
 
 import com.geospatialcorporation.android.geomobile.library.DI.UIHelpers.Interfaces.DialogHelpers.IAttributeDialog;

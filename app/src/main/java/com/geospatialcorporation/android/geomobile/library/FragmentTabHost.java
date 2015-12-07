@@ -1,7 +1,5 @@
 package com.geospatialcorporation.android.geomobile.library;
 
-import java.util.ArrayList;
-
 import android.content.Context;
 import android.content.res.TypedArray;
 import android.os.Bundle;
@@ -12,11 +10,10 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.util.AttributeSet;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.FrameLayout;
-import android.widget.LinearLayout;
 import android.widget.TabHost;
-import android.widget.TabWidget;
+
+import java.util.ArrayList;
 
 public class FragmentTabHost extends TabHost
         implements TabHost.OnTabChangeListener {

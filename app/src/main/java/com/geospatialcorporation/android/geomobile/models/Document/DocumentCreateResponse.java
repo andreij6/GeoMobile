@@ -1,8 +1,5 @@
 package com.geospatialcorporation.android.geomobile.models.Document;
 
-/**
- * Created by andre on 6/2/2015.
- */
 public class DocumentCreateResponse {
     //region Getters & Setters
     public String getName() {

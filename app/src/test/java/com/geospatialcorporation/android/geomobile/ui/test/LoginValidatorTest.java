@@ -2,12 +2,10 @@ package com.geospatialcorporation.android.geomobile.ui.test;
 
 import com.geospatialcorporation.android.geomobile.library.util.LoginValidator;
 
-import static org.junit.Assert.*;
 import org.junit.Test;
 
-/**
- * Created by andre on 6/23/2015.
- */
+import static org.junit.Assert.assertTrue;
+
 public class LoginValidatorTest {
 
     //region EmailIsValid

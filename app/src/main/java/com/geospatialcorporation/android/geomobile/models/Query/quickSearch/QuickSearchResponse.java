@@ -2,9 +2,6 @@ package com.geospatialcorporation.android.geomobile.models.Query.quickSearch;
 
 import java.util.List;
 
-/**
- * Created by andre on 6/4/2015.
- */
 public class QuickSearchResponse {
     //region Getters & Setters
     public int getType() {

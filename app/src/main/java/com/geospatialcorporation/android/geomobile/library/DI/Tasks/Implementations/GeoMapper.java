@@ -1,12 +1,5 @@
 package com.geospatialcorporation.android.geomobile.library.DI.Tasks.Implementations;
 
-import android.graphics.drawable.Drawable;
-import android.os.AsyncTask;
-import android.util.Log;
-import android.view.View;
-import android.widget.CheckBox;
-import android.widget.ProgressBar;
-
 import com.geospatialcorporation.android.geomobile.application;
 import com.geospatialcorporation.android.geomobile.library.DI.Map.Interfaces.ILayerManager;
 import com.geospatialcorporation.android.geomobile.library.DI.Tasks.Interfaces.ILayerStyleTask;
@@ -24,16 +17,13 @@ import com.geospatialcorporation.android.geomobile.library.map.featureMappers.Po
 import com.geospatialcorporation.android.geomobile.library.map.featureMappers.PolygonFeatureMapper;
 import com.geospatialcorporation.android.geomobile.library.map.featureMappers.RasterFeatureMapper;
 import com.geospatialcorporation.android.geomobile.models.GeoAsyncTask;
-import com.geospatialcorporation.android.geomobile.models.Layers.Layer;
 import com.geospatialcorporation.android.geomobile.models.Layers.LegendLayer;
 import com.geospatialcorporation.android.geomobile.models.Query.map.response.mapquery.Feature;
 import com.geospatialcorporation.android.geomobile.models.Query.map.response.mapquery.MapQueryResponse;
 import com.geospatialcorporation.android.geomobile.ui.Interfaces.IPostExecuter;
 
 import java.util.HashMap;
-import java.util.LinkedList;
 import java.util.List;
-import java.util.Queue;
 
 public class GeoMapper implements IMapFeaturesTask, IPostExecuter<Integer> {
 

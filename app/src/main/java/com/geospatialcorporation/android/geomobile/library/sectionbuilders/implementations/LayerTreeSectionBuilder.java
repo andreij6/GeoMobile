@@ -1,7 +1,7 @@
 package com.geospatialcorporation.android.geomobile.library.sectionbuilders.implementations;
 
-import android.support.v4.app.FragmentManager;
 import android.content.Context;
+import android.support.v4.app.FragmentManager;
 import android.support.v7.widget.RecyclerView;
 
 import com.geospatialcorporation.android.geomobile.R;
@@ -9,8 +9,8 @@ import com.geospatialcorporation.android.geomobile.library.panelmanager.ISliding
 import com.geospatialcorporation.android.geomobile.library.sectionbuilders.ISectionBuilder;
 import com.geospatialcorporation.android.geomobile.library.sectionbuilders.TreeSectionBuilderBase;
 import com.geospatialcorporation.android.geomobile.models.Folders.Folder;
-import com.geospatialcorporation.android.geomobile.ui.adapters.recycler.ListItemAdapter;
 import com.geospatialcorporation.android.geomobile.models.ListItem;
+import com.geospatialcorporation.android.geomobile.ui.adapters.recycler.ListItemAdapter;
 
 import java.util.List;
 

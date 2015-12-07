@@ -13,9 +13,6 @@ import java.util.List;
 
 import retrofit.RetrofitError;
 
-/**
- * Created by andre on 6/24/2015.
- */
 public class MapQueryListener extends RequestListenerBase<List<MapQueryResponse>> implements RequestListener<List<MapQueryResponse>> {
 
     private static final String TAG = MapQueryListener.class.getSimpleName();
@@ -40,14 +37,12 @@ public class MapQueryListener extends RequestListenerBase<List<MapQueryResponse>
 
         mGeoMapper.mapFeatures(response, mLLayer);
 
-        //set Layer Loading
-        if(!application.getIsTablet()) {
-            Fragment contentFrag = application.getMainActivity().getContentFragment();
+        Fragment contentFrag = application.getMainActivity().getContentFragment();
 
-            if (contentFrag instanceof GoogleMapFragment) {
-                ((GoogleMapFragment) contentFrag).hideLoadingBar();
-            }
+        if (contentFrag instanceof GoogleMapFragment) {
+            ((GoogleMapFragment) contentFrag).hideLoadingBar();
         }
+
     }
 
     @Override

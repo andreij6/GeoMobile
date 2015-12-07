@@ -3,7 +3,6 @@ package com.geospatialcorporation.android.geomobile.ui.adapters.recycler;
 import android.content.Context;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.CheckBox;
 import android.widget.TextView;
 
 import com.geospatialcorporation.android.geomobile.R;

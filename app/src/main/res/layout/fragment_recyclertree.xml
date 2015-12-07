@@ -48,7 +48,7 @@
             android:layout_height="wrap_content"
             android:textAppearance="?android:attr/textAppearanceSmall"
             tools:text="Root"
-            android:id="@+id/backFolder"
+            android:id="@+id/sectionTitle"
             android:layout_centerVertical="true"
             android:textStyle="italic"
             android:layout_toEndOf="@+id/showNavIV2"

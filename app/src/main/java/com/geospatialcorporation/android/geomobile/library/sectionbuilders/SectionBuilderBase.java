@@ -6,9 +6,6 @@ import com.geospatialcorporation.android.geomobile.ui.adapters.SimpleSectionedRe
 
 import java.util.List;
 
-/**
- * Created by andre on 6/5/2015.
- */
 public abstract class SectionBuilderBase<T> {
 
     protected Context mContext;

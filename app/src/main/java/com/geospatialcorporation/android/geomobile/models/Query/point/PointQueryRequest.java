@@ -2,9 +2,6 @@ package com.geospatialcorporation.android.geomobile.models.Query.point;
 
 import com.geospatialcorporation.android.geomobile.models.Query.Options;
 
-/**
- * Created by andre on 6/14/2015.
- */
 public class PointQueryRequest {
     PointParameters mParameters;
     Options mOptions;

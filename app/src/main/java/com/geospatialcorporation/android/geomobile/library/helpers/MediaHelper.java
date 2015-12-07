@@ -13,9 +13,6 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Locale;
 
-/**
- * Created by andre on 6/3/2015.
- */
 public class MediaHelper {
     private static final String TAG = MediaHelper.class.getSimpleName();
 

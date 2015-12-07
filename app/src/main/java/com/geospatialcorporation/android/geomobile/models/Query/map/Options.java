@@ -1,8 +1,5 @@
 package com.geospatialcorporation.android.geomobile.models.Query.map;
 
-/**
- * Created by andre on 6/24/2015.
- */
 public class Options {
 
     public static final String FEATURE_WINDOW = "feature window";

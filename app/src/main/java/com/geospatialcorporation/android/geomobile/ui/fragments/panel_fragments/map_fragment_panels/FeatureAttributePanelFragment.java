@@ -47,7 +47,11 @@ public class FeatureAttributePanelFragment extends GeoViewFragmentBase {
 
     @OnClick(R.id.close)
     public void closeFeatureWindow(){
-        mPanelManager.collapse();
+        if(!mIsLandscape){
+            mPanelManager.collapse();
+        } else {
+            getFragmentManager().popBackStack();
+        }
     }
 
     @OnClick(R.id.saveButton)
@@ -79,7 +83,9 @@ public class FeatureAttributePanelFragment extends GeoViewFragmentBase {
 
             Toaster("No Changes Made");
 
-            mPanelManager.halfAnchor();
+            if(!mIsLandscape) {
+                mPanelManager.halfAnchor();
+            }
         }
 
 
@@ -95,7 +101,10 @@ public class FeatureAttributePanelFragment extends GeoViewFragmentBase {
 
         handleArgs();
 
-        mPanelManager = new PanelManager(GeoPanel.MAP);
+        if(!mIsLandscape) {
+            mPanelManager = new PanelManager(GeoPanel.MAP);
+            mPanelManager.touch(true);
+        }
 
         setAttributeTable();
 

@@ -1,29 +1,5 @@
 package com.geospatialcorporation.android.geomobile.library.map.layerManager.implementations;
 
-import android.os.AsyncTask;
-import android.util.Log;
-import android.widget.Toast;
-
-import com.geospatialcorporation.android.geomobile.application;
-import com.geospatialcorporation.android.geomobile.library.DI.UIHelpers.Interfaces.IMapStatusBarManager;
-import com.geospatialcorporation.android.geomobile.library.map.Models.GeoClusterMarker;
-import com.geospatialcorporation.android.geomobile.library.map.Models.GeoNonHierarchicalDistanceBasedAlgorithm;
-import com.geospatialcorporation.android.geomobile.library.map.Models.IconRenderer;
-import com.geospatialcorporation.android.geomobile.library.map.layerManager.OptionFeature;
-import com.geospatialcorporation.android.geomobile.library.map.layerManager.OptionsManagerBase;
-import com.geospatialcorporation.android.geomobile.models.Layers.FeatureInfo;
-import com.google.android.gms.maps.GoogleMap;
-import com.google.android.gms.maps.model.LatLng;
-import com.google.android.gms.maps.model.LatLngBounds;
-import com.google.android.gms.maps.model.MarkerOptions;
-import com.google.maps.android.clustering.ClusterManager;
-
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.UUID;
-
 /*
 public class ClusterExtentMarkerOptionsManager extends OptionsManagerBase<MarkerOptions, GeoClusterMarker> {
     private static final String TAG = ClusterExtentMarkerOptionsManager.class.getSimpleName();

@@ -3,13 +3,12 @@ package com.geospatialcorporation.android.geomobile.ui.test;
 import android.graphics.Color;
 
 import com.geospatialcorporation.android.geomobile.library.helpers.GeoColor;
-import static org.junit.Assert.*;
 
 import org.junit.Test;
 
-/**
- * Created by andre on 6/25/2015.
- */
+import static org.junit.Assert.assertTrue;
+
+
 public class GeoColorTest {
 
     @Test

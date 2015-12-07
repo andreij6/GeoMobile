@@ -7,15 +7,11 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.ImageView;
-import android.widget.ListView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.geospatialcorporation.android.geomobile.R;
 
 import java.util.List;
-
-import static com.geospatialcorporation.android.geomobile.R.color.primary_text;
 
 public class MainNavigationAdapter extends ArrayAdapter<String> {
     List<String> mMenuItems;

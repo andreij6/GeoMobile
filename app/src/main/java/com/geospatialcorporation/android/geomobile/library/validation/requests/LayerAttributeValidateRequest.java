@@ -4,9 +4,6 @@ import com.geospatialcorporation.android.geomobile.R;
 
 import java.util.Objects;
 
-/**
- * Created by andre on 6/19/2015.
- */
 public class LayerAttributeValidateRequest extends ValidateRequestBase implements IValidateRequest{
 
     String mName;

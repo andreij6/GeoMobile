@@ -3,7 +3,6 @@ package com.geospatialcorporation.android.geomobile.library.DI.Tasks.Implementat
 import com.geospatialcorporation.android.geomobile.application;
 import com.geospatialcorporation.android.geomobile.library.DI.Tasks.Interfaces.IGetFolderPermissionTask;
 import com.geospatialcorporation.android.geomobile.library.DI.Tasks.models.FolderPermissionsParams;
-import com.geospatialcorporation.android.geomobile.library.DI.TreeServices.Implementations.FolderTreeService;
 import com.geospatialcorporation.android.geomobile.library.DI.TreeServices.Interfaces.IFolderTreeService;
 import com.geospatialcorporation.android.geomobile.models.Folders.Folder;
 import com.geospatialcorporation.android.geomobile.models.Folders.FolderPermissionsResponse;

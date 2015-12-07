@@ -3,9 +3,6 @@ package com.geospatialcorporation.android.geomobile.models.Query.box;
 import com.geospatialcorporation.android.geomobile.models.Query.point.Max;
 import com.geospatialcorporation.android.geomobile.models.Query.point.Min;
 
-/**
- * Created by andre on 6/4/2015.
- */
 public class Box {
     //region Getters & Setters
     public int getGeometryTypeCode() {

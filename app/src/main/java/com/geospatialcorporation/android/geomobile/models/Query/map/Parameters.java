@@ -3,9 +3,6 @@ package com.geospatialcorporation.android.geomobile.models.Query.map;
 import java.util.ArrayList;
 import java.util.List;
 
-/**
- * Created by andre on 6/24/2015.
- */
 public class Parameters {
     List<Integer> LayerIds;
     List<Layers> Layers;

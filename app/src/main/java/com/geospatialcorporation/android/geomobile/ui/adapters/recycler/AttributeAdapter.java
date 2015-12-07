@@ -15,9 +15,6 @@ import java.util.List;
 
 import butterknife.Bind;
 
-/**
- * Created by andre on 6/13/2015.
- */
 public class AttributeAdapter extends GeoRecyclerAdapterBase<AttributeAdapter.Holder, LayerAttributeColumn> {
 
     public AttributeAdapter(Context context, List<LayerAttributeColumn> attributeColumnsList){

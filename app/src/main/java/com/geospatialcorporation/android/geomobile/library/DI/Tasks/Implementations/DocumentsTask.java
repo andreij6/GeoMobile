@@ -3,7 +3,6 @@ package com.geospatialcorporation.android.geomobile.library.DI.Tasks.Implementat
 import android.content.Context;
 import android.os.AsyncTask;
 import android.support.v4.app.FragmentManager;
-import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 
 import com.geospatialcorporation.android.geomobile.application;

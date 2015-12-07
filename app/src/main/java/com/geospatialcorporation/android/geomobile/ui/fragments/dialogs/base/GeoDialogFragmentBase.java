@@ -1,17 +1,14 @@
 package com.geospatialcorporation.android.geomobile.ui.fragments.dialogs.base;
 
 import android.app.AlertDialog;
-import android.support.v4.app.DialogFragment;
 import android.content.Context;
+import android.support.v4.app.DialogFragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Toast;
 
 import com.geospatialcorporation.android.geomobile.library.DI.Analytics.Interfaces.IGeoAnalytics;
 
-/**
- * Created by andre on 6/2/2015.
- */
 public class GeoDialogFragmentBase extends DialogFragment {
     //region Getters & Setters
     public Context getContext() {

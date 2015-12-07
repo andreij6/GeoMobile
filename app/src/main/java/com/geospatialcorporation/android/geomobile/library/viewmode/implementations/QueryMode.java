@@ -36,9 +36,7 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 
-/**
- * Created by andre on 6/6/2015.
- */
+
 public class QueryMode implements IViewMode {
 
     HashMap<Integer, FloatingActionButton> mControls;

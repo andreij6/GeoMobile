@@ -2,9 +2,6 @@ package com.geospatialcorporation.android.geomobile.library.viewmode.implementat
 
 import com.geospatialcorporation.android.geomobile.library.viewmode.IViewMode;
 
-/**
- * Created by andre on 6/6/2015.
- */
 public class CreateLayerMode implements IViewMode {
 
     @Override

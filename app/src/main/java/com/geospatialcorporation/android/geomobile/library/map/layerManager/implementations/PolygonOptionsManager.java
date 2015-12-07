@@ -15,7 +15,6 @@ import com.geospatialcorporation.android.geomobile.library.util.GeoPolyUtil;
 import com.geospatialcorporation.android.geomobile.models.Layers.FeatureInfo;
 import com.geospatialcorporation.android.geomobile.models.Layers.LegendLayer;
 import com.geospatialcorporation.android.geomobile.ui.fragments.GoogleMapFragment;
-import com.geospatialcorporation.android.geomobile.ui.fragments.MapFragments.TabletMapFragment;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.LatLngBounds;
@@ -92,43 +91,24 @@ public class PolygonOptionsManager extends OptionsManagerBase<PolygonOptions, Po
 
                 LatLngBounds bounds = getBounds(selected.getPoints());
 
-                if(application.getIsTablet()){
-                    final TabletMapFragment mapFragment = application.getMainTabletActivity().getMapFragment();
 
-                    mapFragment.centerMap(bounds.getCenter());
+                final GoogleMapFragment mapFragment = (GoogleMapFragment) application.getMainActivity().getContentFragment();
 
-                    new Handler().postDelayed(new Runnable(){
+                mapFragment.centerMap(bounds.getCenter());
 
-                        @Override
-                        public void run() {
-                            for (Polygon ss : polygons) {
-                                if(ss.getPoints().equals(selected.getPoints())){
-                                    mapFragment.getFeatureWindow(ss.getId(), LayerManager.POLYGON);
+                new Handler().postDelayed(new Runnable(){
 
-                                    mapFragment.highlight(ss);
-                                    break;
-                                }
+                    @Override
+                    public void run() {
+                        for (Polygon ss : polygons) {
+                            if(ss.getPoints().equals(selected.getPoints())){
+                                mapFragment.getFeatureWindow(ss.getId(), LayerManager.POLYGON);
+                                break;
                             }
                         }
-                    }, 2000);
-                } else {
-                    final GoogleMapFragment mapFragment = (GoogleMapFragment) application.getMainActivity().getContentFragment();
+                    }
+                }, 1100);
 
-                    mapFragment.centerMap(bounds.getCenter());
-
-                    new Handler().postDelayed(new Runnable(){
-
-                        @Override
-                        public void run() {
-                            for (Polygon ss : polygons) {
-                                if(ss.getPoints().equals(selected.getPoints())){
-                                    mapFragment.getFeatureWindow(ss.getId(), LayerManager.POLYGON);
-                                    break;
-                                }
-                            }
-                        }
-                    }, 1100);
-                }
 
             }
 
@@ -232,7 +212,7 @@ public class PolygonOptionsManager extends OptionsManagerBase<PolygonOptions, Po
         protected void onPostExecute(PostParameters options) {
             IMapStatusBarManager mapStatusBarManager = application.getStatusBarManager();
 
-            if(contentFragmentIsGoogleMapFragment() || application.getIsTablet()) {
+            if(contentFragmentIsGoogleMapFragment()) {
                 options.mapFeatures();
 
                 if(mUUID != null) {
@@ -343,10 +323,6 @@ public class PolygonOptionsManager extends OptionsManagerBase<PolygonOptions, Po
             PolygonOptions closestOption = null;
             PolygonOptions furthestOption = null;
 
-            if(application.getIsTablet()){
-                return null;
-            }
-
             HashMap<Integer, Double> distances = new HashMap<>();
 
             List<HashMap<UUID, OptionFeature<PolygonOptions>>> CachedOptions = getOption();
@@ -449,43 +425,23 @@ public class PolygonOptionsManager extends OptionsManagerBase<PolygonOptions, Po
 
                     LatLngBounds bounds = getBounds(selected.getPoints());
 
-                    if(application.getIsTablet()){
-                        final TabletMapFragment mapFragment = application.getMainTabletActivity().getMapFragment();
+                    final GoogleMapFragment mapFragment = (GoogleMapFragment) application.getMainActivity().getContentFragment();
 
-                        mapFragment.centerMap(bounds.getCenter());
+                    mapFragment.centerMap(bounds.getCenter());
 
-                        new Handler().postDelayed(new Runnable(){
+                    new Handler().postDelayed(new Runnable(){
 
-                            @Override
-                            public void run() {
-                                for (Polygon ss : polygons) {
-                                    if(ss.getPoints().equals(selected.getPoints())){
-                                        mapFragment.getFeatureWindow(ss.getId(), LayerManager.POLYGON);
-
-                                        mapFragment.highlight(ss);
-                                        break;
-                                    }
+                        @Override
+                        public void run() {
+                            for (Polygon ss : polygons) {
+                                if(ss.getPoints().equals(selected.getPoints())){
+                                    mapFragment.getFeatureWindow(ss.getId(), LayerManager.POLYGON);
+                                    break;
                                 }
                             }
-                        }, 1100);
-                    } else {
-                        final GoogleMapFragment mapFragment = (GoogleMapFragment) application.getMainActivity().getContentFragment();
+                        }
+                    }, 1100);
 
-                        mapFragment.centerMap(bounds.getCenter());
-
-                        new Handler().postDelayed(new Runnable(){
-
-                            @Override
-                            public void run() {
-                                for (Polygon ss : polygons) {
-                                    if(ss.getPoints().equals(selected.getPoints())){
-                                        mapFragment.getFeatureWindow(ss.getId(), LayerManager.POLYGON);
-                                        break;
-                                    }
-                                }
-                            }
-                        }, 1100);
-                    }
 
                     break;
                 }
@@ -522,7 +478,7 @@ public class PolygonOptionsManager extends OptionsManagerBase<PolygonOptions, Po
 
         @Override
         protected void onPostExecute(PostParameters options) {
-            if(contentFragmentIsGoogleMapFragment() || application.getIsTablet()) {
+            if(contentFragmentIsGoogleMapFragment()) {
                 options.mapFeatures();
             }
 

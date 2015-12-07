@@ -10,9 +10,6 @@ import com.geospatialcorporation.android.geomobile.library.viewmode.IViewMode;
 import com.melnykov.fab.FloatingActionButton;
 import com.sothree.slidinguppanel.SlidingUpPanelLayout;
 
-/**
- * Created by andre on 6/8/2015.
- */
 public class FullScreenMode implements IViewMode {
     Builder mBuilder;
 

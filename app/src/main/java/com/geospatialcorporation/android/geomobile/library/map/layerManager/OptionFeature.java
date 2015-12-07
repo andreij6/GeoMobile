@@ -2,9 +2,6 @@ package com.geospatialcorporation.android.geomobile.library.map.layerManager;
 
 import com.geospatialcorporation.android.geomobile.models.Layers.FeatureInfo;
 
-/**
- * Created by andre on 7/6/2015.
- */
 public class OptionFeature<T> implements Comparable<OptionFeature> {
     T Option;
     FeatureInfo mFeatureInfo;

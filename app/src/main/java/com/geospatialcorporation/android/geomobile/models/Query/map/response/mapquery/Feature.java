@@ -1,9 +1,5 @@
 package com.geospatialcorporation.android.geomobile.models.Query.map.response.mapquery;
 
-
-/**
- * Created by andre on 6/24/2015.
- */
 public class Feature {
     String Id;
     Geometry Shape;

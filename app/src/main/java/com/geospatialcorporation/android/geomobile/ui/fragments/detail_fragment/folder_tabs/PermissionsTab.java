@@ -1,7 +1,6 @@
 package com.geospatialcorporation.android.geomobile.ui.fragments.detail_fragment.folder_tabs;
 
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -15,7 +14,6 @@ import com.geospatialcorporation.android.geomobile.library.DI.Analytics.Models.G
 import com.geospatialcorporation.android.geomobile.library.DI.Tasks.Interfaces.IGetFolderPermissionTask;
 import com.geospatialcorporation.android.geomobile.library.DI.Tasks.models.FolderPermissionsParams;
 import com.geospatialcorporation.android.geomobile.library.constants.AccessLevelCodes;
-import com.geospatialcorporation.android.geomobile.library.helpers.DataHelper;
 import com.geospatialcorporation.android.geomobile.library.helpers.TableFactory;
 import com.geospatialcorporation.android.geomobile.models.Folders.Folder;
 import com.geospatialcorporation.android.geomobile.models.Folders.FolderPermissionsResponse;

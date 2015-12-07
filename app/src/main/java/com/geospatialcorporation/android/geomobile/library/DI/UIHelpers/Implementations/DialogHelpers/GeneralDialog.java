@@ -12,7 +12,6 @@ import com.geospatialcorporation.android.geomobile.library.DI.TreeServices.Inter
 import com.geospatialcorporation.android.geomobile.library.DI.UIHelpers.Interfaces.DialogHelpers.IGeneralDialog;
 import com.geospatialcorporation.android.geomobile.models.RemoveMapFeatureDocumentRequest;
 import com.geospatialcorporation.android.geomobile.ui.LoginActivity;
-import com.geospatialcorporation.android.geomobile.ui.MainActivity;
 import com.geospatialcorporation.android.geomobile.ui.SubscriptionSelectorActivity;
 import com.geospatialcorporation.android.geomobile.ui.fragments.dialogs.MapFeatureDocumentDialogFragment;
 
@@ -60,6 +59,7 @@ public class GeneralDialog implements IGeneralDialog {
     @Override
     public void Logout(final Context context, FragmentManager manager) {
         new MaterialDialog.Builder(context)
+                .title(R.string.are_you_sure_title)
                 .content(R.string.want_to_logout)
                 .positiveText(R.string.yes)
                 .negativeText(R.string.no)

@@ -1,6 +1,5 @@
 package com.geospatialcorporation.android.geomobile.library.map;
 
-import android.util.Log;
 
 import com.geospatialcorporation.android.geomobile.application;
 import com.geospatialcorporation.android.geomobile.library.DI.Map.Interfaces.ILayerManager;

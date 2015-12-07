@@ -64,7 +64,6 @@
     </style>
 
     <style name="TreePanelSectionStyle">
-        <item name="android:layout_marginTop">5dp</item>
         <item name="android:layout_centerHorizontal">true</item>
         <item name="android:layout_height">48dp</item>
     </style>
@@ -74,7 +73,7 @@
         <item name="android:layout_height">match_parent</item>
         <item name="android:gravity">center_vertical</item>
         <item name="android:textAppearance">?android:attr/textAppearanceMedium</item>
-        <item name="android:paddingLeft">56dp</item>
+        <item name="android:paddingLeft">32dp</item>
         <item name="android:textColor">@color/primary_text</item>
     </style>
     <!-- End Panel Layouts -->

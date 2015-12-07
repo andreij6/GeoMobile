@@ -17,7 +17,7 @@
         android:layout_height="wrap_content"
         android:textAppearance="?android:attr/textAppearanceLarge"
         android:textStyle="bold"
-        android:text="Folder"
+        android:text=""
         android:id="@+id/folderNameTV"
         android:layout_marginTop="16dp"
         android:layout_marginLeft="72dp"/>
@@ -88,7 +88,7 @@
                     android:id="@+id/takePhotoIV"
                     style="TreePanelImageViewStyle"
                     android:layout_marginLeft="16dp"
-                    android:contentDescription="take a photo"
+                    android:contentDescription="@string/take_photo"
                     android:src="@drawable/ic_camera_grey600_36dp"/>
 
                 <TextView

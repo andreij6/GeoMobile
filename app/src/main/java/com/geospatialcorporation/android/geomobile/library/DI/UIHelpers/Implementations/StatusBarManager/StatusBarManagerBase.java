@@ -181,11 +181,7 @@ public abstract class StatusBarManagerBase implements IMapStatusBarManager{
 
     protected void getProgressDialogHelper(){
         if(mProgressDialogHelper == null) {
-            if(application.getIsTablet()){
-                mProgressDialogHelper = new ProgressDialogHelper(application.getMainTabletActivity());
-            } else {
-                mProgressDialogHelper = new ProgressDialogHelper(application.getMainActivity());
-            }
+            mProgressDialogHelper = new ProgressDialogHelper(application.getMainActivity());
         }
     }
 

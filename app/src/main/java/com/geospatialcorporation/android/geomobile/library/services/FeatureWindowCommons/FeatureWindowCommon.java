@@ -18,7 +18,6 @@ import com.geospatialcorporation.android.geomobile.ui.fragments.detail_fragment.
 import com.geospatialcorporation.android.geomobile.ui.fragments.detail_fragment.feature_window_tabs.FeatureMapInfoTab;
 import com.geospatialcorporation.android.geomobile.ui.fragments.detail_fragment.feature_window_tabs.VideoDetailsTab;
 import com.geospatialcorporation.android.geomobile.ui.fragments.detail_fragment.feature_window_tabs.VideoPlayTab;
-import com.geospatialcorporation.android.geomobile.ui.fragments.detail_fragment.feature_window_tabs.tablet.*;
 
 public class FeatureWindowCommon implements IFeatureWindowCommon {
 
@@ -54,15 +53,9 @@ public class FeatureWindowCommon implements IFeatureWindowCommon {
             assert layer != null;
 
             if(layer.getPluginId() == PluginCodes.Default) {
-                if (application.getIsTablet()) {
-                    featureMapInfo = TabletFeatureMapInfoTab.class;
-                    featureAttributes = TabletFeatureAttributesTab.class;
-                    featureDocuments = TabletFeatureDocumentsTab.class;
-                } else {
-                    featureMapInfo = FeatureMapInfoTab.class;
-                    featureAttributes = FeatureAttributesTab.class;
-                    featureDocuments = FeatureDocumentsTab.class;
-                }
+                featureMapInfo = FeatureMapInfoTab.class;
+                featureAttributes = FeatureAttributesTab.class;
+                featureDocuments = FeatureDocumentsTab.class;
 
                 tabHost.addTab(tabHost.newTabSpec(MAPINFO).setIndicator(TabHostUtil.createTabView(tabHost.getContext(), R.drawable.details_selector)), featureMapInfo, arguments);
                 tabHost.addTab(tabHost.newTabSpec(ATTRIBUTES).setIndicator(TabHostUtil.createTabView(tabHost.getContext(), R.drawable.attr_selector)), featureAttributes, arguments);
@@ -76,17 +69,11 @@ public class FeatureWindowCommon implements IFeatureWindowCommon {
 
                 Class<?> videoDetails, videoPlay;
 
-                if (application.getIsTablet()) {
-                    featureMapInfo = TabletFeatureMapInfoTab.class;
-                    featureDocuments = TabletFeatureDocumentsTab.class;
-                    videoDetails = null;//TabletVideoDetailsTab.class;
-                    videoPlay = null;//TabletVideoPlayTab.class;
-                } else {
-                    featureMapInfo = FeatureMapInfoTab.class;
-                    featureDocuments = FeatureDocumentsTab.class;
-                    videoDetails = VideoDetailsTab.class;
-                    videoPlay = VideoPlayTab.class;
-                }
+                featureMapInfo = FeatureMapInfoTab.class;
+                featureDocuments = FeatureDocumentsTab.class;
+                videoDetails = VideoDetailsTab.class;
+                videoPlay = VideoPlayTab.class;
+
 
                 tabHost.addTab(tabHost.newTabSpec(MAPINFO).setIndicator(TabHostUtil.createTabView(tabHost.getContext(), R.drawable.details_selector)), featureMapInfo, arguments);
                 tabHost.addTab(tabHost.newTabSpec(DOCUMENTS).setIndicator(TabHostUtil.createTabView(tabHost.getContext(), R.drawable.documents_selector)), featureDocuments, arguments);

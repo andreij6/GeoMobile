@@ -22,7 +22,6 @@ import com.geospatialcorporation.android.geomobile.models.Folders.Folder;
 import com.geospatialcorporation.android.geomobile.models.RenameRequest;
 
 import java.io.File;
-import java.io.FileNotFoundException;
 
 import retrofit.Callback;
 import retrofit.RetrofitError;

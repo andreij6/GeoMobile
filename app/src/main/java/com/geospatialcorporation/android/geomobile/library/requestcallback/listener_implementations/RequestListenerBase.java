@@ -6,19 +6,10 @@ import android.widget.Toast;
 
 import com.geospatialcorporation.android.geomobile.R;
 import com.geospatialcorporation.android.geomobile.application;
-import com.geospatialcorporation.android.geomobile.library.DI.Analytics.Interfaces.IGeoAnalytics;
-import com.geospatialcorporation.android.geomobile.library.util.DeviceTypeUtil;
-import com.geospatialcorporation.android.geomobile.ui.Interfaces.IContentRefresher;
 import com.geospatialcorporation.android.geomobile.ui.Interfaces.IGeoMainActivity;
-import com.geospatialcorporation.android.geomobile.ui.MainActivity;
-import com.geospatialcorporation.android.geomobile.ui.fragments.tree_fragments.LibraryFragment;
 
 import retrofit.RetrofitError;
-import retrofit.client.Response;
 
-/**
- * Created by andre on 6/20/2015.
- */
 public abstract class RequestListenerBase<T> {
     private static final String TAG = RequestListenerBase.class.getSimpleName();
 
@@ -42,7 +33,7 @@ public abstract class RequestListenerBase<T> {
     }
 
     protected IGeoMainActivity getMainActivity(){
-        return application.getGeoMainActivity();
+        return application.getMainActivity();
     }
 
     protected void Toaster(String message){

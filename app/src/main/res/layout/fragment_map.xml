@@ -97,7 +97,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:textAppearance="?android:attr/textAppearanceMedium"
-                    android:text="Editing"
+                    android:text="@string/editing"
                     android:id="@+id/editLayerTitle"
                     android:textStyle="bold"
                     android:layout_centerVertical="true"
@@ -140,7 +140,7 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="match_parent"
-                    android:text="Loading..."
+                    android:text="@string/loading"
                     android:gravity="center"
                     android:id="@+id/loadingMessage"
                     android:textSize="12sp"

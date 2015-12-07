@@ -1,8 +1,5 @@
 package com.geospatialcorporation.android.geomobile.models.Bookmarks;
 
-/**
- * Created by andre on 6/6/2015.
- */
 public class BookmarkPosition {
     private float mBearing;
     private float mTilt;

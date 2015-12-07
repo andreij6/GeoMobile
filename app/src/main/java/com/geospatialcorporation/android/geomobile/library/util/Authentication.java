@@ -6,12 +6,10 @@ import android.util.Base64;
 import android.util.Log;
 
 import com.afollestad.materialdialogs.MaterialDialog;
-import com.geospatialcorporation.android.geomobile.R;
 import com.geospatialcorporation.android.geomobile.application;
 import com.geospatialcorporation.android.geomobile.library.DI.Analytics.Interfaces.IGeoAnalytics;
 import com.geospatialcorporation.android.geomobile.library.DI.Authentication.Implementations.AuthTokenRetriever;
 import com.geospatialcorporation.android.geomobile.library.DI.ErrorHandler.Interfaces.IGeoErrorHandler;
-import com.geospatialcorporation.android.geomobile.library.helpers.ProgressDialogHelper;
 import com.geospatialcorporation.android.geomobile.library.rest.LoginService;
 import com.geospatialcorporation.android.geomobile.models.Login.ErrorResponse;
 import com.geospatialcorporation.android.geomobile.models.Login.LoginBody;
@@ -356,8 +354,7 @@ public class Authentication {
             byte[] secretKey = secretAccessKey.getBytes("UTF-8");
             Log.d(TAG,"Secret key");
             StringBuilder sb = new StringBuilder();
-            for (int i = 0; i < secretKey.length; i++) {
-                int test = secretKey[i];
+            for (byte test : secretKey) {
                 sb.append(test);
                 sb.append(',');
             }
@@ -366,8 +363,7 @@ public class Authentication {
             Log.d(TAG,"data");
             sb = new StringBuilder();
             byte[] bytes = data.getBytes("UTF-8");
-            for (int i = 0; i < bytes.length; i++) {
-                int test = bytes[i];
+            for (byte test : bytes) {
                 sb.append(test);
                 sb.append(',');
             }

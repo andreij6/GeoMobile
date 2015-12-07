@@ -12,8 +12,7 @@
         sothree:umanoPanelHeight="68dp"
         sothree:umanoShadowHeight="4dp"
         sothree:umanoFadeColor="@android:color/transparent"
-        android:background="@color/primary_light"
-        >
+        android:background="@color/primary_light">
 
         <!--android:layout_marginTop="?attr/actionBarSize"-->
 
@@ -142,7 +141,7 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="match_parent"
-                    android:text="Loading..."
+                    android:text="@string/loading"
                     android:gravity="center"
                     android:id="@+id/loadingMessage"
                     android:textSize="12sp"

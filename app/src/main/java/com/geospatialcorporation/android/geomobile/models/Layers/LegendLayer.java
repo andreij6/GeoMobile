@@ -2,7 +2,6 @@ package com.geospatialcorporation.android.geomobile.models.Layers;
 
 import android.content.Context;
 import android.graphics.drawable.Drawable;
-import android.util.Log;
 import android.widget.CheckBox;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
@@ -14,9 +13,6 @@ import com.google.android.gms.maps.model.BitmapDescriptor;
 import java.util.ArrayList;
 import java.util.List;
 
-/**
- * Created by andre on 6/25/2015.
- */
 public class LegendLayer implements Comparable<LegendLayer> {
     Layer mLayer;
     Drawable mLegendIcon;

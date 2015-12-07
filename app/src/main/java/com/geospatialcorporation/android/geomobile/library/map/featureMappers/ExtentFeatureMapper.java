@@ -5,9 +5,6 @@ import com.geospatialcorporation.android.geomobile.models.Query.map.response.map
 import com.geospatialcorporation.android.geomobile.models.Query.map.response.mapquery.Style;
 import com.google.android.gms.maps.model.PolygonOptions;
 
-/**
- * Created by andre on 6/24/2015.
- */
 public class ExtentFeatureMapper  extends FeatureMapperBase<PolygonOptions> {
     //check map feature type
 

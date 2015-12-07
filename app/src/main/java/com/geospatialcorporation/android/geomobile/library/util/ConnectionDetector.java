@@ -1,7 +1,9 @@
 package com.geospatialcorporation.android.geomobile.library.util;
 
 import android.content.Context;
-import android.net.*;
+import android.net.ConnectivityManager;
+import android.net.Network;
+import android.net.NetworkInfo;
 import android.os.Build;
 
 public class ConnectionDetector {

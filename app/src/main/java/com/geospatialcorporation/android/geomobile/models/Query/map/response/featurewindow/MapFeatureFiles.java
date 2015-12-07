@@ -1,8 +1,5 @@
 package com.geospatialcorporation.android.geomobile.models.Query.map.response.featurewindow;
 
-/**
- * Created by andre on 7/22/2015.
- */
 public class MapFeatureFiles {
     Integer Id;
     String Name;

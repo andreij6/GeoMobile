@@ -1,8 +1,6 @@
 package com.geospatialcorporation.android.geomobile.models.Query;
 
-/**
- * Created by andre on 6/4/2015.
- */
+
 public class Options {
     Boolean Attributes;
     Boolean Columns;

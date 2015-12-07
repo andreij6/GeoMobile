@@ -8,11 +8,8 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.geospatialcorporation.android.geomobile.R;
-import com.geospatialcorporation.android.geomobile.application;
 import com.geospatialcorporation.android.geomobile.library.services.LayerEditor.ILayerEditor;
-import com.geospatialcorporation.android.geomobile.models.Layers.LegendLayer;
 import com.geospatialcorporation.android.geomobile.ui.fragments.GeoViewFragmentBase;
-import com.geospatialcorporation.android.geomobile.ui.fragments.GoogleMapFragment;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;

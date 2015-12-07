@@ -13,10 +13,6 @@ import com.geospatialcorporation.android.geomobile.library.DI.Analytics.Interfac
 
 import java.util.List;
 
-/**
- * Created by andre on 6/14/2015.
- */
-
 public abstract class GeoRecyclerAdapterBase<Holder extends GeoHolderBase<T>, T> extends RecyclerView.Adapter<Holder> {
 
     private static final String TAG = GeoRecyclerAdapterBase.class.getSimpleName();

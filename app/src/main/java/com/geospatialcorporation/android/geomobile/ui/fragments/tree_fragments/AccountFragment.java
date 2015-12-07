@@ -7,7 +7,6 @@ import android.support.v4.app.FragmentManager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.geospatialcorporation.android.geomobile.R;
@@ -22,7 +21,6 @@ import com.geospatialcorporation.android.geomobile.ui.Interfaces.OnFragmentInter
 import com.geospatialcorporation.android.geomobile.ui.MainActivity;
 import com.geospatialcorporation.android.geomobile.ui.fragments.GeoViewFragmentBase;
 import com.geospatialcorporation.android.geomobile.ui.fragments.GoogleMapFragment;
-import com.geospatialcorporation.android.geomobile.ui.fragments.drawer.MainNavigationDrawerFragment;
 
 import butterknife.Bind;
 import butterknife.OnClick;
@@ -118,12 +116,12 @@ public class AccountFragment extends GeoViewFragmentBase implements IAccountFrag
     }
 
     @Override
-    public void setDetailFrame(View view, FragmentManager fm) {
+    public void setDetailFrame(View view, FragmentManager fm, Bundle bundle) {
         view.performClick();
     }
 
     @Override
-    public void setContentFragment(FragmentManager fm) {
+    public void setContentFragment(FragmentManager fm, Bundle bundle) {
         application.getMainActivity().onNavigationDrawerItemSelected(MainNavCtrl.ViewConstants.ACCOUNT);
     }
 }

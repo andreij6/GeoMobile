@@ -3,9 +3,7 @@ package com.geospatialcorporation.android.geomobile.library.requestcallback.list
 import android.util.Log;
 
 import com.geospatialcorporation.android.geomobile.library.requestcallback.RequestListener;
-import com.geospatialcorporation.android.geomobile.models.Document.Document;
 import com.geospatialcorporation.android.geomobile.ui.Interfaces.IContentRefresher;
-import com.geospatialcorporation.android.geomobile.ui.fragments.tree_fragments.LibraryFragment;
 
 import retrofit.client.Response;
 

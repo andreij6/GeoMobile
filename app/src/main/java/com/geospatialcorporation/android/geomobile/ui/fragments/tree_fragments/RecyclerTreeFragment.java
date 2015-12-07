@@ -49,7 +49,8 @@ public abstract class RecyclerTreeFragment extends GeoViewFragmentBase {
     @Nullable @Bind(R.id.showNavIV2) ImageView mNavLogo;
     @Bind(R.id.title) TextView mTitle;
     @Bind(R.id.folderInformation) ImageView mInfo;
-    @Nullable @Bind(R.id.backFolder) TextView mParentFolder;
+    @Nullable @Bind(R.id.sectionTitle) TextView mParentFolder;
+
 
     @Override
     public void onCreate(Bundle savedInstance) {

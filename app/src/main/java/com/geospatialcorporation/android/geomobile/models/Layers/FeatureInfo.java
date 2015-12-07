@@ -1,8 +1,6 @@
 package com.geospatialcorporation.android.geomobile.models.Layers;
 
-/**
- * Created by andre on 7/6/2015.
- */
+
 public class FeatureInfo {
     String FeatureId;
     int LayerId;

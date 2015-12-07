@@ -3,7 +3,6 @@ package com.geospatialcorporation.android.geomobile.library.sectionbuilders.impl
 import android.content.Context;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 
 import com.geospatialcorporation.android.geomobile.R;
 import com.geospatialcorporation.android.geomobile.application;
@@ -14,7 +13,6 @@ import com.geospatialcorporation.android.geomobile.library.DI.SharedPreferences.
 import com.geospatialcorporation.android.geomobile.library.DI.Tasks.Implementations.LayerStyleTask;
 import com.geospatialcorporation.android.geomobile.library.DI.Tasks.Interfaces.ILayerStyleTask;
 import com.geospatialcorporation.android.geomobile.library.DI.UIHelpers.Interfaces.IMapStatusBarManager;
-import com.geospatialcorporation.android.geomobile.library.constants.PluginCodes;
 import com.geospatialcorporation.android.geomobile.library.map.AppStateMapQueryRequestCallback;
 import com.geospatialcorporation.android.geomobile.library.sectionbuilders.ISectionBuilder;
 import com.geospatialcorporation.android.geomobile.library.sectionbuilders.SectionBuilderBase;
@@ -25,8 +23,8 @@ import com.geospatialcorporation.android.geomobile.models.Query.map.Layers;
 import com.geospatialcorporation.android.geomobile.models.Query.map.MapDefaultQueryRequest;
 import com.geospatialcorporation.android.geomobile.models.Query.map.Options;
 import com.geospatialcorporation.android.geomobile.models.Subscription;
-import com.geospatialcorporation.android.geomobile.ui.adapters.recycler.LegendLayerAdapter;
 import com.geospatialcorporation.android.geomobile.ui.adapters.SimpleSectionedRecyclerViewAdapter;
+import com.geospatialcorporation.android.geomobile.ui.adapters.recycler.LegendLayerAdapter;
 
 import java.util.ArrayList;
 import java.util.HashMap;

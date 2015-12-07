@@ -8,11 +8,11 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textAppearance="?android:attr/textAppearanceLarge"
-        android:text="Document Name"
+        android:text=""
         android:textStyle="bold"
         android:id="@+id/title"
         android:layout_marginTop="20dp"
-        android:layout_marginLeft="20dp"
+        android:layout_marginLeft="16dp"
         android:layout_marginRight="5dp"/>
 
     <ImageView
@@ -97,7 +97,7 @@
 
                 <TextView
                     android:layout_width="wrap_content"
-                    android:text="Move"
+                    android:text="@string/move"
                     android:id="@+id/moveTV"
                     style="@style/TreePanelTextViewStyle"/>
 
@@ -119,7 +119,7 @@
 
                 <TextView
                     android:layout_width="wrap_content"
-                    android:text="Delete"
+                    android:text="@string/delete"
                     android:id="@+id/deleteTV"
                     style="@style/TreePanelTextViewStyle"/>
 

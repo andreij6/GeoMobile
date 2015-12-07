@@ -1,7 +1,7 @@
 package com.geospatialcorporation.android.geomobile.library.helpers;
 
-import android.support.v4.app.FragmentManager;
 import android.content.Context;
+import android.support.v4.app.FragmentManager;
 
 import com.geospatialcorporation.android.geomobile.ui.fragments.dialogs.BookmarksDialogFragment;
 import com.google.android.gms.maps.GoogleMap;

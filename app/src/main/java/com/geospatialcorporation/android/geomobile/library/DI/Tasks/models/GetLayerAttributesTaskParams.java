@@ -2,7 +2,6 @@ package com.geospatialcorporation.android.geomobile.library.DI.Tasks.models;
 
 import android.content.Context;
 import android.support.v4.app.FragmentActivity;
-import android.support.v7.widget.RecyclerView;
 
 import com.geospatialcorporation.android.geomobile.models.Layers.Layer;
 import com.geospatialcorporation.android.geomobile.models.Layers.LayerAttributeColumn;

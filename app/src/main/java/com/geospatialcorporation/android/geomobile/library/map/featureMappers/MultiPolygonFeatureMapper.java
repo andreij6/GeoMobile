@@ -3,10 +3,6 @@ package com.geospatialcorporation.android.geomobile.library.map.featureMappers;
 import com.geospatialcorporation.android.geomobile.models.Query.map.response.mapquery.Feature;
 import com.google.android.gms.maps.model.PolygonOptions;
 
-
-/**
- * Created by andre on 6/25/2015.
- */
 public class MultiPolygonFeatureMapper extends MultiFeatureMapperBase<PolygonOptions, PolygonFeatureMapper> {
 
     public MultiPolygonFeatureMapper() {

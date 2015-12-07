@@ -58,7 +58,7 @@ public class FolderDetailsTab extends GeoDetailsTabBase<Folder> implements IPost
 
         mEntity = args.getParcelable(Folder.FOLDER_INTENT);
 
-        mFolderType = args.getString("Folder Type");
+        mFolderType = args.getString(Folder.FOLDER_TYPE_INTENT);
 
         refresh();
 

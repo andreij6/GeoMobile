@@ -23,7 +23,15 @@ public abstract class TreeFolderPanelFragmentBase<T> extends GeoViewFragmentBase
     @Bind(R.id.folderNameTV) TextView mFolderName;
 
     public TreeFolderPanelFragmentBase(){
-        mContentFragment = (T) application.getMainActivity().getContentFragment();
+        mContentFragment = setConentFragment();
+    }
+
+    private T setConentFragment() {
+        if(application.getIsLandscape()){
+            return (T) application.getMainActivity().getDetailFragment();
+        } else {
+            return (T) application.getMainActivity().getContentFragment();
+        }
     }
 
     @Override

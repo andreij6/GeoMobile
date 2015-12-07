@@ -3,9 +3,6 @@ package com.geospatialcorporation.android.geomobile.library.map.featureMappers;
 import com.geospatialcorporation.android.geomobile.models.Query.map.response.mapquery.Feature;
 import com.google.android.gms.maps.model.MarkerOptions;
 
-/**
- * Created by andre on 6/25/2015.
- */
 public class MultiPointFeatureMapper extends MultiFeatureMapperBase<MarkerOptions, PointFeatureMapperBase> {
 
     public MultiPointFeatureMapper() {

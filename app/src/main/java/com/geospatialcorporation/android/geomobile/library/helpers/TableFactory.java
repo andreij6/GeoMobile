@@ -2,14 +2,9 @@ package com.geospatialcorporation.android.geomobile.library.helpers;
 
 import android.content.Context;
 import android.view.LayoutInflater;
-import android.view.View;
 import android.widget.TableLayout;
 import android.widget.TableRow;
 import android.widget.TextView;
-
-import com.geospatialcorporation.android.geomobile.R;
-
-import java.util.zip.Inflater;
 
 public class TableFactory {
 

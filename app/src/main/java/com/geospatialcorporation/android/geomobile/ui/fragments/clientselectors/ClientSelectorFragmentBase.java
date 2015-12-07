@@ -2,24 +2,19 @@ package com.geospatialcorporation.android.geomobile.ui.fragments.clientselectors
 
 import android.content.Context;
 import android.database.Cursor;
-import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.LoaderManager;
+import android.support.v4.content.ContextCompat;
 import android.support.v4.content.CursorLoader;
 import android.support.v4.content.Loader;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
-import android.view.Menu;
-import android.view.MenuInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
 import android.widget.Spinner;
-import android.widget.Toast;
 
 import com.geospatialcorporation.android.geomobile.R;
 import com.geospatialcorporation.android.geomobile.application;
@@ -28,13 +23,10 @@ import com.geospatialcorporation.android.geomobile.data.tables.SubscriptionColum
 import com.geospatialcorporation.android.geomobile.library.DI.Tasks.Interfaces.IGetClientsTask;
 import com.geospatialcorporation.android.geomobile.library.DI.Tasks.models.GetClientsTaskParams;
 import com.geospatialcorporation.android.geomobile.library.DI.UIHelpers.Interfaces.ILayoutRefresher;
-import com.geospatialcorporation.android.geomobile.library.constants.ClientTypeCodes;
 import com.geospatialcorporation.android.geomobile.library.helpers.ProgressDialogHelper;
-import com.geospatialcorporation.android.geomobile.ui.Interfaces.IContentRefresher;
 import com.geospatialcorporation.android.geomobile.models.Subscription;
-import com.geospatialcorporation.android.geomobile.ui.Interfaces.IPostExecuter;
+import com.geospatialcorporation.android.geomobile.ui.Interfaces.IContentRefresher;
 import com.geospatialcorporation.android.geomobile.ui.adapters.cursor.SubscriptionCursorAdapter;
-import com.geospatialcorporation.android.geomobile.ui.adapters.recycler.ClientAdapter;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -81,7 +73,7 @@ public abstract class ClientSelectorFragmentBase extends Fragment implements ICo
         mProgressHelper = new ProgressDialogHelper(getActivity());
 
         mSwipeRefreshLayout.setOnRefreshListener(refresher.build(mSwipeRefreshLayout, this));
-        mSwipeRefreshLayout.setProgressBackgroundColorSchemeColor(mContext.getResources().getColor(R.color.white));
+        mSwipeRefreshLayout.setProgressBackgroundColorSchemeColor(ContextCompat.getColor(mContext, R.color.white));
 
         mSSPClientTypeCode = 1;
 

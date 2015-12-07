@@ -6,7 +6,6 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentStatePagerAdapter;
 
 import com.geospatialcorporation.android.geomobile.R;
-import com.geospatialcorporation.android.geomobile.library.constants.ClientTypeCodes;
 import com.geospatialcorporation.android.geomobile.ui.fragments.clientselectors.ClientSelectorFragmentBase;
 import com.geospatialcorporation.android.geomobile.ui.fragments.clientselectors.PluginOwnerClientSelectorFragment;
 import com.geospatialcorporation.android.geomobile.ui.fragments.clientselectors.SSPClientSelectorFragment;

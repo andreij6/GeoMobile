@@ -10,9 +10,6 @@ import com.geospatialcorporation.android.geomobile.library.DI.Map.Implementation
 import com.geospatialcorporation.android.geomobile.library.constants.EditLayerActionCodes;
 import com.geospatialcorporation.android.geomobile.library.constants.GeometryTypeCodes;
 import com.geospatialcorporation.android.geomobile.models.Layers.LegendLayer;
-import com.geospatialcorporation.android.geomobile.models.Layers.Point;
-import com.geospatialcorporation.android.geomobile.models.Query.map.response.mapquery.Geometry;
-import com.geospatialcorporation.android.geomobile.models.Query.map.response.mapquery.Ring;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;

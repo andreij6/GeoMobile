@@ -2,15 +2,7 @@ package com.geospatialcorporation.android.geomobile.library.panelmanager;
 
 import com.geospatialcorporation.android.geomobile.application;
 import com.geospatialcorporation.android.geomobile.library.constants.GeoPanel;
-import com.geospatialcorporation.android.geomobile.library.panelmanager.paneltype.GeoSlidingPanelBase;
-import com.geospatialcorporation.android.geomobile.library.panelmanager.paneltype.LayerFragmentSlidingPanel;
-import com.geospatialcorporation.android.geomobile.library.panelmanager.paneltype.LibraryFragmentSlidingPanel;
-import com.geospatialcorporation.android.geomobile.library.panelmanager.paneltype.MapSlidingPanel;
-import com.geospatialcorporation.android.geomobile.library.panelmanager.paneltype.SublayerSlidingPanel;
-import com.geospatialcorporation.android.geomobile.library.panelmanager.paneltype.DocumentDetailSlidingPanel;
-import com.geospatialcorporation.android.geomobile.library.panelmanager.paneltype.DocumentFolderSlidingPanel;
-import com.geospatialcorporation.android.geomobile.library.panelmanager.paneltype.LayerDetailSlidingPanel;
-import com.geospatialcorporation.android.geomobile.ui.fragments.detail_fragment.feature_window_tabs.FeatureTabBase;
+import com.geospatialcorporation.android.geomobile.library.panelmanager.paneltype.*;
 import com.sothree.slidinguppanel.SlidingUpPanelLayout;
 
 public class PanelManager implements ISlidingPanelManager {
@@ -116,6 +108,7 @@ public class PanelManager implements ISlidingPanelManager {
         mGeoPanel.halfAnchor(plus);
     }
 
+    @Override
     public boolean isExpanded() {
         return mGeoPanel.getPanelState().equals(SlidingUpPanelLayout.PanelState.EXPANDED);
     }

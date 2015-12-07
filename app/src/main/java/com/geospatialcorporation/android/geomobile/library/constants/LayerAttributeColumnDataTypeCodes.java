@@ -1,8 +1,6 @@
 package com.geospatialcorporation.android.geomobile.library.constants;
 
-/**
- * Created by andre on 6/9/2015.
- */
+
 public class LayerAttributeColumnDataTypeCodes {
     public static final Integer IDFIELD = 0;
     public static final Integer TEXT = 1;

@@ -9,6 +9,7 @@ import android.widget.TableRow;
 import android.widget.TextView;
 
 import com.geospatialcorporation.android.geomobile.R;
+import com.geospatialcorporation.android.geomobile.application;
 import com.geospatialcorporation.android.geomobile.library.DI.Analytics.Models.GoogleAnalyticEvent;
 import com.geospatialcorporation.android.geomobile.library.DI.FeatureWindow.Implementations.FeatureWindowDataParser;
 import com.geospatialcorporation.android.geomobile.library.DI.FeatureWindow.models.FeatureWindowData;
@@ -19,11 +20,11 @@ import java.util.List;
 import butterknife.Bind;
 import butterknife.OnClick;
 
-/**
- * Created by andre on 7/6/2015.
- */
+
 public class FeatureMapInfoTab extends FeatureTabBase {
     private static final String TAG = FeatureMapInfoTab.class.getSimpleName();
+
+    Boolean mIsLandscape;
 
     @Bind(R.id.mapInfoTable) TableLayout mTableLayout;
     @Bind(R.id.moreInfo) TextView mMoreInfo;
@@ -45,6 +46,11 @@ public class FeatureMapInfoTab extends FeatureTabBase {
         mAnalytics.trackScreen(new GoogleAnalyticEvent().MapInfoTab());
         View v = super.onCreateView(inflater, container, savedInstanceState);
 
+        mIsLandscape = application.getIsLandscape();
+
+        if(mIsLandscape){
+            mMoreInfo.setVisibility(View.GONE);
+        }
 
         return v;
     }

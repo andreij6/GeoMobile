@@ -36,7 +36,7 @@
             android:maxLength="30"
             android:textAlignment="center"
             tools:text="Some Layerssssss | Feature Info"
-            android:paddingLeft="32dp"/>
+            android:paddingLeft="8dp"/>
 
         <ImageView
             android:layout_width="wrap_content"
@@ -85,6 +85,7 @@
              </FrameLayout>
 
          </LinearLayout>
+
      </com.geospatialcorporation.android.geomobile.library.FragmentTabHost>
 
 </RelativeLayout>

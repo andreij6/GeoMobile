@@ -112,9 +112,9 @@ public class LegendLayerAdapter extends GeoRecyclerAdapterBase<LegendLayerAdapte
                 gotoSublayer.setImageDrawable(ContextCompat.getDrawable(mContext, R.drawable.ic_information_outline_grey600_18dp));
 
                 mLayerName.setTextAppearance(mContext, android.R.style.TextAppearance_DeviceDefault_Medium);
-                mLayerName.setTextColor(mContext.getResources().getColor(R.color.primary_text));
+                mLayerName.setTextColor(ContextCompat.getColor(mContext, R.color.primary_text));
 
-                mView.setBackgroundColor(mContext.getResources().getColor(R.color.white));
+                mView.setBackgroundColor(ContextCompat.getColor(mContext, R.color.white));
 
                 mLayerName.setText(mLayer.getName());
                 mLayerName.setOnClickListener(ZoomToLayer);
@@ -135,11 +135,11 @@ public class LegendLayerAdapter extends GeoRecyclerAdapterBase<LegendLayerAdapte
             } else {
                 mFolder = llayer.getFolder();
 
-                mView.setBackgroundColor(mContext.getResources().getColor(R.color.body_bkg));
+                mView.setBackgroundColor(ContextCompat.getColor(mContext, R.color.body_bkg));
 
                 mLayerName.setText(mFolder.getProperName().toUpperCase());
                 mLayerName.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 11);
-                mLayerName.setTextColor(mContext.getResources().getColor(R.color.primary_text));
+                mLayerName.setTextColor(ContextCompat.getColor(mContext, R.color.primary_text));
                 mLayerName.setTypeface(null, Typeface.BOLD);
                 mLayerName.setOnClickListener(GoToLayerFragment);
 

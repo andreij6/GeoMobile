@@ -2,7 +2,6 @@ package com.geospatialcorporation.android.geomobile.library.services.LayerEditor
 
 import android.content.Context;
 import android.view.View;
-import android.widget.Toast;
 
 import com.geospatialcorporation.android.geomobile.application;
 import com.geospatialcorporation.android.geomobile.library.DI.Map.Implementations.LayerManager;
@@ -10,7 +9,6 @@ import com.geospatialcorporation.android.geomobile.library.constants.EditLayerAc
 import com.geospatialcorporation.android.geomobile.library.constants.GeometryTypeCodes;
 import com.geospatialcorporation.android.geomobile.models.Layers.LegendLayer;
 import com.geospatialcorporation.android.geomobile.models.Query.map.response.mapquery.Geometry;
-import com.geospatialcorporation.android.geomobile.models.Query.point.Point;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;

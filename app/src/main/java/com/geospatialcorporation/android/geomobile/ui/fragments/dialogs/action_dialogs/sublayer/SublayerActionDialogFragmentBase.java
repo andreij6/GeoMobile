@@ -7,9 +7,6 @@ import com.geospatialcorporation.android.geomobile.library.DI.TreeServices.Inter
 import com.geospatialcorporation.android.geomobile.models.Layers.Layer;
 import com.geospatialcorporation.android.geomobile.ui.fragments.dialogs.base.GeoDialogFragmentBase;
 
-/**
- * Created by andre on 6/12/2015.
- */
 public class SublayerActionDialogFragmentBase extends GeoDialogFragmentBase {
     protected Layer mEntity;
     protected ISublayerTreeService mService;

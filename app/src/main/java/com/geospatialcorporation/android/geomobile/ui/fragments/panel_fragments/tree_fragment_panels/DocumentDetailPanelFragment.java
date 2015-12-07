@@ -41,13 +41,21 @@ public class DocumentDetailPanelFragment extends GeoViewFragmentBase {
         ButterKnife.bind(this, view);
 
         mContext = getActivity();
-        mContentFragment = (DocumentDetailFragment) application.getMainActivity().getContentFragment();
+        mContentFragment = setContentFragment();
         mDocumentDialog = application.getUIHelperComponent().provideDocumentDialog();
         mService = application.getTreeServiceComponent().provideDocumentTreeService();
 
         handleArgs();
 
         return view;
+    }
+
+    private DocumentDetailFragment setContentFragment() {
+        if(application.getIsLandscape()){
+            return (DocumentDetailFragment) application.getMainActivity().getDetailFragment();
+        } else {
+            return (DocumentDetailFragment) application.getMainActivity().getContentFragment();
+        }
     }
 
     protected void handleArgs() {

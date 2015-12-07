@@ -1,7 +1,6 @@
 package com.geospatialcorporation.android.geomobile.library.DI.TreeServices.Interfaces;
 
 import com.geospatialcorporation.android.geomobile.models.AddAttributeRequest;
-import com.geospatialcorporation.android.geomobile.models.Layers.Columns;
 import com.geospatialcorporation.android.geomobile.models.Layers.EditLayerAttributesRequest;
 import com.geospatialcorporation.android.geomobile.models.Layers.Layer;
 import com.geospatialcorporation.android.geomobile.models.Layers.LayerAttributeColumn;

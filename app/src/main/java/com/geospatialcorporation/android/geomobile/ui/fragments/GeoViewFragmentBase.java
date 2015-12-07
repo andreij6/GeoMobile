@@ -30,6 +30,7 @@ public abstract class GeoViewFragmentBase extends Fragment {
     protected ISlidingPanelManager mPanelManager;
     protected IGeoAnalytics mAnalytics;
     private AnalyticsComponent mAnalyticsComponent;
+    protected Boolean mIsLandscape;
 
     @Nullable
     @Override
@@ -50,6 +51,7 @@ public abstract class GeoViewFragmentBase extends Fragment {
         super.onCreate(savedInstanceState);
         mAnalyticsComponent = DaggerAnalyticsComponent.builder().build();
         mAnalytics = mAnalyticsComponent.provideGeoAnalytics();
+        mIsLandscape = application.getIsLandscape();
     }
 
     @Override

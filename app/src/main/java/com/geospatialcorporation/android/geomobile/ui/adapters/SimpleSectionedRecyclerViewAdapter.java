@@ -1,6 +1,7 @@
 package com.geospatialcorporation.android.geomobile.ui.adapters;
 
 import android.content.Context;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.RecyclerView;
 import android.util.SparseArray;
 import android.view.LayoutInflater;
@@ -100,7 +101,7 @@ public class SimpleSectionedRecyclerViewAdapter extends RecyclerView.Adapter<Rec
         //int arrow = R.drawable.ic_arrow_left_bold_black_24dp;
 
         if (titleString.startsWith("Back to ")){
-            title.setBackgroundColor(mContext.getResources().getColor(R.color.primary_light));
+            title.setBackgroundColor(ContextCompat.getColor(mContext, R.color.primary_light));
             //title.setCompoundDrawablesWithIntrinsicBounds(arrow, 0, 0, 0);
         }
     }

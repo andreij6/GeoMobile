@@ -8,9 +8,7 @@ import com.geospatialcorporation.android.geomobile.ui.fragments.detail_fragment.
 
 import retrofit.client.Response;
 
-/**
- * Created by andre on 6/20/2015.
- */
+
 public class SublayerModifiedListner extends RequestListenerBase<Response> implements RequestListener<Response> {
 
     public SublayerModifiedListner(){ super(true);}

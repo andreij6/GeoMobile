@@ -5,11 +5,6 @@ import com.geospatialcorporation.android.geomobile.models.Layers.Layer;
 import java.util.ArrayList;
 import java.util.List;
 
-/**
- * Created by andre on 6/26/2015.
- */
-
-
 public class MapLayerState {
 
     List<Integer> LayerIds;

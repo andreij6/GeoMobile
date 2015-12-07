@@ -1,11 +1,12 @@
 package com.geospatialcorporation.android.geomobile.library.DI.TreeServices.Implementations;
 
+import android.support.design.widget.Snackbar;
 import android.widget.Toast;
 
+import com.geospatialcorporation.android.geomobile.R;
 import com.geospatialcorporation.android.geomobile.application;
 import com.geospatialcorporation.android.geomobile.database.DataRepository.IFullDataRepository;
 import com.geospatialcorporation.android.geomobile.database.DataRepository.Implementations.Folders.FolderAppSource;
-import com.geospatialcorporation.android.geomobile.library.DI.Tasks.Interfaces.IGetDocumentsTask;
 import com.geospatialcorporation.android.geomobile.library.DI.TreeServices.Interfaces.IFolderTreeService;
 import com.geospatialcorporation.android.geomobile.library.requestcallback.RequestCallback;
 import com.geospatialcorporation.android.geomobile.library.requestcallback.listener_implementations.FolderModifiedListener;
@@ -91,7 +92,9 @@ public class FolderTreeService implements IFolderTreeService {
 
             mFolderRepo.Remove(folderId);
         } else {
-            Toast.makeText(application.getAppContext(), "Not Authorized to Delte this Folder", Toast.LENGTH_LONG).show();
+            String message = application.getAppContext().getString(R.string.not_authorized_to_delete_folder);
+
+            Toast.makeText(application.getAppContext(), message, Toast.LENGTH_LONG).show();
         }
     }
 
@@ -106,7 +109,9 @@ public class FolderTreeService implements IFolderTreeService {
 
             mFolderRepo.update(folder, folderId);
         } else {
-            Toast.makeText(application.getAppContext(), "Not Authorized to Rename Layer", Toast.LENGTH_LONG).show();
+            String message = application.getAppContext().getString(R.string.not_authorized_to_rename_layer);
+
+            Toast.makeText(application.getAppContext(), message, Toast.LENGTH_LONG).show();
         }
     }
 
@@ -158,7 +163,7 @@ public class FolderTreeService implements IFolderTreeService {
             return false;
         }
 
-        return !(f.getIsFixed() || f.getIsImportFolder() || f.isEditable());
+        return !(f.getIsFixed() || f.getIsImportFolder() || !f.isEditable());
     }
     //endregion
 }

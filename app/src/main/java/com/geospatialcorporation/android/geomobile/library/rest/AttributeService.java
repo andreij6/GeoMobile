@@ -2,7 +2,6 @@ package com.geospatialcorporation.android.geomobile.library.rest;
 
 import com.geospatialcorporation.android.geomobile.models.AddAttributeRequest;
 import com.geospatialcorporation.android.geomobile.models.Layers.LayerAttributeColumn;
-import com.geospatialcorporation.android.geomobile.models.Layers.Columns;
 
 import java.util.List;
 
@@ -14,9 +13,6 @@ import retrofit.http.GET;
 import retrofit.http.PUT;
 import retrofit.http.Path;
 
-/**
- * Created by andre on 6/8/2015.
- */
 public interface AttributeService {
 
     @GET("/API/Layers/{layerId}/Attributes/Columns")

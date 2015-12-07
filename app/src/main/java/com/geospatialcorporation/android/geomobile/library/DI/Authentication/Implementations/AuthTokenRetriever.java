@@ -7,20 +7,14 @@ import android.widget.Toast;
 
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.geospatialcorporation.android.geomobile.application;
-import com.geospatialcorporation.android.geomobile.library.helpers.ProgressDialogHelper;
 import com.geospatialcorporation.android.geomobile.library.rest.LoginService;
-import com.geospatialcorporation.android.geomobile.library.util.DeviceTypeUtil;
 import com.geospatialcorporation.android.geomobile.models.Subscription;
-import com.geospatialcorporation.android.geomobile.ui.LoginActivity;
-import com.geospatialcorporation.android.geomobile.ui.MainTabletActivity;
-import com.geospatialcorporation.android.geomobile.ui.SubscriptionSelectorActivity;
 import com.geospatialcorporation.android.geomobile.ui.GoogleApiActivity;
+import com.geospatialcorporation.android.geomobile.ui.LoginActivity;
 import com.geospatialcorporation.android.geomobile.ui.MainActivity;
-
-import java.util.List;
+import com.geospatialcorporation.android.geomobile.ui.SubscriptionSelectorActivity;
 
 import retrofit.RetrofitError;
-import retrofit.client.Header;
 import retrofit.client.Response;
 
 public class AuthTokenRetriever {

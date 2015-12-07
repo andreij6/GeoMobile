@@ -9,13 +9,7 @@ import com.geospatialcorporation.android.geomobile.ui.fragments.tree_fragments.L
 
 import butterknife.OnClick;
 
-public class LayerFolderPanelFragment extends TreeFolderPanelFragmentBase {
-
-    LayerFragment mContentFragment;
-
-    public LayerFolderPanelFragment(){
-        mContentFragment = (LayerFragment)application.getMainActivity().getContentFragment();
-    }
+public class LayerFolderPanelFragment extends TreeFolderPanelFragmentBase<LayerFragment> {
 
     @Override
     protected int getViewResource() {

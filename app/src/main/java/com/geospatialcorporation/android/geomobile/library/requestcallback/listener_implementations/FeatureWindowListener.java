@@ -8,9 +8,6 @@ import com.geospatialcorporation.android.geomobile.models.Query.map.response.fea
 
 import java.util.List;
 
-/**
- * Created by andre on 7/1/2015.
- */
 public class FeatureWindowListener extends RequestListenerBase<List<FeatureQueryResponse>> implements RequestListener<List<FeatureQueryResponse>> {
 
     private static final String TAG = FeatureWindowListener.class.getSimpleName();

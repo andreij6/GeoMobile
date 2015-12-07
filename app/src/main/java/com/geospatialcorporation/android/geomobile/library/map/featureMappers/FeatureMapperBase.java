@@ -1,7 +1,6 @@
 package com.geospatialcorporation.android.geomobile.library.map.featureMappers;
 
 import android.graphics.drawable.Drawable;
-import android.util.Log;
 
 import com.geospatialcorporation.android.geomobile.application;
 import com.geospatialcorporation.android.geomobile.library.helpers.GeoColor;
@@ -10,9 +9,6 @@ import com.geospatialcorporation.android.geomobile.models.Query.map.response.map
 import com.geospatialcorporation.android.geomobile.models.Query.map.response.mapquery.Style;
 import com.google.android.gms.maps.GoogleMap;
 
-/**
- * Created by andre on 6/24/2015.
- */
 public abstract class FeatureMapperBase<T> implements IFeatureMapper {
     private static final String TAG = FeatureMapperBase.class.getSimpleName();
 

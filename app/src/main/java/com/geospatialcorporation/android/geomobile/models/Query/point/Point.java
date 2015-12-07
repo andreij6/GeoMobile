@@ -2,9 +2,6 @@ package com.geospatialcorporation.android.geomobile.models.Query.point;
 
 import com.google.android.gms.maps.model.LatLng;
 
-/**
- * Created by andre on 6/9/2015.
- */
 public class Point {
     //region Getters & Setters
     public int getGeometryTypeCode() {

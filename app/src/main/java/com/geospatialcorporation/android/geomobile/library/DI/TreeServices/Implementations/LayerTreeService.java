@@ -1,6 +1,5 @@
 package com.geospatialcorporation.android.geomobile.library.DI.TreeServices.Implementations;
 
-import android.util.Log;
 import android.widget.Toast;
 
 import com.geospatialcorporation.android.geomobile.application;
@@ -21,7 +20,6 @@ import com.geospatialcorporation.android.geomobile.models.Layers.LayerDetailsVm;
 import com.geospatialcorporation.android.geomobile.models.RemoveMapFeatureDocumentRequest;
 import com.geospatialcorporation.android.geomobile.models.RenameRequest;
 import com.geospatialcorporation.android.geomobile.ui.fragments.GoogleMapFragment;
-import com.geospatialcorporation.android.geomobile.ui.fragments.panel_fragments.map_fragment_panels.TabletFeatureWindowPanelFragment;
 
 import java.util.List;
 
@@ -111,22 +109,10 @@ public class LayerTreeService implements ILayerTreeService {
         mLayerService.addMapFeatureDocument(layerId, featureId, documentId, new Callback<Response>() {
             @Override
             public void success(Response response, Response response2) {
+                GoogleMapFragment contentFrag = (GoogleMapFragment) application.getMainActivity().getContentFragment();
 
-                if (application.getIsTablet()) {
-                    try {
-                        TabletFeatureWindowPanelFragment contentFrag = (TabletFeatureWindowPanelFragment) application.getGeoMainActivity().getContentFragment();
+                contentFrag.refreshFeatureWindow(2);
 
-                        contentFrag.refreshFeatureWindow(2);
-                    } catch (Exception e) {
-                        Log.d("LayerTreeService", "exception");
-                        e.printStackTrace();
-
-                    }
-                } else {
-                    GoogleMapFragment contentFrag = (GoogleMapFragment) application.getMainActivity().getContentFragment();
-
-                    contentFrag.refreshFeatureWindow(2);
-                }
             }
 
             @Override
@@ -143,20 +129,10 @@ public class LayerTreeService implements ILayerTreeService {
         mLayerService.removeMapFeatureDocument(request.getLayerId(), request.getFeatureId(), request.getDoc().getId(), new Callback<Response>() {
             @Override
             public void success(Response response, Response response2) {
-                if (application.getIsTablet()) {
-                    try {
-                        TabletFeatureWindowPanelFragment contentFrag = (TabletFeatureWindowPanelFragment) application.getGeoMainActivity().getContentFragment();
+                GoogleMapFragment contentFrag = (GoogleMapFragment) application.getMainActivity().getContentFragment();
 
-                        contentFrag.refreshFeatureWindow(2);
-                    } catch (Exception e) {
-                        Log.d("LayerTreeService", "exception");
-                        e.printStackTrace();
-                    }
-                } else {
-                    GoogleMapFragment contentFrag = (GoogleMapFragment) application.getMainActivity().getContentFragment();
+                contentFrag.refreshFeatureWindow(2);
 
-                    contentFrag.refreshFeatureWindow(2);
-                }
             }
 
             @Override

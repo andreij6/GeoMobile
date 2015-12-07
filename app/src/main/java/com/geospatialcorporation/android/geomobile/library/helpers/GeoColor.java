@@ -6,12 +6,7 @@ import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 
 import com.geospatialcorporation.android.geomobile.application;
-import com.google.android.gms.maps.model.BitmapDescriptor;
-import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 
-/**
- * Created by andre on 6/25/2015.
- */
 public class GeoColor {
 
     public int parseColor(String geocolor){

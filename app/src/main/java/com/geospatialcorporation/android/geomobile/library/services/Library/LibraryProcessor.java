@@ -4,6 +4,7 @@ import android.content.Context;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
+import android.support.v4.content.ContextCompat;
 import android.support.v4.widget.SwipeRefreshLayout;
 
 import com.geospatialcorporation.android.geomobile.R;
@@ -20,7 +21,6 @@ import com.geospatialcorporation.android.geomobile.library.panelmanager.PanelMan
 import com.geospatialcorporation.android.geomobile.models.Folders.Folder;
 import com.geospatialcorporation.android.geomobile.models.ListItem;
 import com.geospatialcorporation.android.geomobile.ui.Interfaces.IContentRefresher;
-import com.geospatialcorporation.android.geomobile.ui.fragments.panel_fragments.tree_fragment_panels.LibraryFolderPanelFragment;
 import com.sothree.slidinguppanel.SlidingUpPanelLayout;
 
 import java.util.List;
@@ -55,7 +55,7 @@ public class LibraryProcessor implements ILibraryProcessor {
     public List<ListItem> getListItemData(Folder currentFolder) {
         DataHelper dataHelper = new DataHelper();
 
-        return dataHelper.CombineLibraryItems(currentFolder.getDocuments(), currentFolder.getFolders(), currentFolder.getParent());
+        return dataHelper.CombineLibraryItems(currentFolder.getDocuments(), currentFolder.getFolders());
     }
 
     @Override
@@ -116,7 +116,7 @@ public class LibraryProcessor implements ILibraryProcessor {
         public Builder swipeRefresh(SwipeRefreshLayout swipeRefreshLayout, IContentRefresher contentRefresher, Context context) {
             ILayoutRefresher refresher = application.getUIHelperComponent().provideLayoutRefresher();
             swipeRefreshLayout.setOnRefreshListener(refresher.build(swipeRefreshLayout, contentRefresher));
-            swipeRefreshLayout.setProgressBackgroundColorSchemeColor(context.getResources().getColor(R.color.white));
+            swipeRefreshLayout.setProgressBackgroundColorSchemeColor(ContextCompat.getColor(context, R.color.white));
 
             return this;
         }

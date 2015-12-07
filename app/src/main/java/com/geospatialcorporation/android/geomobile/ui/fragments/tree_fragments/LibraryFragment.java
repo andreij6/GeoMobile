@@ -2,20 +2,14 @@ package com.geospatialcorporation.android.geomobile.ui.fragments.tree_fragments;
 
 import android.app.Activity;
 import android.content.Intent;
-import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.content.ContextCompat;
-import android.support.v4.widget.SwipeRefreshLayout;
-import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageView;
-import android.widget.TextView;
 
 import com.geospatialcorporation.android.geomobile.R;
 import com.geospatialcorporation.android.geomobile.application;
@@ -25,44 +19,40 @@ import com.geospatialcorporation.android.geomobile.library.DI.Tasks.Interfaces.I
 import com.geospatialcorporation.android.geomobile.library.DI.Tasks.models.GetDocumentsParam;
 import com.geospatialcorporation.android.geomobile.library.DI.TreeServices.Interfaces.IDocumentTreeService;
 import com.geospatialcorporation.android.geomobile.library.DI.UIHelpers.Interfaces.ILayoutRefresher;
-import com.geospatialcorporation.android.geomobile.library.constants.AccessLevelCodes;
 import com.geospatialcorporation.android.geomobile.library.constants.GeoPanel;
 import com.geospatialcorporation.android.geomobile.library.helpers.DataHelper;
 import com.geospatialcorporation.android.geomobile.library.helpers.ProgressDialogHelper;
 import com.geospatialcorporation.android.geomobile.library.panelmanager.PanelManager;
 import com.geospatialcorporation.android.geomobile.library.sectionbuilders.implementations.LibraryTreeSectionBuilder;
-import com.geospatialcorporation.android.geomobile.ui.Interfaces.IContentRefresher;
 import com.geospatialcorporation.android.geomobile.models.Folders.Folder;
+import com.geospatialcorporation.android.geomobile.models.ListItem;
+import com.geospatialcorporation.android.geomobile.ui.Interfaces.IContentRefresher;
 import com.geospatialcorporation.android.geomobile.ui.Interfaces.IFragmentView;
 import com.geospatialcorporation.android.geomobile.ui.Interfaces.IPostExecuter;
-import com.geospatialcorporation.android.geomobile.ui.Interfaces.OnFragmentInteractionListener;
 import com.geospatialcorporation.android.geomobile.ui.MainActivity;
-import com.geospatialcorporation.android.geomobile.ui.fragments.GoogleMapFragment;
 import com.geospatialcorporation.android.geomobile.ui.fragments.detail_fragment.DocumentFolderDetailFragment;
-import com.geospatialcorporation.android.geomobile.ui.fragments.drawer.MainNavigationDrawerFragment;
 import com.geospatialcorporation.android.geomobile.ui.fragments.panel_fragments.tree_fragment_panels.LibraryFolderPanelFragment;
-import com.geospatialcorporation.android.geomobile.models.ListItem;
-import com.melnykov.fab.FloatingActionButton;
-import com.sothree.slidinguppanel.SlidingUpPanelLayout;
-
 
 import java.util.List;
 
-import butterknife.Bind;
 import butterknife.OnClick;
 
 public class LibraryFragment extends RecyclerTreeFragment
         implements IContentRefresher, IFragmentView, IPostExecuter<Folder> {
     protected static final String TAG = LibraryFragment.class.getSimpleName();
+    int mFolderId;
 
-    //region Properties
-
+    //region Properties & Onclicks
     IGetDocumentsTask mDocumentsTask;
     IDocumentTreeService mUploader;
 
     @Nullable
     @OnClick(R.id.OptionsFab)
     public void optionsDropDown(){
+        options();
+    }
+
+    protected void options() {
         if(!mPanelManager.getIsOpen()){
 
             Fragment f = new LibraryFolderPanelFragment();
@@ -74,7 +64,11 @@ public class LibraryFragment extends RecyclerTreeFragment
                     .replace(R.id.slider_content, f)
                     .commit();
 
-            mPanelManager.halfAnchor(0.1f);
+            if(mIsLandscape){
+                mPanelManager.expand();
+            } else {
+                mPanelManager.halfAnchor(0.1f);
+            }
             mPanelManager.touch(false);
         } else {
             closePanel();
@@ -84,22 +78,7 @@ public class LibraryFragment extends RecyclerTreeFragment
     @Nullable
     @OnClick(R.id.landOptionsIV)
     public void optionsDropDownland(){
-        if(!mPanelManager.getIsOpen()){
-
-            Fragment f = new LibraryFolderPanelFragment();
-
-            f.setArguments(mCurrentFolder.toBundle());
-
-            getFragmentManager()
-                    .beginTransaction()
-                    .replace(R.id.slider_content, f)
-                    .commit();
-
-            mPanelManager.halfAnchor(0.1f);
-            mPanelManager.touch(false);
-        } else {
-            closePanel();
-        }
+        options();
     }
 
     @OnClick(R.id.folderInformation)
@@ -142,8 +121,11 @@ public class LibraryFragment extends RecyclerTreeFragment
         mPanelManager = new PanelManager.Builder().type(GeoPanel.LIBRARY_FRAGMENT).hide().build();
 
         mSwipeRefreshLayout.setOnRefreshListener(refresher.build(mSwipeRefreshLayout, this));
-        mSwipeRefreshLayout.setProgressBackgroundColorSchemeColor(mContext.getResources().getColor(R.color.white));
+        mSwipeRefreshLayout.setProgressBackgroundColorSchemeColor(ContextCompat.getColor(mContext, R.color.white));
 
+        if(mIsLandscape){
+            mParentFolder.setText(getString(R.string.library_tree));
+        }
 
         handleArguments();
 
@@ -184,6 +166,13 @@ public class LibraryFragment extends RecyclerTreeFragment
 
 
     }
+
+    @Override
+    public void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        outState.putInt(Folder.FOLDER_INTENT, mFolderId);
+    }
+
     //endregion
 
     //region View.OnClicks
@@ -216,7 +205,7 @@ public class LibraryFragment extends RecyclerTreeFragment
     protected void buildRecycler() {
         mHelper = new DataHelper();
 
-        List<ListItem> data = mHelper.CombineLibraryItems(mCurrentFolder.getDocuments(), mCurrentFolder.getFolders(), mCurrentFolder.getParent());
+        List<ListItem> data = mHelper.CombineLibraryItems(mCurrentFolder.getDocuments(), mCurrentFolder.getFolders());
 
         new LibraryTreeSectionBuilder(mContext, getFragmentManager(), mCurrentFolder.getParent(), mPanelManager)
                 .BuildAdapter(data, mCurrentFolder.getFolders().size())
@@ -247,24 +236,45 @@ public class LibraryFragment extends RecyclerTreeFragment
 
         GetDocumentsParam params = new GetDocumentsParam(getFragmentManager(), mCurrentFolder, mContext, this);
 
+        mFolderId = 0;
+
         if(args != null) {
-            int folderId = args.getInt(Folder.FOLDER_INTENT, 0);
-
-            mDocumentsTask.getDocumentsByFolderId(params, folderId);
-
-        } else {
-            mDocumentsTask.getDocumentsByFolderId(params, 0);
+            mFolderId = args.getInt(Folder.FOLDER_INTENT, 0);
         }
 
+        mDocumentsTask.getDocumentsByFolderId(params, mFolderId);
+
     }
 
     @Override
-    public void setDetailFrame(View view, FragmentManager fm) {
-        view.performClick();
+    public void setDetailFrame(View view, FragmentManager fm, Bundle bundle) {
+        Fragment fragment = new LibraryFragment();
+
+        if(bundle != null){
+            fragment.setArguments(bundle);
+        }
+
+        fm.beginTransaction()
+                .replace(R.id.detail_frame, fragment)
+                .addToBackStack(null)
+                .commit();
+
+        ((MainActivity)view.getContext()).showDetailFragment();
     }
 
     @Override
-    public void setContentFragment(FragmentManager fm) {
+    public void setContentFragment(FragmentManager fm, Bundle bundle) {
         application.getMainActivity().onNavigationDrawerItemSelected(MainNavCtrl.ViewConstants.LIBRARY);
+
+        Fragment fragment = new LibraryFragment();
+
+        if(bundle != null){
+            fragment.setArguments(bundle);
+        }
+
+        fm.beginTransaction()
+                .replace(R.id.content_frame, fragment)
+                .addToBackStack(null)
+                .commit();
     }
 }

@@ -2,9 +2,6 @@ package com.geospatialcorporation.android.geomobile.library.helpers;
 
 import java.util.HashMap;
 
-/**
- * Created by andre on 6/5/2015.
- */
 public class QueryMachine {
 
     HashMap<Integer, Boolean> StateMap;

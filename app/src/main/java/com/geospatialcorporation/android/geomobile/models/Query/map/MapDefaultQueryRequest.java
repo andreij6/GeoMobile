@@ -3,9 +3,6 @@ package com.geospatialcorporation.android.geomobile.models.Query.map;
 
 import java.util.List;
 
-/**
- * Created by andre on 6/24/2015.
- */
 public class MapDefaultQueryRequest {
 
     public MapDefaultQueryRequest(List<Layers> layers, String optionsCode){

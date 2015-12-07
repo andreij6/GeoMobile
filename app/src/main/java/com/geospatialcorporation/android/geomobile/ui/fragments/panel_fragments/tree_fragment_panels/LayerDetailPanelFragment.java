@@ -29,13 +29,21 @@ public class LayerDetailPanelFragment extends GeoViewFragmentBase {
         View view = inflater.inflate(R.layout.fragment_panel_layerdetail, container, false);
         ButterKnife.bind(this, view);
 
-        mContentFragment = (LayerDetailFragment)application.getMainActivity().getContentFragment();
+        mContentFragment = setContentFragment();
         mLayerDialog = application.getUIHelperComponent().provideLayerDialog();
         mAttributeDialog = application.getUIHelperComponent().provideAttributeDialog();
 
         handleArgs();
 
         return view;
+    }
+
+    private LayerDetailFragment setContentFragment() {
+        if(application.getIsLandscape()){
+            return (LayerDetailFragment)application.getMainActivity().getDetailFragment();
+        } else {
+            return (LayerDetailFragment)application.getMainActivity().getContentFragment();
+        }
     }
 
     protected void handleArgs() {

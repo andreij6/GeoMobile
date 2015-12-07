@@ -1,6 +1,6 @@
 package com.geospatialcorporation.android.geomobile.data;
 
-import com.geospatialcorporation.android.geomobile.data.tables.*;
+import com.geospatialcorporation.android.geomobile.data.tables.SubscriptionColumns;
 
 import net.simonvt.schematic.annotation.Database;
 import net.simonvt.schematic.annotation.Table;

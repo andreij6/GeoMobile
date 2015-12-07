@@ -2,12 +2,9 @@ package com.geospatialcorporation.android.geomobile.library.DI.UIHelpers.Interfa
 
 import android.app.Activity;
 import android.content.Context;
-import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
 
-import com.geospatialcorporation.android.geomobile.models.Folders.Folder;
 import com.geospatialcorporation.android.geomobile.models.RemoveMapFeatureDocumentRequest;
-import com.geospatialcorporation.android.geomobile.ui.MainActivity;
 
 public interface IGeneralDialog {
 

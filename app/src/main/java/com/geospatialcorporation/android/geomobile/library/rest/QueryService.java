@@ -15,9 +15,6 @@ import retrofit.client.Response;
 import retrofit.http.Body;
 import retrofit.http.POST;
 
-/**
- * Created by andre on 6/4/2015.
- */
 public interface QueryService {
 
     @POST("/API/Query/Quick")

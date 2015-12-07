@@ -5,9 +5,6 @@ import android.view.View;
 
 import butterknife.ButterKnife;
 
-/**
- * Created by andre on 6/14/2015.
- */
 public abstract class GeoHolderBase<T> extends RecyclerView.ViewHolder {
 
     protected View mView;

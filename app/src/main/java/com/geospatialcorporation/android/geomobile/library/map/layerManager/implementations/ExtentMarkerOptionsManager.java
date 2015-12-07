@@ -12,7 +12,6 @@ import com.geospatialcorporation.android.geomobile.library.map.layerManager.Opti
 import com.geospatialcorporation.android.geomobile.models.Layers.FeatureInfo;
 import com.geospatialcorporation.android.geomobile.models.Layers.LegendLayer;
 import com.geospatialcorporation.android.geomobile.ui.fragments.GoogleMapFragment;
-import com.geospatialcorporation.android.geomobile.ui.fragments.MapFragments.TabletMapFragment;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.LatLngBounds;
@@ -118,18 +117,8 @@ public class ExtentMarkerOptionsManager extends OptionsManagerBase<MarkerOptions
 
                 LatLng position = valuesList.get(next).getOption().getPosition();
 
-                if(!application.getIsTablet()){
-                    GoogleMapFragment mapFragment = (GoogleMapFragment)application.getMainActivity().getContentFragment();
-
-                    mapFragment.simulateClick(position);
-                } else {
-                    TabletMapFragment mapFragment = application.getMainTabletActivity().getMapFragment();
-
-                    mapFragment.simulateClick(position);
-                }
-
-
-
+                GoogleMapFragment mapFragment = (GoogleMapFragment)application.getMainActivity().getContentFragment();
+                mapFragment.simulateClick(position);
             }
         }
     }
@@ -185,10 +174,10 @@ public class ExtentMarkerOptionsManager extends OptionsManagerBase<MarkerOptions
         protected void onPostExecute(MarkerPostParamerters options) {
             IMapStatusBarManager mapStatusBarManager = application.getStatusBarManager();
 
-            if(contentFragmentIsGoogleMapFragment() || application.getIsTablet()) {
+            if(contentFragmentIsGoogleMapFragment()) {
                 options.mapMarkers();
 
-                if(mUUID != null) {
+                if (mUUID != null) {
                     mapStatusBarManager.finished(StatusBarManagerBase.MARKERS, mUUID);
                 }
             }
@@ -294,7 +283,7 @@ public class ExtentMarkerOptionsManager extends OptionsManagerBase<MarkerOptions
 
         @Override
         protected void onPostExecute(MarkerPostParamerters options) {
-            if(contentFragmentIsGoogleMapFragment() || application.getIsTablet()) {
+            if(contentFragmentIsGoogleMapFragment()) {
                 options.mapMarkers();
             }
 
@@ -406,15 +395,10 @@ public class ExtentMarkerOptionsManager extends OptionsManagerBase<MarkerOptions
         protected void onPostExecute(LatLng latLng) {
             super.onPostExecute(latLng);
 
-            if(!application.getIsTablet()){
-                GoogleMapFragment mapFragment = (GoogleMapFragment)application.getMainActivity().getContentFragment();
+            GoogleMapFragment mapFragment = (GoogleMapFragment)application.getMainActivity().getContentFragment();
 
-                mapFragment.simulateClick(latLng);
-            } else {
-                TabletMapFragment mapFragment = application.getMainTabletActivity().getMapFragment();
+            mapFragment.simulateClick(latLng);
 
-                mapFragment.simulateClick(latLng);
-            }
         }
     }
     //endregion

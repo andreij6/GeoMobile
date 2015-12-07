@@ -2,13 +2,13 @@ package com.geospatialcorporation.android.geomobile.library.helpers;
 
 import com.geospatialcorporation.android.geomobile.R;
 import com.geospatialcorporation.android.geomobile.library.constants.NodeTypeCodes;
+import com.geospatialcorporation.android.geomobile.models.Document.Document;
 import com.geospatialcorporation.android.geomobile.models.Folders.Folder;
 import com.geospatialcorporation.android.geomobile.models.Layers.Layer;
-import com.geospatialcorporation.android.geomobile.models.Document.Document;
+import com.geospatialcorporation.android.geomobile.models.ListItem;
 import com.geospatialcorporation.android.geomobile.models.Query.quickSearch.QuickSearchResponse;
 import com.geospatialcorporation.android.geomobile.models.Query.quickSearch.QuickSearchResult;
 import com.geospatialcorporation.android.geomobile.models.Query.quickSearch.QuickSearchResultVM;
-import com.geospatialcorporation.android.geomobile.models.ListItem;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -16,6 +16,7 @@ import java.util.List;
 
 public class DataHelper {
 
+    //TODO: TEST
     public ArrayList<Folder> getFoldersRecursively(Folder folder, Folder parentFolder) {
         ArrayList<Folder> result = new ArrayList<>();
 
@@ -49,28 +50,6 @@ public class DataHelper {
         return value;
     }
 
-    protected void setParentFolder(Folder folder, Folder parentFolder){
-        if(parentFolder != null) {
-            folder.setParent(parentFolder);
-        }
-    }
-
-    public ArrayList<Layer> getLayersRecursively(Folder folder) {
-        ArrayList<Layer> result = new ArrayList<>();
-
-        if (folder == null) return result;
-
-        if (folder.getFolders().size() == 0) {
-            result.addAll(folder.getLayers());
-        } else {
-
-            for (Folder x : folder.getFolders()) {
-                result.addAll(getLayersRecursively(x));
-            }
-        }
-        return result;
-    }
-
     public ArrayList<Document> getDocumentsRecursively(Folder folder) {
         ArrayList<Document> result = new ArrayList<>();
 
@@ -82,6 +61,11 @@ public class DataHelper {
                 result.add(document);
             }
         } else {
+            for(Document document : folder.getDocuments()){
+                document.setParentFolder(folder);
+                result.add(document);
+            }
+
             for (Folder x : folder.getFolders()) {
                 result.addAll(getDocumentsRecursively(x));
             }
@@ -90,7 +74,8 @@ public class DataHelper {
         return result;
     }
 
-    public List<ListItem> CombineLayerItems(List<Layer> layers, List<Folder> folders, Folder parent) {
+    //TODO: TEST
+    public List<ListItem> CombineLayerItems(List<Layer> layers, List<Folder> folders) {
         List<Folder> infolders = folders != null ? folders : new ArrayList<Folder>();
 
         ArrayList<ListItem> results = new ArrayList<>();
@@ -122,7 +107,8 @@ public class DataHelper {
         return results;
     }
 
-    public List<ListItem> CombineLibraryItems(List<Document> documents, List<Folder> folders, Folder parent) {
+    //TODO: TEST
+    public List<ListItem> CombineLibraryItems(List<Document> documents, List<Folder> folders) {
         List<Folder> infolders = folders != null ? folders : new ArrayList<Folder>();
 
         ArrayList<ListItem> results = new ArrayList<>();
@@ -153,13 +139,7 @@ public class DataHelper {
         return results;
     }
 
-    protected void SetupEmptyFolder(List<Folder> folders, ArrayList<ListItem> results) {
-        if(folders.isEmpty()){
-            ListItem listItem = new ListItem(new Folder(), true);
-            results.add(listItem);
-        }
-    }
-
+    //TODO: TEST
     public List<QuickSearchResultVM> normalizeQuickSearchResults(List<QuickSearchResponse> responses) {
 
         List<QuickSearchResultVM> qsr = new ArrayList<>();
@@ -174,6 +154,20 @@ public class DataHelper {
 
         return qsr;
 
+    }
+
+    //region Helpers
+    protected void setParentFolder(Folder folder, Folder parentFolder){
+        if(parentFolder != null) {
+            folder.setParent(parentFolder);
+        }
+    }
+
+    protected void SetupEmptyFolder(List<Folder> folders, ArrayList<ListItem> results) {
+        if(folders.isEmpty()){
+            ListItem listItem = new ListItem(new Folder(), true);
+            results.add(listItem);
+        }
     }
 
     protected QuickSearchResultVM setResultVM(int type, QuickSearchResult result) {
@@ -241,6 +235,7 @@ public class DataHelper {
         vm.setFoundIn("Folders");
         return vm;
     }
+    //endregion
 
 
 }

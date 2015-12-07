@@ -2,9 +2,6 @@ package com.geospatialcorporation.android.geomobile.models.Bookmarks;
 
 import com.geospatialcorporation.android.geomobile.models.Interfaces.IdModel;
 
-/**
- * Created by andre on 6/5/2015.
- */
 public class Bookmark implements IdModel {
 
     int Id;

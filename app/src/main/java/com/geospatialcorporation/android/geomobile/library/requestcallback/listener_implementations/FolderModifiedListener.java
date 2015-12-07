@@ -6,15 +6,11 @@ import com.geospatialcorporation.android.geomobile.models.Folders.Folder;
 import com.geospatialcorporation.android.geomobile.ui.Interfaces.IContentRefresher;
 import com.geospatialcorporation.android.geomobile.ui.fragments.drawer.LayerSelectorDrawerFragment;
 import com.geospatialcorporation.android.geomobile.ui.fragments.tree_fragments.LayerFragment;
-import com.geospatialcorporation.android.geomobile.ui.fragments.tree_fragments.LibraryFragment;
 
 import java.util.ArrayList;
 
 import retrofit.client.Response;
 
-/**
- * Created by andre on 6/20/2015.
- */
 public class FolderModifiedListener extends RequestListenerBase<Response> implements RequestListener<Response> {
 
     public FolderModifiedListener(){

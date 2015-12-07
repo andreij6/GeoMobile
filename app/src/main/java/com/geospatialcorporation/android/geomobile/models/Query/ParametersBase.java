@@ -4,9 +4,6 @@ import com.geospatialcorporation.android.geomobile.models.Layers.Layer;
 
 import java.util.List;
 
-/**
- * Created by andre on 6/4/2015.
- */
 public abstract class ParametersBase {
     //region Getters & Setters
     public List<Layer> getLayers() {

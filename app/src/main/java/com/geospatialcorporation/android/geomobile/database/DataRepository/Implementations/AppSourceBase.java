@@ -8,9 +8,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
-/**
- * Created by andre on 6/3/2015.
- */
+
 public class AppSourceBase<T> implements IFullDataRepository<T>, IAddDataRepository<T> {
 
     HashMap<Integer, T> Data;

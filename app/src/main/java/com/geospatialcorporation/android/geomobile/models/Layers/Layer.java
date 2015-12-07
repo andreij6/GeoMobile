@@ -4,7 +4,6 @@ import android.os.Bundle;
 import android.os.Parcel;
 import android.os.Parcelable;
 import android.text.TextUtils;
-import android.util.Log;
 
 import com.geospatialcorporation.android.geomobile.library.constants.GeometryTypeCodes;
 import com.geospatialcorporation.android.geomobile.library.constants.PluginCodes;
@@ -33,7 +32,6 @@ public class Layer implements Parcelable, ITreeEntity {
         GeometryTypeCodeId = in.readInt();
         IsFixed = (Boolean)in.readValue(Boolean.class.getClassLoader());
         IsOwner = (Boolean)in.readValue(Boolean.class.getClassLoader());
-        //MobileId = in.readInt();
         Name = in.readString();
         IsShowing = (Boolean)in.readValue(Boolean.class.getClassLoader());
         PluginId = in.readInt();
@@ -47,7 +45,6 @@ public class Layer implements Parcelable, ITreeEntity {
     private Integer GeometryTypeCodeId;
     private Boolean IsFixed;
     private Boolean IsOwner;
-    private Integer MobileId;
     private String Name;
     private Boolean IsShowing;
     private List<Layer> Sublayers;
@@ -110,14 +107,6 @@ public class Layer implements Parcelable, ITreeEntity {
 
     public void setIsOwner(Boolean isOwner) {
         IsOwner = isOwner;
-    }
-
-    public Integer getMobileId() {
-        return MobileId;
-    }
-
-    public void setMobileId(Integer id) {
-        MobileId = id;
     }
 
     public int getId() { return Id; }

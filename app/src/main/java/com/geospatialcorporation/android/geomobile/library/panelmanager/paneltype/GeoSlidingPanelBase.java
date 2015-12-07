@@ -4,16 +4,11 @@ import android.content.Context;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
-import android.view.MotionEvent;
 import android.view.View;
 
 import com.geospatialcorporation.android.geomobile.R;
-import com.geospatialcorporation.android.geomobile.application;
-import com.geospatialcorporation.android.geomobile.library.util.DeviceTypeUtil;
-import com.geospatialcorporation.android.geomobile.ui.Interfaces.IPanelFragmentCtrl;
 import com.geospatialcorporation.android.geomobile.ui.Interfaces.IPanelStateReactor;
 import com.geospatialcorporation.android.geomobile.ui.MainActivity;
-import com.geospatialcorporation.android.geomobile.ui.MainTabletActivity;
 import com.geospatialcorporation.android.geomobile.ui.fragments.panel_fragments.tree_fragment_panels.DefaultCollapsedPanelFragment;
 import com.sothree.slidinguppanel.SlidingUpPanelLayout;
 
@@ -62,8 +57,10 @@ public abstract class GeoSlidingPanelBase {
 
                 Fragment sliderFragment = fragmentManager.findFragmentById(R.id.slider_content);
 
-                if (sliderFragment instanceof IPanelStateReactor) {
-                    ((IPanelStateReactor) sliderFragment).Anchored();
+                if(sliderFragment != null) {
+                    if (sliderFragment instanceof IPanelStateReactor) {
+                        ((IPanelStateReactor) sliderFragment).Anchored();
+                    }
                 }
             }
 

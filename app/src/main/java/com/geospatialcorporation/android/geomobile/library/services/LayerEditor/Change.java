@@ -1,9 +1,6 @@
 package com.geospatialcorporation.android.geomobile.library.services.LayerEditor;
 
-import com.geospatialcorporation.android.geomobile.library.constants.GeometryTypeCodes;
 import com.geospatialcorporation.android.geomobile.models.Query.map.response.mapquery.Geometry;
-import com.geospatialcorporation.android.geomobile.models.Query.point.Point;
-import com.google.android.gms.maps.model.Polygon;
 
 public class Change {
     int ActionId;

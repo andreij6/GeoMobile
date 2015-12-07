@@ -7,8 +7,6 @@ import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
 
 import com.geospatialcorporation.android.geomobile.R;
-import com.geospatialcorporation.android.geomobile.application;
-import com.geospatialcorporation.android.geomobile.ui.MainTabletActivity;
 import com.geospatialcorporation.android.geomobile.ui.fragments.GoogleMapFragment;
 
 
@@ -36,15 +34,11 @@ public class DeleteLayerDialogFragment extends LayerActionDialogBase {
     }
 
     private void goToMapFragment() {
-        if(!application.getIsTablet()) {
-            Fragment googleMapFragment = new GoogleMapFragment();
+        Fragment googleMapFragment = new GoogleMapFragment();
 
-            getFragmentManager().beginTransaction()
-                    .replace(R.id.content_frame, googleMapFragment)
-                    .addToBackStack(null)
-                    .commit();
-        } else {
-            ((MainTabletActivity)application.getGeoMainActivity()).closeInfoFragment();
-        }
+        getFragmentManager().beginTransaction()
+                .replace(R.id.content_frame, googleMapFragment)
+                .addToBackStack(null)
+                .commit();
     }
 }

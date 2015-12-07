@@ -17,7 +17,6 @@ import com.geospatialcorporation.android.geomobile.ui.adapters.SimpleSectionedRe
 import com.geospatialcorporation.android.geomobile.ui.adapters.recycler.EditLayerAdapter;
 import com.geospatialcorporation.android.geomobile.ui.fragments.dialogs.base.GeoDialogFragmentBase;
 
-
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;

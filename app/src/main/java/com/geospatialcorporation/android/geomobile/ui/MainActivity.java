@@ -120,7 +120,6 @@ public class MainActivity extends ActionBarActivity
         setContentView(R.layout.activity_main);
         determineOrientation();
 
-        application.setIsTablet(false);
         application.setIsLandscape(mIsLandscape);
         application.setGeoMainActivity(this);
         Subscription subscription = application.getGeoSubscription();
@@ -199,17 +198,18 @@ public class MainActivity extends ActionBarActivity
         mLogoutIV.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                application.Logout();
-                startActivity(new Intent(MainActivity.this, LoginActivity.class));
-                finish();
+                IGeneralDialog dialog = application.getUIHelperComponent().provideGeneralDialog();
+
+                dialog.Logout(MainActivity.this, getSupportFragmentManager());
             }
         });
 
         mSubscriptionsIV.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                startActivity(new Intent(MainActivity.this, SubscriptionSelectorActivity.class));
-                finish();
+                IGeneralDialog dialog = application.getUIHelperComponent().provideGeneralDialog();
+
+                dialog.Subscriptions(MainActivity.this, getSupportFragmentManager());
             }
         });
 
@@ -218,14 +218,16 @@ public class MainActivity extends ActionBarActivity
 
     }
 
-    public void setFragmentFrame(IFragmentView fragment, View controller){
+    public void setFragmentFrame(IFragmentView fragment, View controller, Bundle bundle){
         if (mCurrentFragment.equals(fragment.getClass().getSimpleName())) {
             if(mIsLandscape) {
-                showDetailFragment();
+                if(controller == null){
+                    showDetailFragment();
+                }
 
-                fragment.setDetailFrame(controller, getSupportFragmentManager());
+                fragment.setDetailFrame(controller, getSupportFragmentManager(), bundle);
             } else {
-                fragment.setContentFragment(getSupportFragmentManager());
+                fragment.setContentFragment(getSupportFragmentManager(), bundle);
             }
         }
     }
@@ -238,9 +240,9 @@ public class MainActivity extends ActionBarActivity
             mCurrentFragment = savedInstanceState.getString(CURRENT_FRAGMENT);
 
             if(mCurrentFragment != null){
-                setFragmentFrame(new AccountFragment(), mAccountIV);
-                setFragmentFrame(new LibraryFragment(), mLibrayIV);
-                setFragmentFrame(new LayerFragment(), null);
+                setFragmentFrame(new AccountFragment(), mAccountIV, savedInstanceState);
+                setFragmentFrame(new LibraryFragment(), mLibrayIV, savedInstanceState);
+                setFragmentFrame(new LayerFragment(), null, savedInstanceState);
             }
         }
 
@@ -260,8 +262,11 @@ public class MainActivity extends ActionBarActivity
                 }
             }
         } else {
-            outState.putString(CURRENT_FRAGMENT , getContentFragment().getClass().getSimpleName());
+            mCurrentFragment =  getContentFragment().getClass().getSimpleName();
+
+            outState.putString(CURRENT_FRAGMENT , mCurrentFragment);
         }
+
         super.onSaveInstanceState(outState);
     }
 
@@ -405,7 +410,6 @@ public class MainActivity extends ActionBarActivity
         mIsAdmin = application.getIsAdminUser();
         application.setMainActivity(this);
 
-
         MainNavCtrlComponent component = DaggerMainNavCtrlComponent.builder().build();
         mMainNavCtrl = component.provideMainNavCtrl();
 
@@ -468,6 +472,8 @@ public class MainActivity extends ActionBarActivity
         if(frameLayout != null){
             frameLayout.setVisibility(View.GONE);
         }
+
+        ((GoogleMapFragment)getContentFragment()).clearHighlights();
     }
 
     @Override
@@ -501,6 +507,16 @@ public class MainActivity extends ActionBarActivity
 
     public Fragment getDetailFragment() {
         return getSupportFragmentManager().findFragmentById(R.id.detail_frame);
+    }
+
+    public void setDetailFrame(Fragment fragment) {
+        showDetailFragment();
+
+        getSupportFragmentManager()
+                .beginTransaction()
+                .addToBackStack(null)
+                .replace(R.id.detail_frame, fragment)
+                .commit();
     }
 
     public static class MediaConstants {

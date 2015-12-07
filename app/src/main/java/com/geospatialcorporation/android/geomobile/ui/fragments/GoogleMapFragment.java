@@ -21,7 +21,6 @@ import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentSender;
-import android.content.res.Configuration;
 import android.graphics.Point;
 import android.graphics.drawable.AnimationDrawable;
 import android.location.Location;
@@ -45,7 +44,6 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.geospatialcorporation.android.geomobile.R;
 import com.geospatialcorporation.android.geomobile.application;
@@ -973,20 +971,11 @@ public class GoogleMapFragment extends GeoViewFragmentBase implements
     public void showFeatureWindow(ParcelableFeatureQueryResponse response) {
         try {
             if (validate(response)) {
-                mPanelManager = new PanelManager(GeoPanel.MAP);
-
-                Fragment f = new FeatureWindowPanelFragment().initialize(mHighlightedMarker, mSelectedLayerId);
-
-                f.setArguments(response.toBundle());
-
-                application.getMainActivity().getSupportFragmentManager()
-                        .beginTransaction()
-                        .replace(R.id.slider_content, f)
-                        .commit();
-
-                mPanelManager.halfAnchor();
-
-
+                if(application.getIsLandscape()){
+                    landscapeFeatureWindow(response);
+                } else {
+                    portraitFeatureWindow(response);
+                }
             } else {
                 clearHighlights();
 
@@ -1000,6 +989,36 @@ public class GoogleMapFragment extends GeoViewFragmentBase implements
             mStatusBarManager.reset();
 
         }
+    }
+
+    private void landscapeFeatureWindow(ParcelableFeatureQueryResponse response) {
+        Fragment f = new FeatureWindowPanelFragment().initialize(mHighlightedMarker, mSelectedLayerId);
+
+        f.setArguments(response.toBundle());
+
+        getActivity().getSupportFragmentManager()
+                .beginTransaction()
+                .replace(R.id.detail_frame, f)
+                .commit();
+
+        ((MainActivity)getActivity()).showDetailFragment();
+
+        mStatusBarManager.reset();
+    }
+
+    private void portraitFeatureWindow(ParcelableFeatureQueryResponse response) {
+        mPanelManager = new PanelManager(GeoPanel.MAP);
+
+        Fragment f = new FeatureWindowPanelFragment().initialize(mHighlightedMarker, mSelectedLayerId);
+
+        f.setArguments(response.toBundle());
+
+        application.getMainActivity().getSupportFragmentManager()
+                .beginTransaction()
+                .replace(R.id.slider_content, f)
+                .commit();
+
+        mPanelManager.halfAnchor();
     }
 
     private boolean validate(ParcelableFeatureQueryResponse response) throws IndexOutOfBoundsException{

@@ -16,11 +16,9 @@ import com.geospatialcorporation.android.geomobile.application;
 import com.geospatialcorporation.android.geomobile.library.DI.Analytics.Models.GoogleAnalyticEvent;
 import com.geospatialcorporation.android.geomobile.library.DI.TreeServices.Interfaces.IDocumentTreeService;
 import com.geospatialcorporation.android.geomobile.library.DI.TreeServices.Interfaces.IFolderTreeService;
-import com.geospatialcorporation.android.geomobile.library.DI.TreeServices.Interfaces.ILayerTreeService;
 import com.geospatialcorporation.android.geomobile.library.DI.UIHelpers.Interfaces.DialogHelpers.IGeneralDialog;
 import com.geospatialcorporation.android.geomobile.library.helpers.TableFactory;
 import com.geospatialcorporation.android.geomobile.models.Folders.Folder;
-import com.geospatialcorporation.android.geomobile.models.Layers.Layer;
 import com.geospatialcorporation.android.geomobile.models.MapFeatureDocumentVM;
 import com.geospatialcorporation.android.geomobile.models.Query.map.response.featurewindow.MapFeatureFiles;
 import com.geospatialcorporation.android.geomobile.models.RemoveMapFeatureDocumentRequest;
@@ -38,6 +36,7 @@ public class FeatureDocumentsTab extends FeatureTabBase {
     IGeneralDialog mDialog;
     List<MapFeatureDocumentVM> mData;
     Folder mParentFolder;
+    Boolean mIsLandscape;
 
     IFolderTreeService mFolderTreeService;
     IDocumentTreeService mDocumentTreeService;
@@ -74,6 +73,11 @@ public class FeatureDocumentsTab extends FeatureTabBase {
         mDocumentTreeService = application.getTreeServiceComponent().provideDocumentTreeService();
         mAnalytics.trackScreen(new GoogleAnalyticEvent().MapFeatureDocumentsTab());
 
+        mIsLandscape = application.getIsLandscape();
+
+        if(mIsLandscape){
+            mMoreInfo.setVisibility(View.GONE);
+        }
 
         return v;
     }
@@ -102,13 +106,7 @@ public class FeatureDocumentsTab extends FeatureTabBase {
         mTableLayout.removeAllViews();
 
         TableFactory factory = new TableFactory(getActivity(), mTableLayout, mInflater);
-        String[] headers;
-
-        if(mParentFolder != null && mParentFolder.isEditable()) {
-            headers = new String[]{"Name", "Size", " ", " "};
-        } else {
-            headers = new String[]{"Name", "Size", " "};
-        }
+        String[] headers = new String[]{"Name", "Size", " "};
 
         factory.addHeaders(R.layout.template_table_header, headers);
 
@@ -119,14 +117,16 @@ public class FeatureDocumentsTab extends FeatureTabBase {
 
             TextView name = (TextView)mInflater.inflate(R.layout.template_feature_window_column_tv, null);
             name.setText(doc.getTrimmedName());
+            name.setTextColor(ContextCompat.getColor(mContext, R.color.accent_blue));
 
             TextView fileSize = (TextView)mInflater.inflate(R.layout.template_feature_window_column_tv, null);
             fileSize.setText(doc.getFormattedSize());
 
-            ImageView download = (ImageView)mInflater.inflate(R.layout.template_feature_window_column_iv, null);
-            download.setContentDescription(mContext.getString(R.string.download));
-            download.setImageDrawable(ContextCompat.getDrawable(mContext, R.drawable.ic_file_download_black_24dp));
-            download.setOnClickListener(new View.OnClickListener() {
+            //ImageView download = (ImageView)mInflater.inflate(R.layout.template_feature_window_column_iv, null);
+            //download.setContentDescription(mContext.getString(R.string.download));
+            //download.setImageDrawable(ContextCompat.getDrawable(mContext, R.drawable.ic_file_download_black_24dp));
+
+            name.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     mDocumentTreeService.download(doc.getId(), doc.getName());
@@ -135,12 +135,12 @@ public class FeatureDocumentsTab extends FeatureTabBase {
 
             row.addView(name);
             row.addView(fileSize);
-            row.addView(download);
+            //row.addView(download);
 
             if(mParentFolder != null && mParentFolder.isEditable()) {
                 ImageView remove = (ImageView) mInflater.inflate(R.layout.template_feature_window_column_iv, null);
                 remove.setContentDescription(mContext.getString(R.string.remove));
-                remove.setImageDrawable(ContextCompat.getDrawable(mContext, R.drawable.ic_delete_black_24dp));
+                remove.setImageDrawable(ContextCompat.getDrawable(mContext, R.drawable.ic_close_circle_grey600_24dp));
                 remove.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
@@ -152,9 +152,6 @@ public class FeatureDocumentsTab extends FeatureTabBase {
 
                 row.addView(remove);
             }
-
-
-
 
             mTableLayout.addView(row);
             mTableLayout.setStretchAllColumns(true);

@@ -2,9 +2,6 @@ package com.geospatialcorporation.android.geomobile.models.Query.quickSearch;
 
 import com.geospatialcorporation.android.geomobile.models.Query.point.CenterPoint;
 
-/**
- * Created by andre on 6/4/2015.
- */
 public class QuickSearchResult {
     //region Getters & Setters
     public CenterPoint getCenterPoint() {

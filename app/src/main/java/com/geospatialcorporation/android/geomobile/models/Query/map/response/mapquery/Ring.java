@@ -4,9 +4,6 @@ import com.geospatialcorporation.android.geomobile.models.Layers.Point;
 
 import java.util.List;
 
-/**
- * Created by andre on 6/25/2015.
- */
 public class Ring {
     //region Gs & Ss
     public Integer getGeometryTypeCode() {

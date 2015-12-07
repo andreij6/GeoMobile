@@ -1,11 +1,10 @@
 package com.geospatialcorporation.android.geomobile.ui.fragments.tree_fragments;
 
-import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
-import android.util.Log;
+import android.support.v4.content.ContextCompat;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -20,15 +19,13 @@ import com.geospatialcorporation.android.geomobile.library.helpers.DataHelper;
 import com.geospatialcorporation.android.geomobile.library.helpers.ProgressDialogHelper;
 import com.geospatialcorporation.android.geomobile.library.panelmanager.PanelManager;
 import com.geospatialcorporation.android.geomobile.library.sectionbuilders.implementations.LayerTreeSectionBuilder;
-import com.geospatialcorporation.android.geomobile.ui.Interfaces.IContentRefresher;
 import com.geospatialcorporation.android.geomobile.models.Folders.Folder;
+import com.geospatialcorporation.android.geomobile.models.ListItem;
+import com.geospatialcorporation.android.geomobile.ui.Interfaces.IContentRefresher;
 import com.geospatialcorporation.android.geomobile.ui.Interfaces.IFragmentView;
 import com.geospatialcorporation.android.geomobile.ui.Interfaces.IPostExecuter;
-import com.geospatialcorporation.android.geomobile.ui.MainActivity;
-import com.geospatialcorporation.android.geomobile.ui.fragments.GoogleMapFragment;
 import com.geospatialcorporation.android.geomobile.ui.fragments.detail_fragment.LayerFolderDetailFragment;
 import com.geospatialcorporation.android.geomobile.ui.fragments.panel_fragments.tree_fragment_panels.LayerFolderPanelFragment;
-import com.geospatialcorporation.android.geomobile.models.ListItem;
 
 import java.util.List;
 
@@ -38,11 +35,16 @@ public class LayerFragment extends RecyclerTreeFragment implements IContentRefre
     protected final static String TAG = LayerFragment.class.getSimpleName();
 
     ProgressDialogHelper mProgressDialogHelper;
-
+    int mFolderId;
+    
     @Nullable
     @OnClick(R.id.OptionsFab)
     public void optionsDropDown(){
 
+        options();
+    }
+
+    protected void options() {
         if(!mPanelManager.getIsOpen()){
 
             Fragment f = new LayerFolderPanelFragment();
@@ -53,7 +55,12 @@ public class LayerFragment extends RecyclerTreeFragment implements IContentRefre
                     .replace(R.id.slider_content, f)
                     .commit();
 
-            mPanelManager.halfAnchor();
+            if(mIsLandscape){
+                mPanelManager.expand();
+            } else {
+                mPanelManager.halfAnchor();
+            }
+
             mPanelManager.touch(false);
         } else {
             closePanel();
@@ -63,20 +70,7 @@ public class LayerFragment extends RecyclerTreeFragment implements IContentRefre
     @Nullable
     @OnClick(R.id.landOptionsIV)
     public void optionsDropDownland(){
-        if(!mPanelManager.getIsOpen()){
-            Fragment f = new LayerFolderPanelFragment();
-
-            f.setArguments(mCurrentFolder.toBundle());
-
-            getFragmentManager().beginTransaction()
-                    .replace(R.id.slider_content, f)
-                    .commit();
-
-            mPanelManager.halfAnchor();
-            mPanelManager.touch(false);
-        } else {
-            closePanel();
-        }
+        options();
     }
 
     @OnClick(R.id.folderInformation)
@@ -107,8 +101,12 @@ public class LayerFragment extends RecyclerTreeFragment implements IContentRefre
         mPanelManager = new PanelManager.Builder().type(GeoPanel.LAYER_FRAGMENT).hide().build();
 
         mSwipeRefreshLayout.setOnRefreshListener(refresher.build(mSwipeRefreshLayout, this));
-        mSwipeRefreshLayout.setProgressBackgroundColorSchemeColor(mContext.getResources().getColor(R.color.white));
+        mSwipeRefreshLayout.setProgressBackgroundColorSchemeColor(ContextCompat.getColor(mContext, R.color.white));
 
+
+        if(mIsLandscape){
+            mParentFolder.setText(getString(R.string.layer_tree));
+        }
 
         handleArguments();
 
@@ -123,23 +121,29 @@ public class LayerFragment extends RecyclerTreeFragment implements IContentRefre
     public void handleArguments() {
         Bundle args = getArguments();
         IGetLayersTask task = application.getTasksComponent().provideLayersTask();
-        int folderId = 0;
+        mFolderId = 0;
 
         if(args != null) {
-            folderId = args.getInt(Folder.FOLDER_INTENT, 0);
+            mFolderId = args.getInt(Folder.FOLDER_INTENT, 0);
         }
 
         mProgressHelper = new ProgressDialogHelper(mContext);
         mProgressHelper.toggleProgressDialog();
 
-        task.getByFolder(new GetLayersByFolderTaskParams(getFragmentManager(), mContext, this), folderId);
+        task.getByFolder(new GetLayersByFolderTaskParams(getFragmentManager(), mContext, this), mFolderId);
+    }
+
+    @Override
+    public void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        outState.putInt(Folder.FOLDER_INTENT, mFolderId);
     }
 
     @Override
     protected void buildRecycler() {
         mHelper = new DataHelper();
 
-        List<ListItem> data = mHelper.CombineLayerItems(mCurrentFolder.getLayers(), mCurrentFolder.getFolders(), mCurrentFolder.getParent());
+        List<ListItem> data = mHelper.CombineLayerItems(mCurrentFolder.getLayers(), mCurrentFolder.getFolders());
 
         new LayerTreeSectionBuilder(mContext, getFragmentManager(), mCurrentFolder.getParent(), mPanelManager)
                 .BuildAdapter(data, mCurrentFolder.getFolders().size())
@@ -147,16 +151,22 @@ public class LayerFragment extends RecyclerTreeFragment implements IContentRefre
     }
 
     @Override
-    public void setDetailFrame(View view, FragmentManager fm) {
-        setFrame(R.id.detail_frame, fm);
+    public void setDetailFrame(View view, FragmentManager fm, Bundle bundle) {
+        setFrame(R.id.detail_frame, fm, bundle);
     }
 
     @Override
-    public void setContentFragment(FragmentManager fm) {
-        setFrame(R.id.content_frame, fm);
+    public void setContentFragment(FragmentManager fm, Bundle bundle) {
+        setFrame(R.id.content_frame, fm, bundle);
     }
 
-    private void setFrame(int frame, FragmentManager fm){
+    private void setFrame(int frame, FragmentManager fm, Bundle bundle){
+        Fragment fragment = new LayerFragment();
+
+        if(bundle != null){
+            fragment.setArguments(bundle);
+        }
+
         fm.beginTransaction()
                 .replace(frame, this)
                 .addToBackStack(null)

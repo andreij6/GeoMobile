@@ -1,18 +1,5 @@
 package com.geospatialcorporation.android.geomobile.library.map.layerManager.implementations;
 
-import com.geospatialcorporation.android.geomobile.library.map.layerManager.OptionFeature;
-import com.geospatialcorporation.android.geomobile.library.map.layerManager.OptionsManagerBase;
-import com.geospatialcorporation.android.geomobile.models.Layers.FeatureInfo;
-import com.google.android.gms.maps.GoogleMap;
-import com.google.android.gms.maps.model.LatLng;
-import com.google.android.gms.maps.model.Marker;
-import com.google.android.gms.maps.model.MarkerOptions;
-
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.UUID;
-
 /*
 public class MarkerOptionsManager extends OptionsManagerBase<MarkerOptions, Marker> {
 

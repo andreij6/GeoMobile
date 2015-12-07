@@ -1,11 +1,11 @@
 package com.geospatialcorporation.android.geomobile.library.rest;
 
+import com.geospatialcorporation.android.geomobile.models.Document.Document;
 import com.geospatialcorporation.android.geomobile.models.Folders.Folder;
 import com.geospatialcorporation.android.geomobile.models.Folders.FolderCreateRequest;
 import com.geospatialcorporation.android.geomobile.models.Folders.FolderDetailsResponse;
 import com.geospatialcorporation.android.geomobile.models.Folders.FolderPermissionsResponse;
 import com.geospatialcorporation.android.geomobile.models.Layers.Layer;
-import com.geospatialcorporation.android.geomobile.models.Document.Document;
 import com.geospatialcorporation.android.geomobile.models.PermissionsSaveRequest;
 import com.geospatialcorporation.android.geomobile.models.RenameRequest;
 

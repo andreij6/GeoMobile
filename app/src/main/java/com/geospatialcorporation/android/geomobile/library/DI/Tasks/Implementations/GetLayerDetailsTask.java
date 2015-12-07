@@ -3,7 +3,6 @@ package com.geospatialcorporation.android.geomobile.library.DI.Tasks.Implementat
 import com.geospatialcorporation.android.geomobile.application;
 import com.geospatialcorporation.android.geomobile.library.DI.Tasks.Interfaces.IGetLayerDetailsTask;
 import com.geospatialcorporation.android.geomobile.library.DI.Tasks.models.GetLayerDetailParams;
-import com.geospatialcorporation.android.geomobile.library.DI.TreeServices.Implementations.LayerTreeService;
 import com.geospatialcorporation.android.geomobile.library.DI.TreeServices.Interfaces.ILayerTreeService;
 import com.geospatialcorporation.android.geomobile.models.GeoAsyncTask;
 import com.geospatialcorporation.android.geomobile.models.Layers.Layer;

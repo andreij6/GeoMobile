@@ -6,9 +6,6 @@ import com.geospatialcorporation.android.geomobile.models.Layers.LegendLayer;
 import com.geospatialcorporation.android.geomobile.models.Query.map.response.mapquery.Geometry;
 import com.geospatialcorporation.android.geomobile.models.Query.map.response.mapquery.Style;
 
-/**
- * Created by andre on 6/26/2015.
- */
 public abstract class SingleFeatureMapperBase<T> extends FeatureMapperBase<T> {
 
     protected ILayerManager mLayerManager;

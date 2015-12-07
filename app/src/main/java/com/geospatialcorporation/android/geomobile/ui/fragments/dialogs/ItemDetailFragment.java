@@ -1,32 +1,91 @@
 package com.geospatialcorporation.android.geomobile.ui.fragments.dialogs;
 
 import android.content.Context;
+import android.support.annotation.Nullable;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
 import android.support.v4.content.ContextCompat;
-import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.view.inputmethod.EditorInfo;
 import android.widget.EditText;
 import android.widget.ImageView;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import com.geospatialcorporation.android.geomobile.R;
-import com.geospatialcorporation.android.geomobile.application;
-import com.geospatialcorporation.android.geomobile.library.DI.TreeServices.Interfaces.IDocumentTreeService;
-import com.geospatialcorporation.android.geomobile.library.DI.TreeServices.Interfaces.IFolderTreeService;
-import com.geospatialcorporation.android.geomobile.library.DI.TreeServices.Interfaces.ILayerTreeService;
-import com.geospatialcorporation.android.geomobile.library.DI.TreeServices.TreeServiceComponent;
-import com.geospatialcorporation.android.geomobile.models.Folders.Folder;
-import com.geospatialcorporation.android.geomobile.models.Interfaces.INamedEntity;
-import com.geospatialcorporation.android.geomobile.models.Interfaces.IdModel;
-import com.geospatialcorporation.android.geomobile.models.Layers.Layer;
-import com.geospatialcorporation.android.geomobile.models.Document.Document;
+import com.geospatialcorporation.android.geomobile.models.Interfaces.ITreeEntity;
+import com.geospatialcorporation.android.geomobile.ui.Interfaces.OnFragmentInteractionListener;
 import com.geospatialcorporation.android.geomobile.ui.fragments.GeoViewFragmentBase;
+import com.geospatialcorporation.android.geomobile.ui.fragments.GoogleMapFragment;
 
-public class ItemDetailFragment<ITreeEntity> extends GeoViewFragmentBase {
+import butterknife.OnClick;
 
-    protected ITreeEntity mEntity;
+public abstract class ItemDetailFragment<Entity extends ITreeEntity> extends GeoViewFragmentBase {
+
+    protected Entity mEntity;
+
+    @Nullable
+    @OnClick(R.id.goToMapIV)
+    public void goToMapIV(){
+        Fragment pageFragment = new GoogleMapFragment();
+
+        FragmentManager fragmentManager = getFragmentManager();
+
+        fragmentManager.beginTransaction()
+                .replace(R.id.content_frame, pageFragment)
+                .addToBackStack(null).commit();
+    }
+
+    @Nullable
+    @OnClick(R.id.goBackIV)
+    public void previousView(){
+        getFragmentManager().popBackStack();
+    }
+
+    @Nullable
+    @OnClick(R.id.sectionTitle)
+    public void goUp(){ getFragmentManager().popBackStack(); }
+
+    @Nullable
+    @OnClick(R.id.closeIV)
+    public void closeFragment(){
+        ((OnFragmentInteractionListener)getActivity()).closeDetailFragment();
+    }
+
+    @Nullable
+    @OnClick(R.id.optionsIV)
+    public void bringUpOptions(){
+        options();
+    }
+
+    @Nullable
+    @OnClick(R.id.landOptionsIV)
+    public void bringUpOptionsLand(){
+        options();
+    }
+
+    protected void options(){
+        if(mPanelManager.getIsOpen()){
+            closePanel();
+        } else {
+            Fragment f = getPanelFragment();
+
+            f.setArguments(mEntity.toBundle());
+
+            getFragmentManager().beginTransaction()
+                    .replace(R.id.slider_content, f)
+                    .commit();
+
+            if(mIsLandscape){
+                mPanelManager.expand();
+            }else{
+                mPanelManager.halfAnchor();
+            }
+
+            mPanelManager.touch(false);
+        }
+    }
+
+    protected abstract Fragment getPanelFragment();
 
     //region Getters & Setters
     public EditText getEditText() {
@@ -43,59 +102,6 @@ public class ItemDetailFragment<ITreeEntity> extends GeoViewFragmentBase {
     protected void handleArguments(){
         Toast.makeText(getActivity(), "Override Me", Toast.LENGTH_LONG).show();
     }
-    /*
-
-    protected void SetupUI(){
-        Toast.makeText(getActivity(), "Override Me", Toast.LENGTH_LONG).show();
-    }
-
-    protected View.OnClickListener BackButtonClicked = new View.OnClickListener(){
-        @Override
-        public void onClick(View v){
-            getFragmentManager().popBackStack();
-        }
-    };
-
-    protected View.OnClickListener EditNameClicked = new View.OnClickListener(){
-        @Override
-        public void onClick(View v){
-            mEditText.setText(((INamedEntity)mEntity).getName());
-            mEditText.setVisibility(View.VISIBLE);
-        }
-    };
-
-    protected void SetupRename(){
-        mEditText.setVisibility(View.GONE);
-
-        mEditText.setOnEditorActionListener(new TextView.OnEditorActionListener() {
-            @Override
-            public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
-                if (actionId == EditorInfo.IME_ACTION_DONE) {
-                    TreeServiceComponent component = application.getTreeServiceComponent();
-
-                    int id = ((IdModel)mEntity).getId();
-                    String name = mEditText.getText().toString();
-                    if (mEntity instanceof Document) {
-                        IDocumentTreeService  docService = component.provideDocumentTreeService();
-                        docService.rename(id, name );
-                    } else if (mEntity instanceof Layer) {
-                        ILayerTreeService layerService = component.provideLayerTreeService();
-                        layerService.rename(id, name);
-                    } else if (mEntity instanceof Folder) {
-                        IFolderTreeService folderService = component.provideFolderTreeService();
-                        folderService.rename(id, name);
-                    } else {
-                    }
-
-
-                    mEditText.setVisibility(View.GONE);
-                }
-                return false;
-            }
-        });
-
-    }
-    */
 
     protected View createTabView(Context context, int imageSelector) {
 
@@ -106,6 +112,10 @@ public class ItemDetailFragment<ITreeEntity> extends GeoViewFragmentBase {
         ti.setImageDrawable(ContextCompat.getDrawable(context, imageSelector));
 
         return view;
+    }
+
+    public void closePanel() {
+        mPanelManager.hide();
     }
 
 

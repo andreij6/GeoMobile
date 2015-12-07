@@ -3,9 +3,6 @@ package com.geospatialcorporation.android.geomobile.library.constants;
 import java.util.AbstractMap;
 import java.util.HashMap;
 
-/**
- * Created by andre on 5/31/2015.
- */
 public class ClientTypeCodes {
 
     public ClientTypeCodes(){

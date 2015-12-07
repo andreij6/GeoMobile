@@ -1,7 +1,6 @@
 package com.geospatialcorporation.android.geomobile.library.services.UserAccountProccessor;
 
 import android.content.Context;
-import android.view.View;
 import android.widget.TextView;
 
 import com.geospatialcorporation.android.geomobile.application;
