@@ -274,8 +274,6 @@ public class LayerSelectorDrawerFragment extends Fragment implements IPostExecut
 
     @Override
     public void onPostExecute(List<Folder> folders) {
-        application.setLayerDrawer(mDrawerLayout);
-
         new LegendLayerSectionBuilder(getActivity())
                 .BuildAdapter(folders, 0)
                 .setRecycler(mRecyclerView);

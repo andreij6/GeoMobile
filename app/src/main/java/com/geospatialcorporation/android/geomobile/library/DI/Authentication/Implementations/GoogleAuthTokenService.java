@@ -62,8 +62,6 @@ public class GoogleAuthTokenService implements IGoogleAuthTokenService {
                 final String token = GoogleAuthUtil.getToken(mContext, AccountName, SCOPES);
                 // Do work with token.
 
-                application.setGoogleAuthToken(token);
-
                 mAuthTokenRetriever.retrieve(token, mContext, ProgressHelper);
 
                 if (token != null) {

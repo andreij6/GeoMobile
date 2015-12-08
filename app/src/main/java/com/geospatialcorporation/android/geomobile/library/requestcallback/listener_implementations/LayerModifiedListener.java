@@ -26,8 +26,6 @@ public class LayerModifiedListener extends RequestListenerBase<Response> impleme
     public void onSuccess(Response response) {
         super.onSuccess(response);
 
-        application.setLayerFolders(new ArrayList<Folder>());
-
         if(mShouldRefresh) {
            // ((LayerFragment) mContentFragment).refresh();
             if(mContentFragment instanceof IContentRefresher){

@@ -57,7 +57,6 @@ public class application extends applicationDIBase {
     private final static String TAG = "application";
     private final static String prefsName = "AppState";
     private static final String geoAuthTokenName = "geoAuthToken";
-    //private static GoogleMapFragment googleMap;
     private static Locale locale;
     private static SharedPreferences appState;
     private static String domain;
@@ -65,20 +64,14 @@ public class application extends applicationDIBase {
     private static GoogleApiClient googleClient;
     private static Subscription geoSubscription;
     private static String geoAuthToken;
-    private static String googleAuthToken;
     private static OkClient serviceClient;
     private static RestAdapter restAdapter;
-    private static boolean isAdminUser;
     public static Uri mMediaUri;
 
     private static HashMap<Integer, Folder> folderHashMap;
     private static HashMap<Integer, Document> documentHashMap;
     private static HashMap<Integer, Layer> layerHashMap;
-    private static HashMap<Integer, Bookmark> bookmarkHashMap;
-    private static DrawerLayout layerDrawer;
     private static SlidingUpPanelLayout mapFragmentPanel;
-    private static SlidingUpPanelLayout sublayerFragmentPanel;
-    private static SlidingUpPanelLayout layerAttributePanel;
     private static MainActivity mainActivity;
     private static MapLayerState mapLayerState;
 
@@ -102,13 +95,9 @@ public class application extends applicationDIBase {
     private static IMapStatusBarManager statusBarManager;
     private static String azureDomain;
     private static UserAccount userAccount;
-    private static IGeoMainActivity geoMainActivity;
     private static IFeatureWindowCtrl featureWindowCtrl;
     private static int currentFeatureWindowTab;
-    private static List<Folder> layerFolders;
     private static List<LegendLayer> legendLayerQueue;
-    private static boolean shouldSetAppState;
-    private static boolean mapStateLoaded;
 
     private Thread.UncaughtExceptionHandler androidDefaultUEH;
     //endregion
@@ -121,7 +110,6 @@ public class application extends applicationDIBase {
              }
     };
     private static boolean editingLayerMode;
-    private static Integer clientCode;
     private static Boolean isLandscape;
 
 
@@ -139,16 +127,8 @@ public class application extends applicationDIBase {
         return folderHashMap;
     }
 
-    public static void setFolderHashMap(HashMap<Integer, Folder> folderHashMap) {
-        application.folderHashMap = folderHashMap;
-    }
-
     public static HashMap<Integer, Document> getDocumentHashMap() {
         return documentHashMap;
-    }
-
-    public static void setDocumentHashMap(HashMap<Integer, Document> documentHashMap) {
-        application.documentHashMap = documentHashMap;
     }
 
     public static HashMap<Integer, Layer> getLayerHashMap() {
@@ -172,9 +152,6 @@ public class application extends applicationDIBase {
         return mapLayerState;
     }
 
-    public static void setMapLayerState(MapLayerState mapLayerState) {
-        application.mapLayerState = mapLayerState;
-    }
 
     public static void setIsAdminUser(Boolean isAdminUser) {
         IGeoSharedPrefs geoSharedPrefs = getGeoSharedPrefsComponent().provideGeoSharedPrefs();
@@ -189,35 +166,8 @@ public class application extends applicationDIBase {
         return geoSharedPrefs.getBoolean("IsAdminUser", false);
     }
 
-    public static HashMap<Integer, Bookmark> getBookmarkHashMap() {
-        if(bookmarkHashMap == null){
-            bookmarkHashMap = new HashMap<>();
-        }
-        return bookmarkHashMap;
-    }
-
-    public static void setLayerDrawer(DrawerLayout layerDrawer) {
-        application.layerDrawer = layerDrawer;
-    }
-
-    public static DrawerLayout getLayerDrawer() {
-        return layerDrawer;
-    }
-
-    public static SlidingUpPanelLayout getMapFragmentPanel() {
-        return mapFragmentPanel;
-    }
-
     public static void setMapFragmentPanel(SlidingUpPanelLayout mapFragmentPanel) {
         application.mapFragmentPanel = mapFragmentPanel;
-    }
-
-    public static void setSublayerFragmentPanel(SlidingUpPanelLayout sublayerFragmentPanel){
-        application.sublayerFragmentPanel = sublayerFragmentPanel;
-    }
-
-    public static void setLayerAttributePanel(SlidingUpPanelLayout layerAttributePanel) {
-        application.layerAttributePanel = layerAttributePanel;
     }
 
     public static MainActivity getMainActivity() {
@@ -292,14 +242,6 @@ public class application extends applicationDIBase {
         application.userAccount = userAccount;
     }
 
-    public static void setGeoMainActivity(IGeoMainActivity geoMainActivity) {
-        application.geoMainActivity = geoMainActivity;
-    }
-
-    public static IGeoMainActivity getGeoMainActivity() {
-        return geoMainActivity;
-    }
-
     public static IFeatureWindowCtrl getFeatureWindowCtrl() {
         return featureWindowCtrl;
     }
@@ -316,36 +258,8 @@ public class application extends applicationDIBase {
         return currentFeatureWindowTab;
     }
 
-    public static void setLayerFolders(List<Folder> layerFolders) {
-        application.layerFolders = layerFolders;
-    }
-
-    public static List<Folder> getLayerFolders() {
-        return layerFolders;
-    }
-
     public static List<LegendLayer> getLegendLayerQueue() {
         return legendLayerQueue;
-    }
-
-    public static void setShouldSetAppState(boolean shouldSetAppState) {
-        application.shouldSetAppState = shouldSetAppState;
-    }
-
-    public static boolean getShouldSetAppState() {
-        return shouldSetAppState;
-    }
-
-    public static void setMapStateLoaded(boolean mapStateLoaded) {
-        application.mapStateLoaded = mapStateLoaded;
-    }
-
-    public static boolean getMapStateLoaded() {
-        return mapStateLoaded;
-    }
-
-    public static void setLegendLayerQueue(List<LegendLayer> legendLayerQueue) {
-        application.legendLayerQueue = legendLayerQueue;
     }
 
     public static void setEditingLayerMode(boolean editingLayerMode) {
@@ -405,7 +319,7 @@ public class application extends applicationDIBase {
 
         } else {
             // TODO: Change on release
-            domain = Domains.QUALITY_ASSURANCE;
+            domain = Domains.PRODUCTION;
             azureDomain = "https://geoeastusfilesprod01.blob.core.windows.net/icons/";
 
         }
@@ -428,7 +342,6 @@ public class application extends applicationDIBase {
 
         configRestAdapter(requestInterceptor);
 
-        isAdminUser = false;
         editingLayerMode = false;
 
         mapLayerState = new MapLayerState();
@@ -499,12 +412,6 @@ public class application extends applicationDIBase {
             case GeoPanel.MAP:
                 panel = mapFragmentPanel;
                 break;
-            case GeoPanel.SUBLAYER:
-                panel = sublayerFragmentPanel;
-                break;
-            case GeoPanel.LAYER_ATTRIBUTE:
-                panel = layerAttributePanel;
-                break;
             case GeoPanel.LAYER_FRAGMENT:
                 panel = layerFragmentPanel;
                 break;
@@ -552,10 +459,6 @@ public class application extends applicationDIBase {
         return FeatureWindowDocument_FeatureId;
     }
 
-    public static boolean areLayerFoldersStored() {
-        return layerFolders.size() > 0;
-    }
-
     public static void addLegendLayerToQueue(LegendLayer legendLayer) {
         if(!containsLegendLayer(legendLayerQueue, legendLayer)) {
             legendLayerQueue.add(legendLayer);
@@ -601,14 +504,6 @@ public class application extends applicationDIBase {
         }
     }
 
-    public static String getGoogleAuthToken() {
-        return googleAuthToken;
-    }
-
-    public static void setGoogleAuthToken(String token) {
-        googleAuthToken = token;
-    }
-
     public static Subscription getGeoSubscription() {
         return geoSubscription;
     }
@@ -623,7 +518,6 @@ public class application extends applicationDIBase {
 
     public static void Logout() {
         geoAuthToken = null;
-        googleAuthToken = null;
         clearUserSpecificData();
 
         getStatusBarManager().reset();
@@ -647,7 +541,6 @@ public class application extends applicationDIBase {
         layerHashMap = new HashMap<>();
         documentHashMap = new HashMap<>();
         userAccount = null;
-        layerFolders = new ArrayList<>();
         legendLayerQueue = new ArrayList<>();
     }
 
@@ -658,7 +551,6 @@ public class application extends applicationDIBase {
         mGoogleMapFragment = new GoogleMapFragment();
         //geoAuthToken = appState.getString(geoAuthTokenName, null);
         geoAuthToken = null;
-        layerFolders = new ArrayList<>();
         legendLayerQueue = new ArrayList<>();
 
         IGeoSharedPrefs prefs = getGeoSharedPrefsComponent().provideGeoSharedPrefs();

@@ -24,8 +24,6 @@ public class FolderModifiedListener extends RequestListenerBase<Response> implem
     public void onSuccess(Response response) {
         super.onSuccess(response);
 
-        application.setLayerFolders(new ArrayList<Folder>());
-
         if(mShouldRefresh) {
             if(mContentFragment instanceof LayerFragment){
                 LayerSelectorDrawerFragment drawerFragment = application.getMainActivity().getLayerDrawerFragment();

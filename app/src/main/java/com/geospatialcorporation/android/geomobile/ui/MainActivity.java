@@ -121,8 +121,6 @@ public class MainActivity extends ActionBarActivity
         determineOrientation();
 
         application.setIsLandscape(mIsLandscape);
-        application.setGeoMainActivity(this);
-        Subscription subscription = application.getGeoSubscription();
 
         //region Common Btw Tablet & Phone
         ButterKnife.bind(this);
@@ -158,7 +156,6 @@ public class MainActivity extends ActionBarActivity
         if(mIsLandscape) {
             setupLandscapeUI();
         }
-        //determineScreenSize();
     }
 
     private void setupLandscapeUI() {
@@ -309,33 +306,6 @@ public class MainActivity extends ActionBarActivity
             mIsLandscape = false;
         }
 
-    }
-
-    public void determineScreenSize() {
-        float density = getResources().getDisplayMetrics().density;
-
-        Toast.makeText(this, "Density: " + density, Toast.LENGTH_LONG).show();
-
-        int screenSize = getResources().getConfiguration().screenLayout
-                & Configuration.SCREENLAYOUT_SIZE_MASK;
-        switch (screenSize) {
-            case Configuration.SCREENLAYOUT_SIZE_XLARGE:
-                Toast.makeText(this, "XLarge screen", Toast.LENGTH_LONG).show();
-                break;
-            case Configuration.SCREENLAYOUT_SIZE_LARGE:
-                Toast.makeText(this, "Large screen", Toast.LENGTH_LONG).show();
-                break;
-            case Configuration.SCREENLAYOUT_SIZE_NORMAL:
-                Toast.makeText(this, "Normal screen", Toast.LENGTH_LONG).show();
-                break;
-            case Configuration.SCREENLAYOUT_SIZE_SMALL:
-                Toast.makeText(this, "Small screen", Toast.LENGTH_LONG).show();
-                break;
-            default:
-                Toast.makeText(this,
-                        "Screen size is neither large, normal or small",
-                        Toast.LENGTH_LONG).show();
-        }
     }
 
     @Override
