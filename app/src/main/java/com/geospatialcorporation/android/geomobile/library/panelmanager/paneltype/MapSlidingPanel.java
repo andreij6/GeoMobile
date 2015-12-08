@@ -25,10 +25,4 @@ public class MapSlidingPanel extends GeoSlidingPanelBase {
         mMapFragment.clearHighlights();
     }
 
-    @Override
-    public void collapse(){
-        mMapFragment.resetViewMode();
-        super.collapse();
-    }
-
 }

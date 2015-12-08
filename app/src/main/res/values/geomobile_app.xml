@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="api_base">https://dev.geounderground.com/api/</string>
     <string name="mobile_version">1.0.0</string>
     <string name="mobile_version_codename">Alpha</string>
     <string name="mobile_version_id">5AC2F6BD-AA2D-402F-B4E0-DFC3545602BC</string>

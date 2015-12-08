@@ -18,6 +18,10 @@ android {
         }
     }
 
+    testOptions {
+        unitTests.returnDefaultValues = true;
+    }
+
     defaultConfig {
         applicationId "com.geospatialcorporation.android.geomobile"
         minSdkVersion 18

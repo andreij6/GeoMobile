@@ -90,6 +90,8 @@ public class FeatureAttributesTab extends FeatureTabBase {
         if(!mIsLandscape){
             mPanelManager = new PanelManager(GeoPanel.MAP);
             mPanelManager.touch(true);
+        } else {
+            mMoreInfo.setVisibility(View.GONE);
         }
 
         return v;

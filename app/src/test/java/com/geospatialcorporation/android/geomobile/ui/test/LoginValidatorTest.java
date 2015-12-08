@@ -4,6 +4,7 @@ import com.geospatialcorporation.android.geomobile.library.util.LoginValidator;
 
 import org.junit.Test;
 
+import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
 public class LoginValidatorTest {
@@ -13,45 +14,35 @@ public class LoginValidatorTest {
     public void isEmailValid_True(){
         Boolean actual = LoginValidator.isEmailValid("andre.jones@geospatialcorp.com");
 
-        Boolean expected = true;
-
-        assertTrue("A valid Email returned invalid", actual == expected);
+        assertEquals(true, actual);
     }
 
     @Test
     public void isEmailValid_False(){
         Boolean actual = LoginValidator.isEmailValid("andre.jones?geospatialcorp.com");
 
-        Boolean expected = false;
-
-        assertTrue("An invalid Email was returned valid", actual == expected);
+        assertEquals(false, actual);
     }
 
     @Test
     public void isEmailValid_False_1(){
         Boolean actual = LoginValidator.isEmailValid("@andre.jonesgeospatialcorp.com");
 
-        Boolean expected = false;
-
-        assertTrue("An invalid Email was returned valid", actual == expected);
+        assertEquals(false, actual);
     }
 
     @Test
     public void isEmailValid_False_2(){
         Boolean actual = LoginValidator.isEmailValid("andre.jones@geospatialcorp");
 
-        Boolean expected = false;
-
-        assertTrue("An invalid Email was returned valid", actual == expected);
+        assertEquals(false, actual);
     }
 
     @Test
     public void isEmailValid_False_3(){
         Boolean actual = LoginValidator.isEmailValid("@.com");
 
-        Boolean expected = false;
-
-        assertTrue("An invalid Email was returned valid", actual == expected);
+        assertEquals(false, actual);
     }
     //endregion
 

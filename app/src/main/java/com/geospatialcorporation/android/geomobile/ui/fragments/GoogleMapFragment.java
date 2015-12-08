@@ -34,7 +34,6 @@ import android.support.v7.app.ActionBar;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
-import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
@@ -70,7 +69,6 @@ import com.geospatialcorporation.android.geomobile.library.services.LayerEditor.
 import com.geospatialcorporation.android.geomobile.library.services.LayerEditor.PointLayerEditor;
 import com.geospatialcorporation.android.geomobile.library.services.LayerEditor.PolygonLayerEditor;
 import com.geospatialcorporation.android.geomobile.library.services.QueryRestService;
-import com.geospatialcorporation.android.geomobile.library.viewmode.IViewMode;
 import com.geospatialcorporation.android.geomobile.models.Folders.Folder;
 import com.geospatialcorporation.android.geomobile.models.Layers.Extent;
 import com.geospatialcorporation.android.geomobile.models.Layers.LegendLayer;
@@ -80,7 +78,6 @@ import com.geospatialcorporation.android.geomobile.models.Query.map.Options;
 import com.geospatialcorporation.android.geomobile.models.Query.map.response.featurewindow.ParcelableFeatureQueryResponse;
 import com.geospatialcorporation.android.geomobile.ui.Interfaces.IFeatureWindowCtrl;
 import com.geospatialcorporation.android.geomobile.ui.Interfaces.IMapStatusCtrl;
-import com.geospatialcorporation.android.geomobile.ui.Interfaces.IViewModeListener;
 import com.geospatialcorporation.android.geomobile.ui.MainActivity;
 import com.geospatialcorporation.android.geomobile.ui.fragments.panel_fragments.map_fragment_panels.EditLinePanelFragment;
 import com.geospatialcorporation.android.geomobile.ui.fragments.panel_fragments.map_fragment_panels.EditPointPanelFragment;
@@ -124,7 +121,6 @@ import butterknife.OnClick;
  * Fragment that appears in the "content_frame", shows a google-play map
  */
 public class GoogleMapFragment extends GeoViewFragmentBase implements
-        IViewModeListener,
         GoogleApiClient.ConnectionCallbacks,
         GoogleApiClient.OnConnectionFailedListener,
         LocationListener,
@@ -138,7 +134,6 @@ public class GoogleMapFragment extends GeoViewFragmentBase implements
     public GoogleMap mMap;
     Marker mCurrentLocationMaker;
     Boolean UsingClustering;
-    IViewMode mViewMode;
     GoogleApiClient mLocationClient;
     ISlidingPanelManager mPanelManager;
     IMapStateService mMapStateService;
@@ -443,30 +438,11 @@ public class GoogleMapFragment extends GeoViewFragmentBase implements
     }
 
     @Override
-    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
-        inflater.inflate(R.menu.map_menu, menu);
-        mMenu = menu;
-        super.onCreateOptionsMenu(menu, inflater);
-    }
-
-    @Override
     public void onResume() {
         super.onResume();
         LifeCycleLogger("onResume");
         mMapView.onResume();
         setLocationClient();
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action buttons
-        switch (item.getItemId()) {
-            case R.id.action_show_layers:
-                showLayersDrawer();
-                return true;
-            default:
-                return super.onOptionsItemSelected(item);
-        }
     }
 
     @Override
@@ -514,11 +490,6 @@ public class GoogleMapFragment extends GeoViewFragmentBase implements
         mPanelManager.hide();
         super.onDestroyView();
         mLayerManager.clearVisibleLayers();
-
-        if(mViewMode != null){
-            mViewMode.Disable(true);
-            mViewMode = null;
-        }
     }
 
     @Override
@@ -542,30 +513,6 @@ public class GoogleMapFragment extends GeoViewFragmentBase implements
         }
     }
 
-    //endregion
-
-    //region ViewMode Listener
-    @Override
-    public void setViewMode(IViewMode mode) {
-
-        if(mViewMode != null){
-            if(mViewMode.isSame(mode)){
-                mViewMode.Disable(true);
-                mViewMode = null;
-            } else {
-                mViewMode.Disable(false);
-                mViewMode = null;
-                mViewMode = mode;
-            }
-
-        } else {
-            mViewMode = mode;
-        }
-    }
-
-    public void resetViewMode() {
-        mViewMode = null;
-    }
     //endregion
 
     protected void saveMapState() {

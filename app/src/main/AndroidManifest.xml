@@ -60,6 +60,11 @@
             android:name=".data.generated.GeoUndergoundProvider" >
         </provider>
 
+        <!--<provider
+            android:authorities="com.geospatialcorporation.android.geomobile2"
+            android:name=".data.GeoUndergroundProvider2" >
+        </provider>-->
+
         <meta-data
             android:name="com.google.android.maps.v2.API_KEY"
             android:value="AIzaSyBO8L6_5-kKdAJpiCok3XvuJCrniRajBC4"/>
