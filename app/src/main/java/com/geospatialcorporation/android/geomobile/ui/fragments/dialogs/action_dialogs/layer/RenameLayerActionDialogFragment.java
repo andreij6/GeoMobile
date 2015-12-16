@@ -19,11 +19,16 @@ public class RenameLayerActionDialogFragment extends LayerActionDialogBase {
     @NonNull
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState){
+        if(savedInstanceState != null){
+            mLayer = savedInstanceState.getParcelable(LAYER_DIALOG);
+            init(mLayer);
+        }
 
         View v = getDialogView(R.layout.dialog_shared_rename);
         ButterKnife.bind(this, v);
 
         mRenameInput.setText(mLayer.getName());
+        showKeyboard(mRenameInput);
 
         return getDialogBuilder()
                 .setTitle(R.string.rename)
@@ -36,6 +41,7 @@ public class RenameLayerActionDialogFragment extends LayerActionDialogBase {
                         if (!newName.isEmpty()) {
                             mService.rename(mLayer.getId(), newName);
                             getFragmentManager().popBackStack();
+                            hideKeyBoard(mRenameInput);
                         } else {
                             Toaster("Please add a valid Name");
                         }
@@ -44,6 +50,7 @@ public class RenameLayerActionDialogFragment extends LayerActionDialogBase {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
                         dialog.cancel();
+                        hideKeyBoard(mRenameInput);
                     }
                 }).create();
     }

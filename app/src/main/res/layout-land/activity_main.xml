@@ -23,51 +23,36 @@
 
             <LinearLayout
                 android:orientation="vertical"
-                android:layout_width="wrap_content"
+                android:layout_width="48dp"
                 android:layout_height="match_parent"
-                android:background="@color/accent">
+                android:background="@color/white">
 
                 <ImageView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:id="@+id/mapIV"
-                    android:src="@drawable/ic_earth_white_24dp"
+                    android:id="@+id/menuIV"
+                    android:src="@drawable/ic_menu_grey600_24dp"
                     style="@style/landNavigation"/>
 
                 <ImageView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:id="@+id/layersIV"
-                    android:src="@drawable/ic_layers_white_24dp"
+                    android:src="@drawable/ic_layers_grey600_24dp"
                     style="@style/landNavigation"/>
 
                 <ImageView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:id="@+id/libraryIV"
-                    android:src="@drawable/ic_book_white_24dp"
+                    android:src="@drawable/ic_folder_multiple_outline_grey600_24dp"
                     style="@style/landNavigation"/>
 
                 <ImageView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:id="@+id/accountIV"
-                    android:src="@drawable/ic_account_circle_white_24dp"
-                    style="@style/landNavigation"/>
-
-                <ImageView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:id="@+id/SubscriptionsIV"
-                    android:src="@drawable/ic_account_search_white_24dp"
-                    style="@style/landNavigation"
-                    android:visibility="gone"/>
-
-                <ImageView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:id="@+id/logoutIV"
-                    android:src="@drawable/ic_logout_white_24dp"
+                    android:id="@+id/logoIV"
+                    android:src="@drawable/ic_g_logo"
                     style="@style/landNavigation"/>
 
             </LinearLayout>
@@ -76,7 +61,7 @@
                 android:id="@+id/detail_frame"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:layout_weight="1.5"
+                android:layout_weight="1"
                 android:elevation="18dp"
                 android:visibility="gone">
 
@@ -103,6 +88,14 @@
         -->
 
         <fragment
+            android:id="@+id/navigation_drawer"
+            android:name="com.geospatialcorporation.android.geomobile.ui.fragments.drawer.MainNavigationDrawerFragment"
+            android:layout_width="240dp"
+            android:layout_height="match_parent"
+            android:layout_gravity="start"
+            tools:layout="@layout/fragment_left_navigation_drawer"/>
+
+        <fragment
             android:id="@+id/layer_drawer"
             android:name="com.geospatialcorporation.android.geomobile.ui.fragments.drawer.LayerSelectorDrawerFragment"
             android:layout_width="300dp"
@@ -111,7 +104,5 @@
             tools:layout="@layout/fragment_right_navigation_drawer"/>
 
     </android.support.v4.widget.DrawerLayout>
-
-
 
 </RelativeLayout>

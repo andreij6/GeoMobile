@@ -95,9 +95,9 @@ public class GetLayersTask implements IGetLayersTask {
                 folders.add(0, root.get(0));
 
             } catch (RetrofitError e) {
-                Log.d(TAG, "Messed up.");
+                //Log.d(TAG, "Messed up.");
             } catch (Exception e) {
-                Log.d(TAG, e.getMessage());
+                //Log.d(TAG, e.getMessage());
             }
 
             return folders;
@@ -130,9 +130,9 @@ public class GetLayersTask implements IGetLayersTask {
                 currentFolder.setFolders(mFolderTreeService.getFoldersByFolder(currentFolder.getId(), false));
                 currentFolder.setLayers(mFolderTreeService.getLayersByFolder(currentFolder.getId(), false));
             } catch (RetrofitError e) {
-                Log.d(TAG, "Messed up.");
+                //Log.d(TAG, "Messed up.");
             } catch (Exception e) {
-                Log.d(TAG, e.getMessage());
+                //Log.d(TAG, e.getMessage());
             }
 
             return currentFolder;
@@ -145,11 +145,15 @@ public class GetLayersTask implements IGetLayersTask {
             if (allFolders.size() > 0) {
                 mFolderRepo.Add(allFolders);
             }
-            else { Log.d(TAG, "allFolders empty."); }
+            else {
+            //Log.d(TAG, "allFolders empty.");
+            }
             if (allLayers.size() > 0) {
                 mLayerRepo.Add(allLayers);
             }
-            else { Log.d(TAG, "allLayers empty."); }
+            else {
+                //Log.d(TAG, "allLayers empty.");
+            }
         }
     }
 }

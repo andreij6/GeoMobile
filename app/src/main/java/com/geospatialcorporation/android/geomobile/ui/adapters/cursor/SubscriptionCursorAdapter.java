@@ -83,7 +83,7 @@ public class SubscriptionCursorAdapter extends CursorRecyclerViewAdapter<Subscri
 
             } catch (RetrofitError e) {
                 if (e.getResponse() != null) {
-                    Log.d(TAG, Integer.toString(e.getResponse().getStatus()));
+                    //Log.d(TAG, Integer.toString(e.getResponse().getStatus()));
                 }
             }
 

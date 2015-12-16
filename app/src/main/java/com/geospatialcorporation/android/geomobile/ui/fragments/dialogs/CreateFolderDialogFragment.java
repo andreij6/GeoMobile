@@ -2,10 +2,15 @@ package com.geospatialcorporation.android.geomobile.ui.fragments.dialogs;
 
 import android.app.AlertDialog;
 import android.app.Dialog;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.SystemClock;
 import android.support.annotation.NonNull;
+import android.view.MotionEvent;
 import android.view.View;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 
 import com.geospatialcorporation.android.geomobile.R;
@@ -24,6 +29,7 @@ public class CreateFolderDialogFragment extends CreateDialogFragmentBase {
         final IFolderTreeService service = application.getTreeServiceComponent().provideFolderTreeService();
 
         final EditText name = (EditText)v.findViewById(R.id.folderNameInput);
+        showKeyboard(name);
 
         builder.setTitle(R.string.create_folder)
                 .setView(v)
@@ -33,14 +39,18 @@ public class CreateFolderDialogFragment extends CreateDialogFragmentBase {
                             //TODO: Validation
                             mAnalytics.trackClick(new GoogleAnalyticEvent().CreateFolder());
                             service.create(name.getText().toString(), mFolder.getId());
+                            hideKeyBoard(name);
                         }
                     }).setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialog, int which) {
                             CreateFolderDialogFragment.this.getDialog().cancel();
+                            hideKeyBoard(name);
                         }
                     });
 
         return builder.create();
     }
+
+
 }

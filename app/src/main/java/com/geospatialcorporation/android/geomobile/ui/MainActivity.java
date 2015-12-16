@@ -19,6 +19,7 @@ package com.geospatialcorporation.android.geomobile.ui;
 import android.content.Intent;
 import android.content.res.Configuration;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.widget.DrawerLayout;
@@ -26,7 +27,6 @@ import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBarActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Gravity;
-import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.FrameLayout;
@@ -42,11 +42,14 @@ import com.geospatialcorporation.android.geomobile.library.DI.MainNavigationCont
 import com.geospatialcorporation.android.geomobile.library.DI.MainNavigationController.Implementations.MainNavCtrl;
 import com.geospatialcorporation.android.geomobile.library.DI.MainNavigationController.MainNavCtrlComponent;
 import com.geospatialcorporation.android.geomobile.library.DI.UIHelpers.Interfaces.DialogHelpers.IGeneralDialog;
-import com.geospatialcorporation.android.geomobile.models.Subscription;
 import com.geospatialcorporation.android.geomobile.ui.Interfaces.IFragmentView;
 import com.geospatialcorporation.android.geomobile.ui.Interfaces.IGeoMainActivity;
 import com.geospatialcorporation.android.geomobile.ui.Interfaces.OnFragmentInteractionListener;
 import com.geospatialcorporation.android.geomobile.ui.fragments.GoogleMapFragment;
+import com.geospatialcorporation.android.geomobile.ui.fragments.detail_fragment.DocumentDetailFragment;
+import com.geospatialcorporation.android.geomobile.ui.fragments.detail_fragment.DocumentFolderDetailFragment;
+import com.geospatialcorporation.android.geomobile.ui.fragments.detail_fragment.LayerDetailFragment;
+import com.geospatialcorporation.android.geomobile.ui.fragments.detail_fragment.LayerFolderDetailFragment;
 import com.geospatialcorporation.android.geomobile.ui.fragments.drawer.LayerSelectorDrawerFragment;
 import com.geospatialcorporation.android.geomobile.ui.fragments.drawer.MainNavigationDrawerFragment;
 import com.geospatialcorporation.android.geomobile.ui.fragments.tree_fragments.AccountFragment;
@@ -104,12 +107,12 @@ public class MainActivity extends ActionBarActivity
     FrameLayout mDetailFrame;
     String mCurrentFragment;
     //region Landscape Views
-    ImageView mMapIV;
+    ImageView mMenuIV;
     ImageView mLayersIV;
     ImageView mLibrayIV;
     ImageView mAccountIV;
     ImageView mSubscriptionsIV;
-    ImageView mLogoutIV;
+    ImageView mLogoIV;
     //endregion
     //endregion
 
@@ -119,8 +122,6 @@ public class MainActivity extends ActionBarActivity
 
         setContentView(R.layout.activity_main);
         determineOrientation();
-
-        application.setIsLandscape(mIsLandscape);
 
         //region Common Btw Tablet & Phone
         ButterKnife.bind(this);
@@ -145,10 +146,8 @@ public class MainActivity extends ActionBarActivity
 
         mDrawerLayout = (DrawerLayout)findViewById(R.id.drawer_layout);
 
-        if (!mIsLandscape) {
-            mMainMainNavigationDrawerFragment = (MainNavigationDrawerFragment) getSupportFragmentManager().findFragmentById(R.id.navigation_drawer);
-            mMainMainNavigationDrawerFragment.setUp(R.id.navigation_drawer, mDrawerLayout, getSupportActionBar());
-        }
+        mMainMainNavigationDrawerFragment = (MainNavigationDrawerFragment) getSupportFragmentManager().findFragmentById(R.id.navigation_drawer);
+        mMainMainNavigationDrawerFragment.setUp(R.id.navigation_drawer, mDrawerLayout, getSupportActionBar());
 
         mLayerDrawerFragment = (LayerSelectorDrawerFragment)getSupportFragmentManager().findFragmentById(R.id.layer_drawer);
         mLayerDrawerFragment.setUp(R.id.layer_drawer, mDrawerLayout, new Toolbar(this), mMainMainNavigationDrawerFragment);
@@ -161,27 +160,24 @@ public class MainActivity extends ActionBarActivity
     private void setupLandscapeUI() {
         mDetailFrame = (FrameLayout)findViewById(R.id.detail_frame);
 
-        mMapIV = (ImageView)findViewById(R.id.mapIV);
+        mMenuIV = (ImageView)findViewById(R.id.menuIV);
         mLayersIV = (ImageView)findViewById(R.id.layersIV);
         mLibrayIV = (ImageView)findViewById(R.id.libraryIV);
-        mAccountIV = (ImageView)findViewById(R.id.accountIV);
-        mSubscriptionsIV = (ImageView)findViewById(R.id.SubscriptionsIV);
-        mLogoutIV = (ImageView)findViewById(R.id.logoutIV);
-
-        if(mIsAdmin){
-            mSubscriptionsIV.setVisibility(View.VISIBLE);
-        }
+        mLogoIV = (ImageView)findViewById(R.id.logoIV);
 
         FragmentManager fragmentManager = getSupportFragmentManager();
 
-        fragmentManager.beginTransaction()
-                .replace(R.id.content_frame, mMapFragment)
-                .addToBackStack(null).commit();
+        if(fragmentManager != null) {
 
-        mMapIV.setOnClickListener(new View.OnClickListener() {
+            fragmentManager.beginTransaction()
+                    .replace(R.id.content_frame, mMapFragment)
+                    .addToBackStack(null).commit();
+        }
+
+        mMenuIV.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                mDetailFrame.setVisibility(View.GONE);
+                openNavigationDrawer();
             }
         });
 
@@ -192,40 +188,36 @@ public class MainActivity extends ActionBarActivity
             }
         });
 
-        mLogoutIV.setOnClickListener(new View.OnClickListener() {
+
+
+        mLibrayIV.setOnClickListener(new View.OnClickListener() {
+
             @Override
             public void onClick(View v) {
-                IGeneralDialog dialog = application.getUIHelperComponent().provideGeneralDialog();
+                if(getContentFragment().getClass().getSimpleName().equals(LibraryFragment.class.getSimpleName())){
+                    return;
+                }
 
-                dialog.Logout(MainActivity.this, getSupportFragmentManager());
+                Fragment libraryFragment = new LibraryFragment();
+                libraryFragment.setArguments(LibraryFragment.rootBundle());
+
+                setContentFrame(libraryFragment);
             }
         });
+    }
 
-        mSubscriptionsIV.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                IGeneralDialog dialog = application.getUIHelperComponent().provideGeneralDialog();
+    private void setContentFrame(Fragment fragment) {
 
-                dialog.Subscriptions(MainActivity.this, getSupportFragmentManager());
-            }
-        });
-
-        showDetailFrame(mLibrayIV, new LibraryFragment());
-        showDetailFrame(mAccountIV, new AccountFragment());
-
+        getSupportFragmentManager().beginTransaction()
+                .replace(R.id.content_frame, fragment)
+                .addToBackStack(null)
+                .commit();
     }
 
     public void setFragmentFrame(IFragmentView fragment, View controller, Bundle bundle){
         if (mCurrentFragment.equals(fragment.getClass().getSimpleName())) {
-            if(mIsLandscape) {
-                if(controller == null){
-                    showDetailFragment();
-                }
-
-                fragment.setDetailFrame(controller, getSupportFragmentManager(), bundle);
-            } else {
-                fragment.setContentFragment(getSupportFragmentManager(), bundle);
-            }
+            closeDetailFragment();
+            fragment.setContentFragment(getSupportFragmentManager(), bundle);
         }
     }
 
@@ -238,8 +230,13 @@ public class MainActivity extends ActionBarActivity
 
             if(mCurrentFragment != null){
                 setFragmentFrame(new AccountFragment(), mAccountIV, savedInstanceState);
-                setFragmentFrame(new LibraryFragment(), mLibrayIV, savedInstanceState);
+                setFragmentFrame(new LibraryFragment(), null, savedInstanceState);
                 setFragmentFrame(new LayerFragment(), null, savedInstanceState);
+
+                setFragmentFrame(new LayerDetailFragment(), null, savedInstanceState);
+                setFragmentFrame(new LayerFolderDetailFragment(), null, savedInstanceState);
+                setFragmentFrame(new DocumentDetailFragment(), null, savedInstanceState);
+                setFragmentFrame(new DocumentFolderDetailFragment(), null, savedInstanceState);
             }
         }
 
@@ -257,44 +254,20 @@ public class MainActivity extends ActionBarActivity
 
                     outState.putString(CURRENT_FRAGMENT, mCurrentFragment);
                 }
+            } else {
+                setCurrentFragmentString(outState);
             }
         } else {
-            mCurrentFragment =  getContentFragment().getClass().getSimpleName();
-
-            outState.putString(CURRENT_FRAGMENT , mCurrentFragment);
+            setCurrentFragmentString(outState);
         }
 
         super.onSaveInstanceState(outState);
     }
 
-    private void showDetailFrame(ImageView control, final Fragment fragment) {
-        control.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Fragment currentFragment = getDetailFragment();
+    private void setCurrentFragmentString(Bundle outState) {
+        mCurrentFragment = getContentFragment().getClass().getSimpleName();
 
-                if (currentFragment != null) {
-                    if (fragment.getClass().getSimpleName().equals(currentFragment.getClass().getSimpleName()) && mDetailFrame.getVisibility() == View.VISIBLE) {
-                        //If the fragment is Visible and already the target fragment just hide the frame
-                        mDetailFrame.setVisibility(View.GONE);
-                    } else {
-                        setDetailFragment();
-                    }
-                } else {
-                    setDetailFragment();
-                }
-            }
-
-            protected void setDetailFragment() {
-                mDetailFrame.setVisibility(View.VISIBLE);
-
-                FragmentManager fragmentManager = getSupportFragmentManager();
-
-                fragmentManager.beginTransaction()
-                        .replace(R.id.detail_frame, fragment)
-                        .addToBackStack(null).commit();
-            }
-        });
+        outState.putString(CURRENT_FRAGMENT, mCurrentFragment);
     }
 
     public void determineOrientation(){
@@ -306,11 +279,7 @@ public class MainActivity extends ActionBarActivity
             mIsLandscape = false;
         }
 
-    }
-
-    @Override
-    protected void onResume() {
-        super.onResume();
+        application.setIsLandscape(mIsLandscape);
     }
 
     @Override
@@ -321,7 +290,14 @@ public class MainActivity extends ActionBarActivity
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        Fragment fragment = getSupportFragmentManager().findFragmentById(R.id.content_frame);
+        Fragment fragment;
+
+        if(mIsLandscape){
+            fragment = getDetailFragment();
+        } else {
+            fragment = getContentFragment();
+        }
+
         fragment.onActivityResult(requestCode, resultCode, data);
     }
 
@@ -340,16 +316,9 @@ public class MainActivity extends ActionBarActivity
         return super.onOptionsItemSelected(item);
     }
 
-    /* Called whenever we call invalidateOptionsMenu() */
-    @Override
-    public boolean onPrepareOptionsMenu(Menu menu) {
-        return super.onPrepareOptionsMenu(menu);
-    }
-
     @Override
     public void onBackPressed() {
-
-        if(getContentFragment().getClass().getSimpleName().equals(GoogleMapFragment.class.getSimpleName())){
+        if(isGoogleMapFragment()){
             IGeneralDialog dialog = application.getUIHelperComponent().provideGeneralDialog();
 
             if(mIsAdmin) {
@@ -359,22 +328,53 @@ public class MainActivity extends ActionBarActivity
             }
         } else {
             super.onBackPressed();
-        }
 
+            if(getContentFragment() != null && mIsLandscape) {
+                if(isGoogleMapFragment()){
+                    openLayersDrawer();
+
+                    new Handler().postDelayed(new Runnable() {
+
+            /*
+             * Showing splash screen with a timer. This will be useful when you
+             * want to show case your app logo / company
+             */
+
+                        @Override
+                        public void run() {
+                            closeLayerDrawer();
+                        }
+                    }, 20);
+
+                }
+            }
+        }
+    }
+
+    protected boolean isGoogleMapFragment() {
+        return getContentFragment().getClass().getSimpleName().equals(GoogleMapFragment.class.getSimpleName());
     }
 
     @Override
     public void onNavigationDrawerItemSelected(int position) {
-        Fragment pageFragment = setContentFragment(position);
+        try {
+            Fragment pageFragment = setContentFragment(position);
 
-        if (pageFragment == null) return;
+            if (pageFragment == null) return;
 
-        FragmentManager fragmentManager = getSupportFragmentManager();
+            FragmentManager fragmentManager = getSupportFragmentManager();
 
-        fragmentManager.beginTransaction()
-                .replace(R.id.content_frame, pageFragment)
-                .addToBackStack(null).commit();
+            fragmentManager.beginTransaction()
+                    .replace(R.id.content_frame, pageFragment)
+                    .addToBackStack(null)
+                    .commit();
+
+        } catch (Exception e){
+            return;
+        }
     }
+
+
 
     protected Fragment setContentFragment(int position) {
         mIsAdmin = application.getIsAdminUser();
@@ -388,6 +388,11 @@ public class MainActivity extends ActionBarActivity
         } else {
             return mMainNavCtrl.setStandardView(mMap, mMapFragment, position);
         }
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
     }
 
     public Fragment getContentFragment(){
@@ -431,11 +436,6 @@ public class MainActivity extends ActionBarActivity
     }
 
     @Override
-    public void onFragmentInteraction(String title) {
-        getSupportActionBar().setTitle(title);
-    }
-
-    @Override
     public void closeDetailFragment() {
         FrameLayout frameLayout = (FrameLayout)findViewById(R.id.detail_frame);
 
@@ -443,11 +443,19 @@ public class MainActivity extends ActionBarActivity
             frameLayout.setVisibility(View.GONE);
         }
 
-        ((GoogleMapFragment)getContentFragment()).clearHighlights();
+        try {
+            ((GoogleMapFragment) getContentFragment()).clearHighlights();
+        }catch (Exception e){
+            return;
+        }
     }
 
     @Override
     public void showDetailFragment() {
+        if(mDetailFrame == null){
+            setupLandscapeUI();
+        }
+
         mDetailFrame.setVisibility(View.VISIBLE);
     }
 
@@ -475,6 +483,7 @@ public class MainActivity extends ActionBarActivity
         return findViewById(R.id.navigation_drawer);
     }
 
+    @Override
     public Fragment getDetailFragment() {
         return getSupportFragmentManager().findFragmentById(R.id.detail_frame);
     }

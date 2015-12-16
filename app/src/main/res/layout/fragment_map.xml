@@ -74,6 +74,15 @@
                 <ImageView
                     android:layout_width="36dp"
                     android:layout_height="match_parent"
+                    android:id="@+id/libraryIV"
+                    android:src="@drawable/ic_folder_multiple_outline_grey600_24dp"
+                    android:layout_gravity="center_vertical"
+                    android:layout_alignEnd="@+id/showLayersIV"
+                    android:layout_marginRight="64dp"/>
+
+                <ImageView
+                    android:layout_width="36dp"
+                    android:layout_height="match_parent"
                     android:id="@+id/showLayersIV"
                     android:src="@drawable/ic_layers_grey600_36dp"
                     android:layout_gravity="center_vertical"

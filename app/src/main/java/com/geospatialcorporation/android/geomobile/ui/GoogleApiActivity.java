@@ -212,7 +212,7 @@ public class GoogleApiActivity extends Activity implements
         // We've resolved any connection errors.  mGoogleApiClient can be used to
         // access Google APIs on behalf of the user.
         // TODO: store authtoken send to geounderground api
-        Log.d(TAG, "connected");
+        //Log.d(TAG, "connected");
         // code
     }
 

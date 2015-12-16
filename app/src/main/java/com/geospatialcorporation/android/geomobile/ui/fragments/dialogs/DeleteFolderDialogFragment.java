@@ -12,33 +12,20 @@ import com.geospatialcorporation.android.geomobile.application;
 import com.geospatialcorporation.android.geomobile.library.DI.Analytics.Models.GoogleAnalyticEvent;
 import com.geospatialcorporation.android.geomobile.library.DI.TreeServices.Interfaces.IFolderTreeService;
 import com.geospatialcorporation.android.geomobile.models.Folders.Folder;
+import com.geospatialcorporation.android.geomobile.ui.fragments.dialogs.action_dialogs.folder.FolderActionDialogBase;
 import com.geospatialcorporation.android.geomobile.ui.fragments.dialogs.base.GeoDialogFragmentBase;
 
 
-public class DeleteFolderDialogFragment extends GeoDialogFragmentBase {
-    public Folder getFolder() {
-        return mFolder;
-    }
-
-    public void setFolder(Folder folder) {
-        mFolder = folder;
-    }
-
-    Folder mFolder;
-    IFolderTreeService mService;
-
-    public void init(Context context, Folder folder){
-        setContext(context);
-        setFolder(folder);
-        mService = application.getTreeServiceComponent().provideFolderTreeService();
-        mAnalytics = application.getAnalyticsComponent().provideGeoAnalytics();
-
-    }
-
+public class DeleteFolderDialogFragment extends FolderActionDialogBase {
 
     @NonNull
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState){
+
+        if(savedInstanceState != null){
+            mFolder = savedInstanceState.getParcelable(FOLDER_DIALOG);
+            init(mFolder);
+        }
 
         return getDialogBuilder()
                 .setTitle(R.string.are_you_sure_title)

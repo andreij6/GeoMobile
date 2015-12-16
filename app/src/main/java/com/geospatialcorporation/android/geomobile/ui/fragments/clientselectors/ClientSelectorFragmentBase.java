@@ -109,8 +109,13 @@ public abstract class ClientSelectorFragmentBase extends Fragment implements ICo
     @Override
     public Loader<Cursor> onCreateLoader(int id, Bundle args) {
         String[] selectionArgs = {"" + mClientTypeCode, "0"};
-        return new CursorLoader(getActivity(), GeoUndergoundProvider.Subscriptions.CONTENT_URI, null,
-                SubscriptionColumns.TYPE + " = ? AND " + SubscriptionColumns.SSP + " = ?", selectionArgs, null);
+        return new CursorLoader(
+                getActivity(),
+                GeoUndergoundProvider.Subscriptions.CONTENT_URI,
+                null,
+                SubscriptionColumns.TYPE + " = ? AND " + SubscriptionColumns.SSP + " = ?",
+                selectionArgs,
+                SubscriptionColumns.NAME + " COLLATE NOCASE ASC");
     }
 
     @Override

@@ -51,11 +51,7 @@ public class DocumentDetailPanelFragment extends GeoViewFragmentBase {
     }
 
     private DocumentDetailFragment setContentFragment() {
-        if(application.getIsLandscape()){
-            return (DocumentDetailFragment) application.getMainActivity().getDetailFragment();
-        } else {
-            return (DocumentDetailFragment) application.getMainActivity().getContentFragment();
-        }
+        return (DocumentDetailFragment) application.getMainActivity().getContentFragment();
     }
 
     protected void handleArgs() {

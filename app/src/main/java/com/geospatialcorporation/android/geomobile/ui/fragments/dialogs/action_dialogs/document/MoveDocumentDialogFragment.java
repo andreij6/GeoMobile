@@ -24,7 +24,6 @@ import butterknife.Bind;
 import butterknife.ButterKnife;
 
 public class MoveDocumentDialogFragment extends DocumentActionDialogBase implements ISpinnerListener<Folder> {
-    TreeService mTreeService;
     List<Folder> mFolders;
     Folder mSelected;
 
@@ -33,6 +32,12 @@ public class MoveDocumentDialogFragment extends DocumentActionDialogBase impleme
     @NonNull
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState){
+
+        if(savedInstanceState != null){
+            mDocument = savedInstanceState.getParcelable(DOCUMENT_DIALOG);
+
+            init(mDocument);
+        }
 
         IGetDocumentsTask task = application.getTasksComponent().provideGetDocumentsTask();
         task.getDocumentFolders(this);

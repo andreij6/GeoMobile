@@ -62,11 +62,7 @@ public class ListItemAdapter extends GeoRecyclerAdapterBase<ListItemAdapter.Hold
     }
 
     private void setInfoFrame() {
-        if(application.getIsLandscape()){
-            mInfoFrame = R.id.detail_frame;
-        } else {
-            mInfoFrame = R.id.content_frame;
-        }
+        mInfoFrame = R.id.content_frame;
     }
 
     @Override

@@ -23,8 +23,8 @@ public class CreateDialogFragmentBase extends GeoDialogFragmentBase {
 
 
 
-    public void init(Context context, Folder folder){
-        setContext(context);
+    public void init(Folder folder){
+        setContext(getActivity());
         setFolder(folder);
         mAnalytics = application.getAnalyticsComponent().provideGeoAnalytics();
     }
@@ -33,11 +33,11 @@ public class CreateDialogFragmentBase extends GeoDialogFragmentBase {
     protected IGeoAnalytics mAnalytics;
 
     protected AlertDialog.Builder getDialogBuilder(){
-        return new AlertDialog.Builder(mContext);
+        return new AlertDialog.Builder(getContext());
     }
 
     protected View getDialogView(int layoutId){
-        LayoutInflater inflater = LayoutInflater.from(mContext);
+        LayoutInflater inflater = LayoutInflater.from(getContext());
 
         return inflater.inflate(layoutId, null);
     }

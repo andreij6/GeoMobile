@@ -5,6 +5,7 @@ import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.content.ContextCompat;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -20,10 +21,12 @@ import com.geospatialcorporation.android.geomobile.library.helpers.ProgressDialo
 import com.geospatialcorporation.android.geomobile.library.panelmanager.PanelManager;
 import com.geospatialcorporation.android.geomobile.library.sectionbuilders.implementations.LayerTreeSectionBuilder;
 import com.geospatialcorporation.android.geomobile.models.Folders.Folder;
+import com.geospatialcorporation.android.geomobile.models.Layers.Layer;
 import com.geospatialcorporation.android.geomobile.models.ListItem;
 import com.geospatialcorporation.android.geomobile.ui.Interfaces.IContentRefresher;
 import com.geospatialcorporation.android.geomobile.ui.Interfaces.IFragmentView;
 import com.geospatialcorporation.android.geomobile.ui.Interfaces.IPostExecuter;
+import com.geospatialcorporation.android.geomobile.ui.Interfaces.RestoreSettings;
 import com.geospatialcorporation.android.geomobile.ui.fragments.detail_fragment.LayerFolderDetailFragment;
 import com.geospatialcorporation.android.geomobile.ui.fragments.panel_fragments.tree_fragment_panels.LayerFolderPanelFragment;
 
@@ -36,7 +39,10 @@ public class LayerFragment extends RecyclerTreeFragment implements IContentRefre
 
     ProgressDialogHelper mProgressDialogHelper;
     int mFolderId;
-    
+    LayerRestoreSettings mRestoreSettings;
+
+    static String RESTORE_SETTINGS_KEY = LayerRestoreSettings.class.getSimpleName();
+
     @Nullable
     @OnClick(R.id.OptionsFab)
     public void optionsDropDown(){
@@ -89,6 +95,7 @@ public class LayerFragment extends RecyclerTreeFragment implements IContentRefre
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        mSavedInstanceState = savedInstanceState;
         setView(inflater, container, R.layout.fragment_recyclertree);
         mContext = getActivity();
 
@@ -103,10 +110,7 @@ public class LayerFragment extends RecyclerTreeFragment implements IContentRefre
         mSwipeRefreshLayout.setOnRefreshListener(refresher.build(mSwipeRefreshLayout, this));
         mSwipeRefreshLayout.setProgressBackgroundColorSchemeColor(ContextCompat.getColor(mContext, R.color.white));
 
-
-        if(mIsLandscape){
-            mParentFolder.setText(getString(R.string.layer_tree));
-        }
+        mFolderId = 0;
 
         handleArguments();
 
@@ -118,25 +122,50 @@ public class LayerFragment extends RecyclerTreeFragment implements IContentRefre
     }
 
     @Override
+    protected String getTreeName() {
+        return getString(R.string.layer_tree);
+    }
+
+    @Override
+    public Fragment getNewInstanceOfCurrentFragment() {
+        return new LayerFragment();
+    }
+
+    @Override
     public void handleArguments() {
         Bundle args = getArguments();
         IGetLayersTask task = application.getTasksComponent().provideLayersTask();
-        mFolderId = 0;
 
         if(args != null) {
             mFolderId = args.getInt(Folder.FOLDER_INTENT, 0);
         }
 
-        mProgressHelper = new ProgressDialogHelper(mContext);
-        mProgressHelper.toggleProgressDialog();
+        if(mSavedInstanceState == null){
+            mRestoreSettings = (LayerRestoreSettings) application.getRestoreSettings(RESTORE_SETTINGS_KEY);
 
-        task.getByFolder(new GetLayersByFolderTaskParams(getFragmentManager(), mContext, this), mFolderId);
+            if (mRestoreSettings != null) {
+                mFolderId = mRestoreSettings.getEntityConditionally(mFolderId);
+            }
+
+            mProgressHelper = new ProgressDialogHelper(mContext);
+            mProgressHelper.toggleProgressDialog();
+
+            task.getByFolder(new GetLayersByFolderTaskParams(getFragmentManager(), mContext, this), mFolderId);
+        }
+
+
     }
 
     @Override
     public void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
-        outState.putInt(Folder.FOLDER_INTENT, mFolderId);
+        //outState.putInt(Folder.FOLDER_INTENT, mFolderId);
+        if(mRestoreSettings != null){
+            mRestoreSettings.onSaveInstance(mFolderId, RESTORE_SETTINGS_KEY);
+        } else {
+            application.setRestoreSettings(LayerRestoreSettings.newInstance(mFolderId), RESTORE_SETTINGS_KEY);
+        }
+
     }
 
     @Override
@@ -151,17 +180,12 @@ public class LayerFragment extends RecyclerTreeFragment implements IContentRefre
     }
 
     @Override
-    public void setDetailFrame(View view, FragmentManager fm, Bundle bundle) {
-        setFrame(R.id.detail_frame, fm, bundle);
-    }
-
-    @Override
     public void setContentFragment(FragmentManager fm, Bundle bundle) {
         setFrame(R.id.content_frame, fm, bundle);
     }
 
     private void setFrame(int frame, FragmentManager fm, Bundle bundle){
-        Fragment fragment = new LayerFragment();
+        LayerFragment fragment = new LayerFragment();
 
         if(bundle != null){
             fragment.setArguments(bundle);
@@ -171,6 +195,18 @@ public class LayerFragment extends RecyclerTreeFragment implements IContentRefre
                 .replace(frame, this)
                 .addToBackStack(null)
                 .commit();
+    }
+
+    public static class LayerRestoreSettings extends RestoreSettings<Integer> {
+
+        public static LayerRestoreSettings newInstance(int folderId) {
+            LayerRestoreSettings result = new LayerRestoreSettings();
+            result.setShouldRestore(true);
+            result.setEntity(folderId);
+            return result;
+        }
+
+
     }
 
 }

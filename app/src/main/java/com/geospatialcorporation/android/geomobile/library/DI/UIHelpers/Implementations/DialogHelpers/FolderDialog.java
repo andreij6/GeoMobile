@@ -14,14 +14,14 @@ public class FolderDialog implements IFolderDialog {
     @Override
     public void create(Folder parent, Context context, FragmentManager manager) {
         CreateFolderDialogFragment c = new CreateFolderDialogFragment();
-        c.init(context, parent);
+        c.init(parent);
         c.show(manager, "Folder Creator");
     }
 
     @Override
     public void delete(Folder entity, Context context, FragmentManager manager) {
         DeleteFolderDialogFragment d = new DeleteFolderDialogFragment();
-        d.init(context, entity);
+        d.init(entity);
         d.show(manager, "Delete Folder");
     }
 
@@ -33,7 +33,7 @@ public class FolderDialog implements IFolderDialog {
     @Override
     public void rename(Folder entity, Context context, FragmentManager manager) {
         RenameFolderActionDialogFragment r = new RenameFolderActionDialogFragment();
-        r.init(context, entity);
+        r.init(entity);
         r.show(manager, "Rename Folder");
     }
 

@@ -39,11 +39,7 @@ public class LayerDetailPanelFragment extends GeoViewFragmentBase {
     }
 
     private LayerDetailFragment setContentFragment() {
-        if(application.getIsLandscape()){
-            return (LayerDetailFragment)application.getMainActivity().getDetailFragment();
-        } else {
-            return (LayerDetailFragment)application.getMainActivity().getContentFragment();
-        }
+        return (LayerDetailFragment)application.getMainActivity().getContentFragment();
     }
 
     protected void handleArgs() {

@@ -17,6 +17,8 @@ import com.geospatialcorporation.android.geomobile.models.Document.Document;
 import com.geospatialcorporation.android.geomobile.ui.fragments.dialogs.base.GeoDialogFragmentBase;
 
 public class DownloadDialogFragment extends GeoDialogFragmentBase {
+    private static final String DOCUMENT_DIALOG = "document_dialog";
+
     //region Getters & Setters
     public Document getDocument() {
         return mDocument;
@@ -34,12 +36,15 @@ public class DownloadDialogFragment extends GeoDialogFragmentBase {
     @NonNull
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {
+        if(savedInstanceState != null){
+            mDocument = savedInstanceState.getParcelable(DOCUMENT_DIALOG);
+        }
         // Use the Builder class for convenient dialog construction
-        AlertDialog.Builder builder = new AlertDialog.Builder(mContext);
+        AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
 
         mAnalytics = application.getAnalyticsComponent().provideGeoAnalytics();
 
-        LayoutInflater inflater = LayoutInflater.from(mContext);
+        LayoutInflater inflater = LayoutInflater.from(getActivity());
         View v = inflater.inflate(R.layout.dialog_download, null);
         TextView documentName = (TextView)v.findViewById(R.id.documentName);
         documentName.setText(mDocument.getNameWithExt());
@@ -62,5 +67,11 @@ public class DownloadDialogFragment extends GeoDialogFragmentBase {
                 });
 
         return builder.create();
+    }
+
+    @Override
+    public void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        outState.putParcelable(DOCUMENT_DIALOG, mDocument);
     }
 }

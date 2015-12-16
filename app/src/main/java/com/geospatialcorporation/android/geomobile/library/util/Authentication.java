@@ -125,7 +125,7 @@ public class Authentication {
             public void success(Response result, Response response) {
                 String responseBody = new String(((TypedByteArray) result.getBody()).getBytes());
 
-                Log.d(TAG, "emailLoginStart success. Response mBody: " + responseBody);
+                //Log.d(TAG, "emailLoginStart success. Response mBody: " + responseBody);
 
                 parseStartString(responseBody);
 
@@ -134,8 +134,8 @@ public class Authentication {
 
             @Override
             public void failure(RetrofitError retrofitError) {
-                Log.d(TAG, "emailLoginStart failure");
-                Log.d(TAG, "Message: " + retrofitError.getMessage());
+                //Log.d(TAG, "emailLoginStart failure");
+                //Log.d(TAG, "Message: " + retrofitError.getMessage());
                 Log.e(TAG, "Error calling: " + retrofitError.getUrl());
 
                 Response response = retrofitError.getResponse();
@@ -164,13 +164,12 @@ public class Authentication {
         // Returns {attemptId}.{base64Key}
         String xGeoHeader = getXGeoUndergroundHeader();
 
-        Log.d(TAG, xGeoHeader);
+        //Log.d(TAG, xGeoHeader);
 
         mService.start(xGeoHeader, new TypedString(fixedKey), callback);
     }
 
     private void postEmailLogin() {
-        Log.d(TAG, "Beginning postEmailLogin");
         LoginBody loginBody = new LoginBody(mLoginAttemptId, mUsername, mPassword);
 
         // required because order of properties matters for hash
@@ -223,33 +222,25 @@ public class Authentication {
 
         String signature = getLatestSignature();
 
-        Log.d(TAG, "Login Attempt, Email, Password: " + mLoginAttemptId + " | " + mUsername + " | " + mPassword);
         try { Log.d(TAG, "Login Attempt Salt: " + new String(mLoginAttemptSalt, "UTF-8")); } catch (Exception e) { Log.d(TAG, "Couldn't convert mLoginAttemptSalt to string."); }
-        Log.d(TAG, "JSON Body: " + mBody);
-        Log.d(TAG, "Encrypted JSON Body: " + encryptedJSONBody);
-        Log.d(TAG, "Signature: " + signature);
+        //Log.d(TAG, "Encrypted JSON Body: " + encryptedJSONBody);
+        //Log.d(TAG, "Signature: " + signature);
 
         mService.login(getXGeoUndergroundHeader(), signature, new TypedString(encryptedJSONBody), callback);
     }
 
     //region Helpers
     private String getLatestSignature() {
-        Log.d(TAG, "Beginning getLatestSignature");
+        //Log.d(TAG, "Beginning getLatestSignature");
         String returnString = null;
         try {
-            Log.d(TAG, "HmacSHA256 salt1: " + new String(mLoginAttemptSalt, "UTF-8"));
-            Log.d(TAG, "HmacSHA256 salt2: " + new String(keyTwo, "UTF-8"));
-
             String saltKeyTwo = Base64.encodeToString(concat(Base64.decode(mLoginAttemptSalt, Base64.NO_WRAP), Base64.decode(keyTwo, Base64.NO_WRAP)), Base64.NO_WRAP);
 
             String preHash = versionId + "." + getDeviceId() + "." + mBody;
 
-            Log.d(TAG, "HmacSHA256 on: " + preHash);
-            Log.d(TAG, "HmacSHA256 secret: " + saltKeyTwo);
 
             returnString = testHmac(preHash, saltKeyTwo);
 
-            Log.d(TAG, "HmacSHA256 final: " + returnString);
         } catch (Exception e) {
             Log.e(TAG, "getLatestSignature error: " + e.getMessage());
 
@@ -260,7 +251,7 @@ public class Authentication {
     }
 
     private String encryptRSA(String content) {
-        Log.d(TAG, "Beginning encryptRSA");
+        //Log.d(TAG, "Beginning encryptRSA");
         String returnString = null;
         try {
             KeyFactory factory = KeyFactory.getInstance("RSA");
@@ -281,12 +272,12 @@ public class Authentication {
             mAnalytics.sendException(e);
         }
 
-        Log.d(TAG, "Completed encryptRSA");
+        //Log.d(TAG, "Completed encryptRSA");
         return returnString;
     }
 
     private static String decryptAES(String base64Content, boolean returnBase64) {
-        Log.d(TAG, "Beginning decryptAES");
+        //Log.d(TAG, "Beginning decryptAES");
         String returnString = null;
         try {
             byte[] base64ContentBytes = Base64.decode(base64Content, Base64.NO_WRAP);
@@ -301,7 +292,7 @@ public class Authentication {
             Log.e(TAG, "decryptAES error: " + e.getMessage());
         }
 
-        Log.d(TAG, "Completed decryptAES");
+        //Log.d(TAG, "Completed decryptAES");
         return returnString;
     }
 
@@ -331,18 +322,18 @@ public class Authentication {
         String[] loginAttemptStrings = theStartString.split("\\.");
 
         if (loginAttemptStrings.length != 2) {
-            Log.d(TAG, "emailLoginStart error: Too many strings after split.");
+            //Log.d(TAG, "emailLoginStart error: Too many strings after split.");
         }
 
         try {
             String loginAttemptIdString = loginAttemptStrings[0];
-            Log.d(TAG, "emailLoginStart setting mLoginAttemptId to: " + loginAttemptIdString);
+            //Log.d(TAG, "emailLoginStart setting mLoginAttemptId to: " + loginAttemptIdString);
             mLoginAttemptId = loginAttemptIdString;
 
-            Log.d(TAG, "emailLoginStart setting mLoginAttemptSalt to: " + loginAttemptStrings[1]);
+            //Log.d(TAG, "emailLoginStart setting mLoginAttemptSalt to: " + loginAttemptStrings[1]);
             mLoginAttemptSalt = loginAttemptStrings[1].getBytes("UTF-8");
         } catch (Exception e) {
-            Log.d(TAG, "emailLoginStart error: " + e.getMessage());
+            //Log.d(TAG, "emailLoginStart error: " + e.getMessage());
 
             mAnalytics.sendException(e);
         }
@@ -352,35 +343,34 @@ public class Authentication {
         String returnString = "";
         try {
             byte[] secretKey = secretAccessKey.getBytes("UTF-8");
-            Log.d(TAG,"Secret key");
             StringBuilder sb = new StringBuilder();
             for (byte test : secretKey) {
                 sb.append(test);
                 sb.append(',');
             }
-            Log.d(TAG, sb.toString());
+            //Log.d(TAG, sb.toString());
 
-            Log.d(TAG,"data");
+            //Log.d(TAG,"data");
             sb = new StringBuilder();
             byte[] bytes = data.getBytes("UTF-8");
             for (byte test : bytes) {
                 sb.append(test);
                 sb.append(',');
             }
-            Log.d(TAG, sb.toString());
+            //Log.d(TAG, sb.toString());
 
             SecretKeySpec signingKey = new SecretKeySpec(secretKey, "HmacSHA256");
             Mac mac = Mac.getInstance("HmacSHA256");
             mac.init(signingKey);
 
             byte[] rawHmac = mac.doFinal(bytes);
-            Log.d(TAG, "testHmac started");
+            //Log.d(TAG, "testHmac started");
 
             returnString = new String(Base64.encode(rawHmac, Base64.NO_WRAP), Charsets.UTF_8);
 
-            Log.d(TAG, returnString);
+            //Log.d(TAG, returnString);
         } catch (Exception e) {
-            Log.e(TAG, "testHmac error");
+            //Log.e(TAG, "testHmac error");
 
             mAnalytics.sendException(e);
         }

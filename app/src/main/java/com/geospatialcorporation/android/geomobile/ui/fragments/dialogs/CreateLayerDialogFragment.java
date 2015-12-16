@@ -28,6 +28,8 @@ public class CreateLayerDialogFragment extends CreateDialogFragmentBase {
         View v = getDialogView(R.layout.dialog_create_layer);
 
         final EditText name = (EditText)v.findViewById(R.id.layerNameInput);
+        showKeyboard(name);
+
         final RadioButton point = (RadioButton)v.findViewById(R.id.pointRadio);
         final RadioButton polygon = (RadioButton)v.findViewById(R.id.polygonRadio);
         final RadioButton line = (RadioButton)v.findViewById(R.id.lineRadio);
@@ -53,12 +55,14 @@ public class CreateLayerDialogFragment extends CreateDialogFragmentBase {
                 mAnalytics.trackClick(new GoogleAnalyticEvent().CreateLayer());
 
                 layerService.create(name.getText().toString(), shape, mFolder.getId());
+                hideKeyBoard(name);
 
             }
         }).setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
                 CreateLayerDialogFragment.this.getDialog().cancel();
+                hideKeyBoard(name);
             }
         });
 

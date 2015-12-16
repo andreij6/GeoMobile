@@ -109,9 +109,9 @@ public class DocumentsTask implements IGetDocumentsTask {
                 mCurrentFolder.setFolders(folders);
                 mCurrentFolder.setDocuments(documents);
             } catch (RetrofitError e) {
-                Log.d(TAG, "Messed up.");
+                //Log.d(TAG, "Messed up.");
             } catch (Exception e) {
-                Log.d(TAG, e.getMessage());
+                //Log.d(TAG, e.getMessage());
             }
 
             return mCurrentFolder;

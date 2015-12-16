@@ -109,7 +109,7 @@ public class FolderTreeService implements IFolderTreeService {
 
             mFolderRepo.update(folder, folderId);
         } else {
-            String message = application.getAppContext().getString(R.string.not_authorized_to_rename_layer);
+            String message = application.getAppContext().getString(R.string.not_authorized_to_rename_folder);
 
             Toast.makeText(application.getAppContext(), message, Toast.LENGTH_LONG).show();
         }

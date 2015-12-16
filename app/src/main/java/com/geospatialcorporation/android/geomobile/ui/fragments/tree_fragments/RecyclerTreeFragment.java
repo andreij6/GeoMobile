@@ -44,11 +44,11 @@ public abstract class RecyclerTreeFragment extends GeoViewFragmentBase {
     @Bind(R.id.sliding_layout) SlidingUpPanelLayout mPanel;
     @Nullable
     @Bind(R.id.OptionsFab) FloatingActionButton mOptionsSlider;
-    @Nullable @Bind(R.id.landOptionsIV) ImageView mLandscapeOptions;
     @Nullable @Bind(R.id.showNavIV1) ImageView mNavBars;
     @Nullable @Bind(R.id.showNavIV2) ImageView mNavLogo;
     @Bind(R.id.title) TextView mTitle;
     @Bind(R.id.folderInformation) ImageView mInfo;
+    @Nullable @Bind(R.id.backIV) ImageView mBackIV;
     @Nullable @Bind(R.id.sectionTitle) TextView mParentFolder;
 
 
@@ -72,16 +72,24 @@ public abstract class RecyclerTreeFragment extends GeoViewFragmentBase {
 
             }
         } catch (NullPointerException nullpointer){
-            Log.d(TAG, nullpointer.getMessage());
+            //Log.d(TAG, nullpointer.getMessage());
         } catch (Exception e){
-            Log.d(TAG, e.getMessage());
+            //Log.d(TAG, e.getMessage());
         } finally {
             mProgressHelper.hideProgressDialog();
         }
     }
 
     private void landscapeOnPostExecute() {
-        canEdit(mLandscapeOptions);
+        if(mCurrentFolder.getParent() == null) {
+            mParentFolder.setText(getTreeName());
+
+        } else {
+            mParentFolder.setText(mCurrentFolder.getParent().getProperName());
+            mBackIV.setVisibility(View.VISIBLE);
+        }
+
+        canEdit(mOptionsSlider);
 
         mTitle.setText(mCurrentFolder.getProperName());
 
@@ -93,6 +101,8 @@ public abstract class RecyclerTreeFragment extends GeoViewFragmentBase {
             options.setVisibility(View.VISIBLE);
         }
     }
+
+    protected abstract String getTreeName();
 
     private void portraitOnPostExecute() {
         canEdit(mOptionsSlider);
@@ -128,6 +138,8 @@ public abstract class RecyclerTreeFragment extends GeoViewFragmentBase {
         buildRecycler();
     }
 
+    public abstract Fragment getNewInstanceOfCurrentFragment();
+
     @Nullable
     @OnClick(R.id.goToMapIV)
     public void goToMapIV(){
@@ -142,6 +154,39 @@ public abstract class RecyclerTreeFragment extends GeoViewFragmentBase {
                     .replace(R.id.content_frame, pageFragment)
                     .addToBackStack(null).commit();
         }
+    }
+
+    @Nullable
+    @OnClick(R.id.sectionTitle)
+    public void goToParent(){
+        backToParent();
+    }
+
+    @Nullable
+    @OnClick(R.id.backIV)
+    public void goBack(){
+        backToParent();
+    }
+
+    private void backToParent() {
+        if(mCurrentFolder.getParent() == null){
+            return;
+        }
+
+        Fragment pageFragment = getNewInstanceOfCurrentFragment();
+
+        Bundle bundle = new Bundle();
+
+        bundle.putInt(Folder.FOLDER_INTENT, mCurrentFolder.getParent().getId());
+
+        pageFragment.setArguments(bundle);
+
+        FragmentManager fragmentManager = getFragmentManager();
+
+        fragmentManager.beginTransaction()
+                .replace(R.id.content_frame, pageFragment)
+                .addToBackStack(null)
+                .commit();
     }
 
     @Nullable
@@ -195,4 +240,10 @@ public abstract class RecyclerTreeFragment extends GeoViewFragmentBase {
     public abstract void handleArguments();
 
     protected abstract void buildRecycler();
+
+    public static Bundle rootBundle() {
+        Bundle bundle = new Bundle();
+        bundle.putInt(Folder.FOLDER_INTENT, 0);
+        return bundle;
+    }
 }

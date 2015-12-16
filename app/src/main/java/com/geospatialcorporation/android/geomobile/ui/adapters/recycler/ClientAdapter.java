@@ -80,7 +80,7 @@ public class ClientAdapter extends GeoRecyclerAdapterBase<ClientAdapter.Holder, 
                 mService.setClient(mSelectedSubscription.getId());
             } catch (RetrofitError e) {
                 if (e.getResponse() != null) {
-                    Log.d(TAG, Integer.toString(e.getResponse().getStatus()));
+                    //Log.d(TAG, Integer.toString(e.getResponse().getStatus()));
                 }
             }
 

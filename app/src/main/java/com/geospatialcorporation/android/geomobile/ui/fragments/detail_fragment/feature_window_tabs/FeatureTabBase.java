@@ -71,7 +71,7 @@ public abstract class FeatureTabBase extends GeoViewFragmentBase implements IPan
 
         String responseJson = new Gson().toJson(mResponse);
 
-        Log.d(TAG, responseJson);
+        //Log.d(TAG, responseJson);
 
 
     }

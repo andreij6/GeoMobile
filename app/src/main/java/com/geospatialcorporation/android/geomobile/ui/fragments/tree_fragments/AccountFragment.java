@@ -7,6 +7,7 @@ import android.support.v4.app.FragmentManager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.geospatialcorporation.android.geomobile.R;
@@ -42,6 +43,7 @@ public class AccountFragment extends GeoViewFragmentBase implements IAccountFrag
     @Bind(R.id.cellPhoneLabel) TextView CellPhoneLabel;
     @Bind(R.id.officePhone) TextView OfficePhone;
     @Bind(R.id.officePhoneLabel) TextView OfficePhoneLabel;
+    @Bind(R.id.account_actionbar) RelativeLayout mActionBar;
 
     @Nullable
     @OnClick(R.id.showNavIV1)
@@ -94,7 +96,10 @@ public class AccountFragment extends GeoViewFragmentBase implements IAccountFrag
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState){
         setView(inflater, container, R.layout.fragment_account);
-        SetTitle(R.string.account_title);
+
+        if(application.getIsLandscape()){
+            mActionBar.setVisibility(View.GONE);
+        }
 
         mProcessor.GetUserAccountData(getActivity(), this);
 
@@ -113,11 +118,6 @@ public class AccountFragment extends GeoViewFragmentBase implements IAccountFrag
 
     private IUserAccountProcessor setProcessor() {
         return new UserAccountProcessor();
-    }
-
-    @Override
-    public void setDetailFrame(View view, FragmentManager fm, Bundle bundle) {
-        view.performClick();
     }
 
     @Override

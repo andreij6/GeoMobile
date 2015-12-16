@@ -14,6 +14,12 @@ public class DeleteDocumentDialogFragment extends DocumentActionDialogBase {
     @NonNull
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState){
+        if(savedInstanceState != null){
+            mDocument = savedInstanceState.getParcelable(DOCUMENT_DIALOG);
+
+            init(mDocument);
+        }
+
         return getDialogBuilder()
                 .setTitle(R.string.are_you_sure_title)
                 .setMessage(getString(R.string.are_you_sure) + " " + mDocument.getNameWithExt())

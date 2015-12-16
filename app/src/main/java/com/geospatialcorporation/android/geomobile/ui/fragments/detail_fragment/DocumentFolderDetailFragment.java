@@ -3,6 +3,7 @@ package com.geospatialcorporation.android.geomobile.ui.fragments.detail_fragment
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTabHost;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -18,6 +19,8 @@ import com.geospatialcorporation.android.geomobile.library.constants.GeoPanel;
 import com.geospatialcorporation.android.geomobile.library.helpers.DataHelper;
 import com.geospatialcorporation.android.geomobile.library.panelmanager.PanelManager;
 import com.geospatialcorporation.android.geomobile.models.Folders.Folder;
+import com.geospatialcorporation.android.geomobile.ui.Interfaces.IFragmentView;
+import com.geospatialcorporation.android.geomobile.ui.Interfaces.RestoreSettings;
 import com.geospatialcorporation.android.geomobile.ui.fragments.detail_fragment.folder_tabs.FolderDetailsTab;
 import com.geospatialcorporation.android.geomobile.ui.fragments.detail_fragment.folder_tabs.PermissionsTab;
 import com.geospatialcorporation.android.geomobile.ui.fragments.dialogs.ItemDetailFragment;
@@ -28,7 +31,7 @@ import com.sothree.slidinguppanel.SlidingUpPanelLayout;
 import butterknife.Bind;
 import butterknife.ButterKnife;
 
-public class DocumentFolderDetailFragment extends ItemDetailFragment<Folder> implements TabHost.OnTabChangeListener {
+public class DocumentFolderDetailFragment extends ItemDetailFragment<Folder> implements TabHost.OnTabChangeListener, IFragmentView {
     private static final String TAG = DocumentFolderDetailFragment.class.getSimpleName();
 
     private static final String DETAILS = "Details";
@@ -43,9 +46,14 @@ public class DocumentFolderDetailFragment extends ItemDetailFragment<Folder> imp
 
     IFolderDialog mFolderDialog;
 
+    DocumentFolderRestoreSettings mRestoreSettings;
+    Bundle mBundle;
+
+    static String RESTORE_SETTINGS_KEY = DocumentFolderRestoreSettings.class.getSimpleName();
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState){
-        super.onCreate(savedInstanceState);
+        super.onCreateView(inflater, container, savedInstanceState);
 
         View view = inflater.inflate(R.layout.fragment_tree_detail, null);
 
@@ -57,8 +65,8 @@ public class DocumentFolderDetailFragment extends ItemDetailFragment<Folder> imp
         mPanelManager = new PanelManager.Builder().type(GeoPanel.DOCUMENT_FOLDER_DETAIL).hide().build();
 
         handleArguments();
-        Bundle args = getArguments();
-        args.putString(Folder.FOLDER_TYPE_INTENT, "Document");
+
+
 
         if(mOptions != null) {
             mOptions.bringToFront();
@@ -68,8 +76,8 @@ public class DocumentFolderDetailFragment extends ItemDetailFragment<Folder> imp
 
         tabHost.setup(getActivity(), getChildFragmentManager(), android.R.id.tabcontent);
 
-        tabHost.addTab(tabHost.newTabSpec(DETAILS).setIndicator(createTabView(tabHost.getContext(), R.drawable.details_selector)), FolderDetailsTab.class, args);
-        tabHost.addTab(tabHost.newTabSpec(PERMISSIONS).setIndicator(createTabView(tabHost.getContext(), R.drawable.permissions_selector)), PermissionsTab.class, args);
+        tabHost.addTab(tabHost.newTabSpec(DETAILS).setIndicator(createTabView(tabHost.getContext(), R.drawable.details_selector)), FolderDetailsTab.class, mBundle);
+        tabHost.addTab(tabHost.newTabSpec(PERMISSIONS).setIndicator(createTabView(tabHost.getContext(), R.drawable.permissions_selector)), PermissionsTab.class, mBundle);
 
         tabHost.setCurrentTab(0);
 
@@ -83,12 +91,35 @@ public class DocumentFolderDetailFragment extends ItemDetailFragment<Folder> imp
 
     @Override
     protected void handleArguments() {
-        Bundle args = getArguments();
+        mBundle = getArguments();
 
-        mEntity = args.getParcelable(Folder.FOLDER_INTENT);
+        if(mBundle != null) {
+            mEntity = mBundle.getParcelable(Folder.FOLDER_INTENT);
+        } else {
+            mRestoreSettings = (DocumentFolderRestoreSettings)application.getRestoreSettings(RESTORE_SETTINGS_KEY);
+
+            if (mRestoreSettings != null) {
+                mEntity = mRestoreSettings.getEntity();
+                mBundle = new Bundle();
+                mBundle.putParcelable(Folder.FOLDER_INTENT, mEntity);
+            }
+
+        }
 
         if(mEntity != null){
             mTitle.setText(DataHelper.trimString(mEntity.getProperName(), 15));
+        }
+
+        mBundle.putString(Folder.FOLDER_TYPE_INTENT, "Document");
+    }
+
+    @Override
+    public void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        if(mRestoreSettings != null){
+            mRestoreSettings.onSaveInstance(mEntity, RESTORE_SETTINGS_KEY);
+        } else {
+            application.setRestoreSettings(new DocumentFolderRestoreSettings(mEntity), RESTORE_SETTINGS_KEY);
         }
     }
 
@@ -104,4 +135,27 @@ public class DocumentFolderDetailFragment extends ItemDetailFragment<Folder> imp
 
     }
 
+    @Override
+    public void setContentFragment(FragmentManager fm, Bundle bundle) {
+        setFrame(R.id.content_frame, fm, bundle);
+    }
+
+    private void setFrame(int frame, FragmentManager fm, Bundle bundle){
+        Fragment fragment = new DocumentFolderDetailFragment();
+
+        if (bundle != null) {
+            fragment.setArguments(bundle);
+
+            fm.beginTransaction()
+                    .replace(frame, this)
+                    .addToBackStack(null)
+                    .commit();
+        }
+    }
+
+    public static class DocumentFolderRestoreSettings extends RestoreSettings<Folder>{
+        public DocumentFolderRestoreSettings(Folder folder){
+            super(folder);
+        }
+    }
 }

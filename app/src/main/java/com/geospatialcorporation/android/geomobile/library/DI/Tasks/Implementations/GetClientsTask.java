@@ -65,7 +65,7 @@ public class GetClientsTask implements IGetClientsTask {
 
             } catch (RetrofitError e) {
                 if (e.getResponse() != null) {
-                    Log.d(TAG, e.getResponse().getStatus() + " : Line 112");
+                    //Log.d(TAG, e.getResponse().getStatus() + " : Line 112");
                 }
             }
 
@@ -115,7 +115,7 @@ public class GetClientsTask implements IGetClientsTask {
                 inserted = mContext.getContentResolver().bulkInsert(GeoUndergoundProvider.Subscriptions.CONTENT_URI, cvArray);
             }
 
-            Log.d(TAG, "fETCH clients complete. " + inserted + " Inserted");
+            //Log.d(TAG, "fETCH clients complete. " + inserted + " Inserted");
 
 
         }

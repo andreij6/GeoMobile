@@ -4,6 +4,7 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.geospatialcorporation.android.geomobile.R;
@@ -38,6 +39,8 @@ public class DetailsTab extends GeoDetailsTabBase<Layer> implements IPostExecute
     @Bind(R.id.lastUpdatedLabel)TextView mLastUpdateLabel;
     @Bind(R.id.shapeTypeValue) TextView mShapeType;
     @Bind(R.id.entityCountValue) TextView mFeatureCount;
+    @Bind(R.id.lastUpdateSection) LinearLayout mLastUpdateSection;
+    @Bind(R.id.userUpdateSection) LinearLayout mUserUpdateSection;
     //endregion
 
     @Override
@@ -76,10 +79,8 @@ public class DetailsTab extends GeoDetailsTabBase<Layer> implements IPostExecute
                     mUserUpdated.setText(details.getUpdateUser());
                     mLastUpdatedValue.setText(DateTimeFormatter.format(details.getUpdateDateTime()));
                 } else {
-                    mUserUpdated.setVisibility(View.GONE);
-                    mLastUpdatedValue.setVisibility(View.GONE);
-                    mLastUpdateLabel.setVisibility(View.GONE);
-                    mUserUpdatedLabel.setVisibility(View.GONE);
+                    mUserUpdateSection.setVisibility(View.GONE);
+                    mLastUpdateSection.setVisibility(View.GONE);
                 }
                 mShapeType.setText(mEntity.getReadableGeometryType());
             }

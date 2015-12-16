@@ -3,6 +3,7 @@ package com.geospatialcorporation.android.geomobile.ui.fragments.detail_fragment
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTabHost;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -19,6 +20,8 @@ import com.geospatialcorporation.android.geomobile.library.helpers.DataHelper;
 import com.geospatialcorporation.android.geomobile.library.panelmanager.PanelManager;
 import com.geospatialcorporation.android.geomobile.models.Folders.Folder;
 import com.geospatialcorporation.android.geomobile.models.Layers.Layer;
+import com.geospatialcorporation.android.geomobile.ui.Interfaces.IFragmentView;
+import com.geospatialcorporation.android.geomobile.ui.Interfaces.RestoreSettings;
 import com.geospatialcorporation.android.geomobile.ui.fragments.detail_fragment.layer_tabs.AttributeLayoutTab;
 import com.geospatialcorporation.android.geomobile.ui.fragments.detail_fragment.layer_tabs.DetailsTab;
 import com.geospatialcorporation.android.geomobile.ui.fragments.detail_fragment.layer_tabs.SublayersTab;
@@ -31,8 +34,7 @@ import butterknife.Bind;
 import butterknife.ButterKnife;
 
 public class LayerDetailFragment extends ItemDetailFragment<Layer>
-        implements TabHost.OnTabChangeListener
-{
+        implements TabHost.OnTabChangeListener, IFragmentView {
     private static final String TAG = LayerDetailFragment.class.getSimpleName();
 
     private static final String SUBLAYERS = "Sublayers";
@@ -49,6 +51,11 @@ public class LayerDetailFragment extends ItemDetailFragment<Layer>
     FragmentTabHost mTabHost;
     View mView;
     IFolderTreeService mFolderService;
+    LayerDetailRestoreSettings mRestoreSettings;
+    Bundle mBundle;
+
+    static String RESTORE_SETTINGS_KEY = LayerDetailRestoreSettings.class.getSimpleName();
+
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState){
@@ -69,17 +76,17 @@ public class LayerDetailFragment extends ItemDetailFragment<Layer>
         mTabHost.addTab(
                 mTabHost.newTabSpec(SUBLAYERS)
                 .setIndicator(createTabView(mTabHost.getContext(), R.drawable.sublayers_selector)),
-                SublayersTab.class, getArguments());
+                SublayersTab.class, mBundle);
 
         mTabHost.addTab(
                 mTabHost.newTabSpec(ATTRIBUTES)
                         .setIndicator(createTabView(mTabHost.getContext(), R.drawable.attr_selector)),
-                AttributeLayoutTab.class, getArguments());
+                AttributeLayoutTab.class, mBundle);
 
         mTabHost.addTab(
                 mTabHost.newTabSpec(DETAILS)
                         .setIndicator(createTabView(mTabHost.getContext(), R.drawable.details_selector)),
-                DetailsTab.class, getArguments());
+                DetailsTab.class, mBundle);
 
         mTabHost.setCurrentTab(0);
 
@@ -97,12 +104,21 @@ public class LayerDetailFragment extends ItemDetailFragment<Layer>
 
     @Override
     protected void handleArguments() {
-        Bundle args = getArguments();
+        mBundle = getArguments();
 
-        mEntity = args.getParcelable(Layer.LAYER_INTENT);
+        if(mBundle == null){
+            mRestoreSettings = (LayerDetailRestoreSettings)application.getRestoreSettings(RESTORE_SETTINGS_KEY);
+
+            if(mRestoreSettings != null){
+                mEntity = mRestoreSettings.getEntity();
+                mBundle = new Bundle();
+                mBundle.putParcelable(Layer.LAYER_INTENT, mEntity);
+            }
+        } else {
+            mEntity = mBundle.getParcelable(Layer.LAYER_INTENT);
+        }
 
         if(mEntity != null){
-
             mTitle.setText(DataHelper.trimString(mEntity.getName(), 15));
         }
 
@@ -133,5 +149,35 @@ public class LayerDetailFragment extends ItemDetailFragment<Layer>
         return getChildFragmentManager().findFragmentById(android.R.id.tabcontent);
     }
 
+    @Override
+    public void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        //outState.putParcelable(Layer.LAYER_INTENT, mEntity);
+        if(mRestoreSettings != null){
+            mRestoreSettings.onSaveInstance(mEntity, RESTORE_SETTINGS_KEY);
+        } else {
+            application.setRestoreSettings(new LayerDetailRestoreSettings(mEntity), RESTORE_SETTINGS_KEY);
+        }
+    }
 
+    @Override
+    public void setContentFragment(FragmentManager fm, Bundle bundle) {
+        setFrame(R.id.content_frame, fm, bundle);
+    }
+
+    private void setFrame(int frame, FragmentManager fm, Bundle bundle){
+        Fragment fragment = new LayerDetailFragment();
+
+        fragment.setArguments(bundle);
+
+        fm.beginTransaction()
+                .replace(frame, this)
+                .addToBackStack(null)
+                .commit();
+
+    }
+
+    public static class LayerDetailRestoreSettings extends RestoreSettings<Layer> {
+       public LayerDetailRestoreSettings(Layer layer){ super(layer);}
+    }
 }

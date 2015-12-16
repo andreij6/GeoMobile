@@ -15,14 +15,14 @@ public class LayerDialog implements ILayerDialog {
     @Override
     public void create(Folder parent, Context context, FragmentManager manager) {
         CreateLayerDialogFragment l = new CreateLayerDialogFragment();
-        l.init(context, parent);
+        l.init(parent);
         l.show(manager, "Layer Creator");
     }
 
     @Override
     public void delete(Layer entity, Context context, FragmentManager manager) {
         DeleteLayerDialogFragment d = new DeleteLayerDialogFragment();
-        d.init(context, entity);
+        d.init(entity);
         d.show(manager, "Delete Layer");
     }
 
@@ -34,7 +34,7 @@ public class LayerDialog implements ILayerDialog {
     @Override
     public void rename(Layer entity, Context context, FragmentManager manager) {
         RenameLayerActionDialogFragment d = new RenameLayerActionDialogFragment();
-        d.init(context, entity);
+        d.init(entity);
         d.show(manager, "Rename Layer");
     }
 

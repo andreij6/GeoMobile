@@ -104,6 +104,10 @@ public class MapFeatureDocumentDialogFragment extends GeoDialogFragmentBase impl
         mContext = context;
         mLayerId = layerId;
         mFeatureId = featureId;
+        setComponents();
+    }
+
+    protected void setComponents() {
         mLayerTreeService = application.getTreeServiceComponent().provideLayerTreeService();
         mAnalytics = application.getAnalyticsComponent().provideGeoAnalytics();
         mGetDocumentsTask = application.getTasksComponent().provideGetDocumentsTask();
@@ -112,6 +116,10 @@ public class MapFeatureDocumentDialogFragment extends GeoDialogFragmentBase impl
     @NonNull
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {
+        if(mGetDocumentsTask == null){
+            setComponents();
+        }
+
         mGetDocumentsTask.getAllDocuments(new GetAllDocumentsParam(this, mDocuments));
 
         AlertDialog.Builder builder = getDialogBuilder();

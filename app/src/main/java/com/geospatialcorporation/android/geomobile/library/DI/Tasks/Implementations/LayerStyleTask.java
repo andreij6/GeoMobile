@@ -192,7 +192,7 @@ public class LayerStyleTask implements ILayerStyleTask {
 
         @Override
         public void onBitmapFailed(Drawable errorDrawable) {
-            Log.d(TAG, "Error Loading " + mLegendLayer.getLayer().getName());
+            //Log.d(TAG, "Error Loading " + mLegendLayer.getLayer().getName());
 
             mTargets.remove(activeStyleTarget);
             mTargets = null;
@@ -200,7 +200,7 @@ public class LayerStyleTask implements ILayerStyleTask {
 
         @Override
         public void onPrepareLoad(Drawable placeHolderDrawable) {
-            Log.d(TAG, "On PrepareLoad " + mLegendLayer.getLayer().getName());
+            //Log.d(TAG, "On PrepareLoad " + mLegendLayer.getLayer().getName());
         }
     };
 
@@ -222,12 +222,12 @@ public class LayerStyleTask implements ILayerStyleTask {
 
                 mCallBack.invokeCallback();
             } catch (NullPointerException e) {
-                Log.d(TAG, "null pointer");
+                //Log.d(TAG, "null pointer");
                 e.printStackTrace();
 
                 mAnalytics.sendException(e);
             } catch (Exception e) {
-                Log.d(TAG, "general exception");
+                //Log.d(TAG, "general exception");
                 e.printStackTrace();
 
                 mAnalytics.sendException(e);
@@ -240,7 +240,7 @@ public class LayerStyleTask implements ILayerStyleTask {
 
         @Override
         public void onBitmapFailed(Drawable errorDrawable) {
-            Log.d(TAG, "Bitmap Failed");
+            //Log.d(TAG, "Bitmap Failed");
 
             mTargets.remove(styleTarget);
             mTargets = null;

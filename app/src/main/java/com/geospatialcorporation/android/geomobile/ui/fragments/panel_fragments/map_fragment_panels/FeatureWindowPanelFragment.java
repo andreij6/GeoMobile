@@ -40,7 +40,6 @@ public class FeatureWindowPanelFragment extends GeoViewFragmentBase implements I
     @Bind(R.id.tabHost) FragmentTabHost mTabHost;
     @Nullable @Bind(R.id.closeIV) ImageView mClose;
     @Nullable @Bind(R.id.sliding_layout) SlidingUpPanelLayout mPanel;
-    Boolean mIsPointFeature;
 
     @Nullable
     @OnClick(R.id.closeIV)
@@ -86,13 +85,7 @@ public class FeatureWindowPanelFragment extends GeoViewFragmentBase implements I
     }
 
 
-    public Fragment initialize(Marker highlightedMarker, int selectedLayerId) {
-        if(highlightedMarker != null){
-            mIsPointFeature = true;
-        } else {
-            mIsPointFeature = false;
-        }
-
+    public Fragment initialize(int selectedLayerId) {
         mLayerId = selectedLayerId;
 
         return this;

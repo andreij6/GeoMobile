@@ -44,8 +44,8 @@ public class AuthTokenRetriever {
                 return response.getBody().toString();
 
             } catch (Exception e) {
-                Log.e(TAG, "Login by GoogleAuthToken failed.");
-                Log.d(TAG, e.getMessage());
+                //Log.e(TAG, "Login by GoogleAuthToken failed.");
+                //Log.d(TAG, e.getMessage());
                 this.exception = e;
             }
 
@@ -77,12 +77,12 @@ public class AuthTokenRetriever {
 
                 } catch (RetrofitError e) {
                     if (e.getResponse() != null) {
-                        Log.d(TAG, Integer.toString(e.getResponse().getStatus()));
+                        //Log.d(TAG, Integer.toString(e.getResponse().getStatus()));
 
                         if (e.getResponse().getStatus() == 401) {
-                            Log.d(TAG, "Unauthorized.");
+                            //Log.d(TAG, "Unauthorized.");
                         } else {
-                            Log.d(TAG, e.getResponse().getBody().toString());
+                            //Log.d(TAG, e.getResponse().getBody().toString());
                             application.setIsAdminUser(true);
 
                             mContext.startActivity(new Intent(mContext, SubscriptionSelectorActivity.class));
@@ -123,12 +123,12 @@ public class AuthTokenRetriever {
                     mContext.finish();
                 } catch (RetrofitError e) {
                     if (e.getResponse() != null) {
-                        Log.d(TAG, Integer.toString(e.getResponse().getStatus()));
+                        //Log.d(TAG, Integer.toString(e.getResponse().getStatus()));
 
                         if (e.getResponse().getStatus() == 401) {
-                            Log.d(TAG, "Unauthorized.");
+                            //Log.d(TAG, "Unauthorized.");
                         } else {
-                            Log.d(TAG, e.getResponse().getBody().toString());
+                            //Log.d(TAG, e.getResponse().getBody().toString());
                             application.setIsAdminUser(true);
 
                             mContext.startActivity(new Intent(mContext, SubscriptionSelectorActivity.class));

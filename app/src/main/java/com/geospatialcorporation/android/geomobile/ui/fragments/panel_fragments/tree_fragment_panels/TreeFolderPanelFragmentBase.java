@@ -27,11 +27,7 @@ public abstract class TreeFolderPanelFragmentBase<T> extends GeoViewFragmentBase
     }
 
     private T setConentFragment() {
-        if(application.getIsLandscape()){
-            return (T) application.getMainActivity().getDetailFragment();
-        } else {
-            return (T) application.getMainActivity().getContentFragment();
-        }
+        return (T) application.getMainActivity().getContentFragment();
     }
 
     @Override

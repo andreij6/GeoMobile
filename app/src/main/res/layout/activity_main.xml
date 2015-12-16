@@ -28,7 +28,7 @@
         android:layout_height="match_parent">
 
         <!--
-            As the main content view, the view below consumes the entire
+             As the main content view, the view below consumes the entire
              space available using match_parent in both dimensions.
         -->
         <FrameLayout
@@ -58,7 +58,7 @@
         <fragment
             android:id="@+id/layer_drawer"
             android:name="com.geospatialcorporation.android.geomobile.ui.fragments.drawer.LayerSelectorDrawerFragment"
-            android:layout_width="match_parent"
+            android:layout_width="240dp"
             android:layout_height="match_parent"
             android:layout_gravity="end"
             tools:layout="@layout/fragment_right_navigation_drawer"/>

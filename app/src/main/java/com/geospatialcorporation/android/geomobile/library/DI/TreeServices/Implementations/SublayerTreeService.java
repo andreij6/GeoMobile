@@ -42,7 +42,7 @@ public class SublayerTreeService implements ISublayerTreeService {
         try {
             sublayers = mService.getSublayers(layerId);
         } catch (Exception e){
-            Log.d(TAG, e.getMessage());
+            //Log.d(TAG, e.getMessage());
         }
 
         return sublayers;

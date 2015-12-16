@@ -3,6 +3,7 @@ package com.geospatialcorporation.android.geomobile.ui.fragments.detail_fragment
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -17,6 +18,9 @@ import com.geospatialcorporation.android.geomobile.library.helpers.DateTimeForma
 import com.geospatialcorporation.android.geomobile.library.helpers.FileSizeFormatter;
 import com.geospatialcorporation.android.geomobile.library.panelmanager.PanelManager;
 import com.geospatialcorporation.android.geomobile.models.Document.Document;
+import com.geospatialcorporation.android.geomobile.models.Folders.Folder;
+import com.geospatialcorporation.android.geomobile.ui.Interfaces.IFragmentView;
+import com.geospatialcorporation.android.geomobile.ui.Interfaces.RestoreSettings;
 import com.geospatialcorporation.android.geomobile.ui.fragments.dialogs.ItemDetailFragment;
 import com.geospatialcorporation.android.geomobile.ui.fragments.panel_fragments.tree_fragment_panels.DocumentDetailPanelFragment;
 import com.melnykov.fab.FloatingActionButton;
@@ -25,7 +29,7 @@ import com.sothree.slidinguppanel.SlidingUpPanelLayout;
 import butterknife.Bind;
 import butterknife.ButterKnife;
 
-public class DocumentDetailFragment extends ItemDetailFragment<Document>  {
+public class DocumentDetailFragment extends ItemDetailFragment<Document> implements IFragmentView {
     private static final String TAG = DocumentDetailFragment.class.getSimpleName();
 
     //region Butterknife
@@ -36,6 +40,11 @@ public class DocumentDetailFragment extends ItemDetailFragment<Document>  {
     @Bind(R.id.title) TextView mTitle;
     @Bind(R.id.sliding_layout) SlidingUpPanelLayout mPanel;
     @Nullable @Bind(R.id.optionsIV) FloatingActionButton mOptions;
+
+    DocumentDetailRestoreSettings mRestoreSettings;
+    Bundle mBundle;
+
+    static String RESTORE_SETTINGS_KEY = DocumentDetailRestoreSettings.class.getSimpleName();
 
     @Override
     protected void options() {
@@ -79,7 +88,12 @@ public class DocumentDetailFragment extends ItemDetailFragment<Document>  {
 
         handleArguments();
 
-        mTitle.setText(DataHelper.trimString(mEntity.getNameWithExt(), 15));
+        if(mIsLandscape){
+            mTitle.setText(mEntity.getNameWithExt());
+        } else {
+            mTitle.setText(DataHelper.trimString(mEntity.getNameWithExt(), 15));
+        }
+
         mUploadValue.setText(DateTimeFormatter.format(mEntity.getUploadTime()));
         mFileSizeValue.setText(FileSizeFormatter.format(mEntity.getSize() + ""));
 
@@ -92,8 +106,48 @@ public class DocumentDetailFragment extends ItemDetailFragment<Document>  {
 
     @Override
     protected void handleArguments() {
-        Bundle args = getArguments();
+        mBundle = getArguments();
 
-        mEntity = args.getParcelable(Document.INTENT);
+        if(mBundle == null){
+            mRestoreSettings = (DocumentDetailRestoreSettings)application.getRestoreSettings(RESTORE_SETTINGS_KEY);
+            if(mRestoreSettings != null){
+                mEntity = mRestoreSettings.getEntity();
+            }
+        } else {
+            mEntity = mBundle.getParcelable(Document.INTENT);
+        }
+    }
+
+    @Override
+    public void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        if(mRestoreSettings != null){
+            mRestoreSettings.onSaveInstance(mEntity, RESTORE_SETTINGS_KEY);
+        } else {
+            application.setRestoreSettings(new DocumentDetailRestoreSettings(mEntity), RESTORE_SETTINGS_KEY);
+        }
+    }
+
+    @Override
+    public void setContentFragment(FragmentManager fm, Bundle bundle) {
+        setFrame(R.id.content_frame, fm, bundle);
+    }
+
+    private void setFrame(int frame, FragmentManager fm, Bundle bundle){
+        Fragment fragment = new DocumentDetailFragment();
+
+        if (bundle != null) {
+            fragment.setArguments(bundle);
+
+
+            fm.beginTransaction()
+                    .replace(frame, this)
+                    .addToBackStack(null)
+                    .commit();
+        }
+    }
+
+    public static class DocumentDetailRestoreSettings extends RestoreSettings<Document> {
+        public DocumentDetailRestoreSettings(Document doc){super(doc); }
     }
 }

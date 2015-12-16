@@ -15,6 +15,11 @@ public class DeleteLayerDialogFragment extends LayerActionDialogBase {
     @NonNull
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState){
+        if(savedInstanceState != null){
+            mLayer = savedInstanceState.getParcelable(LAYER_DIALOG);
+            init(mLayer);
+        }
+
         return getDialogBuilder()
                 .setTitle(R.string.are_you_sure_title)
                 .setMessage(getString(R.string.are_you_sure) + " " + mLayer.getName())

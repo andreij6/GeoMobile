@@ -55,6 +55,8 @@ public class CreateAttributeDialogFragment extends AttributesActionDialogBase<La
         mService = application.getTreeServiceComponent().provideLayerTreeService();
         mAnalytics = application.getAnalyticsComponent().provideGeoAnalytics();
 
+        showKeyboard(mName);
+
         builder.setTitle(R.string.add_attribute)
                 .setView(v)
                 .setPositiveButton(R.string.save, new DialogInterface.OnClickListener() {
@@ -64,6 +66,7 @@ public class CreateAttributeDialogFragment extends AttributesActionDialogBase<La
                             mAnalytics.trackClick(new GoogleAnalyticEvent().CreateAttribute());
                             mTask.getOrderNumber(new GetOrderNumberParams(mData, mHidden, mColumnTypes, mName, mDefaultValue, CreateAttributeDialogFragment.this));
                             dialog.cancel();
+                            hideKeyBoard(mName);
                         }
                     }
                 })
@@ -71,6 +74,7 @@ public class CreateAttributeDialogFragment extends AttributesActionDialogBase<La
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
                         dialog.cancel();
+                        hideKeyBoard(mName);
                     }
                 });
 

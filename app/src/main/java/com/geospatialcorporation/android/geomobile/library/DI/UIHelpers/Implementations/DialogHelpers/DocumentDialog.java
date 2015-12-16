@@ -14,14 +14,14 @@ public class DocumentDialog implements IDocumentDialog {
     @Override
     public void move(Document document, Context context, FragmentManager manager) {
         MoveDocumentDialogFragment move = new MoveDocumentDialogFragment();
-        move.init(context, document);
+        move.init(document);
         move.show(manager, "Move Document");
     }
 
     @Override
     public void delete(Document entity, Context context, FragmentManager manager) {
         DeleteDocumentDialogFragment d = new DeleteDocumentDialogFragment();
-        d.init(context, entity);
+        d.init(entity);
         d.show(manager, "Delete Document");
     }
 
@@ -32,7 +32,7 @@ public class DocumentDialog implements IDocumentDialog {
     @Override
     public void rename(Document entity, Context context, FragmentManager manager) {
         RenameDocumentDialogFragment rdd = new RenameDocumentDialogFragment();
-        rdd.init(context, entity);
+        rdd.init(entity);
         rdd.show(manager, "Rename Document");
     }
 }

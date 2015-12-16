@@ -31,13 +31,14 @@ public abstract class GeoViewFragmentBase extends Fragment {
     protected IGeoAnalytics mAnalytics;
     private AnalyticsComponent mAnalyticsComponent;
     protected Boolean mIsLandscape;
+    protected Bundle mSavedInstanceState;
 
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        mView = super.onCreateView(inflater, container, savedInstanceState);
-        ButterKnife.bind(this, mView);
-        return mView;
+        mSavedInstanceState = savedInstanceState;
+        return super.onCreateView(inflater, container, savedInstanceState);
+
     }
 
     protected void setView(LayoutInflater inflater, ViewGroup container, int layout) {
@@ -49,6 +50,7 @@ public abstract class GeoViewFragmentBase extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        mSavedInstanceState = savedInstanceState;
         mAnalyticsComponent = DaggerAnalyticsComponent.builder().build();
         mAnalytics = mAnalyticsComponent.provideGeoAnalytics();
         mIsLandscape = application.getIsLandscape();
@@ -71,18 +73,6 @@ public abstract class GeoViewFragmentBase extends Fragment {
     public void onDetach() {
         super.onDetach();
         mListener = null;
-    }
-
-    public void SetTitle(int stringResource){
-        //if (mListener != null) {
-        //    mListener.onFragmentInteraction(getActivity().getString(stringResource));
-        //}
-    }
-
-    public void SetTitle(String title){
-        //if (mListener != null) {
-        //    mListener.onFragmentInteraction(string);
-        //}
     }
 
     @Override

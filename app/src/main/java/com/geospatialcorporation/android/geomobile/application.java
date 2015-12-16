@@ -2,6 +2,7 @@ package com.geospatialcorporation.android.geomobile;
 
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.content.res.Configuration;
 import android.net.Uri;
 import android.os.StrictMode;
 import android.support.v4.widget.DrawerLayout;
@@ -29,8 +30,10 @@ import com.geospatialcorporation.android.geomobile.models.Subscription;
 import com.geospatialcorporation.android.geomobile.models.UserAccount;
 import com.geospatialcorporation.android.geomobile.ui.Interfaces.IFeatureWindowCtrl;
 import com.geospatialcorporation.android.geomobile.ui.Interfaces.IGeoMainActivity;
+import com.geospatialcorporation.android.geomobile.ui.Interfaces.RestoreSettings;
 import com.geospatialcorporation.android.geomobile.ui.MainActivity;
 import com.geospatialcorporation.android.geomobile.ui.fragments.GoogleMapFragment;
+import com.geospatialcorporation.android.geomobile.ui.fragments.tree_fragments.LayerFragment;
 import com.google.android.gms.analytics.GoogleAnalytics;
 import com.google.android.gms.analytics.Tracker;
 import com.google.android.gms.common.api.GoogleApiClient;
@@ -98,6 +101,7 @@ public class application extends applicationDIBase {
     private static IFeatureWindowCtrl featureWindowCtrl;
     private static int currentFeatureWindowTab;
     private static List<LegendLayer> legendLayerQueue;
+    private static HashMap<String, RestoreSettings> restoreSettings;
 
     private Thread.UncaughtExceptionHandler androidDefaultUEH;
     //endregion
@@ -275,15 +279,33 @@ public class application extends applicationDIBase {
     }
 
     public static Boolean getIsLandscape() {
+        determineOrientation();
+
         return isLandscape;
     }
 
+    private static void determineOrientation(){
+        int display_mode = getAppContext().getResources().getConfiguration().orientation;
 
+        if(display_mode == Configuration.ORIENTATION_LANDSCAPE){
+            isLandscape = true;
+        } else {
+            isLandscape = false;
+        }
+    }
+
+    public static void setRestoreSettings(RestoreSettings restoreSettings, String key) {
+        application.restoreSettings.put(key, restoreSettings);
+    }
+
+    public static RestoreSettings getRestoreSettings(String key) {
+        return application.restoreSettings.get(key);
+    }
     //endregion
 
     public void onCreate() {
         super.onCreate();
-        Log.d(TAG, "onApplicationCreate");
+        //Log.d(TAG, "onApplicationCreate");
         androidDefaultUEH = Thread.getDefaultUncaughtExceptionHandler();
         Thread.setDefaultUncaughtExceptionHandler(handler);
 
@@ -300,8 +322,7 @@ public class application extends applicationDIBase {
         tracker.enableAutoActivityTracking(true);
 
         if (BuildConfig.DEBUG) {
-            domain = Domains.DEVELOPMENT;
-            azureDomain = "https://geoeastusfilesdev01.blob.core.windows.net/icons/";
+            setDevEndpoints();
 
             StrictMode.setThreadPolicy(new StrictMode.ThreadPolicy.Builder()
                     .detectDiskReads()
@@ -318,10 +339,7 @@ public class application extends applicationDIBase {
                     .build());
 
         } else {
-            // TODO: Change on release
-            domain = Domains.PRODUCTION;
-            azureDomain = "https://geoeastusfilesprod01.blob.core.windows.net/icons/";
-
+            setProdEndpoints();
         }
 
         Stetho.initialize(
@@ -348,6 +366,21 @@ public class application extends applicationDIBase {
         layerManager = new LayerManager();
 
         initializeApplication();
+    }
+
+    private void setDevEndpoints() {
+        domain = Domains.DEVELOPMENT;
+        azureDomain = "https://geoeastusfilesdev01.blob.core.windows.net/icons/";
+    }
+
+    private void setQAEndpoints(){
+        domain = Domains.QUALITY_ASSURANCE;
+        azureDomain = "https://geoeastusfilesprod01.blob.core.windows.net/icons/";
+    }
+
+    private void setProdEndpoints() {
+        domain = Domains.PRODUCTION;
+        azureDomain = "https://geoeastusfilesprod01.blob.core.windows.net/icons/";
     }
 
     public static Context getAppContext() {
@@ -480,6 +513,8 @@ public class application extends applicationDIBase {
         return result;
     }
 
+
+
     class TokenInterceptor implements Interceptor {
         @Override
         public Response intercept(Chain chain) throws IOException {
@@ -490,7 +525,7 @@ public class application extends applicationDIBase {
 
             if (newToken != null) {
                 geoAuthToken = newToken;
-                Log.d(TAG, "Set GeoToken to: " + newToken);
+                //Log.d(TAG, "Set GeoToken to: " + newToken);
                 addTokenToSharedPreferences(newToken);
             }
 
@@ -545,6 +580,7 @@ public class application extends applicationDIBase {
     }
 
     private static void initializeApplication() {
+        restoreSettings = new HashMap<>();
         folderHashMap = new HashMap<>();
         layerHashMap = new HashMap<>();
         documentHashMap = new HashMap<>();

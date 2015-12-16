@@ -17,15 +17,20 @@ public class RenameFolderActionDialogFragment extends FolderActionDialogBase {
     @Bind(R.id.renameInput)
     EditText mRenameInput;
 
-
     @NonNull
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState){
+
+        if(savedInstanceState != null){
+            mFolder = savedInstanceState.getParcelable(FOLDER_DIALOG);
+            init(mFolder);
+        }
 
         View v = getDialogView(R.layout.dialog_shared_rename);
         ButterKnife.bind(this, v);
 
         mRenameInput.setText(mFolder.getName());
+        showKeyboard(mRenameInput);
 
         return getDialogBuilder()
                 .setTitle(R.string.rename)
@@ -39,6 +44,7 @@ public class RenameFolderActionDialogFragment extends FolderActionDialogBase {
                             Toaster(mContext.getString(R.string.rename_request_sent));
                             mService.rename(mFolder.getId(), newName);
                             getFragmentManager().popBackStack();
+                            hideKeyBoard(mRenameInput);
                         } else {
                             Toaster(mContext.getString(R.string.folder_rename_validation));
                         }
@@ -46,8 +52,11 @@ public class RenameFolderActionDialogFragment extends FolderActionDialogBase {
                 }).setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
+                        hideKeyBoard(mRenameInput);
                         dialog.cancel();
                     }
                 }).create();
     }
+
+
 }

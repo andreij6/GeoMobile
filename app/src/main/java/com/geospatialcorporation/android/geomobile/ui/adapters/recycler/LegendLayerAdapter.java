@@ -227,13 +227,7 @@ public class LegendLayerAdapter extends GeoRecyclerAdapterBase<LegendLayerAdapte
         }
 
         public int getFrameId() {
-            if(application.getIsLandscape()){
-                ((OnFragmentInteractionListener)mContext).showDetailFragment();
-
-                return R.id.detail_frame;
-            } else {
-                return R.id.content_frame;
-            }
+            return R.id.content_frame;
         }
 
         protected View.OnClickListener GoToLayerFragment = new View.OnClickListener() {

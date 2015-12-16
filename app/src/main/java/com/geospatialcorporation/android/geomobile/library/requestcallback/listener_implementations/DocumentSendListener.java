@@ -31,7 +31,7 @@ public class DocumentSendListener extends RequestListenerBase<Document> implemen
                     ((IContentRefresher) mContentFragment).refresh();
                 }
             } catch (Exception e){
-                Log.d(TAG, e.getMessage()); //cannot cast content fragment to libraryfragment when adding doc to feature window
+                //Log.d(TAG, e.getMessage()); //cannot cast content fragment to libraryfragment when adding doc to feature window
             }
         }
 

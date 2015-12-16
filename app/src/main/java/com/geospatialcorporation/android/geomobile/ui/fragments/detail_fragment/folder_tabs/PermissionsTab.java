@@ -64,6 +64,10 @@ public class PermissionsTab extends GeoDetailsTabBase<Folder> implements IPostEx
             return;
         }
 
+        if(mTableLayout == null){
+            return;
+        }
+
         mTableLayout.removeAllViews();
 
         TableFactory factory = new TableFactory(getActivity(), mTableLayout, mInflater);

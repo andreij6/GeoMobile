@@ -14,29 +14,16 @@ import com.google.android.gms.maps.GoogleMap;
 public class MainNavCtrl {
 
     public Fragment setAdminView(MainActivity mainActivity, GoogleMap map, GoogleMapFragment mapFragment, int position) {
-        Fragment currentFragment = application.getMainActivity().getContentFragment();
+        Fragment currentFragment = getCurrentFragment();
 
         switch (position) {
             case ViewConstants.HEADER:
             case ViewConstants.MAP:
-                if(currentFragment instanceof GoogleMapFragment){
-                    return null;
-                } else {
-                    if (map == null) {
-                        mapFragment = application.getMapFragment();
-                    }
-                    return mapFragment;
-                }
+                return fetchMapFragment(map, mapFragment, currentFragment);
             case ViewConstants.LIBRARY:
-                if(currentFragment instanceof LibraryFragment){
-                    return null;
-                }
-                return new LibraryFragment();
+                return fetchLibraryFragment(currentFragment);
             case ViewConstants.ACCOUNT:
-                if(currentFragment instanceof AccountFragment){
-                    return null;
-                }
-                return new AccountFragment();
+                return fetchAccountFragment(currentFragment);
             case ViewConstants.ADMIN_CLIENTS:
                 mainActivity.startActivity(new Intent(mainActivity, SubscriptionSelectorActivity.class));
                 mainActivity.finish();
@@ -49,19 +36,51 @@ public class MainNavCtrl {
     }
 
     public Fragment setStandardView(GoogleMap map, GoogleMapFragment mapFragment, int position) {
+        Fragment currentFragment = getCurrentFragment();
+
         switch (position) {
             case ViewConstants.HEADER:
             case ViewConstants.MAP:
-                if(map == null) {
-                    mapFragment = application.getMapFragment();
-                }
-                return mapFragment;
+                return fetchMapFragment(map, mapFragment, currentFragment);
             case ViewConstants.LIBRARY:
-                return new LibraryFragment();
+                return fetchLibraryFragment(currentFragment);
             case ViewConstants.ACCOUNT:
-                return new AccountFragment();
+                return fetchAccountFragment(currentFragment);
             default:
                 return null;
+        }
+    }
+
+    public Fragment getCurrentFragment() {
+        return application.getMainActivity().getContentFragment();
+    }
+
+    protected Fragment fetchAccountFragment(Fragment currentFragment) {
+        if(currentFragment instanceof AccountFragment){
+            return null;
+        }
+        return new AccountFragment();
+    }
+
+    protected Fragment fetchLibraryFragment(Fragment currentFragment) {
+        if(currentFragment instanceof LibraryFragment){
+            return null;
+        }
+
+        LibraryFragment fragment = new LibraryFragment();
+        fragment.setArguments(LibraryFragment.rootBundle());
+
+        return fragment;
+    }
+
+    protected Fragment fetchMapFragment(GoogleMap map, GoogleMapFragment mapFragment, Fragment currentFragment) {
+        if(currentFragment instanceof GoogleMapFragment){
+            return null;
+        } else {
+            if (map == null) {
+                mapFragment = application.getMapFragment();
+            }
+            return mapFragment;
         }
     }
 
@@ -72,6 +91,6 @@ public class MainNavCtrl {
         public static final int LIBRARY = 2;
         public static final int ACCOUNT = 3;
         public static final int ADMIN_CLIENTS = 4;
-
     }
+
 }

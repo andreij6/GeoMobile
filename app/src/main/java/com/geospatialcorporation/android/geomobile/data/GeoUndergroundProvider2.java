@@ -4,11 +4,14 @@ package com.geospatialcorporation.android.geomobile.data;
 import android.content.ContentProvider;
 import android.content.ContentResolver;
 import android.content.ContentValues;
+import android.content.UriMatcher;
 import android.database.Cursor;
 import android.net.Uri;
+import android.provider.BaseColumns;
 import android.support.annotation.Nullable;
 
 import com.geospatialcorporation.android.geomobile.application;
+import com.geospatialcorporation.android.geomobile.models.Document.Document;
 import com.geospatialcorporation.android.geomobile.ui.MainActivity;
 import com.snappydb.DB;
 import com.snappydb.DBFactory;
@@ -16,20 +19,20 @@ import com.snappydb.SnappydbException;
 
 public class GeoUndergroundProvider2 extends ContentProvider {
 
-    public static final String AUTHORITY = "com.geospatialcorporation.android.geomobile2";
-    public static final Uri BASE_CONTENT_URI = Uri.parse("content://" + AUTHORITY);
+    static final int FOLDER = 100;
+    static final int LAYER = 200;
+    static final int DOCUMENT = 300;
+    static final int SUBSCRIPTION = 400;
 
-    public static final String PATH_FOLDER = "folder";
-    public static final String PATH_LAYER = "layer";
-    public static final String PATH_DOCUMENT = "document";
+    private DB mSnappyDB;
 
     @Override
     public boolean onCreate() {
         Boolean wasCreated = false;
         try {
-            DB snappydb = DBFactory.open(getContext());
+            mSnappyDB = DBFactory.open(getContext());
 
-            if(snappydb != null){
+            if(mSnappyDB != null){
                 wasCreated = true;
             }
         } catch (SnappydbException e) {
@@ -51,7 +54,21 @@ public class GeoUndergroundProvider2 extends ContentProvider {
     @Nullable
     @Override
     public String getType(Uri uri) {
-        return null;
+        final int match = sUriMatcher.match(uri);
+
+        switch (match) {
+            // Student: Uncomment and fill out these two cases
+            case FOLDER:
+                return GeoUndergroundDataContract.Folders.CONTENT_TYPE;
+            case LAYER:
+                return GeoUndergroundDataContract.Layers.CONTENT_TYPE;
+            case DOCUMENT:
+                return GeoUndergroundDataContract.Documents.CONTENT_TYPE;
+            case SUBSCRIPTION:
+                return GeoUndergroundDataContract.Subscriptions.CONTENT_TYPE;
+            default:
+                throw new UnsupportedOperationException("Unknown uri: " + uri);
+        }
     }
 
     @Nullable
@@ -70,21 +87,18 @@ public class GeoUndergroundProvider2 extends ContentProvider {
         return 0;
     }
 
-    public static final class Folders {
-        public static final Uri CONTENT_URI = Uri.parse("content://" + AUTHORITY + "/" + PATH_FOLDER);
+    private static final UriMatcher sUriMatcher = buildUriMatcher();
 
-        public static final String CONTENT_TYPE = ContentResolver.CURSOR_DIR_BASE_TYPE + "/" + AUTHORITY + "/" + PATH_FOLDER;
-    }
+    private static UriMatcher buildUriMatcher() {
+        final UriMatcher matcher = new UriMatcher(UriMatcher.NO_MATCH);
+        final String authority = GeoUndergroundDataContract.AUTHORITY;
 
-    public static final class Layers {
-        public static final Uri CONTENT_URI = BASE_CONTENT_URI.buildUpon().appendPath(PATH_LAYER).build();
+        // For each type of URI you want to add, create a corresponding code.
+        matcher.addURI(authority, GeoUndergroundDataContract.PATH_FOLDER, FOLDER);
+        matcher.addURI(authority, GeoUndergroundDataContract.PATH_LAYER, LAYER);
+        matcher.addURI(authority, GeoUndergroundDataContract.PATH_DOCUMENT, DOCUMENT);
+        matcher.addURI(authority, GeoUndergroundDataContract.PATH_SUBSCRIPTION, SUBSCRIPTION);
 
-        public static final String CONTENT_TYPE = ContentResolver.CURSOR_DIR_BASE_TYPE + "/" + AUTHORITY + "/" + PATH_LAYER;
-    }
-
-    public static final class Documents {
-        public static final Uri CONTENT_URI = BASE_CONTENT_URI.buildUpon().appendPath(PATH_DOCUMENT).build();
-
-        public static final String CONTENT_TYPE = ContentResolver.CURSOR_DIR_BASE_TYPE + "/" + AUTHORITY + "/" + PATH_DOCUMENT;
+        return matcher;
     }
 }

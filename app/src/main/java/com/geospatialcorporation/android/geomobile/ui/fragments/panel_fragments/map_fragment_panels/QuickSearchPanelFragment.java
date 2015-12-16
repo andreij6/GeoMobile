@@ -58,7 +58,6 @@ public class QuickSearchPanelFragment extends GeoViewFragmentBase {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState){
         setView(inflater, container, R.layout.fragment_panel_search_quick);
-        SetTitle(R.string.quicksearch);
         setPanelManager(GeoPanel.MAP);
         RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(container.getContext());
         mDataHelper = new DataHelper();
@@ -68,12 +67,6 @@ public class QuickSearchPanelFragment extends GeoViewFragmentBase {
         mService = application.getRestAdapter().create(QueryService.class);
 
         return mView;
-    }
-
-    @Override
-    public void onDestroyView() {
-        super.onDestroyView();
-        SetTitle(R.string.app_name);
     }
 
     //region Helpers
@@ -97,7 +90,7 @@ public class QuickSearchPanelFragment extends GeoViewFragmentBase {
             @Override
             public void failure(RetrofitError error) {
                 Toaster("Error");
-                Log.d(TAG, error.getMessage());
+                //Log.d(TAG, error.getMessage());
             }
         });
     }

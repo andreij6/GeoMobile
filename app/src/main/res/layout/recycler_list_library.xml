@@ -8,31 +8,6 @@
                 xmlns:tools="http://schemas.android.com/tools"
                 android:paddingTop="8dp">
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="match_parent"
-        android:gravity="center_vertical"
-        android:textAppearance="?android:attr/textAppearanceMedium"
-        android:textStyle="bold"
-        style="@style/rippleBackground"
-        android:id="@+id/itemNameTV"
-        tools:text="List Item"
-        android:singleLine="true"
-        android:maxLength="15"
-        android:layout_marginStart="32dp"
-        android:layout_centerVertical="true"
-        android:layout_toEndOf="@+id/itemImageView"/>
-
-    <ImageButton
-        android:layout_width="wrap_content"
-        android:layout_height="match_parent"
-        android:id="@+id/infoImageView"
-        android:src="@drawable/ic_information_outline_grey600_24dp"
-        android:layout_alignParentTop="true"
-        style="@style/information_img_btn"
-        android:layout_alignParentEnd="true"
-        android:contentDescription="@string/information"/>
-
     <com.melnykov.fab.FloatingActionButton
         android:id="@+id/itemImageView"
         android:layout_width="wrap_content"
@@ -44,6 +19,33 @@
         fab:fab_shadow="false"
         android:layout_marginStart="32dp"
         android:paddingTop="8dp"/>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:gravity="center_vertical"
+        android:textAppearance="?android:attr/textAppearanceMedium"
+        android:textStyle="bold"
+        style="@style/rippleBackground"
+        android:id="@+id/itemNameTV"
+        tools:text="List Item"
+        android:singleLine="true"
+        android:maxLength="15"
+        android:layout_centerVertical="true"
+        android:layout_toEndOf="@+id/itemImageView"
+        android:layout_toStartOf="@+id/infoImageView"/>
+
+    <ImageButton
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:id="@+id/infoImageView"
+        android:src="@drawable/ic_information_outline_grey600_24dp"
+        android:layout_alignParentTop="true"
+        style="@style/information_img_btn"
+        android:layout_alignParentEnd="true"
+        android:contentDescription="@string/information"/>
+
+
 
 
     <View

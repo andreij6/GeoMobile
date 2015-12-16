@@ -59,7 +59,7 @@ public class MediaHelper {
                 return null;
             }
 
-            Log.d(TAG, "File: " + Uri.fromFile(mediaFile));
+            //Log.d(TAG, "File: " + Uri.fromFile(mediaFile));
 
             // 5. Return the file's URI
             return Uri.fromFile(mediaFile);

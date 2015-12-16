@@ -7,6 +7,7 @@ import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.content.ContextCompat;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -17,6 +18,7 @@ import com.geospatialcorporation.android.geomobile.library.DI.Analytics.Models.G
 import com.geospatialcorporation.android.geomobile.library.DI.MainNavigationController.Implementations.MainNavCtrl;
 import com.geospatialcorporation.android.geomobile.library.DI.Tasks.Interfaces.IGetDocumentsTask;
 import com.geospatialcorporation.android.geomobile.library.DI.Tasks.models.GetDocumentsParam;
+import com.geospatialcorporation.android.geomobile.library.DI.Tasks.models.GetLayersByFolderTaskParams;
 import com.geospatialcorporation.android.geomobile.library.DI.TreeServices.Interfaces.IDocumentTreeService;
 import com.geospatialcorporation.android.geomobile.library.DI.UIHelpers.Interfaces.ILayoutRefresher;
 import com.geospatialcorporation.android.geomobile.library.constants.GeoPanel;
@@ -29,6 +31,7 @@ import com.geospatialcorporation.android.geomobile.models.ListItem;
 import com.geospatialcorporation.android.geomobile.ui.Interfaces.IContentRefresher;
 import com.geospatialcorporation.android.geomobile.ui.Interfaces.IFragmentView;
 import com.geospatialcorporation.android.geomobile.ui.Interfaces.IPostExecuter;
+import com.geospatialcorporation.android.geomobile.ui.Interfaces.RestoreSettings;
 import com.geospatialcorporation.android.geomobile.ui.MainActivity;
 import com.geospatialcorporation.android.geomobile.ui.fragments.detail_fragment.DocumentFolderDetailFragment;
 import com.geospatialcorporation.android.geomobile.ui.fragments.panel_fragments.tree_fragment_panels.LibraryFolderPanelFragment;
@@ -45,6 +48,10 @@ public class LibraryFragment extends RecyclerTreeFragment
     //region Properties & Onclicks
     IGetDocumentsTask mDocumentsTask;
     IDocumentTreeService mUploader;
+
+    LibraryRestoreSettings mRestoreSettings;
+    static String RESTORE_SETTINGS_KEY = LibraryRestoreSettings.class.getSimpleName();
+
 
     @Nullable
     @OnClick(R.id.OptionsFab)
@@ -100,13 +107,15 @@ public class LibraryFragment extends RecyclerTreeFragment
             closePanel();
         }
     }
+
+
     //endregion
 
     //region Fragment Overrides
-
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         setView(inflater, container, R.layout.fragment_recyclertree);
+        mSavedInstanceState = savedInstanceState;
         mContext = getActivity();
 
         mTitle.setText("Loading...");
@@ -170,7 +179,11 @@ public class LibraryFragment extends RecyclerTreeFragment
     @Override
     public void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
-        outState.putInt(Folder.FOLDER_INTENT, mFolderId);
+        if(mRestoreSettings != null){
+            mRestoreSettings.onSaveInstance(mFolderId, RESTORE_SETTINGS_KEY);
+        } else {
+            application.setRestoreSettings(LibraryRestoreSettings.newInstance(mFolderId), RESTORE_SETTINGS_KEY);
+        }
     }
 
     //endregion
@@ -200,7 +213,6 @@ public class LibraryFragment extends RecyclerTreeFragment
     };
     //endregion
 
-
     @Override
     protected void buildRecycler() {
         mHelper = new DataHelper();
@@ -212,69 +224,73 @@ public class LibraryFragment extends RecyclerTreeFragment
                 .setRecycler(mRecyclerView);
     }
 
-    public void goToFolderInfo() {
-        Fragment f = new DocumentFolderDetailFragment();
-
-        f.setArguments(mCurrentFolder.toBundle());
-
-        getFragmentManager().beginTransaction()
-                .addToBackStack(null)
-                .replace(R.id.content_frame, f)
-                .commit();
-    }
-
     protected void sendScreenName() {
         mAnalytics.trackScreen(new GoogleAnalyticEvent().LibraryTreeScreen());
+    }
+
+    @Override
+    protected String getTreeName() {
+        return getString(R.string.library_tree);
+    }
+
+    @Override
+    public Fragment getNewInstanceOfCurrentFragment() {
+        return new LibraryFragment();
     }
 
     @Override
     public void handleArguments() {
         Bundle args = getArguments();
 
-        mProgressHelper.showProgressDialog();
         mDocumentsTask = application.getTasksComponent().provideGetDocumentsTask();
 
-        GetDocumentsParam params = new GetDocumentsParam(getFragmentManager(), mCurrentFolder, mContext, this);
-
-        mFolderId = 0;
+        mFolderId = -1;
 
         if(args != null) {
-            mFolderId = args.getInt(Folder.FOLDER_INTENT, 0);
+            mFolderId = args.getInt(Folder.FOLDER_INTENT, -1);
         }
 
-        mDocumentsTask.getDocumentsByFolderId(params, mFolderId);
+        if(mSavedInstanceState == null){
+            mRestoreSettings = (LibraryRestoreSettings) application.getRestoreSettings(RESTORE_SETTINGS_KEY);
+            if (mRestoreSettings != null && mFolderId == -1) {
+                mFolderId = mRestoreSettings.getEntityConditionally(mFolderId);
+            }
 
-    }
-
-    @Override
-    public void setDetailFrame(View view, FragmentManager fm, Bundle bundle) {
-        Fragment fragment = new LibraryFragment();
-
-        if(bundle != null){
-            fragment.setArguments(bundle);
+            mProgressHelper.showProgressDialog();
+            mDocumentsTask.getDocumentsByFolderId(new GetDocumentsParam(getFragmentManager(), mCurrentFolder, mContext, this), mFolderId);
         }
 
-        fm.beginTransaction()
-                .replace(R.id.detail_frame, fragment)
-                .addToBackStack(null)
-                .commit();
-
-        ((MainActivity)view.getContext()).showDetailFragment();
     }
 
     @Override
     public void setContentFragment(FragmentManager fm, Bundle bundle) {
-        application.getMainActivity().onNavigationDrawerItemSelected(MainNavCtrl.ViewConstants.LIBRARY);
+        //application.getMainActivity().onNavigationDrawerItemSelected(MainNavCtrl.ViewConstants.LIBRARY);
 
-        Fragment fragment = new LibraryFragment();
+        setFrame(R.id.content_frame, fm, bundle);
+    }
+
+    private void setFrame(int frame, FragmentManager fm, Bundle bundle){
+        LibraryFragment fragment = new LibraryFragment();
 
         if(bundle != null){
             fragment.setArguments(bundle);
         }
 
         fm.beginTransaction()
-                .replace(R.id.content_frame, fragment)
+                .replace(frame, this)
                 .addToBackStack(null)
                 .commit();
+    }
+
+    public static class LibraryRestoreSettings extends RestoreSettings<Integer> {
+
+        public static LibraryRestoreSettings newInstance(int folderId) {
+            LibraryRestoreSettings result = new LibraryRestoreSettings();
+            result.setShouldRestore(true);
+            result.setEntity(folderId);
+            return result;
+        }
+
+
     }
 }
