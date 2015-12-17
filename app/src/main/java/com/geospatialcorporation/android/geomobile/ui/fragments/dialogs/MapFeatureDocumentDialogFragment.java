@@ -24,7 +24,7 @@ import com.geospatialcorporation.android.geomobile.library.helpers.ItemSelectedL
 import com.geospatialcorporation.android.geomobile.library.helpers.MediaHelper;
 import com.geospatialcorporation.android.geomobile.models.Document.Document;
 import com.geospatialcorporation.android.geomobile.ui.Interfaces.ISpinnerListener;
-import com.geospatialcorporation.android.geomobile.ui.MainActivity;
+import com.geospatialcorporation.android.geomobile.ui.activity.MainActivity;
 import com.geospatialcorporation.android.geomobile.ui.fragments.dialogs.base.GeoDialogFragmentBase;
 
 import java.util.ArrayList;

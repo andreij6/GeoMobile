@@ -6,7 +6,7 @@ import android.content.Intent;
 import com.geospatialcorporation.android.geomobile.application;
 import com.geospatialcorporation.android.geomobile.library.DI.Analytics.Interfaces.IGeoAnalytics;
 import com.geospatialcorporation.android.geomobile.library.DI.ErrorHandler.Interfaces.IGeoErrorHandler;
-import com.geospatialcorporation.android.geomobile.ui.SplashScreenActivity;
+import com.geospatialcorporation.android.geomobile.ui.activity.SplashScreenActivity;
 
 import java.io.PrintWriter;
 import java.io.StringWriter;

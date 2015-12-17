@@ -5,7 +5,6 @@ import android.database.Cursor;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.support.v4.app.FragmentActivity;
-import android.util.Log;
 
 import com.geospatialcorporation.android.geomobile.application;
 import com.geospatialcorporation.android.geomobile.data.GeoUndergoundProvider;
@@ -13,7 +12,7 @@ import com.geospatialcorporation.android.geomobile.data.tables.SubscriptionColum
 import com.geospatialcorporation.android.geomobile.library.DI.Tasks.Interfaces.IGetClientsTask;
 import com.geospatialcorporation.android.geomobile.library.DI.Tasks.models.GetClientsTaskParams;
 import com.geospatialcorporation.android.geomobile.library.constants.ClientTypeCodes;
-import com.geospatialcorporation.android.geomobile.library.rest.LoginService;
+import com.geospatialcorporation.android.geomobile.api.LoginService;
 import com.geospatialcorporation.android.geomobile.models.PluginSubscriptionResponse;
 import com.geospatialcorporation.android.geomobile.models.Subscription;
 

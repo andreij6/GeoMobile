@@ -4,10 +4,9 @@ import android.app.Dialog;
 import android.os.AsyncTask;
 
 import com.afollestad.materialdialogs.MaterialDialog;
-import com.geospatialcorporation.android.geomobile.application;
 import com.geospatialcorporation.android.geomobile.library.DI.Authentication.IGoogleAuthTokenService;
 import com.geospatialcorporation.android.geomobile.library.DI.Authentication.models.AuthTokenParams;
-import com.geospatialcorporation.android.geomobile.ui.GoogleApiActivity;
+import com.geospatialcorporation.android.geomobile.ui.activity.GoogleApiActivity;
 import com.google.android.gms.auth.GoogleAuthException;
 import com.google.android.gms.auth.GoogleAuthUtil;
 import com.google.android.gms.auth.GooglePlayServicesAvailabilityException;

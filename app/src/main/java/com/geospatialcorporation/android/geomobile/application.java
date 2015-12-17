@@ -5,11 +5,13 @@ import android.content.SharedPreferences;
 import android.content.res.Configuration;
 import android.net.Uri;
 import android.os.StrictMode;
-import android.support.v4.widget.DrawerLayout;
 import android.util.Log;
 
 import com.facebook.stetho.Stetho;
 import com.facebook.stetho.okhttp.StethoInterceptor;
+import com.geospatialcorporation.android.geomobile.di.component.AppComponent;
+import com.geospatialcorporation.android.geomobile.di.component.DaggerAppComponent;
+import com.geospatialcorporation.android.geomobile.di.module.ApplicationModule;
 import com.geospatialcorporation.android.geomobile.library.DI.Analytics.Interfaces.IGeoAnalytics;
 import com.geospatialcorporation.android.geomobile.library.DI.Analytics.Models.GoogleAnalyticEvent;
 import com.geospatialcorporation.android.geomobile.library.DI.Map.Implementations.LayerManager;
@@ -20,7 +22,6 @@ import com.geospatialcorporation.android.geomobile.library.constants.Domains;
 import com.geospatialcorporation.android.geomobile.library.constants.GeoPanel;
 import com.geospatialcorporation.android.geomobile.library.constants.GeoSharedPreferences;
 import com.geospatialcorporation.android.geomobile.library.map.Models.GeoClusterMarker;
-import com.geospatialcorporation.android.geomobile.models.Bookmarks.Bookmark;
 import com.geospatialcorporation.android.geomobile.models.Document.Document;
 import com.geospatialcorporation.android.geomobile.models.Folders.Folder;
 import com.geospatialcorporation.android.geomobile.models.Layers.Layer;
@@ -29,11 +30,9 @@ import com.geospatialcorporation.android.geomobile.models.MapLayerState;
 import com.geospatialcorporation.android.geomobile.models.Subscription;
 import com.geospatialcorporation.android.geomobile.models.UserAccount;
 import com.geospatialcorporation.android.geomobile.ui.Interfaces.IFeatureWindowCtrl;
-import com.geospatialcorporation.android.geomobile.ui.Interfaces.IGeoMainActivity;
 import com.geospatialcorporation.android.geomobile.ui.Interfaces.RestoreSettings;
-import com.geospatialcorporation.android.geomobile.ui.MainActivity;
+import com.geospatialcorporation.android.geomobile.ui.activity.MainActivity;
 import com.geospatialcorporation.android.geomobile.ui.fragments.GoogleMapFragment;
-import com.geospatialcorporation.android.geomobile.ui.fragments.tree_fragments.LayerFragment;
 import com.google.android.gms.analytics.GoogleAnalytics;
 import com.google.android.gms.analytics.Tracker;
 import com.google.android.gms.common.api.GoogleApiClient;
@@ -303,9 +302,15 @@ public class application extends applicationDIBase {
     }
     //endregion
 
+    private AppComponent mAppComponent;
+
     public void onCreate() {
         super.onCreate();
-        //Log.d(TAG, "onApplicationCreate");
+
+        mAppComponent = DaggerAppComponent.builder()
+                            .applicationModule(new ApplicationModule(this))
+                            .build();
+
         androidDefaultUEH = Thread.getDefaultUncaughtExceptionHandler();
         Thread.setDefaultUncaughtExceptionHandler(handler);
 
@@ -366,6 +371,10 @@ public class application extends applicationDIBase {
         layerManager = new LayerManager();
 
         initializeApplication();
+    }
+
+    public AppComponent getAppComponent(){
+        return mAppComponent;
     }
 
     private void setDevEndpoints() {

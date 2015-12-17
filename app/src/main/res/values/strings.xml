@@ -41,7 +41,7 @@
 
 <!-- Activity Login -->
     <string name="title_activity_login">Sign in</string>
-    <string name="prompt_email">Email</string>
+    <string name="prompt_email">Email Address</string>
     <string name="prompt_password">Password</string>
     <string name="action_sign_in">Sign In</string>
     <string name="action_sign_in_short">Sign in</string>
@@ -214,7 +214,7 @@
 
     <string name="or">OR</string>
     <string name="powered_by">Powered by Geospatial Corporation</string>
-    <string name="sign_up_invitation">Don\'t have an account? <a href="https://www.geounderground.com/register">Sign Up.</a></string>
+    <string name="sign_up_invitation">CREATE A GEOUNDERGROUND ACCOUNT <a href="https://www.geounderground.com/register"></a></string>
     <string name="full_screen_mode">Fullscreen mode initialized</string>
     <string name="query_mode">Query Mode Initialized</string>
     <string name="quicksearch_mode">Quick Search opened</string>

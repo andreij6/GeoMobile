@@ -1,6 +1,5 @@
 package com.geospatialcorporation.android.geomobile.library.DI.TreeServices.Implementations;
 
-import android.support.design.widget.Snackbar;
 import android.widget.Toast;
 
 import com.geospatialcorporation.android.geomobile.R;
@@ -10,8 +9,8 @@ import com.geospatialcorporation.android.geomobile.database.DataRepository.Imple
 import com.geospatialcorporation.android.geomobile.library.DI.TreeServices.Interfaces.IFolderTreeService;
 import com.geospatialcorporation.android.geomobile.library.requestcallback.RequestCallback;
 import com.geospatialcorporation.android.geomobile.library.requestcallback.listener_implementations.FolderModifiedListener;
-import com.geospatialcorporation.android.geomobile.library.rest.FolderService;
-import com.geospatialcorporation.android.geomobile.library.rest.TreeService;
+import com.geospatialcorporation.android.geomobile.api.FolderService;
+import com.geospatialcorporation.android.geomobile.api.TreeService;
 import com.geospatialcorporation.android.geomobile.models.Document.Document;
 import com.geospatialcorporation.android.geomobile.models.Folders.Folder;
 import com.geospatialcorporation.android.geomobile.models.Folders.FolderCreateRequest;

@@ -4,8 +4,8 @@ import android.content.Intent;
 import android.support.v4.app.Fragment;
 
 import com.geospatialcorporation.android.geomobile.application;
-import com.geospatialcorporation.android.geomobile.ui.MainActivity;
-import com.geospatialcorporation.android.geomobile.ui.SubscriptionSelectorActivity;
+import com.geospatialcorporation.android.geomobile.ui.activity.MainActivity;
+import com.geospatialcorporation.android.geomobile.ui.activity.SubscriptionSelectorActivity;
 import com.geospatialcorporation.android.geomobile.ui.fragments.GoogleMapFragment;
 import com.geospatialcorporation.android.geomobile.ui.fragments.tree_fragments.AccountFragment;
 import com.geospatialcorporation.android.geomobile.ui.fragments.tree_fragments.LibraryFragment;

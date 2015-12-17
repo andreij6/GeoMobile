@@ -19,20 +19,20 @@
             android:layout_height="match_parent"
             android:id="@+id/showNavIV1"
             android:layout_gravity="left"
-            android:src="@drawable/ic_nav_orange"
+            android:src="@drawable/ic_menu_grey600_36dp"
             android:paddingLeft="-10dp"
             android:layout_alignParentStart="true"
             android:paddingRight="-10dp"/>
 
         <ImageView
-            android:layout_width="48dp"
+            android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:id="@+id/showNavIV2"
             android:src="@drawable/ic_g_logo"
             android:layout_gravity="center_vertical"
             android:layout_alignParentTop="true"
             android:layout_toEndOf="@+id/showNavIV1"
-            android:paddingLeft="-10dp"/>
+            android:paddingLeft="-4dp"/>
 
         <ImageView
             android:layout_width="36dp"

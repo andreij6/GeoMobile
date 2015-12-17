@@ -9,8 +9,8 @@ import com.geospatialcorporation.android.geomobile.library.requestcallback.Reque
 import com.geospatialcorporation.android.geomobile.library.requestcallback.listener_implementations.AttributeColumnModifiedListener;
 import com.geospatialcorporation.android.geomobile.library.requestcallback.listener_implementations.AttributeValueModifiedListener;
 import com.geospatialcorporation.android.geomobile.library.requestcallback.listener_implementations.LayerModifiedListener;
-import com.geospatialcorporation.android.geomobile.library.rest.AttributeService;
-import com.geospatialcorporation.android.geomobile.library.rest.LayerService;
+import com.geospatialcorporation.android.geomobile.api.AttributeService;
+import com.geospatialcorporation.android.geomobile.api.LayerService;
 import com.geospatialcorporation.android.geomobile.models.AddAttributeRequest;
 import com.geospatialcorporation.android.geomobile.models.Layers.EditLayerAttributesRequest;
 import com.geospatialcorporation.android.geomobile.models.Layers.Layer;

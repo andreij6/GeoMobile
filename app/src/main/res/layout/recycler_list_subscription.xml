@@ -5,7 +5,7 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:id="@+id/choose_client_card_view"
     android:layout_width="match_parent"
-    android:layout_height="100dp"
+    android:layout_height="75dp"
     android:background="?android:attr/selectableItemBackground"
     card_view:cardCornerRadius="4dp"
     android:layout_margin="5dp">
@@ -13,36 +13,22 @@
     <RelativeLayout
         android:id="@+id/clientLayout"
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        android:padding="12dp">
 
         <TextView
-            android:id="@+id/clientTypeLabel"
             android:layout_width="match_parent"
-            android:layout_height="20dp"
-            android:gravity="center_vertical"
-            android:textColor="@color/primary_text"
-            tools:text="Standard"
-            android:textStyle="italic"
-            android:textSize="14sp"
-            android:paddingTop="5sp"
-            android:paddingLeft="5sp"
-            android:paddingRight="5sp"/>
-
-        <TextView
-            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textAppearance="?android:attr/textAppearanceLarge"
+            android:textAppearance="?android:attr/textAppearanceMedium"
             android:id="@+id/clientNameLabel"
             android:textColor="@color/primary_text"
-            tools:text="AA Testing Client"
             android:textStyle="bold"
-            android:layout_below="@+id/clientTypeLabel"
+            tools:text="AA Testing Client"
             android:layout_centerHorizontal="true"/>
 
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:gravity="center_horizontal"
             android:text="@string/impersonate"
             android:textAllCaps="true"
             android:id="@+id/impersonate"

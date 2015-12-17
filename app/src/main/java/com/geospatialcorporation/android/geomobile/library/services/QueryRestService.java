@@ -4,7 +4,7 @@ import com.geospatialcorporation.android.geomobile.application;
 import com.geospatialcorporation.android.geomobile.library.requestcallback.RequestCallback;
 import com.geospatialcorporation.android.geomobile.library.requestcallback.listener_implementations.FeatureWindowListener;
 import com.geospatialcorporation.android.geomobile.library.requestcallback.listener_implementations.MapQueryListener;
-import com.geospatialcorporation.android.geomobile.library.rest.QueryService;
+import com.geospatialcorporation.android.geomobile.api.QueryService;
 import com.geospatialcorporation.android.geomobile.models.Layers.LegendLayer;
 import com.geospatialcorporation.android.geomobile.models.Query.map.Layers;
 import com.geospatialcorporation.android.geomobile.models.Query.map.MapDefaultQueryRequest;

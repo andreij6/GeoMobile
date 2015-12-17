@@ -63,7 +63,7 @@ import com.geospatialcorporation.android.geomobile.library.map.EditLayerMapQuery
 import com.geospatialcorporation.android.geomobile.library.map.Models.GeoClusterMarker;
 import com.geospatialcorporation.android.geomobile.library.panelmanager.ISlidingPanelManager;
 import com.geospatialcorporation.android.geomobile.library.panelmanager.PanelManager;
-import com.geospatialcorporation.android.geomobile.library.rest.TreeService;
+import com.geospatialcorporation.android.geomobile.api.TreeService;
 import com.geospatialcorporation.android.geomobile.library.services.LayerEditor.ILayerEditor;
 import com.geospatialcorporation.android.geomobile.library.services.LayerEditor.LineLayerEditor;
 import com.geospatialcorporation.android.geomobile.library.services.LayerEditor.PointLayerEditor;
@@ -79,7 +79,7 @@ import com.geospatialcorporation.android.geomobile.models.Query.map.response.fea
 import com.geospatialcorporation.android.geomobile.ui.Interfaces.IFeatureWindowCtrl;
 import com.geospatialcorporation.android.geomobile.ui.Interfaces.IMapStatusCtrl;
 import com.geospatialcorporation.android.geomobile.ui.Interfaces.RestoreSettings;
-import com.geospatialcorporation.android.geomobile.ui.MainActivity;
+import com.geospatialcorporation.android.geomobile.ui.activity.MainActivity;
 import com.geospatialcorporation.android.geomobile.ui.fragments.panel_fragments.map_fragment_panels.EditLinePanelFragment;
 import com.geospatialcorporation.android.geomobile.ui.fragments.panel_fragments.map_fragment_panels.EditPointPanelFragment;
 import com.geospatialcorporation.android.geomobile.ui.fragments.panel_fragments.map_fragment_panels.EditPolygonPanelFragment;
@@ -693,7 +693,8 @@ public class GoogleMapFragment extends GeoViewFragmentBase implements
 
             CameraUpdate update2 = CameraUpdateFactory.newLatLngBounds(dblBounds, 0);
 
-            mMap.animateCamera(update2);
+            mMap.moveCamera(update2);
+
 
             double latDiff = (dblBounds.getCenter().latitude - highlightedMarker.getPosition().latitude) / 2;
 
@@ -702,8 +703,7 @@ public class GoogleMapFragment extends GeoViewFragmentBase implements
             finalUpdate = CameraUpdateFactory.newLatLngZoom(new LatLng(latBtwCenterMarker, dblBounds.getCenter().longitude), zoom);
         }
 
-
-        mMap.animateCamera(finalUpdate);
+        mMap.moveCamera(finalUpdate);
     }
 
     protected void zoomToCluster(Marker clusterMarker){

@@ -2,11 +2,8 @@ package com.geospatialcorporation.android.geomobile.library.DI.Map.Implementatio
 
 import com.geospatialcorporation.android.geomobile.application;
 import com.geospatialcorporation.android.geomobile.library.DI.Map.Interfaces.IMapStateService;
-import com.geospatialcorporation.android.geomobile.library.DI.Map.Models.BookmarkMapStateSaveRequest;
 import com.geospatialcorporation.android.geomobile.library.DI.Map.Models.MapStateSaveRequest;
 import com.geospatialcorporation.android.geomobile.library.DI.SharedPreferences.Interfaces.IGeoSharedPrefs;
-import com.geospatialcorporation.android.geomobile.models.Bookmarks.Bookmark;
-import com.geospatialcorporation.android.geomobile.models.Bookmarks.BookmarkPosition;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.model.CameraPosition;
 import com.google.android.gms.maps.model.LatLng;
@@ -75,25 +72,6 @@ public class MapStateService implements IMapStateService {
         }
 
         return (int)maptype;
-    }
-
-    @Override
-    public void saveBookmarkState(BookmarkMapStateSaveRequest request) {
-        //IFullDataRepository<Bookmark> BookmarkRepo = new BookmarkDataSource(application.getAppContext()); //not cache repo
-
-        CameraPosition position = request.getMap().getCameraPosition();
-
-        BookmarkPosition bp = new BookmarkPosition();
-
-        bp.setLat((float) position.target.latitude);
-        bp.setLng((float) position.target.longitude);
-        bp.setZoom(position.zoom);
-        bp.setTilt(position.tilt);
-        bp.setBearing(position.bearing);
-
-        Bookmark bookmark = new Bookmark(request.getName(), bp);
-
-        //BookmarkRepo.Create(bookmark);
     }
 
     //region Helpers

@@ -5,7 +5,6 @@ import android.content.Intent;
 import android.database.Cursor;
 import android.os.AsyncTask;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -13,9 +12,9 @@ import android.widget.TextView;
 
 import com.geospatialcorporation.android.geomobile.R;
 import com.geospatialcorporation.android.geomobile.application;
-import com.geospatialcorporation.android.geomobile.library.rest.LoginService;
+import com.geospatialcorporation.android.geomobile.api.LoginService;
 import com.geospatialcorporation.android.geomobile.models.Subscription;
-import com.geospatialcorporation.android.geomobile.ui.MainActivity;
+import com.geospatialcorporation.android.geomobile.ui.activity.MainActivity;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
@@ -39,7 +38,6 @@ public class SubscriptionCursorAdapter extends CursorRecyclerViewAdapter<Subscri
         Subscription subscription = Subscription.fromCursor(cursor);
 
         viewHolder.mClientName.setText(subscription.getName());
-        viewHolder.mClientType.setText("");
         viewHolder.mSubscription = subscription;
     }
 
@@ -52,7 +50,6 @@ public class SubscriptionCursorAdapter extends CursorRecyclerViewAdapter<Subscri
 
     public class ViewHolder extends RecyclerView.ViewHolder {
         @Bind(R.id.clientNameLabel) TextView mClientName;
-        @Bind(R.id.clientTypeLabel) TextView mClientType;
         Subscription mSubscription;
 
         public ViewHolder(View view) {

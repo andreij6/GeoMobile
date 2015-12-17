@@ -4,9 +4,8 @@
                 xmlns:tools="http://schemas.android.com/tools"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:background="@color/body_bkg"
-                android:gravity="center_horizontal"
-                tools:context="com.geospatialcorporation.android.geomobile.ui.LoginActivity">
+                android:layout_alignParentBottom="true"
+                tools:context=".ui.activity.LoginActivity">
 
     <LinearLayout
         android:id="@+id/plus_sign_out_buttons"
@@ -33,98 +32,119 @@
 
     </LinearLayout>
 
-    <LinearLayout
-        android:id="@+id/email_login_form"
+    <AutoCompleteTextView
+        android:id="@+id/email"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@color/body_bkg"
-        android:orientation="vertical"
-        android:paddingTop="10dp"
-        >
+        android:layout_marginLeft="15dp"
+        android:layout_marginRight="15dp"
+        android:hint="@string/prompt_email"
+        android:inputType="textEmailAddress"
+        android:maxLines="1"
+        android:nestedScrollingEnabled="false"
+        android:singleLine="true"
+        android:focusable="true"
+        android:focusableInTouchMode="true"
+        android:layout_above="@+id/password"
+        android:layout_toEndOf="@+id/plus_sign_out_buttons"/>
 
-        <AutoCompleteTextView
-            android:id="@+id/email"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="15dp"
-            android:layout_marginRight="15dp"
-            android:hint="@string/prompt_email"
-            android:inputType="textEmailAddress"
-            android:maxLines="1"
-            android:nestedScrollingEnabled="false"
-            android:singleLine="true"
-            android:focusable="true"
-            android:focusableInTouchMode="true"
-            />
+    <EditText
+        android:id="@+id/password"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="15dp"
+        android:layout_marginRight="15dp"
+        android:hint="@string/prompt_password"
+        android:imeActionId="@+id/login"
+        android:imeActionLabel="@string/action_sign_in_short"
+        android:imeOptions="actionUnspecified"
+        android:inputType="textPassword"
+        android:maxLines="1"
+        android:singleLine="true"
+        android:layout_above="@+id/rememberSection"
+        android:layout_toEndOf="@+id/plus_sign_out_buttons"/>
 
-        <EditText
-            android:id="@+id/password"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="15dp"
-            android:layout_marginRight="15dp"
-            android:hint="@string/prompt_password"
-            android:imeActionId="@+id/login"
-            android:imeActionLabel="@string/action_sign_in_short"
-            android:imeOptions="actionUnspecified"
-            android:inputType="textPassword"
-            android:maxLines="1"
-            android:singleLine="true"/>
+    <LinearLayout
+        android:id="@+id/rememberSection"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_above="@+id/email_sign_in_button"
+        android:layout_toEndOf="@+id/plus_sign_out_buttons"
+        android:paddingLeft="8dp"
+        android:layout_marginTop="12dp">
 
-        <Button
-            android:id="@+id/email_sign_in_button"
-            style="?android:textAppearanceSmall"
-            android:layout_width="match_parent"
+        <CheckBox
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="8dp"
-            android:background="@color/accent_blue"
-            android:text="@string/action_sign_in_short"
-            android:textColor="@color/white"
-            android:textStyle="bold"
-            android:layout_marginRight="4dp"
-            android:layout_marginLeft="4dp"/>
+            android:text="@string/remember_me"
+            android:id="@+id/rememberCB"
+            android:textColor="@color/primary_text"
+            android:layout_weight="1"
+            android:visibility="invisible"/>
+
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textAppearance="?android:attr/textAppearanceMedium"
+            android:text="@string/forgotPassword"
+            android:id="@+id/forgotPassword"
+            android:textColorLink="@color/primary_text"
+            android:layout_weight="1"
+            android:visibility="invisible"/>
 
     </LinearLayout>
 
-    <CheckBox
+    <Button
+        android:id="@+id/email_sign_in_button"
+        style="?android:textAppearanceSmall"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="@string/remember_me"
-        android:id="@+id/rememberCB"
-        android:layout_gravity="center_horizontal"
-        android:textColor="@color/primary_text"
-        android:layout_below="@+id/email_login_form"
-        android:layout_alignParentStart="true"/>
+        android:background="@color/accent_blue"
+        android:text="@string/action_sign_in_short"
+        android:textColor="@color/white"
+        android:textStyle="bold"
+        android:layout_marginRight="16dp"
+        android:layout_marginLeft="16dp"
+        android:layout_marginTop="12dp"
+        android:layout_above="@+id/plus_sign_in_button"/>
 
     <com.google.android.gms.common.SignInButton
         android:id="@+id/plus_sign_in_button"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
-        android:layout_alignStart="@+id/email_login_form"/>
+        android:layout_above="@+id/signUpLink"
+        android:layout_alignParentStart="true"
+        android:layout_marginTop="12dp"
+        android:layout_margin="12dp"/>
+
+    <View
+        android:layout_width="fill_parent"
+        android:layout_height="2dp"
+        android:background="@color/md_divider_black"
+        android:layout_below="@id/plus_sign_in_button"
+        android:layout_marginBottom="12dp"/>
 
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:textAppearance="?android:attr/textAppearanceMedium"
         android:text="@string/sign_up_invitation"
         android:id="@+id/signUpLink"
-        android:layout_gravity="center_horizontal"
-        android:layout_marginTop="32dp"
         android:textColorLink="@color/primary_text"
-        android:layout_below="@+id/rememberCB"
-        android:layout_centerHorizontal="true"/>
+        android:textSize="16sp"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="12dp"
+        android:layout_marginBottom="27dp"/>
 
-    <TextView
-        android:layout_width="wrap_content"
+    <ImageView
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:textAppearance="?android:attr/textAppearanceMedium"
-        android:text="@string/forgotPassword"
-        android:id="@+id/forgotPassword"
-        android:layout_gravity="center_horizontal"
-        android:textColorLink="@color/primary_text"
-        android:layout_alignBottom="@+id/rememberCB"
-        android:layout_alignParentEnd="true"
-        android:layout_marginEnd="27dp"/>
+        android:id="@+id/imageView6"
+        android:layout_above="@+id/email"
+        android:layout_centerHorizontal="true"
+        android:src="@drawable/ic_full_color_logo_200"
+        android:scaleType="centerCrop"/>
 
 </RelativeLayout>

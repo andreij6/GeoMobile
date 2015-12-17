@@ -2,17 +2,16 @@ package com.geospatialcorporation.android.geomobile.library.DI.Authentication.Im
 
 import android.content.Intent;
 import android.os.AsyncTask;
-import android.util.Log;
 import android.widget.Toast;
 
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.geospatialcorporation.android.geomobile.application;
-import com.geospatialcorporation.android.geomobile.library.rest.LoginService;
+import com.geospatialcorporation.android.geomobile.api.LoginService;
 import com.geospatialcorporation.android.geomobile.models.Subscription;
-import com.geospatialcorporation.android.geomobile.ui.GoogleApiActivity;
-import com.geospatialcorporation.android.geomobile.ui.LoginActivity;
-import com.geospatialcorporation.android.geomobile.ui.MainActivity;
-import com.geospatialcorporation.android.geomobile.ui.SubscriptionSelectorActivity;
+import com.geospatialcorporation.android.geomobile.ui.activity.GoogleApiActivity;
+import com.geospatialcorporation.android.geomobile.ui.activity.LoginActivity;
+import com.geospatialcorporation.android.geomobile.ui.activity.MainActivity;
+import com.geospatialcorporation.android.geomobile.ui.activity.SubscriptionSelectorActivity;
 
 import retrofit.RetrofitError;
 import retrofit.client.Response;

@@ -48,9 +48,6 @@
         android:name="com.google.android.gms.version"
         android:value="@integer/google_play_services_version"/>
 
-
-
-
     <application
         android:name=".application"
         android:allowBackup="false"
@@ -63,32 +60,28 @@
             android:authorities="com.geospatialcorporation.android.geomobile">
         </provider>
 
-        <!--<provider
-            android:authorities="com.geospatialcorporation.android.geomobile2"
-            android:name=".data.GeoUndergroundProvider2" >
-        </provider>-->
-
         <meta-data
             android:name="com.google.android.maps.v2.API_KEY"
             android:value="AIzaSyBO8L6_5-kKdAJpiCok3XvuJCrniRajBC4"/>
 
         <!-- On load: Splash -> Login? -> Main -->
         <activity
-            android:name=".ui.SplashScreenActivity"
+            android:name=".ui.activity.SplashScreenActivity"
             android:label="@string/app_name"
-            android:theme="@android:style/Theme.Black.NoTitleBar">
+            android:theme="@style/Theme.AppCompat.Light.NoActionBar"
+            android:screenOrientation="portrait">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN"/>
                 <category android:name="android.intent.category.LAUNCHER"/>
             </intent-filter>
         </activity>
         <activity
-            android:name=".ui.LoginActivity"
+            android:name=".ui.activity.LoginActivity"
             android:label="@string/app_name"
-            android:windowSoftInputMode="adjustResize">
+            android:windowSoftInputMode="adjustResize|stateHidden">
         </activity>
         <activity
-            android:name=".ui.MainActivity"
+            android:name=".ui.activity.MainActivity"
             android:label="@string/app_name">
         </activity>
 
@@ -97,7 +90,7 @@
             android:value="@integer/google_play_services_version"/>
 
         <activity
-            android:name=".ui.SubscriptionSelectorActivity"
+            android:name=".ui.activity.SubscriptionSelectorActivity"
             android:label="@string/title_activity_subscription_selector">
         </activity>
 

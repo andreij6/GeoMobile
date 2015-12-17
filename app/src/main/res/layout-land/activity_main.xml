@@ -27,19 +27,22 @@
                 android:layout_height="match_parent"
                 android:background="@color/white">
 
-                <ImageView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:id="@+id/menuIV"
-                    android:src="@drawable/ic_menu_grey600_24dp"
-                    style="@style/landNavigation"/>
 
                 <ImageView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:id="@+id/layersIV"
-                    android:src="@drawable/ic_layers_grey600_24dp"
-                    style="@style/landNavigation"/>
+                    android:id="@+id/logoIV"
+                    android:src="@drawable/ic_g_logo"
+                    style="@style/landNavigation"
+                    android:layout_weight="1"/>
+
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/spacer"
+                    style="@style/landNavigation"
+                    android:layout_weight="1"
+                    android:visibility="invisible"/>
 
                 <ImageView
                     android:layout_width="wrap_content"
@@ -48,11 +51,12 @@
                     android:src="@drawable/ic_folder_multiple_outline_grey600_24dp"
                     style="@style/landNavigation"/>
 
+
                 <ImageView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:id="@+id/logoIV"
-                    android:src="@drawable/ic_g_logo"
+                    android:id="@+id/layersIV"
+                    android:src="@drawable/ic_layers_grey600_24dp"
                     style="@style/landNavigation"/>
 
             </LinearLayout>

@@ -10,11 +10,11 @@ import com.geospatialcorporation.android.geomobile.application;
 import com.geospatialcorporation.android.geomobile.library.DI.Analytics.Interfaces.IGeoAnalytics;
 import com.geospatialcorporation.android.geomobile.library.DI.Authentication.Implementations.AuthTokenRetriever;
 import com.geospatialcorporation.android.geomobile.library.DI.ErrorHandler.Interfaces.IGeoErrorHandler;
-import com.geospatialcorporation.android.geomobile.library.rest.LoginService;
+import com.geospatialcorporation.android.geomobile.api.LoginService;
 import com.geospatialcorporation.android.geomobile.models.Login.ErrorResponse;
 import com.geospatialcorporation.android.geomobile.models.Login.LoginBody;
 import com.geospatialcorporation.android.geomobile.models.Login.LoginBodyJsonSerializer;
-import com.geospatialcorporation.android.geomobile.ui.LoginActivity;
+import com.geospatialcorporation.android.geomobile.ui.activity.LoginActivity;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 

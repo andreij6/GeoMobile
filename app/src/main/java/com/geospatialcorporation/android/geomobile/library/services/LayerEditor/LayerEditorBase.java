@@ -6,7 +6,7 @@ import android.util.Log;
 import com.geospatialcorporation.android.geomobile.application;
 import com.geospatialcorporation.android.geomobile.library.DI.Map.Interfaces.ILayerManager;
 import com.geospatialcorporation.android.geomobile.library.helpers.GeoColor;
-import com.geospatialcorporation.android.geomobile.library.rest.LayerService;
+import com.geospatialcorporation.android.geomobile.api.LayerService;
 import com.geospatialcorporation.android.geomobile.models.Layers.Layer;
 import com.geospatialcorporation.android.geomobile.models.Layers.LegendLayer;
 import com.geospatialcorporation.android.geomobile.ui.fragments.GoogleMapFragment;

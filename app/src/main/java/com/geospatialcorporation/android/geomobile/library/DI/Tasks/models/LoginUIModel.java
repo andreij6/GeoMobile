@@ -3,7 +3,7 @@ package com.geospatialcorporation.android.geomobile.library.DI.Tasks.models;
 import android.widget.EditText;
 
 import com.geospatialcorporation.android.geomobile.library.DI.Tasks.Interfaces.IUserLoginTask;
-import com.geospatialcorporation.android.geomobile.ui.LoginActivity;
+import com.geospatialcorporation.android.geomobile.ui.activity.LoginActivity;
 
 public class LoginUIModel {
     private EditText mPasswordView;

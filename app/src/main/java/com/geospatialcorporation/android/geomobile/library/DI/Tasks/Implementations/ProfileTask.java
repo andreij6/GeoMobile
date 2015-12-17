@@ -5,7 +5,7 @@ import android.util.Log;
 import com.geospatialcorporation.android.geomobile.application;
 import com.geospatialcorporation.android.geomobile.library.DI.Tasks.Interfaces.IGetProfileTask;
 import com.geospatialcorporation.android.geomobile.library.DI.Tasks.models.ProfileTaskParams;
-import com.geospatialcorporation.android.geomobile.library.rest.AccountService;
+import com.geospatialcorporation.android.geomobile.api.AccountService;
 import com.geospatialcorporation.android.geomobile.models.GeoAsyncTask;
 import com.geospatialcorporation.android.geomobile.models.UserAccount;
 

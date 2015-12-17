@@ -8,7 +8,7 @@ import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.content.ContextCompat;
-import android.support.v7.app.ActionBarActivity;
+import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageButton;
@@ -97,7 +97,11 @@ public class ListItemAdapter extends GeoRecyclerAdapterBase<ListItemAdapter.Hold
         public void bind(ListItem item) {
             mItem = item;
 
-            itemName.setText(DataHelper.trimString(item.getName(), 15));
+            if(application.getIsLandscape()) {
+                itemName.setText(DataHelper.trimString(item.getName(), 60));
+            } else {
+                itemName.setText(DataHelper.trimString(item.getName(), 15));
+            }
 
             itemIcon.setVisibility(View.VISIBLE);
             itemInfo.setVisibility(View.VISIBLE);
@@ -212,7 +216,7 @@ public class ListItemAdapter extends GeoRecyclerAdapterBase<ListItemAdapter.Hold
             bundle.putInt(Folder.FOLDER_INTENT, mItem.getId());
 
             Activity activity = (Activity) itemView.getContext();
-            FragmentManager fragmentManager = ((ActionBarActivity) activity).getSupportFragmentManager();
+            FragmentManager fragmentManager = ((AppCompatActivity) activity).getSupportFragmentManager();
 
             fragment.setArguments(bundle);
 

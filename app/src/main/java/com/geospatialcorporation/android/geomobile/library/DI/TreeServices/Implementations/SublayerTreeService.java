@@ -1,12 +1,10 @@
 package com.geospatialcorporation.android.geomobile.library.DI.TreeServices.Implementations;
 
-import android.util.Log;
-
 import com.geospatialcorporation.android.geomobile.application;
 import com.geospatialcorporation.android.geomobile.library.DI.TreeServices.Interfaces.ISublayerTreeService;
 import com.geospatialcorporation.android.geomobile.library.requestcallback.RequestCallback;
 import com.geospatialcorporation.android.geomobile.library.requestcallback.listener_implementations.SublayerModifiedListner;
-import com.geospatialcorporation.android.geomobile.library.rest.SublayerService;
+import com.geospatialcorporation.android.geomobile.api.SublayerService;
 import com.geospatialcorporation.android.geomobile.models.Layers.Layer;
 import com.geospatialcorporation.android.geomobile.models.Layers.SublayerCreateRequest;
 import com.geospatialcorporation.android.geomobile.models.RenameRequest;

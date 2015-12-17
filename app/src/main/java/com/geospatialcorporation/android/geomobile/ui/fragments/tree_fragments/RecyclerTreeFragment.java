@@ -8,7 +8,6 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -20,7 +19,7 @@ import com.geospatialcorporation.android.geomobile.library.helpers.DataHelper;
 import com.geospatialcorporation.android.geomobile.library.helpers.ProgressDialogHelper;
 import com.geospatialcorporation.android.geomobile.models.Folders.Folder;
 import com.geospatialcorporation.android.geomobile.ui.Interfaces.OnFragmentInteractionListener;
-import com.geospatialcorporation.android.geomobile.ui.MainActivity;
+import com.geospatialcorporation.android.geomobile.ui.activity.MainActivity;
 import com.geospatialcorporation.android.geomobile.ui.fragments.GeoViewFragmentBase;
 import com.geospatialcorporation.android.geomobile.ui.fragments.GoogleMapFragment;
 import com.melnykov.fab.FloatingActionButton;
@@ -120,7 +119,7 @@ public abstract class RecyclerTreeFragment extends GeoViewFragmentBase {
             mParentFolder.setText(mCurrentFolder.getParent().getProperName());
 
         } else {
-            mNavBars.setImageDrawable(ContextCompat.getDrawable(mContext, R.drawable.ic_nav_orange));
+            mNavBars.setImageDrawable(ContextCompat.getDrawable(mContext, R.drawable.ic_menu_grey600_36dp));
 
             mNavBars.setOnClickListener(showNavigation);
             mNavLogo.setOnClickListener(showNavigation);

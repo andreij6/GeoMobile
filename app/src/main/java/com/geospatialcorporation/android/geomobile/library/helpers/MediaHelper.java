@@ -6,7 +6,7 @@ import android.os.Environment;
 import android.util.Log;
 
 import com.geospatialcorporation.android.geomobile.R;
-import com.geospatialcorporation.android.geomobile.ui.MainActivity;
+import com.geospatialcorporation.android.geomobile.ui.activity.MainActivity;
 
 import java.io.File;
 import java.text.SimpleDateFormat;

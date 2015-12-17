@@ -11,8 +11,8 @@ import com.geospatialcorporation.android.geomobile.application;
 import com.geospatialcorporation.android.geomobile.library.DI.TreeServices.Interfaces.ILayerTreeService;
 import com.geospatialcorporation.android.geomobile.library.DI.UIHelpers.Interfaces.DialogHelpers.IGeneralDialog;
 import com.geospatialcorporation.android.geomobile.models.RemoveMapFeatureDocumentRequest;
-import com.geospatialcorporation.android.geomobile.ui.LoginActivity;
-import com.geospatialcorporation.android.geomobile.ui.SubscriptionSelectorActivity;
+import com.geospatialcorporation.android.geomobile.ui.activity.LoginActivity;
+import com.geospatialcorporation.android.geomobile.ui.activity.SubscriptionSelectorActivity;
 import com.geospatialcorporation.android.geomobile.ui.fragments.dialogs.MapFeatureDocumentDialogFragment;
 
 public class GeneralDialog implements IGeneralDialog {
