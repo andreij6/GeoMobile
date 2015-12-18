@@ -695,7 +695,6 @@ public class GoogleMapFragment extends GeoViewFragmentBase implements
 
             mMap.moveCamera(update2);
 
-
             double latDiff = (dblBounds.getCenter().latitude - highlightedMarker.getPosition().latitude) / 2;
 
             double latBtwCenterMarker = highlightedMarker.getPosition().latitude + latDiff;

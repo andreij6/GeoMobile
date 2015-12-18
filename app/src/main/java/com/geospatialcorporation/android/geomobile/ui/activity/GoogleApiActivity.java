@@ -170,7 +170,7 @@ public class GoogleApiActivity extends AppCompatActivity implements
                 mGeoSharedPrefs.apply();
 
                 ProgressHelper = new MaterialDialog.Builder(this)
-                        .title(R.string.progress_dialog)
+                        .title(R.string.signing_in)
                         .content(R.string.please_wait)
                         .progress(true, 0)
                         .build();

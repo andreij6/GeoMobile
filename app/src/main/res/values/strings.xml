@@ -322,4 +322,5 @@
     <string name="rename_request_sent">Rename Request Sent</string>
     <string name="folder_rename_validation">Please add a Valid Folder Name</string>
     <string name="not_authorized_to_rename_folder">Not Authorized to Rename Folder</string>
+    <string name="signing_in">Signing In</string>
 </resources>
